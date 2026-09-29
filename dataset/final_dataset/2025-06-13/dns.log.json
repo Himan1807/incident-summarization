@@ -1,0 +1,8035 @@
+[
+ {
+  "ts": 1749828835.712627,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "wpad.massfriction.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828835.712981,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "wpad.massfriction.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828835.714176,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "DESKTOP-5AVE44C.massfriction.com",
+    "qtype": 6
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828835.714359,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "wpad.massfriction.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828835.71436,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "DESKTOP-5AVE44C.massfriction.com",
+    "qtype": 6
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828835.71457,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "wpad.massfriction.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828835.715541,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "massfriction.com",
+    "qtype": 6
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828835.717558,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "massfriction.com",
+    "qtype": 6
+   }
+  ],
+  "answers": [
+   {
+    "name": "DESKTOP-5AVE44C.massfriction.com",
+    "type": "CNAME",
+    "data": "DESKTOP-5AVE44C.massfriction.com"
+   }
+  ]
+ },
+ {
+  "ts": 1749828835.734271,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "_ldap._tcp.Default-First-Site-Name._sites.dc._msdcs.massfriction.com",
+    "qtype": 33
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828835.734567,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "_ldap._tcp.Default-First-Site-Name._sites.dc._msdcs.massfriction.com",
+    "qtype": 33
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828835.734991,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "win-dql4wfwjxq4.massfriction.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828835.735214,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "win-dql4wfwjxq4.massfriction.com",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "win-dql4wfwjxq4.massfriction.com",
+    "type": "A",
+    "data": "10.6.13.3"
+   }
+  ]
+ },
+ {
+  "ts": 1749828839.870499,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "kv601.prod.do.dsp.mp.microsoft.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828839.912991,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "kv601.prod.do.dsp.mp.microsoft.com",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "kv601.prod.do.dsp.mp.microsoft.com",
+    "type": "CNAME",
+    "data": "kv601.prod.do.dsp.mp.microsoft.com.edgekey.net"
+   },
+   {
+    "name": "kv601.prod.do.dsp.mp.microsoft.com.edgekey.net",
+    "type": "CNAME",
+    "data": "e12358.d.akamaiedge.net"
+   },
+   {
+    "name": "e12358.d.akamaiedge.net",
+    "type": "A",
+    "data": "173.222.52.33"
+   }
+  ]
+ },
+ {
+  "ts": 1749828840.10909,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "geo.prod.do.dsp.mp.microsoft.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828840.152757,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "geo.prod.do.dsp.mp.microsoft.com",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "geo.prod.do.dsp.mp.microsoft.com",
+    "type": "CNAME",
+    "data": "geo.prod.do.dsp.trafficmanager.net"
+   },
+   {
+    "name": "geo.prod.do.dsp.trafficmanager.net",
+    "type": "CNAME",
+    "data": "array818.prod.do.dsp.mp.microsoft.com"
+   },
+   {
+    "name": "array818.prod.do.dsp.mp.microsoft.com",
+    "type": "A",
+    "data": "52.156.123.84"
+   }
+  ]
+ },
+ {
+  "ts": 1749828840.380409,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "wpad.massfriction.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828840.380577,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "wpad.massfriction.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828840.380578,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "wpad.massfriction.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828840.380782,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "wpad.massfriction.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828840.40331,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "www.msftconnecttest.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828840.442333,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "www.msftconnecttest.com",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "www.msftconnecttest.com",
+    "type": "CNAME",
+    "data": "ncsi-geo.trafficmanager.net"
+   },
+   {
+    "name": "ncsi-geo.trafficmanager.net",
+    "type": "CNAME",
+    "data": "www.msftncsi.com.edgesuite.net"
+   },
+   {
+    "name": "www.msftncsi.com.edgesuite.net",
+    "type": "CNAME",
+    "data": "a1961.g2.akamai.net"
+   },
+   {
+    "name": "a1961.g2.akamai.net",
+    "type": "A",
+    "data": "23.192.223.206"
+   },
+   {
+    "name": "a1961.g2.akamai.net",
+    "type": "A",
+    "data": "23.192.223.200"
+   }
+  ]
+ },
+ {
+  "ts": 1749828841.155378,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "client.wns.windows.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828841.200777,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "client.wns.windows.com",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "client.wns.windows.com",
+    "type": "CNAME",
+    "data": "wns.notify.trafficmanager.net"
+   },
+   {
+    "name": "wns.notify.trafficmanager.net",
+    "type": "A",
+    "data": "104.208.203.90"
+   }
+  ]
+ },
+ {
+  "ts": 1749828844.433191,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "dns.msftncsi.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828844.474739,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "dns.msftncsi.com",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "dns.msftncsi.com",
+    "type": "A",
+    "data": "131.107.255.255"
+   }
+  ]
+ },
+ {
+  "ts": 1749828849.921646,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "_ldap._tcp.Default-First-Site-Name._sites.massfriction.com",
+    "qtype": 33
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828849.922094,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "_ldap._tcp.Default-First-Site-Name._sites.massfriction.com",
+    "qtype": 33
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828850.157453,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "WIN-DQL4WFWJXQ4.massfriction.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828850.157455,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "WIN-DQL4WFWJXQ4.massfriction.com",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "WIN-DQL4WFWJXQ4.massfriction.com",
+    "type": "A",
+    "data": "10.6.13.3"
+   }
+  ]
+ },
+ {
+  "ts": 1749828853.312615,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "login.live.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828853.357629,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "login.live.com",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "login.live.com",
+    "type": "CNAME",
+    "data": "login.msa.msidentity.com"
+   },
+   {
+    "name": "login.msa.msidentity.com",
+    "type": "CNAME",
+    "data": "www.tm.lg.prod.aadmsa.trafficmanager.net"
+   },
+   {
+    "name": "www.tm.lg.prod.aadmsa.trafficmanager.net",
+    "type": "CNAME",
+    "data": "prdv4a.aadg.msidentity.com"
+   },
+   {
+    "name": "prdv4a.aadg.msidentity.com",
+    "type": "CNAME",
+    "data": "www.tm.v4.a.prd.aadg.trafficmanager.net"
+   },
+   {
+    "name": "www.tm.v4.a.prd.aadg.trafficmanager.net",
+    "type": "A",
+    "data": "20.190.135.6"
+   },
+   {
+    "name": "www.tm.v4.a.prd.aadg.trafficmanager.net",
+    "type": "A",
+    "data": "20.190.135.17"
+   },
+   {
+    "name": "www.tm.v4.a.prd.aadg.trafficmanager.net",
+    "type": "A",
+    "data": "20.190.135.4"
+   },
+   {
+    "name": "www.tm.v4.a.prd.aadg.trafficmanager.net",
+    "type": "A",
+    "data": "40.126.28.12"
+   },
+   {
+    "name": "www.tm.v4.a.prd.aadg.trafficmanager.net",
+    "type": "A",
+    "data": "20.190.135.2"
+   },
+   {
+    "name": "www.tm.v4.a.prd.aadg.trafficmanager.net",
+    "type": "A",
+    "data": "40.126.28.19"
+   },
+   {
+    "name": "www.tm.v4.a.prd.aadg.trafficmanager.net",
+    "type": "A",
+    "data": "40.126.28.14"
+   },
+   {
+    "name": "www.tm.v4.a.prd.aadg.trafficmanager.net",
+    "type": "A",
+    "data": "20.190.135.16"
+   }
+  ]
+ },
+ {
+  "ts": 1749828854.493531,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "ctldl.windowsupdate.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828854.549237,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "ctldl.windowsupdate.com",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "ctldl.windowsupdate.com",
+    "type": "CNAME",
+    "data": "ctldl.windowsupdate.com.delivery.microsoft.com"
+   },
+   {
+    "name": "ctldl.windowsupdate.com.delivery.microsoft.com",
+    "type": "CNAME",
+    "data": "wu-b-net.trafficmanager.net"
+   },
+   {
+    "name": "wu-b-net.trafficmanager.net",
+    "type": "CNAME",
+    "data": "edge.ds-c7110-microsoft.global.dns.qwilted-cds.cqloud.com"
+   },
+   {
+    "name": "edge.ds-c7110-microsoft.global.dns.qwilted-cds.cqloud.com",
+    "type": "A",
+    "data": "217.20.51.22"
+   },
+   {
+    "name": "edge.ds-c7110-microsoft.global.dns.qwilted-cds.cqloud.com",
+    "type": "A",
+    "data": "217.20.51.26"
+   },
+   {
+    "name": "edge.ds-c7110-microsoft.global.dns.qwilted-cds.cqloud.com",
+    "type": "A",
+    "data": "217.20.51.76"
+   },
+   {
+    "name": "edge.ds-c7110-microsoft.global.dns.qwilted-cds.cqloud.com",
+    "type": "A",
+    "data": "217.20.51.43"
+   },
+   {
+    "name": "edge.ds-c7110-microsoft.global.dns.qwilted-cds.cqloud.com",
+    "type": "A",
+    "data": "217.20.51.42"
+   },
+   {
+    "name": "edge.ds-c7110-microsoft.global.dns.qwilted-cds.cqloud.com",
+    "type": "A",
+    "data": "217.20.51.110"
+   },
+   {
+    "name": "edge.ds-c7110-microsoft.global.dns.qwilted-cds.cqloud.com",
+    "type": "A",
+    "data": "217.20.51.20"
+   },
+   {
+    "name": "edge.ds-c7110-microsoft.global.dns.qwilted-cds.cqloud.com",
+    "type": "A",
+    "data": "217.20.51.37"
+   }
+  ]
+ },
+ {
+  "ts": 1749828854.865754,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "wpad.massfriction.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828854.865906,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "wpad.massfriction.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828854.879268,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "config.edge.skype.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828854.87927,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "config.edge.skype.com",
+    "qtype": 65
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828854.933188,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "config.edge.skype.com",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "config.edge.skype.com",
+    "type": "CNAME",
+    "data": "config.edge.skype.com.trafficmanager.net"
+   },
+   {
+    "name": "config.edge.skype.com.trafficmanager.net",
+    "type": "CNAME",
+    "data": "l-0007.config.skype.com"
+   },
+   {
+    "name": "l-0007.config.skype.com",
+    "type": "CNAME",
+    "data": "config-edge-skype.l-0007.l-msedge.net"
+   },
+   {
+    "name": "config-edge-skype.l-0007.l-msedge.net",
+    "type": "CNAME",
+    "data": "l-0007.l-msedge.net"
+   },
+   {
+    "name": "l-0007.l-msedge.net",
+    "type": "A",
+    "data": "13.107.42.16"
+   }
+  ]
+ },
+ {
+  "ts": 1749828854.980578,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "config.edge.skype.com",
+    "qtype": 65
+   }
+  ],
+  "answers": [
+   {
+    "name": "config.edge.skype.com",
+    "type": "CNAME",
+    "data": "config.edge.skype.com.trafficmanager.net"
+   },
+   {
+    "name": "config.edge.skype.com.trafficmanager.net",
+    "type": "CNAME",
+    "data": "l-0007.config.skype.com"
+   },
+   {
+    "name": "l-0007.config.skype.com",
+    "type": "CNAME",
+    "data": "config-edge-skype.l-0007.l-msedge.net"
+   },
+   {
+    "name": "config-edge-skype.l-0007.l-msedge.net",
+    "type": "CNAME",
+    "data": "l-0007.l-msedge.net"
+   }
+  ]
+ },
+ {
+  "ts": 1749828855.162533,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "www.bing.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828855.162534,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "www.bing.com",
+    "qtype": 65
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828855.195406,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "www.msn.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828855.204993,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "www.bing.com",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "www.bing.com",
+    "type": "CNAME",
+    "data": "www-www.bing.com.trafficmanager.net"
+   },
+   {
+    "name": "www-www.bing.com.trafficmanager.net",
+    "type": "CNAME",
+    "data": "www.bing.com.edgekey.net"
+   },
+   {
+    "name": "www.bing.com.edgekey.net",
+    "type": "CNAME",
+    "data": "e86303.dscx.akamaiedge.net"
+   },
+   {
+    "name": "e86303.dscx.akamaiedge.net",
+    "type": "A",
+    "data": "23.198.7.186"
+   },
+   {
+    "name": "e86303.dscx.akamaiedge.net",
+    "type": "A",
+    "data": "23.198.7.180"
+   },
+   {
+    "name": "e86303.dscx.akamaiedge.net",
+    "type": "A",
+    "data": "23.198.7.184"
+   },
+   {
+    "name": "e86303.dscx.akamaiedge.net",
+    "type": "A",
+    "data": "23.198.7.187"
+   },
+   {
+    "name": "e86303.dscx.akamaiedge.net",
+    "type": "A",
+    "data": "23.198.7.183"
+   },
+   {
+    "name": "e86303.dscx.akamaiedge.net",
+    "type": "A",
+    "data": "23.198.7.178"
+   },
+   {
+    "name": "e86303.dscx.akamaiedge.net",
+    "type": "A",
+    "data": "23.198.7.167"
+   },
+   {
+    "name": "e86303.dscx.akamaiedge.net",
+    "type": "A",
+    "data": "23.198.7.185"
+   },
+   {
+    "name": "e86303.dscx.akamaiedge.net",
+    "type": "A",
+    "data": "23.198.7.181"
+   }
+  ]
+ },
+ {
+  "ts": 1749828855.2345,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "www.msn.com",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "www.msn.com",
+    "type": "CNAME",
+    "data": "www-msn-com.a-0003.a-msedge.net"
+   },
+   {
+    "name": "www-msn-com.a-0003.a-msedge.net",
+    "type": "CNAME",
+    "data": "a-0003.a-msedge.net"
+   },
+   {
+    "name": "a-0003.a-msedge.net",
+    "type": "A",
+    "data": "204.79.197.203"
+   }
+  ]
+ },
+ {
+  "ts": 1749828855.240494,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "www.bing.com",
+    "qtype": 65
+   }
+  ],
+  "answers": [
+   {
+    "name": "www.bing.com",
+    "type": "CNAME",
+    "data": "www-www.bing.com.trafficmanager.net"
+   },
+   {
+    "name": "www-www.bing.com.trafficmanager.net",
+    "type": "CNAME",
+    "data": "www.bing.com.edgekey.net"
+   },
+   {
+    "name": "www.bing.com.edgekey.net",
+    "type": "CNAME",
+    "data": "e86303.dscx.akamaiedge.net"
+   }
+  ]
+ },
+ {
+  "ts": 1749828855.978432,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "assets.msn.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828855.986732,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "wpad.massfriction.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828855.986734,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "wpad.massfriction.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828855.987086,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "wpad.massfriction.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828855.987088,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "wpad.massfriction.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828856.02158,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "assets.msn.com",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "assets.msn.com",
+    "type": "CNAME",
+    "data": "assets-msn-com-world-atm-default.trafficmanager.net"
+   },
+   {
+    "name": "assets-msn-com-world-atm-default.trafficmanager.net",
+    "type": "CNAME",
+    "data": "assets.msn.com-ion.edgesuite.net"
+   },
+   {
+    "name": "assets.msn.com-ion.edgesuite.net",
+    "type": "CNAME",
+    "data": "a1666.dscr.akamai.net"
+   },
+   {
+    "name": "a1666.dscr.akamai.net",
+    "type": "A",
+    "data": "23.212.185.76"
+   },
+   {
+    "name": "a1666.dscr.akamai.net",
+    "type": "A",
+    "data": "23.212.185.85"
+   }
+  ]
+ },
+ {
+  "ts": 1749828864.181644,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "wpad.massfriction.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828864.181645,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "wpad.massfriction.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828864.193501,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "edge.microsoft.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828864.193503,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "edge.microsoft.com",
+    "qtype": 65
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828864.236988,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "edge.microsoft.com",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "edge.microsoft.com",
+    "type": "CNAME",
+    "data": "edge-microsoft-com.ax-0002.ax-msedge.net"
+   },
+   {
+    "name": "edge-microsoft-com.ax-0002.ax-msedge.net",
+    "type": "CNAME",
+    "data": "ax-0002.ax-msedge.net"
+   },
+   {
+    "name": "ax-0002.ax-msedge.net",
+    "type": "A",
+    "data": "150.171.27.11"
+   },
+   {
+    "name": "ax-0002.ax-msedge.net",
+    "type": "A",
+    "data": "150.171.28.11"
+   }
+  ]
+ },
+ {
+  "ts": 1749828864.23699,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "edge.microsoft.com",
+    "qtype": 65
+   }
+  ],
+  "answers": [
+   {
+    "name": "edge.microsoft.com",
+    "type": "CNAME",
+    "data": "edge-microsoft-com.ax-0002.ax-msedge.net"
+   }
+  ]
+ },
+ {
+  "ts": 1749828864.572304,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "login.microsoftonline.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828864.614972,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "login.microsoftonline.com",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "login.microsoftonline.com",
+    "type": "CNAME",
+    "data": "login.mso.msidentity.com"
+   },
+   {
+    "name": "login.mso.msidentity.com",
+    "type": "CNAME",
+    "data": "ak.privatelink.msidentity.com"
+   },
+   {
+    "name": "ak.privatelink.msidentity.com",
+    "type": "CNAME",
+    "data": "www.tm.a.prd.aadg.trafficmanager.net"
+   },
+   {
+    "name": "www.tm.a.prd.aadg.trafficmanager.net",
+    "type": "A",
+    "data": "40.126.29.13"
+   },
+   {
+    "name": "www.tm.a.prd.aadg.trafficmanager.net",
+    "type": "A",
+    "data": "20.190.157.11"
+   },
+   {
+    "name": "www.tm.a.prd.aadg.trafficmanager.net",
+    "type": "A",
+    "data": "40.126.29.5"
+   },
+   {
+    "name": "www.tm.a.prd.aadg.trafficmanager.net",
+    "type": "A",
+    "data": "40.126.29.14"
+   },
+   {
+    "name": "www.tm.a.prd.aadg.trafficmanager.net",
+    "type": "A",
+    "data": "20.190.157.1"
+   },
+   {
+    "name": "www.tm.a.prd.aadg.trafficmanager.net",
+    "type": "A",
+    "data": "20.190.157.2"
+   },
+   {
+    "name": "www.tm.a.prd.aadg.trafficmanager.net",
+    "type": "A",
+    "data": "20.190.157.15"
+   },
+   {
+    "name": "www.tm.a.prd.aadg.trafficmanager.net",
+    "type": "A",
+    "data": "40.126.29.12"
+   }
+  ]
+ },
+ {
+  "ts": 1749828866.259426,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "www.bing.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828866.259428,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "www.bing.com",
+    "qtype": 65
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828866.259774,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "www.bing.com",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "www.bing.com",
+    "type": "CNAME",
+    "data": "www-www.bing.com.trafficmanager.net"
+   },
+   {
+    "name": "www-www.bing.com.trafficmanager.net",
+    "type": "CNAME",
+    "data": "www.bing.com.edgekey.net"
+   },
+   {
+    "name": "www.bing.com.edgekey.net",
+    "type": "CNAME",
+    "data": "e86303.dscx.akamaiedge.net"
+   },
+   {
+    "name": "e86303.dscx.akamaiedge.net",
+    "type": "A",
+    "data": "23.198.7.180"
+   },
+   {
+    "name": "e86303.dscx.akamaiedge.net",
+    "type": "A",
+    "data": "23.198.7.184"
+   },
+   {
+    "name": "e86303.dscx.akamaiedge.net",
+    "type": "A",
+    "data": "23.198.7.187"
+   },
+   {
+    "name": "e86303.dscx.akamaiedge.net",
+    "type": "A",
+    "data": "23.198.7.183"
+   },
+   {
+    "name": "e86303.dscx.akamaiedge.net",
+    "type": "A",
+    "data": "23.198.7.178"
+   },
+   {
+    "name": "e86303.dscx.akamaiedge.net",
+    "type": "A",
+    "data": "23.198.7.167"
+   },
+   {
+    "name": "e86303.dscx.akamaiedge.net",
+    "type": "A",
+    "data": "23.198.7.185"
+   },
+   {
+    "name": "e86303.dscx.akamaiedge.net",
+    "type": "A",
+    "data": "23.198.7.181"
+   },
+   {
+    "name": "e86303.dscx.akamaiedge.net",
+    "type": "A",
+    "data": "23.198.7.186"
+   }
+  ]
+ },
+ {
+  "ts": 1749828866.259776,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "www.bing.com",
+    "qtype": 65
+   }
+  ],
+  "answers": [
+   {
+    "name": "www.bing.com",
+    "type": "CNAME",
+    "data": "www-www.bing.com.trafficmanager.net"
+   },
+   {
+    "name": "www-www.bing.com.trafficmanager.net",
+    "type": "CNAME",
+    "data": "www.bing.com.edgekey.net"
+   },
+   {
+    "name": "www.bing.com.edgekey.net",
+    "type": "CNAME",
+    "data": "e86303.dscx.akamaiedge.net"
+   }
+  ]
+ },
+ {
+  "ts": 1749828866.543997,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "edge.microsoft.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828866.543999,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "edge.microsoft.com",
+    "qtype": 65
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828866.544102,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "edge.microsoft.com",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "edge.microsoft.com",
+    "type": "CNAME",
+    "data": "edge-microsoft-com.ax-0002.ax-msedge.net"
+   },
+   {
+    "name": "edge-microsoft-com.ax-0002.ax-msedge.net",
+    "type": "CNAME",
+    "data": "ax-0002.ax-msedge.net"
+   },
+   {
+    "name": "ax-0002.ax-msedge.net",
+    "type": "A",
+    "data": "150.171.28.11"
+   },
+   {
+    "name": "ax-0002.ax-msedge.net",
+    "type": "A",
+    "data": "150.171.27.11"
+   }
+  ]
+ },
+ {
+  "ts": 1749828866.591746,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "edge.microsoft.com",
+    "qtype": 65
+   }
+  ],
+  "answers": [
+   {
+    "name": "edge.microsoft.com",
+    "type": "CNAME",
+    "data": "edge-microsoft-com.ax-0002.ax-msedge.net"
+   },
+   {
+    "name": "edge-microsoft-com.ax-0002.ax-msedge.net",
+    "type": "CNAME",
+    "data": "ax-0002.ax-msedge.net"
+   }
+  ]
+ },
+ {
+  "ts": 1749828872.20512,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "wpad.massfriction.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828872.205177,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "wpad.massfriction.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828878.562205,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "www.google.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828878.562207,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "www.google.com",
+    "qtype": 65
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828878.562503,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "www.google.com",
+    "qtype": 65
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828878.59152,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "www.google.com",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "www.google.com",
+    "type": "A",
+    "data": "142.250.115.99"
+   },
+   {
+    "name": "www.google.com",
+    "type": "A",
+    "data": "142.250.115.106"
+   },
+   {
+    "name": "www.google.com",
+    "type": "A",
+    "data": "142.250.115.104"
+   },
+   {
+    "name": "www.google.com",
+    "type": "A",
+    "data": "142.250.115.105"
+   },
+   {
+    "name": "www.google.com",
+    "type": "A",
+    "data": "142.250.115.103"
+   },
+   {
+    "name": "www.google.com",
+    "type": "A",
+    "data": "142.250.115.147"
+   }
+  ]
+ },
+ {
+  "ts": 1749828879.093206,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "www.googleadservices.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828879.093421,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "www.googleadservices.com",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "www.googleadservices.com",
+    "type": "A",
+    "data": "173.194.208.155"
+   },
+   {
+    "name": "www.googleadservices.com",
+    "type": "A",
+    "data": "173.194.208.156"
+   },
+   {
+    "name": "www.googleadservices.com",
+    "type": "A",
+    "data": "173.194.208.157"
+   },
+   {
+    "name": "www.googleadservices.com",
+    "type": "A",
+    "data": "173.194.208.154"
+   }
+  ]
+ },
+ {
+  "ts": 1749828879.093422,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "www.googleadservices.com",
+    "qtype": 65
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828879.093568,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "www.googleadservices.com",
+    "qtype": 65
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828879.391349,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "ogads-pa.clients6.google.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828879.391351,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "ogads-pa.clients6.google.com",
+    "qtype": 65
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828879.391542,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "ogads-pa.clients6.google.com",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "ogads-pa.clients6.google.com",
+    "type": "A",
+    "data": "142.250.113.95"
+   }
+  ]
+ },
+ {
+  "ts": 1749828879.438639,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "ogads-pa.clients6.google.com",
+    "qtype": 65
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828879.972867,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "play.google.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828879.972869,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "play.google.com",
+    "qtype": 65
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828880.01216,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "play.google.com",
+    "qtype": 65
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828880.012382,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "play.google.com",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "play.google.com",
+    "type": "A",
+    "data": "142.251.186.138"
+   },
+   {
+    "name": "play.google.com",
+    "type": "A",
+    "data": "142.251.186.100"
+   },
+   {
+    "name": "play.google.com",
+    "type": "A",
+    "data": "142.251.186.102"
+   },
+   {
+    "name": "play.google.com",
+    "type": "A",
+    "data": "142.251.186.139"
+   },
+   {
+    "name": "play.google.com",
+    "type": "A",
+    "data": "142.251.186.113"
+   },
+   {
+    "name": "play.google.com",
+    "type": "A",
+    "data": "142.251.186.101"
+   }
+  ]
+ },
+ {
+  "ts": 1749828885.182115,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "www.truglomedspa.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828885.182117,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "www.truglomedspa.com",
+    "qtype": 65
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828885.261463,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "www.truglomedspa.com",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "www.truglomedspa.com",
+    "type": "CNAME",
+    "data": "truglomedspa.com"
+   },
+   {
+    "name": "truglomedspa.com",
+    "type": "A",
+    "data": "205.174.24.80"
+   }
+  ]
+ },
+ {
+  "ts": 1749828885.374402,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "www.truglomedspa.com",
+    "qtype": 65
+   }
+  ],
+  "answers": [
+   {
+    "name": "www.truglomedspa.com",
+    "type": "CNAME",
+    "data": "truglomedspa.com"
+   }
+  ]
+ },
+ {
+  "ts": 1749828886.003411,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "fonts.googleapis.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828886.003433,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "fonts.googleapis.com",
+    "qtype": 65
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828886.00372,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "fonts.googleapis.com",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "fonts.googleapis.com",
+    "type": "A",
+    "data": "142.250.115.95"
+   }
+  ]
+ },
+ {
+  "ts": 1749828886.027781,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "www.google.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828886.027783,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "www.google.com",
+    "qtype": 65
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828886.028036,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "www.google.com",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "www.google.com",
+    "type": "A",
+    "data": "142.250.115.106"
+   },
+   {
+    "name": "www.google.com",
+    "type": "A",
+    "data": "142.250.115.104"
+   },
+   {
+    "name": "www.google.com",
+    "type": "A",
+    "data": "142.250.115.105"
+   },
+   {
+    "name": "www.google.com",
+    "type": "A",
+    "data": "142.250.115.103"
+   },
+   {
+    "name": "www.google.com",
+    "type": "A",
+    "data": "142.250.115.147"
+   },
+   {
+    "name": "www.google.com",
+    "type": "A",
+    "data": "142.250.115.99"
+   }
+  ]
+ },
+ {
+  "ts": 1749828886.028038,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "www.google.com",
+    "qtype": 65
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828886.057381,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "fonts.googleapis.com",
+    "qtype": 65
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828886.266175,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "hillcoweb.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828886.2664,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "hillcoweb.com",
+    "qtype": 65
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828886.266972,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "www.clarity.ms",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828886.267093,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "www.clarity.ms",
+    "qtype": 65
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828886.267637,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "www.googletagmanager.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828886.267639,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "www.googletagmanager.com",
+    "qtype": 65
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828886.267641,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "www.googletagmanager.com",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "www.googletagmanager.com",
+    "type": "A",
+    "data": "142.250.138.97"
+   }
+  ]
+ },
+ {
+  "ts": 1749828886.292362,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "cdn.userway.org",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828886.292363,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "cdn.userway.org",
+    "qtype": 65
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828886.305204,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "www.googletagmanager.com",
+    "qtype": 65
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828886.30788,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "fonts.gstatic.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828886.307882,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "fonts.gstatic.com",
+    "qtype": 65
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828886.308081,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "fonts.gstatic.com",
+    "qtype": 65
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828886.318493,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "www.gstatic.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828886.318495,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "www.gstatic.com",
+    "qtype": 65
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828886.318498,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "www.gstatic.com",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "www.gstatic.com",
+    "type": "A",
+    "data": "142.250.115.94"
+   }
+  ]
+ },
+ {
+  "ts": 1749828886.320316,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "www.clarity.ms",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "www.clarity.ms",
+    "type": "CNAME",
+    "data": "clarity.azurefd.net"
+   },
+   {
+    "name": "clarity.azurefd.net",
+    "type": "CNAME",
+    "data": "azurefd-t-prod.trafficmanager.net"
+   },
+   {
+    "name": "azurefd-t-prod.trafficmanager.net",
+    "type": "CNAME",
+    "data": "shed.dual-low.s-part-0029.t-0009.t-msedge.net"
+   },
+   {
+    "name": "shed.dual-low.s-part-0029.t-0009.t-msedge.net",
+    "type": "CNAME",
+    "data": "s-part-0029.t-0009.t-msedge.net"
+   },
+   {
+    "name": "s-part-0029.t-0009.t-msedge.net",
+    "type": "A",
+    "data": "13.107.246.57"
+   }
+  ]
+ },
+ {
+  "ts": 1749828886.320518,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "hillcoweb.com",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "hillcoweb.com",
+    "type": "A",
+    "data": "67.217.228.199"
+   }
+  ]
+ },
+ {
+  "ts": 1749828886.329576,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "hillcoweb.com",
+    "qtype": 65
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828886.335857,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "cdn.userway.org",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "cdn.userway.org",
+    "type": "CNAME",
+    "data": "1667503734.rsc.cdn77.org"
+   },
+   {
+    "name": "1667503734.rsc.cdn77.org",
+    "type": "A",
+    "data": "109.61.92.48"
+   },
+   {
+    "name": "1667503734.rsc.cdn77.org",
+    "type": "A",
+    "data": "109.61.92.57"
+   },
+   {
+    "name": "1667503734.rsc.cdn77.org",
+    "type": "A",
+    "data": "109.61.92.50"
+   },
+   {
+    "name": "1667503734.rsc.cdn77.org",
+    "type": "A",
+    "data": "109.61.92.54"
+   }
+  ]
+ },
+ {
+  "ts": 1749828886.344128,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "fonts.gstatic.com",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "fonts.gstatic.com",
+    "type": "A",
+    "data": "173.194.208.94"
+   }
+  ]
+ },
+ {
+  "ts": 1749828886.359327,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "edge.microsoft.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828886.359328,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "edge.microsoft.com",
+    "qtype": 65
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828886.359661,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "edge.microsoft.com",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "edge.microsoft.com",
+    "type": "CNAME",
+    "data": "edge-microsoft-com.ax-0002.ax-msedge.net"
+   },
+   {
+    "name": "edge-microsoft-com.ax-0002.ax-msedge.net",
+    "type": "CNAME",
+    "data": "ax-0002.ax-msedge.net"
+   },
+   {
+    "name": "ax-0002.ax-msedge.net",
+    "type": "A",
+    "data": "150.171.27.11"
+   },
+   {
+    "name": "ax-0002.ax-msedge.net",
+    "type": "A",
+    "data": "150.171.28.11"
+   }
+  ]
+ },
+ {
+  "ts": 1749828886.359662,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "edge.microsoft.com",
+    "qtype": 65
+   }
+  ],
+  "answers": [
+   {
+    "name": "edge.microsoft.com",
+    "type": "CNAME",
+    "data": "edge-microsoft-com.ax-0002.ax-msedge.net"
+   },
+   {
+    "name": "edge-microsoft-com.ax-0002.ax-msedge.net",
+    "type": "CNAME",
+    "data": "ax-0002.ax-msedge.net"
+   }
+  ]
+ },
+ {
+  "ts": 1749828886.366431,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "www.gstatic.com",
+    "qtype": 65
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828886.366743,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "cdn.userway.org",
+    "qtype": 65
+   }
+  ],
+  "answers": [
+   {
+    "name": "cdn.userway.org",
+    "type": "CNAME",
+    "data": "1667503734.rsc.cdn77.org"
+   }
+  ]
+ },
+ {
+  "ts": 1749828886.383832,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "www.clarity.ms",
+    "qtype": 65
+   }
+  ],
+  "answers": [
+   {
+    "name": "www.clarity.ms",
+    "type": "CNAME",
+    "data": "clarity.azurefd.net"
+   },
+   {
+    "name": "clarity.azurefd.net",
+    "type": "CNAME",
+    "data": "azurefd-t-prod.trafficmanager.net"
+   },
+   {
+    "name": "azurefd-t-prod.trafficmanager.net",
+    "type": "CNAME",
+    "data": "shed.dual-low.s-part-0029.t-0009.t-msedge.net"
+   },
+   {
+    "name": "shed.dual-low.s-part-0029.t-0009.t-msedge.net",
+    "type": "CNAME",
+    "data": "s-part-0029.t-0009.t-msedge.net"
+   }
+  ]
+ },
+ {
+  "ts": 1749828886.692597,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "www.google.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828886.692599,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "www.google.com",
+    "qtype": 65
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828886.692805,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "www.google.com",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "www.google.com",
+    "type": "A",
+    "data": "142.250.115.104"
+   },
+   {
+    "name": "www.google.com",
+    "type": "A",
+    "data": "142.250.115.105"
+   },
+   {
+    "name": "www.google.com",
+    "type": "A",
+    "data": "142.250.115.103"
+   },
+   {
+    "name": "www.google.com",
+    "type": "A",
+    "data": "142.250.115.147"
+   },
+   {
+    "name": "www.google.com",
+    "type": "A",
+    "data": "142.250.115.99"
+   },
+   {
+    "name": "www.google.com",
+    "type": "A",
+    "data": "142.250.115.106"
+   }
+  ]
+ },
+ {
+  "ts": 1749828886.692855,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "www.google.com",
+    "qtype": 65
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828886.722847,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "connect.facebook.net",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828886.722849,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "connect.facebook.net",
+    "qtype": 65
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828886.72305,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "connect.facebook.net",
+    "qtype": 65
+   }
+  ],
+  "answers": [
+   {
+    "name": "connect.facebook.net",
+    "type": "CNAME",
+    "data": "scontent.xx.fbcdn.net"
+   }
+  ]
+ },
+ {
+  "ts": 1749828886.785786,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "connect.facebook.net",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "connect.facebook.net",
+    "type": "CNAME",
+    "data": "scontent.xx.fbcdn.net"
+   },
+   {
+    "name": "scontent.xx.fbcdn.net",
+    "type": "A",
+    "data": "157.240.24.13"
+   }
+  ]
+ },
+ {
+  "ts": 1749828886.876349,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "www.gstatic.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828886.876351,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "www.gstatic.com",
+    "qtype": 65
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828886.876638,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "www.gstatic.com",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "www.gstatic.com",
+    "type": "A",
+    "data": "142.250.115.94"
+   }
+  ]
+ },
+ {
+  "ts": 1749828886.87664,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "www.gstatic.com",
+    "qtype": 65
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828886.881118,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "api.userway.org",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828886.88112,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "api.userway.org",
+    "qtype": 65
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828886.921702,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "api.userway.org",
+    "qtype": 65
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828886.921703,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "api.userway.org",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "api.userway.org",
+    "type": "A",
+    "data": "44.239.34.26"
+   },
+   {
+    "name": "api.userway.org",
+    "type": "A",
+    "data": "44.238.228.97"
+   },
+   {
+    "name": "api.userway.org",
+    "type": "A",
+    "data": "34.211.245.22"
+   },
+   {
+    "name": "api.userway.org",
+    "type": "A",
+    "data": "52.34.131.220"
+   },
+   {
+    "name": "api.userway.org",
+    "type": "A",
+    "data": "44.237.196.227"
+   },
+   {
+    "name": "api.userway.org",
+    "type": "A",
+    "data": "34.212.184.24"
+   },
+   {
+    "name": "api.userway.org",
+    "type": "A",
+    "data": "52.89.20.208"
+   },
+   {
+    "name": "api.userway.org",
+    "type": "A",
+    "data": "54.148.115.203"
+   }
+  ]
+ },
+ {
+  "ts": 1749828886.954134,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "analytics.google.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828886.954137,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "analytics.google.com",
+    "qtype": 65
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828886.954193,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "analytics.google.com",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "analytics.google.com",
+    "type": "CNAME",
+    "data": "analytics-alv.google.com"
+   },
+   {
+    "name": "analytics-alv.google.com",
+    "type": "A",
+    "data": "216.239.38.181"
+   },
+   {
+    "name": "analytics-alv.google.com",
+    "type": "A",
+    "data": "216.239.34.181"
+   },
+   {
+    "name": "analytics-alv.google.com",
+    "type": "A",
+    "data": "216.239.36.181"
+   },
+   {
+    "name": "analytics-alv.google.com",
+    "type": "A",
+    "data": "216.239.32.181"
+   }
+  ]
+ },
+ {
+  "ts": 1749828886.955059,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "stats.g.doubleclick.net",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828886.955276,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "stats.g.doubleclick.net",
+    "qtype": 65
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828886.955278,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "stats.g.doubleclick.net",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "stats.g.doubleclick.net",
+    "type": "A",
+    "data": "142.250.138.155"
+   },
+   {
+    "name": "stats.g.doubleclick.net",
+    "type": "A",
+    "data": "142.250.138.157"
+   },
+   {
+    "name": "stats.g.doubleclick.net",
+    "type": "A",
+    "data": "142.250.138.154"
+   },
+   {
+    "name": "stats.g.doubleclick.net",
+    "type": "A",
+    "data": "142.250.138.156"
+   }
+  ]
+ },
+ {
+  "ts": 1749828886.959028,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "s.clarity.ms",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828886.95903,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "s.clarity.ms",
+    "qtype": 65
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828886.990353,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "analytics.google.com",
+    "qtype": 65
+   }
+  ],
+  "answers": [
+   {
+    "name": "analytics.google.com",
+    "type": "CNAME",
+    "data": "analytics-alv.google.com"
+   }
+  ]
+ },
+ {
+  "ts": 1749828886.999395,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "s.clarity.ms",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "s.clarity.ms",
+    "type": "CNAME",
+    "data": "clarity-ingest-eus-c-sc.eastus.cloudapp.azure.com"
+   },
+   {
+    "name": "clarity-ingest-eus-c-sc.eastus.cloudapp.azure.com",
+    "type": "A",
+    "data": "23.96.124.68"
+   }
+  ]
+ },
+ {
+  "ts": 1749828886.999397,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "stats.g.doubleclick.net",
+    "qtype": 65
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828887.05248,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "s.clarity.ms",
+    "qtype": 65
+   }
+  ],
+  "answers": [
+   {
+    "name": "s.clarity.ms",
+    "type": "CNAME",
+    "data": "clarity-ingest-eus-c-sc.eastus.cloudapp.azure.com"
+   }
+  ]
+ },
+ {
+  "ts": 1749828887.132686,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "www.facebook.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828887.132687,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "www.facebook.com",
+    "qtype": 65
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828887.133142,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "www.facebook.com",
+    "qtype": 65
+   }
+  ],
+  "answers": [
+   {
+    "name": "www.facebook.com",
+    "type": "CNAME",
+    "data": "star-mini.c10r.facebook.com"
+   }
+  ]
+ },
+ {
+  "ts": 1749828887.180909,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "www.facebook.com",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "www.facebook.com",
+    "type": "CNAME",
+    "data": "star-mini.c10r.facebook.com"
+   },
+   {
+    "name": "star-mini.c10r.facebook.com",
+    "type": "A",
+    "data": "157.240.24.35"
+   }
+  ]
+ },
+ {
+  "ts": 1749828887.2173,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "fonts.gstatic.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828887.217301,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "fonts.gstatic.com",
+    "qtype": 65
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828887.217303,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "fonts.gstatic.com",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "fonts.gstatic.com",
+    "type": "A",
+    "data": "173.194.208.94"
+   }
+  ]
+ },
+ {
+  "ts": 1749828887.217555,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "fonts.gstatic.com",
+    "qtype": 65
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828888.397411,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "www.cloudflare.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828888.397413,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "www.cloudflare.com",
+    "qtype": 65
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828888.457541,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "www.cloudflare.com",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "www.cloudflare.com",
+    "type": "A",
+    "data": "104.16.124.96"
+   },
+   {
+    "name": "www.cloudflare.com",
+    "type": "A",
+    "data": "104.16.123.96"
+   }
+  ]
+ },
+ {
+  "ts": 1749828888.461368,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "www.cloudflare.com",
+    "qtype": 65
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828893.757867,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "edge-consumer-static.azureedge.net",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828893.758069,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "edge-consumer-static.azureedge.net",
+    "qtype": 65
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828893.798109,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "edge-consumer-static.azureedge.net",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "edge-consumer-static.azureedge.net",
+    "type": "CNAME",
+    "data": "edge-consumer-static.afd.azureedge.net"
+   },
+   {
+    "name": "edge-consumer-static.afd.azureedge.net",
+    "type": "CNAME",
+    "data": "azureedge-t-prod.trafficmanager.net"
+   },
+   {
+    "name": "azureedge-t-prod.trafficmanager.net",
+    "type": "CNAME",
+    "data": "shed.dual-low.s-part-0029.t-0009.t-msedge.net"
+   },
+   {
+    "name": "shed.dual-low.s-part-0029.t-0009.t-msedge.net",
+    "type": "CNAME",
+    "data": "s-part-0029.t-0009.t-msedge.net"
+   },
+   {
+    "name": "s-part-0029.t-0009.t-msedge.net",
+    "type": "A",
+    "data": "13.107.246.57"
+   }
+  ]
+ },
+ {
+  "ts": 1749828893.801067,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "edge-consumer-static.azureedge.net",
+    "qtype": 65
+   }
+  ],
+  "answers": [
+   {
+    "name": "edge-consumer-static.azureedge.net",
+    "type": "CNAME",
+    "data": "edge-consumer-static.afd.azureedge.net"
+   },
+   {
+    "name": "edge-consumer-static.afd.azureedge.net",
+    "type": "CNAME",
+    "data": "azureedge-t-prod.trafficmanager.net"
+   },
+   {
+    "name": "azureedge-t-prod.trafficmanager.net",
+    "type": "CNAME",
+    "data": "shed.dual-low.s-part-0029.t-0009.t-msedge.net"
+   },
+   {
+    "name": "shed.dual-low.s-part-0029.t-0009.t-msedge.net",
+    "type": "CNAME",
+    "data": "s-part-0029.t-0009.t-msedge.net"
+   }
+  ]
+ },
+ {
+  "ts": 1749828899.451901,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "wpad.massfriction.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828899.451902,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "wpad.massfriction.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828900.907609,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "fp.msedge.net",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828900.90761,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "fp.msedge.net",
+    "qtype": 65
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828900.9412,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "fp.msedge.net",
+    "qtype": 65
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828900.941202,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "fp.msedge.net",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "fp.msedge.net",
+    "type": "CNAME",
+    "data": "1.perf.msedge.net"
+   },
+   {
+    "name": "1.perf.msedge.net",
+    "type": "CNAME",
+    "data": "a-0019.a-msedge.net"
+   },
+   {
+    "name": "a-0019.a-msedge.net",
+    "type": "CNAME",
+    "data": "a-0019.a.dns.azurefd.net"
+   },
+   {
+    "name": "a-0019.a.dns.azurefd.net",
+    "type": "CNAME",
+    "data": "a-0019.standard.a-msedge.net"
+   },
+   {
+    "name": "a-0019.standard.a-msedge.net",
+    "type": "A",
+    "data": "204.79.197.222"
+   }
+  ]
+ },
+ {
+  "ts": 1749828900.941204,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "fp.msedge.net",
+    "qtype": 65
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828900.972142,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "fp.msedge.net",
+    "qtype": 65
+   }
+  ],
+  "answers": [
+   {
+    "name": "fp.msedge.net",
+    "type": "CNAME",
+    "data": "1.perf.msedge.net"
+   },
+   {
+    "name": "1.perf.msedge.net",
+    "type": "CNAME",
+    "data": "a-0019.a-msedge.net"
+   },
+   {
+    "name": "a-0019.a-msedge.net",
+    "type": "CNAME",
+    "data": "a-0019.a.dns.azurefd.net"
+   },
+   {
+    "name": "a-0019.a.dns.azurefd.net",
+    "type": "CNAME",
+    "data": "a-0019.standard.a-msedge.net"
+   }
+  ]
+ },
+ {
+  "ts": 1749828903.211042,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "bx-ring.msedge.net",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828903.211261,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "bx-ring.msedge.net",
+    "qtype": 65
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828903.256251,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "bx-ring.msedge.net",
+    "qtype": 65
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828903.259301,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "bx-ring.msedge.net",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "bx-ring.msedge.net",
+    "type": "CNAME",
+    "data": "bx-ring.bx-9999.bx-msedge.net"
+   },
+   {
+    "name": "bx-ring.bx-9999.bx-msedge.net",
+    "type": "CNAME",
+    "data": "bx-9999.bx-msedge.net"
+   },
+   {
+    "name": "bx-9999.bx-msedge.net",
+    "type": "A",
+    "data": "150.171.73.254"
+   },
+   {
+    "name": "bx-9999.bx-msedge.net",
+    "type": "A",
+    "data": "150.171.74.254"
+   }
+  ]
+ },
+ {
+  "ts": 1749828903.468315,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "teams-ring.msedge.net",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828903.468601,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "teams-ring.msedge.net",
+    "qtype": 65
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828903.50137,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "teams-ring.msedge.net",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "teams-ring.msedge.net",
+    "type": "CNAME",
+    "data": "teams-ring.teams-9999.teams-msedge.net"
+   },
+   {
+    "name": "teams-ring.teams-9999.teams-msedge.net",
+    "type": "CNAME",
+    "data": "teams-9999.teams-msedge.net"
+   },
+   {
+    "name": "teams-9999.teams-msedge.net",
+    "type": "A",
+    "data": "52.113.196.254"
+   }
+  ]
+ },
+ {
+  "ts": 1749828903.540996,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "teams-ring.msedge.net",
+    "qtype": 65
+   }
+  ],
+  "answers": [
+   {
+    "name": "teams-ring.msedge.net",
+    "type": "CNAME",
+    "data": "teams-ring.teams-9999.teams-msedge.net"
+   },
+   {
+    "name": "teams-ring.teams-9999.teams-msedge.net",
+    "type": "CNAME",
+    "data": "teams-9999.teams-msedge.net"
+   }
+  ]
+ },
+ {
+  "ts": 1749828903.820098,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "f532cb556f727d508908f4950f1b685d.azr.footprintdns.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828903.820867,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "f532cb556f727d508908f4950f1b685d.azr.footprintdns.com",
+    "qtype": 65
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828903.881401,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "f532cb556f727d508908f4950f1b685d.azr.footprintdns.com",
+    "qtype": 65
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828903.881403,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "f532cb556f727d508908f4950f1b685d.azr.footprintdns.com",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "f532cb556f727d508908f4950f1b685d.azr.footprintdns.com",
+    "type": "CNAME",
+    "data": "azperfmaptargets-prod.trafficmanager.net"
+   },
+   {
+    "name": "azperfmaptargets-prod.trafficmanager.net",
+    "type": "CNAME",
+    "data": "cq1prdapp01-canary.netmon.azure.com"
+   },
+   {
+    "name": "cq1prdapp01-canary.netmon.azure.com",
+    "type": "CNAME",
+    "data": "cq1prdapp01-canary.brazilsouth.cloudapp.azure.com"
+   },
+   {
+    "name": "cq1prdapp01-canary.brazilsouth.cloudapp.azure.com",
+    "type": "A",
+    "data": "191.232.215.149"
+   }
+  ]
+ },
+ {
+  "ts": 1749828910.039632,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "arc-ring.msedge.net",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828910.039982,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "arc-ring.msedge.net",
+    "qtype": 65
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828910.079298,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "arc-ring.msedge.net",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "arc-ring.msedge.net",
+    "type": "CNAME",
+    "data": "arc-ring.arc-9999.arc-msedge.net"
+   },
+   {
+    "name": "arc-ring.arc-9999.arc-msedge.net",
+    "type": "CNAME",
+    "data": "arc-9999.arc-msedge.net"
+   },
+   {
+    "name": "arc-9999.arc-msedge.net",
+    "type": "A",
+    "data": "172.202.65.254"
+   },
+   {
+    "name": "arc-9999.arc-msedge.net",
+    "type": "A",
+    "data": "172.202.64.254"
+   }
+  ]
+ },
+ {
+  "ts": 1749828910.112272,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "arc-ring.msedge.net",
+    "qtype": 65
+   }
+  ],
+  "answers": [
+   {
+    "name": "arc-ring.msedge.net",
+    "type": "CNAME",
+    "data": "arc-ring.arc-9999.arc-msedge.net"
+   },
+   {
+    "name": "arc-ring.arc-9999.arc-msedge.net",
+    "type": "CNAME",
+    "data": "arc-9999.arc-msedge.net"
+   }
+  ]
+ },
+ {
+  "ts": 1749828910.384495,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "ce7953307ad2079d6aaa354bfc57865b.clo.footprintdns.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828910.384497,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "ce7953307ad2079d6aaa354bfc57865b.clo.footprintdns.com",
+    "qtype": 65
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828910.420838,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "ce7953307ad2079d6aaa354bfc57865b.clo.footprintdns.com",
+    "qtype": 65
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828910.434066,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "ce7953307ad2079d6aaa354bfc57865b.clo.footprintdns.com",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "ce7953307ad2079d6aaa354bfc57865b.clo.footprintdns.com",
+    "type": "CNAME",
+    "data": "7.perf.msedge.net"
+   },
+   {
+    "name": "7.perf.msedge.net",
+    "type": "CNAME",
+    "data": "l-0001.l-msedge.net"
+   },
+   {
+    "name": "l-0001.l-msedge.net",
+    "type": "A",
+    "data": "13.107.42.10"
+   }
+  ]
+ },
+ {
+  "ts": 1749828910.700275,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "k-ring.msedge.net",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828910.700627,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "k-ring.msedge.net",
+    "qtype": 65
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828910.741117,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "k-ring.msedge.net",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "k-ring.msedge.net",
+    "type": "CNAME",
+    "data": "k-ring.k-9999.k-msedge.net"
+   },
+   {
+    "name": "k-ring.k-9999.k-msedge.net",
+    "type": "CNAME",
+    "data": "k-9999.k-msedge.net"
+   },
+   {
+    "name": "k-9999.k-msedge.net",
+    "type": "A",
+    "data": "13.107.18.254"
+   }
+  ]
+ },
+ {
+  "ts": 1749828910.796682,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "k-ring.msedge.net",
+    "qtype": 65
+   }
+  ],
+  "answers": [
+   {
+    "name": "k-ring.msedge.net",
+    "type": "CNAME",
+    "data": "k-ring.k-9999.k-msedge.net"
+   },
+   {
+    "name": "k-ring.k-9999.k-msedge.net",
+    "type": "CNAME",
+    "data": "k-9999.k-msedge.net"
+   }
+  ]
+ },
+ {
+  "ts": 1749828911.155925,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "_ldap._tcp.Default-First-Site-Name._sites.dc._msdcs.massfriction.com",
+    "qtype": 33
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828911.155927,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "_ldap._tcp.Default-First-Site-Name._sites.dc._msdcs.massfriction.com",
+    "qtype": 33
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828914.559994,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "edge.microsoft.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828914.559995,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "edge.microsoft.com",
+    "qtype": 65
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828914.60094,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "edge.microsoft.com",
+    "qtype": 65
+   }
+  ],
+  "answers": [
+   {
+    "name": "edge.microsoft.com",
+    "type": "CNAME",
+    "data": "edge-microsoft-com.ax-0002.ax-msedge.net"
+   }
+  ]
+ },
+ {
+  "ts": 1749828914.610987,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "edge.microsoft.com",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "edge.microsoft.com",
+    "type": "CNAME",
+    "data": "edge-microsoft-com.ax-0002.ax-msedge.net"
+   },
+   {
+    "name": "edge-microsoft-com.ax-0002.ax-msedge.net",
+    "type": "CNAME",
+    "data": "ax-0002.ax-msedge.net"
+   },
+   {
+    "name": "ax-0002.ax-msedge.net",
+    "type": "A",
+    "data": "150.171.27.11"
+   },
+   {
+    "name": "ax-0002.ax-msedge.net",
+    "type": "A",
+    "data": "150.171.28.11"
+   }
+  ]
+ },
+ {
+  "ts": 1749828916.005759,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "wpad.massfriction.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828916.00576,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "wpad.massfriction.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828916.005761,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "wpad.massfriction.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828916.005762,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "wpad.massfriction.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828923.773925,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "static.edge.microsoftapp.net",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828923.773959,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "static.edge.microsoftapp.net",
+    "qtype": 65
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828923.778531,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "wpad.massfriction.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828923.778532,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "wpad.massfriction.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828923.82091,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "static.edge.microsoftapp.net",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "static.edge.microsoftapp.net",
+    "type": "CNAME",
+    "data": "edge-cloud-resource-static.azureedge.net"
+   },
+   {
+    "name": "edge-cloud-resource-static.azureedge.net",
+    "type": "CNAME",
+    "data": "edge-cloud-resource-static.afd.azureedge.net"
+   },
+   {
+    "name": "edge-cloud-resource-static.afd.azureedge.net",
+    "type": "CNAME",
+    "data": "azureedge-t-prod.trafficmanager.net"
+   },
+   {
+    "name": "azureedge-t-prod.trafficmanager.net",
+    "type": "CNAME",
+    "data": "shed.dual-low.s-part-0029.t-0009.t-msedge.net"
+   },
+   {
+    "name": "shed.dual-low.s-part-0029.t-0009.t-msedge.net",
+    "type": "CNAME",
+    "data": "s-part-0029.t-0009.t-msedge.net"
+   },
+   {
+    "name": "s-part-0029.t-0009.t-msedge.net",
+    "type": "A",
+    "data": "13.107.246.57"
+   }
+  ]
+ },
+ {
+  "ts": 1749828923.820912,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "static.edge.microsoftapp.net",
+    "qtype": 65
+   }
+  ],
+  "answers": [
+   {
+    "name": "static.edge.microsoftapp.net",
+    "type": "CNAME",
+    "data": "edge-cloud-resource-static.azureedge.net"
+   },
+   {
+    "name": "edge-cloud-resource-static.azureedge.net",
+    "type": "CNAME",
+    "data": "edge-cloud-resource-static.afd.azureedge.net"
+   },
+   {
+    "name": "edge-cloud-resource-static.afd.azureedge.net",
+    "type": "CNAME",
+    "data": "azureedge-t-prod.trafficmanager.net"
+   },
+   {
+    "name": "azureedge-t-prod.trafficmanager.net",
+    "type": "CNAME",
+    "data": "shed.dual-low.s-part-0029.t-0009.t-msedge.net"
+   },
+   {
+    "name": "shed.dual-low.s-part-0029.t-0009.t-msedge.net",
+    "type": "CNAME",
+    "data": "s-part-0029.t-0009.t-msedge.net"
+   }
+  ]
+ },
+ {
+  "ts": 1749828931.622044,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "wpad.massfriction.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828931.622259,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "wpad.massfriction.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828931.635003,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "browser.pipe.aria.microsoft.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828931.635005,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "browser.pipe.aria.microsoft.com",
+    "qtype": 65
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828931.667247,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "browser.pipe.aria.microsoft.com",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "browser.pipe.aria.microsoft.com",
+    "type": "CNAME",
+    "data": "browser.events.data.trafficmanager.net"
+   },
+   {
+    "name": "browser.events.data.trafficmanager.net",
+    "type": "CNAME",
+    "data": "onedscolprdwus05.westus.cloudapp.azure.com"
+   },
+   {
+    "name": "onedscolprdwus05.westus.cloudapp.azure.com",
+    "type": "A",
+    "data": "20.189.173.6"
+   }
+  ]
+ },
+ {
+  "ts": 1749828931.720548,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "browser.pipe.aria.microsoft.com",
+    "qtype": 65
+   }
+  ],
+  "answers": [
+   {
+    "name": "browser.pipe.aria.microsoft.com",
+    "type": "CNAME",
+    "data": "browser.events.data.trafficmanager.net"
+   },
+   {
+    "name": "browser.events.data.trafficmanager.net",
+    "type": "CNAME",
+    "data": "onedscolprdwus05.westus.cloudapp.azure.com"
+   }
+  ]
+ },
+ {
+  "ts": 1749828933.184653,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "www.bing.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828933.184655,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "www.bing.com",
+    "qtype": 65
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828933.237498,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "www.bing.com",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "www.bing.com",
+    "type": "CNAME",
+    "data": "www-www.bing.com.trafficmanager.net"
+   },
+   {
+    "name": "www-www.bing.com.trafficmanager.net",
+    "type": "CNAME",
+    "data": "www.bing.com.edgekey.net"
+   },
+   {
+    "name": "www.bing.com.edgekey.net",
+    "type": "CNAME",
+    "data": "e86303.dscx.akamaiedge.net"
+   },
+   {
+    "name": "e86303.dscx.akamaiedge.net",
+    "type": "A",
+    "data": "23.198.7.168"
+   },
+   {
+    "name": "e86303.dscx.akamaiedge.net",
+    "type": "A",
+    "data": "23.198.7.184"
+   },
+   {
+    "name": "e86303.dscx.akamaiedge.net",
+    "type": "A",
+    "data": "23.198.7.187"
+   },
+   {
+    "name": "e86303.dscx.akamaiedge.net",
+    "type": "A",
+    "data": "23.198.7.167"
+   },
+   {
+    "name": "e86303.dscx.akamaiedge.net",
+    "type": "A",
+    "data": "23.198.7.164"
+   },
+   {
+    "name": "e86303.dscx.akamaiedge.net",
+    "type": "A",
+    "data": "23.198.7.185"
+   },
+   {
+    "name": "e86303.dscx.akamaiedge.net",
+    "type": "A",
+    "data": "23.198.7.183"
+   },
+   {
+    "name": "e86303.dscx.akamaiedge.net",
+    "type": "A",
+    "data": "23.198.7.186"
+   },
+   {
+    "name": "e86303.dscx.akamaiedge.net",
+    "type": "A",
+    "data": "23.198.7.181"
+   }
+  ]
+ },
+ {
+  "ts": 1749828933.252084,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "www.bing.com",
+    "qtype": 65
+   }
+  ],
+  "answers": [
+   {
+    "name": "www.bing.com",
+    "type": "CNAME",
+    "data": "www-www.bing.com.trafficmanager.net"
+   },
+   {
+    "name": "www-www.bing.com.trafficmanager.net",
+    "type": "CNAME",
+    "data": "www.bing.com.edgekey.net"
+   },
+   {
+    "name": "www.bing.com.edgekey.net",
+    "type": "CNAME",
+    "data": "e86303.dscx.akamaiedge.net"
+   }
+  ]
+ },
+ {
+  "ts": 1749828938.176459,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "dng-microsoftds.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828938.260668,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "dng-microsoftds.com",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "dng-microsoftds.com",
+    "type": "A",
+    "data": "172.67.146.241"
+   },
+   {
+    "name": "dng-microsoftds.com",
+    "type": "A",
+    "data": "104.21.10.227"
+   }
+  ]
+ },
+ {
+  "ts": 1749828948.668145,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "event-time-microsoft.org",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828948.76117,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "event-time-microsoft.org",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "event-time-microsoft.org",
+    "type": "A",
+    "data": "104.21.24.186"
+   },
+   {
+    "name": "event-time-microsoft.org",
+    "type": "A",
+    "data": "172.67.219.231"
+   }
+  ]
+ },
+ {
+  "ts": 1749828958.350269,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "eventdata-microsoft.live",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828958.434505,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "eventdata-microsoft.live",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "eventdata-microsoft.live",
+    "type": "A",
+    "data": "104.21.112.1"
+   },
+   {
+    "name": "eventdata-microsoft.live",
+    "type": "A",
+    "data": "104.21.32.1"
+   },
+   {
+    "name": "eventdata-microsoft.live",
+    "type": "A",
+    "data": "104.21.96.1"
+   },
+   {
+    "name": "eventdata-microsoft.live",
+    "type": "A",
+    "data": "104.21.64.1"
+   },
+   {
+    "name": "eventdata-microsoft.live",
+    "type": "A",
+    "data": "104.21.48.1"
+   },
+   {
+    "name": "eventdata-microsoft.live",
+    "type": "A",
+    "data": "104.21.16.1"
+   },
+   {
+    "name": "eventdata-microsoft.live",
+    "type": "A",
+    "data": "104.21.80.1"
+   }
+  ]
+ },
+ {
+  "ts": 1749828961.346333,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "s.clarity.ms",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828961.346687,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "s.clarity.ms",
+    "qtype": 65
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828961.352233,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "wpad.massfriction.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828961.352235,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "wpad.massfriction.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828961.386748,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "s.clarity.ms",
+    "qtype": 65
+   }
+  ],
+  "answers": [
+   {
+    "name": "s.clarity.ms",
+    "type": "CNAME",
+    "data": "clarity-ingest-eus-c-sc.eastus.cloudapp.azure.com"
+   }
+  ]
+ },
+ {
+  "ts": 1749828961.399529,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "s.clarity.ms",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "s.clarity.ms",
+    "type": "CNAME",
+    "data": "clarity-ingest-eus-c-sc.eastus.cloudapp.azure.com"
+   },
+   {
+    "name": "clarity-ingest-eus-c-sc.eastus.cloudapp.azure.com",
+    "type": "A",
+    "data": "23.96.124.68"
+   }
+  ]
+ },
+ {
+  "ts": 1749828974.17465,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "wpad.massfriction.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828974.174792,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "wpad.massfriction.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828974.190363,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "config.edge.skype.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828974.190426,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "config.edge.skype.com",
+    "qtype": 65
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828974.221727,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "windows.msn.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828974.222613,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "windows.msn.com",
+    "qtype": 65
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828974.240241,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "config.edge.skype.com",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "config.edge.skype.com",
+    "type": "CNAME",
+    "data": "config.edge.skype.com.trafficmanager.net"
+   },
+   {
+    "name": "config.edge.skype.com.trafficmanager.net",
+    "type": "CNAME",
+    "data": "l-0007.config.skype.com"
+   },
+   {
+    "name": "l-0007.config.skype.com",
+    "type": "CNAME",
+    "data": "config-edge-skype.l-0007.l-msedge.net"
+   },
+   {
+    "name": "config-edge-skype.l-0007.l-msedge.net",
+    "type": "CNAME",
+    "data": "l-0007.l-msedge.net"
+   },
+   {
+    "name": "l-0007.l-msedge.net",
+    "type": "A",
+    "data": "13.107.42.16"
+   }
+  ]
+ },
+ {
+  "ts": 1749828974.265214,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "windows.msn.com",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "windows.msn.com",
+    "type": "CNAME",
+    "data": "win-msn-com-world-atm-default.trafficmanager.net"
+   },
+   {
+    "name": "win-msn-com-world-atm-default.trafficmanager.net",
+    "type": "CNAME",
+    "data": "windows.msn.com-ion.edgesuite.net"
+   },
+   {
+    "name": "windows.msn.com-ion.edgesuite.net",
+    "type": "CNAME",
+    "data": "a1672.dscr.akamai.net"
+   },
+   {
+    "name": "a1672.dscr.akamai.net",
+    "type": "A",
+    "data": "23.212.185.87"
+   },
+   {
+    "name": "a1672.dscr.akamai.net",
+    "type": "A",
+    "data": "23.212.185.78"
+   }
+  ]
+ },
+ {
+  "ts": 1749828974.320182,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "windows.msn.com",
+    "qtype": 65
+   }
+  ],
+  "answers": [
+   {
+    "name": "windows.msn.com",
+    "type": "CNAME",
+    "data": "win-msn-com-world-atm-default.trafficmanager.net"
+   },
+   {
+    "name": "win-msn-com-world-atm-default.trafficmanager.net",
+    "type": "CNAME",
+    "data": "windows.msn.com-ion.edgesuite.net"
+   },
+   {
+    "name": "windows.msn.com-ion.edgesuite.net",
+    "type": "CNAME",
+    "data": "a1672.dscr.akamai.net"
+   }
+  ]
+ },
+ {
+  "ts": 1749828974.322331,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "config.edge.skype.com",
+    "qtype": 65
+   }
+  ],
+  "answers": [
+   {
+    "name": "config.edge.skype.com",
+    "type": "CNAME",
+    "data": "config.edge.skype.com.trafficmanager.net"
+   },
+   {
+    "name": "config.edge.skype.com.trafficmanager.net",
+    "type": "CNAME",
+    "data": "l-0007.config.skype.com"
+   },
+   {
+    "name": "l-0007.config.skype.com",
+    "type": "CNAME",
+    "data": "config-edge-skype.l-0007.l-msedge.net"
+   }
+  ]
+ },
+ {
+  "ts": 1749828974.885288,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "www.msn.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828974.885289,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "www.msn.com",
+    "qtype": 65
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828974.921159,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "www.msn.com",
+    "qtype": 65
+   }
+  ],
+  "answers": [
+   {
+    "name": "www.msn.com",
+    "type": "CNAME",
+    "data": "www-msn-com.a-0003.a-msedge.net"
+   }
+  ]
+ },
+ {
+  "ts": 1749828974.923119,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "www.msn.com",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "www.msn.com",
+    "type": "CNAME",
+    "data": "www-msn-com.a-0003.a-msedge.net"
+   },
+   {
+    "name": "www-msn-com.a-0003.a-msedge.net",
+    "type": "CNAME",
+    "data": "a-0003.a-msedge.net"
+   },
+   {
+    "name": "a-0003.a-msedge.net",
+    "type": "A",
+    "data": "204.79.197.203"
+   }
+  ]
+ },
+ {
+  "ts": 1749828975.284814,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "api.msn.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828975.284816,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "api.msn.com",
+    "qtype": 65
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828975.285553,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "assets.msn.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828975.285555,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "assets.msn.com",
+    "qtype": 65
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828975.323235,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "api.msn.com",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "api.msn.com",
+    "type": "CNAME",
+    "data": "api-msn-com-oneservice-world-default.trafficmanager.net"
+   },
+   {
+    "name": "api-msn-com-oneservice-world-default.trafficmanager.net",
+    "type": "CNAME",
+    "data": "api-msn-com.ax-0003.ax-msedge.net"
+   },
+   {
+    "name": "api-msn-com.ax-0003.ax-msedge.net",
+    "type": "CNAME",
+    "data": "ax-0003.ax-msedge.net"
+   },
+   {
+    "name": "ax-0003.ax-msedge.net",
+    "type": "A",
+    "data": "150.171.27.12"
+   },
+   {
+    "name": "ax-0003.ax-msedge.net",
+    "type": "A",
+    "data": "150.171.28.12"
+   }
+  ]
+ },
+ {
+  "ts": 1749828975.323237,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "assets.msn.com",
+    "qtype": 65
+   }
+  ],
+  "answers": [
+   {
+    "name": "assets.msn.com",
+    "type": "CNAME",
+    "data": "assets-msn-com-world-atm-default.trafficmanager.net"
+   },
+   {
+    "name": "assets-msn-com-world-atm-default.trafficmanager.net",
+    "type": "CNAME",
+    "data": "assets.msn.com-ion.edgesuite.net"
+   },
+   {
+    "name": "assets.msn.com-ion.edgesuite.net",
+    "type": "CNAME",
+    "data": "a1666.dscr.akamai.net"
+   }
+  ]
+ },
+ {
+  "ts": 1749828975.332955,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "assets.msn.com",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "assets.msn.com",
+    "type": "CNAME",
+    "data": "assets-msn-com-world-atm-default.trafficmanager.net"
+   },
+   {
+    "name": "assets-msn-com-world-atm-default.trafficmanager.net",
+    "type": "CNAME",
+    "data": "assets.msn.com-ion.edgesuite.net"
+   },
+   {
+    "name": "assets.msn.com-ion.edgesuite.net",
+    "type": "CNAME",
+    "data": "a1666.dscr.akamai.net"
+   },
+   {
+    "name": "a1666.dscr.akamai.net",
+    "type": "A",
+    "data": "23.212.185.76"
+   },
+   {
+    "name": "a1666.dscr.akamai.net",
+    "type": "A",
+    "data": "23.212.185.85"
+   }
+  ]
+ },
+ {
+  "ts": 1749828975.35491,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "api.msn.com",
+    "qtype": 65
+   }
+  ],
+  "answers": [
+   {
+    "name": "api.msn.com",
+    "type": "CNAME",
+    "data": "api-msn-com-oneservice-world-default.trafficmanager.net"
+   },
+   {
+    "name": "api-msn-com-oneservice-world-default.trafficmanager.net",
+    "type": "CNAME",
+    "data": "api-msn-com.ax-0003.ax-msedge.net"
+   },
+   {
+    "name": "api-msn-com.ax-0003.ax-msedge.net",
+    "type": "CNAME",
+    "data": "ax-0003.ax-msedge.net"
+   }
+  ]
+ },
+ {
+  "ts": 1749828975.528458,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "srtb.msn.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828975.528459,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "srtb.msn.com",
+    "qtype": 65
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828975.561465,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "srtb.msn.com",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "srtb.msn.com",
+    "type": "CNAME",
+    "data": "srtb-msn-com-profile.trafficmanager.net"
+   },
+   {
+    "name": "srtb-msn-com-profile.trafficmanager.net",
+    "type": "CNAME",
+    "data": "www-msn-com.a-0003.a-msedge.net"
+   },
+   {
+    "name": "www-msn-com.a-0003.a-msedge.net",
+    "type": "CNAME",
+    "data": "a-0003.a-msedge.net"
+   },
+   {
+    "name": "a-0003.a-msedge.net",
+    "type": "A",
+    "data": "204.79.197.203"
+   }
+  ]
+ },
+ {
+  "ts": 1749828975.595412,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "srtb.msn.com",
+    "qtype": 65
+   }
+  ],
+  "answers": [
+   {
+    "name": "srtb.msn.com",
+    "type": "CNAME",
+    "data": "srtb-msn-com-profile.trafficmanager.net"
+   },
+   {
+    "name": "srtb-msn-com-profile.trafficmanager.net",
+    "type": "CNAME",
+    "data": "www-msn-com.a-0003.a-msedge.net"
+   },
+   {
+    "name": "www-msn-com.a-0003.a-msedge.net",
+    "type": "CNAME",
+    "data": "a-0003.a-msedge.net"
+   }
+  ]
+ },
+ {
+  "ts": 1749828975.62367,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "th.bing.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828975.623672,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "th.bing.com",
+    "qtype": 65
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828975.667161,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "th.bing.com",
+    "qtype": 65
+   }
+  ],
+  "answers": [
+   {
+    "name": "th.bing.com",
+    "type": "CNAME",
+    "data": "p-th.bing.com.trafficmanager.net"
+   },
+   {
+    "name": "p-th.bing.com.trafficmanager.net",
+    "type": "CNAME",
+    "data": "th.bing.com.edgekey.net"
+   },
+   {
+    "name": "th.bing.com.edgekey.net",
+    "type": "CNAME",
+    "data": "e86303.dscx.akamaiedge.net"
+   }
+  ]
+ },
+ {
+  "ts": 1749828975.667502,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "th.bing.com",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "th.bing.com",
+    "type": "CNAME",
+    "data": "p-th.bing.com.trafficmanager.net"
+   },
+   {
+    "name": "p-th.bing.com.trafficmanager.net",
+    "type": "CNAME",
+    "data": "th.bing.com.edgekey.net"
+   },
+   {
+    "name": "th.bing.com.edgekey.net",
+    "type": "CNAME",
+    "data": "e86303.dscx.akamaiedge.net"
+   },
+   {
+    "name": "e86303.dscx.akamaiedge.net",
+    "type": "A",
+    "data": "23.198.7.186"
+   },
+   {
+    "name": "e86303.dscx.akamaiedge.net",
+    "type": "A",
+    "data": "23.198.7.168"
+   },
+   {
+    "name": "e86303.dscx.akamaiedge.net",
+    "type": "A",
+    "data": "23.198.7.182"
+   },
+   {
+    "name": "e86303.dscx.akamaiedge.net",
+    "type": "A",
+    "data": "23.198.7.167"
+   },
+   {
+    "name": "e86303.dscx.akamaiedge.net",
+    "type": "A",
+    "data": "23.198.7.183"
+   },
+   {
+    "name": "e86303.dscx.akamaiedge.net",
+    "type": "A",
+    "data": "23.198.7.187"
+   },
+   {
+    "name": "e86303.dscx.akamaiedge.net",
+    "type": "A",
+    "data": "23.198.7.184"
+   },
+   {
+    "name": "e86303.dscx.akamaiedge.net",
+    "type": "A",
+    "data": "23.198.7.185"
+   },
+   {
+    "name": "e86303.dscx.akamaiedge.net",
+    "type": "A",
+    "data": "23.198.7.181"
+   }
+  ]
+ },
+ {
+  "ts": 1749828975.876231,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "thaka.bing.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828975.876233,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "thaka.bing.com",
+    "qtype": 65
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828975.910093,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "thaka.bing.com",
+    "qtype": 65
+   }
+  ],
+  "answers": [
+   {
+    "name": "thaka.bing.com",
+    "type": "CNAME",
+    "data": "thaka.bing.com.edgekey.net"
+   },
+   {
+    "name": "thaka.bing.com.edgekey.net",
+    "type": "CNAME",
+    "data": "e86303.dscx.akamaiedge.net"
+   }
+  ]
+ },
+ {
+  "ts": 1749828975.919157,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "thaka.bing.com",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "thaka.bing.com",
+    "type": "CNAME",
+    "data": "thaka.bing.com.edgekey.net"
+   },
+   {
+    "name": "thaka.bing.com.edgekey.net",
+    "type": "CNAME",
+    "data": "e86303.dscx.akamaiedge.net"
+   },
+   {
+    "name": "e86303.dscx.akamaiedge.net",
+    "type": "A",
+    "data": "23.198.7.168"
+   },
+   {
+    "name": "e86303.dscx.akamaiedge.net",
+    "type": "A",
+    "data": "23.198.7.182"
+   },
+   {
+    "name": "e86303.dscx.akamaiedge.net",
+    "type": "A",
+    "data": "23.198.7.167"
+   },
+   {
+    "name": "e86303.dscx.akamaiedge.net",
+    "type": "A",
+    "data": "23.198.7.183"
+   },
+   {
+    "name": "e86303.dscx.akamaiedge.net",
+    "type": "A",
+    "data": "23.198.7.187"
+   },
+   {
+    "name": "e86303.dscx.akamaiedge.net",
+    "type": "A",
+    "data": "23.198.7.184"
+   },
+   {
+    "name": "e86303.dscx.akamaiedge.net",
+    "type": "A",
+    "data": "23.198.7.185"
+   },
+   {
+    "name": "e86303.dscx.akamaiedge.net",
+    "type": "A",
+    "data": "23.198.7.181"
+   },
+   {
+    "name": "e86303.dscx.akamaiedge.net",
+    "type": "A",
+    "data": "23.198.7.186"
+   }
+  ]
+ },
+ {
+  "ts": 1749828976.759598,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "www.bing.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828976.759605,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "www.bing.com",
+    "qtype": 65
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828976.75987,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "www.bing.com",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "www.bing.com",
+    "type": "CNAME",
+    "data": "www-www.bing.com.trafficmanager.net"
+   },
+   {
+    "name": "www-www.bing.com.trafficmanager.net",
+    "type": "CNAME",
+    "data": "www.bing.com.edgekey.net"
+   },
+   {
+    "name": "www.bing.com.edgekey.net",
+    "type": "CNAME",
+    "data": "e86303.dscx.akamaiedge.net"
+   },
+   {
+    "name": "e86303.dscx.akamaiedge.net",
+    "type": "A",
+    "data": "23.198.7.182"
+   },
+   {
+    "name": "e86303.dscx.akamaiedge.net",
+    "type": "A",
+    "data": "23.198.7.167"
+   },
+   {
+    "name": "e86303.dscx.akamaiedge.net",
+    "type": "A",
+    "data": "23.198.7.183"
+   },
+   {
+    "name": "e86303.dscx.akamaiedge.net",
+    "type": "A",
+    "data": "23.198.7.187"
+   },
+   {
+    "name": "e86303.dscx.akamaiedge.net",
+    "type": "A",
+    "data": "23.198.7.184"
+   },
+   {
+    "name": "e86303.dscx.akamaiedge.net",
+    "type": "A",
+    "data": "23.198.7.185"
+   },
+   {
+    "name": "e86303.dscx.akamaiedge.net",
+    "type": "A",
+    "data": "23.198.7.181"
+   },
+   {
+    "name": "e86303.dscx.akamaiedge.net",
+    "type": "A",
+    "data": "23.198.7.186"
+   },
+   {
+    "name": "e86303.dscx.akamaiedge.net",
+    "type": "A",
+    "data": "23.198.7.168"
+   }
+  ]
+ },
+ {
+  "ts": 1749828976.759873,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "www.bing.com",
+    "qtype": 65
+   }
+  ],
+  "answers": [
+   {
+    "name": "www.bing.com",
+    "type": "CNAME",
+    "data": "www-www.bing.com.trafficmanager.net"
+   },
+   {
+    "name": "www-www.bing.com.trafficmanager.net",
+    "type": "CNAME",
+    "data": "www.bing.com.edgekey.net"
+   },
+   {
+    "name": "www.bing.com.edgekey.net",
+    "type": "CNAME",
+    "data": "e86303.dscx.akamaiedge.net"
+   }
+  ]
+ },
+ {
+  "ts": 1749828982.19822,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "wpad.massfriction.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828982.198221,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "wpad.massfriction.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828993.129367,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "windows.php.net",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749828993.199824,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "windows.php.net",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "windows.php.net",
+    "type": "A",
+    "data": "83.137.149.15"
+   }
+  ]
+ },
+ {
+  "ts": 1749829022.340059,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "s.clarity.ms",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749829022.34006,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "s.clarity.ms",
+    "qtype": 65
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749829022.379617,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "s.clarity.ms",
+    "qtype": 65
+   }
+  ],
+  "answers": [
+   {
+    "name": "s.clarity.ms",
+    "type": "CNAME",
+    "data": "clarity-ingest-eus-c-sc.eastus.cloudapp.azure.com"
+   }
+  ]
+ },
+ {
+  "ts": 1749829022.385812,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "s.clarity.ms",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "s.clarity.ms",
+    "type": "CNAME",
+    "data": "clarity-ingest-eus-c-sc.eastus.cloudapp.azure.com"
+   },
+   {
+    "name": "clarity-ingest-eus-c-sc.eastus.cloudapp.azure.com",
+    "type": "A",
+    "data": "23.96.124.68"
+   }
+  ]
+ },
+ {
+  "ts": 1749829043.934811,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "edge.microsoft.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749829043.934999,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "edge.microsoft.com",
+    "qtype": 65
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749829043.969474,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "edge.microsoft.com",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "edge.microsoft.com",
+    "type": "CNAME",
+    "data": "edge-microsoft-com.ax-0002.ax-msedge.net"
+   },
+   {
+    "name": "edge-microsoft-com.ax-0002.ax-msedge.net",
+    "type": "CNAME",
+    "data": "ax-0002.ax-msedge.net"
+   },
+   {
+    "name": "ax-0002.ax-msedge.net",
+    "type": "A",
+    "data": "150.171.28.11"
+   },
+   {
+    "name": "ax-0002.ax-msedge.net",
+    "type": "A",
+    "data": "150.171.27.11"
+   }
+  ]
+ },
+ {
+  "ts": 1749829044.006585,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "edge.microsoft.com",
+    "qtype": 65
+   }
+  ],
+  "answers": [
+   {
+    "name": "edge.microsoft.com",
+    "type": "CNAME",
+    "data": "edge-microsoft-com.ax-0002.ax-msedge.net"
+   },
+   {
+    "name": "edge-microsoft-com.ax-0002.ax-msedge.net",
+    "type": "CNAME",
+    "data": "ax-0002.ax-msedge.net"
+   }
+  ]
+ },
+ {
+  "ts": 1749829045.247564,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "windows-msgas.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749829045.305614,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "windows-msgas.com",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "windows-msgas.com",
+    "type": "A",
+    "data": "104.21.16.1"
+   },
+   {
+    "name": "windows-msgas.com",
+    "type": "A",
+    "data": "104.21.112.1"
+   },
+   {
+    "name": "windows-msgas.com",
+    "type": "A",
+    "data": "104.21.48.1"
+   },
+   {
+    "name": "windows-msgas.com",
+    "type": "A",
+    "data": "104.21.96.1"
+   },
+   {
+    "name": "windows-msgas.com",
+    "type": "A",
+    "data": "104.21.32.1"
+   },
+   {
+    "name": "windows-msgas.com",
+    "type": "A",
+    "data": "104.21.80.1"
+   },
+   {
+    "name": "windows-msgas.com",
+    "type": "A",
+    "data": "104.21.64.1"
+   }
+  ]
+ },
+ {
+  "ts": 1749829135.580248,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "varying-rentals-calgary-predict.trycloudflare.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749829135.618472,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "varying-rentals-calgary-predict.trycloudflare.com",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "varying-rentals-calgary-predict.trycloudflare.com",
+    "type": "A",
+    "data": "104.16.230.132"
+   },
+   {
+    "name": "varying-rentals-calgary-predict.trycloudflare.com",
+    "type": "A",
+    "data": "104.16.231.132"
+   }
+  ]
+ },
+ {
+  "ts": 1749829153.187306,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "_ldap._tcp.Default-First-Site-Name._sites.WIN-DQL4WFWJXQ4.massfriction.com",
+    "qtype": 33
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749829153.187413,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "_ldap._tcp.Default-First-Site-Name._sites.WIN-DQL4WFWJXQ4.massfriction.com",
+    "qtype": 33
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749829153.188272,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "_ldap._tcp.WIN-DQL4WFWJXQ4.massfriction.com",
+    "qtype": 33
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749829153.188274,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "_ldap._tcp.WIN-DQL4WFWJXQ4.massfriction.com",
+    "qtype": 33
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749829165.700426,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "event-datamicrosoft.live",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749829165.777199,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "event-datamicrosoft.live",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "event-datamicrosoft.live",
+    "type": "A",
+    "data": "104.21.16.1"
+   },
+   {
+    "name": "event-datamicrosoft.live",
+    "type": "A",
+    "data": "104.21.80.1"
+   },
+   {
+    "name": "event-datamicrosoft.live",
+    "type": "A",
+    "data": "104.21.48.1"
+   },
+   {
+    "name": "event-datamicrosoft.live",
+    "type": "A",
+    "data": "104.21.64.1"
+   },
+   {
+    "name": "event-datamicrosoft.live",
+    "type": "A",
+    "data": "104.21.112.1"
+   },
+   {
+    "name": "event-datamicrosoft.live",
+    "type": "A",
+    "data": "104.21.96.1"
+   },
+   {
+    "name": "event-datamicrosoft.live",
+    "type": "A",
+    "data": "104.21.32.1"
+   }
+  ]
+ },
+ {
+  "ts": 1749829290.729102,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "_ldap._tcp.Default-First-Site-Name._sites.WIN-DQL4WFWJXQ4.massfriction.com",
+    "qtype": 33
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749829290.729383,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "_ldap._tcp.Default-First-Site-Name._sites.WIN-DQL4WFWJXQ4.massfriction.com",
+    "qtype": 33
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749829290.729694,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "_ldap._tcp.WIN-DQL4WFWJXQ4.massfriction.com",
+    "qtype": 33
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749829290.729695,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "_ldap._tcp.WIN-DQL4WFWJXQ4.massfriction.com",
+    "qtype": 33
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749829291.561036,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "login.microsoftonline.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749829291.590612,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "fd.api.iris.microsoft.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749829291.609446,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "login.microsoftonline.com",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "login.microsoftonline.com",
+    "type": "CNAME",
+    "data": "login.mso.msidentity.com"
+   },
+   {
+    "name": "login.mso.msidentity.com",
+    "type": "CNAME",
+    "data": "ak.privatelink.msidentity.com"
+   },
+   {
+    "name": "ak.privatelink.msidentity.com",
+    "type": "CNAME",
+    "data": "www.tm.a.prd.aadg.akadns.net"
+   },
+   {
+    "name": "www.tm.a.prd.aadg.akadns.net",
+    "type": "A",
+    "data": "20.190.157.13"
+   },
+   {
+    "name": "www.tm.a.prd.aadg.akadns.net",
+    "type": "A",
+    "data": "20.190.157.9"
+   },
+   {
+    "name": "www.tm.a.prd.aadg.akadns.net",
+    "type": "A",
+    "data": "40.126.29.6"
+   },
+   {
+    "name": "www.tm.a.prd.aadg.akadns.net",
+    "type": "A",
+    "data": "20.190.157.14"
+   },
+   {
+    "name": "www.tm.a.prd.aadg.akadns.net",
+    "type": "A",
+    "data": "20.190.157.0"
+   },
+   {
+    "name": "www.tm.a.prd.aadg.akadns.net",
+    "type": "A",
+    "data": "40.126.29.13"
+   },
+   {
+    "name": "www.tm.a.prd.aadg.akadns.net",
+    "type": "A",
+    "data": "20.190.157.1"
+   },
+   {
+    "name": "www.tm.a.prd.aadg.akadns.net",
+    "type": "A",
+    "data": "20.190.157.3"
+   }
+  ]
+ },
+ {
+  "ts": 1749829291.635273,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "fd.api.iris.microsoft.com",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "fd.api.iris.microsoft.com",
+    "type": "CNAME",
+    "data": "fd-api-iris.trafficmanager.net"
+   },
+   {
+    "name": "fd-api-iris.trafficmanager.net",
+    "type": "CNAME",
+    "data": "iris-de-prod-azsc-v2-ncus.northcentralus.cloudapp.azure.com"
+   },
+   {
+    "name": "iris-de-prod-azsc-v2-ncus.northcentralus.cloudapp.azure.com",
+    "type": "A",
+    "data": "23.96.180.189"
+   }
+  ]
+ },
+ {
+  "ts": 1749829292.000243,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "settings-win.data.microsoft.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749829292.042114,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "settings-win.data.microsoft.com",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "settings-win.data.microsoft.com",
+    "type": "CNAME",
+    "data": "atm-settingsfe-prod-geo2.trafficmanager.net"
+   },
+   {
+    "name": "atm-settingsfe-prod-geo2.trafficmanager.net",
+    "type": "CNAME",
+    "data": "settings-prod-cin-1.centralindia.cloudapp.azure.com"
+   },
+   {
+    "name": "settings-prod-cin-1.centralindia.cloudapp.azure.com",
+    "type": "A",
+    "data": "52.140.118.28"
+   }
+  ]
+ },
+ {
+  "ts": 1749829433.535438,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "array619.prod.do.dsp.mp.microsoft.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749829433.535546,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "array619.prod.do.dsp.mp.microsoft.com",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "array619.prod.do.dsp.mp.microsoft.com",
+    "type": "A",
+    "data": "13.74.187.43"
+   }
+  ]
+ },
+ {
+  "ts": 1749829434.207352,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "kv601.prod.do.dsp.mp.microsoft.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749829434.254158,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "kv601.prod.do.dsp.mp.microsoft.com",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "kv601.prod.do.dsp.mp.microsoft.com",
+    "type": "CNAME",
+    "data": "kv601.prod.do.dsp.mp.microsoft.com.edgekey.net"
+   },
+   {
+    "name": "kv601.prod.do.dsp.mp.microsoft.com.edgekey.net",
+    "type": "CNAME",
+    "data": "e12358.d.akamaiedge.net"
+   },
+   {
+    "name": "e12358.d.akamaiedge.net",
+    "type": "A",
+    "data": "173.222.52.33"
+   }
+  ]
+ },
+ {
+  "ts": 1749829437.100752,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "varying-rentals-calgary-predict.trycloudflare.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749829437.174238,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "varying-rentals-calgary-predict.trycloudflare.com",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "varying-rentals-calgary-predict.trycloudflare.com",
+    "type": "A",
+    "data": "104.16.230.132"
+   },
+   {
+    "name": "varying-rentals-calgary-predict.trycloudflare.com",
+    "type": "A",
+    "data": "104.16.231.132"
+   }
+  ]
+ },
+ {
+  "ts": 1749829497.31662,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "windows-msgas.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749829497.431528,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "windows-msgas.com",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "windows-msgas.com",
+    "type": "A",
+    "data": "104.21.16.1"
+   },
+   {
+    "name": "windows-msgas.com",
+    "type": "A",
+    "data": "104.21.112.1"
+   },
+   {
+    "name": "windows-msgas.com",
+    "type": "A",
+    "data": "104.21.96.1"
+   },
+   {
+    "name": "windows-msgas.com",
+    "type": "A",
+    "data": "104.21.32.1"
+   },
+   {
+    "name": "windows-msgas.com",
+    "type": "A",
+    "data": "104.21.48.1"
+   },
+   {
+    "name": "windows-msgas.com",
+    "type": "A",
+    "data": "104.21.80.1"
+   },
+   {
+    "name": "windows-msgas.com",
+    "type": "A",
+    "data": "104.21.64.1"
+   }
+  ]
+ },
+ {
+  "ts": 1749829516.030669,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "wpad.massfriction.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749829516.03067,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "wpad.massfriction.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749829516.030871,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "wpad.massfriction.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749829516.030872,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "wpad.massfriction.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749829531.979672,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "login.microsoftonline.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749829532.064181,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "login.microsoftonline.com",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "login.microsoftonline.com",
+    "type": "CNAME",
+    "data": "login.mso.msidentity.com"
+   },
+   {
+    "name": "login.mso.msidentity.com",
+    "type": "CNAME",
+    "data": "ak.privatelink.msidentity.com"
+   },
+   {
+    "name": "ak.privatelink.msidentity.com",
+    "type": "CNAME",
+    "data": "www.tm.a.prd.aadg.akadns.net"
+   },
+   {
+    "name": "www.tm.a.prd.aadg.akadns.net",
+    "type": "A",
+    "data": "40.126.29.11"
+   },
+   {
+    "name": "www.tm.a.prd.aadg.akadns.net",
+    "type": "A",
+    "data": "20.190.157.14"
+   },
+   {
+    "name": "www.tm.a.prd.aadg.akadns.net",
+    "type": "A",
+    "data": "40.126.29.13"
+   },
+   {
+    "name": "www.tm.a.prd.aadg.akadns.net",
+    "type": "A",
+    "data": "40.126.29.5"
+   },
+   {
+    "name": "www.tm.a.prd.aadg.akadns.net",
+    "type": "A",
+    "data": "40.126.29.7"
+   },
+   {
+    "name": "www.tm.a.prd.aadg.akadns.net",
+    "type": "A",
+    "data": "40.126.29.9"
+   },
+   {
+    "name": "www.tm.a.prd.aadg.akadns.net",
+    "type": "A",
+    "data": "20.190.157.9"
+   },
+   {
+    "name": "www.tm.a.prd.aadg.akadns.net",
+    "type": "A",
+    "data": "40.126.29.10"
+   }
+  ]
+ },
+ {
+  "ts": 1749829550.62351,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "v10.events.data.microsoft.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749829550.688526,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "v10.events.data.microsoft.com",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "v10.events.data.microsoft.com",
+    "type": "CNAME",
+    "data": "win-global-asimov-leafs-events-data.trafficmanager.net"
+   },
+   {
+    "name": "win-global-asimov-leafs-events-data.trafficmanager.net",
+    "type": "CNAME",
+    "data": "onedscolprdneu08.northeurope.cloudapp.azure.com"
+   },
+   {
+    "name": "onedscolprdneu08.northeurope.cloudapp.azure.com",
+    "type": "A",
+    "data": "20.50.80.213"
+   }
+  ]
+ },
+ {
+  "ts": 1749829557.63941,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "event-datamicrosoft.live",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749829557.706059,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "event-datamicrosoft.live",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749829557.724966,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "event-datamicrosoft.live",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "event-datamicrosoft.live",
+    "type": "A",
+    "data": "104.21.112.1"
+   },
+   {
+    "name": "event-datamicrosoft.live",
+    "type": "A",
+    "data": "104.21.16.1"
+   },
+   {
+    "name": "event-datamicrosoft.live",
+    "type": "A",
+    "data": "104.21.64.1"
+   },
+   {
+    "name": "event-datamicrosoft.live",
+    "type": "A",
+    "data": "104.21.96.1"
+   },
+   {
+    "name": "event-datamicrosoft.live",
+    "type": "A",
+    "data": "104.21.80.1"
+   },
+   {
+    "name": "event-datamicrosoft.live",
+    "type": "A",
+    "data": "104.21.32.1"
+   },
+   {
+    "name": "event-datamicrosoft.live",
+    "type": "A",
+    "data": "104.21.48.1"
+   }
+  ]
+ },
+ {
+  "ts": 1749829571.690263,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "acroipm2.adobe.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749829571.755348,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "acroipm2.adobe.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749829571.859255,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "acroipm2.adobe.com",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "acroipm2.adobe.com",
+    "type": "CNAME",
+    "data": "acroipm2.adobe.com.edgesuite.net"
+   },
+   {
+    "name": "acroipm2.adobe.com.edgesuite.net",
+    "type": "CNAME",
+    "data": "a122.dscd.akamai.net"
+   },
+   {
+    "name": "a122.dscd.akamai.net",
+    "type": "A",
+    "data": "23.192.223.240"
+   },
+   {
+    "name": "a122.dscd.akamai.net",
+    "type": "A",
+    "data": "23.192.223.236"
+   }
+  ]
+ },
+ {
+  "ts": 1749829572.589957,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "wpad.massfriction.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749829572.590065,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "wpad.massfriction.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749829580.604462,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "wpad.massfriction.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749829580.604689,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "wpad.massfriction.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749829709.172168,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "login.microsoftonline.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749829709.207298,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "login.microsoftonline.com",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "login.microsoftonline.com",
+    "type": "CNAME",
+    "data": "login.mso.msidentity.com"
+   },
+   {
+    "name": "login.mso.msidentity.com",
+    "type": "CNAME",
+    "data": "ak.privatelink.msidentity.com"
+   },
+   {
+    "name": "ak.privatelink.msidentity.com",
+    "type": "CNAME",
+    "data": "www.tm.a.prd.aadg.akadns.net"
+   },
+   {
+    "name": "www.tm.a.prd.aadg.akadns.net",
+    "type": "A",
+    "data": "20.190.157.14"
+   },
+   {
+    "name": "www.tm.a.prd.aadg.akadns.net",
+    "type": "A",
+    "data": "40.126.29.13"
+   },
+   {
+    "name": "www.tm.a.prd.aadg.akadns.net",
+    "type": "A",
+    "data": "40.126.29.5"
+   },
+   {
+    "name": "www.tm.a.prd.aadg.akadns.net",
+    "type": "A",
+    "data": "40.126.29.7"
+   },
+   {
+    "name": "www.tm.a.prd.aadg.akadns.net",
+    "type": "A",
+    "data": "40.126.29.9"
+   },
+   {
+    "name": "www.tm.a.prd.aadg.akadns.net",
+    "type": "A",
+    "data": "20.190.157.9"
+   },
+   {
+    "name": "www.tm.a.prd.aadg.akadns.net",
+    "type": "A",
+    "data": "40.126.29.10"
+   },
+   {
+    "name": "www.tm.a.prd.aadg.akadns.net",
+    "type": "A",
+    "data": "40.126.29.11"
+   }
+  ]
+ },
+ {
+  "ts": 1749829828.962664,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "windows-msgas.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749829829.030223,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "windows-msgas.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749829829.057851,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "windows-msgas.com",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "windows-msgas.com",
+    "type": "A",
+    "data": "104.21.80.1"
+   },
+   {
+    "name": "windows-msgas.com",
+    "type": "A",
+    "data": "104.21.112.1"
+   },
+   {
+    "name": "windows-msgas.com",
+    "type": "A",
+    "data": "104.21.64.1"
+   },
+   {
+    "name": "windows-msgas.com",
+    "type": "A",
+    "data": "104.21.96.1"
+   },
+   {
+    "name": "windows-msgas.com",
+    "type": "A",
+    "data": "104.21.48.1"
+   },
+   {
+    "name": "windows-msgas.com",
+    "type": "A",
+    "data": "104.21.16.1"
+   },
+   {
+    "name": "windows-msgas.com",
+    "type": "A",
+    "data": "104.21.32.1"
+   }
+  ]
+ },
+ {
+  "ts": 1749829859.142163,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "varying-rentals-calgary-predict.trycloudflare.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749829859.206425,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "varying-rentals-calgary-predict.trycloudflare.com",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "varying-rentals-calgary-predict.trycloudflare.com",
+    "type": "A",
+    "data": "104.16.231.132"
+   },
+   {
+    "name": "varying-rentals-calgary-predict.trycloudflare.com",
+    "type": "A",
+    "data": "104.16.230.132"
+   }
+  ]
+ },
+ {
+  "ts": 1749829873.965449,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "windows.msn.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749829874.036543,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "windows.msn.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749829874.525312,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "windows.msn.com",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "windows.msn.com",
+    "type": "CNAME",
+    "data": "win-msn-com-world-atm-default.trafficmanager.net"
+   },
+   {
+    "name": "win-msn-com-world-atm-default.trafficmanager.net",
+    "type": "CNAME",
+    "data": "windows.msn.com-ion.edgesuite.net"
+   },
+   {
+    "name": "windows.msn.com-ion.edgesuite.net",
+    "type": "CNAME",
+    "data": "a1672.dscr.akamai.net"
+   },
+   {
+    "name": "a1672.dscr.akamai.net",
+    "type": "A",
+    "data": "23.212.185.87"
+   },
+   {
+    "name": "a1672.dscr.akamai.net",
+    "type": "A",
+    "data": "23.212.185.78"
+   }
+  ]
+ },
+ {
+  "ts": 1749829919.364928,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "event-datamicrosoft.live",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749829919.430042,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "event-datamicrosoft.live",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749829919.451177,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "event-datamicrosoft.live",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "event-datamicrosoft.live",
+    "type": "A",
+    "data": "104.21.80.1"
+   },
+   {
+    "name": "event-datamicrosoft.live",
+    "type": "A",
+    "data": "104.21.48.1"
+   },
+   {
+    "name": "event-datamicrosoft.live",
+    "type": "A",
+    "data": "104.21.16.1"
+   },
+   {
+    "name": "event-datamicrosoft.live",
+    "type": "A",
+    "data": "104.21.96.1"
+   },
+   {
+    "name": "event-datamicrosoft.live",
+    "type": "A",
+    "data": "104.21.32.1"
+   },
+   {
+    "name": "event-datamicrosoft.live",
+    "type": "A",
+    "data": "104.21.64.1"
+   },
+   {
+    "name": "event-datamicrosoft.live",
+    "type": "A",
+    "data": "104.21.112.1"
+   }
+  ]
+ },
+ {
+  "ts": 1749830017.337799,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "array620.prod.do.dsp.mp.microsoft.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749830017.337876,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "array620.prod.do.dsp.mp.microsoft.com",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "array620.prod.do.dsp.mp.microsoft.com",
+    "type": "A",
+    "data": "40.69.76.172"
+   }
+  ]
+ },
+ {
+  "ts": 1749830018.021952,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "kv601.prod.do.dsp.mp.microsoft.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749830018.079939,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "kv601.prod.do.dsp.mp.microsoft.com",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "kv601.prod.do.dsp.mp.microsoft.com",
+    "type": "CNAME",
+    "data": "kv601.prod.do.dsp.mp.microsoft.com.edgekey.net"
+   },
+   {
+    "name": "kv601.prod.do.dsp.mp.microsoft.com.edgekey.net",
+    "type": "CNAME",
+    "data": "e12358.d.akamaiedge.net"
+   },
+   {
+    "name": "e12358.d.akamaiedge.net",
+    "type": "A",
+    "data": "173.222.52.33"
+   }
+  ]
+ },
+ {
+  "ts": 1749830074.318648,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "ecs.office.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749830074.362716,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "ecs.office.com",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "ecs.office.com",
+    "type": "CNAME",
+    "data": "ecs.office.trafficmanager.net"
+   },
+   {
+    "name": "ecs.office.trafficmanager.net",
+    "type": "CNAME",
+    "data": "dual-s-0005-office.config.skype.com"
+   },
+   {
+    "name": "dual-s-0005-office.config.skype.com",
+    "type": "CNAME",
+    "data": "ecs-office.s-0005.dual-s-msedge.net"
+   },
+   {
+    "name": "ecs-office.s-0005.dual-s-msedge.net",
+    "type": "CNAME",
+    "data": "s-0005.dual-s-msedge.net"
+   },
+   {
+    "name": "s-0005.dual-s-msedge.net",
+    "type": "A",
+    "data": "52.123.129.14"
+   },
+   {
+    "name": "s-0005.dual-s-msedge.net",
+    "type": "A",
+    "data": "52.123.128.14"
+   }
+  ]
+ },
+ {
+  "ts": 1749830116.089515,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "wpad.massfriction.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749830116.089517,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "wpad.massfriction.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749830116.089518,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "wpad.massfriction.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749830116.089735,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "wpad.massfriction.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749830116.894936,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "kv601.prod.do.dsp.mp.microsoft.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749830116.941897,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "kv601.prod.do.dsp.mp.microsoft.com",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "kv601.prod.do.dsp.mp.microsoft.com",
+    "type": "CNAME",
+    "data": "kv601.prod.do.dsp.mp.microsoft.com.edgekey.net"
+   },
+   {
+    "name": "kv601.prod.do.dsp.mp.microsoft.com.edgekey.net",
+    "type": "CNAME",
+    "data": "e12358.d.akamaiedge.net"
+   },
+   {
+    "name": "e12358.d.akamaiedge.net",
+    "type": "A",
+    "data": "173.222.52.33"
+   }
+  ]
+ },
+ {
+  "ts": 1749830190.320252,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "varying-rentals-calgary-predict.trycloudflare.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749830190.373046,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "varying-rentals-calgary-predict.trycloudflare.com",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "varying-rentals-calgary-predict.trycloudflare.com",
+    "type": "A",
+    "data": "104.16.231.132"
+   },
+   {
+    "name": "varying-rentals-calgary-predict.trycloudflare.com",
+    "type": "A",
+    "data": "104.16.230.132"
+   }
+  ]
+ },
+ {
+  "ts": 1749830220.452396,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "windows-msgas.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749830220.491328,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "windows-msgas.com",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "windows-msgas.com",
+    "type": "A",
+    "data": "104.21.64.1"
+   },
+   {
+    "name": "windows-msgas.com",
+    "type": "A",
+    "data": "104.21.48.1"
+   },
+   {
+    "name": "windows-msgas.com",
+    "type": "A",
+    "data": "104.21.80.1"
+   },
+   {
+    "name": "windows-msgas.com",
+    "type": "A",
+    "data": "104.21.16.1"
+   },
+   {
+    "name": "windows-msgas.com",
+    "type": "A",
+    "data": "104.21.32.1"
+   },
+   {
+    "name": "windows-msgas.com",
+    "type": "A",
+    "data": "104.21.112.1"
+   },
+   {
+    "name": "windows-msgas.com",
+    "type": "A",
+    "data": "104.21.96.1"
+   }
+  ]
+ },
+ {
+  "ts": 1749830280.638537,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "event-datamicrosoft.live",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749830280.705274,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "event-datamicrosoft.live",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749830280.713577,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "event-datamicrosoft.live",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "event-datamicrosoft.live",
+    "type": "A",
+    "data": "104.21.80.1"
+   },
+   {
+    "name": "event-datamicrosoft.live",
+    "type": "A",
+    "data": "104.21.64.1"
+   },
+   {
+    "name": "event-datamicrosoft.live",
+    "type": "A",
+    "data": "104.21.96.1"
+   },
+   {
+    "name": "event-datamicrosoft.live",
+    "type": "A",
+    "data": "104.21.32.1"
+   },
+   {
+    "name": "event-datamicrosoft.live",
+    "type": "A",
+    "data": "104.21.112.1"
+   },
+   {
+    "name": "event-datamicrosoft.live",
+    "type": "A",
+    "data": "104.21.48.1"
+   },
+   {
+    "name": "event-datamicrosoft.live",
+    "type": "A",
+    "data": "104.21.16.1"
+   }
+  ]
+ },
+ {
+  "ts": 1749830491.323912,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "varying-rentals-calgary-predict.trycloudflare.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749830491.380333,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "varying-rentals-calgary-predict.trycloudflare.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749830491.501005,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "varying-rentals-calgary-predict.trycloudflare.com",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "varying-rentals-calgary-predict.trycloudflare.com",
+    "type": "A",
+    "data": "104.16.230.132"
+   },
+   {
+    "name": "varying-rentals-calgary-predict.trycloudflare.com",
+    "type": "A",
+    "data": "104.16.231.132"
+   }
+  ]
+ },
+ {
+  "ts": 1749830551.694026,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "windows-msgas.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749830551.746312,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "windows-msgas.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749830552.04163,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "windows-msgas.com",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "windows-msgas.com",
+    "type": "A",
+    "data": "104.21.112.1"
+   },
+   {
+    "name": "windows-msgas.com",
+    "type": "A",
+    "data": "104.21.80.1"
+   },
+   {
+    "name": "windows-msgas.com",
+    "type": "A",
+    "data": "104.21.96.1"
+   },
+   {
+    "name": "windows-msgas.com",
+    "type": "A",
+    "data": "104.21.48.1"
+   },
+   {
+    "name": "windows-msgas.com",
+    "type": "A",
+    "data": "104.21.32.1"
+   },
+   {
+    "name": "windows-msgas.com",
+    "type": "A",
+    "data": "104.21.16.1"
+   },
+   {
+    "name": "windows-msgas.com",
+    "type": "A",
+    "data": "104.21.64.1"
+   }
+  ]
+ },
+ {
+  "ts": 1749830639.754692,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "login.microsoftonline.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749830639.811424,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "login.microsoftonline.com",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "login.microsoftonline.com",
+    "type": "CNAME",
+    "data": "login.mso.msidentity.com"
+   },
+   {
+    "name": "login.mso.msidentity.com",
+    "type": "CNAME",
+    "data": "ak.privatelink.msidentity.com"
+   },
+   {
+    "name": "ak.privatelink.msidentity.com",
+    "type": "CNAME",
+    "data": "www.tm.a.prd.aadg.trafficmanager.net"
+   },
+   {
+    "name": "www.tm.a.prd.aadg.trafficmanager.net",
+    "type": "A",
+    "data": "20.190.157.9"
+   },
+   {
+    "name": "www.tm.a.prd.aadg.trafficmanager.net",
+    "type": "A",
+    "data": "20.190.157.3"
+   },
+   {
+    "name": "www.tm.a.prd.aadg.trafficmanager.net",
+    "type": "A",
+    "data": "40.126.29.10"
+   },
+   {
+    "name": "www.tm.a.prd.aadg.trafficmanager.net",
+    "type": "A",
+    "data": "40.126.29.9"
+   },
+   {
+    "name": "www.tm.a.prd.aadg.trafficmanager.net",
+    "type": "A",
+    "data": "40.126.29.13"
+   },
+   {
+    "name": "www.tm.a.prd.aadg.trafficmanager.net",
+    "type": "A",
+    "data": "20.190.157.2"
+   },
+   {
+    "name": "www.tm.a.prd.aadg.trafficmanager.net",
+    "type": "A",
+    "data": "40.126.29.5"
+   },
+   {
+    "name": "www.tm.a.prd.aadg.trafficmanager.net",
+    "type": "A",
+    "data": "20.190.157.0"
+   }
+  ]
+ },
+ {
+  "ts": 1749830641.319464,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "settings-win.data.microsoft.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749830641.370025,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "settings-win.data.microsoft.com",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "settings-win.data.microsoft.com",
+    "type": "CNAME",
+    "data": "atm-settingsfe-prod-geo2.trafficmanager.net"
+   },
+   {
+    "name": "atm-settingsfe-prod-geo2.trafficmanager.net",
+    "type": "CNAME",
+    "data": "settings-prod-eus2-1.eastus2.cloudapp.azure.com"
+   },
+   {
+    "name": "settings-prod-eus2-1.eastus2.cloudapp.azure.com",
+    "type": "A",
+    "data": "52.167.249.196"
+   }
+  ]
+ },
+ {
+  "ts": 1749830716.126915,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "wpad.massfriction.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749830716.126917,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "wpad.massfriction.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749830716.127172,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "wpad.massfriction.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749830716.127173,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "wpad.massfriction.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749830762.627861,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "event-datamicrosoft.live",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749830762.695721,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "event-datamicrosoft.live",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749830762.697536,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "event-datamicrosoft.live",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "event-datamicrosoft.live",
+    "type": "A",
+    "data": "104.21.112.1"
+   },
+   {
+    "name": "event-datamicrosoft.live",
+    "type": "A",
+    "data": "104.21.80.1"
+   },
+   {
+    "name": "event-datamicrosoft.live",
+    "type": "A",
+    "data": "104.21.32.1"
+   },
+   {
+    "name": "event-datamicrosoft.live",
+    "type": "A",
+    "data": "104.21.96.1"
+   },
+   {
+    "name": "event-datamicrosoft.live",
+    "type": "A",
+    "data": "104.21.64.1"
+   },
+   {
+    "name": "event-datamicrosoft.live",
+    "type": "A",
+    "data": "104.21.16.1"
+   },
+   {
+    "name": "event-datamicrosoft.live",
+    "type": "A",
+    "data": "104.21.48.1"
+   }
+  ]
+ },
+ {
+  "ts": 1749830822.88202,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "varying-rentals-calgary-predict.trycloudflare.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749830822.949563,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "varying-rentals-calgary-predict.trycloudflare.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749830822.952942,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "varying-rentals-calgary-predict.trycloudflare.com",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "varying-rentals-calgary-predict.trycloudflare.com",
+    "type": "A",
+    "data": "104.16.231.132"
+   },
+   {
+    "name": "varying-rentals-calgary-predict.trycloudflare.com",
+    "type": "A",
+    "data": "104.16.230.132"
+   }
+  ]
+ },
+ {
+  "ts": 1749830847.147034,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "_ldap._tcp.Default-First-Site-Name._sites.dc._msdcs.massfriction.com",
+    "qtype": 33
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749830847.147198,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "_ldap._tcp.Default-First-Site-Name._sites.dc._msdcs.massfriction.com",
+    "qtype": 33
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749830853.011953,
+  "src_ip": "10.6.13.133",
+  "dst_ip": "10.6.13.3",
+  "is_response": false,
+  "questions": [
+   {
+    "name": "windows-msgas.com",
+    "qtype": 1
+   }
+  ],
+  "answers": []
+ },
+ {
+  "ts": 1749830853.057771,
+  "src_ip": "10.6.13.3",
+  "dst_ip": "10.6.13.133",
+  "is_response": true,
+  "questions": [
+   {
+    "name": "windows-msgas.com",
+    "qtype": 1
+   }
+  ],
+  "answers": [
+   {
+    "name": "windows-msgas.com",
+    "type": "A",
+    "data": "104.21.96.1"
+   },
+   {
+    "name": "windows-msgas.com",
+    "type": "A",
+    "data": "104.21.32.1"
+   },
+   {
+    "name": "windows-msgas.com",
+    "type": "A",
+    "data": "104.21.64.1"
+   },
+   {
+    "name": "windows-msgas.com",
+    "type": "A",
+    "data": "104.21.112.1"
+   },
+   {
+    "name": "windows-msgas.com",
+    "type": "A",
+    "data": "104.21.80.1"
+   },
+   {
+    "name": "windows-msgas.com",
+    "type": "A",
+    "data": "104.21.16.1"
+   },
+   {
+    "name": "windows-msgas.com",
+    "type": "A",
+    "data": "104.21.48.1"
+   }
+  ]
+ }
+]

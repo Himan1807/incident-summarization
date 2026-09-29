@@ -1,0 +1,41 @@
+{
+  "source": "malware-traffic-analysis.net 2025-06-13, Active Directory environment traffic exercise",
+  "confidence": "medium - independently derived by this pipeline; no official answer key was accessible (distributed as a password-protected PDF this pipeline cannot open)",
+  "qa": [
+    {
+      "question": "What is the IP address of the infected Windows client?",
+      "answer": "10.6.13.133",
+      "evidence": "Only internal host observed with sustained external beaconing (169 outbound connections to 72 distinct external IPs)."
+    },
+    {
+      "question": "What is the MAC address of the infected Windows client?",
+      "answer": "24:77:03:ac:97:df",
+      "evidence": "Ethernet source address on packets from 10.6.13.133."
+    },
+    {
+      "question": "What is the host name of the infected Windows client?",
+      "answer": "DESKTOP-5AVE44C",
+      "evidence": "DHCP option 12/81 (FQDN DESKTOP-5AVE44C.massfriction.com); also seen as a DNS self-registration query."
+    },
+    {
+      "question": "What is the user account name from the infected Windows client?",
+      "answer": "Not determined -- requires Kerberos/SMB authentication log parsing, which this lightweight parser does not implement.",
+      "evidence": "Known gap."
+    },
+    {
+      "question": "What is the Active Directory domain and domain controller?",
+      "answer": "Domain: massfriction.com. Domain controller: WIN-DQL4WFWJXQ4.massfriction.com.",
+      "evidence": "LDAP SRV record queries (_ldap._tcp...massfriction.com) and direct DNS query for WIN-DQL4WFWJXQ4.massfriction.com."
+    },
+    {
+      "question": "What C2 infrastructure did the infected host communicate with?",
+      "answer": "Two rotating C2 fronts, both proxied through Cloudflare: windows-msgas.com (typosquat of Windows telemetry domains; resolves to Cloudflare anycast IPs 104.21.16.1/104.21.80.1/104.21.64.1/104.21.96.1/104.21.112.1) and varying-rentals-calgary-predict.trycloudflare.com (an explicit Cloudflare Tunnel subdomain; resolves to 104.16.230.132/104.16.231.132). Both received periodic HTTP POST requests every ~30-90 seconds with randomized token-like URI paths and no User-Agent header -- a beaconing pattern consistent with a C2 implant using Cloudflare Tunnel to hide its true origin.",
+      "evidence": "http_file_download_aggregation / raw http.log.json request pattern; dns_query_aggregation_non_benign chunk."
+    },
+    {
+      "question": "What is the likely initial access vector?",
+      "answer": "Not conclusively determined. hillcoweb.com and www.truglomedspa.com appear as one-off DNS lookups shortly before the beaconing begins and may be part of a malvertising/redirect chain, but this pipeline could not confirm a download event tied to them.",
+      "evidence": "dns_query_aggregation_non_benign chunk; flagged as a hypothesis, not a confirmed finding."
+    }
+  ]
+}

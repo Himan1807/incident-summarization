@@ -1,0 +1,30 @@
+{
+  "metadata": {
+    "incident_id": "INC-DEMO-001",
+    "service": "payment-api",
+    "severity": "SEV-2",
+    "timestamp": "2026-09-20T10:00:00Z"
+  },
+  "alerts": [
+    "Error rate alert triggered for payment-api at 10:02 UTC.",
+    "Latency exceeded 2 seconds for 5 consecutive minutes."
+  ],
+  "logs": [
+    "10:02 UTC payment-api returned HTTP 500 for database requests.",
+    "10:05 UTC connection pool exhaustion message observed."
+  ],
+  "metrics": [
+    "HTTP 500 rate increased from 0.4% to 18%.",
+    "Database connection utilization reached 100%."
+  ],
+  "changes": [
+    "A configuration change was deployed at 09:45 UTC."
+  ],
+  "communications": [
+    "On-call engineer acknowledged the alert at 10:04 UTC.",
+    "Database team was paged at 10:08 UTC."
+  ],
+  "investigation_notes": [
+    "The team suspected the recent configuration change, but confirmation was pending."
+  ]
+}

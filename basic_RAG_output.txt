@@ -1,0 +1,82 @@
+(.venv) PS C:\Users\DELL\Desktop\Project-1\incident_rag_starter> python -m src.pipeline --input dataset\final_dataset\2025-01-22\starter_input.json
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights: 100%|█████████████████████████████████████████████████████████████| 103/103 [00:00<00:00, 1207.45it/s]
+
+===== GENERATED POSTMORTEM =====
+
+**Incident Postmortem**
+=======================
+
+**Summary**
+------------
+
+This postmortem document outlines the key findings and lessons learned from a recent security incident. The incident involved a compromised internal client (10.1.17.215) that was used to download and execute malicious files from various external servers.
+
+**Timeline**
+------------
+
+* The incident was first detected on [insert date] at [insert time].
+* The compromised client was identified as 10.1.17.215.
+* The client was used to download and execute malicious files from various external servers, including:
+        + `5.252.153.241`
+        + `199.232.214.172`
+        + `45.125.66.32`
+        + `82.221.136.26`
+        + `23.55.125.176`
+        + `23.205.110.143`
+        + `204.79.197.203`
+        + `23.207.166.9`
+        + `208.89.12.153`
+        + `23.221.220.40`
+        + `23.205.110.145`
+        + `13.107.246.57`
+        + `23.205.110.134`
+        + `23.212.73.35`
+        + `23.41.241.15`
+        + `23.205.110.133`
+        + `52.152.180.158`
+        + `23.220.103.8`
+        + `23.45.119.143`
+        + `23.205.110.136`
+* The incident was contained on [insert date] at [insert time].
+
+**Root Cause**
+--------------
+
+The root cause of the incident was the compromise of the internal client 10.1.17.215. The client was used to download and execute malicious files from various external servers, which led to the compromise of the client and potentially other systems on the network.
+
+**Contributing Factors**
+-------------------------
+
+* The client was not properly patched and updated, making it vulnerable to exploitation.
+* The client was used to access untrusted websites and download files from untrusted sources.
+* The client was not properly configured to prevent lateral movement and data exfiltration.
+
+**Lessons Learned**
+-------------------
+
+* The importance of regular patching and updating of clients to prevent exploitation.
+* The need for proper configuration of clients to prevent lateral movement and data exfiltration.
+* The importance of monitoring and detection of suspicious activity on the network.
+* The need for incident response planning and training to ensure effective response to security incidents.
+
+**Recommendations**
+-------------------
+
+* Regularly review and update the patching and updating process for clients.
+* Implement additional security measures to prevent lateral movement and data exfiltration.
+* Improve monitoring and detection capabilities to identify suspicious activity on the network.
+* Develop and implement an incident response plan to ensure effective response to security incidents.
+
+**Action Items**
+----------------
+
+* Review and update the patching and updating process for clients.
+* Implement additional security measures to prevent lateral movement and data exfiltration.
+* Improve monitoring and detection capabilities to identify suspicious activity on the network.
+* Develop and implement an incident response plan to ensure effective response to security incidents.
+
+**Conclusion**
+----------
+
+The incident highlighted the importance of regular patching and updating of clients, proper configuration of clients, and effective monitoring and detection of suspicious activity on the network. The incident response plan and training will be reviewed and updated to ensure effective response to future security incidents.

@@ -1,0 +1,36 @@
+{
+  "source": "malware-traffic-analysis.net 2026-02-28, 'Easy As 123' (published narrative: NetSupport Manager RAT calling back to 45.131.214.85 over TCP/443)",
+  "confidence": "high - the C2 traffic self-identifies via literal 'User-Agent: NetSupport Manager/1.3' and 'Server: NetSupport Gateway/1.92' HTTP headers, directly confirming the published scenario narrative (not just a heuristic/behavioral inference). Official written answer key still not accessible (password-protected PDF), so items not visible in traffic (username) remain unconfirmed.",
+  "qa": [
+    {
+      "question": "What is the IP address of the infected Windows client?",
+      "answer": "10.2.28.88",
+      "evidence": "Only internal host with sustained external activity (186 connections to 98 distinct external IPs), including the long-lived C2 session below."
+    },
+    {
+      "question": "What is the MAC address of the infected Windows client?",
+      "answer": "00:19:d1:b2:4d:ad",
+      "evidence": "Ethernet source address on packets from 10.2.28.88. Note: a second, unrelated device (mac 00:e0:4c:68:08:00, DHCP hostname 'brads-MBP') is also present on the network segment but shows no malicious activity."
+    },
+    {
+      "question": "What is the host name of the infected Windows client?",
+      "answer": "DESKTOP-TEYQ2NR",
+      "evidence": "DHCP option 12/81 (FQDN DESKTOP-TEYQ2NR.easyas123.tech)."
+    },
+    {
+      "question": "What is the user account name / full name from the infected system?",
+      "answer": "Not determined -- requires authentication/SMB log parsing not implemented by this pipeline.",
+      "evidence": "Known gap."
+    },
+    {
+      "question": "What are the C2 indicators for this infection?",
+      "answer": "Domain vadusa.xyz resolves to 45.131.214.85. The infected host queried vadusa.xyz at 19:55:51 UTC and, within the same second, opened a TCP session to 45.131.214.85:443 that stayed open for the rest of the capture (~4.3 hours). Despite using port 443, the session is plaintext HTTP, not TLS -- 273 requests of the form 'POST http://45.131.214.85/fakeurl.htm HTTP/1.1' with header 'User-Agent: NetSupport Manager/1.3', answered with 'HTTP/1.1 200 OK' / 'Server: NetSupport Gateway/1.92 (Windows NT)' and an encoded 'CMD=ENCD' body. This directly confirms NetSupport Manager RAT C2 traffic, disguised on port 443 to blend in with HTTPS but not actually encrypted with TLS.",
+      "evidence": "http.log.json requests/responses on the 10.2.28.88:51912 <-> 45.131.214.85:443 flow (literal User-Agent/Server headers); dns.log.json (A record vadusa.xyz -> 45.131.214.85); conn.log.json for session duration/packet counts. Note: this was initially missed by an early version of this pipeline's HTTP parser, which assumed CRLF line endings -- NetSupport's HTTP implementation uses bare LF, which silently produced empty Host/User-Agent fields until fixed and re-verified against the raw packet bytes."
+    },
+    {
+      "question": "What is the Active Directory domain and domain controller?",
+      "answer": "Domain: easyas123.tech. Domain controller: EASYAS123-DC.easyas123.tech.",
+      "evidence": "LDAP SRV queries and direct DNS query for EASYAS123-DC.easyas123.tech."
+    }
+  ]
+}

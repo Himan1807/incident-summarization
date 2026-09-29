@@ -1,0 +1,490 @@
+[
+ {
+  "ts": 1749828839.95557,
+  "src_ip": "10.6.13.133",
+  "src_port": 52429,
+  "dst_ip": "173.222.52.33",
+  "dst_port": 443,
+  "sni": "kv601.prod.do.dsp.mp.microsoft.com"
+ },
+ {
+  "ts": 1749828840.235008,
+  "src_ip": "10.6.13.133",
+  "src_port": 52430,
+  "dst_ip": "52.156.123.84",
+  "dst_port": 443,
+  "sni": "geo.prod.do.dsp.mp.microsoft.com"
+ },
+ {
+  "ts": 1749828841.277021,
+  "src_ip": "10.6.13.133",
+  "src_port": 52432,
+  "dst_ip": "104.208.203.90",
+  "dst_port": 443,
+  "sni": "client.wns.windows.com"
+ },
+ {
+  "ts": 1749828853.516315,
+  "src_ip": "10.6.13.133",
+  "src_port": 52447,
+  "dst_ip": "20.190.135.6",
+  "dst_port": 443,
+  "sni": "login.live.com"
+ },
+ {
+  "ts": 1749828854.99493,
+  "src_ip": "10.6.13.133",
+  "src_port": 52449,
+  "dst_ip": "13.107.42.16",
+  "dst_port": 443,
+  "sni": "config.edge.skype.com"
+ },
+ {
+  "ts": 1749828855.33595,
+  "src_ip": "10.6.13.133",
+  "src_port": 52450,
+  "dst_ip": "204.79.197.203",
+  "dst_port": 443,
+  "sni": "www.msn.com"
+ },
+ {
+  "ts": 1749828856.061202,
+  "src_ip": "10.6.13.133",
+  "src_port": 52451,
+  "dst_ip": "23.212.185.76",
+  "dst_port": 443,
+  "sni": "assets.msn.com"
+ },
+ {
+  "ts": 1749828864.658831,
+  "src_ip": "10.6.13.133",
+  "src_port": 52458,
+  "dst_ip": "40.126.29.13",
+  "dst_port": 443,
+  "sni": "login.microsoftonline.com"
+ },
+ {
+  "ts": 1749828866.613114,
+  "src_ip": "10.6.13.133",
+  "src_port": 52462,
+  "dst_ip": "150.171.28.11",
+  "dst_port": 443,
+  "sni": "edge.microsoft.com"
+ },
+ {
+  "ts": 1749828879.439443,
+  "src_ip": "10.6.13.133",
+  "src_port": 52465,
+  "dst_ip": "142.250.113.95",
+  "dst_port": 443,
+  "sni": "ogads-pa.clients6.google.com"
+ },
+ {
+  "ts": 1749828880.181625,
+  "src_ip": "10.6.13.133",
+  "src_port": 52468,
+  "dst_ip": "142.251.186.138",
+  "dst_port": 443,
+  "sni": "play.google.com"
+ },
+ {
+  "ts": 1749828886.047944,
+  "src_ip": "10.6.13.133",
+  "src_port": 52470,
+  "dst_ip": "142.250.115.95",
+  "dst_port": 443,
+  "sni": "fonts.googleapis.com"
+ },
+ {
+  "ts": 1749828886.061702,
+  "src_ip": "10.6.13.133",
+  "src_port": 52471,
+  "dst_ip": "142.250.115.106",
+  "dst_port": 443,
+  "sni": "www.google.com"
+ },
+ {
+  "ts": 1749828886.320863,
+  "src_ip": "10.6.13.133",
+  "src_port": 52472,
+  "dst_ip": "142.250.138.97",
+  "dst_port": 443,
+  "sni": "www.googletagmanager.com"
+ },
+ {
+  "ts": 1749828886.375247,
+  "src_ip": "10.6.13.133",
+  "src_port": 52473,
+  "dst_ip": "142.250.115.94",
+  "dst_port": 443,
+  "sni": "www.gstatic.com"
+ },
+ {
+  "ts": 1749828886.384808,
+  "src_ip": "10.6.13.133",
+  "src_port": 52475,
+  "dst_ip": "13.107.246.57",
+  "dst_port": 443,
+  "sni": "www.clarity.ms"
+ },
+ {
+  "ts": 1749828886.386304,
+  "src_ip": "10.6.13.133",
+  "src_port": 52476,
+  "dst_ip": "173.194.208.94",
+  "dst_port": 443,
+  "sni": "fonts.gstatic.com"
+ },
+ {
+  "ts": 1749828886.38733,
+  "src_ip": "10.6.13.133",
+  "src_port": 52477,
+  "dst_ip": "109.61.92.48",
+  "dst_port": 443,
+  "sni": "cdn.userway.org"
+ },
+ {
+  "ts": 1749828886.401557,
+  "src_ip": "10.6.13.133",
+  "src_port": 52474,
+  "dst_ip": "67.217.228.199",
+  "dst_port": 443,
+  "sni": "hillcoweb.com"
+ },
+ {
+  "ts": 1749828886.682899,
+  "src_ip": "10.6.13.133",
+  "src_port": 52479,
+  "dst_ip": "109.61.92.48",
+  "dst_port": 443,
+  "sni": "cdn.userway.org"
+ },
+ {
+  "ts": 1749828886.738563,
+  "src_ip": "10.6.13.133",
+  "src_port": 52480,
+  "dst_ip": "142.250.115.104",
+  "dst_port": 443,
+  "sni": "www.google.com"
+ },
+ {
+  "ts": 1749828886.921698,
+  "src_ip": "10.6.13.133",
+  "src_port": 52483,
+  "dst_ip": "142.250.115.94",
+  "dst_port": 443,
+  "sni": "www.gstatic.com"
+ },
+ {
+  "ts": 1749828887.011744,
+  "src_ip": "10.6.13.133",
+  "src_port": 52486,
+  "dst_ip": "142.250.138.155",
+  "dst_port": 443,
+  "sni": "stats.g.doubleclick.net"
+ },
+ {
+  "ts": 1749828887.092546,
+  "src_ip": "10.6.13.133",
+  "src_port": 52487,
+  "dst_ip": "23.96.124.68",
+  "dst_port": 443,
+  "sni": "s.clarity.ms"
+ },
+ {
+  "ts": 1749828887.21246,
+  "src_ip": "10.6.13.133",
+  "src_port": 52490,
+  "dst_ip": "157.240.24.35",
+  "dst_port": 443,
+  "sni": "www.facebook.com"
+ },
+ {
+  "ts": 1749828887.221704,
+  "src_ip": "10.6.13.133",
+  "src_port": 52488,
+  "dst_ip": "23.96.124.68",
+  "dst_port": 443,
+  "sni": "s.clarity.ms"
+ },
+ {
+  "ts": 1749828887.261956,
+  "src_ip": "10.6.13.133",
+  "src_port": 52493,
+  "dst_ip": "173.194.208.94",
+  "dst_port": 443,
+  "sni": "fonts.gstatic.com"
+ },
+ {
+  "ts": 1749828888.494061,
+  "src_ip": "10.6.13.133",
+  "src_port": 52494,
+  "dst_ip": "104.16.124.96",
+  "dst_port": 443,
+  "sni": "www.cloudflare.com"
+ },
+ {
+  "ts": 1749828888.641722,
+  "src_ip": "10.6.13.133",
+  "src_port": 52495,
+  "dst_ip": "67.217.228.199",
+  "dst_port": 443,
+  "sni": "hillcoweb.com"
+ },
+ {
+  "ts": 1749828893.834359,
+  "src_ip": "10.6.13.133",
+  "src_port": 52496,
+  "dst_ip": "13.107.246.57",
+  "dst_port": 443,
+  "sni": "edge-consumer-static.azureedge.net"
+ },
+ {
+  "ts": 1749828903.562727,
+  "src_ip": "10.6.13.133",
+  "src_port": 52499,
+  "dst_ip": "52.113.196.254",
+  "dst_port": 443,
+  "sni": "teams-ring.msedge.net"
+ },
+ {
+  "ts": 1749828904.057864,
+  "src_ip": "10.6.13.133",
+  "src_port": 52500,
+  "dst_ip": "191.232.215.149",
+  "dst_port": 443,
+  "sni": "f532cb556f727d508908f4950f1b685d.azr.footprintdns.com"
+ },
+ {
+  "ts": 1749828910.141311,
+  "src_ip": "10.6.13.133",
+  "src_port": 52501,
+  "dst_ip": "172.202.65.254",
+  "dst_port": 443,
+  "sni": "arc-ring.msedge.net"
+ },
+ {
+  "ts": 1749828910.473322,
+  "src_ip": "10.6.13.133",
+  "src_port": 52502,
+  "dst_ip": "13.107.42.10",
+  "dst_port": 443,
+  "sni": "ce7953307ad2079d6aaa354bfc57865b.clo.footprintdns.com"
+ },
+ {
+  "ts": 1749828924.131133,
+  "src_ip": "10.6.13.133",
+  "src_port": 52511,
+  "dst_ip": "150.171.28.11",
+  "dst_port": 443,
+  "sni": "edge.microsoft.com"
+ },
+ {
+  "ts": 1749828933.326662,
+  "src_ip": "10.6.13.133",
+  "src_port": 52513,
+  "dst_ip": "20.190.135.6",
+  "dst_port": 443,
+  "sni": "login.live.com"
+ },
+ {
+  "ts": 1749828938.315036,
+  "src_ip": "10.6.13.133",
+  "src_port": 52514,
+  "dst_ip": "172.67.146.241",
+  "dst_port": 443,
+  "sni": "dng-microsoftds.com"
+ },
+ {
+  "ts": 1749828961.508265,
+  "src_ip": "10.6.13.133",
+  "src_port": 52517,
+  "dst_ip": "23.96.124.68",
+  "dst_port": 443,
+  "sni": "s.clarity.ms"
+ },
+ {
+  "ts": 1749828974.32157,
+  "src_ip": "10.6.13.133",
+  "src_port": 52519,
+  "dst_ip": "23.212.185.87",
+  "dst_port": 443,
+  "sni": "windows.msn.com"
+ },
+ {
+  "ts": 1749828975.366291,
+  "src_ip": "10.6.13.133",
+  "src_port": 52522,
+  "dst_ip": "150.171.27.12",
+  "dst_port": 443,
+  "sni": "api.msn.com"
+ },
+ {
+  "ts": 1749828975.54773,
+  "src_ip": "10.6.13.133",
+  "src_port": 52523,
+  "dst_ip": "150.171.27.12",
+  "dst_port": 443,
+  "sni": "api.msn.com"
+ },
+ {
+  "ts": 1749828993.358478,
+  "src_ip": "10.6.13.133",
+  "src_port": 52527,
+  "dst_ip": "83.137.149.15",
+  "dst_port": 443,
+  "sni": "windows.php.net"
+ },
+ {
+  "ts": 1749829022.458275,
+  "src_ip": "10.6.13.133",
+  "src_port": 52528,
+  "dst_ip": "23.96.124.68",
+  "dst_port": 443,
+  "sni": "s.clarity.ms"
+ },
+ {
+  "ts": 1749829022.792113,
+  "src_ip": "10.6.13.133",
+  "src_port": 52529,
+  "dst_ip": "23.96.124.68",
+  "dst_port": 443,
+  "sni": "s.clarity.ms"
+ },
+ {
+  "ts": 1749829291.64806,
+  "src_ip": "10.6.13.133",
+  "src_port": 52551,
+  "dst_ip": "20.190.157.13",
+  "dst_port": 443,
+  "sni": "login.microsoftonline.com"
+ },
+ {
+  "ts": 1749829291.714392,
+  "src_ip": "10.6.13.133",
+  "src_port": 52552,
+  "dst_ip": "23.96.180.189",
+  "dst_port": 443,
+  "sni": "fd.api.iris.microsoft.com"
+ },
+ {
+  "ts": 1749829292.304797,
+  "src_ip": "10.6.13.133",
+  "src_port": 52553,
+  "dst_ip": "52.140.118.28",
+  "dst_port": 443,
+  "sni": "settings-win.data.microsoft.com"
+ },
+ {
+  "ts": 1749829433.67879,
+  "src_ip": "10.6.13.133",
+  "src_port": 52558,
+  "dst_ip": "13.74.187.43",
+  "dst_port": 443,
+  "sni": "array619.prod.do.dsp.mp.microsoft.com"
+ },
+ {
+  "ts": 1749829434.295773,
+  "src_ip": "10.6.13.133",
+  "src_port": 52559,
+  "dst_ip": "173.222.52.33",
+  "dst_port": 443,
+  "sni": "kv601.prod.do.dsp.mp.microsoft.com"
+ },
+ {
+  "ts": 1749829532.105603,
+  "src_ip": "10.6.13.133",
+  "src_port": 52568,
+  "dst_ip": "40.126.29.11",
+  "dst_port": 443,
+  "sni": "login.microsoftonline.com"
+ },
+ {
+  "ts": 1749829550.826622,
+  "src_ip": "10.6.13.133",
+  "src_port": 52569,
+  "dst_ip": "20.50.80.213",
+  "dst_port": 443,
+  "sni": "v10.events.data.microsoft.com"
+ },
+ {
+  "ts": 1749829709.262858,
+  "src_ip": "10.6.13.133",
+  "src_port": 52581,
+  "dst_ip": "20.190.157.14",
+  "dst_port": 443,
+  "sni": "login.microsoftonline.com"
+ },
+ {
+  "ts": 1749829874.565237,
+  "src_ip": "10.6.13.133",
+  "src_port": 52588,
+  "dst_ip": "23.212.185.87",
+  "dst_port": 443,
+  "sni": "windows.msn.com"
+ },
+ {
+  "ts": 1749830017.489474,
+  "src_ip": "10.6.13.133",
+  "src_port": 52594,
+  "dst_ip": "40.69.76.172",
+  "dst_port": 443,
+  "sni": "array620.prod.do.dsp.mp.microsoft.com"
+ },
+ {
+  "ts": 1749830018.108767,
+  "src_ip": "10.6.13.133",
+  "src_port": 52595,
+  "dst_ip": "173.222.52.33",
+  "dst_port": 443,
+  "sni": "kv601.prod.do.dsp.mp.microsoft.com"
+ },
+ {
+  "ts": 1749830074.398952,
+  "src_ip": "10.6.13.133",
+  "src_port": 52598,
+  "dst_ip": "52.123.129.14",
+  "dst_port": 443,
+  "sni": "ecs.office.com"
+ },
+ {
+  "ts": 1749830116.416387,
+  "src_ip": "10.6.13.133",
+  "src_port": 52600,
+  "dst_ip": "40.69.76.172",
+  "dst_port": 443,
+  "sni": "array620.prod.do.dsp.mp.microsoft.com"
+ },
+ {
+  "ts": 1749830116.984215,
+  "src_ip": "10.6.13.133",
+  "src_port": 52601,
+  "dst_ip": "173.222.52.33",
+  "dst_port": 443,
+  "sni": "kv601.prod.do.dsp.mp.microsoft.com"
+ },
+ {
+  "ts": 1749830639.865198,
+  "src_ip": "10.6.13.133",
+  "src_port": 52623,
+  "dst_ip": "20.190.157.9",
+  "dst_port": 443,
+  "sni": "login.microsoftonline.com"
+ },
+ {
+  "ts": 1749830641.443223,
+  "src_ip": "10.6.13.133",
+  "src_port": 52624,
+  "dst_ip": "52.167.249.196",
+  "dst_port": 443,
+  "sni": "settings-win.data.microsoft.com"
+ },
+ {
+  "ts": 1749830642.013958,
+  "src_ip": "10.6.13.133",
+  "src_port": 52625,
+  "dst_ip": "52.167.249.196",
+  "dst_port": 443,
+  "sni": "settings-win.data.microsoft.com"
+ }
+]

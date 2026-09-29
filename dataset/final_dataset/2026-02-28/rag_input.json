@@ -1,0 +1,119 @@
+{
+  "metadata": {
+    "incident_id": "INC-20260228",
+    "scenario": "2026-02-28",
+    "title": "Easy As 123",
+    "source": "malware-traffic-analysis.net",
+    "capture_start": "2026-02-28T19:55:06.482909Z",
+    "capture_end": "2026-03-01T00:16:35.687910Z",
+    "duration_sec": 15689.21,
+    "evidence_types": [
+      "network_summary",
+      "dns",
+      "http",
+      "tls"
+    ],
+    "artifact_scope_note": "This pilot contains network telemetry only; no communications/chat or validated IDS/Suricata alert artifacts were available in the supplied dataset."
+  },
+  "incident_description": "Security network-traffic investigation scenario 'Easy As 123' from malware-traffic-analysis.net. The supplied evidence consists of parsed DNS, HTTP, TLS, connection-activity, User-Agent, and HTTP Server-header observations from the associated packet capture. This description intentionally does not state a root cause, impact, or confirmed C2 attribution; those must be established from the supplied artifacts.",
+  "artifacts": [
+    {
+      "artifact_id": "2026-02-28-01",
+      "artifact_type": "network_summary",
+      "subtype": "internal_host_activity_summary",
+      "source": "internal_host_activity_summary",
+      "content": "{\n  \"chunk_type\": \"internal_host_activity_summary\",\n  \"description\": \"Internal (private-IP) hosts ranked by number of distinct outbound connections to external IPs.\",\n  \"hosts\": [\n    {\n      \"internal_ip\": \"10.2.28.88\",\n      \"outbound_connections\": 186,\n      \"distinct_external_ips_contacted\": 98\n    }\n  ]\n}",
+      "metadata": {
+        "scenario": "2026-02-28",
+        "capture_start": "2026-02-28T19:55:06.482909Z",
+        "capture_end": "2026-03-01T00:16:35.687910Z",
+        "source_kind": "derived_network_evidence",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "2026-02-28-02",
+      "artifact_type": "dns",
+      "subtype": "dns_query_aggregation_non_benign",
+      "source": "dns_query_aggregation_non_benign",
+      "content": "{\n  \"chunk_type\": \"dns_query_aggregation_non_benign\",\n  \"description\": \"Domains queried, excluding well-known Microsoft/CDN/OS-vendor infrastructure, ranked by query count.\",\n  \"domains\": [\n    {\n      \"domain\": \"wpad.mshome.net\",\n      \"query_count\": 157,\n      \"resolved_ips\": []\n    },\n    {\n      \"domain\": \"wpad.easyas123.tech\",\n      \"query_count\": 156,\n      \"resolved_ips\": []\n    },\n    {\n      \"domain\": \"login.microsoftonline.com\",\n      \"query_count\": 48,\n      \"resolved_ips\": []\n    },\n    {\n      \"domain\": \"www.msn.com\",\n      \"query_count\": 22,\n      \"resolved_ips\": []\n    },\n    {\n      \"domain\": \"_ldap._tcp.Default-First-Site-Name._sites.dc._msdcs.easyas123.tech\",\n      \"query_count\": 20,\n      \"resolved_ips\": []\n    },\n    {\n      \"domain\": \"windows.msn.com\",\n      \"query_count\": 20,\n      \"resolved_ips\": []\n    },\n    {\n      \"domain\": \"www.bing.com\",\n      \"query_count\": 20,\n      \"resolved_ips\": []\n    },\n    {\n      \"domain\": \"assets.msn.com\",\n      \"query_count\": 15,\n      \"resolved_ips\": []\n    },\n    {\n      \"domain\": \"th.bing.com\",\n      \"query_count\": 12,\n      \"resolved_ips\": []\n    },\n    {\n      \"domain\": \"EASYAS123-DC.easyas123.tech\",\n      \"query_count\": 12,\n      \"resolved_ips\": [\n        \"10.2.28.2\"\n      ]\n    },\n    {\n      \"domain\": \"_ldap._tcp.Default-First-Site-Name._sites.dc._msdcs.mshome.net\",\n      \"query_count\": 9,\n      \"resolved_ips\": []\n    },\n    {\n      \"domain\": \"edge-consumer-static.azureedge.net\",\n      \"query_count\": 8,\n      \"resolved_ips\": []\n    },\n    {\n      \"domain\": \"api.msn.com\",\n      \"query_count\": 8,\n      \"resolved_ips\": []\n    },\n    {\n      \"domain\": \"srtb.msn.com\",\n      \"query_count\": 8,\n      \"resolved_ips\": []\n    },\n    {\n      \"domain\": \"_ldap._tcp.dc._msdcs.mshome.net\",\n      \"query_count\": 7,\n      \"resolved_ips\": []\n    },\n    {\n      \"domain\": \"armmf.adobe.com\",\n      \"query_count\": 6,\n      \"resolved_ips\": []\n    },\n    {\n      \"domain\": \"client.wns.windows.com\",\n      \"query_count\": 5,\n      \"resolved_ips\": []\n    },\n    {\n      \"domain\": \"_ldap._tcp.Default-First-Site-Name._sites.easyas123.tech\",\n      \"query_count\": 4,\n      \"resolved_ips\": []\n    },\n    {\n      \"domain\": \"config.edge.skype.com\",\n      \"query_count\": 4,\n      \"resolved_ips\": []\n    },\n    {\n      \"domain\": \"www.fmcsa.dot.gov\",\n      \"query_count\": 4,\n      \"resolved_ips\": []\n    },\n    {\n      \"domain\": \"_ldap._tcp.Default-First-Site-Name._sites.EASYAS123-DC.easyas123.tech\",\n      \"query_count\": 4,\n      \"resolved_ips\": []\n    },\n    {\n      \"domain\": \"_ldap._tcp.EASYAS123-DC.easyas123.tech\",\n      \"query_count\": 4,\n      \"resolved_ips\": []\n    },\n    {\n      \"domain\": \"deff.nelreports.net\",\n      \"query_count\": 4,\n      \"resolved_ips\": []\n    },\n    {\n      \"domain\": \"staticview.msn.com\",\n      \"query_count\": 4,\n      \"resolved_ips\": []\n    },\n    {\n      \"domain\": \"oneclient.sfx.ms\",\n      \"query_count\": 3,\n      \"resolved_ips\": []\n    },\n    {\n      \"domain\": \"assets.adobedtm.com\",\n      \"query_count\": 3,\n      \"resolved_ips\": []\n    },\n    {\n      \"domain\": \"vadusa.xyz\",\n      \"query_count\": 3,\n      \"resolved_ips\": [\n        \"45.131.214.85\"\n      ]\n    },\n    {\n      \"domain\": \"services.gfe.nvidia.com\",\n      \"query_count\": 3,\n      \"resolved_ips\": []\n    },\n    {\n      \"domain\": \"acroipm2.adobe.com\",\n      \"query_count\": 3,\n      \"resolved_ips\": []\n    },\n    {\n      \"domain\": \"easyas123-dc.easyas123.tech\",\n      \"query_count\": 2,\n      \"resolved_ips\": [\n        \"10.2.28.2\"\n      ]\n    }\n  ]\n}",
+      "metadata": {
+        "scenario": "2026-02-28",
+        "capture_start": "2026-02-28T19:55:06.482909Z",
+        "capture_end": "2026-03-01T00:16:35.687910Z",
+        "source_kind": "derived_network_evidence",
+        "heuristic": true
+      }
+    },
+    {
+      "artifact_id": "2026-02-28-03",
+      "artifact_type": "http",
+      "subtype": "http_file_download_aggregation",
+      "source": "http_file_download_aggregation",
+      "content": "{\n  \"chunk_type\": \"http_file_download_aggregation\",\n  \"description\": \"HTTP requests to executable-looking paths or common malware-delivery patterns, grouped by server+URI.\",\n  \"downloads\": []\n}",
+      "metadata": {
+        "scenario": "2026-02-28",
+        "capture_start": "2026-02-28T19:55:06.482909Z",
+        "capture_end": "2026-03-01T00:16:35.687910Z",
+        "source_kind": "derived_network_evidence",
+        "heuristic": true
+      }
+    },
+    {
+      "artifact_id": "2026-02-28-04",
+      "artifact_type": "network_summary",
+      "subtype": "external_ip_activity_aggregation",
+      "source": "external_ip_activity_aggregation",
+      "content": "{\n  \"chunk_type\": \"external_ip_activity_aggregation\",\n  \"description\": \"External IPs ranked by bytes received by internal clients (server->client), a proxy for payload/data delivery.\",\n  \"ips\": [\n    {\n      \"ip\": \"23.64.147.24\",\n      \"connection_count\": 1,\n      \"bytes_from_server\": 1091335,\n      \"internal_clients\": [\n        \"10.2.28.88\"\n      ],\n      \"ports_used\": [\n        443\n      ]\n    },\n    {\n      \"ip\": \"23.218.232.148\",\n      \"connection_count\": 2,\n      \"bytes_from_server\": 985167,\n      \"internal_clients\": [\n        \"10.2.28.88\"\n      ],\n      \"ports_used\": [\n        80\n      ]\n    },\n    {\n      \"ip\": \"23.192.223.23\",\n      \"connection_count\": 2,\n      \"bytes_from_server\": 203694,\n      \"internal_clients\": [\n        \"10.2.28.88\"\n      ],\n      \"ports_used\": [\n        443\n      ]\n    },\n    {\n      \"ip\": \"23.205.110.136\",\n      \"connection_count\": 1,\n      \"bytes_from_server\": 146181,\n      \"internal_clients\": [\n        \"10.2.28.88\"\n      ],\n      \"ports_used\": [\n        443\n      ]\n    },\n    {\n      \"ip\": \"23.192.223.16\",\n      \"connection_count\": 3,\n      \"bytes_from_server\": 115189,\n      \"internal_clients\": [\n        \"10.2.28.88\"\n      ],\n      \"ports_used\": [\n        443\n      ]\n    },\n    {\n      \"ip\": \"150.171.28.11\",\n      \"connection_count\": 14,\n      \"bytes_from_server\": 91375,\n      \"internal_clients\": [\n        \"10.2.28.88\"\n      ],\n      \"ports_used\": [\n        443\n      ]\n    },\n    {\n      \"ip\": \"23.64.115.206\",\n      \"connection_count\": 2,\n      \"bytes_from_server\": 83758,\n      \"internal_clients\": [\n        \"10.2.28.88\"\n      ],\n      \"ports_used\": [\n        443\n      ]\n    },\n    {\n      \"ip\": \"23.41.251.53\",\n      \"connection_count\": 6,\n      \"bytes_from_server\": 78099,\n      \"internal_clients\": [\n        \"10.2.28.88\"\n      ],\n      \"ports_used\": [\n        443\n      ]\n    },\n    {\n      \"ip\": \"23.205.110.151\",\n      \"connection_count\": 1,\n      \"bytes_from_server\": 74592,\n      \"internal_clients\": [\n        \"10.2.28.88\"\n      ],\n      \"ports_used\": [\n        443\n      ]\n    },\n    {\n      \"ip\": \"23.218.232.166\",\n      \"connection_count\": 2,\n      \"bytes_from_server\": 57161,\n      \"internal_clients\": [\n        \"10.2.28.88\"\n      ],\n      \"ports_used\": [\n        80\n      ]\n    },\n    {\n      \"ip\": \"23.60.174.202\",\n      \"connection_count\": 2,\n      \"bytes_from_server\": 50950,\n      \"internal_clients\": [\n        \"10.2.28.88\"\n      ],\n      \"ports_used\": [\n        443\n      ]\n    },\n    {\n      \"ip\": \"52.123.129.14\",\n      \"connection_count\": 5,\n      \"bytes_from_server\": 48675,\n      \"internal_clients\": [\n        \"10.2.28.88\"\n      ],\n      \"ports_used\": [\n        443\n      ]\n    },\n    {\n      \"ip\": \"52.110.6.19\",\n      \"connection_count\": 4,\n      \"bytes_from_server\": 42490,\n      \"internal_clients\": [\n        \"10.2.28.88\"\n      ],\n      \"ports_used\": [\n        443\n      ]\n    },\n    {\n      \"ip\": \"23.205.110.155\",\n      \"connection_count\": 3,\n      \"bytes_from_server\": 38135,\n      \"internal_clients\": [\n        \"10.2.28.88\"\n      ],\n      \"ports_used\": [\n        443\n      ]\n    },\n    {\n      \"ip\": \"52.123.250.27\",\n      \"connection_count\": 5,\n      \"bytes_from_server\": 32630,\n      \"internal_clients\": [\n        \"10.2.28.88\"\n      ],\n      \"ports_used\": [\n        443\n      ]\n    },\n    {\n      \"ip\": \"52.123.250.16\",\n      \"connection_count\": 5,\n      \"bytes_from_server\": 29864,\n      \"internal_clients\": [\n        \"10.2.28.88\"\n      ],\n      \"ports_used\": [\n        443\n      ]\n    },\n    {\n      \"ip\": \"150.171.27.11\",\n      \"connection_count\": 5,\n      \"bytes_from_server\": 29646,\n      \"internal_clients\": [\n        \"10.2.28.88\"\n      ],\n      \"ports_used\": [\n        80,\n        443\n      ]\n    },\n    {\n      \"ip\": \"23.218.232.183\",\n      \"connection_count\": 2,\n      \"bytes_from_server\": 27268,\n      \"internal_clients\": [\n        \"10.2.28.88\"\n      ],\n      \"ports_used\": [\n        80\n      ]\n    },\n    {\n      \"ip\": \"150.171.28.12\",\n      \"connection_count\": 2,\n      \"bytes_from_server\": 23391,\n      \"internal_clients\": [\n        \"10.2.28.88\"\n      ],\n      \"ports_used\": [\n        443\n      ]\n    },\n    {\n      \"ip\": \"150.171.27.12\",\n      \"connection_count\": 2,\n      \"bytes_from_server\": 23389,\n      \"internal_clients\": [\n        \"10.2.28.88\"\n      ],\n      \"ports_used\": [\n        443\n      ]\n    }\n  ]\n}",
+      "metadata": {
+        "scenario": "2026-02-28",
+        "capture_start": "2026-02-28T19:55:06.482909Z",
+        "capture_end": "2026-03-01T00:16:35.687910Z",
+        "source_kind": "derived_network_evidence",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "2026-02-28-05",
+      "artifact_type": "tls",
+      "subtype": "tls_sni_aggregation_non_benign",
+      "source": "tls_sni_aggregation_non_benign",
+      "content": "{\n  \"chunk_type\": \"tls_sni_aggregation_non_benign\",\n  \"description\": \"TLS ClientHello SNI values seen, excluding well-known vendor/CDN infrastructure.\",\n  \"sni_values\": [\n    {\n      \"sni\": \"login.microsoftonline.com\",\n      \"count\": 18,\n      \"clients\": [\n        \"10.2.28.88\"\n      ]\n    },\n    {\n      \"sni\": \"windows.msn.com\",\n      \"count\": 6,\n      \"clients\": [\n        \"10.2.28.88\"\n      ]\n    },\n    {\n      \"sni\": \"www.msn.com\",\n      \"count\": 5,\n      \"clients\": [\n        \"10.2.28.88\"\n      ]\n    },\n    {\n      \"sni\": \"client.wns.windows.com\",\n      \"count\": 3,\n      \"clients\": [\n        \"10.2.28.88\"\n      ]\n    },\n    {\n      \"sni\": \"assets.msn.com\",\n      \"count\": 2,\n      \"clients\": [\n        \"10.2.28.88\"\n      ]\n    },\n    {\n      \"sni\": \"assets.adobedtm.com\",\n      \"count\": 2,\n      \"clients\": [\n        \"10.2.28.88\"\n      ]\n    },\n    {\n      \"sni\": \"services.gfe.nvidia.com\",\n      \"count\": 2,\n      \"clients\": [\n        \"10.2.28.88\"\n      ]\n    },\n    {\n      \"sni\": \"armmf.adobe.com\",\n      \"count\": 2,\n      \"clients\": [\n        \"10.2.28.88\"\n      ]\n    },\n    {\n      \"sni\": \"config.edge.skype.com\",\n      \"count\": 1,\n      \"clients\": [\n        \"10.2.28.88\"\n      ]\n    },\n    {\n      \"sni\": \"oneclient.sfx.ms\",\n      \"count\": 1,\n      \"clients\": [\n        \"10.2.28.88\"\n      ]\n    },\n    {\n      \"sni\": \"api.msn.com\",\n      \"count\": 1,\n      \"clients\": [\n        \"10.2.28.88\"\n      ]\n    },\n    {\n      \"sni\": \"srtb.msn.com\",\n      \"count\": 1,\n      \"clients\": [\n        \"10.2.28.88\"\n      ]\n    },\n    {\n      \"sni\": \"www.bing.com\",\n      \"count\": 1,\n      \"clients\": [\n        \"10.2.28.88\"\n      ]\n    },\n    {\n      \"sni\": \"edge-consumer-static.azureedge.net\",\n      \"count\": 1,\n      \"clients\": [\n        \"10.2.28.88\"\n      ]\n    },\n    {\n      \"sni\": \"deff.nelreports.net\",\n      \"count\": 1,\n      \"clients\": [\n        \"10.2.28.88\"\n      ]\n    },\n    {\n      \"sni\": \"th.bing.com\",\n      \"count\": 1,\n      \"clients\": [\n        \"10.2.28.88\"\n      ]\n    }\n  ]\n}",
+      "metadata": {
+        "scenario": "2026-02-28",
+        "capture_start": "2026-02-28T19:55:06.482909Z",
+        "capture_end": "2026-03-01T00:16:35.687910Z",
+        "source_kind": "derived_network_evidence",
+        "heuristic": true
+      }
+    },
+    {
+      "artifact_id": "2026-02-28-06",
+      "artifact_type": "http",
+      "subtype": "non_browser_user_agent_aggregation",
+      "source": "non_browser_user_agent_aggregation",
+      "content": "{\n  \"chunk_type\": \"non_browser_user_agent_aggregation\",\n  \"description\": \"Every distinct HTTP User-Agent that is not a recognizable browser or common OS-vendor update agent. Deliberately broad (not a fixed malware-keyword list) so unfamiliar tool identifiers are not silently dropped -- includes both malicious and benign findings (e.g. legitimate remote-support/update tools) for human/LLM triage.\",\n  \"user_agents\": [\n    {\n      \"user_agent\": \"NetSupport Manager/1.3\",\n      \"count\": 273,\n      \"client_ips\": [\n        \"10.2.28.88\"\n      ],\n      \"server_ips\": [\n        \"45.131.214.85\"\n      ]\n    }\n  ]\n}",
+      "metadata": {
+        "scenario": "2026-02-28",
+        "capture_start": "2026-02-28T19:55:06.482909Z",
+        "capture_end": "2026-03-01T00:16:35.687910Z",
+        "source_kind": "derived_network_evidence",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "2026-02-28-07",
+      "artifact_type": "http",
+      "subtype": "http_server_header_aggregation",
+      "source": "http_server_header_aggregation",
+      "content": "{\n  \"chunk_type\": \"http_server_header_aggregation\",\n  \"description\": \"Distinct HTTP Server: response headers seen, with the responding IP(s). Useful for identifying C2 server software (e.g. RAT gateway banners) even when the client-side request looked otherwise unremarkable.\",\n  \"servers\": [\n    {\n      \"server_header\": \"Microsoft-IIS/10.0\",\n      \"count\": 30,\n      \"server_ips\": [\n        \"23.218.232.142\",\n        \"23.218.232.148\",\n        \"23.218.232.166\",\n        \"23.218.232.183\"\n      ]\n    },\n    {\n      \"server_header\": \"NetSupport Gateway/1.92 (Windows NT)\",\n      \"count\": 2,\n      \"server_ips\": [\n        \"45.131.214.85\"\n      ]\n    }\n  ]\n}",
+      "metadata": {
+        "scenario": "2026-02-28",
+        "capture_start": "2026-02-28T19:55:06.482909Z",
+        "capture_end": "2026-03-01T00:16:35.687910Z",
+        "source_kind": "derived_network_evidence",
+        "heuristic": false
+      }
+    }
+  ]
+}

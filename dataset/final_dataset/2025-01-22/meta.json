@@ -1,0 +1,12 @@
+{
+  "scenario": "2025-01-22",
+  "pcap_file": "2025-01-22-traffic-analysis-exercise.pcap",
+  "packet_count": 39427,
+  "first_ts": 1737575096.530137,
+  "last_ts": 1737578298.91825,
+  "duration_sec": 3202.39,
+  "connection_count": 767,
+  "dns_event_count": 1512,
+  "http_event_count": 1253,
+  "tls_event_count": 183
+}

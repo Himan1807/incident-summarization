@@ -1,0 +1,696 @@
+{
+  "scenario": "2025-06-13",
+  "meta": {
+    "scenario": "2025-06-13",
+    "pcap_file": "2025-06-13-traffic-analysis-exercise.pcap",
+    "packet_count": 48877,
+    "first_ts": 1749828835.686551,
+    "last_ts": 1749830908.127693,
+    "duration_sec": 2072.44,
+    "connection_count": 361,
+    "dns_event_count": 392,
+    "http_event_count": 76,
+    "tls_event_count": 61
+  },
+  "chunks": [
+    {
+      "chunk_type": "internal_host_activity_summary",
+      "description": "Internal (private-IP) hosts ranked by number of distinct outbound connections to external IPs.",
+      "hosts": [
+        {
+          "internal_ip": "10.6.13.133",
+          "outbound_connections": 169,
+          "distinct_external_ips_contacted": 72
+        }
+      ]
+    },
+    {
+      "chunk_type": "dns_query_aggregation_non_benign",
+      "description": "Domains queried, excluding well-known Microsoft/CDN/OS-vendor infrastructure, ranked by query count.",
+      "domains": [
+        {
+          "domain": "wpad.massfriction.com",
+          "query_count": 50,
+          "resolved_ips": []
+        },
+        {
+          "domain": "www.bing.com",
+          "query_count": 16,
+          "resolved_ips": []
+        },
+        {
+          "domain": "windows-msgas.com",
+          "query_count": 14,
+          "resolved_ips": [
+            "104.21.112.1",
+            "104.21.16.1",
+            "104.21.32.1",
+            "104.21.48.1",
+            "104.21.64.1"
+          ]
+        },
+        {
+          "domain": "event-datamicrosoft.live",
+          "query_count": 14,
+          "resolved_ips": [
+            "104.21.112.1",
+            "104.21.16.1",
+            "104.21.32.1",
+            "104.21.48.1",
+            "104.21.64.1"
+          ]
+        },
+        {
+          "domain": "s.clarity.ms",
+          "query_count": 12,
+          "resolved_ips": []
+        },
+        {
+          "domain": "login.microsoftonline.com",
+          "query_count": 10,
+          "resolved_ips": []
+        },
+        {
+          "domain": "config.edge.skype.com",
+          "query_count": 8,
+          "resolved_ips": []
+        },
+        {
+          "domain": "windows.msn.com",
+          "query_count": 7,
+          "resolved_ips": []
+        },
+        {
+          "domain": "_ldap._tcp.Default-First-Site-Name._sites.dc._msdcs.massfriction.com",
+          "query_count": 6,
+          "resolved_ips": []
+        },
+        {
+          "domain": "www.msn.com",
+          "query_count": 6,
+          "resolved_ips": []
+        },
+        {
+          "domain": "assets.msn.com",
+          "query_count": 6,
+          "resolved_ips": []
+        },
+        {
+          "domain": "fp.msedge.net",
+          "query_count": 6,
+          "resolved_ips": []
+        },
+        {
+          "domain": "www.googleadservices.com",
+          "query_count": 4,
+          "resolved_ips": [
+            "173.194.208.154",
+            "173.194.208.155",
+            "173.194.208.156",
+            "173.194.208.157"
+          ]
+        },
+        {
+          "domain": "www.truglomedspa.com",
+          "query_count": 4,
+          "resolved_ips": []
+        },
+        {
+          "domain": "hillcoweb.com",
+          "query_count": 4,
+          "resolved_ips": [
+            "67.217.228.199"
+          ]
+        },
+        {
+          "domain": "www.clarity.ms",
+          "query_count": 4,
+          "resolved_ips": []
+        },
+        {
+          "domain": "www.googletagmanager.com",
+          "query_count": 4,
+          "resolved_ips": [
+            "142.250.138.97"
+          ]
+        },
+        {
+          "domain": "cdn.userway.org",
+          "query_count": 4,
+          "resolved_ips": []
+        },
+        {
+          "domain": "connect.facebook.net",
+          "query_count": 4,
+          "resolved_ips": []
+        },
+        {
+          "domain": "api.userway.org",
+          "query_count": 4,
+          "resolved_ips": [
+            "34.211.245.22",
+            "34.212.184.24",
+            "44.237.196.227",
+            "44.238.228.97",
+            "44.239.34.26"
+          ]
+        },
+        {
+          "domain": "stats.g.doubleclick.net",
+          "query_count": 4,
+          "resolved_ips": [
+            "142.250.138.154",
+            "142.250.138.155",
+            "142.250.138.156",
+            "142.250.138.157"
+          ]
+        },
+        {
+          "domain": "www.facebook.com",
+          "query_count": 4,
+          "resolved_ips": []
+        },
+        {
+          "domain": "edge-consumer-static.azureedge.net",
+          "query_count": 4,
+          "resolved_ips": []
+        },
+        {
+          "domain": "bx-ring.msedge.net",
+          "query_count": 4,
+          "resolved_ips": []
+        },
+        {
+          "domain": "teams-ring.msedge.net",
+          "query_count": 4,
+          "resolved_ips": []
+        },
+        {
+          "domain": "f532cb556f727d508908f4950f1b685d.azr.footprintdns.com",
+          "query_count": 4,
+          "resolved_ips": []
+        },
+        {
+          "domain": "arc-ring.msedge.net",
+          "query_count": 4,
+          "resolved_ips": []
+        },
+        {
+          "domain": "ce7953307ad2079d6aaa354bfc57865b.clo.footprintdns.com",
+          "query_count": 4,
+          "resolved_ips": []
+        },
+        {
+          "domain": "k-ring.msedge.net",
+          "query_count": 4,
+          "resolved_ips": []
+        },
+        {
+          "domain": "static.edge.microsoftapp.net",
+          "query_count": 4,
+          "resolved_ips": []
+        },
+        {
+          "domain": "api.msn.com",
+          "query_count": 4,
+          "resolved_ips": []
+        },
+        {
+          "domain": "srtb.msn.com",
+          "query_count": 4,
+          "resolved_ips": []
+        },
+        {
+          "domain": "th.bing.com",
+          "query_count": 4,
+          "resolved_ips": []
+        },
+        {
+          "domain": "thaka.bing.com",
+          "query_count": 4,
+          "resolved_ips": []
+        },
+        {
+          "domain": "_ldap._tcp.Default-First-Site-Name._sites.WIN-DQL4WFWJXQ4.massfriction.com",
+          "query_count": 4,
+          "resolved_ips": []
+        },
+        {
+          "domain": "_ldap._tcp.WIN-DQL4WFWJXQ4.massfriction.com",
+          "query_count": 4,
+          "resolved_ips": []
+        },
+        {
+          "domain": "acroipm2.adobe.com",
+          "query_count": 3,
+          "resolved_ips": []
+        },
+        {
+          "domain": "DESKTOP-5AVE44C.massfriction.com",
+          "query_count": 2,
+          "resolved_ips": []
+        },
+        {
+          "domain": "massfriction.com",
+          "query_count": 2,
+          "resolved_ips": []
+        },
+        {
+          "domain": "win-dql4wfwjxq4.massfriction.com",
+          "query_count": 2,
+          "resolved_ips": [
+            "10.6.13.3"
+          ]
+        }
+      ]
+    },
+    {
+      "chunk_type": "http_file_download_aggregation",
+      "description": "HTTP requests to executable-looking paths or common malware-delivery patterns, grouped by server+URI.",
+      "downloads": []
+    },
+    {
+      "chunk_type": "external_ip_activity_aggregation",
+      "description": "External IPs ranked by bytes received by internal clients (server->client), a proxy for payload/data delivery.",
+      "ips": [
+        {
+          "ip": "83.137.149.15",
+          "connection_count": 1,
+          "bytes_from_server": 32014285,
+          "internal_clients": [
+            "10.6.13.133"
+          ],
+          "ports_used": [
+            443
+          ]
+        },
+        {
+          "ip": "104.21.112.1",
+          "connection_count": 13,
+          "bytes_from_server": 995226,
+          "internal_clients": [
+            "10.6.13.133"
+          ],
+          "ports_used": [
+            80
+          ]
+        },
+        {
+          "ip": "205.174.24.80",
+          "connection_count": 1,
+          "bytes_from_server": 844914,
+          "internal_clients": [
+            "10.6.13.133"
+          ],
+          "ports_used": [
+            443
+          ]
+        },
+        {
+          "ip": "142.250.115.94",
+          "connection_count": 3,
+          "bytes_from_server": 518451,
+          "internal_clients": [
+            "10.6.13.133"
+          ],
+          "ports_used": [
+            443
+          ]
+        },
+        {
+          "ip": "142.250.115.99",
+          "connection_count": 1,
+          "bytes_from_server": 508514,
+          "internal_clients": [
+            "10.6.13.133"
+          ],
+          "ports_used": [
+            443
+          ]
+        },
+        {
+          "ip": "23.198.7.186",
+          "connection_count": 4,
+          "bytes_from_server": 294513,
+          "internal_clients": [
+            "10.6.13.133"
+          ],
+          "ports_used": [
+            443
+          ]
+        },
+        {
+          "ip": "142.250.138.97",
+          "connection_count": 1,
+          "bytes_from_server": 279652,
+          "internal_clients": [
+            "10.6.13.133"
+          ],
+          "ports_used": [
+            443
+          ]
+        },
+        {
+          "ip": "23.212.185.76",
+          "connection_count": 3,
+          "bytes_from_server": 136546,
+          "internal_clients": [
+            "10.6.13.133"
+          ],
+          "ports_used": [
+            443
+          ]
+        },
+        {
+          "ip": "157.240.24.13",
+          "connection_count": 1,
+          "bytes_from_server": 91773,
+          "internal_clients": [
+            "10.6.13.133"
+          ],
+          "ports_used": [
+            443
+          ]
+        },
+        {
+          "ip": "109.61.92.48",
+          "connection_count": 2,
+          "bytes_from_server": 77348,
+          "internal_clients": [
+            "10.6.13.133"
+          ],
+          "ports_used": [
+            443
+          ]
+        },
+        {
+          "ip": "13.107.246.57",
+          "connection_count": 3,
+          "bytes_from_server": 54747,
+          "internal_clients": [
+            "10.6.13.133"
+          ],
+          "ports_used": [
+            443
+          ]
+        },
+        {
+          "ip": "142.250.115.104",
+          "connection_count": 1,
+          "bytes_from_server": 50526,
+          "internal_clients": [
+            "10.6.13.133"
+          ],
+          "ports_used": [
+            443
+          ]
+        },
+        {
+          "ip": "173.194.208.94",
+          "connection_count": 2,
+          "bytes_from_server": 47920,
+          "internal_clients": [
+            "10.6.13.133"
+          ],
+          "ports_used": [
+            443
+          ]
+        },
+        {
+          "ip": "204.79.197.203",
+          "connection_count": 3,
+          "bytes_from_server": 37794,
+          "internal_clients": [
+            "10.6.13.133"
+          ],
+          "ports_used": [
+            443
+          ]
+        },
+        {
+          "ip": "172.67.146.241",
+          "connection_count": 1,
+          "bytes_from_server": 37643,
+          "internal_clients": [
+            "10.6.13.133"
+          ],
+          "ports_used": [
+            443
+          ]
+        },
+        {
+          "ip": "67.217.228.199",
+          "connection_count": 2,
+          "bytes_from_server": 33264,
+          "internal_clients": [
+            "10.6.13.133"
+          ],
+          "ports_used": [
+            443
+          ]
+        },
+        {
+          "ip": "23.96.124.68",
+          "connection_count": 6,
+          "bytes_from_server": 30891,
+          "internal_clients": [
+            "10.6.13.133"
+          ],
+          "ports_used": [
+            443
+          ]
+        },
+        {
+          "ip": "173.222.52.33",
+          "connection_count": 4,
+          "bytes_from_server": 30870,
+          "internal_clients": [
+            "10.6.13.133"
+          ],
+          "ports_used": [
+            443
+          ]
+        },
+        {
+          "ip": "23.198.7.182",
+          "connection_count": 1,
+          "bytes_from_server": 30503,
+          "internal_clients": [
+            "10.6.13.133"
+          ],
+          "ports_used": [
+            443
+          ]
+        },
+        {
+          "ip": "204.79.197.222",
+          "connection_count": 1,
+          "bytes_from_server": 27554,
+          "internal_clients": [
+            "10.6.13.133"
+          ],
+          "ports_used": [
+            443
+          ]
+        }
+      ]
+    },
+    {
+      "chunk_type": "tls_sni_aggregation_non_benign",
+      "description": "TLS ClientHello SNI values seen, excluding well-known vendor/CDN infrastructure.",
+      "sni_values": [
+        {
+          "sni": "login.microsoftonline.com",
+          "count": 5,
+          "clients": [
+            "10.6.13.133"
+          ]
+        },
+        {
+          "sni": "s.clarity.ms",
+          "count": 5,
+          "clients": [
+            "10.6.13.133"
+          ]
+        },
+        {
+          "sni": "cdn.userway.org",
+          "count": 2,
+          "clients": [
+            "10.6.13.133"
+          ]
+        },
+        {
+          "sni": "hillcoweb.com",
+          "count": 2,
+          "clients": [
+            "10.6.13.133"
+          ]
+        },
+        {
+          "sni": "windows.msn.com",
+          "count": 2,
+          "clients": [
+            "10.6.13.133"
+          ]
+        },
+        {
+          "sni": "api.msn.com",
+          "count": 2,
+          "clients": [
+            "10.6.13.133"
+          ]
+        },
+        {
+          "sni": "client.wns.windows.com",
+          "count": 1,
+          "clients": [
+            "10.6.13.133"
+          ]
+        },
+        {
+          "sni": "config.edge.skype.com",
+          "count": 1,
+          "clients": [
+            "10.6.13.133"
+          ]
+        },
+        {
+          "sni": "www.msn.com",
+          "count": 1,
+          "clients": [
+            "10.6.13.133"
+          ]
+        },
+        {
+          "sni": "assets.msn.com",
+          "count": 1,
+          "clients": [
+            "10.6.13.133"
+          ]
+        },
+        {
+          "sni": "www.googletagmanager.com",
+          "count": 1,
+          "clients": [
+            "10.6.13.133"
+          ]
+        },
+        {
+          "sni": "www.clarity.ms",
+          "count": 1,
+          "clients": [
+            "10.6.13.133"
+          ]
+        },
+        {
+          "sni": "stats.g.doubleclick.net",
+          "count": 1,
+          "clients": [
+            "10.6.13.133"
+          ]
+        },
+        {
+          "sni": "www.facebook.com",
+          "count": 1,
+          "clients": [
+            "10.6.13.133"
+          ]
+        },
+        {
+          "sni": "edge-consumer-static.azureedge.net",
+          "count": 1,
+          "clients": [
+            "10.6.13.133"
+          ]
+        },
+        {
+          "sni": "teams-ring.msedge.net",
+          "count": 1,
+          "clients": [
+            "10.6.13.133"
+          ]
+        },
+        {
+          "sni": "f532cb556f727d508908f4950f1b685d.azr.footprintdns.com",
+          "count": 1,
+          "clients": [
+            "10.6.13.133"
+          ]
+        },
+        {
+          "sni": "arc-ring.msedge.net",
+          "count": 1,
+          "clients": [
+            "10.6.13.133"
+          ]
+        },
+        {
+          "sni": "ce7953307ad2079d6aaa354bfc57865b.clo.footprintdns.com",
+          "count": 1,
+          "clients": [
+            "10.6.13.133"
+          ]
+        },
+        {
+          "sni": "dng-microsoftds.com",
+          "count": 1,
+          "clients": [
+            "10.6.13.133"
+          ]
+        },
+        {
+          "sni": "windows.php.net",
+          "count": 1,
+          "clients": [
+            "10.6.13.133"
+          ]
+        }
+      ]
+    },
+    {
+      "chunk_type": "non_browser_user_agent_aggregation",
+      "description": "Every distinct HTTP User-Agent that is not a recognizable browser or common OS-vendor update agent. Deliberately broad (not a fixed malware-keyword list) so unfamiliar tool identifiers are not silently dropped -- includes both malicious and benign findings (e.g. legitimate remote-support/update tools) for human/LLM triage.",
+      "user_agents": [
+        {
+          "user_agent": "WSDAPI",
+          "count": 1,
+          "client_ips": [
+            "10.6.13.133"
+          ],
+          "server_ips": [
+            "10.6.13.129"
+          ]
+        }
+      ]
+    },
+    {
+      "chunk_type": "http_server_header_aggregation",
+      "description": "Distinct HTTP Server: response headers seen, with the responding IP(s). Useful for identifying C2 server software (e.g. RAT gateway banners) even when the client-side request looked otherwise unremarkable.",
+      "servers": [
+        {
+          "server_header": "Qwilt",
+          "count": 2,
+          "server_ips": [
+            "217.20.51.22"
+          ]
+        },
+        {
+          "server_header": "cloudflare",
+          "count": 2,
+          "server_ips": [
+            "104.21.112.1",
+            "104.21.24.186"
+          ]
+        },
+        {
+          "server_header": "Microsoft-HTTPAPI/2.0",
+          "count": 1,
+          "server_ips": [
+            "10.6.13.129"
+          ]
+        }
+      ]
+    }
+  ]
+}
