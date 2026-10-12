@@ -1,0 +1,219 @@
+{
+  "run_log": [
+    {
+      "section": "Impact and Affected Assets",
+      "retrieved": [
+        "2025-01-22-01#0",
+        "2025-01-22-04#0",
+        "2025-01-22-04#2",
+        "2025-01-22-04#3",
+        "2025-01-22-04#4",
+        "2025-01-22-04#1"
+      ],
+      "seconds": 245.9,
+      "flagged_lines": 0
+    },
+    {
+      "section": "Timeline",
+      "retrieved": [
+        "2025-01-22-E1#0",
+        "2025-01-22-E1#3",
+        "2025-01-22-E1#1",
+        "2025-01-22-E1#6",
+        "2025-01-22-E1#5"
+      ],
+      "seconds": 263.2,
+      "flagged_lines": 0
+    },
+    {
+      "section": "Detection and Indicators of Compromise",
+      "retrieved": [
+        "2025-01-22-06#0",
+        "2025-01-22-07#0",
+        "2025-01-22-E1#1",
+        "2025-01-22-03#0",
+        "2025-01-22-E1#5"
+      ],
+      "seconds": 255.9,
+      "flagged_lines": 0
+    },
+    {
+      "section": "Investigation Findings: Malicious Downloads",
+      "retrieved": [
+        "2025-01-22-03#0",
+        "2025-01-22-03#1",
+        "2025-01-22-07#0",
+        "2025-01-22-04#0",
+        "2025-01-22-04#2"
+      ],
+      "seconds": 270.6,
+      "flagged_lines": 0
+    },
+    {
+      "section": "Investigation Findings: Command-and-Control and Data Transfer",
+      "retrieved": [
+        "2025-01-22-04#2",
+        "2025-01-22-04#3",
+        "2025-01-22-04#0",
+        "2025-01-22-04#1",
+        "2025-01-22-04#4"
+      ],
+      "seconds": 187.5,
+      "flagged_lines": 0
+    },
+    {
+      "section": "Root Cause and Contributing Factors",
+      "retrieved": [
+        "2025-01-22-06#0",
+        "2025-01-22-01#0",
+        "2025-01-22-02#7",
+        "2025-01-22-05#0",
+        "2025-01-22-05#3",
+        "2025-01-22-05#4"
+      ],
+      "seconds": 145.7,
+      "flagged_lines": 0
+    },
+    {
+      "section": "Open Questions and Evidence Gaps",
+      "retrieved": [
+        "2025-01-22-06#0",
+        "2025-01-22-04#1",
+        "2025-01-22-E1#5",
+        "2025-01-22-E1#1",
+        "2025-01-22-E1#3"
+      ],
+      "seconds": 171.1,
+      "flagged_lines": 0
+    },
+    {
+      "section": "Corrective and Preventive Actions",
+      "retrieved": [
+        "2025-01-22-E1#5",
+        "2025-01-22-E1#3",
+        "2025-01-22-E1#1",
+        "2025-01-22-E1#4",
+        "2025-01-22-04#0"
+      ],
+      "seconds": 230.7,
+      "flagged_lines": 0
+    }
+  ],
+  "flagged": [
+    {
+      "section": "Incident Summary",
+      "line": "* The following files/URIs were downloaded from the server 5.252.153.241:80: /api/file/get-file/264872, /api/file/get-file/29842.ps1, /api/file/get-file/TeamViewer, /api/file/get-file/Teamviewer_Resource_fr, /api/file/get-file/TV, and /api/file/get-file/pas.ps1.",
+      "unsupported_entities": [
+        "/api/file/get-file/pas.ps1."
+      ],
+      "invalid_citations": [],
+      "placeholders": []
+    }
+  ],
+  "evaluation": {
+    "answerable_entity_recall": 1.0,
+    "overall_entity_recall": 0.917,
+    "hallucination_rate": 0.029,
+    "unsupported_entities": [
+      "/api/file/get-file/pas.ps1."
+    ],
+    "placeholder_count": 0,
+    "citation_rate": 0.337,
+    "per_question": [
+      {
+        "question": "What is the IP address of the infected Windows client?",
+        "type": "entity",
+        "entities": [
+          "10.1.17.215"
+        ],
+        "answerable_from_evidence": [
+          "10.1.17.215"
+        ],
+        "found_in_report": [
+          "10.1.17.215"
+        ]
+      },
+      {
+        "question": "What is the MAC address of the infected Windows client?",
+        "type": "entity",
+        "entities": [
+          "00:d0:b7:26:4a:74"
+        ],
+        "answerable_from_evidence": [],
+        "found_in_report": []
+      },
+      {
+        "question": "What is the host name of the infected Windows client?",
+        "type": "entity",
+        "entities": [
+          "DESKTOP-L8C5GSJ"
+        ],
+        "answerable_from_evidence": [
+          "DESKTOP-L8C5GSJ"
+        ],
+        "found_in_report": [
+          "DESKTOP-L8C5GSJ"
+        ]
+      },
+      {
+        "question": "What is the user account name from the infected Windows client?",
+        "type": "abstain",
+        "entities": [],
+        "found": []
+      },
+      {
+        "question": "What are the IP addresses used for C2 servers for this infection?",
+        "type": "entity",
+        "entities": [
+          "/api/file/get-file/29842.ps1",
+          "45.125.66.32",
+          "5.252.153.241"
+        ],
+        "answerable_from_evidence": [
+          "/api/file/get-file/29842.ps1",
+          "45.125.66.32",
+          "5.252.153.241"
+        ],
+        "found_in_report": [
+          "/api/file/get-file/29842.ps1",
+          "45.125.66.32",
+          "5.252.153.241"
+        ]
+      },
+      {
+        "question": "What malicious files were downloaded, and from where?",
+        "type": "entity",
+        "entities": [
+          "/Teamviewer_Resource_fr",
+          "/api/file/get-file/264872",
+          "/api/file/get-file/29842.ps1",
+          "/api/file/get-file/TeamViewer",
+          "/api/file/get-file/pas.ps1",
+          "5.252.153.241"
+        ],
+        "answerable_from_evidence": [
+          "/Teamviewer_Resource_fr",
+          "/api/file/get-file/264872",
+          "/api/file/get-file/29842.ps1",
+          "/api/file/get-file/TeamViewer",
+          "/api/file/get-file/pas.ps1",
+          "5.252.153.241"
+        ],
+        "found_in_report": [
+          "/Teamviewer_Resource_fr",
+          "/api/file/get-file/264872",
+          "/api/file/get-file/29842.ps1",
+          "/api/file/get-file/TeamViewer",
+          "/api/file/get-file/pas.ps1",
+          "5.252.153.241"
+        ]
+      },
+      {
+        "question": "What domain name was used for the fake Google Authenticator page?",
+        "type": "abstain",
+        "entities": [],
+        "found": []
+      }
+    ]
+  }
+}
