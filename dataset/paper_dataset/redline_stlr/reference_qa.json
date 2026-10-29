@@ -1,0 +1,102 @@
+{
+  "source": "answers.txt (paper dataset)",
+  "confidence": "paper ground truth",
+  "qa": [
+    {
+      "id": 1,
+      "question": "What is the IP address of the potentially infected internal host in the LAN?",
+      "answer": "10.7.10.47",
+      "atoms": [
+        {
+          "text": "10.7.10.47",
+          "kind": "ip"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "question": "What is the hostname of the potentially infected machine in the LAN?",
+      "answer": "DESKTOP-9PEA63H",
+      "atoms": [
+        {
+          "text": "DESKTOP-9PEA63H",
+          "kind": "hostname"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "question": "What is the Windows human user account name (not machine accounts ending in $) of the potentially infected machine in the LAN?",
+      "answer": "rwalters",
+      "atoms": [
+        {
+          "text": "rwalters",
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "question": "What are the likely fake or suspicious domains / URLs for initial infection?",
+      "answer": "623start.site, guiatelefonos.com",
+      "atoms": [
+        {
+          "text": "623start.site",
+          "kind": "domain_or_file"
+        },
+        {
+          "text": "guiatelefonos.com",
+          "kind": "domain_or_file"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "question": "What are the suspicious external IP addresses contacted, which might be involved in command-and-control (C2) communication?",
+      "answer": "194.26.135.119",
+      "atoms": [
+        {
+          "text": "194.26.135.119",
+          "kind": "ip"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "question": "Which of the three CIA components does the attacker target primarily: availability, integrity, or confidentiality?",
+      "answer": "confidentiality",
+      "atoms": [
+        {
+          "text": "confidentiality",
+          "kind": "cia"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "question": "During what hour did the first signs of infection activity appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+      "answer": "2023-07-10 22:00 UTC",
+      "atoms": [
+        {
+          "text": "2023-07-10 22:00 UTC",
+          "kind": "time"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "question": "According to the connection volume statistics, what single external IP address received the most connections from the infected hosts? Is it a C2 server or a legitimate service?",
+      "answer": "195.161.114.3, legitimate service",
+      "atoms": [
+        {
+          "text": "195.161.114.3",
+          "kind": "ip"
+        },
+        {
+          "text": "legitimate service",
+          "kind": "label"
+        }
+      ]
+    }
+  ]
+}

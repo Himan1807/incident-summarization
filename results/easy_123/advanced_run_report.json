@@ -1,0 +1,547 @@
+{
+  "verification_totals": {
+    "uncited": 29,
+    "unsupported_entities": 9,
+    "invalid_citations": 8,
+    "unsupported_numbers": 3
+  },
+  "run_log": [
+    {
+      "section": "Affected Host and User",
+      "retrieved": [
+        "easy_123-08#0",
+        "easy_123-05#0",
+        "easy_123-04#1",
+        "easy_123-04#0",
+        "easy_123-03#0",
+        "easy_123-02#0"
+      ],
+      "seconds": 148.8,
+      "flagged_lines": 0,
+      "flag_counts": {},
+      "truncated": false
+    },
+    {
+      "section": "Timeline",
+      "retrieved": [
+        "easy_123-06#2",
+        "easy_123-06#3",
+        "easy_123-06#1",
+        "easy_123-06#0",
+        "easy_123-08#0",
+        "easy_123-01#4"
+      ],
+      "seconds": 225.5,
+      "flagged_lines": 0,
+      "flag_counts": {},
+      "truncated": false
+    },
+    {
+      "section": "Detection: IDS Alerts",
+      "retrieved": [
+        "easy_123-08#0",
+        "easy_123-06#2",
+        "easy_123-06#1",
+        "easy_123-06#3",
+        "easy_123-06#0",
+        "easy_123-02#0"
+      ],
+      "seconds": 166.8,
+      "flagged_lines": 3,
+      "flag_counts": {
+        "uncited": 3
+      },
+      "truncated": false
+    },
+    {
+      "section": "Initial Infection Indicators",
+      "retrieved": [
+        "easy_123-01#6",
+        "easy_123-01#7",
+        "easy_123-01#4",
+        "easy_123-01#3",
+        "easy_123-01#5"
+      ],
+      "seconds": 213.3,
+      "flagged_lines": 8,
+      "flag_counts": {
+        "unsupported_entities": 8,
+        "invalid_citations": 8,
+        "uncited": 8
+      },
+      "truncated": false
+    },
+    {
+      "section": "Command-and-Control and Network Activity",
+      "retrieved": [
+        "easy_123-08#0",
+        "easy_123-01#4",
+        "easy_123-07#1",
+        "easy_123-05#0",
+        "easy_123-02#0",
+        "easy_123-07#0"
+      ],
+      "seconds": 266.7,
+      "flagged_lines": 0,
+      "flag_counts": {},
+      "truncated": true
+    },
+    {
+      "section": "Impact Assessment",
+      "retrieved": [
+        "easy_123-02#0",
+        "easy_123-07#0",
+        "easy_123-08#0",
+        "easy_123-06#2",
+        "easy_123-06#1",
+        "easy_123-06#3"
+      ],
+      "seconds": 151.3,
+      "flagged_lines": 0,
+      "flag_counts": {},
+      "truncated": false
+    },
+    {
+      "section": "Root Cause and Evidence Gaps",
+      "retrieved": [
+        "easy_123-09#0",
+        "easy_123-04#1",
+        "easy_123-04#0",
+        "easy_123-02#0",
+        "easy_123-08#0",
+        "easy_123-07#0"
+      ],
+      "seconds": 147.9,
+      "flagged_lines": 6,
+      "flag_counts": {
+        "uncited": 6
+      },
+      "truncated": false
+    },
+    {
+      "section": "Corrective and Preventive Actions",
+      "retrieved": [
+        "easy_123-08#0",
+        "easy_123-04#1",
+        "easy_123-04#0",
+        "easy_123-01#1",
+        "easy_123-01#2",
+        "easy_123-07#0"
+      ],
+      "seconds": 180.0,
+      "flagged_lines": 5,
+      "flag_counts": {
+        "uncited": 5
+      },
+      "truncated": false
+    },
+    {
+      "section": "Answers to Investigation Questions",
+      "retrieved": [
+        "easy_123-08#0",
+        "easy_123-03#0",
+        "easy_123-07#1",
+        "easy_123-05#0",
+        "easy_123-04#1",
+        "easy_123-07#0",
+        "easy_123-06#3",
+        "easy_123-06#2",
+        "easy_123-02#0"
+      ],
+      "seconds": 210.2,
+      "flagged_lines": 6,
+      "flag_counts": {
+        "uncited": 6,
+        "unsupported_numbers": 3
+      },
+      "truncated": false
+    }
+  ],
+  "flagged": [
+    {
+      "section": "Detection: IDS Alerts",
+      "line": "* The high-severity alerts are primarily related to HTTP traffic on port 443 (POST) and possible SoftEther Windows Client SSTP Traffic.",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Detection: IDS Alerts",
+      "line": "* The host 10.2.28.88 is involved in a large number of external connections, with 45.131.214.85 being the most contacted external IP.",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Detection: IDS Alerts",
+      "line": "* The NetSupport Remote Admin Checkin and Response alerts may indicate legitimate administrative activity, but further investigation is needed to determine their relevance.",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Initial Infection Indicators",
+      "line": "+ Possible: `23.218.232.183` (6 events) [2025-01-22-03#4]",
+      "types": [
+        "unsupported_entities",
+        "invalid_citations",
+        "uncited"
+      ],
+      "unsupported_entities": [
+        "2025-01-22"
+      ],
+      "invalid_citations": [
+        "2025-01-22-03#4"
+      ]
+    },
+    {
+      "section": "Initial Infection Indicators",
+      "line": "+ Possible: `23.218.232.142` (9 events) [2025-01-22-03#4]",
+      "types": [
+        "unsupported_entities",
+        "invalid_citations",
+        "uncited"
+      ],
+      "unsupported_entities": [
+        "2025-01-22"
+      ],
+      "invalid_citations": [
+        "2025-01-22-03#4"
+      ]
+    },
+    {
+      "section": "Initial Infection Indicators",
+      "line": "+ Possible: `23.47.50.182` (2 events) [2025-01-22-03#4]",
+      "types": [
+        "unsupported_entities",
+        "invalid_citations",
+        "uncited"
+      ],
+      "unsupported_entities": [
+        "2025-01-22"
+      ],
+      "invalid_citations": [
+        "2025-01-22-03#4"
+      ]
+    },
+    {
+      "section": "Initial Infection Indicators",
+      "line": "+ Possible: `45.131.214.85` (264 events) [2025-01-22-03#3]",
+      "types": [
+        "unsupported_entities",
+        "invalid_citations",
+        "uncited"
+      ],
+      "unsupported_entities": [
+        "2025-01-22"
+      ],
+      "invalid_citations": [
+        "2025-01-22-03#3"
+      ]
+    },
+    {
+      "section": "Initial Infection Indicators",
+      "line": "+ Possible: `23.218.232.148` (11 events) [2025-01-22-03#3]",
+      "types": [
+        "unsupported_entities",
+        "invalid_citations",
+        "uncited"
+      ],
+      "unsupported_entities": [
+        "2025-01-22"
+      ],
+      "invalid_citations": [
+        "2025-01-22-03#3"
+      ]
+    },
+    {
+      "section": "Initial Infection Indicators",
+      "line": "+ Possible: `23.218.232.166` (7 events) [2025-01-22-03#3]",
+      "types": [
+        "unsupported_entities",
+        "invalid_citations",
+        "uncited"
+      ],
+      "unsupported_entities": [
+        "2025-01-22"
+      ],
+      "invalid_citations": [
+        "2025-01-22-03#3"
+      ]
+    },
+    {
+      "section": "Initial Infection Indicators",
+      "line": "+ Possible: `150.171.27.11` (1 event) [2025-01-22-03#5]",
+      "types": [
+        "unsupported_entities",
+        "invalid_citations",
+        "uncited"
+      ],
+      "unsupported_entities": [
+        "2025-01-22"
+      ],
+      "invalid_citations": [
+        "2025-01-22-03#5"
+      ]
+    },
+    {
+      "section": "Initial Infection Indicators",
+      "line": "+ Possible: `199.232.210.172` (1 event) [2025-01-22-03#5]",
+      "types": [
+        "unsupported_entities",
+        "invalid_citations",
+        "uncited"
+      ],
+      "unsupported_entities": [
+        "2025-01-22"
+      ],
+      "invalid_citations": [
+        "2025-01-22-03#5"
+      ]
+    },
+    {
+      "section": "Root Cause and Evidence Gaps",
+      "line": "* Root cause: **High** - Compromised Kerberos identity of a client (10.2.28.88) is likely the root cause of the incident. The client's Kerberos identity was used to authenticate to various services, including the domain controller, and made external connections to multiple destinations.",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Root Cause and Evidence Gaps",
+      "line": "* Queries that failed or were empty",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Root Cause and Evidence Gaps",
+      "line": "* C2 (Command and Control) attribution",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Root Cause and Evidence Gaps",
+      "line": "* Impact on the network or systems",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Root Cause and Evidence Gaps",
+      "line": "* Specific services or protocols exploited",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Root Cause and Evidence Gaps",
+      "line": "* Any potential lateral movement or spread of the compromise",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Corrective and Preventive Actions",
+      "line": "* Isolate host 10.2.28.88 from the network to prevent further potential malicious activity.",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Corrective and Preventive Actions",
+      "line": "* Reset the Kerberos identity of host 10.2.28.88, specifically the human user account(s) brolf.",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Corrective and Preventive Actions",
+      "line": "* Block IP 45.131.214.85 to prevent future connections from this IP.",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Corrective and Preventive Actions",
+      "line": "* Investigate and update the TLS certificates and domains accessed by host 10.2.28.88, specifically img-s-msn-com.akamaized.net, assets.adobedtm.com, deff.nelreports.net, and oneclient.sfx.ms.",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Corrective and Preventive Actions",
+      "line": "* Review and update the file transfer policies to prevent unauthorized file transfers from host 10.2.28.88 to external destinations, specifically 13.89.179.14, 13.89.179.9, 135.234.160.246, 150.171.22.17, and 150.171.27.11.",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Answers to Investigation Questions",
+      "line": "1. What is the IP address of the infected Windows client?",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Answers to Investigation Questions",
+      "line": "2. What is the host name of the infected Windows client?",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Answers to Investigation Questions",
+      "line": "3. What is the Windows human user account name (not machine accounts ending in $) of the potentially infected machine in the LAN?",
+      "types": [
+        "unsupported_numbers",
+        "uncited"
+      ],
+      "unsupported_numbers": [
+        "3"
+      ]
+    },
+    {
+      "section": "Answers to Investigation Questions",
+      "line": "4. What are the suspicious external IP addresses contacted, which might be involved in command-and-control (C2) communication?",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Answers to Investigation Questions",
+      "line": "5. During what hour did the first signs of infection activity appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+      "types": [
+        "unsupported_numbers",
+        "uncited"
+      ],
+      "unsupported_numbers": [
+        "5"
+      ]
+    },
+    {
+      "section": "Answers to Investigation Questions",
+      "line": "6. According to the connection volume statistics, what single external IP address received the most connections from the infected hosts? Is it a C2 server or a legitimate service?",
+      "types": [
+        "unsupported_numbers",
+        "uncited"
+      ],
+      "unsupported_numbers": [
+        "6"
+      ]
+    },
+    {
+      "section": "Incident Summary",
+      "line": "The incident occurred on 2026-02-28T19:00:00 UTC to 2026-03-02T23:59:59 UTC. The affected host was 10.2.28.88 (desktop-teyq2nr) with user account brolf. The host started making external connections at 2026-02-28T19:00:00 UTC, with 45.131.214.85 being the most contacted external IP. High-severity alerts were detected, primarily related to HTTP traffic on port 443 (POST) and possible SoftEther Windows Client SSTP Traffic. The internal client 10.2.28.88 made HTTP requests to multiple external IPs and contacted multiple external domains, suggesting potential Command-and-Control (C2) activity.",
+      "types": [
+        "unsupported_entities",
+        "uncited"
+      ],
+      "unsupported_entities": [
+        "2026-02-28 19:00:00"
+      ]
+    }
+  ],
+  "evaluation": {
+    "question_recall": 1.0,
+    "questions_correct": "6/6",
+    "answerable_entity_recall": 1.0,
+    "overall_entity_recall": 1.0,
+    "hallucination_rate": 0.062,
+    "unsupported_entities": [
+      "2025-01-22",
+      "2026-02-28 19:00:00"
+    ],
+    "unsupported_number_count": 2,
+    "unsupported_numbers": [
+      "450",
+      "5"
+    ],
+    "placeholder_count": 0,
+    "citation_rate": 0.545,
+    "uncited_lines": 30,
+    "per_question": [
+      {
+        "question": "What is the IP address of the infected Windows client?",
+        "atoms": [
+          "10.2.28.88"
+        ],
+        "answerable_from_evidence": [
+          "10.2.28.88"
+        ],
+        "found_in_report": [
+          "10.2.28.88"
+        ],
+        "missing_from_evidence": []
+      },
+      {
+        "question": "What is the host name of the infected Windows client?",
+        "atoms": [
+          "DESKTOP-TEYQ2NR"
+        ],
+        "answerable_from_evidence": [
+          "DESKTOP-TEYQ2NR"
+        ],
+        "found_in_report": [
+          "DESKTOP-TEYQ2NR"
+        ],
+        "missing_from_evidence": []
+      },
+      {
+        "question": "What is the Windows human user account name (not machine accounts ending in $) of the potentially infected machine in the LAN?",
+        "atoms": [
+          "brolf"
+        ],
+        "answerable_from_evidence": [
+          "brolf"
+        ],
+        "found_in_report": [
+          "brolf"
+        ],
+        "missing_from_evidence": []
+      },
+      {
+        "question": "What are the suspicious external IP addresses contacted, which might be involved in command-and-control (C2) communication?",
+        "atoms": [
+          "45.131.214.85"
+        ],
+        "answerable_from_evidence": [
+          "45.131.214.85"
+        ],
+        "found_in_report": [
+          "45.131.214.85"
+        ],
+        "missing_from_evidence": []
+      },
+      {
+        "question": "During what hour did the first signs of infection activity appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+        "atoms": [
+          "2026-02-28 19:00 UTC"
+        ],
+        "answerable_from_evidence": [
+          "2026-02-28 19:00 UTC"
+        ],
+        "found_in_report": [
+          "2026-02-28 19:00 UTC"
+        ],
+        "missing_from_evidence": []
+      },
+      {
+        "question": "According to the connection volume statistics, what single external IP address received the most connections from the infected hosts? Is it a C2 server or a legitimate service?",
+        "atoms": [
+          "45.131.214.85",
+          "C2 server"
+        ],
+        "answerable_from_evidence": [
+          "45.131.214.85",
+          "C2 server"
+        ],
+        "found_in_report": [
+          "45.131.214.85",
+          "C2 server"
+        ],
+        "missing_from_evidence": []
+      }
+    ]
+  }
+}

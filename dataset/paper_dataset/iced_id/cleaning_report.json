@@ -1,0 +1,14 @@
+{
+  "scenario": "iced_id",
+  "cleaning": [],
+  "skipped": [],
+  "gaps": [
+    "suspicious_certificates"
+  ],
+  "artifacts": 9,
+  "facts": 136,
+  "empty_aggregations": 0,
+  "questions": 8,
+  "answers": 8,
+  "atoms": 12
+}

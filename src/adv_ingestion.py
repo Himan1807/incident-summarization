@@ -53,4 +53,5 @@ def load_artifacts(path: str) -> dict[str, Any]:
                     "payload": payload, "raw_text": v if isinstance(v, str) else json.dumps(v),
                     "heuristic": False,
                 })
-    return {"metadata": meta, "description": description, "artifacts": artifacts}
+    return {"metadata": meta, "description": description, "artifacts": artifacts,
+            "questions": data.get("investigation_questions", [])}

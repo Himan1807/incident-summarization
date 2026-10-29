@@ -1,0 +1,138 @@
+{
+  "metadata": {
+    "incident_id": "INC-20211022",
+    "scenario": "oct21isc",
+    "title": "Network security incident investigation",
+    "source": "neu-nds2/llm-sec-incident-analysis",
+    "query_window_start": "2021-10-22T00:00:00",
+    "query_window_end": "2021-10-22T23:59:59",
+    "evidence_types": [
+      "authentication",
+      "derived_findings",
+      "ids_alerts",
+      "network_summary"
+    ],
+    "artifact_scope_note": "Evidence is aggregated query output (not raw packets); it contains no chat/communication records."
+  },
+  "incident_description": "Network security investigation of a monitored LAN. Evidence consists of Elasticsearch aggregation results over Zeek and Suricata logs (IDS alerts, Kerberos, HTTP downloads, TLS certificates, domains and external-destination activity). No root cause, impact or C2 attribution is stated; these must be established from the supplied artifacts. Network context: LAN segment range: 10.10.22.0/24 (10.10.22.0 through 10.10.22.255); Domain: enemywatch.net; Domain Controller: 10.10.22.22 - ENEMYWATCH-DC; LAN segment gateway: 10.10.22.1; LAN segment broadcast address: 10.10.22.255.",
+  "investigation_questions": [
+    "What are the IP addresses of the potentially infected internal hosts in the LAN?",
+    "What are the hostnames of the potentially infected machines in the LAN?",
+    "What are the Windows human user account names (not machine accounts ending in $) of the potentially infected machines in the LAN?",
+    "What external servers (domains and IP addresses) were used to download malicious files?",
+    "What are the suspicious external IP addresses contacted, which might be involved in command-and-control (C2) communication?",
+    "What specific malicious file was downloaded by an internal host from multiple external IP addresses?",
+    "During what hour did the first signs of infection activity appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "According to the connection volume statistics, what single external IP address received the most connections from the infected hosts? Is it a C2 server or a legitimate service?"
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "oct21isc-01",
+      "artifact_type": "network_summary",
+      "subtype": "file_downloads",
+      "source": "file_downloads",
+      "content": "{\"description\": \"HTTP file downloads and file transfers: download domains/IPs, requests (client -> server:port : URI), file types and download sources.\", \"facts\": [\"download domains: ctldl.windowsupdate.com — 7 events\", \"download domains: x1.c.lencr.org — 3 events\", \"download domains: sobolpand.top — 2 events\", \"download domains: 178.23.190.8 — 1 events\", \"download domains: 190.14.37.244 — 1 events\", \"download domains: 194.36.191.35 — 1 events\", \"download domains: www.kqzyfj.com — 1 events\", \"http requests: no_http_uri — 1145 events\", \"http requests: 10.10.22.158 -> 172.67.139.101:80 : /034g100/index.php — 4 events\", \"http requests: 10.10.22.156 -> 104.94.77.31:80 : / — 2 events\", \"http requests: 10.10.22.156 -> 178.23.190.8:80 : /44491.6090605324.dat — 1 events\", \"http requests: 10.10.22.156 -> 190.14.37.244:80 : /44491.6090605324.dat — 1 events\", \"http requests: 10.10.22.156 -> 194.36.191.35:80 : /44491.6090605324.dat — 1 events\", \"http requests: 10.10.22.156 -> 8.253.156.120:80 : /msdownload/update/v3/static/trustedr/en/authrootstl.cab?29290d2fe073e937 — 1 events\", \"http requests: 10.10.22.156 -> 8.253.156.120:80 : /msdownload/update/v3/static/trustedr/en/disallowedcertstl.cab?84945a395c830399 — 1 events\", \"http requests: 10.10.22.156 -> 8.253.156.120:80 : /msdownload/update/v3/static/trustedr/en/disallowedcertstl.cab?c073614b94536784 — 1 events\", \"http requests: 10.10.22.156 -> 8.253.156.120:80 : /msdownload/update/v3/static/trustedr/en/pinrulesstl.cab?88af6d736a9e15f4 — 1 events\", \"file transfers: 93 matching events\", \"file transfers > transfer details: file_transfer — 6 events\", \"file transfers > transfer details: 10.10.22.156 -> 104.208.16.88:443 : fuid: Fjxw103NNNaUXuRei — 1 events\", \"file transfers > transfer details: 10.10.22.156 -> 104.208.16.94:443 : fuid: FJxyIt3XkQZYEKg2r4 — 1 events\", \"file transfers > transfer details: 10.10.22.156 -> 140.82.49.12:443 : fuid: Fc7Nl6kEzt63AmJP6 — 1 events\", \"file transfers > transfer details: 10.10.22.156 -> 162.210.220.137:443 : fuid: F3n9EU1Oe7rLUk0jUb — 1 events\", \"file transfers > transfer details: 10.10.22.156 -> 178.23.190.8:80 : file: 44491.6090605324.dat — 1 events\", \"file transfers > transfer details: 10.10.22.156 -> 190.14.37.244:80 : file: 44491.6090605324.dat — 1 events\", \"file transfers > transfer details: 10.10.22.156 -> 194.36.191.35:80 : file: 44491.6090605324.dat — 1 events\", \"file transfers > transfer details: 10.10.22.156 -> 20.189.173.12:443 : fuid: FKDDHm224MLHXqBlHg — 1 events\", \"file transfers > transfer details: 10.10.22.156 -> 20.190.157.11:443 : fuid: F5mpR11aYS0yLj8jq2 — 1 events\", \"file types: other — 1160 events\", \"file types: exe — 4 events\", \"download sources: 10.10.22.156 — 761 events\", \"download sources: 10.10.22.158 — 315 events\", \"download sources: 10.10.22.157 — 88 events\"]}",
+      "metadata": {
+        "scenario": "oct21isc",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "oct21isc-02",
+      "artifact_type": "network_summary",
+      "subtype": "high_activity_external_dest",
+      "source": "high_activity_external_dest",
+      "content": "{\"description\": \"Internal clients ranked by number of connections to external destinations, with each client's most-contacted destinations.\", \"facts\": [\"source clients: 10.10.22.156 — 761 events; external destinations=80; top destinations: 201.137.10.225 (70), 207.246.112.221 (34), 73.52.50.32 (32), 209.210.95.228 (32), 54.243.29.214 (30); 563 further events in other values\", \"source clients: 10.10.22.158 — 315 events; external destinations=45; top destinations: 194.15.112.173 (65), 204.79.197.200 (28), 13.107.21.200 (23), 83.223.99.191 (14), 107.161.180.34 (14); 171 further events in other values\", \"source clients: 10.10.22.157 — 88 events; external destinations=24; top destinations: 52.185.211.133 (8), 104.46.162.226 (7), 20.189.173.7 (6), 13.64.180.106 (5), 13.107.21.200 (5); 57 further events in other values\"]}",
+      "metadata": {
+        "scenario": "oct21isc",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "oct21isc-03",
+      "artifact_type": "authentication",
+      "subtype": "kerberos_clients",
+      "source": "kerberos_clients",
+      "content": "{\"description\": \"Kerberos client account names (user accounts) and the source IPs they authenticated from.\", \"facts\": [\"client accounts: DESKTOP-87WCE26$ — 13 events; source ips: 10.10.22.158 (13)\", \"client accounts: DESKTOP-CFA3367$ — 11 events; source ips: 10.10.22.156 (11)\", \"client accounts: DESKTOP-NZ875R4$ — 10 events; source ips: 10.10.22.157 (10)\", \"client accounts: desktop-87wce26$ — 8 events; source ips: 10.10.22.158 (8)\", \"client accounts: kevin.henderson — 7 events; source ips: 10.10.22.158 (7)\", \"client accounts: agnes.warren — 6 events; source ips: 10.10.22.156 (6)\", \"client accounts: desktop-cfa3367$ — 6 events; source ips: 10.10.22.156 (6)\", \"client accounts: desktop-nz875r4$ — 6 events; source ips: 10.10.22.157 (6)\", \"client accounts: marcus.cobb — 6 events; source ips: 10.10.22.157 (6)\"]}",
+      "metadata": {
+        "scenario": "oct21isc",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "oct21isc-04",
+      "artifact_type": "authentication",
+      "subtype": "kerberos_full_services",
+      "source": "kerberos_full_services",
+      "content": "{\"description\": \"Kerberos services requested (including host and machine account names) per source IP.\", \"facts\": [\"full services: krb_tcp — 76 events; source ips: 10.10.22.158 (29), 10.10.22.156 (24), 10.10.22.157 (23)\", \"full services: krbtgt/ENEMYWATCH.NET — 32 events; source ips: 10.10.22.158 (12), 10.10.22.156 (10), 10.10.22.157 (10)\", \"full services: LDAP/ENEMYWATCH-DC.enemywatch.net/enemywatch.net — 6 events; source ips: 10.10.22.158 (3), 10.10.22.156 (2), 10.10.22.157 (1)\", \"full services: krbtgt/enemywatch.net — 6 events; source ips: 10.10.22.156 (2), 10.10.22.157 (2), 10.10.22.158 (2)\", \"full services: ldap/enemywatch-dc.enemywatch.net/enemywatch.net — 5 events; source ips: 10.10.22.157 (2), 10.10.22.158 (2), 10.10.22.156 (1)\", \"full services: cifs/ENEMYWATCH-DC.enemywatch.net — 4 events; source ips: 10.10.22.158 (2), 10.10.22.156 (1), 10.10.22.157 (1)\", \"full services: cifs/ENEMYWATCH-DC — 3 events; source ips: 10.10.22.156 (1), 10.10.22.157 (1), 10.10.22.158 (1)\", \"full services: cifs/ENEMYWATCH-DC.enemywatch.net/enemywatch.net — 3 events; source ips: 10.10.22.156 (1), 10.10.22.157 (1), 10.10.22.158 (1)\", \"full services: krbtgt/ENEMYWATCH — 3 events; source ips: 10.10.22.156 (1), 10.10.22.157 (1), 10.10.22.158 (1)\", \"full services: LDAP/ENEMYWATCH-DC.enemywatch.net — 2 events; source ips: 10.10.22.156 (1), 10.10.22.158 (1)\", \"full services: cifs/ENEMYWATCH.NET — 2 events; source ips: 10.10.22.156 (1), 10.10.22.157 (1)\", \"full services: DESKTOP-87WCE26$ — 1 events; source ips: 10.10.22.158 (1)\", \"full services: DESKTOP-CFA3367$ — 1 events; source ips: 10.10.22.156 (1)\", \"full services: DESKTOP-NZ875R4$ — 1 events; source ips: 10.10.22.157 (1)\", \"full services: cifs/enemywatch.net — 1 events; source ips: 10.10.22.158 (1)\", \"full services: desktop-87wce26$ — 1 events; source ips: 10.10.22.158 (1)\", \"full services: desktop-cfa3367$ — 1 events; source ips: 10.10.22.156 (1)\", \"full services: desktop-nz875r4$ — 1 events; source ips: 10.10.22.157 (1)\", \"full services: host/desktop-87wce26.enemywatch.net — 1 events; source ips: 10.10.22.158 (1)\", \"full services: host/desktop-cfa3367.enemywatch.net — 1 events; source ips: 10.10.22.156 (1)\"]}",
+      "metadata": {
+        "scenario": "oct21isc",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "oct21isc-05",
+      "artifact_type": "authentication",
+      "subtype": "kerberos_hostnames",
+      "source": "kerberos_hostnames",
+      "content": "{\"description\": \"Host names seen in Kerberos traffic with their source IPs.\", \"facts\": [\"hostnames: desktop-87wce26 — 1 events; source ips: 10.10.22.158 (1)\", \"hostnames: desktop-cfa3367 — 1 events; source ips: 10.10.22.156 (1)\", \"hostnames: desktop-nz875r4 — 1 events; source ips: 10.10.22.157 (1)\"]}",
+      "metadata": {
+        "scenario": "oct21isc",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "oct21isc-06",
+      "artifact_type": "ids_alerts",
+      "subtype": "suricata_alerts",
+      "source": "suricata_alerts",
+      "content": "{\"description\": \"Suricata IDS alerts: signatures, high-severity alert destinations and sources, and an hourly alert timeline (UTC).\", \"facts\": [\"alert signatures: ET MALWARE NanoCore RAT CnC 7 — 597 events\", \"alert signatures: ET DYN_DNS DNS Query to DynDNS Domain *.ddns .net — 308 events\", \"alert signatures: ET JA3 Hash - [Abuse.ch] Possible Dridex — 65 events\", \"alert signatures: ET INFO External IP Address Lookup Domain (ipify .org) in TLS SNI — 27 events\", \"alert signatures: ET HUNTING Observed DNS Query for EmerDNS TLD (.bazar) — 15 events\", \"alert signatures: ET INFO External IP Lookup Domain (ipify .org) in DNS Lookup — 10 events\", \"alert signatures: ET INFO NTLM Session Setup Request - Auth — 5 events\", \"alert signatures: ET INFO NTLM Session Setup Request - Negotiate — 5 events\", \"alert signatures: ET INFO NTLMv1 Session Setup Response - Challenge — 5 events\", \"alert signatures: ET RPC DCERPC SVCCTL - Remote Service Control Manager Access — 3 events\", \"alert signatures: ET DNS Query for .cc TLD — 2 events\", \"alert signatures: ET DNS Query to a *.top domain - Likely Hostile — 2 events\", \"alert signatures: ET HUNTING Request to .TOP Domain with Minimal Headers — 2 events\", \"alert signatures: ET INFO HTTP Request to a *.top domain — 1 events\", \"alert signatures: ET INFO IP Check Domain (myexternalip .com in TLS SNI) — 1 events\", \"alert signatures: ET INFO Observed DNS Query to .biz TLD — 1 events\", \"alert signatures: ET MALWARE VNCStartServer BOT Variant CnC Beacon — 1 events\", \"alert signatures: ET MALWARE VNCStartServer USR Variant CnC Beacon — 1 events\", \"high severity alerts: 934 matching events\", \"high severity alerts > high severity  destinations: 37.0.10.22 — 597 events\", \"high severity alerts > high severity  destinations: 8.8.8.8 — 308 events\", \"high severity alerts > high severity  destinations: 130.61.64.122 — 14 events\", \"high severity alerts > high severity  destinations: 10.10.22.22 — 6 events\", \"high severity alerts > high severity  destinations: 172.67.139.101 — 3 events\", \"high severity alerts > high severity signatures: ET MALWARE NanoCore RAT CnC 7 — 597 events\", \"high severity alerts > high severity signatures: ET DYN_DNS DNS Query to DynDNS Domain *.ddns .net — 308 events\", \"high severity alerts > high severity signatures: ET HUNTING Observed DNS Query for EmerDNS TLD (.bazar) — 15 events\", \"high severity alerts > high severity signatures: ET RPC DCERPC SVCCTL - Remote Service Control Manager Access — 3 events\", \"high severity alerts > high severity signatures: ET DNS Query for .cc TLD — 2 events\", \"high severity alerts > high severity signatures: ET DNS Query to a *.top domain - Likely Hostile — 2 events\", \"high severity alerts > high severity signatures: ET HUNTING Request to .TOP Domain with Minimal Headers — 2 events\", \"high severity alerts > high severity signatures: ET INFO HTTP Request to a *.top domain — 1 events\", \"high severity alerts > high severity signatures: ET INFO IP Check Domain (myexternalip .com in TLS SNI) — 1 events\", \"high severity alerts > high severity signatures: ET INFO Observed DNS Query to .biz TLD — 1 events\", \"high severity alerts > high severity sources: 10.10.22.157 — 905 events\", \"high severity alerts > high severity sources: 10.10.22.158 — 21 events\", \"high severity alerts > high severity sources: 10.10.22.156 — 8 events\", \"alert timeline: 2021-10-22 14:00 UTC — 285 events\", \"alert timeline: 2021-10-22 15:00 UTC — 728 events\", \"alert timeline: 2021-10-22 16:00 UTC — 38 events\"]}",
+      "metadata": {
+        "scenario": "oct21isc",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "oct21isc-07",
+      "artifact_type": "network_summary",
+      "subtype": "suspicious_certificates",
+      "source": "suspicious_certificates",
+      "content": "{\"description\": \"TLS certificates that are self-signed, IP-based or short-lived.\", \"facts\": [\"self signed analysis: 5 matching events\", \"self signed analysis > self signed details: IP_certificate: 162.210.220.137 — 1 events\", \"self signed analysis > self signed details: self_signed: C=US,OU=Fileserver1,O=Fileserver1,CN=Fileserver1 — 1 events\", \"self signed analysis > self signed details: self_signed: CN=nergoeas.fr,OU=FR System,O=GG EST,L=Nergoea,ST= — 1 events\", \"self signed analysis > self signed details: self_signed: CN=vipsauna.com,O=vipsauna.com,L=Los Angeles,ST=CA — 1 events\", \"self signed analysis > self signed details: self_signed: CN=xoouxld.net,OU=Sxgaxdie,O=Eiy Zwhkvki Iloqntg P — 1 events\", \"ip based certificates: 1 matching events\", \"ip based certificates > ip cert details: IP_cert: 162.210.220.137 — 1 events\", \"short validity certs: normal_validity — 5 events\"]}",
+      "metadata": {
+        "scenario": "oct21isc",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "oct21isc-08",
+      "artifact_type": "network_summary",
+      "subtype": "suspicious_domains",
+      "source": "suspicious_domains",
+      "content": "{\"description\": \"Unusual domains with their source and destination IPs, and direct-IP HTTP connections.\", \"facts\": [\"domains: api.ipify.org — 27 events; top source ips: 10.10.22.156 (27); top destination ips: 54.243.29.214 (10), 54.243.250.193 (7), 50.17.218.95 (6), 23.21.76.7 (4)\", \"domains: redinnovations.co.uk — 7 events; top source ips: 10.10.22.158 (7); top destination ips: 83.223.99.191 (7)\", \"domains: tackleadvisors.com — 7 events; top source ips: 10.10.22.158 (7); top destination ips: 198.136.61.225 (7)\", \"domains: www.calacatta.com — 7 events; top source ips: 10.10.22.158 (7); top destination ips: 107.161.180.34 (7)\", \"domains: www.oftheearth.ca — 7 events; top source ips: 10.10.22.158 (7); top destination ips: 198.50.182.64 (7)\", \"domains: pingosip.top — 2 events; top source ips: 10.10.22.158 (2); top destination ips: 104.21.32.95 (2)\", \"domains: a.nel.cloudflare.com — 1 events; top source ips: 10.10.22.158 (1); top destination ips: 35.190.80.1 (1)\", \"domains: cj.dotomi.com — 1 events; top source ips: 10.10.22.158 (1); top destination ips: 159.127.40.144 (1)\", \"domains: fp-afd.azurefd.us — 1 events; top source ips: 10.10.22.156 (1); top destination ips: 20.140.56.70 (1)\", \"domains: img-prod-cms-rt-microsoft-com.akamaized.net — 1 events; top source ips: 10.10.22.156 (1); top destination ips: 23.47.50.180 (1)\", \"domains: myexternalip.com — 1 events; top source ips: 10.10.22.158 (1); top destination ips: 34.117.59.81 (1)\", \"domains: outlook.office365.com — 1 events; top source ips: 10.10.22.156 (1); top destination ips: 52.96.55.242 (1)\", \"domains: slickdeals.net — 1 events; top source ips: 10.10.22.158 (1); top destination ips: 23.222.241.43 (1)\", \"domains: www.backmarket.com — 1 events; top source ips: 10.10.22.158 (1); top destination ips: 104.16.10.88 (1)\", \"domains: www.dellrefurbished.com — 1 events; top source ips: 10.10.22.158 (1); top destination ips: 34.120.119.232 (1)\", \"domains: www.emjcd.com — 1 events; top source ips: 10.10.22.158 (1); top destination ips: 159.127.40.144 (1)\", \"domains: www.openssl.org — 1 events; top source ips: 10.10.22.156 (1); top destination ips: 72.247.207.22 (1)\"]}",
+      "metadata": {
+        "scenario": "oct21isc",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "oct21isc-09",
+      "artifact_type": "derived_findings",
+      "subtype": "derived_summary",
+      "source": "derived_summary",
+      "content": "{\"description\": \"Deterministic summary computed from the query results above (client ranking, IP-to-hostname/account join, alert timeline).\", \"facts\": [\"Derived: internal client 10.10.22.156 ranks #1 by external connections (761 events, 80 distinct external destinations). Most-contacted external IP: 201.137.10.225 (70 connections).\", \"Derived: Kerberos identity of 10.10.22.156: hostname(s) desktop-cfa3367; human user account(s) agnes.warren.\", \"Derived: internal client 10.10.22.158 ranks #2 by external connections (315 events, 45 distinct external destinations). Most-contacted external IP: 194.15.112.173 (65 connections).\", \"Derived: Kerberos identity of 10.10.22.158: hostname(s) desktop-87wce26; human user account(s) kevin.henderson.\", \"Derived: internal client 10.10.22.157 ranks #3 by external connections (88 events, 24 distinct external destinations). Most-contacted external IP: 52.185.211.133 (8 connections).\", \"Derived: Kerberos identity of 10.10.22.157: hostname(s) desktop-nz875r4; human user account(s) marcus.cobb.\", \"Derived: Suricata alerts span 2021-10-22 14:00 UTC to 2021-10-22 16:00 UTC; earliest alert hour 2021-10-22 14:00 UTC (285 alerts).\", \"Derived: destinations of high-severity alerts: 37.0.10.22 (597), 8.8.8.8 (308), 130.61.64.122 (14), 10.10.22.22 (6), 172.67.139.101 (3).\"]}",
+      "metadata": {
+        "scenario": "oct21isc",
+        "source_kind": "derived_from_es_results",
+        "heuristic": true
+      }
+    }
+  ]
+}

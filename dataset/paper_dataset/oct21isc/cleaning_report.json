@@ -1,0 +1,12 @@
+{
+  "scenario": "oct21isc",
+  "cleaning": [],
+  "skipped": [],
+  "gaps": [],
+  "artifacts": 9,
+  "facts": 142,
+  "empty_aggregations": 0,
+  "questions": 8,
+  "answers": 8,
+  "atoms": 18
+}

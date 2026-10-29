@@ -1,0 +1,15 @@
+{
+  "scenario": "apr21isc",
+  "cleaning": [],
+  "skipped": [
+    "high_activity_external_dest: all aggregations empty",
+    "kerberos_hostnames: all aggregations empty"
+  ],
+  "gaps": [],
+  "artifacts": 8,
+  "facts": 64,
+  "empty_aggregations": 3,
+  "questions": 8,
+  "answers": 8,
+  "atoms": 14
+}

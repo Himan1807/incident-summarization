@@ -1,0 +1,14 @@
+{
+  "scenario": "easy_123",
+  "cleaning": [],
+  "skipped": [
+    "suspicious_certificates: all aggregations empty"
+  ],
+  "gaps": [],
+  "artifacts": 9,
+  "facts": 68,
+  "empty_aggregations": 3,
+  "questions": 6,
+  "answers": 6,
+  "atoms": 7
+}

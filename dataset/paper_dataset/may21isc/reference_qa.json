@@ -1,0 +1,87 @@
+{
+  "source": "answers.txt (paper dataset)",
+  "confidence": "paper ground truth",
+  "qa": [
+    {
+      "id": 1,
+      "question": "What was the IP address of the infected Windows computer?",
+      "answer": "172.17.4.206",
+      "atoms": [
+        {
+          "text": "172.17.4.206",
+          "kind": "ip"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "question": "What was the host name of the infected Windows computer?",
+      "answer": "DESKTOP-V0FEH1L",
+      "atoms": [
+        {
+          "text": "DESKTOP-V0FEH1L",
+          "kind": "hostname"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "question": "What is the Windows human user account name (not machine accounts ending in $) of the potentially infected machine in the LAN?",
+      "answer": "alfonso.paternoster",
+      "atoms": [
+        {
+          "text": "alfonso.paternoster",
+          "kind": "domain_or_file"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "question": "During what hour did the first signs of infection activity appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+      "answer": "2021-05-04 22:00 UTC",
+      "atoms": [
+        {
+          "text": "2021-05-04 22:00 UTC",
+          "kind": "time"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "question": "What are the suspicious external IP addresses contacted, which might be involved in command-and-control (C2) communication?",
+      "answer": "185.183.99.115",
+      "atoms": [
+        {
+          "text": "185.183.99.115",
+          "kind": "ip"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "question": "Were any suspicious certificates observed in the encrypted network traffic? If so, identify the domain or IP in the certificate.",
+      "answer": "zqyefcetkqg.biz",
+      "atoms": [
+        {
+          "text": "zqyefcetkqg.biz",
+          "kind": "domain_or_file"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "question": "According to the connection volume statistics, what single external IP address received the most connections from the infected hosts? Is it a C2 server or a legitimate service?",
+      "answer": "45.32.211.207, C2 server",
+      "atoms": [
+        {
+          "text": "45.32.211.207",
+          "kind": "ip"
+        },
+        {
+          "text": "C2 server",
+          "kind": "label"
+        }
+      ]
+    }
+  ]
+}

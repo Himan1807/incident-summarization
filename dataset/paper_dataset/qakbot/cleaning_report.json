@@ -1,0 +1,12 @@
+{
+  "scenario": "qakbot",
+  "cleaning": [],
+  "skipped": [],
+  "gaps": [],
+  "artifacts": 10,
+  "facts": 102,
+  "empty_aggregations": 1,
+  "questions": 8,
+  "answers": 8,
+  "atoms": 13
+}

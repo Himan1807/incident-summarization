@@ -1,0 +1,14 @@
+{
+  "scenario": "redline_stlr",
+  "cleaning": [],
+  "skipped": [
+    "suspicious_certificates: all aggregations empty"
+  ],
+  "gaps": [],
+  "artifacts": 9,
+  "facts": 59,
+  "empty_aggregations": 3,
+  "questions": 8,
+  "answers": 8,
+  "atoms": 10
+}

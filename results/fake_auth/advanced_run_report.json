@@ -1,0 +1,1179 @@
+{
+  "verification_totals": {
+    "uncited": 106,
+    "invalid_citations": 17,
+    "unsupported_numbers": 5,
+    "unsupported_entities": 1
+  },
+  "run_log": [
+    {
+      "section": "Affected Host and User",
+      "retrieved": [
+        "fake_auth-09#0",
+        "fake_auth-05#0",
+        "fake_auth-04#3",
+        "fake_auth-04#2",
+        "fake_auth-04#0",
+        "fake_auth-04#1"
+      ],
+      "seconds": 59.1,
+      "flagged_lines": 1,
+      "flag_counts": {
+        "uncited": 1
+      },
+      "truncated": false
+    },
+    {
+      "section": "Timeline",
+      "retrieved": [
+        "fake_auth-06#4",
+        "fake_auth-06#2",
+        "fake_auth-09#0",
+        "fake_auth-06#3",
+        "fake_auth-06#0",
+        "fake_auth-06#1"
+      ],
+      "seconds": 182.3,
+      "flagged_lines": 25,
+      "flag_counts": {
+        "uncited": 25
+      },
+      "truncated": true
+    },
+    {
+      "section": "Detection: IDS Alerts",
+      "retrieved": [
+        "fake_auth-06#1",
+        "fake_auth-06#2",
+        "fake_auth-06#4",
+        "fake_auth-06#3",
+        "fake_auth-09#0",
+        "fake_auth-06#0"
+      ],
+      "seconds": 82.4,
+      "flagged_lines": 9,
+      "flag_counts": {
+        "uncited": 9
+      },
+      "truncated": false
+    },
+    {
+      "section": "Initial Infection Indicators",
+      "retrieved": [
+        "fake_auth-01#1",
+        "fake_auth-01#0",
+        "fake_auth-01#7",
+        "fake_auth-01#2",
+        "fake_auth-01#4",
+        "fake_auth-01#6"
+      ],
+      "seconds": 108.3,
+      "flagged_lines": 16,
+      "flag_counts": {
+        "invalid_citations": 15,
+        "uncited": 15
+      },
+      "truncated": true
+    },
+    {
+      "section": "Command-and-Control and Network Activity",
+      "retrieved": [
+        "fake_auth-09#0",
+        "fake_auth-05#0",
+        "fake_auth-02#0",
+        "fake_auth-08#2",
+        "fake_auth-08#3",
+        "fake_auth-08#0"
+      ],
+      "seconds": 120.4,
+      "flagged_lines": 19,
+      "flag_counts": {
+        "uncited": 19
+      },
+      "truncated": true
+    },
+    {
+      "section": "Impact Assessment",
+      "retrieved": [
+        "fake_auth-02#0",
+        "fake_auth-06#2",
+        "fake_auth-06#4",
+        "fake_auth-09#0",
+        "fake_auth-08#0",
+        "fake_auth-08#2"
+      ],
+      "seconds": 61.6,
+      "flagged_lines": 4,
+      "flag_counts": {
+        "invalid_citations": 1,
+        "uncited": 4
+      },
+      "truncated": false
+    },
+    {
+      "section": "Root Cause and Evidence Gaps",
+      "retrieved": [
+        "fake_auth-09#0",
+        "fake_auth-02#0",
+        "fake_auth-04#1",
+        "fake_auth-04#0",
+        "fake_auth-03#0",
+        "fake_auth-01#2"
+      ],
+      "seconds": 61.5,
+      "flagged_lines": 7,
+      "flag_counts": {
+        "uncited": 7
+      },
+      "truncated": false
+    },
+    {
+      "section": "Corrective and Preventive Actions",
+      "retrieved": [
+        "fake_auth-06#1",
+        "fake_auth-09#0",
+        "fake_auth-03#0",
+        "fake_auth-08#0",
+        "fake_auth-08#3",
+        "fake_auth-01#2"
+      ],
+      "seconds": 80.1,
+      "flagged_lines": 6,
+      "flag_counts": {
+        "uncited": 6
+      },
+      "truncated": false
+    },
+    {
+      "section": "Answers to Investigation Questions",
+      "retrieved": [
+        "fake_auth-09#0",
+        "fake_auth-05#0",
+        "fake_auth-04#2",
+        "fake_auth-04#3",
+        "fake_auth-03#0",
+        "fake_auth-04#1",
+        "fake_auth-08#2",
+        "fake_auth-08#0",
+        "fake_auth-08#3",
+        "fake_auth-06#4",
+        "fake_auth-06#2",
+        "fake_auth-07#0",
+        "fake_auth-07#1",
+        "fake_auth-02#0"
+      ],
+      "seconds": 236.9,
+      "flagged_lines": 5,
+      "flag_counts": {
+        "unsupported_numbers": 4,
+        "invalid_citations": 1,
+        "uncited": 1
+      },
+      "truncated": false
+    }
+  ],
+  "flagged": [
+    {
+      "section": "Affected Host and User",
+      "line": "* Human user account: shutchenson",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Timeline",
+      "line": "* 2025-01-22 19:00 UTC: High severity alerts from 45.125.66.32 and 45.125.66.252, with 10 events in total.",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Timeline",
+      "line": "* 2025-01-22 19:00 UTC: High severity alerts from 5.252.153.241, 10.1.17.215, and 185.188.32.26, with 8 events in total.",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Timeline",
+      "line": "* 2025-01-22 19:00 UTC: Suricata alerts start.",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Timeline",
+      "line": "* 2025-01-22 19:00 UTC: Kerberos identity of 10.1.17.215 is derived.",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Timeline",
+      "line": "* 2025-01-22 19:00 UTC: High severity alerts from 10.1.17.215, with 6 events in total.",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Timeline",
+      "line": "* 2025-01-22 19:00 UTC: High severity alerts from 10.1.17.215, with 2 events in total.",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Timeline",
+      "line": "* 2025-01-22 19:00 UTC: High severity alerts from 185.188.32.26, with 2 events in total.",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Timeline",
+      "line": "* 2025-01-22 19:00 UTC: High severity alerts from 5.252.153.241, with 4 events in total.",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Timeline",
+      "line": "* 2025-01-22 19:00 UTC: High severity alerts from ET DROP Spamhaus DROP Listed Traffic Inbound group 5, with 2 events in total.",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Timeline",
+      "line": "* 2025-01-22 19:00 UTC: High severity alerts from ET INFO PS1 Powershell File Request, with 2 events in total.",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Timeline",
+      "line": "* 2025-01-22 19:00 UTC: High severity alerts from ET INFO TeamViewer Dyngate User-Agent, with 2 events in total.",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Timeline",
+      "line": "* 2025-01-22 19:00 UTC: High severity alerts from ET MALWARE Fake Microsoft Teams CnC Payload Request (GET), with 2 events in total.",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Timeline",
+      "line": "* 2025-01-22 19:00 UTC: High severity alerts from ET INFO Microsoft Connection Test, with 2 events in total.",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Timeline",
+      "line": "* 2025-01-22 19:00 UTC: High severity alerts from ET INFO Observed UA-CPU Header, with 1 event in total.",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Timeline",
+      "line": "* 2025-01-22 19:00 UTC: High severity alerts from ET REMOTE_ACCESS TeamViewer RMM Domain (teamviewer .com) in DNS Lookup, with 1 event in total.",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Timeline",
+      "line": "* 2025-01-22 19:00 UTC: High severity alerts from ET DROP Spamhaus DROP Listed Traffic Inbound group 5, with 2 events in total.",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Timeline",
+      "line": "* 2025-01-22 19:00 UTC: High severity alerts from ET INFO PS1 Powershell File Request, with 2 events in total.",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Timeline",
+      "line": "* 2025-01-22 19:00 UTC: High severity alerts from ET INFO TeamViewer Dyngate User-Agent, with 2 events in total.",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Timeline",
+      "line": "* 2025-01-22 19:00 UTC: High severity alerts from ET MALWARE Fake Microsoft Teams CnC Payload Request (GET), with 2 events in total.",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Timeline",
+      "line": "* 2025-01-22 19:00 UTC: High severity alerts from ET INFO Microsoft Connection Test, with 2 events in total.",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Timeline",
+      "line": "* 2025-01-22 19:00 UTC: High severity alerts from ET INFO Observed UA-CPU Header, with 1 event in total.",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Timeline",
+      "line": "* 2025-01-22 19:00 UTC: High severity alerts from ET REMOTE_ACCESS TeamViewer RMM Domain (teamviewer .com) in DNS Lookup, with 1 event in total.",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Timeline",
+      "line": "* 2025-01-22 19:00 UTC: High severity alerts from ET DROP Spamhaus DROP Listed Traffic Inbound group 5, with 2 events in total.",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Timeline",
+      "line": "* 2025-01-22 19:00 UTC: High severity alerts from ET INFO PS1 Powershell File Request, with 2 events in total.",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Timeline",
+      "line": "* 2025-01-22 19:00 UTC: High severity alerts from ET INFO TeamViewer Dyngate User-Agent, with 2 events in total.",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Detection: IDS Alerts",
+      "line": "* ET MALWARE Fake Microsoft Teams CnC Payload Request (GET) \u2014 2 events",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Detection: IDS Alerts",
+      "line": "* ET DROP Spamhaus DROP Listed Traffic Inbound group 5 \u2014 2 events",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Detection: IDS Alerts",
+      "line": "* ET MALWARE Fake Microsoft Teams CnC Payload Request (GET) \u2014 2 events",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Detection: IDS Alerts",
+      "line": "* ET INFO PS1 Powershell File Request \u2014 2 events",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Detection: IDS Alerts",
+      "line": "* ET INFO TeamViewer Dyngate User-Agent \u2014 2 events",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Detection: IDS Alerts",
+      "line": "* ET MALWARE Fake Microsoft Teams CnC Payload Request (GET) \u2014 2 events",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Detection: IDS Alerts",
+      "line": "* ET INFO PS1 Powershell File Request \u2014 2 events",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Detection: IDS Alerts",
+      "line": "* ET INFO TeamViewer Dyngate User-Agent \u2014 2 events",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Detection: IDS Alerts",
+      "line": "* ET MALWARE Fake Microsoft Teams CnC Payload Request (GET) \u2014 2 events",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Initial Infection Indicators",
+      "line": "* possible: ctldl.windowsupdate.com [2025-01-22-03#0]",
+      "types": [
+        "invalid_citations",
+        "uncited"
+      ],
+      "invalid_citations": [
+        "2025-01-22-03#0"
+      ]
+    },
+    {
+      "section": "Initial Infection Indicators",
+      "line": "* possible: www.msftconnecttest.com [2025-01-22-03#0]",
+      "types": [
+        "invalid_citations",
+        "uncited"
+      ],
+      "invalid_citations": [
+        "2025-01-22-03#0"
+      ]
+    },
+    {
+      "section": "Initial Infection Indicators",
+      "line": "* possible: au.download.windowsupdate.com [2025-01-22-03#0]",
+      "types": [
+        "invalid_citations",
+        "uncited"
+      ],
+      "invalid_citations": [
+        "2025-01-22-03#0"
+      ]
+    },
+    {
+      "section": "Initial Infection Indicators",
+      "line": "* 5.252.153.241 [2025-01-22-03#0]",
+      "types": [
+        "invalid_citations",
+        "uncited"
+      ],
+      "invalid_citations": [
+        "2025-01-22-03#0"
+      ]
+    },
+    {
+      "section": "Initial Infection Indicators",
+      "line": "* master16.teamviewer.com [2025-01-22-03#0]",
+      "types": [
+        "invalid_citations",
+        "uncited"
+      ],
+      "invalid_citations": [
+        "2025-01-22-03#0"
+      ]
+    },
+    {
+      "section": "Initial Infection Indicators",
+      "line": "* msedge.b.tlu.dl.delivery.mp.microsoft.com [2025-01-22-03#0]",
+      "types": [
+        "invalid_citations",
+        "uncited"
+      ],
+      "invalid_citations": [
+        "2025-01-22-03#0"
+      ]
+    },
+    {
+      "section": "Initial Infection Indicators",
+      "line": "* download.windowsupdate.com [2025-01-22-03#0]",
+      "types": [
+        "invalid_citations",
+        "uncited"
+      ],
+      "invalid_citations": [
+        "2025-01-22-03#0"
+      ]
+    },
+    {
+      "section": "Initial Infection Indicators",
+      "line": "* possible: other [2025-01-22-03#0]",
+      "types": [
+        "invalid_citations",
+        "uncited"
+      ],
+      "invalid_citations": [
+        "2025-01-22-03#0"
+      ]
+    },
+    {
+      "section": "Initial Infection Indicators",
+      "line": "* 10.1.17.215 [2025-01-22-03#0]",
+      "types": [
+        "invalid_citations"
+      ],
+      "invalid_citations": [
+        "2025-01-22-03#0"
+      ]
+    },
+    {
+      "section": "Initial Infection Indicators",
+      "line": "* 13.107.21.239:443 [2025-01-22-03#0]",
+      "types": [
+        "invalid_citations",
+        "uncited"
+      ],
+      "invalid_citations": [
+        "2025-01-22-03#0"
+      ]
+    },
+    {
+      "section": "Initial Infection Indicators",
+      "line": "* 13.107.42.14:443 [2025-01-22-03#0]",
+      "types": [
+        "invalid_citations",
+        "uncited"
+      ],
+      "invalid_citations": [
+        "2025-01-22-03#0"
+      ]
+    },
+    {
+      "section": "Initial Infection Indicators",
+      "line": "* 13.71.55.58:443 [2025-01-22-03#0]",
+      "types": [
+        "invalid_citations",
+        "uncited"
+      ],
+      "invalid_citations": [
+        "2025-01-22-03#0"
+      ]
+    },
+    {
+      "section": "Initial Infection Indicators",
+      "line": "* 10.1.17.215 -> 5.252.153.241:80 : /1517096937 [2025-01-22-03#2]",
+      "types": [
+        "invalid_citations",
+        "uncited"
+      ],
+      "invalid_citations": [
+        "2025-01-22-03#2"
+      ]
+    },
+    {
+      "section": "Initial Infection Indicators",
+      "line": "* 10.1.17.215 -> 5.252.153.241:80 : /api/file/get-file/29842.ps1 [2025-01-22-03#2]",
+      "types": [
+        "invalid_citations",
+        "uncited"
+      ],
+      "invalid_citations": [
+        "2025-01-22-03#2"
+      ]
+    },
+    {
+      "section": "Initial Infection Indicators",
+      "line": "* 10.1.17.215 -> 185.188.32.26:80 : /din.aspx?s=00000000&id=0&client=DynGate&rnd=427975263&p=10000001 [2025-01-22-03#3]",
+      "types": [
+        "invalid_citations",
+        "uncited"
+      ],
+      "invalid_citations": [
+        "2025-01-22-03#3"
+      ]
+    },
+    {
+      "section": "Initial Infection Indicators",
+      "line": "* 10.1.17.215 -> 185.188.32.26:80 : /din.aspx?s",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Command-and-Control and Network Activity",
+      "line": "* 10.1.17.215 received 1823 events from external destinations.",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Command-and-Control and Network Activity",
+      "line": "* 5.252.153.241 received 1196 connections from 10.1.17.215.",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Command-and-Control and Network Activity",
+      "line": "* 23.207.166.9 received 75 connections from 10.1.17.215.",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Command-and-Control and Network Activity",
+      "line": "* 185.188.32.26 received 48 connections from 10.1.17.215.",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Command-and-Control and Network Activity",
+      "line": "* 204.79.197.203 received 30 connections from 10.1.17.215.",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Command-and-Control and Network Activity",
+      "line": "* 13.107.246.57 received 26 connections from 10.1.17.215.",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Command-and-Control and Network Activity",
+      "line": "* 23.212.73.35 received 2 connections from 10.1.17.215.",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Command-and-Control and Network Activity",
+      "line": "* 23.41.241.15 received 1 connection from 10.1.17.215.",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Command-and-Control and Network Activity",
+      "line": "* 23.55.125.39 received 1 connection from 10.1.17.215.",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Command-and-Control and Network Activity",
+      "line": "* 23.199.168.146 received 2 connections from 10.1.17.215.",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Command-and-Control and Network Activity",
+      "line": "* 3.82.67.153 received 1 connection from 10.1.17.215.",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Command-and-Control and Network Activity",
+      "line": "* 35.71.139.29 received 1 connection from 10.1.17.215.",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Command-and-Control and Network Activity",
+      "line": "* 52.32.135.66 received 1 connection from 10.1.17.215.",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Command-and-Control and Network Activity",
+      "line": "* 104.18.8.76 received 1 connection from 10.1.17.215.",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Command-and-Control and Network Activity",
+      "line": "* 104.21.64.1 received 1 connection from 10.1.17.215.",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Command-and-Control and Network Activity",
+      "line": "* 44.237.90.153 received 1 connection from 10.1.17.215.",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Command-and-Control and Network Activity",
+      "line": "* 151.101.1.181 received 1 connection from 10.1.17.215.",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Command-and-Control and Network Activity",
+      "line": "* 23.205.110.12 received 1 connection from 10.1.17.215.",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Command-and-Control and Network Activity",
+      "line": "* 23.205.110.59 received 1 connection from 10",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Impact Assessment",
+      "line": "* Assessment: Availability [2025-01-22-03#0]",
+      "types": [
+        "invalid_citations",
+        "uncited"
+      ],
+      "invalid_citations": [
+        "2025-01-22-03#0"
+      ]
+    },
+    {
+      "section": "Impact Assessment",
+      "line": "+ Indirect evidence suggests possible availability impact due to high-severity alerts and external destination activity.",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Impact Assessment",
+      "line": "+ 10.1.17.215 ranks #1 by external connections (1823 events, 119 distinct external destinations).",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Impact Assessment",
+      "line": "+ Most-contacted external IP: 5.252.153.241 (1196 connections).",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Root Cause and Evidence Gaps",
+      "line": "* Assessment: Root cause - High confidence",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Root Cause and Evidence Gaps",
+      "line": "* Queries that failed or were empty",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Root Cause and Evidence Gaps",
+      "line": "* Root cause beyond Kerberos authentication",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Root Cause and Evidence Gaps",
+      "line": "* Purpose of the HTTP requests to 5.252.153.241 and 185.188.32.26",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Root Cause and Evidence Gaps",
+      "line": "* Functionality of the DESKTOP-L8C5GSJ$ account",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Root Cause and Evidence Gaps",
+      "line": "* Purpose of the LDAP and CIFS services",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Root Cause and Evidence Gaps",
+      "line": "* Source of the 448 additional events in other values",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Corrective and Preventive Actions",
+      "line": "Assessment: Host is ranked #1 by external connections and has the most-contacted external IP.",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Corrective and Preventive Actions",
+      "line": "Assessment: IP is the most-contacted external IP and has multiple connections to 10.1.17.215.",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Corrective and Preventive Actions",
+      "line": "Assessment: Account has 11 events and is associated with 10.1.17.215.",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Corrective and Preventive Actions",
+      "line": "Assessment: Domain has 4 events and is associated with 10.1.17.215.",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Corrective and Preventive Actions",
+      "line": "* **Monitor HTTP requests to 5.252.153.241**",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Corrective and Preventive Actions",
+      "line": "Assessment: Host 10.1.17.215 makes multiple HTTP requests to this IP.",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Answers to Investigation Questions",
+      "line": "3. Windows human user account name (not machine accounts ending in $) of the potentially infected machine in the LAN: shutchenson [fake_auth-03#0, fake_auth-04#1, fake_auth-04#2]",
+      "types": [
+        "unsupported_numbers"
+      ],
+      "unsupported_numbers": [
+        "3"
+      ]
+    },
+    {
+      "section": "Answers to Investigation Questions",
+      "line": "5. Suspicious external IP addresses contacted, which might be involved in command-and-control (C2) communication: 5.252.153.241 [fake_auth-08#2, fake_auth-06#2], 23.207.164.186 [fake_auth-08#2], 35.71.139.29 [fake_auth-08#2], 52.32.135.66 [fake_auth-08#2], 104.18.8.76 [fake_auth-08#2], 23.212.73.35 [fake_auth-08#0], 23.41.241.15 [fake_auth-08#0], 23.55.125.39 [fake_auth-08#0], 23.199.168.146 [fake_auth-08#4], 3.82.67.153 [fake_auth-08#4], 104.21.64.1 [fake_auth-08#3], 44.237.90.153 [fake_auth-08#3], 35.84.233.181 [fake_auth-08#3], 151.101.1.181 [fake_auth-08#4]",
+      "types": [
+        "invalid_citations"
+      ],
+      "invalid_citations": [
+        "fake_auth-08#4"
+      ]
+    },
+    {
+      "section": "Answers to Investigation Questions",
+      "line": "6. During what hour did the first signs of infection activity appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format: 19:00 UTC [Suricata alerts span 2025-01-22 19:00 UTC to 2025-01-22 20:00 UTC]",
+      "types": [
+        "unsupported_numbers",
+        "uncited"
+      ],
+      "unsupported_numbers": [
+        "00",
+        "19",
+        "6"
+      ]
+    },
+    {
+      "section": "Answers to Investigation Questions",
+      "line": "7. Were any suspicious certificates observed in the encrypted network traffic? If so, identify the domain or IP in the certificate: IP_certificate: 45.125.66.252 [fake_auth-07#1], IP_certificate: 45.125.66.32 [fake_auth-07#1]",
+      "types": [
+        "unsupported_numbers"
+      ],
+      "unsupported_numbers": [
+        "7"
+      ]
+    },
+    {
+      "section": "Answers to Investigation Questions",
+      "line": "8. According to the connection volume statistics, what single external IP address received the most connections from the infected hosts? Is it a C2 server or a legitimate service: 5.252.153.241 [fake_auth-09#0]",
+      "types": [
+        "unsupported_numbers"
+      ],
+      "unsupported_numbers": [
+        "8"
+      ]
+    },
+    {
+      "section": "Incident Summary",
+      "line": "* The incident occurred on 2025-01-22, starting at 19:00 UTC.",
+      "types": [
+        "unsupported_numbers",
+        "uncited"
+      ],
+      "unsupported_numbers": [
+        "00",
+        "19"
+      ]
+    },
+    {
+      "section": "Incident Summary",
+      "line": "* High-severity alerts from multiple sources, including 45.125.66.32, 45.125.66.252, 5.252.153.241, 10.1.17.215, and 185.188.32.26, were generated.",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Incident Summary",
+      "line": "* The alerts were related to suspicious activity, including fake Microsoft Teams CnC Payload Requests, TeamViewer Dyngate User-Agent, and Powershell File Requests.",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Incident Summary",
+      "line": "* The host 10.1.17.215 received 1823 events from external destinations, making it the most-contacted external IP.",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Incident Summary",
+      "line": "* The most-contacted external IP was 5.252.153.241, which received 1196 connections from 10.1.17.215.",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Incident Summary",
+      "line": "* The incident did not appear to have a significant impact on the network, but there was a high volume of suspicious activity.",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Incident Summary",
+      "line": "* The incident is likely related to a phishing or malware attack, but the exact nature of the attack is not known.",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Incident Summary",
+      "line": "* The incident is not related to the bluemoontuesday.com domain or the WIN-GSH54QLW48D Active Directory domain controller.",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Incident Summary",
+      "line": "* The incident is not related to the TeamViewer RMM Domain (teamviewer.com) in DNS Lookup.",
+      "types": [
+        "unsupported_entities",
+        "uncited"
+      ],
+      "unsupported_entities": [
+        "teamviewer.com"
+      ]
+    },
+    {
+      "section": "Incident Summary",
+      "line": "* The incident is not related to the DESKTOP-L8C5GSJ$ account or the LDAP and CIFS services.",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Incident Summary",
+      "line": "* The incident is not related to the 448 additional events in other values.",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Incident Summary",
+      "line": "* The incident is not related to the oneclient.sfx.ms domain.",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Incident Summary",
+      "line": "* The incident is not related to the HTTP requests to 5.252.153.241.",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Incident Summary",
+      "line": "* The incident is not related to the Kerberos authentication.",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Incident Summary",
+      "line": "* The incident is not related to the Powershell File Request.",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Incident Summary",
+      "line": "* The incident is not related to the TeamViewer Dyngate User-Agent.",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Incident Summary",
+      "line": "* The incident is not related to the Fake Microsoft Teams CnC Payload Request.",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Incident Summary",
+      "line": "* The incident is not related to the Microsoft Connection Test.",
+      "types": [
+        "uncited"
+      ]
+    },
+    {
+      "section": "Incident Summary",
+      "line": "* The incident is not related to",
+      "types": [
+        "uncited"
+      ]
+    }
+  ],
+  "evaluation": {
+    "question_recall": 0.875,
+    "questions_correct": "7/8",
+    "answerable_entity_recall": 0.917,
+    "overall_entity_recall": 0.917,
+    "hallucination_rate": 0.0,
+    "unsupported_entities": [],
+    "unsupported_number_count": 5,
+    "unsupported_numbers": [
+      "00",
+      "19",
+      "450",
+      "7",
+      "900"
+    ],
+    "placeholder_count": 0,
+    "citation_rate": 0.052,
+    "uncited_lines": 110,
+    "per_question": [
+      {
+        "question": "What is the IP address of the potentially infected internal host in the LAN?",
+        "atoms": [
+          "10.1.17.215"
+        ],
+        "answerable_from_evidence": [
+          "10.1.17.215"
+        ],
+        "found_in_report": [
+          "10.1.17.215"
+        ],
+        "missing_from_evidence": []
+      },
+      {
+        "question": "What is the hostname of the potentially infected machine in the LAN?",
+        "atoms": [
+          "DESKTOP-L8C5GSJ"
+        ],
+        "answerable_from_evidence": [
+          "DESKTOP-L8C5GSJ"
+        ],
+        "found_in_report": [
+          "DESKTOP-L8C5GSJ"
+        ],
+        "missing_from_evidence": []
+      },
+      {
+        "question": "What is the Windows human user account name (not machine accounts ending in $) of the potentially infected machine in the LAN?",
+        "atoms": [
+          "shutchenson"
+        ],
+        "answerable_from_evidence": [
+          "shutchenson"
+        ],
+        "found_in_report": [
+          "shutchenson"
+        ],
+        "missing_from_evidence": []
+      },
+      {
+        "question": "What are the likely fake or suspicious domains / URLs for initial infection?",
+        "atoms": [
+          "authenticatoor.org"
+        ],
+        "answerable_from_evidence": [
+          "authenticatoor.org"
+        ],
+        "found_in_report": [],
+        "missing_from_evidence": []
+      },
+      {
+        "question": "What are the suspicious external IP addresses contacted, which might be involved in command-and-control (C2) communication?",
+        "atoms": [
+          "5.252.153.241",
+          "45.125.66.32",
+          "45.125.66.252"
+        ],
+        "answerable_from_evidence": [
+          "5.252.153.241",
+          "45.125.66.32",
+          "45.125.66.252"
+        ],
+        "found_in_report": [
+          "5.252.153.241",
+          "45.125.66.32",
+          "45.125.66.252"
+        ],
+        "missing_from_evidence": []
+      },
+      {
+        "question": "During what hour did the first signs of infection activity appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+        "atoms": [
+          "2025-01-22 19:00 UTC"
+        ],
+        "answerable_from_evidence": [
+          "2025-01-22 19:00 UTC"
+        ],
+        "found_in_report": [
+          "2025-01-22 19:00 UTC"
+        ],
+        "missing_from_evidence": []
+      },
+      {
+        "question": "Were any suspicious certificates observed in the encrypted network traffic? If so, identify the domain or IP in the certificate.",
+        "atoms": [
+          "45.125.66.252",
+          "45.125.66.32"
+        ],
+        "answerable_from_evidence": [
+          "45.125.66.252",
+          "45.125.66.32"
+        ],
+        "found_in_report": [
+          "45.125.66.252",
+          "45.125.66.32"
+        ],
+        "missing_from_evidence": []
+      },
+      {
+        "question": "According to the connection volume statistics, what single external IP address received the most connections from the infected hosts? Is it a C2 server or a legitimate service?",
+        "atoms": [
+          "5.252.153.241",
+          "C2 server"
+        ],
+        "answerable_from_evidence": [
+          "5.252.153.241",
+          "C2 server"
+        ],
+        "found_in_report": [
+          "5.252.153.241",
+          "C2 server"
+        ],
+        "missing_from_evidence": []
+      }
+    ]
+  }
+}

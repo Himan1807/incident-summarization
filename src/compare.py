@@ -9,7 +9,7 @@ from pathlib import Path
 from src.adv_ingestion import load_artifacts
 from src.adv_chunking import chunk_artifacts
 from src.enrichment import build_enrichment
-from src.verify import build_corpus
+from src.verify import make_evidence
 from src.evaluate import evaluate_report
 from config import AdvancedSettings
 
@@ -24,13 +24,15 @@ def main():
     arts = data["artifacts"] + build_enrichment(data["artifacts"], str(inp.parent), data["metadata"].get("scenario", "inc"))
     chunks = chunk_artifacts(arts, AdvancedSettings().items_per_chunk)
     # evidence = raw artifact text as well, so baseline output (which saw raw JSON) is judged fairly
-    corpus = build_corpus(chunks, "\n".join(x["raw_text"] for x in data["artifacts"]) + data["description"])
+    corpus = make_evidence("\n".join(c["text"] for c in chunks), "\n".join(x["raw_text"] for x in data["artifacts"]), data["description"])
     ids = {c["id"] for c in chunks}
-    print(f"{'report':45s} ans_recall overall_recall halluc placeholders cite_rate")
+    cols = ("answer_precision", "answer_recall", "answer_f1", "question_recall", "faithfulness", "grounding_rate",
+            "citation_rate", "hallucination_rate", "unsupported_number_count", "placeholder_count")
+    print(f"{'report':34s} " + " ".join(f"{c[:11]:>11s}" for c in cols))
+    chunk_text = {c["id"]: c["text"] for c in chunks}
     for r in a.report:
-        ev = evaluate_report(Path(r).read_text(encoding="utf-8"), str(inp.parent / "reference_qa.json"), corpus, ids)
-        print(f"{r[-45:]:45s} {ev['answerable_entity_recall']!s:10s} {ev['overall_entity_recall']!s:14s} "
-              f"{ev['hallucination_rate']!s:7s} {ev['placeholder_count']!s:12s} {ev['citation_rate']}")
+        ev = evaluate_report(Path(r).read_text(encoding="utf-8"), str(inp.parent / "reference_qa.json"), corpus, ids, chunk_text)
+        print(f"{r[-34:]:34s} " + " ".join(f"{str(ev[c]):>11s}" for c in cols))
         if ev["unsupported_entities"]:
             print("   unsupported:", ev["unsupported_entities"][:8])
 

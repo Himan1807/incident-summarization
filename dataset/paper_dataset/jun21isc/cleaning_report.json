@@ -1,0 +1,14 @@
+{
+  "scenario": "jun21isc",
+  "cleaning": [
+    "Q2: reference answer contains probable typo 'DEKSTOP-A1CTJVY' (DESKTOP?); kept as given"
+  ],
+  "skipped": [],
+  "gaps": [],
+  "artifacts": 10,
+  "facts": 163,
+  "empty_aggregations": 1,
+  "questions": 8,
+  "answers": 8,
+  "atoms": 23
+}

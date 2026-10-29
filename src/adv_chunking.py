@@ -19,6 +19,9 @@ def _fmt_list(v, limit=4):
 
 def _fact_lines(subtype: str, payload: dict) -> list[str]:
     L: list[str] = []
+    facts = payload.get("facts")
+    if isinstance(facts, list) and facts and all(isinstance(x, str) for x in facts):
+        return facts                      # paper-dataset artifacts: one fact per line already
     if subtype == "internal_host_activity_summary":
         for h in payload.get("hosts", []):
             L.append(f"Internal host {h['internal_ip']} made {h['outbound_connections']} outbound connections "

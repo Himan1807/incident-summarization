@@ -1,0 +1,154 @@
+{
+  "source": "answers.txt (paper dataset)",
+  "confidence": "paper ground truth",
+  "qa": [
+    {
+      "id": 1,
+      "question": "What are the IP addresses of the potentially infected internal hosts in the LAN?",
+      "answer": "10.6.15.93, 10.6.15.119, 10.6.15.187",
+      "atoms": [
+        {
+          "text": "10.6.15.93",
+          "kind": "ip"
+        },
+        {
+          "text": "10.6.15.119",
+          "kind": "ip"
+        },
+        {
+          "text": "10.6.15.187",
+          "kind": "ip"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "question": "What are the hostnames of the potentially infected machines in the LAN?",
+      "answer": "DEKSTOP-A1CTJVY, DESKTOP-NIEE9LP, DESKTOP-YS6FZ2G",
+      "atoms": [
+        {
+          "text": "DEKSTOP-A1CTJVY",
+          "kind": "hostname"
+        },
+        {
+          "text": "DESKTOP-NIEE9LP",
+          "kind": "hostname"
+        },
+        {
+          "text": "DESKTOP-YS6FZ2G",
+          "kind": "hostname"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "question": "What are the Windows human user account names (not machine accounts ending in $) of the potentially infected machines in the LAN?",
+      "answer": "raquel.anderson, tommy.vega, horace.maddox",
+      "atoms": [
+        {
+          "text": "raquel.anderson",
+          "kind": "domain_or_file"
+        },
+        {
+          "text": "tommy.vega",
+          "kind": "domain_or_file"
+        },
+        {
+          "text": "horace.maddox",
+          "kind": "domain_or_file"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "question": "What external domains or IP addresses are associated with the initial infection and malware delivery?",
+      "answer": "ststephenskisugu.church, srand04rf.ru, solarwindsonline.com, hadevatjulps.com",
+      "atoms": [
+        {
+          "text": "ststephenskisugu.church",
+          "kind": "domain_or_file"
+        },
+        {
+          "text": "srand04rf.ru",
+          "kind": "domain_or_file"
+        },
+        {
+          "text": "solarwindsonline.com",
+          "kind": "domain_or_file"
+        },
+        {
+          "text": "hadevatjulps.com",
+          "kind": "domain_or_file"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "question": "What are the suspicious external IP addresses contacted, which might be involved in command-and-control (C2) communication?",
+      "answer": "65.60.35.141, 194.226.60.15, 185.66.15.228, 162.244.83.95, 103.28.39.29, 104.244.121.13",
+      "atoms": [
+        {
+          "text": "65.60.35.141",
+          "kind": "ip"
+        },
+        {
+          "text": "194.226.60.15",
+          "kind": "ip"
+        },
+        {
+          "text": "185.66.15.228",
+          "kind": "ip"
+        },
+        {
+          "text": "162.244.83.95",
+          "kind": "ip"
+        },
+        {
+          "text": "103.28.39.29",
+          "kind": "ip"
+        },
+        {
+          "text": "104.244.121.13",
+          "kind": "ip"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "question": "During what hour did the first signs of infection activity appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+      "answer": "2021-06-16 14:00 UTC",
+      "atoms": [
+        {
+          "text": "2021-06-16 14:00 UTC",
+          "kind": "time"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "question": "Were any suspicious certificates observed in the encrypted network traffic? If so, identify the domain or IP in the certificate.",
+      "answer": "zqyefcetkqg.biz",
+      "atoms": [
+        {
+          "text": "zqyefcetkqg.biz",
+          "kind": "domain_or_file"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "question": "According to the connection volume statistics, what single external IP address received the most connections from the infected hosts? Is it a C2 server or a legitimate service?",
+      "answer": "65.60.35.141, C2 server",
+      "atoms": [
+        {
+          "text": "65.60.35.141",
+          "kind": "ip"
+        },
+        {
+          "text": "C2 server",
+          "kind": "label"
+        }
+      ]
+    }
+  ]
+}

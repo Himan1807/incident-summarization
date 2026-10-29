@@ -11,7 +11,7 @@ class Settings:
     final_top_k: int = 10
     max_context_chars: int = 16000
     temperature: float = 0.1
-    timeout_seconds: int = 900
+    timeout_seconds: int = 90
 
 
 @dataclass
@@ -25,7 +25,8 @@ class AdvancedSettings:
     temperature: float = 0.1
     timeout_seconds: int = 1800
     num_ctx: int = 4096            # per-section prompts are small; keeps RAM/latency low
-    num_predict: int = 450         # max tokens generated per section
+    num_predict: int = 600         # max tokens generated per section
+    num_predict_long: int = 900    # sections flagged long=True in sections.py (Timeline)
 
     # Chunking (item-level, structure aware)
     items_per_chunk: int = 4
