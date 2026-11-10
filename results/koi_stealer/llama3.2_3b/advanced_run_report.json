@@ -1,0 +1,480 @@
+{
+  "condition": "rag",
+  "model": "llama3.2:3b",
+  "scenario": "koi_stealer",
+  "seconds_total": 832.8,
+  "verification_totals": {
+    "uncited": 1
+  },
+  "mode": "drop",
+  "removed_unverified_lines": 0,
+  "postprocessing": {
+    "enabled": true,
+    "model_citation_rate_before_attribution": 0.641,
+    "auto_attributed_lines": 13,
+    "invalid_citations_removed": 0,
+    "partial_lines_dropped": 0,
+    "duplicate_lines_removed": 4,
+    "removed": [
+      {
+        "section": "Detection: IDS Alerts",
+        "line": "+ ET HUNTING GENERIC SUSPICIOUS POST to Dotted Quad with Fake Browser 1 \u2014 48 events [koi_stealer-06#2, koi_stealer-06#0]",
+        "duplicate_of": "Detection: IDS Alerts"
+      },
+      {
+        "section": "Detection: IDS Alerts",
+        "line": "+ ET ATTACK RESPONSE Koi Loader/Stealer CnC Config Inbound \u2014 1 events [koi_stealer-08#0, koi_stealer-06#3]",
+        "duplicate_of": "Detection: IDS Alerts"
+      },
+      {
+        "section": "Detection: IDS Alerts",
+        "line": "+ ET MALWARE Win32/Koi Stealer CnC Checkin (GET) \u2014 1 events [koi_stealer-08#0, koi_stealer-06#3]",
+        "duplicate_of": "Detection: IDS Alerts"
+      },
+      {
+        "section": "Detection: IDS Alerts",
+        "line": "* High-severity alerts > high-severity signatures:",
+        "duplicate_of": "(orphaned parent)"
+      }
+    ]
+  },
+  "run_log": [
+    {
+      "section": "Affected Host and User",
+      "retrieved": [
+        "koi_stealer-08#0",
+        "koi_stealer-05#0",
+        "koi_stealer-04#1",
+        "koi_stealer-04#0",
+        "koi_stealer-03#0",
+        "koi_stealer-02#0"
+      ],
+      "seconds": 82.6,
+      "truncated": false,
+      "dropped_partial_line": null,
+      "model_cited_claims": 0,
+      "claims": 0,
+      "auto_attributed_lines": 0,
+      "invalid_citations_removed": 0,
+      "flag_counts": {}
+    },
+    {
+      "section": "Timeline",
+      "retrieved": [
+        "koi_stealer-06#3",
+        "koi_stealer-08#0"
+      ],
+      "extractive": true,
+      "seconds": 0.0,
+      "claims": 2,
+      "model_cited_claims": 2,
+      "flag_counts": {}
+    },
+    {
+      "section": "Detection: IDS Alerts",
+      "retrieved": [
+        "koi_stealer-06#1",
+        "koi_stealer-06#2",
+        "koi_stealer-06#3",
+        "koi_stealer-08#0",
+        "koi_stealer-06#0",
+        "koi_stealer-05#0"
+      ],
+      "seconds": 93.9,
+      "truncated": false,
+      "dropped_partial_line": null,
+      "model_cited_claims": 0,
+      "claims": 7,
+      "auto_attributed_lines": 7,
+      "invalid_citations_removed": 0,
+      "flag_counts": {}
+    },
+    {
+      "section": "Initial Infection Indicators",
+      "retrieved": [
+        "koi_stealer-01#0",
+        "koi_stealer-01#1",
+        "koi_stealer-01#6",
+        "koi_stealer-01#2",
+        "koi_stealer-01#3",
+        "koi_stealer-01#5"
+      ],
+      "seconds": 102.3,
+      "truncated": false,
+      "dropped_partial_line": null,
+      "model_cited_claims": 6,
+      "claims": 6,
+      "auto_attributed_lines": 0,
+      "invalid_citations_removed": 0,
+      "flag_counts": {}
+    },
+    {
+      "section": "Command-and-Control and Network Activity",
+      "retrieved": [
+        "koi_stealer-08#0",
+        "koi_stealer-05#0",
+        "koi_stealer-02#0",
+        "koi_stealer-07#1",
+        "koi_stealer-01#2",
+        "koi_stealer-07#0"
+      ],
+      "seconds": 115.2,
+      "truncated": false,
+      "dropped_partial_line": null,
+      "model_cited_claims": 7,
+      "claims": 7,
+      "auto_attributed_lines": 0,
+      "invalid_citations_removed": 0,
+      "flag_counts": {}
+    },
+    {
+      "section": "Impact Assessment",
+      "retrieved": [
+        "koi_stealer-02#0",
+        "koi_stealer-06#3",
+        "koi_stealer-07#1",
+        "koi_stealer-06#1",
+        "koi_stealer-08#0",
+        "koi_stealer-06#2"
+      ],
+      "seconds": 89.8,
+      "truncated": false,
+      "dropped_partial_line": null,
+      "model_cited_claims": 4,
+      "claims": 4,
+      "auto_attributed_lines": 0,
+      "invalid_citations_removed": 0,
+      "flag_counts": {}
+    },
+    {
+      "section": "Root Cause and Evidence Gaps",
+      "retrieved": [
+        "koi_stealer-09#0",
+        "koi_stealer-08#0",
+        "koi_stealer-01#4",
+        "koi_stealer-04#0",
+        "koi_stealer-04#1",
+        "koi_stealer-01#5"
+      ],
+      "seconds": 108.0,
+      "truncated": false,
+      "dropped_partial_line": null,
+      "model_cited_claims": 0,
+      "claims": 2,
+      "auto_attributed_lines": 2,
+      "invalid_citations_removed": 0,
+      "flag_counts": {}
+    },
+    {
+      "section": "Corrective and Preventive Actions",
+      "retrieved": [
+        "koi_stealer-08#0",
+        "koi_stealer-01#4",
+        "koi_stealer-04#1",
+        "koi_stealer-01#5",
+        "koi_stealer-04#0",
+        "koi_stealer-01#2"
+      ],
+      "seconds": 79.6,
+      "truncated": false,
+      "dropped_partial_line": null,
+      "model_cited_claims": 0,
+      "claims": 5,
+      "auto_attributed_lines": 4,
+      "invalid_citations_removed": 0,
+      "flag_counts": {
+        "uncited": 1
+      }
+    },
+    {
+      "section": "Answers to Investigation Questions",
+      "retrieved": [
+        "koi_stealer-08#0",
+        "koi_stealer-05#0",
+        "koi_stealer-04#1",
+        "koi_stealer-09#0",
+        "koi_stealer-03#0",
+        "koi_stealer-07#1",
+        "koi_stealer-07#0",
+        "koi_stealer-06#2",
+        "koi_stealer-02#0",
+        "koi_stealer-06#3",
+        "koi_stealer-06#1"
+      ],
+      "seconds": 161.4,
+      "truncated": false,
+      "dropped_partial_line": null,
+      "model_cited_claims": 6,
+      "claims": 6,
+      "auto_attributed_lines": 0,
+      "invalid_citations_removed": 0,
+      "flag_counts": {}
+    }
+  ],
+  "flagged": [
+    {
+      "section": "Corrective and Preventive Actions",
+      "line": "* Investigate and address the potential vulnerabilities in the Active Directory environment, specifically the Kerberos configuration, to prevent similar incidents in the future.",
+      "types": [
+        "uncited"
+      ],
+      "action": "kept"
+    }
+  ],
+  "evaluation": {
+    "answer_precision": 0.6,
+    "answer_recall": 0.778,
+    "answer_f1": 0.678,
+    "question_recall": 0.875,
+    "questions_correct": "7/8",
+    "answerable_entity_recall": 1.0,
+    "overall_entity_recall": 0.889,
+    "faithfulness": 0.921,
+    "grounding_rate": 1.0,
+    "citation_precision": 0.946,
+    "citation_rate": 0.974,
+    "claims": 38,
+    "assessment_lines": 4,
+    "uncited_lines": 1,
+    "hallucination_rate": 0.0,
+    "unsupported_entities": [],
+    "unsupported_number_count": 1,
+    "unsupported_numbers": [
+      "0"
+    ],
+    "placeholder_count": 0,
+    "per_question": [
+      {
+        "id": 1,
+        "question": "What is the IP address of the potentially infected internal host in the LAN?",
+        "reference_answer": "172.17.0.99",
+        "atoms": [
+          "172.17.0.99"
+        ],
+        "answerable_from_evidence": [
+          "172.17.0.99"
+        ],
+        "found_in_report": [
+          "172.17.0.99"
+        ],
+        "missing_from_evidence": [],
+        "answer_text": "The IP address of the potentially infected internal host in the LAN is 172.17.0.99.",
+        "status": "CORRECT",
+        "predicted_entities": [
+          "172.17.0.99"
+        ],
+        "correct_entities": [
+          "172.17.0.99"
+        ],
+        "atoms_found_in_answer": [
+          "172.17.0.99"
+        ],
+        "wrong_entities": [],
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      {
+        "id": 2,
+        "question": "What is the hostname of the potentially infected machine in the LAN?",
+        "reference_answer": "DESKTOP-RNVO9AT",
+        "atoms": [
+          "DESKTOP-RNVO9AT"
+        ],
+        "answerable_from_evidence": [
+          "DESKTOP-RNVO9AT"
+        ],
+        "found_in_report": [
+          "DESKTOP-RNVO9AT"
+        ],
+        "missing_from_evidence": [],
+        "answer_text": "The hostname of the potentially infected machine in the LAN is desktop-rnvo9at.",
+        "status": "CORRECT",
+        "predicted_entities": [
+          "DESKTOP-RNVO9AT"
+        ],
+        "correct_entities": [
+          "DESKTOP-RNVO9AT"
+        ],
+        "atoms_found_in_answer": [
+          "DESKTOP-RNVO9AT"
+        ],
+        "wrong_entities": [],
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      {
+        "id": 3,
+        "question": "What is the Windows human user account name (not machine accounts ending in $) of the potentially infected machine in the LAN?",
+        "reference_answer": "afletcher",
+        "atoms": [
+          "afletcher"
+        ],
+        "answerable_from_evidence": [
+          "afletcher"
+        ],
+        "found_in_report": [
+          "afletcher"
+        ],
+        "missing_from_evidence": [],
+        "answer_text": "The Windows human user account name (not machine accounts ending in $) of the potentially infected machine in the LAN is afletcher.",
+        "status": "CORRECT",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [
+          "afletcher"
+        ],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 1.0
+      },
+      {
+        "id": 4,
+        "question": "What are the likely fake or suspicious domains / URLs for initial infection?",
+        "reference_answer": "www.bellantonicioccolato.it (likely compromised site associated with Koi Loader/Koi Stealer)",
+        "atoms": [
+          "www.bellantonicioccolato.it"
+        ],
+        "answerable_from_evidence": [
+          "www.bellantonicioccolato.it"
+        ],
+        "found_in_report": [
+          "www.bellantonicioccolato.it"
+        ],
+        "missing_from_evidence": [],
+        "answer_text": "The likely fake or suspicious domains / URLs for initial infection are weathermapdata.blob.core.windows.net, sso.godaddy.com, www.bellantonicioccolato.it, img-s-msn-com.akamaized.net, and oneclient.sfx.ms.",
+        "status": "PARTIAL",
+        "predicted_entities": [
+          "img-s-msn-com.akamaized.net",
+          "oneclient.sfx.ms",
+          "sso.godaddy.com",
+          "weathermapdata.blob.core.windows.net",
+          "www.bellantonicioccolato.it"
+        ],
+        "correct_entities": [
+          "www.bellantonicioccolato.it"
+        ],
+        "atoms_found_in_answer": [
+          "www.bellantonicioccolato.it"
+        ],
+        "wrong_entities": [
+          "img-s-msn-com.akamaized.net",
+          "oneclient.sfx.ms",
+          "sso.godaddy.com",
+          "weathermapdata.blob.core.windows.net"
+        ],
+        "precision": 0.2,
+        "recall": 1.0
+      },
+      {
+        "id": 5,
+        "question": "What are the suspicious external IP addresses contacted, which might be involved in command-and-control (C2) communication?",
+        "reference_answer": "79.124.78.197",
+        "atoms": [
+          "79.124.78.197"
+        ],
+        "answerable_from_evidence": [
+          "79.124.78.197"
+        ],
+        "found_in_report": [
+          "79.124.78.197"
+        ],
+        "missing_from_evidence": [],
+        "answer_text": "The suspicious external IP addresses contacted, which might be involved in command-and-control (C2) communication, are 79.124.78.197.",
+        "status": "CORRECT",
+        "predicted_entities": [
+          "79.124.78.197"
+        ],
+        "correct_entities": [
+          "79.124.78.197"
+        ],
+        "atoms_found_in_answer": [
+          "79.124.78.197"
+        ],
+        "wrong_entities": [],
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      {
+        "id": 6,
+        "question": "Which of the three CIA components does the attacker target primarily: availability, integrity, or confidentiality?",
+        "reference_answer": "confidentiality",
+        "atoms": [
+          "confidentiality"
+        ],
+        "answerable_from_evidence": [],
+        "found_in_report": [],
+        "missing_from_evidence": [
+          "confidentiality"
+        ],
+        "answer_text": "Not established from the available artifacts.",
+        "status": "ABSTAINED",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 0.0
+      },
+      {
+        "id": 7,
+        "question": "During what hour did the first signs of infection activity appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+        "reference_answer": "2024-09-04 17:00 UTC",
+        "atoms": [
+          "2024-09-04 17:00 UTC"
+        ],
+        "answerable_from_evidence": [
+          "2024-09-04 17:00 UTC"
+        ],
+        "found_in_report": [
+          "2024-09-04 17:00 UTC"
+        ],
+        "missing_from_evidence": [],
+        "answer_text": "The first signs of infection activity appeared during the hour of 17:00 UTC on 2024-09-04.",
+        "status": "WRONG",
+        "predicted_entities": [
+          "2024-09-04"
+        ],
+        "correct_entities": [
+          "2024-09-04"
+        ],
+        "atoms_found_in_answer": [],
+        "wrong_entities": [],
+        "precision": 1.0,
+        "recall": 0.0
+      },
+      {
+        "id": 8,
+        "question": "According to the connection volume statistics, what single external IP address received the most connections from the infected hosts? Is it a C2 server or a legitimate service?",
+        "reference_answer": "79.124.78.197, C2 server",
+        "atoms": [
+          "79.124.78.197",
+          "C2 server"
+        ],
+        "answerable_from_evidence": [
+          "79.124.78.197",
+          "C2 server"
+        ],
+        "found_in_report": [
+          "79.124.78.197",
+          "C2 server"
+        ],
+        "missing_from_evidence": [],
+        "answer_text": "According to the connection volume statistics, the single external IP address that received the most connections from the infected hosts is 79.124.78.197, which is likely a C2 server.",
+        "status": "CORRECT",
+        "predicted_entities": [
+          "79.124.78.197"
+        ],
+        "correct_entities": [
+          "79.124.78.197"
+        ],
+        "atoms_found_in_answer": [
+          "79.124.78.197",
+          "C2 server"
+        ],
+        "wrong_entities": [],
+        "precision": 1.0,
+        "recall": 1.0
+      }
+    ]
+  }
+}

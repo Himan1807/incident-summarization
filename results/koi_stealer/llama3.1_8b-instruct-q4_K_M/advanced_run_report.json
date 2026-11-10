@@ -1,0 +1,422 @@
+{
+  "condition": "rag",
+  "model": "llama3.1:8b-instruct-q4_K_M",
+  "scenario": "koi_stealer",
+  "seconds_total": 2597.5,
+  "verification_totals": {
+    "unsupported_numbers": 4,
+    "role_conflicts": 1
+  },
+  "mode": "drop",
+  "removed_unverified_lines": 5,
+  "postprocessing": {
+    "enabled": true,
+    "model_citation_rate_before_attribution": 1.0,
+    "auto_attributed_lines": 0,
+    "invalid_citations_removed": 0,
+    "partial_lines_dropped": 0,
+    "duplicate_lines_removed": 2,
+    "removed": [
+      {
+        "section": "Command-and-Control and Network Activity",
+        "line": "* 172.17.0.99 made connections to 35 distinct external destinations, with 79.124.78.197 being the most contacted [koi_stealer-08#0].",
+        "duplicate_of": "Affected Host and User"
+      },
+      {
+        "section": "Command-and-Control and Network Activity",
+        "line": "* Assessment: The fact that 79.124.78.197 was the destination of 49 high-severity Suricata alerts suggests that this IP may be involved in malicious activity [koi_stealer-08#0].",
+        "duplicate_of": "Command-and-Control and Network Activity"
+      }
+    ]
+  },
+  "run_log": [
+    {
+      "section": "Affected Host and User",
+      "retrieved": [
+        "koi_stealer-08#0",
+        "koi_stealer-05#0",
+        "koi_stealer-04#1",
+        "koi_stealer-04#0",
+        "koi_stealer-03#0",
+        "koi_stealer-02#0"
+      ],
+      "seconds": 199.6,
+      "truncated": false,
+      "dropped_partial_line": null,
+      "model_cited_claims": 4,
+      "claims": 4,
+      "auto_attributed_lines": 0,
+      "invalid_citations_removed": 0,
+      "flag_counts": {}
+    },
+    {
+      "section": "Timeline",
+      "retrieved": [
+        "koi_stealer-06#3",
+        "koi_stealer-08#0"
+      ],
+      "extractive": true,
+      "seconds": 0.0,
+      "claims": 2,
+      "model_cited_claims": 2,
+      "flag_counts": {}
+    },
+    {
+      "section": "Detection: IDS Alerts",
+      "retrieved": [
+        "koi_stealer-06#1",
+        "koi_stealer-06#2",
+        "koi_stealer-06#3",
+        "koi_stealer-08#0",
+        "koi_stealer-06#0",
+        "koi_stealer-05#0"
+      ],
+      "seconds": 194.0,
+      "truncated": false,
+      "dropped_partial_line": null,
+      "model_cited_claims": 6,
+      "claims": 6,
+      "auto_attributed_lines": 0,
+      "invalid_citations_removed": 0,
+      "flag_counts": {}
+    },
+    {
+      "section": "Initial Infection Indicators",
+      "retrieved": [
+        "koi_stealer-01#0",
+        "koi_stealer-01#1",
+        "koi_stealer-01#6",
+        "koi_stealer-01#2",
+        "koi_stealer-01#3",
+        "koi_stealer-01#5"
+      ],
+      "seconds": 225.2,
+      "truncated": false,
+      "dropped_partial_line": null,
+      "model_cited_claims": 6,
+      "claims": 6,
+      "auto_attributed_lines": 0,
+      "invalid_citations_removed": 0,
+      "flag_counts": {}
+    },
+    {
+      "section": "Command-and-Control and Network Activity",
+      "retrieved": [
+        "koi_stealer-08#0",
+        "koi_stealer-05#0",
+        "koi_stealer-02#0",
+        "koi_stealer-07#1",
+        "koi_stealer-01#2",
+        "koi_stealer-07#0"
+      ],
+      "seconds": 233.3,
+      "truncated": false,
+      "dropped_partial_line": null,
+      "model_cited_claims": 10,
+      "claims": 10,
+      "auto_attributed_lines": 0,
+      "invalid_citations_removed": 0,
+      "flag_counts": {}
+    },
+    {
+      "section": "Impact Assessment",
+      "retrieved": [
+        "koi_stealer-02#0",
+        "koi_stealer-06#3",
+        "koi_stealer-07#1",
+        "koi_stealer-06#1",
+        "koi_stealer-08#0",
+        "koi_stealer-06#2"
+      ],
+      "seconds": 998.6,
+      "truncated": false,
+      "dropped_partial_line": null,
+      "model_cited_claims": 5,
+      "claims": 5,
+      "auto_attributed_lines": 0,
+      "invalid_citations_removed": 0,
+      "flag_counts": {}
+    },
+    {
+      "section": "Root Cause and Evidence Gaps",
+      "retrieved": [
+        "koi_stealer-09#0",
+        "koi_stealer-08#0",
+        "koi_stealer-01#4",
+        "koi_stealer-04#0",
+        "koi_stealer-04#1",
+        "koi_stealer-01#5"
+      ],
+      "seconds": 208.7,
+      "truncated": false,
+      "dropped_partial_line": null,
+      "model_cited_claims": 1,
+      "claims": 1,
+      "auto_attributed_lines": 0,
+      "invalid_citations_removed": 0,
+      "flag_counts": {}
+    },
+    {
+      "section": "Corrective and Preventive Actions",
+      "retrieved": [
+        "koi_stealer-08#0",
+        "koi_stealer-01#4",
+        "koi_stealer-04#1",
+        "koi_stealer-01#5",
+        "koi_stealer-04#0",
+        "koi_stealer-01#2"
+      ],
+      "seconds": 259.2,
+      "truncated": false,
+      "dropped_partial_line": null,
+      "model_cited_claims": 5,
+      "claims": 5,
+      "auto_attributed_lines": 0,
+      "invalid_citations_removed": 0,
+      "flag_counts": {}
+    },
+    {
+      "section": "Answers to Investigation Questions",
+      "retrieved": [
+        "koi_stealer-08#0",
+        "koi_stealer-05#0",
+        "koi_stealer-04#1",
+        "koi_stealer-09#0",
+        "koi_stealer-03#0",
+        "koi_stealer-07#1",
+        "koi_stealer-07#0",
+        "koi_stealer-06#2",
+        "koi_stealer-02#0",
+        "koi_stealer-06#3",
+        "koi_stealer-06#1"
+      ],
+      "seconds": 278.9,
+      "truncated": false,
+      "dropped_partial_line": null,
+      "model_cited_claims": 7,
+      "claims": 7,
+      "auto_attributed_lines": 0,
+      "invalid_citations_removed": 0,
+      "flag_counts": {
+        "unsupported_numbers": 4
+      }
+    }
+  ],
+  "flagged": [
+    {
+      "section": "Answers to Investigation Questions",
+      "line": "* 4. The likely fake or suspicious domains / URLs for initial infection are not established from the available artifacts.",
+      "types": [
+        "unsupported_numbers"
+      ],
+      "action": "removed",
+      "unsupported_numbers": [
+        "4"
+      ]
+    },
+    {
+      "section": "Answers to Investigation Questions",
+      "line": "* 5. The suspicious external IP addresses contacted, which might be involved in command-and-control (C2) communication, are 79.124.78.197 [koi_stealer-08#0].",
+      "types": [
+        "unsupported_numbers"
+      ],
+      "action": "removed",
+      "unsupported_numbers": [
+        "5"
+      ]
+    },
+    {
+      "section": "Answers to Investigation Questions",
+      "line": "* 6. The attacker targets primarily the confidentiality component of the CIA triad, as indicated by the presence of malware and C2 communication [koi_stealer-06#2].",
+      "types": [
+        "unsupported_numbers"
+      ],
+      "action": "removed",
+      "unsupported_numbers": [
+        "6"
+      ]
+    },
+    {
+      "section": "Answers to Investigation Questions",
+      "line": "* 7. The first signs of infection activity appeared during the hour of 2024-09-04 17:00 UTC [koi_stealer-06#3].",
+      "types": [
+        "unsupported_numbers"
+      ],
+      "action": "removed",
+      "unsupported_numbers": [
+        "7"
+      ]
+    },
+    {
+      "section": "Incident Summary",
+      "line": "The affected host is 172.17.0.99, with hostname(s) desktop-rnvo9at, and associated human user account afletcher. The earliest alert hour was 2024-09-04 17:00 UTC, with 31 events. The main C2 candidate is 79.124.78.197, which received the most connections from 172.17.0.99 and was the destination of 49 high-severity Suricata alerts. Assessment: The high frequency of connections to 79.124.78.197 and the presence of HTTP requests to this IP suggest potential C2 activity. [koi_stealer-08#0]",
+      "types": [
+        "role_conflicts"
+      ],
+      "action": "removed",
+      "role_conflicts": [
+        "172.17.0.99"
+      ]
+    }
+  ],
+  "evaluation": {
+    "answer_precision": null,
+    "answer_recall": null,
+    "answer_f1": null,
+    "question_recall": 0.75,
+    "questions_correct": "6/8",
+    "answerable_entity_recall": 0.875,
+    "overall_entity_recall": 0.778,
+    "faithfulness": 0.875,
+    "grounding_rate": 1.0,
+    "citation_precision": 0.875,
+    "citation_rate": 1.0,
+    "claims": 40,
+    "assessment_lines": 2,
+    "uncited_lines": 0,
+    "hallucination_rate": 0.0,
+    "unsupported_entities": [],
+    "unsupported_number_count": 1,
+    "unsupported_numbers": [
+      "0"
+    ],
+    "placeholder_count": 0,
+    "per_question": [
+      {
+        "id": 1,
+        "question": "What is the IP address of the potentially infected internal host in the LAN?",
+        "reference_answer": "172.17.0.99",
+        "atoms": [
+          "172.17.0.99"
+        ],
+        "answerable_from_evidence": [
+          "172.17.0.99"
+        ],
+        "found_in_report": [
+          "172.17.0.99"
+        ],
+        "missing_from_evidence": [],
+        "answer_text": null,
+        "status": "NO ANSWER"
+      },
+      {
+        "id": 2,
+        "question": "What is the hostname of the potentially infected machine in the LAN?",
+        "reference_answer": "DESKTOP-RNVO9AT",
+        "atoms": [
+          "DESKTOP-RNVO9AT"
+        ],
+        "answerable_from_evidence": [
+          "DESKTOP-RNVO9AT"
+        ],
+        "found_in_report": [
+          "DESKTOP-RNVO9AT"
+        ],
+        "missing_from_evidence": [],
+        "answer_text": null,
+        "status": "NO ANSWER"
+      },
+      {
+        "id": 3,
+        "question": "What is the Windows human user account name (not machine accounts ending in $) of the potentially infected machine in the LAN?",
+        "reference_answer": "afletcher",
+        "atoms": [
+          "afletcher"
+        ],
+        "answerable_from_evidence": [
+          "afletcher"
+        ],
+        "found_in_report": [
+          "afletcher"
+        ],
+        "missing_from_evidence": [],
+        "answer_text": null,
+        "status": "NO ANSWER"
+      },
+      {
+        "id": 4,
+        "question": "What are the likely fake or suspicious domains / URLs for initial infection?",
+        "reference_answer": "www.bellantonicioccolato.it (likely compromised site associated with Koi Loader/Koi Stealer)",
+        "atoms": [
+          "www.bellantonicioccolato.it"
+        ],
+        "answerable_from_evidence": [
+          "www.bellantonicioccolato.it"
+        ],
+        "found_in_report": [],
+        "missing_from_evidence": [],
+        "answer_text": null,
+        "status": "NO ANSWER"
+      },
+      {
+        "id": 5,
+        "question": "What are the suspicious external IP addresses contacted, which might be involved in command-and-control (C2) communication?",
+        "reference_answer": "79.124.78.197",
+        "atoms": [
+          "79.124.78.197"
+        ],
+        "answerable_from_evidence": [
+          "79.124.78.197"
+        ],
+        "found_in_report": [
+          "79.124.78.197"
+        ],
+        "missing_from_evidence": [],
+        "answer_text": null,
+        "status": "NO ANSWER"
+      },
+      {
+        "id": 6,
+        "question": "Which of the three CIA components does the attacker target primarily: availability, integrity, or confidentiality?",
+        "reference_answer": "confidentiality",
+        "atoms": [
+          "confidentiality"
+        ],
+        "answerable_from_evidence": [],
+        "found_in_report": [],
+        "missing_from_evidence": [
+          "confidentiality"
+        ],
+        "answer_text": null,
+        "status": "NO ANSWER"
+      },
+      {
+        "id": 7,
+        "question": "During what hour did the first signs of infection activity appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+        "reference_answer": "2024-09-04 17:00 UTC",
+        "atoms": [
+          "2024-09-04 17:00 UTC"
+        ],
+        "answerable_from_evidence": [
+          "2024-09-04 17:00 UTC"
+        ],
+        "found_in_report": [
+          "2024-09-04 17:00 UTC"
+        ],
+        "missing_from_evidence": [],
+        "answer_text": null,
+        "status": "NO ANSWER"
+      },
+      {
+        "id": 8,
+        "question": "According to the connection volume statistics, what single external IP address received the most connections from the infected hosts? Is it a C2 server or a legitimate service?",
+        "reference_answer": "79.124.78.197, C2 server",
+        "atoms": [
+          "79.124.78.197",
+          "C2 server"
+        ],
+        "answerable_from_evidence": [
+          "79.124.78.197",
+          "C2 server"
+        ],
+        "found_in_report": [
+          "79.124.78.197",
+          "C2 server"
+        ],
+        "missing_from_evidence": [],
+        "answer_text": null,
+        "status": "NO ANSWER"
+      }
+    ]
+  }
+}

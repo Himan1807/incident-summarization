@@ -7,7 +7,45 @@ import re
 from collections import defaultdict
 
 import numpy as np
-from rank_bm25 import BM25Okapi
+try:
+    from rank_bm25 import BM25Okapi
+except ImportError:                                  # optional dependency: fall back to an equivalent built-in implementation
+    import math
+
+    class BM25Okapi:                                 # same formula and defaults as rank_bm25.BM25Okapi
+        def __init__(self, corpus, k1=1.5, b=0.75, epsilon=0.25):
+            self.k1, self.b, self.epsilon = k1, b, epsilon
+            self.corpus_size = len(corpus)
+            self.doc_len = [len(d) for d in corpus]
+            self.avgdl = sum(self.doc_len) / max(self.corpus_size, 1)
+            self.tf = [dict() for _ in corpus]
+            df = {}
+            for i, doc in enumerate(corpus):
+                for w in doc:
+                    self.tf[i][w] = self.tf[i].get(w, 0) + 1
+                for w in self.tf[i]:
+                    df[w] = df.get(w, 0) + 1
+            self.idf, neg, total = {}, [], 0.0
+            for w, n in df.items():
+                v = math.log(self.corpus_size - n + 0.5) - math.log(n + 0.5)
+                self.idf[w] = v; total += v
+                if v < 0:
+                    neg.append(w)
+            avg = total / max(len(self.idf), 1)
+            for w in neg:
+                self.idf[w] = self.epsilon * avg
+
+        def get_scores(self, query):
+            score = np.zeros(self.corpus_size)
+            for q in query:
+                idf = self.idf.get(q)
+                if idf is None:
+                    continue
+                for i, tf in enumerate(self.tf):
+                    f = tf.get(q, 0)
+                    if f:
+                        score[i] += idf * f * (self.k1 + 1) / (f + self.k1 * (1 - self.b + self.b * self.doc_len[i] / self.avgdl))
+            return score
 
 _TOKEN = re.compile(r"[A-Za-z0-9_]+(?:[.\-:/][A-Za-z0-9_]+)*")
 

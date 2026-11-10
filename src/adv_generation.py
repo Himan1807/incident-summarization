@@ -8,6 +8,9 @@ Rules:
 - Keep observed facts and assessments separate; label assessments 'Assessment:'.
 - Every bullet must add NEW information. Never repeat a fact or conclusion already stated in this section, and do not restate
   content that belongs to another section of the report.
+- An internal client is the host that makes connections; an external IP or destination is the remote server. Never call a
+  private-range IP (10.x, 172.16-31.x, 192.168.x) an external destination or C2 server.
+- Cite with square brackets only, once per line, at the end of the line, e.g. {example}. No citations in parentheses.
 - Do not start with a title, heading or introduction. Start directly with the bullets. No generic security advice."""
 
 
@@ -19,6 +22,8 @@ def section_prompt(section: dict, evidence: str, header: str, ids: list[str] | N
         others = ("\nREPORT STRUCTURE (you write ONLY '" + section["name"] + "'; the others are written separately): "
                   + "; ".join(all_sections) + "\n")
     valid = ("\nVALID EVIDENCE IDS: " + ", ".join(ids) + "\n") if ids else ""
+    if section.get("max_bullets"):
+        valid += f"LENGTH: write AT MOST {section['max_bullets']} bullets, one short line each, then stop.\n"
     return (f"{SYSTEM.format(example=example)}\n\nINCIDENT CONTEXT:\n{header}\n{others}\nSECTION: {section['name']}\n"
             f"TASK: {section['task']}\n{valid}\nEVIDENCE:\n{evidence}\n\nWrite the section now (Markdown bullets):")
 
@@ -26,8 +31,8 @@ def section_prompt(section: dict, evidence: str, header: str, ids: list[str] | N
 def summary_prompt(header: str, sections_text: str) -> str:
     return (f"{SYSTEM.format(example='[<evidence id>]')}\n\nINCIDENT CONTEXT:\n{header}\n\nBelow are verified postmortem sections.\n"
             f"TASK: Write a 4-6 sentence Incident Summary using ONLY facts stated in these sections. Keep their citations. "
-            f"Start directly with the summary (no preamble). The query time window is NOT the incident duration: take event times "
-            f"only from the sections.\n\nSECTIONS:\n{sections_text}\n\nIncident Summary:")
+            f"Start directly with the summary (no preamble). Cover: the affected host and user, the earliest alert hour, the main C2 candidate, and the key "
+            f"assessment. The query time window is NOT the incident duration: take event times only from the sections.\n\nSECTIONS:\n{sections_text}\n\nIncident Summary:")
 
 
 def call_ollama(prompt, url, model, temperature, timeout, num_ctx=4096, num_predict=450):

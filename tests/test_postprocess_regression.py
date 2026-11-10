@@ -14,7 +14,7 @@ class HashEmb:
         out = []
         for t in texts:
             v = np.zeros(512)
-            for w in re.findall(r"[\w.\-]+", t.lower()): v[hash(w) % 512] += 1
+            for w in re.findall(r"[\w.\-]+", t.lower()): v[__import__("zlib").crc32(w.encode()) % 512] += 1
             out.append(v / (np.linalg.norm(v) + 1e-9))
         return np.array(out)
 
@@ -27,11 +27,11 @@ def canned(prompt, n=600):
     return RAW.get(m.group(1).strip(), "- Not established from the available artifacts."), False
 
 def go(post):
-    a = argparse.Namespace(input=str(ROOT / "dataset/paper_dataset/easy_123/rag_input.json"), model=None, dry_run=False,
-                           strict=False, no_enrich=False, sections=None, no_postprocess=not post)
+    a = argparse.Namespace(input=str(ROOT / "dataset/paper_dataset/easy_123/rag_input.json"), model="test-model", results_dir=str(ROOT / "results_test"), dry_run=False,
+                           strict=False, annotate=True, no_enrich=False, sections=None, no_postprocess=not post)
     with contextlib.redirect_stdout(io.StringIO()):
         rep = run(a, embedder=HashEmb(), reranker=None, llm=canned)
-    r = json.load(open(ROOT / "results/easy_123/advanced_run_report.json"))
+    r = json.load(open(ROOT / "results_test/easy_123/test-model/advanced_run_report.json"))
     return rep, r
 
 rep0, r0 = go(False); rep1, r1 = go(True)

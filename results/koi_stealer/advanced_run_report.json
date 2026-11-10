@@ -1,57 +1,15 @@
 {
   "verification_totals": {
-    "unsupported_numbers": 12,
-    "unsupported_entities": 1,
-    "uncited": 7
+    "unsupported_numbers": 28,
+    "uncited": 5
   },
   "postprocessing": {
     "enabled": true,
-    "model_citation_rate_before_attribution": 0.41,
-    "auto_attributed_lines": 42,
+    "model_citation_rate_before_attribution": 0.194,
+    "auto_attributed_lines": 53,
     "invalid_citations_removed": 0,
-    "duplicate_lines_removed": 8,
-    "removed": [
-      {
-        "section": "Affected Host and User",
-        "line": "* The host 172.17.0.99 was involved in 1 CIFS event for the WIN-CTL9XBQ9Y19.bepositive.com domain. [koi_stealer-04#1]",
-        "duplicate_of": "Affected Host and User"
-      },
-      {
-        "section": "Detection: IDS Alerts",
-        "line": "* The host 172.17.0.99 had a Kerberos identity of hostname(s) desktop-rnvo9at and human user account(s) afletcher. [koi_stealer-08#0]",
-        "duplicate_of": "Affected Host and User"
-      },
-      {
-        "section": "Detection: IDS Alerts",
-        "line": "* The host 172.17.0.99 was involved in 49 high-severity alert destinations. [koi_stealer-06#2]",
-        "duplicate_of": "Detection: IDS Alerts"
-      },
-      {
-        "section": "Detection: IDS Alerts",
-        "line": "* The host 172.17.0.99 was involved in 1 high-severity alert source. [koi_stealer-06#2]",
-        "duplicate_of": "Detection: IDS Alerts"
-      },
-      {
-        "section": "Detection: IDS Alerts",
-        "line": "* The host 172.17.0.99 was involved in 1 high-severity alert source. [koi_stealer-08#0]",
-        "duplicate_of": "Detection: IDS Alerts"
-      },
-      {
-        "section": "Detection: IDS Alerts",
-        "line": "* The host 172.17.0.99 was involved in 1 high-severity alert source. [koi_stealer-06#2]",
-        "duplicate_of": "Detection: IDS Alerts"
-      },
-      {
-        "section": "Corrective and Preventive Actions",
-        "line": "* Reset the Kerberos identity of host 172.17.0.99, which is associated with the human user account afletcher. [koi_stealer-08#0, koi_stealer-04#1]",
-        "duplicate_of": "Command-and-Control and Network Activity"
-      },
-      {
-        "section": "Corrective and Preventive Actions",
-        "line": "* Block the external IP address 79.124.78.197, which was contacted by host 172.17.0.99 in 218 connections. [koi_stealer-08#0]",
-        "duplicate_of": "Detection: IDS Alerts"
-      }
-    ]
+    "duplicate_lines_removed": 0,
+    "removed": []
   },
   "run_log": [
     {
@@ -64,15 +22,13 @@
         "koi_stealer-03#0",
         "koi_stealer-02#0"
       ],
-      "seconds": 282.8,
+      "seconds": 257.8,
       "truncated": false,
-      "model_cited_claims": 10,
-      "claims": 10,
+      "model_cited_claims": 7,
+      "claims": 7,
       "auto_attributed_lines": 0,
       "invalid_citations_removed": 0,
-      "flag_counts": {
-        "unsupported_numbers": 1
-      }
+      "flag_counts": {}
     },
     {
       "section": "Timeline",
@@ -84,14 +40,14 @@
         "koi_stealer-08#0",
         "koi_stealer-02#0"
       ],
-      "seconds": 328.0,
+      "seconds": 370.8,
       "truncated": false,
       "model_cited_claims": 0,
-      "claims": 14,
-      "auto_attributed_lines": 14,
+      "claims": 18,
+      "auto_attributed_lines": 18,
       "invalid_citations_removed": 0,
       "flag_counts": {
-        "unsupported_numbers": 6
+        "unsupported_numbers": 7
       }
     },
     {
@@ -104,14 +60,14 @@
         "koi_stealer-06#0",
         "koi_stealer-05#0"
       ],
-      "seconds": 320.0,
-      "truncated": true,
-      "model_cited_claims": 17,
-      "claims": 17,
-      "auto_attributed_lines": 0,
+      "seconds": 251.8,
+      "truncated": false,
+      "model_cited_claims": 0,
+      "claims": 9,
+      "auto_attributed_lines": 9,
       "invalid_citations_removed": 0,
       "flag_counts": {
-        "unsupported_entities": 1
+        "unsupported_numbers": 7
       }
     },
     {
@@ -124,7 +80,7 @@
         "koi_stealer-01#3",
         "koi_stealer-01#5"
       ],
-      "seconds": 195.7,
+      "seconds": 186.5,
       "truncated": false,
       "model_cited_claims": 0,
       "claims": 8,
@@ -142,13 +98,15 @@
         "koi_stealer-01#2",
         "koi_stealer-07#0"
       ],
-      "seconds": 209.5,
+      "seconds": 198.2,
       "truncated": false,
       "model_cited_claims": 0,
-      "claims": 9,
-      "auto_attributed_lines": 9,
+      "claims": 7,
+      "auto_attributed_lines": 7,
       "invalid_citations_removed": 0,
-      "flag_counts": {}
+      "flag_counts": {
+        "unsupported_numbers": 4
+      }
     },
     {
       "section": "Impact Assessment",
@@ -160,15 +118,14 @@
         "koi_stealer-08#0",
         "koi_stealer-06#2"
       ],
-      "seconds": 185.0,
+      "seconds": 185.2,
       "truncated": false,
       "model_cited_claims": 0,
-      "claims": 6,
+      "claims": 5,
       "auto_attributed_lines": 5,
       "invalid_citations_removed": 0,
       "flag_counts": {
-        "unsupported_numbers": 5,
-        "uncited": 1
+        "unsupported_numbers": 5
       }
     },
     {
@@ -181,14 +138,14 @@
         "koi_stealer-04#1",
         "koi_stealer-01#5"
       ],
-      "seconds": 173.8,
+      "seconds": 172.5,
       "truncated": false,
       "model_cited_claims": 0,
-      "claims": 7,
+      "claims": 6,
       "auto_attributed_lines": 1,
       "invalid_citations_removed": 0,
       "flag_counts": {
-        "uncited": 6
+        "uncited": 5
       }
     },
     {
@@ -201,13 +158,15 @@
         "koi_stealer-04#0",
         "koi_stealer-01#2"
       ],
-      "seconds": 211.3,
+      "seconds": 238.3,
       "truncated": false,
       "model_cited_claims": 0,
       "claims": 5,
       "auto_attributed_lines": 5,
       "invalid_citations_removed": 0,
-      "flag_counts": {}
+      "flag_counts": {
+        "unsupported_numbers": 4
+      }
     },
     {
       "section": "Answers to Investigation Questions",
@@ -224,27 +183,18 @@
         "koi_stealer-06#3",
         "koi_stealer-06#1"
       ],
-      "seconds": 239.6,
+      "seconds": 248.1,
       "truncated": false,
       "model_cited_claims": 7,
       "claims": 7,
       "auto_attributed_lines": 0,
       "invalid_citations_removed": 0,
-      "flag_counts": {}
+      "flag_counts": {
+        "unsupported_numbers": 1
+      }
     }
   ],
   "flagged": [
-    {
-      "section": "Affected Host and User",
-      "line": "* The host 172.17.0.99 was involved in 361 events, with 31 of those events occurring between 17:00 and 18:00 UTC on 2024-09-04. [koi_stealer-08#0]",
-      "types": [
-        "unsupported_numbers"
-      ],
-      "unsupported_numbers": [
-        "00",
-        "17"
-      ]
-    },
     {
       "section": "Timeline",
       "line": "* 2024-09-04 17:00 UTC: High severity alerts started, with 31 events reported (koi_stealer-08#0). [koi_stealer-08#0]",
@@ -267,7 +217,7 @@
     },
     {
       "section": "Timeline",
-      "line": "* 2024-09-04 17:00 UTC: High severity signatures: ET ATTACK_RESPONSE Koi Loader/Stealer CnC Config Inbound \u2014 1 events (koi_stealer-06#0). [koi_stealer-06#3]",
+      "line": "* 2024-09-04 17:00 UTC: Alert signatures: ET HUNTING GENERIC SUSPICIOUS POST to Dotted Quad with Fake Browser 1 \u2014 48 events (koi_stealer-06#0). [koi_stealer-06#3]",
       "types": [
         "unsupported_numbers"
       ],
@@ -277,7 +227,7 @@
     },
     {
       "section": "Timeline",
-      "line": "* 2024-09-04 17:00 UTC: High severity signatures: GPL NETBIOS SMB IPC$ unicode share access \u2014 5 events (koi_stealer-06#0). [koi_stealer-06#3]",
+      "line": "* 2024-09-04 17:00 UTC: Alert signatures: GPL NETBIOS SMB IPC$ unicode share access \u2014 5 events (koi_stealer-06#0). [koi_stealer-06#3]",
       "types": [
         "unsupported_numbers"
       ],
@@ -287,7 +237,7 @@
     },
     {
       "section": "Timeline",
-      "line": "* 2024-09-04 17:00 UTC: High severity signatures: ET INFO Microsoft Connection Test \u2014 2 events (koi_stealer-06#0). [koi_stealer-06#3]",
+      "line": "* 2024-09-04 17:00 UTC: Alert signatures: ET INFO Microsoft Connection Test \u2014 2 events (koi_stealer-06#0). [koi_stealer-06#3]",
       "types": [
         "unsupported_numbers"
       ],
@@ -297,7 +247,27 @@
     },
     {
       "section": "Timeline",
-      "line": "* 2024-09-04 18:00 UTC: High severity alerts continued, with 26 events reported (koi_stealer-08#0). [koi_stealer-08#0, koi_stealer-06#3]",
+      "line": "* 2024-09-04 17:00 UTC: Alert signatures: ET ATTACK_RESPONSE Koi Loader/Stealer CnC Config Inbound \u2014 1 events (koi_stealer-06#0). [koi_stealer-06#3]",
+      "types": [
+        "unsupported_numbers"
+      ],
+      "unsupported_numbers": [
+        "0"
+      ]
+    },
+    {
+      "section": "Timeline",
+      "line": "* 2024-09-04 18:00 UTC: High severity alerts > high severity sources: 79.124.78.197 \u2014 26 events (koi_stealer-06#3). [koi_stealer-06#3]",
+      "types": [
+        "unsupported_numbers"
+      ],
+      "unsupported_numbers": [
+        "3"
+      ]
+    },
+    {
+      "section": "Detection: IDS Alerts",
+      "line": "* The ET HUNTING GENERIC SUSPICIOUS POST to Dotted Quad with Fake Browser 1 signature was triggered 48 times, indicating potential malicious activity (koi_stealer-06#0, koi_stealer-06#2). [koi_stealer-06#0]",
       "types": [
         "unsupported_numbers"
       ],
@@ -307,17 +277,7 @@
     },
     {
       "section": "Detection: IDS Alerts",
-      "line": "* The host 172.17.17.0.99 was involved in high-severity alerts, with 1 event. [koi_stealer-06#1]",
-      "types": [
-        "unsupported_entities"
-      ],
-      "unsupported_entities": [
-        "172.17.17.0"
-      ]
-    },
-    {
-      "section": "Impact Assessment",
-      "line": "* The primary CIA component targeted is possible integrity, as evidenced by the presence of Koi Stealer CnC Checkin (GET) alerts (koi_stealer-06#1) and the large number of external connections from a single client (koi_stealer-08#0). [koi_stealer-08#0, koi_stealer-06#3]",
+      "line": "* The ET ATTACK_RESPONSE Koi Loader/Stealer CnC Config Inbound signature was triggered 1 time, suggesting a possible command-and-control (C2) communication attempt (koi_stealer-06#2, koi_stealer-06#0). [koi_stealer-06#0]",
       "types": [
         "unsupported_numbers"
       ],
@@ -326,8 +286,18 @@
       ]
     },
     {
-      "section": "Impact Assessment",
-      "line": "* The number of affected hosts is at least one, as indicated by the Kerberos identity of 172.17.0.99 (koi_stealer-08#0). [koi_stealer-08#0]",
+      "section": "Detection: IDS Alerts",
+      "line": "* The IP address 79.124.78.197 was a high-severity destination for 49 high-severity alerts, and a high-severity source for 1 high-severity alert (koi_stealer-06#1, koi_stealer-06#2, koi_stealer-06#3). [koi_stealer-06#1]",
+      "types": [
+        "unsupported_numbers"
+      ],
+      "unsupported_numbers": [
+        "3"
+      ]
+    },
+    {
+      "section": "Detection: IDS Alerts",
+      "line": "* The host desktop-rnvo9at was involved in 1 event, with the source IP address 172.17.0.99 (koi_stealer-05#0). [koi_stealer-05#0]",
       "types": [
         "unsupported_numbers"
       ],
@@ -336,8 +306,8 @@
       ]
     },
     {
-      "section": "Impact Assessment",
-      "line": "* The scale of external activity is significant, with 361 events from a single client (koi_stealer-08#0) and 35 distinct external destinations (koi_stealer-02#0). [koi_stealer-08#0, koi_stealer-02#0]",
+      "section": "Detection: IDS Alerts",
+      "line": "* The most-contacted external IP address was 79.124.78.197, with 218 connections from the internal client 172.17.0.99 (koi_stealer-08#0). [koi_stealer-08#0]",
       "types": [
         "unsupported_numbers"
       ],
@@ -346,11 +316,20 @@
       ]
     },
     {
-      "section": "Impact Assessment",
-      "line": "* The external IP 79.124.78.197 was contacted by the affected client 172.17.0.99 on multiple occasions (koi_stealer-02#0, koi_stealer-06#3, koi_stealer-08#0).",
+      "section": "Detection: IDS Alerts",
+      "line": "* The internal client 172.17.0.99 had 361 external connections, with 35 distinct external destinations (koi_stealer-08#0). [koi_stealer-08#0]",
       "types": [
-        "unsupported_numbers",
-        "uncited"
+        "unsupported_numbers"
+      ],
+      "unsupported_numbers": [
+        "0"
+      ]
+    },
+    {
+      "section": "Detection: IDS Alerts",
+      "line": "* The earliest alert hour was 2024-09-04 17:00 UTC, with 31 alerts triggered during this hour (koi_stealer-08#0, koi_stealer-06#3). [koi_stealer-08#0, koi_stealer-06#3]",
+      "types": [
+        "unsupported_numbers"
       ],
       "unsupported_numbers": [
         "0",
@@ -358,8 +337,8 @@
       ]
     },
     {
-      "section": "Impact Assessment",
-      "line": "* The affected client 172.17.0.99 was identified as desktop-rnvo9at, with a human user account afletcher (koi_stealer-08#0). [koi_stealer-08#0]",
+      "section": "Command-and-Control and Network Activity",
+      "line": "* The affected host 172.17.0.99 made 361 connections to 35 distinct external destinations, with 218 connections to the IP 79.124.78.197. (koi_stealer-08#0) [koi_stealer-08#0]",
       "types": [
         "unsupported_numbers"
       ],
@@ -368,10 +347,84 @@
       ]
     },
     {
-      "section": "Root Cause and Evidence Gaps",
-      "line": "* The most likely root cause is a compromised internal client, Assessment: High.",
+      "section": "Command-and-Control and Network Activity",
+      "line": "* The external IP 79.124.78.197 received the most connections from the affected host 172.17.0.99. (koi_stealer-08#0) [koi_stealer-08#0]",
       "types": [
-        "uncited"
+        "unsupported_numbers"
+      ],
+      "unsupported_numbers": [
+        "0"
+      ]
+    },
+    {
+      "section": "Command-and-Control and Network Activity",
+      "line": "* The affected host 172.17.0.99 made 49 high-severity Suricata alerts to the IP 79.124.78.197. (koi_stealer-08#0) [koi_stealer-08#0]",
+      "types": [
+        "unsupported_numbers"
+      ],
+      "unsupported_numbers": [
+        "0"
+      ]
+    },
+    {
+      "section": "Command-and-Control and Network Activity",
+      "line": "* The affected host 172.17.0.99 made connections to multiple external domains, including weathermapdata.blob.core.windows.net, sso.godaddy.com, www.bellantonicioccolato.it, img-s-msn-com.akamaized.net, and oneclient.sfx.ms. (koi_stealer-07#1, koi_stealer-07#0) [koi_stealer-07#0]",
+      "types": [
+        "unsupported_numbers"
+      ],
+      "unsupported_numbers": [
+        "0"
+      ]
+    },
+    {
+      "section": "Impact Assessment",
+      "line": "* The primary CIA component targeted is possible integrity, as evidenced by the presence of Koi Stealer CnC Checkin (GET) alerts (koi_stealer-06#1) and the large number of external connections from 172.17.0.99 (koi_stealer-08#0). [koi_stealer-08#0, koi_stealer-06#2]",
+      "types": [
+        "unsupported_numbers"
+      ],
+      "unsupported_numbers": [
+        "0"
+      ]
+    },
+    {
+      "section": "Impact Assessment",
+      "line": "* The number of affected hosts is at least 1, as indicated by the Kerberos identity of 172.17.0.99 (koi_stealer-08#0). [koi_stealer-08#0]",
+      "types": [
+        "unsupported_numbers"
+      ],
+      "unsupported_numbers": [
+        "0"
+      ]
+    },
+    {
+      "section": "Impact Assessment",
+      "line": "* The scale of external activity is significant, with 172.17.0.99 making 361 events to 35 distinct external destinations (koi_stealer-02#0), and the most-contacted external IP being 79.124.78.197 (koi_stealer-08#0). [koi_stealer-08#0, koi_stealer-02#0]",
+      "types": [
+        "unsupported_numbers"
+      ],
+      "unsupported_numbers": [
+        "0"
+      ]
+    },
+    {
+      "section": "Impact Assessment",
+      "line": "* The external IP 79.124.78.197 was contacted by 172.17.0.99 in 218 connections (koi_stealer-08#0), and was also the destination of 49 high-severity alerts (koi_stealer-06#1 and koi_stealer-06#2). [koi_stealer-08#0]",
+      "types": [
+        "unsupported_numbers"
+      ],
+      "unsupported_numbers": [
+        "0",
+        "2"
+      ]
+    },
+    {
+      "section": "Impact Assessment",
+      "line": "* The human user account associated with the compromised host is afletcher (koi_stealer-08#0). [koi_stealer-08#0]",
+      "types": [
+        "unsupported_numbers"
+      ],
+      "unsupported_numbers": [
+        "0"
       ]
     },
     {
@@ -383,57 +436,107 @@
     },
     {
       "section": "Root Cause and Evidence Gaps",
-      "line": "+ Payload behavior (what the malware did after initial infection)",
+      "line": "+ Payload behavior (what actions the malware took after infection)",
       "types": [
         "uncited"
       ]
     },
     {
       "section": "Root Cause and Evidence Gaps",
-      "line": "+ Data exfiltration (if any data was stolen or transmitted)",
+      "line": "+ Data exfiltration (whether sensitive data was stolen)",
       "types": [
         "uncited"
       ]
     },
     {
       "section": "Root Cause and Evidence Gaps",
-      "line": "+ C2 (Command and Control) server(s) or communication channels used by the malware",
+      "line": "+ Queries that failed or were empty (any potential gaps in the evidence)",
       "types": [
         "uncited"
       ]
     },
     {
       "section": "Root Cause and Evidence Gaps",
-      "line": "+ Type of malware or payload used (no specific malware indicators were found in the evidence)",
+      "line": "+ The specific malware or threat actor involved (only external destinations and file transfers are mentioned)",
       "types": [
         "uncited"
+      ]
+    },
+    {
+      "section": "Corrective and Preventive Actions",
+      "line": "* Isolate host 172.17.0.99 from the network to prevent further communication with external destinations, particularly 79.124.78.197, which was contacted 218 times by this host (koi_stealer-08#0). [koi_stealer-08#0]",
+      "types": [
+        "unsupported_numbers"
+      ],
+      "unsupported_numbers": [
+        "0"
+      ]
+    },
+    {
+      "section": "Corrective and Preventive Actions",
+      "line": "* Reset the Kerberos identity of 172.17.0.99, which is associated with the hostname(s) desktop-rnvo9at and human user account(s) afletcher, to prevent potential lateral movement (koi_stealer-08#0). [koi_stealer-08#0]",
+      "types": [
+        "unsupported_numbers"
+      ],
+      "unsupported_numbers": [
+        "0"
+      ]
+    },
+    {
+      "section": "Corrective and Preventive Actions",
+      "line": "* Block the external IP address 79.124.78.197, which was contacted by 172.17.0.99 218 times and was the destination of 49 high-severity Suricata alerts (koi_stealer-08#0). [koi_stealer-08#0]",
+      "types": [
+        "unsupported_numbers"
+      ],
+      "unsupported_numbers": [
+        "0"
+      ]
+    },
+    {
+      "section": "Corrective and Preventive Actions",
+      "line": "* Investigate the file transfers initiated by 172.17.0.99, which involved multiple external IP addresses, including 13.70.79.200, 13.89.179.9, 20.189.173.1, 20.189.173.26, 20.241.44.114, 20.42.73.28, and 20.96.153.111 (koi_stealer-01#4, koi_stealer-01#5). [koi_stealer-01#5]",
+      "types": [
+        "unsupported_numbers"
+      ],
+      "unsupported_numbers": [
+        "4",
+        "5"
+      ]
+    },
+    {
+      "section": "Answers to Investigation Questions",
+      "line": "7. The first signs of infection activity appeared during the hour of 17:00 UTC on 2024-09-04 [koi_stealer-06#3].",
+      "types": [
+        "unsupported_numbers"
+      ],
+      "unsupported_numbers": [
+        "00",
+        "17"
       ]
     }
   ],
   "evaluation": {
     "answer_precision": 1.0,
-    "answer_recall": 0.889,
-    "answer_f1": 0.941,
-    "question_recall": 0.875,
-    "questions_correct": "7/8",
-    "answerable_entity_recall": 0.875,
-    "overall_entity_recall": 0.889,
-    "faithfulness": 0.743,
-    "grounding_rate": 0.814,
-    "citation_precision": 0.765,
-    "citation_rate": 0.971,
-    "claims": 70,
-    "uncited_lines": 2,
-    "hallucination_rate": 0.053,
-    "unsupported_entities": [
-      "172.17.17.0"
-    ],
+    "answer_recall": 0.778,
+    "answer_f1": 0.875,
+    "question_recall": 1.0,
+    "questions_correct": "8/8",
+    "answerable_entity_recall": 1.0,
+    "overall_entity_recall": 1.0,
+    "faithfulness": 0.463,
+    "grounding_rate": 0.627,
+    "citation_precision": 0.463,
+    "citation_rate": 1.0,
+    "claims": 67,
+    "uncited_lines": 0,
+    "hallucination_rate": 0.0,
+    "unsupported_entities": [],
     "unsupported_number_count": 4,
     "unsupported_numbers": [
       "0",
       "00",
       "17",
-      "600"
+      "4"
     ],
     "placeholder_count": 0,
     "per_question": [
@@ -510,7 +613,9 @@
         "answerable_from_evidence": [
           "www.bellantonicioccolato.it"
         ],
-        "found_in_report": [],
+        "found_in_report": [
+          "www.bellantonicioccolato.it"
+        ],
         "missing_from_evidence": [],
         "predicted_entities": [],
         "correct_entities": [],
@@ -572,16 +677,12 @@
         ],
         "missing_from_evidence": [],
         "predicted_entities": [
-          "2024-09-04",
-          "2024-09-04 17:00"
+          "2024-09-04"
         ],
         "correct_entities": [
-          "2024-09-04",
-          "2024-09-04 17:00"
+          "2024-09-04"
         ],
-        "atoms_found_in_answer": [
-          "2024-09-04 17:00 UTC"
-        ],
+        "atoms_found_in_answer": [],
         "wrong_entities": []
       },
       {

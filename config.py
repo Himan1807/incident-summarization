@@ -11,7 +11,7 @@ class Settings:
     final_top_k: int = 10
     max_context_chars: int = 16000
     temperature: float = 0.1
-    timeout_seconds: int = 90
+    timeout_seconds: int = 900
 
 
 @dataclass

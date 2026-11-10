@@ -10,7 +10,7 @@
 import re
 
 from src.verify import (MARKER_RE, analyze_text, content_words, extract_entities, is_claim_line, is_heading, norm_ts,
-                        numbers_in, strip_cites, make_evidence, CITE_GROUP_RE)
+                        numbers_in, strip_cites, make_evidence, CITE_GROUP_RE, PAREN_CITE_RE, parse_citations)
 
 PREAMBLE_RE = re.compile(r"^\s*(?:here is|here's|here are|sure|certainly|okay|below is|the following is)\b[^\n]*$", re.I)
 
@@ -19,7 +19,46 @@ def _norm_title(s: str) -> str:
     return re.sub(r"[^a-z0-9 ]", "", s.lower()).strip()
 
 
+def normalize_citations(text: str) -> str:
+    """(id#1) -> [id#1]; several citation groups on one line -> one trailing group with unique ids."""
+    text = PAREN_CITE_RE.sub(lambda m: "[" + m.group(0).strip("() ") + "]", text)
+    out = []
+    for ln in text.splitlines():
+        if len(CITE_GROUP_RE.findall(ln)) >= 2:
+            ids = list(dict.fromkeys(parse_citations(ln)))
+            body = CITE_GROUP_RE.sub("", ln)
+            body = re.sub(r"\s+([.,;:])", r"\1", body)
+            body = re.sub(r"[ \t]{2,}", " ", body).rstrip()
+            ln = body + " [" + ", ".join(ids) + "]"
+        out.append(ln)
+    return "\n".join(out)
+
+
+def drop_partial_tail(text: str):
+    """After a token-cap cut, remove the unfinished last line. Returns (text, dropped_line or None)."""
+    lines = text.rstrip().splitlines()
+    if not lines:
+        return text, None
+    last = lines[-1].rstrip()
+    if re.search(r"[.\])!?:]$", last) or CITE_GROUP_RE.search(last):
+        return text, None
+    return "\n".join(lines[:-1]), last.strip()
+
+
+def drop_orphan_parents(text: str) -> str:
+    lines = text.splitlines(); out = []
+    for j, l in enumerate(lines):
+        if l.rstrip().endswith(":") and l.strip() and not is_heading(l):
+            ind = len(l) - len(l.lstrip())
+            nxt = next((x for x in lines[j + 1:] if x.strip()), None)
+            if nxt is None or (len(nxt) - len(nxt.lstrip())) <= ind:
+                continue
+        out.append(l)
+    return "\n".join(out)
+
+
 def clean_model_output(text: str, section_name: str) -> str:
+    text = normalize_citations(text)
     lines = text.replace("\t", "    ").splitlines()
     while lines and (not lines[0].strip() or PREAMBLE_RE.match(lines[0])):
         lines.pop(0)

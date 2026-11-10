@@ -33,10 +33,12 @@ DESCRIPTIONS = {
     "kerberos_hostnames": "Host names seen in Kerberos traffic with their source IPs.",
     "suricata_alerts": "Suricata IDS alerts: signatures, high-severity alert destinations and sources, and an hourly alert timeline (UTC).",
     "suspicious_certificates": "TLS certificates that are self-signed, IP-based or short-lived.",
-    "suspicious_domains": "Unusual domains with their source and destination IPs, and direct-IP HTTP connections.",
+    "suspicious_domains": "Suspicious domains: unusual or possibly malicious domains (candidates for fake, phishing or malware sites) with their source and destination IPs, and direct-IP HTTP connections.",
 }
 TYPES = {"suricata_alerts": "ids_alerts", "kerberos_clients": "authentication", "kerberos_full_services": "authentication",
          "kerberos_hostnames": "authentication"}
+LABELS = {"suspicious_domains": {"domains": "suspicious domain"},
+          "file_downloads": {"domains": "download domain"}}      # clearer labels than the raw aggregation names
 SKIP = {"doc_count_error_upper_bound", "sum_other_doc_count", "key", "key_as_string", "doc_count", "buckets",
         "value", "value_as_string", "meta"}
 
@@ -91,8 +93,8 @@ def _inline(name: str, node: dict) -> str | None:
     return None
 
 
-def flatten(name: str, node: dict, lines: list, empty: list, prefix: str = "") -> None:
-    label = f"{prefix}{human(name)}"
+def flatten(name: str, node: dict, lines: list, empty: list, prefix: str = "", rename: dict | None = None) -> None:
+    label = f"{prefix}{(rename or {}).get(name, human(name))}"
     if "buckets" in node:
         if not node["buckets"]:
             empty.append(label); return
@@ -231,7 +233,7 @@ def convert(scen_dir: Path, out_root: Path) -> dict:
         lines, empty = [], []
         for an, av in aggs.items():
             if is_agg(av):
-                flatten(an, av, lines, empty)
+                flatten(an, av, lines, empty, rename=LABELS.get(qname))
         empty_all += [f"{human(qname)} / {e}" for e in empty]
         if not lines:
             rep["skipped"].append(f"{qname}: all aggregations empty"); continue

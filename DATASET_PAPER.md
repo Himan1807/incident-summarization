@@ -20,6 +20,7 @@ Known data issue kept as given: `jun21isc` reference answer contains the typo `D
 
 ## Commands (PowerShell, from the project root)
 ```powershell
+# results are written to results\<incident>\<model>\ ; see EXPERIMENTS.md for the reports
 # regenerate the prepared dataset (optional; already included)
 git clone https://github.com/neu-nds2/llm-sec-incident-analysis
 python -m src.prepare_dataset --source llm-sec-incident-analysis\evaluation --out dataset\paper_dataset
@@ -29,7 +30,7 @@ python -m src.pipeline_adv --input dataset\paper_dataset\koi_stealer\rag_input.j
 python -m src.pipeline_adv --input dataset\paper_dataset\koi_stealer\rag_input.json --model llama3.2:3b
 python -m src.pipeline --input dataset\paper_dataset\koi_stealer\starter_input.json     # basic RAG baseline
 python -m src.compare --input dataset\paper_dataset\koi_stealer\rag_input.json --report <basic_output.txt> --report results\koi_stealer\advanced_postmortem.md
-python -m src.run_batch --scenarios koi_stealer,fake_auth,easy_123 --model llama3.2:3b   # several scenarios + results\summary.md
+python -m src.run_experiment --scenarios koi_stealer,fake_auth,easy_123 --models llama3.2:3b   # RAG + no-RAG, all text reports (see EXPERIMENTS.md)
 python tests\test_postprocess_regression.py                         # replays a real model output; no Ollama needed
 ```
 `python -m src.pipeline` prints to the console; save it with `> basic_koi.txt` (PowerShell: `| Out-File -Encoding utf8 basic_koi.txt`).

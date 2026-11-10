@@ -16,8 +16,9 @@ All metrics are computed by string matching against the evidence and the referen
 | hallucination_rate | Report entities absent from the evidence / all report entities | Invented IPs, domains, times |
 | unsupported_number_count, placeholder_count | Numbers absent from the evidence; `[insert ...]` | |
 
-A *claim line* is a bullet of at least 30 characters that is not a heading, a question, a list label or an absence statement
-("Not established ...", or anything under a "Not established / evidence gaps" heading).
+A *claim line* is a bullet of at least 30 characters that is not a heading, a question, a list label, an absence statement
+("Not established ...", or anything under a "Not established / evidence gaps" heading or bullet) or a pure hedged assessment ("The most likely
+root cause is a compromised client" with no IP, domain, number or time). Assessments are counted separately (`assessment_lines`).
 
 Limits: precision only counts entities a regex can extract (a user name such as `brolf` is scored for recall but not precision);
 derived numbers (sums, ratios) are flagged, not recomputed; reasoning quality is not judged.
@@ -29,3 +30,17 @@ actually contains an uncited line's entities/numbers (string match only); and re
 Everything it does is counted in `results/<scenario>/advanced_run_report.json` under `postprocessing`
 (`model_citation_rate_before_attribution`, `auto_attributed_lines`, `invalid_citations_removed`, `duplicate_lines_removed` and the removed lines).
 Report the model's own citation rate (before attribution) next to the final one. `--no-postprocess` switches all of this off.
+
+## Default behaviour of the verification step
+* **drop (default):** lines whose entities, numbers or citations cannot be verified in the section's retrieved evidence, placeholders, and role errors
+  (a private IP called an external destination / C2 server, or a public IP called the infected internal host) are **removed** and listed in
+  `advanced_run_report.json` (`flagged`, `action: removed`). The report ends with a one-line verification note. Uncited claims stay, untagged.
+* `--annotate` keeps everything and shows `UNVERIFIED` / `UNCITED` tags. `--strict` also removes uncited lines.
+* **Timeline** is extractive: every timestamped evidence line becomes one entry, merged per timestamp, sorted, cited (no LLM call, no invented times).
+  `--llm-timeline` restores LLM generation.
+* **Token cap:** sections have a bullet limit in the prompt; if the cap is still hit, the unfinished last line is dropped (logged as
+  `dropped_partial_line`) instead of printing a half sentence.
+
+## Question status (text reports)
+CORRECT = every reference item found and no wrong entity; PARTIAL = some found or wrong entities present; WRONG = answer given, none found;
+ABSTAINED = "Not established from the available artifacts"; NO ANSWER = no answer for that question in the report. See EXPERIMENTS.md.

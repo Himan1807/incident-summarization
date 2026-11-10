@@ -6,13 +6,13 @@ A final 'Answers to Investigation Questions' section is added automatically when
 """
 
 SECTIONS = [
-    {"name": "Affected Host and User",
+    {"name": "Affected Host and User", "max_bullets": 4,
      "queries": ["internal client IP address ranked by external connections", "Kerberos hostname source IP",
                  "Kerberos client account human user source IP", "derived Kerberos identity of internal client"],
      "rerank": "Which internal host is affected (IP address, hostname and human user account)?",
      "task": "State the IP address, hostname and human user account (not machine accounts ending in $) of each affected internal host, "
              "as observed. If several hosts are affected, list each separately. Domain controllers and gateways are not affected hosts."},
-    {"name": "Timeline", "long": True,
+    {"name": "Timeline", "long": True, "extractive": "timeline",
      "queries": ["earliest alert hour alert timeline", "alert timeline hourly Suricata alerts UTC", "first seen last seen timestamp UTC",
                  "first contact external IP first queried domain"],
      "rerank": "Chronological order of key events with UTC timestamps.",
@@ -20,37 +20,39 @@ SECTIONS = [
              "(alert-hour counts, first/last seen). Every line MUST start with the exact UTC date and hour from the evidence. Do not attach a "
              "timestamp to facts that have none (host identity, destinations). Merge events that share a timestamp. State the earliest alert hour. "
              "Never write placeholders."},
-    {"name": "Detection: IDS Alerts",
+    {"name": "Detection: IDS Alerts", "max_bullets": 6,
      "queries": ["Suricata alert signatures malware CnC", "high severity alerts destinations sources",
                  "ET MALWARE trojan alert signature", "suspicious POST user agent alert"],
      "rerank": "Which Suricata alerts indicate malicious activity, and which hosts do they involve?",
      "task": "List the significant alert signatures with counts and the hosts involved. Separate high-severity malicious signatures "
              "from informational ones (such as connection tests)."},
-    {"name": "Initial Infection Indicators",
+    {"name": "Initial Infection Indicators", "max_bullets": 6,
      "queries": ["suspicious domains fake site download", "HTTP file downloads URI file type", "download domains requests client to server",
                  "TLS certificate self-signed IP-based", "direct IP HTTP connections raw IP"],
      "rerank": "Which domains, URLs or downloads were the likely initial infection vector?",
-     "task": "List suspicious domains/URLs and downloaded files (file names, server IP/domain, client). Mark weak indicators as 'possible'. "
+     "task": "List ONLY domains, URLs or downloads that the evidence marks as suspicious or unusual (suspicious-domain results, direct-IP downloads, "
+             "hosts named in alerts). Do NOT list ordinary CDN, certificate-authority or software-update hosts just because files were downloaded from them. "
+             "Give file names, server IP/domain and client where available. Mark weak indicators as 'possible'. "
              "If no initial vector is visible, write 'Not established from the available artifacts'."},
-    {"name": "Command-and-Control and Network Activity",
+    {"name": "Command-and-Control and Network Activity", "max_bullets": 8,
      "queries": ["most contacted external IP connections", "high severity alert destination C2 check-in",
                  "external destinations top destinations connections", "direct IP connections POST beaconing"],
      "rerank": "Which external IP addresses look like command-and-control servers and why?",
      "task": "Separate OBSERVED facts (connection counts, alert counts) from INFERRED assessment (label it 'Assessment:'; at most 3 assessment bullets, each a different conclusion). "
              "State which external IP received the most connections from the affected host(s) and whether the evidence supports C2 or a legitimate service."},
-    {"name": "Impact Assessment",
+    {"name": "Impact Assessment", "max_bullets": 5,
      "queries": ["data theft stealer credential exfiltration alert", "ransomware encryption availability integrity", "volume of connections external destinations",
                  "number of affected hosts"],
      "rerank": "Which security property (confidentiality, integrity or availability) is targeted, and what is the scale of impact?",
      "task": "State the primary CIA component targeted (confidentiality, integrity or availability) as 'Assessment:' with supporting evidence, "
              "and the number of affected hosts and scale of external activity. Use 'possible' where evidence is indirect."},
-    {"name": "Root Cause and Evidence Gaps",
+    {"name": "Root Cause and Evidence Gaps", "max_bullets": 7,
      "queries": ["no matching results query returned nothing", "evidence unavailable shard failed", "initial infection vector unknown",
                  "no results certificates"],
      "rerank": "What is the most likely root cause and what cannot be determined from the evidence?",
      "task": "Give the most likely root cause as 'Assessment:' with confidence (low/medium/high). Then list what is NOT established "
              "(for example initial vector, payload behaviour, data exfiltration, queries that failed or were empty). Do not invent evidence."},
-    {"name": "Corrective and Preventive Actions",
+    {"name": "Corrective and Preventive Actions", "max_bullets": 5,
      "queries": ["block malicious IP domain", "suspicious external server alert destination", "affected host user account", "malicious download URL"],
      "rerank": "Which concrete containment and prevention actions follow from the observed indicators?",
      "task": "Give 4-6 concrete actions tied to specific observed indicators (e.g. isolate host X, reset account Y, block IP Z). No generic advice."},

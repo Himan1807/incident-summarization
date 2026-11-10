@@ -24,7 +24,7 @@ import json
 import re
 from pathlib import Path
 
-from src.verify import extract_entities, verify_text, claim_stats, norm_ts, Evidence
+from src.verify import extract_entities, verify_text, claim_stats, norm_ts, strip_cites, Evidence
 
 SYNONYMS = {"c2 server": ["c2", "command-and-control", "command and control", "c&c"],
             "legitimate service": ["legitimate", "benign"]}
@@ -63,6 +63,8 @@ def answer_blocks(report: str) -> dict[int, str]:
         return {}
     blocks, cur = {}, None
     for ln in m.group(1).splitlines():
+        if ln.strip().startswith("---") or ln.strip().lower().startswith(("verification note", "_verification")):
+            break                                          # the closing note is not part of any answer
         n = re.match(r"^\s{0,3}(\d+)[.)]\s*(.*)$", ln)
         if n:
             cur = int(n.group(1)); blocks[cur] = n.group(2)
@@ -86,8 +88,10 @@ def evaluate_report(report: str, qa_path: str, ev: Evidence, valid_ids: set[str]
         ans_tot += len(answerable); ans_hit += len([a for a in answerable if a in found])
         all_tot += len(atoms); all_hit += len(found)
         q_scores.append(len(found) / len(atoms)); q_correct += bool(found)
-        row = {"question": item["question"], "atoms": atoms, "answerable_from_evidence": answerable,
-               "found_in_report": found, "missing_from_evidence": [a for a in atoms if a not in answerable]}
+        row = {"id": item.get("id"), "question": item["question"], "reference_answer": item.get("answer", ""),
+               "atoms": atoms, "answerable_from_evidence": answerable,
+               "found_in_report": found, "missing_from_evidence": [a for a in atoms if a not in answerable],
+               "answer_text": None, "status": "NO ANSWER"}
         pred = blocks.get(item.get("id"))
         if pred is not None:                                   # answer-level precision / recall
             pl = _prep(pred)
@@ -97,8 +101,13 @@ def evaluate_report(report: str, qa_path: str, ev: Evidence, valid_ids: set[str]
             ref_blob = re.sub(r"\s+utc\b", "", ref_blob)
             ok = {e for e in pents if e.lower() in ref_blob}
             p_match += len(ok); p_pred += len(pents); r_hit += len(pf); r_tot += len(atoms)
-            row.update(predicted_entities=sorted(pents), correct_entities=sorted(ok), atoms_found_in_answer=pf,
-                       wrong_entities=sorted(pents - ok))
+            wrong = sorted(pents - ok)
+            abstained = "not established" in pred.lower()
+            status = ("CORRECT" if (len(pf) == len(atoms) and not wrong) else "PARTIAL" if pf
+                      else "ABSTAINED" if abstained else "WRONG")
+            row.update(answer_text=re.sub(r"\s+([.,;:])", r"\1", re.sub(r"\s+", " ", strip_cites(pred))).strip(), predicted_entities=sorted(pents),
+                       correct_entities=sorted(ok), atoms_found_in_answer=pf, wrong_entities=wrong, status=status,
+                       precision=(round(len(ok) / len(pents), 3) if pents else None), recall=round(len(pf) / len(atoms), 3))
         rows.append(row)
     prec = round(p_match / p_pred, 3) if p_pred else None
     rec = round(r_hit / r_tot, 3) if blocks and r_tot else None
@@ -114,7 +123,7 @@ def evaluate_report(report: str, qa_path: str, ev: Evidence, valid_ids: set[str]
         "faithfulness": cs["faithfulness"], "grounding_rate": cs["grounding_rate"],
         "citation_precision": cs["citation_precision"],
         "citation_rate": round(cs["cited_claims"] / cs["claims"], 3) if cs["claims"] else None,
-        "claims": cs["claims"], "uncited_lines": cs["uncited_claims"],
+        "claims": cs["claims"], "assessment_lines": cs["assessments"], "uncited_lines": cs["uncited_claims"],
         "hallucination_rate": round(len(v["unsupported_entities"]) / max(len(v["entities"]), 1), 3),
         "unsupported_entities": v["unsupported_entities"],
         "unsupported_number_count": len(v["unsupported_numbers"]),

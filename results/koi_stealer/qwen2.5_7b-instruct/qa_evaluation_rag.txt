@@ -1,0 +1,102 @@
+====================================================================================================
+INCIDENT : koi_stealer
+MODEL    : qwen2.5:7b-instruct
+CONDITION: RAG (advanced pipeline)
+RUN TIME : 32.6 min of LLM generation
+REPORT   : results\koi_stealer\qwen2.5_7b-instruct\advanced_postmortem.md
+CREATED  : 2026-11-10T10:51:03
+====================================================================================================
+
+A. QUESTION-BY-QUESTION EVALUATION
+   Found = reference items present in the report's answer; Prec. = correct entities / entities the answer gave;
+   Wrong items = entities in the answer that are not in the reference answer.
+
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| #   | Question                         | Reference answer           | Answer from the report             | Found | Prec. | Wrong items      | Status    |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 1   | What is the IP address of the    | 172.17.0.99                | The IP address of the potentially  | 1/1   | 1/1   | -                | CORRECT   |
+|     | potentially infected internal    |                            | infected internal host in the LAN  |       |       |                  |           |
+|     | host in the LAN?                 |                            | is 172.17.0.99.                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 2   | What is the hostname of the      | DESKTOP-RNVO9AT            | The hostname of the potentially    | 1/1   | 1/1   | -                | CORRECT   |
+|     | potentially infected machine in  |                            | infected machine in the LAN is     |       |       |                  |           |
+|     | the LAN?                         |                            | desktop-rnvo9at.                   |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 3   | What is the Windows human user   | afletcher                  | The Windows human user account     | 1/1   | -     | -                | CORRECT   |
+|     | account name (not machine        |                            | name of the potentially infected   |       |       |                  |           |
+|     | accounts ending in $) of the     |                            | machine in the LAN is afletcher.   |       |       |                  |           |
+|     | potentially infected machine in  |                            |                                    |       |       |                  |           |
+|     | the LAN?                         |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 4   | What are the likely fake or      | www.bellantonicioccolato.i | The likely fake or suspicious      | 0/1   | -     | -                | ABSTAINED |
+|     | suspicious domains / URLs for    | t (likely compromised site | domains / URLs for initial         |       |       |                  |           |
+|     | initial infection?               | associated with Koi        | infection are Not established from |       |       |                  |           |
+|     |                                  | Loader/Koi Stealer)        | the available artifacts.           |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 5   | What are the suspicious external | 79.124.78.197              | The suspicious external IP         | 1/1   | 1/1   | -                | CORRECT   |
+|     | IP addresses contacted, which    |                            | addresses contacted, which might   |       |       |                  |           |
+|     | might be involved in command-    |                            | be involved in command-and-control |       |       |                  |           |
+|     | and-control (C2) communication?  |                            | (C2) communication, are            |       |       |                  |           |
+|     |                                  |                            | 79.124.78.197.                     |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 6   | Which of the three CIA           | confidentiality            | The attacker primarily targets     | 1/1   | -     | -                | CORRECT   |
+|     | components does the attacker     |                            | confidentiality [Assessment: Based |       |       |                  |           |
+|     | target primarily: availability,  |                            | on the nature of a koi stealer,    |       |       |                  |           |
+|     | integrity, or confidentiality?   |                            | which typically focuses on         |       |       |                  |           |
+|     |                                  |                            | stealing sensitive information].   |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 7   | During what hour did the first   | 2024-09-04 17:00 UTC       | The first signs of infection       | 1/1   | 2/2   | -                | CORRECT   |
+|     | signs of infection activity      |                            | activity appeared during the hour  |       |       |                  |           |
+|     | appear? Provide the earliest     |                            | 2024-09-04 17:00 UTC.              |       |       |                  |           |
+|     | date and time in YYYY-MM-DD      |                            |                                    |       |       |                  |           |
+|     | HH:MM UTC format.                |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 8   | According to the connection      | 79.124.78.197, C2 server   | According to the connection volume | 2/2   | 1/1   | -                | CORRECT   |
+|     | volume statistics, what single   |                            | statistics, the single external IP |       |       |                  |           |
+|     | external IP address received the |                            | address that received the most     |       |       |                  |           |
+|     | most connections from the        |                            | connections from the infected      |       |       |                  |           |
+|     | infected hosts? Is it a C2       |                            | hosts is 79.124.78.197, and it is  |       |       |                  |           |
+|     | server or a legitimate service?  |                            | likely a C2 server.                |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+
+B. METRICS
+
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Metric                                       | Value        | Meaning                                                                |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Answer precision                             | 1.000        | Entities (IPs, domains, hosts, URLs, times) in the report's answers    |
+|                                              |              | that also occur in the reference / all entities it gave                |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Answer recall                                | 0.889        | Reference answer items found in the report's answers / all reference   |
+|                                              |              | items                                                                  |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Answer F1                                    | 0.941        | Harmonic mean of answer precision and recall                           |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Question recall                              | 1.000        | Mean over questions of reference items found anywhere in the report    |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Faithfulness                                 | 0.861        | Claims whose facts are in the evidence AND in the chunks they cite /   |
+|                                              |              | all claims                                                             |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Grounding rate                               | 1.000        | Claims whose entities and numbers all exist in the evidence            |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Citation precision                           | 0.912        | Cited claims that are actually supported by the chunks they cite       |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Citation rate                                | 0.944        | Cited claims / all claims                                              |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Hallucination rate                           | 0.000        | Entities in the report that are absent from the evidence / all         |
+|                                              |              | entities (lower is better)                                             |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Unsupported numbers                          | 1            | Numbers in the report that are absent from the evidence (lower is      |
+|                                              |              | better)                                                                |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Placeholders                                 | 0            | '[insert ...]' placeholders left in the report (lower is better)       |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Questions correct / partial / wrong /        | 7 / 0 / 0 /  | Per-question status in the table above                                 |
+| abstained / unanswered                       | 1 / 0        |                                                                        |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Claims (cited / total)                       | 34 / 36      | Claim lines counted by the verifier; hedged assessments are excluded   |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+
+Status: CORRECT = every reference item found and nothing wrong; PARTIAL = some items found or wrong items present;
+        WRONG = answer given but no reference item found; ABSTAINED = the report says 'Not established from the available artifacts';
+        NO ANSWER = the report has no answer for that question.

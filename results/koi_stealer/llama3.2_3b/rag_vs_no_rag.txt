@@ -1,0 +1,109 @@
+====================================================================================================
+INCIDENT : koi_stealer
+MODEL    : llama3.2:3b
+CONDITION: No RAG vs RAG (same LLM, same section plan, same questions)
+CREATED  : 2026-11-10T10:51:03
+====================================================================================================
+
+NO RAG : the LLM receives only the incident context (network description and the questions). It has NO logs, alerts or query results.
+         Output is formatted (titles/preambles removed) but not verified, de-duplicated or given citations.
+RAG    : the advanced pipeline (hybrid retrieval, reranking, section-wise generation with citations, verification).
+Hallucination, grounding and number checks are always measured against the REAL evidence of the incident.
+
+A. METRICS
+
++------------------------------------------------------+----------------+----------------+----------------+
+| Metric                                               | No RAG         | RAG            | RAG - No RAG   |
++------------------------------------------------------+----------------+----------------+----------------+
+| Answer precision                                     | -              | 0.600          | -              |
++------------------------------------------------------+----------------+----------------+----------------+
+| Answer recall                                        | 0.000          | 0.778          | +0.778         |
++------------------------------------------------------+----------------+----------------+----------------+
+| Answer F1                                            | -              | 0.678          | -              |
++------------------------------------------------------+----------------+----------------+----------------+
+| Question recall                                      | 0.062          | 0.875          | +0.813         |
++------------------------------------------------------+----------------+----------------+----------------+
+| Faithfulness                                         | 0.000          | 0.921          | +0.921         |
++------------------------------------------------------+----------------+----------------+----------------+
+| Grounding rate                                       | 0.389          | 1.000          | +0.611         |
++------------------------------------------------------+----------------+----------------+----------------+
+| Citation precision                                   | -              | 0.946          | -              |
++------------------------------------------------------+----------------+----------------+----------------+
+| Citation rate                                        | 0.000          | 0.974          | +0.974         |
++------------------------------------------------------+----------------+----------------+----------------+
+| Hallucination rate (lower is better)                 | 0.591          | 0.000          | -0.591         |
++------------------------------------------------------+----------------+----------------+----------------+
+| Unsupported numbers (lower is better)                | 9              | 1              | -8             |
++------------------------------------------------------+----------------+----------------+----------------+
+| Placeholders (lower is better)                       | 0              | 0              | +0             |
++------------------------------------------------------+----------------+----------------+----------------+
+| Questions CORRECT                                    | 0              | 5              | +5             |
++------------------------------------------------------+----------------+----------------+----------------+
+| Questions PARTIAL                                    | 0              | 1              | +1             |
++------------------------------------------------------+----------------+----------------+----------------+
+| Questions WRONG                                      | 0              | 1              | +1             |
++------------------------------------------------------+----------------+----------------+----------------+
+| Questions ABSTAINED / unanswered                     | 8 / 0          | 1 / 0          | -              |
++------------------------------------------------------+----------------+----------------+----------------+
+| LLM generation time (min)                            | 4.3            | 13.9           | -              |
++------------------------------------------------------+----------------+----------------+----------------+
+
+B. ANSWERS PER QUESTION
+
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| #   | Question                     | Reference answer         | No RAG answer                  | RAG answer                     | No RAG    | RAG       |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 1   | What is the IP address of    | 172.17.0.99              | Not established from the       | The IP address of the          | ABSTAINED | CORRECT   |
+|     | the potentially infected     |                          | available artifacts            | potentially infected internal  |           |           |
+|     | internal host in the LAN?    |                          |                                | host in the LAN is             |           |           |
+|     |                              |                          |                                | 172.17.0.99.                   |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 2   | What is the hostname of the  | DESKTOP-RNVO9AT          | Not established from the       | The hostname of the            | ABSTAINED | CORRECT   |
+|     | potentially infected machine |                          | available artifacts            | potentially infected machine   |           |           |
+|     | in the LAN?                  |                          |                                | in the LAN is desktop-rnvo9at. |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 3   | What is the Windows human    | afletcher                | Not established from the       | The Windows human user account | ABSTAINED | CORRECT   |
+|     | user account name (not       |                          | available artifacts            | name (not machine accounts     |           |           |
+|     | machine accounts ending in   |                          |                                | ending in $) of the            |           |           |
+|     | $) of the potentially        |                          |                                | potentially infected machine   |           |           |
+|     | infected machine in the LAN? |                          |                                | in the LAN is afletcher.       |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 4   | What are the likely fake or  | www.bellantonicioccolato | Not established from the       | The likely fake or suspicious  | ABSTAINED | PARTIAL   |
+|     | suspicious domains / URLs    | .it (likely compromised  | available artifacts            | domains / URLs for initial     |           |           |
+|     | for initial infection?       | site associated with Koi |                                | infection are weathermapdata.b |           |           |
+|     |                              | Loader/Koi Stealer)      |                                | lob.core.windows.net,          |           |           |
+|     |                              |                          |                                | sso.godaddy.com,               |           |           |
+|     |                              |                          |                                | www.bellantonicioccolato.it,   |           |           |
+|     |                              |                          |                                | img-s-msn-com.akamaized.net,   |           |           |
+|     |                              |                          |                                | and oneclient.sfx.ms.          |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 5   | What are the suspicious      | 79.124.78.197            | Not established from the       | The suspicious external IP     | ABSTAINED | CORRECT   |
+|     | external IP addresses        |                          | available artifacts            | addresses contacted, which     |           |           |
+|     | contacted, which might be    |                          |                                | might be involved in command-  |           |           |
+|     | involved in command-and-     |                          |                                | and-control (C2)               |           |           |
+|     | control (C2) communication?  |                          |                                | communication, are             |           |           |
+|     |                              |                          |                                | 79.124.78.197.                 |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 6   | Which of the three CIA       | confidentiality          | Not established from the       | Not established from the       | ABSTAINED | ABSTAINED |
+|     | components does the attacker |                          | available artifacts            | available artifacts.           |           |           |
+|     | target primarily:            |                          |                                |                                |           |           |
+|     | availability, integrity, or  |                          |                                |                                |           |           |
+|     | confidentiality?             |                          |                                |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 7   | During what hour did the     | 2024-09-04 17:00 UTC     | Not established from the       | The first signs of infection   | ABSTAINED | WRONG     |
+|     | first signs of infection     |                          | available artifacts            | activity appeared during the   |           |           |
+|     | activity appear? Provide the |                          |                                | hour of 17:00 UTC on           |           |           |
+|     | earliest date and time in    |                          |                                | 2024-09-04.                    |           |           |
+|     | YYYY-MM-DD HH:MM UTC format. |                          |                                |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 8   | According to the connection  | 79.124.78.197, C2 server | Not established from the       | According to the connection    | ABSTAINED | CORRECT   |
+|     | volume statistics, what      |                          | available artifacts            | volume statistics, the single  |           |           |
+|     | single external IP address   |                          |                                | external IP address that       |           |           |
+|     | received the most            |                          |                                | received the most connections  |           |           |
+|     | connections from the         |                          |                                | from the infected hosts is     |           |           |
+|     | infected hosts? Is it a C2   |                          |                                | 79.124.78.197, which is likely |           |           |
+|     | server or a legitimate       |                          |                                | a C2 server.                   |           |           |
+|     | service?                     |                          |                                |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+
+Faithfulness and citation metrics are 0 / '-' for No RAG by construction: without retrieved chunks it cannot cite evidence.

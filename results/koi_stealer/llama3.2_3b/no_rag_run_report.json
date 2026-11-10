@@ -1,0 +1,272 @@
+{
+  "condition": "no_rag",
+  "model": "llama3.2:3b",
+  "scenario": "koi_stealer",
+  "seconds_total": 257.1,
+  "run_log": [
+    {
+      "section": "Affected Host and User",
+      "seconds": 28.8,
+      "truncated": false
+    },
+    {
+      "section": "Timeline",
+      "seconds": 51.4,
+      "truncated": false
+    },
+    {
+      "section": "Detection: IDS Alerts",
+      "seconds": 38.0,
+      "truncated": false
+    },
+    {
+      "section": "Initial Infection Indicators",
+      "seconds": 14.9,
+      "truncated": false
+    },
+    {
+      "section": "Command-and-Control and Network Activity",
+      "seconds": 25.5,
+      "truncated": false
+    },
+    {
+      "section": "Impact Assessment",
+      "seconds": 20.7,
+      "truncated": false
+    },
+    {
+      "section": "Root Cause and Evidence Gaps",
+      "seconds": 29.8,
+      "truncated": false
+    },
+    {
+      "section": "Corrective and Preventive Actions",
+      "seconds": 23.4,
+      "truncated": false
+    },
+    {
+      "section": "Answers to Investigation Questions",
+      "seconds": 24.6,
+      "truncated": false
+    }
+  ],
+  "evaluation": {
+    "answer_precision": null,
+    "answer_recall": 0.0,
+    "answer_f1": null,
+    "question_recall": 0.062,
+    "questions_correct": "1/8",
+    "answerable_entity_recall": 0.125,
+    "overall_entity_recall": 0.111,
+    "faithfulness": 0.0,
+    "grounding_rate": 0.389,
+    "citation_precision": null,
+    "citation_rate": 0.0,
+    "claims": 36,
+    "assessment_lines": 11,
+    "uncited_lines": 36,
+    "hallucination_rate": 0.591,
+    "unsupported_entities": [
+      "172.17.0.10",
+      "172.17.0.100",
+      "172.17.0.101",
+      "172.17.0.20",
+      "172.17.0.30",
+      "172.17.0.40",
+      "2024-09-04 00:15",
+      "2024-09-04 00:30",
+      "2024-09-04 01:00",
+      "2024-09-04 01:15",
+      "2024-09-04 02:00",
+      "2024-09-04 03:00",
+      "8.8.8.8"
+    ],
+    "unsupported_number_count": 9,
+    "unsupported_numbers": [
+      "101",
+      "103",
+      "105",
+      "12",
+      "201",
+      "202",
+      "204",
+      "30",
+      "4"
+    ],
+    "placeholder_count": 0,
+    "per_question": [
+      {
+        "id": 1,
+        "question": "What is the IP address of the potentially infected internal host in the LAN?",
+        "reference_answer": "172.17.0.99",
+        "atoms": [
+          "172.17.0.99"
+        ],
+        "answerable_from_evidence": [
+          "172.17.0.99"
+        ],
+        "found_in_report": [],
+        "missing_from_evidence": [],
+        "answer_text": "Not established from the available artifacts",
+        "status": "ABSTAINED",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 0.0
+      },
+      {
+        "id": 2,
+        "question": "What is the hostname of the potentially infected machine in the LAN?",
+        "reference_answer": "DESKTOP-RNVO9AT",
+        "atoms": [
+          "DESKTOP-RNVO9AT"
+        ],
+        "answerable_from_evidence": [
+          "DESKTOP-RNVO9AT"
+        ],
+        "found_in_report": [],
+        "missing_from_evidence": [],
+        "answer_text": "Not established from the available artifacts",
+        "status": "ABSTAINED",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 0.0
+      },
+      {
+        "id": 3,
+        "question": "What is the Windows human user account name (not machine accounts ending in $) of the potentially infected machine in the LAN?",
+        "reference_answer": "afletcher",
+        "atoms": [
+          "afletcher"
+        ],
+        "answerable_from_evidence": [
+          "afletcher"
+        ],
+        "found_in_report": [],
+        "missing_from_evidence": [],
+        "answer_text": "Not established from the available artifacts",
+        "status": "ABSTAINED",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 0.0
+      },
+      {
+        "id": 4,
+        "question": "What are the likely fake or suspicious domains / URLs for initial infection?",
+        "reference_answer": "www.bellantonicioccolato.it (likely compromised site associated with Koi Loader/Koi Stealer)",
+        "atoms": [
+          "www.bellantonicioccolato.it"
+        ],
+        "answerable_from_evidence": [
+          "www.bellantonicioccolato.it"
+        ],
+        "found_in_report": [],
+        "missing_from_evidence": [],
+        "answer_text": "Not established from the available artifacts",
+        "status": "ABSTAINED",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 0.0
+      },
+      {
+        "id": 5,
+        "question": "What are the suspicious external IP addresses contacted, which might be involved in command-and-control (C2) communication?",
+        "reference_answer": "79.124.78.197",
+        "atoms": [
+          "79.124.78.197"
+        ],
+        "answerable_from_evidence": [
+          "79.124.78.197"
+        ],
+        "found_in_report": [],
+        "missing_from_evidence": [],
+        "answer_text": "Not established from the available artifacts",
+        "status": "ABSTAINED",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 0.0
+      },
+      {
+        "id": 6,
+        "question": "Which of the three CIA components does the attacker target primarily: availability, integrity, or confidentiality?",
+        "reference_answer": "confidentiality",
+        "atoms": [
+          "confidentiality"
+        ],
+        "answerable_from_evidence": [],
+        "found_in_report": [],
+        "missing_from_evidence": [
+          "confidentiality"
+        ],
+        "answer_text": "Not established from the available artifacts",
+        "status": "ABSTAINED",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 0.0
+      },
+      {
+        "id": 7,
+        "question": "During what hour did the first signs of infection activity appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+        "reference_answer": "2024-09-04 17:00 UTC",
+        "atoms": [
+          "2024-09-04 17:00 UTC"
+        ],
+        "answerable_from_evidence": [
+          "2024-09-04 17:00 UTC"
+        ],
+        "found_in_report": [],
+        "missing_from_evidence": [],
+        "answer_text": "Not established from the available artifacts",
+        "status": "ABSTAINED",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 0.0
+      },
+      {
+        "id": 8,
+        "question": "According to the connection volume statistics, what single external IP address received the most connections from the infected hosts? Is it a C2 server or a legitimate service?",
+        "reference_answer": "79.124.78.197, C2 server",
+        "atoms": [
+          "79.124.78.197",
+          "C2 server"
+        ],
+        "answerable_from_evidence": [
+          "79.124.78.197",
+          "C2 server"
+        ],
+        "found_in_report": [
+          "C2 server"
+        ],
+        "missing_from_evidence": [],
+        "answer_text": "Not established from the available artifacts",
+        "status": "ABSTAINED",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 0.0
+      }
+    ]
+  }
+}

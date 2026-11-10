@@ -11,7 +11,7 @@ class FakeEmb:
         out=[]
         for t in texts:
             v=np.zeros(512)
-            for w in re.findall(r"[\w.\-]+", t.lower()): v[hash(w)%512]+=1
+            for w in re.findall(r"[\w.\-]+", t.lower()): v[__import__("zlib").crc32(w.encode())%512]+=1
             out.append(v/(np.linalg.norm(v)+1e-9))
         return np.array(out)
 
@@ -26,11 +26,11 @@ def echo_llm(prompt, n=450):
 
 root=ROOT/"dataset"/"paper_dataset"; rows=[]
 for sc in sorted(p.name for p in root.iterdir() if p.is_dir()):
-    a=argparse.Namespace(input=str(root/sc/"rag_input.json"), model=None, dry_run=False, strict=False, no_enrich=False, sections=None)
+    a=argparse.Namespace(input=str(root/sc/"rag_input.json"), model="smoke", results_dir=str(ROOT/"results_test"), dry_run=False, strict=False, no_enrich=False, sections=None)
     buf=io.StringIO()
     with contextlib.redirect_stdout(buf):
         run(a, embedder=FakeEmb(), reranker=None, llm=echo_llm)
-    rep=json.load(open(ROOT/"results"/sc/"advanced_run_report.json"))
+    rep=json.load(open(ROOT/"results_test"/sc/"smoke"/"advanced_run_report.json"))
     ev=rep["evaluation"]
     flagged=sum(rep["verification_totals"].values()) if rep["verification_totals"] else 0
     rows.append((sc, ev["question_recall"], ev["answerable_entity_recall"], ev["overall_entity_recall"], ev["hallucination_rate"], flagged))
