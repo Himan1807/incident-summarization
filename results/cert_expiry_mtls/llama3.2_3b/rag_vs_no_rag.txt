@@ -1,0 +1,110 @@
+====================================================================================================
+INCIDENT : cert_expiry_mtls
+MODEL    : llama3.2:3b
+CONDITION: No RAG vs RAG (same LLM, same section plan, same questions)
+CREATED  : 2026-11-19T12:58:22
+====================================================================================================
+
+NO RAG : the LLM receives only the incident context (network description and the questions). It has NO logs, alerts or query results.
+         Output is formatted (titles/preambles removed) but not verified, de-duplicated or given citations.
+RAG    : the advanced pipeline (hybrid retrieval, reranking, section-wise generation with citations, verification).
+Hallucination, grounding and number checks are always measured against the REAL evidence of the incident.
+
+A. METRICS
+
++------------------------------------------------------+----------------+----------------+----------------+
+| Metric                                               | No RAG         | RAG            | RAG - No RAG   |
++------------------------------------------------------+----------------+----------------+----------------+
+| Answer precision                                     | -              | -              | -              |
++------------------------------------------------------+----------------+----------------+----------------+
+| Answer recall                                        | 0.000          | 0.111          | +0.111         |
++------------------------------------------------------+----------------+----------------+----------------+
+| Answer F1                                            | -              | -              | -              |
++------------------------------------------------------+----------------+----------------+----------------+
+| Question recall                                      | 0.111          | 0.722          | +0.611         |
++------------------------------------------------------+----------------+----------------+----------------+
+| Faithfulness                                         | 0.000          | 0.897          | +0.897         |
++------------------------------------------------------+----------------+----------------+----------------+
+| Grounding rate                                       | 0.696          | 1.000          | +0.304         |
++------------------------------------------------------+----------------+----------------+----------------+
+| Citation precision                                   | -              | 0.946          | -              |
++------------------------------------------------------+----------------+----------------+----------------+
+| Citation rate                                        | 0.000          | 0.949          | +0.949         |
++------------------------------------------------------+----------------+----------------+----------------+
+| Hallucination rate (lower is better)                 | 0.773          | 0.000          | -0.773         |
++------------------------------------------------------+----------------+----------------+----------------+
+| Unsupported numbers (lower is better)                | 5              | 0              | -5             |
++------------------------------------------------------+----------------+----------------+----------------+
+| Placeholders (lower is better)                       | 0              | 0              | +0             |
++------------------------------------------------------+----------------+----------------+----------------+
+| Questions CORRECT                                    | 0              | 0              | +0             |
++------------------------------------------------------+----------------+----------------+----------------+
+| Questions PARTIAL                                    | 0              | 1              | +1             |
++------------------------------------------------------+----------------+----------------+----------------+
+| Questions WRONG                                      | 1              | 2              | +1             |
++------------------------------------------------------+----------------+----------------+----------------+
+| Questions ABSTAINED / unanswered                     | 8 / 0          | 5 / 1          | -              |
++------------------------------------------------------+----------------+----------------+----------------+
+| LLM generation time (min)                            | 6.2            | 12.1           | -              |
++------------------------------------------------------+----------------+----------------+----------------+
+
+B. ANSWERS PER QUESTION
+
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| #   | Question                     | Reference answer         | No RAG answer                  | RAG answer                     | No RAG    | RAG       |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 1   | Which certificate expired?   | cf-mesh-intermediate     | Not established from the       | expired certificates: 1844     | ABSTAINED | WRONG     |
+|     |                              | (Istio mesh intermediate | available artifacts            | matching events                |           |           |
+|     |                              | CA)                      |                                |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 2   | When did the certificate     | 2024-09-30 12:00 UTC     | Not established from the       | not established from the       | ABSTAINED | ABSTAINED |
+|     | expire? Provide YYYY-MM-DD   |                          | available artifacts            | available artifacts            |           |           |
+|     | HH:MM UTC.                   |                          |                                |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 3   | Why did automatic renewal    | Vault denied the signing | Not established from the       | Not established from the       | ABSTAINED | ABSTAINED |
+|     | fail?                        | request (403 permission  | available artifacts            | available artifacts            |           |           |
+|     |                              | denied for cert-         |                                |                                |           |           |
+|     |                              | manager's policy)        |                                |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 4   | Which change fixed the cause | CHG-5611                 | Not established from the       | Not established from the       | ABSTAINED | ABSTAINED |
+|     | of the renewal failure?      |                          | available artifacts            | available artifacts            |           |           |
+|     | Provide its change           |                          |                                |                                |           |           |
+|     | identifier.                  |                          |                                |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 5   | During what hour did the     | 2024-09-30 12:00 UTC     | Not established from the       | (no answer)                    | ABSTAINED | NO ANSWER |
+|     | service outage begin?        |                          | available artifacts            |                                |           |           |
+|     | Provide the earliest date    |                          |                                |                                |           |           |
+|     | and time in YYYY-MM-DD HH:MM |                          |                                |                                |           |           |
+|     | UTC format.                  |                          |                                |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 6   | What is the root cause       | certificate expiry       | Not established from the       | Not established from the       | ABSTAINED | ABSTAINED |
+|     | category of the incident:    |                          | available artifacts            | available artifacts            |           |           |
+|     | configuration change,        |                          |                                |                                |           |           |
+|     | software defect, hardware    |                          |                                |                                |           |           |
+|     | failure, cloud provider      |                          |                                |                                |           |           |
+|     | failure, capacity            |                          |                                |                                |           |           |
+|     | exhaustion, automation       |                          |                                |                                |           |           |
+|     | error, certificate expiry,   |                          |                                |                                |           |           |
+|     | or third-party dependency    |                          |                                |                                |           |           |
+|     | failure?                     |                          |                                |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 7   | Which of the three CIA       | availability             | Not established from the       | Not established from the       | ABSTAINED | ABSTAINED |
+|     | components is primarily      |                          | available artifacts            | available artifacts            |           |           |
+|     | affected: availability,      |                          |                                |                                |           |           |
+|     | integrity, or                |                          |                                |                                |           |           |
+|     | confidentiality?             |                          |                                |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 8   | According to the error       | istio-ingressgateway,    | Not established from the       | istio-ingressgateway ranks #1  | ABSTAINED | PARTIAL   |
+|     | volume statistics, what      | downstream symptom       | available artifacts            | by error volume (92410 events, |           |           |
+|     | single service emitted the   |                          |                                | 2 failing dependencies)        |           |           |
+|     | most errors? Is it the root  |                          |                                |                                |           |           |
+|     | cause or a downstream        |                          |                                |                                |           |           |
+|     | symptom?                     |                          |                                |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 9   | Which deployment shortly     | CHG-5602                 | CHG-123456                     | CHG-5598 | deployment | rate-  | WRONG     | WRONG     |
+|     | before the outage is         |                          |                                | engine 4.4.0 -> 4.4.1          |           |           |
+|     | unrelated? Provide its       |                          |                                |                                |           |           |
+|     | change identifier.           |                          |                                |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+
+Faithfulness and citation metrics are 0 / '-' for No RAG by construction: without retrieved chunks it cannot cite evidence.

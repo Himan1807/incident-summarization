@@ -1,0 +1,60 @@
+====================================================================================================
+INCIDENT: az_ebs_degraded   -   comparison of 1 run(s) (models and conditions)
+CREATED : 2026-11-18T19:27:24
+====================================================================================================
+
+Runs:  R1 = llama3.2:3b (RAG)
+
+A. METRICS PER RUN (higher is better except Halluc. and BadNum)
+
++------+------------------------------------+----------+----------+----------+----------+----------+----------+----------+----------+----------+----------+--------+
+| Run  | Model / condition                  | Ans-P    | Ans-R    | Ans-F1   | Q-recall | Faithful | Ground.  | CitePrec | CiteRate | Halluc.  | BadNum   | Min    |
++------+------------------------------------+----------+----------+----------+----------+----------+----------+----------+----------+----------+----------+--------+
+| R1   | llama3.2:3b (RAG)                  | 1.000    | 0.500    | 0.667    | 0.889    | 0.881    | 1.000    | 0.949    | 0.929    | 0.000    | 0        | 13.8   |
++------+------------------------------------+----------+----------+----------+----------+----------+----------+----------+----------+----------+----------+--------+
+
+B. ANSWER STATUS PER QUESTION  (OK = correct, PART = partial, WRONG, ABST = 'Not established', NONE = no answer in the report)
+
++-----+------------------------------------------+--------------------------------+--------+
+| #   | Question                                 | Reference answer               | R1     |
++-----+------------------------------------------+--------------------------------+--------+
+| 1   | What is the hostname of the host or node | db-mysql-01                    | OK     |
+|     | where the failure originated?            |                                |        |
++-----+------------------------------------------+--------------------------------+--------+
+| 2   | What is the IP address of the host or    | 10.30.2.15                     | OK     |
+|     | node where the failure originated?       |                                |        |
++-----+------------------------------------------+--------------------------------+--------+
+| 3   | Which availability zone was affected by  | eu-central-1b                  | OK     |
+|     | the cloud provider event?                |                                |        |
++-----+------------------------------------------+--------------------------------+--------+
+| 4   | Which storage volume attached to the     | vol-0a91c3e5f27d4b8e1          | ABST   |
+|     | failing host was degraded?               |                                |        |
++-----+------------------------------------------+--------------------------------+--------+
+| 5   | During what hour did the first signs of  | 2025-02-17 06:00 UTC           | WRONG  |
+|     | the failure appear? Provide the earliest |                                |        |
+|     | date and time in YYYY-MM-DD HH:MM UTC    |                                |        |
+|     | format.                                  |                                |        |
++-----+------------------------------------------+--------------------------------+--------+
+| 6   | What is the root cause category of the   | cloud provider failure         | ABST   |
+|     | incident: configuration change, software |                                |        |
+|     | defect, hardware failure, cloud provider |                                |        |
+|     | failure, capacity exhaustion, automation |                                |        |
+|     | error, certificate expiry, or third-     |                                |        |
+|     | party dependency failure?                |                                |        |
++-----+------------------------------------------+--------------------------------+--------+
+| 7   | Which of the three CIA components is     | availability                   | ABST   |
+|     | primarily affected: availability,        |                                |        |
+|     | integrity, or confidentiality?           |                                |        |
++-----+------------------------------------------+--------------------------------+--------+
+| 8   | According to the error volume            | web-frontend, downstream       | OK     |
+|     | statistics, what single service emitted  | symptom                        |        |
+|     | the most errors? Is it the root cause or |                                |        |
+|     | a downstream symptom?                    |                                |        |
++-----+------------------------------------------+--------------------------------+--------+
+| 9   | Which change restored normal service?    | CHG-7781 (manual failover to   | WRONG  |
+|     | Provide its change identifier.           | db-mysql-02)                   |        |
++-----+------------------------------------------+--------------------------------+--------+
+
+Best answer F1: llama3.2:3b (RAG) (0.667)
+
+Metric definitions: see METRICS.md. 'no RAG' rows have no retrieved evidence, so their faithfulness and citation metrics are 0 or '-'.

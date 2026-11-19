@@ -1,0 +1,153 @@
+{
+  "metadata": {
+    "incident_id": "INC-20260422",
+    "scenario": "objstore_503",
+    "title": "Infrastructure reliability incident investigation",
+    "source": "synthetic/ops-incident-expansion (modeled on neu-nds2/llm-sec-incident-analysis)",
+    "query_window_start": "2026-04-22T00:00:00",
+    "query_window_end": "2026-04-24T23:59:59",
+    "evidence_types": [
+      "change_records",
+      "derived_findings",
+      "infrastructure_events",
+      "monitoring_alerts",
+      "query_coverage",
+      "resource_metrics",
+      "service_logs"
+    ],
+    "artifact_scope_note": "Evidence is aggregated query output (not raw log lines or metric samples); it contains no chat/communication records."
+  },
+  "incident_description": "Reliability incident investigation of a production environment. Evidence consists of Elasticsearch aggregation results over application and proxy logs, Kubernetes, cloud-provider and host system events, Prometheus Alertmanager alerts, change-management / CI-CD audit records and metric anomaly detection. No root cause, impact or trigger is stated; these must be established from the supplied artifacts. Environment context: Organization: Pixelfold (photo sharing); Platform: Microsoft Azure West Europe; Kubernetes cluster: pf-weu-prod (AKS, node range 10.224.0.0/16); Object storage: Azure Blob Storage account holding originals and thumbnails; CDN in front of gallery-web; Deployments: Azure Pipelines releases with REL- identifiers; manual changes use CHG- identifiers.",
+  "investigation_questions": [
+    "Which external storage endpoint returned the errors?",
+    "What is the cloud provider's tracking ID for the service event?",
+    "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+    "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+    "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+    "Which deployment preceded the errors but did not cause them? Provide its identifier.",
+    "Did rolling back thumbnail-worker restore normal service? Answer yes or no."
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "objstore_503-01",
+      "artifact_type": "service_logs",
+      "subtype": "error_logs",
+      "source": "error_logs",
+      "content": "{\"description\": \"Application and proxy error logs: HTTP/gRPC status codes, failing requests (caller -> callee:port : operation), error messages and the services emitting them.\", \"facts\": [\"error events: 95360 matching events\", \"error events > status codes: 503 \\u2014 86123 events\", \"error events > status codes: 500 \\u2014 9214 events\", \"error events > status codes: n/a (client-side timeout) \\u2014 23 events\", \"failing requests: thumbnail-worker -> pfmediaweu01.blob.core.windows.net:443 : GET/PUT /thumbnails/* \\u2014 74094 events\", \"failing requests: media-upload -> pfmediaweu01.blob.core.windows.net:443 : PUT /originals/* \\u2014 18302 events\", \"failing requests: gallery-web (CDN origin) -> pfmediaweu01.blob.core.windows.net:443 : GET /originals/* \\u2014 2941 events\", \"failing requests: profile-api -> redis-profile:6379 : GET \\u2014 23 events\", \"error messages: RequestFailedException: Status: 503 (The server is busy.) ErrorCode: ServerBusy \\u2014 83182 events\", \"error messages: OperationTimedOut: Operation could not be completed within the specified time \\u2014 9214 events\", \"error messages: origin fetch failed: 503 Service Unavailable (The server is busy.) \\u2014 2941 events\", \"error messages: redis: i/o timeout \\u2014 23 events\", \"emitting services: thumbnail-worker \\u2014 74094 events\", \"emitting services: media-upload \\u2014 18302 events\", \"emitting services: gallery-web \\u2014 2941 events\", \"emitting services: profile-api \\u2014 23 events\"]}",
+      "metadata": {
+        "scenario": "objstore_503",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "objstore_503-02",
+      "artifact_type": "service_logs",
+      "subtype": "error_volume_by_service",
+      "source": "error_volume_by_service",
+      "content": "{\"description\": \"Services ranked by number of error events, with each service's most-failed downstream dependencies.\", \"facts\": [\"services: thumbnail-worker \\u2014 74094 events; failing dependencies=1; top dependencies: pfmediaweu01.blob.core.windows.net (74094)\", \"services: media-upload \\u2014 18302 events; failing dependencies=1; top dependencies: pfmediaweu01.blob.core.windows.net (18302)\", \"services: gallery-web \\u2014 2941 events; failing dependencies=1; top dependencies: pfmediaweu01.blob.core.windows.net (2941)\", \"services: profile-api \\u2014 23 events; failing dependencies=1; top dependencies: redis-profile (23)\"]}",
+      "metadata": {
+        "scenario": "objstore_503",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "objstore_503-03",
+      "artifact_type": "change_records",
+      "subtype": "change_log",
+      "source": "change_log",
+      "content": "{\"description\": \"Deployments, configuration pushes, infrastructure and automation runs from the change-management and CI/CD audit log: change ID, type, target, actor, time (UTC), status and recorded diff/summary.\", \"facts\": [\"changes: REL-2026.04.22-1 | deployment | thumbnail-worker 7.2.4 -> 7.3.0 | actor: azure-pipelines | 2026-04-22 07:40 UTC | status: succeeded | thumbnail codec switched to AVIF \\u2014 1 events\", \"changes: CHG-2214 | rollback | thumbnail-worker 7.3.0 -> 7.2.4 | actor: e.moreau | 2026-04-22 10:15 UTC | status: succeeded | precautionary rollback \\u2014 1 events\", \"changes: CHG-2219 | config_push | media-upload blob client retry policy | actor: e.moreau | 2026-04-22 11:02 UTC | status: succeeded | maxRetries 3 -> 6, exponential backoff \\u2014 1 events\", \"changes: REL-2026.04.23-2 | deployment | gallery-web 3.13.2 -> 3.14.0 | actor: azure-pipelines | 2026-04-23 08:20 UTC | status: succeeded | lightbox redesign \\u2014 1 events\", \"changes: REL-2026.04.23-3 | deployment | thumbnail-worker 7.2.4 -> 7.3.0 | actor: azure-pipelines | 2026-04-23 15:10 UTC | status: succeeded | re-release of 7.3.0 \\u2014 1 events\", \"change types: deployment \\u2014 3 events\", \"change types: rollback \\u2014 1 events\", \"change types: config_push \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "objstore_503",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "objstore_503-04",
+      "artifact_type": "change_records",
+      "subtype": "change_actors",
+      "source": "change_actors",
+      "content": "{\"description\": \"Accounts and automation identities that executed changes, with the hosts or targets they acted on.\", \"facts\": [\"actors: azure-pipelines \\u2014 3 events; targets: pf-weu-prod/thumbnail-worker (2), pf-weu-prod/gallery-web (1)\", \"actors: e.moreau \\u2014 2 events; targets: pf-weu-prod/thumbnail-worker (1), pf-weu-prod/media-upload (1)\"]}",
+      "metadata": {
+        "scenario": "objstore_503",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "objstore_503-05",
+      "artifact_type": "infrastructure_events",
+      "subtype": "host_inventory",
+      "source": "host_inventory",
+      "content": "{\"description\": \"Host and node names seen in infrastructure events with their IP address, role and availability zone / rack.\", \"facts\": [\"hosts: aks-userpool-31877412-vmss000003 \\u2014 152 events; ip: 10.224.0.7; role: aks-worker; zone: westeurope-1\", \"hosts: aks-userpool-31877412-vmss000004 \\u2014 149 events; ip: 10.224.0.8; role: aks-worker; zone: westeurope-2\", \"hosts: aks-userpool-31877412-vmss000007 \\u2014 147 events; ip: 10.224.0.11; role: aks-worker; zone: westeurope-3\"]}",
+      "metadata": {
+        "scenario": "objstore_503",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "objstore_503-06",
+      "artifact_type": "infrastructure_events",
+      "subtype": "platform_events",
+      "source": "platform_events",
+      "content": "{\"description\": \"Kubernetes events, cloud-provider health events and host system messages (kernel, hardware, daemons) with the objects or hosts they refer to.\", \"facts\": [\"cloud health events: Azure Service Health: Storage - West Europe - service degradation, tracking ID 2LQ8-T9X, impact start 2026-04-22 08:55 UTC, mitigated 2026-04-22 13:40 UTC \\u2014 2 events; top objects: subscription pixelfold-prod (2)\", \"cloud health events: Azure Resource Health: storage account Degraded \\u2014 3 events; top objects: storageAccounts/pfmediaweu01 (3)\", \"event reasons: BackOff \\u2014 41 events; top objects: pod/thumbnail-worker-7b9d6c5f4-2kq8z (21), pod/thumbnail-worker-7b9d6c5f4-p5x7w (20)\", \"event reasons: Pulled \\u2014 22 events; top objects: pod/thumbnail-worker-7b9d6c5f4-2kq8z (6), pod/gallery-web-5f8c7d9b6-m3n4p (4)\"]}",
+      "metadata": {
+        "scenario": "objstore_503",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "objstore_503-07",
+      "artifact_type": "monitoring_alerts",
+      "subtype": "alertmanager_alerts",
+      "source": "alertmanager_alerts",
+      "content": "{\"description\": \"Prometheus Alertmanager alerts: alert names with severity, critical-alert instances, alert names and services, and an hourly timeline of warning and critical alerts (UTC).\", \"facts\": [\"alert names: Watchdog (info) \\u2014 72 events\", \"alert names: BlobStorageErrorRateHigh (critical) \\u2014 28 events\", \"alert names: ThumbnailQueueBacklog (warning) \\u2014 20 events\", \"alert names: UploadFailureRateHigh (critical) \\u2014 19 events\", \"alert names: KubePodCrashLooping (critical) \\u2014 10 events\", \"alert names: KubeCPUOvercommit (warning) \\u2014 1 events\", \"critical alerts: 57 matching events\", \"critical alerts > critical instances: pfmediaweu01 \\u2014 28 events\", \"critical alerts > critical instances: media-upload \\u2014 19 events\", \"critical alerts > critical instances: thumbnail-worker-7b9d6c5f4-2kq8z \\u2014 5 events\", \"critical alerts > critical instances: thumbnail-worker-7b9d6c5f4-p5x7w \\u2014 5 events\", \"critical alerts > critical alert names: BlobStorageErrorRateHigh \\u2014 28 events\", \"critical alerts > critical alert names: UploadFailureRateHigh \\u2014 19 events\", \"critical alerts > critical alert names: KubePodCrashLooping \\u2014 10 events\", \"critical alerts > critical services: storage \\u2014 28 events\", \"critical alerts > critical services: media-upload \\u2014 19 events\", \"critical alerts > critical services: thumbnail-worker \\u2014 10 events\", \"alert timeline: 2026-04-22 09:00 UTC \\u2014 14 events\", \"alert timeline: 2026-04-22 10:00 UTC \\u2014 18 events\", \"alert timeline: 2026-04-22 11:00 UTC \\u2014 17 events\", \"alert timeline: 2026-04-22 12:00 UTC \\u2014 16 events\", \"alert timeline: 2026-04-22 13:00 UTC \\u2014 10 events\", \"alert timeline: 2026-04-22 14:00 UTC \\u2014 2 events\", \"alert timeline: 2026-04-23 03:00 UTC \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "objstore_503",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "objstore_503-08",
+      "artifact_type": "resource_metrics",
+      "subtype": "metric_anomalies",
+      "source": "metric_anomalies",
+      "content": "{\"description\": \"Metric series that deviated from their 7-day baseline (hourly resolution): baseline, peak or trough value, anomaly onset and recovery (UTC).\", \"facts\": [\"metric anomalies: azure_storage_transactions{ResponseType=ServerBusyError} on pfmediaweu01 \\u2014 baseline ~3/min; peak 41,200/min; onset 2026-04-22 08:00 UTC; recovered 2026-04-22 13:00 UTC\", \"metric anomalies: azure_storage SuccessE2ELatency (avg) on pfmediaweu01 \\u2014 baseline 38 ms; peak 9,450 ms; onset 2026-04-22 08:00 UTC; recovered 2026-04-22 13:00 UTC\", \"metric anomalies: thumbnail-jobs queue depth on servicebus:thumbnail-jobs \\u2014 baseline ~40; peak 212,600; onset 2026-04-22 09:00 UTC; recovered 2026-04-22 15:00 UTC\"]}",
+      "metadata": {
+        "scenario": "objstore_503",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "objstore_503-09",
+      "artifact_type": "derived_findings",
+      "subtype": "derived_summary",
+      "source": "derived_summary",
+      "content": "{\"description\": \"Deterministic summary computed from the query results above (error ranking, instance-to-host join, alert timeline, change correlation, earliest metric anomaly).\", \"facts\": [\"Derived: service thumbnail-worker ranks #1 by error volume (74094 events, 1 failing dependencies). Most-failed dependency: pfmediaweu01.blob.core.windows.net (74094 errors).\", \"Derived: most-alerted critical instance pfmediaweu01 (28 critical alerts); no matching host-inventory entry.\", \"Derived: warning/critical alerts span 2026-04-22 09:00 UTC to 2026-04-23 03:00 UTC; earliest alert hour 2026-04-22 09:00 UTC (14 alerts).\", \"Derived: changes recorded from 6 hours before the earliest alert hour to its end: REL-2026.04.22-1 (deployment, thumbnail-worker 7.2.4 -> 7.3.0, azure-pipelines, 2026-04-22 07:40 UTC).\", \"Derived: earliest metric anomaly onset 2026-04-22 08:00 UTC (azure_storage_transactions{ResponseType=ServerBusyError} on pfmediaweu01).\"]}",
+      "metadata": {
+        "scenario": "objstore_503",
+        "source_kind": "derived_from_es_results",
+        "heuristic": true
+      }
+    },
+    {
+      "artifact_id": "objstore_503-10",
+      "artifact_type": "query_coverage",
+      "subtype": "evidence_gaps",
+      "source": "evidence_gaps",
+      "content": "{\"description\": \"Queries that returned nothing or failed; use these to state what is NOT established.\", \"facts\": [\"No matching results for: tls certificates / expired certificates. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / expiring within 7 days. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / self signed. (Absence in this query is not proof of absence elsewhere.)\"]}",
+      "metadata": {
+        "scenario": "objstore_503",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    }
+  ]
+}

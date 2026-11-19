@@ -1,0 +1,14 @@
+{
+  "scenario": "payment_provider_outage",
+  "cleaning": [
+    "Q8: the earliest alert in the window (CertificateExpiringSoon, 09:00 UTC) is unrelated to the outage"
+  ],
+  "skipped": [],
+  "gaps": [],
+  "artifacts": 11,
+  "facts": 68,
+  "empty_aggregations": 2,
+  "questions": 9,
+  "answers": 9,
+  "atoms": 10
+}

@@ -1,0 +1,16 @@
+{
+  "scenario": "memleak_release",
+  "cleaning": [
+    "Q5: first signs taken from the memory working-set anomaly onset (01:00 UTC), which precedes the first alert (09:00 UTC)"
+  ],
+  "skipped": [
+    "tls_certificates: all aggregations empty"
+  ],
+  "gaps": [],
+  "artifacts": 10,
+  "facts": 66,
+  "empty_aggregations": 3,
+  "questions": 9,
+  "answers": 9,
+  "atoms": 10
+}

@@ -1,0 +1,154 @@
+{
+  "metadata": {
+    "incident_id": "INC-20250217",
+    "scenario": "az_ebs_degraded",
+    "title": "Infrastructure reliability incident investigation",
+    "source": "synthetic/ops-incident-expansion (modeled on neu-nds2/llm-sec-incident-analysis)",
+    "query_window_start": "2025-02-17T00:00:00",
+    "query_window_end": "2025-02-19T23:59:59",
+    "evidence_types": [
+      "change_records",
+      "derived_findings",
+      "infrastructure_events",
+      "monitoring_alerts",
+      "query_coverage",
+      "resource_metrics",
+      "service_logs"
+    ],
+    "artifact_scope_note": "Evidence is aggregated query output (not raw log lines or metric samples); it contains no chat/communication records."
+  },
+  "incident_description": "Reliability incident investigation of a production environment. Evidence consists of Elasticsearch aggregation results over application and proxy logs, Kubernetes, cloud-provider and host system events, Prometheus Alertmanager alerts, change-management / CI-CD audit records and metric anomaly detection. No root cause, impact or trigger is stated; these must be established from the supplied artifacts. Environment context: Organization: Brightlane Media (news publishing); Platform: AWS eu-central-1 (zones eu-central-1a/1b/1c); VPC range: 10.30.0.0/16 (one /24 per tier per zone); Database tier: self-managed MySQL 8.0 primary/replica pair on EC2 with EBS gp3 volumes behind ProxySQL; Application tier: web-frontend, content-api and comment-svc on EC2 auto-scaling groups; Change management: CHG- identifiers.",
+  "investigation_questions": [
+    "What is the hostname of the host or node where the failure originated?",
+    "What is the IP address of the host or node where the failure originated?",
+    "Which availability zone was affected by the cloud provider event?",
+    "Which storage volume attached to the failing host was degraded?",
+    "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+    "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+    "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+    "Which change restored normal service? Provide its change identifier."
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "az_ebs_degraded-01",
+      "artifact_type": "service_logs",
+      "subtype": "error_logs",
+      "source": "error_logs",
+      "content": "{\"description\": \"Application and proxy error logs: HTTP/gRPC status codes, failing requests (caller -> callee:port : operation), error messages and the services emitting them.\", \"facts\": [\"error events: 69891 matching events\", \"error events > status codes: 504 \\u2014 48220 events\", \"error events > status codes: 500 \\u2014 21671 events\", \"failing requests: web-frontend -> content-api:8080 : GET /v2/articles/{slug} \\u2014 48220 events\", \"failing requests: content-api -> db-mysql-01:3306 : SELECT/UPDATE content schema \\u2014 17420 events\", \"failing requests: web-frontend -> php-fpm:9000 : render article \\u2014 3110 events\", \"failing requests: comment-svc -> db-mysql-01:3306 : INSERT comments \\u2014 1104 events\", \"failing requests: image-resizer -> s3.eu-central-1.amazonaws.com:443 : GetObject \\u2014 37 events\", \"error messages: upstream content-api: 504 Gateway Timeout \\u2014 48220 events\", \"error messages: SQLSTATE[HY000] [2002] Connection timed out \\u2014 10916 events\", \"error messages: SQLSTATE[HY000]: General error: 1205 Lock wait timeout exceeded; try restarting transaction \\u2014 6401 events\", \"error messages: PHP Fatal error: Maximum execution time of 30 seconds exceeded \\u2014 3110 events\", \"error messages: SQLSTATE[HY000]: General error: 2006 MySQL server has gone away \\u2014 1207 events\", \"error messages: vips: out of order read at line 1024 \\u2014 37 events\", \"emitting services: web-frontend \\u2014 51330 events\", \"emitting services: content-api \\u2014 17420 events\", \"emitting services: comment-svc \\u2014 1104 events\", \"emitting services: image-resizer \\u2014 37 events\"]}",
+      "metadata": {
+        "scenario": "az_ebs_degraded",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "az_ebs_degraded-02",
+      "artifact_type": "service_logs",
+      "subtype": "error_volume_by_service",
+      "source": "error_volume_by_service",
+      "content": "{\"description\": \"Services ranked by number of error events, with each service's most-failed downstream dependencies.\", \"facts\": [\"services: web-frontend \\u2014 51330 events; failing dependencies=2; top dependencies: content-api (48220), php-fpm (3110)\", \"services: content-api \\u2014 17420 events; failing dependencies=1; top dependencies: db-mysql-01 (17420)\", \"services: comment-svc \\u2014 1104 events; failing dependencies=1; top dependencies: db-mysql-01 (1104)\", \"services: image-resizer \\u2014 37 events; failing dependencies=1; top dependencies: s3.eu-central-1.amazonaws.com (37)\"]}",
+      "metadata": {
+        "scenario": "az_ebs_degraded",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "az_ebs_degraded-03",
+      "artifact_type": "change_records",
+      "subtype": "change_log",
+      "source": "change_log",
+      "content": "{\"description\": \"Deployments, configuration pushes, infrastructure and automation runs from the change-management and CI/CD audit log: change ID, type, target, actor, time (UTC), status and recorded diff/summary.\", \"facts\": [\"changes: CHG-7759 | deployment | web-frontend 2025.02.16-2 | actor: jenkins-deploy | 2025-02-17 04:40 UTC | status: completed | CSS bundle and article template change \\u2014 1 events\", \"changes: CHG-7781 | manual_failover | MySQL primary db-mysql-01 -> db-mysql-02 | actor: k.weber | 2025-02-17 08:12 UTC | status: completed | promote replica db-mysql-02 \\u2014 1 events\", \"changes: CHG-7790 | config_push | proxysql mysql_servers | actor: k.weber | 2025-02-17 08:14 UTC | status: completed | writer hostgroup 10: db-mysql-01 -> db-mysql-02 \\u2014 1 events\", \"changes: CHG-7764 | deployment | image-resizer 4.0.7 -> 4.1.0 | actor: jenkins-deploy | 2025-02-17 10:30 UTC | status: completed | libvips upgrade \\u2014 1 events\", \"changes: CHG-7802 | ebs_volume_replace | db-mysql-01 data volume | actor: m.santos | 2025-02-18 10:05 UTC | status: completed | new gp3 volume restored from snapshot; db-mysql-01 rebuilt as replica \\u2014 1 events\", \"change types: deployment \\u2014 2 events\", \"change types: manual_failover \\u2014 1 events\", \"change types: config_push \\u2014 1 events\", \"change types: ebs_volume_replace \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "az_ebs_degraded",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "az_ebs_degraded-04",
+      "artifact_type": "change_records",
+      "subtype": "change_actors",
+      "source": "change_actors",
+      "content": "{\"description\": \"Accounts and automation identities that executed changes, with the hosts or targets they acted on.\", \"facts\": [\"actors: jenkins-deploy \\u2014 2 events; targets: asg-web-frontend (1), asg-image-resizer (1)\", \"actors: k.weber \\u2014 2 events; targets: db-mysql-01 (1), db-mysql-02 (1), proxysql (1)\", \"actors: m.santos \\u2014 1 events; targets: db-mysql-01 (1)\"]}",
+      "metadata": {
+        "scenario": "az_ebs_degraded",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "az_ebs_degraded-05",
+      "artifact_type": "infrastructure_events",
+      "subtype": "host_inventory",
+      "source": "host_inventory",
+      "content": "{\"description\": \"Host and node names seen in infrastructure events with their IP address, role and availability zone / rack.\", \"facts\": [\"hosts: db-mysql-01 \\u2014 342 events; ip: 10.30.2.15; role: mysql-primary; zone: eu-central-1b\", \"hosts: db-mysql-02 \\u2014 121 events; ip: 10.30.3.15; role: mysql-replica; zone: eu-central-1c\", \"hosts: app-web-02 \\u2014 91 events; ip: 10.30.12.21; role: web-frontend; zone: eu-central-1b\", \"hosts: app-web-01 \\u2014 88 events; ip: 10.30.11.21; role: web-frontend; zone: eu-central-1a\", \"hosts: app-web-03 \\u2014 86 events; ip: 10.30.13.21; role: web-frontend; zone: eu-central-1c\", \"hosts: app-content-02 \\u2014 66 events; ip: 10.30.12.40; role: content-api; zone: eu-central-1b\", \"hosts: app-content-01 \\u2014 64 events; ip: 10.30.11.40; role: content-api; zone: eu-central-1a\"]}",
+      "metadata": {
+        "scenario": "az_ebs_degraded",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "az_ebs_degraded-06",
+      "artifact_type": "infrastructure_events",
+      "subtype": "platform_events",
+      "source": "platform_events",
+      "content": "{\"description\": \"Kubernetes events, cloud-provider health events and host system messages (kernel, hardware, daemons) with the objects or hosts they refer to.\", \"facts\": [\"cloud health events: AWS_EBS_DEGRADED_VOLUME_PERFORMANCE (eu-central-1b) opened 2025-02-17 06:38 UTC, closed 2025-02-17 09:51 UTC \\u2014 3 events; top objects: vol-0a91c3e5f27d4b8e1 (i-0c4f2e9a71b3d5c08) (1), vol-04be7d21c9a0f3e66 (i-0e1a9c3b5d7f20a14) (1), vol-0d3f5a8c2e1b7094f (i-07b2d4f6a8c0e1359) (1)\", \"system messages: kernel: nvme nvme1: I/O 412 QID 3 timeout, aborting \\u2014 57 events; top objects: db-mysql-01 (57)\", \"system messages: mysqld: [Warning] [MY-012985] [InnoDB] A long semaphore wait \\u2014 41 events; top objects: db-mysql-01 (41)\", \"system messages: kernel: INFO: task mysqld:2231 blocked for more than 120 seconds. \\u2014 23 events; top objects: db-mysql-01 (23)\", \"system messages: kernel: nvme nvme0: I/O 87 QID 1 timeout, aborting \\u2014 4 events; top objects: app-web-02 (3), app-content-02 (1)\", \"ec2 status checks: instance and system status checks passed \\u2014 1512 events; top objects: db-mysql-01 (216), db-mysql-02 (216), app-web-01 (216)\"]}",
+      "metadata": {
+        "scenario": "az_ebs_degraded",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "az_ebs_degraded-07",
+      "artifact_type": "monitoring_alerts",
+      "subtype": "alertmanager_alerts",
+      "source": "alertmanager_alerts",
+      "content": "{\"description\": \"Prometheus Alertmanager alerts: alert names with severity, critical-alert instances, alert names and services, and an hourly timeline of warning and critical alerts (UTC).\", \"facts\": [\"alert names: Watchdog (info) \\u2014 72 events\", \"alert names: HighDiskIOLatency (critical) \\u2014 19 events\", \"alert names: WebFrontend5xxRateHigh (critical) \\u2014 11 events\", \"alert names: MySQLHighThreadsRunning (critical) \\u2014 10 events\", \"alert names: MySQLReplicationLag (warning) \\u2014 6 events\", \"alert names: HostHighCpuLoad (warning) \\u2014 2 events\", \"critical alerts: 40 matching events\", \"critical alerts > critical instances: 10.30.2.15:9100 \\u2014 19 events\", \"critical alerts > critical instances: web-frontend \\u2014 11 events\", \"critical alerts > critical instances: 10.30.2.15:9104 \\u2014 10 events\", \"critical alerts > critical alert names: HighDiskIOLatency \\u2014 19 events\", \"critical alerts > critical alert names: WebFrontend5xxRateHigh \\u2014 11 events\", \"critical alerts > critical alert names: MySQLHighThreadsRunning \\u2014 10 events\", \"critical alerts > critical services: node \\u2014 19 events\", \"critical alerts > critical services: web-frontend \\u2014 11 events\", \"critical alerts > critical services: mysql \\u2014 10 events\", \"alert timeline: 2025-02-17 06:00 UTC \\u2014 8 events\", \"alert timeline: 2025-02-17 07:00 UTC \\u2014 22 events\", \"alert timeline: 2025-02-17 08:00 UTC \\u2014 12 events\", \"alert timeline: 2025-02-17 09:00 UTC \\u2014 4 events\", \"alert timeline: 2025-02-17 10:00 UTC \\u2014 2 events\"]}",
+      "metadata": {
+        "scenario": "az_ebs_degraded",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "az_ebs_degraded-08",
+      "artifact_type": "resource_metrics",
+      "subtype": "metric_anomalies",
+      "source": "metric_anomalies",
+      "content": "{\"description\": \"Metric series that deviated from their 7-day baseline (hourly resolution): baseline, peak or trough value, anomaly onset and recovery (UTC).\", \"facts\": [\"metric anomalies: node_disk await (nvme1n1) on db-mysql-01 \\u2014 baseline 0.6 ms; peak 2,840 ms; onset 2025-02-17 06:00 UTC; recovered 2025-02-17 09:00 UTC\", \"metric anomalies: aws_ebs VolumeQueueLength (vol-0a91c3e5f27d4b8e1) on db-mysql-01 \\u2014 baseline 0.8; peak 311; onset 2025-02-17 06:00 UTC; recovered 2025-02-17 09:00 UTC\", \"metric anomalies: mysql_global_status_threads_running on db-mysql-01 \\u2014 baseline 12; peak 1,024; onset 2025-02-17 06:00 UTC; recovered 2025-02-17 08:00 UTC\", \"metric anomalies: mysql_slave_status_seconds_behind_master on db-mysql-02 \\u2014 baseline 0 s; peak 1,860 s; onset 2025-02-17 06:00 UTC; recovered 2025-02-17 08:00 UTC\"]}",
+      "metadata": {
+        "scenario": "az_ebs_degraded",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "az_ebs_degraded-09",
+      "artifact_type": "derived_findings",
+      "subtype": "derived_summary",
+      "source": "derived_summary",
+      "content": "{\"description\": \"Deterministic summary computed from the query results above (error ranking, instance-to-host join, alert timeline, change correlation, earliest metric anomaly).\", \"facts\": [\"Derived: service web-frontend ranks #1 by error volume (51330 events, 2 failing dependencies). Most-failed dependency: content-api (48220 errors).\", \"Derived: most-alerted critical instance 10.30.2.15:9100 (19 critical alerts) maps to hostname db-mysql-01; role mysql-primary; zone eu-central-1b.\", \"Derived: warning/critical alerts span 2025-02-17 06:00 UTC to 2025-02-17 10:00 UTC; earliest alert hour 2025-02-17 06:00 UTC (8 alerts).\", \"Derived: changes recorded from 6 hours before the earliest alert hour to its end: CHG-7759 (deployment, web-frontend 2025.02.16-2, jenkins-deploy, 2025-02-17 04:40 UTC).\", \"Derived: earliest metric anomaly onset 2025-02-17 06:00 UTC (node_disk await (nvme1n1) on db-mysql-01).\"]}",
+      "metadata": {
+        "scenario": "az_ebs_degraded",
+        "source_kind": "derived_from_es_results",
+        "heuristic": true
+      }
+    },
+    {
+      "artifact_id": "az_ebs_degraded-10",
+      "artifact_type": "query_coverage",
+      "subtype": "evidence_gaps",
+      "source": "evidence_gaps",
+      "content": "{\"description\": \"Queries that returned nothing or failed; use these to state what is NOT established.\", \"facts\": [\"No matching results for: tls certificates / expired certificates. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / expiring within 7 days. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / self signed. (Absence in this query is not proof of absence elsewhere.)\"]}",
+      "metadata": {
+        "scenario": "az_ebs_degraded",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    }
+  ]
+}

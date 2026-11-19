@@ -1,0 +1,294 @@
+{
+  "condition": "no_rag",
+  "model": "llama3.2:3b",
+  "scenario": "cert_expiry_mtls",
+  "seconds_total": 370.0,
+  "run_log": [
+    {
+      "section": "Affected Host and User",
+      "seconds": 33.1,
+      "truncated": false
+    },
+    {
+      "section": "Timeline",
+      "seconds": 134.9,
+      "truncated": true
+    },
+    {
+      "section": "Detection: IDS Alerts",
+      "seconds": 30.1,
+      "truncated": false
+    },
+    {
+      "section": "Initial Infection Indicators",
+      "seconds": 16.0,
+      "truncated": false
+    },
+    {
+      "section": "Command-and-Control and Network Activity",
+      "seconds": 45.0,
+      "truncated": false
+    },
+    {
+      "section": "Impact Assessment",
+      "seconds": 21.7,
+      "truncated": false
+    },
+    {
+      "section": "Root Cause and Evidence Gaps",
+      "seconds": 27.7,
+      "truncated": false
+    },
+    {
+      "section": "Corrective and Preventive Actions",
+      "seconds": 33.9,
+      "truncated": false
+    },
+    {
+      "section": "Answers to Investigation Questions",
+      "seconds": 27.6,
+      "truncated": false
+    }
+  ],
+  "evaluation": {
+    "answer_precision": null,
+    "answer_recall": 0.0,
+    "answer_f1": null,
+    "question_recall": 0.111,
+    "questions_correct": "1/9",
+    "answerable_entity_recall": 0.125,
+    "overall_entity_recall": 0.1,
+    "faithfulness": 0.0,
+    "grounding_rate": 0.696,
+    "citation_precision": null,
+    "citation_rate": 0.0,
+    "claims": 69,
+    "assessment_lines": 17,
+    "uncited_lines": 69,
+    "hallucination_rate": 0.773,
+    "unsupported_entities": [
+      "10.44.0.1",
+      "10.44.0.10",
+      "10.44.0.100",
+      "10.44.0.11",
+      "10.44.0.12",
+      "10.44.0.13",
+      "10.44.0.14",
+      "10.44.0.2",
+      "10.44.0.200",
+      "10.44.0.3",
+      "10.44.0.4",
+      "10.44.0.50",
+      "192.168.1.100",
+      "8.8.8.8",
+      "calderonfreight.com",
+      "jane.smith",
+      "john.doe"
+    ],
+    "unsupported_number_count": 5,
+    "unsupported_numbers": [
+      "12345",
+      "123456",
+      "20",
+      "24",
+      "5"
+    ],
+    "placeholder_count": 0,
+    "per_question": [
+      {
+        "id": 1,
+        "question": "Which certificate expired?",
+        "reference_answer": "cf-mesh-intermediate (Istio mesh intermediate CA)",
+        "atoms": [
+          "cf-mesh-intermediate"
+        ],
+        "answerable_from_evidence": [
+          "cf-mesh-intermediate"
+        ],
+        "found_in_report": [],
+        "missing_from_evidence": [],
+        "answer_text": "Not established from the available artifacts",
+        "status": "ABSTAINED",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 0.0
+      },
+      {
+        "id": 2,
+        "question": "When did the certificate expire? Provide YYYY-MM-DD HH:MM UTC.",
+        "reference_answer": "2024-09-30 12:00 UTC",
+        "atoms": [
+          "2024-09-30 12:00"
+        ],
+        "answerable_from_evidence": [
+          "2024-09-30 12:00"
+        ],
+        "found_in_report": [],
+        "missing_from_evidence": [],
+        "answer_text": "Not established from the available artifacts",
+        "status": "ABSTAINED",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 0.0
+      },
+      {
+        "id": 3,
+        "question": "Why did automatic renewal fail?",
+        "reference_answer": "Vault denied the signing request (403 permission denied for cert-manager's policy)",
+        "atoms": [
+          "permission denied"
+        ],
+        "answerable_from_evidence": [
+          "permission denied"
+        ],
+        "found_in_report": [],
+        "missing_from_evidence": [],
+        "answer_text": "Not established from the available artifacts",
+        "status": "ABSTAINED",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 0.0
+      },
+      {
+        "id": 4,
+        "question": "Which change fixed the cause of the renewal failure? Provide its change identifier.",
+        "reference_answer": "CHG-5611",
+        "atoms": [
+          "CHG-5611"
+        ],
+        "answerable_from_evidence": [
+          "CHG-5611"
+        ],
+        "found_in_report": [],
+        "missing_from_evidence": [],
+        "answer_text": "Not established from the available artifacts",
+        "status": "ABSTAINED",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 0.0
+      },
+      {
+        "id": 5,
+        "question": "During what hour did the service outage begin? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+        "reference_answer": "2024-09-30 12:00 UTC",
+        "atoms": [
+          "2024-09-30 12:00 UTC"
+        ],
+        "answerable_from_evidence": [
+          "2024-09-30 12:00 UTC"
+        ],
+        "found_in_report": [],
+        "missing_from_evidence": [],
+        "answer_text": "Not established from the available artifacts",
+        "status": "ABSTAINED",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 0.0
+      },
+      {
+        "id": 6,
+        "question": "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+        "reference_answer": "certificate expiry",
+        "atoms": [
+          "certificate expiry"
+        ],
+        "answerable_from_evidence": [],
+        "found_in_report": [],
+        "missing_from_evidence": [
+          "certificate expiry"
+        ],
+        "answer_text": "Not established from the available artifacts",
+        "status": "ABSTAINED",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 0.0
+      },
+      {
+        "id": 7,
+        "question": "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+        "reference_answer": "availability",
+        "atoms": [
+          "availability"
+        ],
+        "answerable_from_evidence": [
+          "availability"
+        ],
+        "found_in_report": [
+          "availability"
+        ],
+        "missing_from_evidence": [],
+        "answer_text": "Not established from the available artifacts",
+        "status": "ABSTAINED",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 0.0
+      },
+      {
+        "id": 8,
+        "question": "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+        "reference_answer": "istio-ingressgateway, downstream symptom",
+        "atoms": [
+          "istio-ingressgateway",
+          "downstream symptom"
+        ],
+        "answerable_from_evidence": [
+          "istio-ingressgateway"
+        ],
+        "found_in_report": [],
+        "missing_from_evidence": [
+          "downstream symptom"
+        ],
+        "answer_text": "Not established from the available artifacts",
+        "status": "ABSTAINED",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 0.0
+      },
+      {
+        "id": 9,
+        "question": "Which deployment shortly before the outage is unrelated? Provide its change identifier.",
+        "reference_answer": "CHG-5602",
+        "atoms": [
+          "CHG-5602"
+        ],
+        "answerable_from_evidence": [
+          "CHG-5602"
+        ],
+        "found_in_report": [],
+        "missing_from_evidence": [],
+        "answer_text": "CHG-123456",
+        "status": "WRONG",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 0.0
+      }
+    ]
+  }
+}

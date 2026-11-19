@@ -4,7 +4,7 @@ MODEL    : llama3.1:8b-instruct-q4_K_M
 CONDITION: RAG (advanced pipeline)
 RUN TIME : 43.3 min of LLM generation
 REPORT   : results\koi_stealer\llama3.1_8b-instruct-q4_K_M\advanced_postmortem.md
-CREATED  : 2026-11-10T10:51:03
+CREATED  : 2026-11-19T12:58:22
 ====================================================================================================
 
 A. QUESTION-BY-QUESTION EVALUATION

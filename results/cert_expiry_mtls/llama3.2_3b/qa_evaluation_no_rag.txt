@@ -1,0 +1,103 @@
+====================================================================================================
+INCIDENT : cert_expiry_mtls
+MODEL    : llama3.2:3b
+CONDITION: No RAG (LLM without retrieval)
+RUN TIME : 6.2 min of LLM generation
+REPORT   : results\cert_expiry_mtls\llama3.2_3b\no_rag_postmortem.md
+CREATED  : 2026-11-19T12:58:22
+====================================================================================================
+
+A. QUESTION-BY-QUESTION EVALUATION
+   Found = reference items present in the report's answer; Prec. = correct entities / entities the answer gave;
+   Wrong items = entities in the answer that are not in the reference answer.
+
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| #   | Question                         | Reference answer           | Answer from the report             | Found | Prec. | Wrong items      | Status    |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 1   | Which certificate expired?       | cf-mesh-intermediate       | Not established from the available | 0/1   | -     | -                | ABSTAINED |
+|     |                                  | (Istio mesh intermediate   | artifacts                          |       |       |                  |           |
+|     |                                  | CA)                        |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 2   | When did the certificate expire? | 2024-09-30 12:00 UTC       | Not established from the available | 0/1   | -     | -                | ABSTAINED |
+|     | Provide YYYY-MM-DD HH:MM UTC.    |                            | artifacts                          |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 3   | Why did automatic renewal fail?  | Vault denied the signing   | Not established from the available | 0/1   | -     | -                | ABSTAINED |
+|     |                                  | request (403 permission    | artifacts                          |       |       |                  |           |
+|     |                                  | denied for cert-manager's  |                                    |       |       |                  |           |
+|     |                                  | policy)                    |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 4   | Which change fixed the cause of  | CHG-5611                   | Not established from the available | 0/1   | -     | -                | ABSTAINED |
+|     | the renewal failure? Provide its |                            | artifacts                          |       |       |                  |           |
+|     | change identifier.               |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 5   | During what hour did the service | 2024-09-30 12:00 UTC       | Not established from the available | 0/1   | -     | -                | ABSTAINED |
+|     | outage begin? Provide the        |                            | artifacts                          |       |       |                  |           |
+|     | earliest date and time in YYYY-  |                            |                                    |       |       |                  |           |
+|     | MM-DD HH:MM UTC format.          |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 6   | What is the root cause category  | certificate expiry         | Not established from the available | 0/1   | -     | -                | ABSTAINED |
+|     | of the incident: configuration   |                            | artifacts                          |       |       |                  |           |
+|     | change, software defect,         |                            |                                    |       |       |                  |           |
+|     | hardware failure, cloud provider |                            |                                    |       |       |                  |           |
+|     | failure, capacity exhaustion,    |                            |                                    |       |       |                  |           |
+|     | automation error, certificate    |                            |                                    |       |       |                  |           |
+|     | expiry, or third-party           |                            |                                    |       |       |                  |           |
+|     | dependency failure?              |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 7   | Which of the three CIA           | availability               | Not established from the available | 0/1   | -     | -                | ABSTAINED |
+|     | components is primarily          |                            | artifacts                          |       |       |                  |           |
+|     | affected: availability,          |                            |                                    |       |       |                  |           |
+|     | integrity, or confidentiality?   |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 8   | According to the error volume    | istio-ingressgateway,      | Not established from the available | 0/2   | -     | -                | ABSTAINED |
+|     | statistics, what single service  | downstream symptom         | artifacts                          |       |       |                  |           |
+|     | emitted the most errors? Is it   |                            |                                    |       |       |                  |           |
+|     | the root cause or a downstream   |                            |                                    |       |       |                  |           |
+|     | symptom?                         |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 9   | Which deployment shortly before  | CHG-5602                   | CHG-123456                         | 0/1   | -     | -                | WRONG     |
+|     | the outage is unrelated? Provide |                            |                                    |       |       |                  |           |
+|     | its change identifier.           |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+
+B. METRICS
+
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Metric                                       | Value        | Meaning                                                                |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Answer precision                             | -            | Entities (IPs, domains, hosts, URLs, times) in the report's answers    |
+|                                              |              | that also occur in the reference / all entities it gave                |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Answer recall                                | 0.000        | Reference answer items found in the report's answers / all reference   |
+|                                              |              | items                                                                  |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Answer F1                                    | -            | Harmonic mean of answer precision and recall                           |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Question recall                              | 0.111        | Mean over questions of reference items found anywhere in the report    |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Faithfulness                                 | 0.000        | Claims whose facts are in the evidence AND in the chunks they cite /   |
+|                                              |              | all claims                                                             |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Grounding rate                               | 0.696        | Claims whose entities and numbers all exist in the evidence            |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Citation precision                           | -            | Cited claims that are actually supported by the chunks they cite       |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Citation rate                                | 0.000        | Cited claims / all claims                                              |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Hallucination rate                           | 0.773        | Entities in the report that are absent from the evidence / all         |
+|                                              |              | entities (lower is better)                                             |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Unsupported numbers                          | 5            | Numbers in the report that are absent from the evidence (lower is      |
+|                                              |              | better)                                                                |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Placeholders                                 | 0            | '[insert ...]' placeholders left in the report (lower is better)       |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Questions correct / partial / wrong /        | 0 / 0 / 1 /  | Per-question status in the table above                                 |
+| abstained / unanswered                       | 8 / 0        |                                                                        |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Claims (cited / total)                       | 0 / 69       | Claim lines counted by the verifier; hedged assessments are excluded   |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+
+Status: CORRECT = every reference item found and nothing wrong; PARTIAL = some items found or wrong items present;
+        WRONG = answer given but no reference item found; ABSTAINED = the report says 'Not established from the available artifacts';
+        NO ANSWER = the report has no answer for that question.

@@ -2,7 +2,7 @@
 INCIDENT : koi_stealer
 MODEL    : qwen3:8b-q4_K_M
 CONDITION: No RAG vs RAG (same LLM, same section plan, same questions)
-CREATED  : 2026-11-10T10:51:03
+CREATED  : 2026-11-19T12:58:22
 ====================================================================================================
 
 NO RAG : the LLM receives only the incident context (network description and the questions). It has NO logs, alerts or query results.

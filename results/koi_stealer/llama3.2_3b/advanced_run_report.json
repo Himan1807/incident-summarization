@@ -2,7 +2,7 @@
   "condition": "rag",
   "model": "llama3.2:3b",
   "scenario": "koi_stealer",
-  "seconds_total": 832.8,
+  "seconds_total": 755.2,
   "verification_totals": {
     "uncited": 1
   },
@@ -10,31 +10,56 @@
   "removed_unverified_lines": 0,
   "postprocessing": {
     "enabled": true,
-    "model_citation_rate_before_attribution": 0.641,
-    "auto_attributed_lines": 13,
+    "model_citation_rate_before_attribution": 0.618,
+    "auto_attributed_lines": 12,
     "invalid_citations_removed": 0,
     "partial_lines_dropped": 0,
-    "duplicate_lines_removed": 4,
+    "duplicate_lines_removed": 9,
     "removed": [
       {
         "section": "Detection: IDS Alerts",
-        "line": "+ ET HUNTING GENERIC SUSPICIOUS POST to Dotted Quad with Fake Browser 1 \u2014 48 events [koi_stealer-06#2, koi_stealer-06#0]",
+        "line": "* ET MALWARE Win32/Koi Stealer CnC Checkin (GET) \u2014 1 events [koi_stealer-08#0, koi_stealer-06#3]",
         "duplicate_of": "Detection: IDS Alerts"
       },
       {
         "section": "Detection: IDS Alerts",
-        "line": "+ ET ATTACK RESPONSE Koi Loader/Stealer CnC Config Inbound \u2014 1 events [koi_stealer-08#0, koi_stealer-06#3]",
+        "line": "* ET HUNTING GENERIC SUSPICIOUS POST to Dotted Quad with Fake Browser 1 \u2014 48 events [koi_stealer-06#2, koi_stealer-06#0]",
         "duplicate_of": "Detection: IDS Alerts"
       },
       {
         "section": "Detection: IDS Alerts",
-        "line": "+ ET MALWARE Win32/Koi Stealer CnC Checkin (GET) \u2014 1 events [koi_stealer-08#0, koi_stealer-06#3]",
+        "line": "* ET ATTACK RESPONSE Koi Loader/Stealer CnC Config Inbound \u2014 1 events [koi_stealer-08#0, koi_stealer-06#3]",
+        "duplicate_of": "Detection: IDS Alerts"
+      },
+      {
+        "section": "Detection: IDS Alerts",
+        "line": "* ET HUNTING GENERIC SUSPICIOUS POST to Dotted Quad with Fake Browser 1 \u2014 48 events [koi_stealer-06#2, koi_stealer-06#0]",
+        "duplicate_of": "Detection: IDS Alerts"
+      },
+      {
+        "section": "Detection: IDS Alerts",
+        "line": "* ET ATTACK RESPONSE Koi Loader/Stealer CnC Config Inbound \u2014 1 events [koi_stealer-08#0, koi_stealer-06#3]",
+        "duplicate_of": "Detection: IDS Alerts"
+      },
+      {
+        "section": "Detection: IDS Alerts",
+        "line": "* ET MALWARE Win32/Koi Stealer CnC Checkin (GET) \u2014 1 events [koi_stealer-08#0, koi_stealer-06#3]",
         "duplicate_of": "Detection: IDS Alerts"
       },
       {
         "section": "Detection: IDS Alerts",
         "line": "* High-severity alerts > high-severity signatures:",
         "duplicate_of": "(orphaned parent)"
+      },
+      {
+        "section": "Root Cause and Evidence Gaps",
+        "line": "+ Data exfiltration destinations or methods",
+        "duplicate_of": "Root Cause and Evidence Gaps"
+      },
+      {
+        "section": "Root Cause and Evidence Gaps",
+        "line": "+ External IP involvement or motivations",
+        "duplicate_of": "Root Cause and Evidence Gaps"
       }
     ]
   },
@@ -49,7 +74,7 @@
         "koi_stealer-03#0",
         "koi_stealer-02#0"
       ],
-      "seconds": 82.6,
+      "seconds": 75.9,
       "truncated": false,
       "dropped_partial_line": null,
       "model_cited_claims": 0,
@@ -80,12 +105,12 @@
         "koi_stealer-06#0",
         "koi_stealer-05#0"
       ],
-      "seconds": 93.9,
+      "seconds": 97.9,
       "truncated": false,
       "dropped_partial_line": null,
       "model_cited_claims": 0,
-      "claims": 7,
-      "auto_attributed_lines": 7,
+      "claims": 9,
+      "auto_attributed_lines": 9,
       "invalid_citations_removed": 0,
       "flag_counts": {}
     },
@@ -99,7 +124,7 @@
         "koi_stealer-01#3",
         "koi_stealer-01#5"
       ],
-      "seconds": 102.3,
+      "seconds": 93.4,
       "truncated": false,
       "dropped_partial_line": null,
       "model_cited_claims": 6,
@@ -118,11 +143,11 @@
         "koi_stealer-01#2",
         "koi_stealer-07#0"
       ],
-      "seconds": 115.2,
+      "seconds": 83.5,
       "truncated": false,
       "dropped_partial_line": null,
-      "model_cited_claims": 7,
-      "claims": 7,
+      "model_cited_claims": 3,
+      "claims": 3,
       "auto_attributed_lines": 0,
       "invalid_citations_removed": 0,
       "flag_counts": {}
@@ -137,11 +162,11 @@
         "koi_stealer-08#0",
         "koi_stealer-06#2"
       ],
-      "seconds": 89.8,
+      "seconds": 79.4,
       "truncated": false,
       "dropped_partial_line": null,
-      "model_cited_claims": 4,
-      "claims": 4,
+      "model_cited_claims": 2,
+      "claims": 2,
       "auto_attributed_lines": 0,
       "invalid_citations_removed": 0,
       "flag_counts": {}
@@ -156,12 +181,12 @@
         "koi_stealer-04#1",
         "koi_stealer-01#5"
       ],
-      "seconds": 108.0,
+      "seconds": 117.2,
       "truncated": false,
       "dropped_partial_line": null,
-      "model_cited_claims": 0,
-      "claims": 2,
-      "auto_attributed_lines": 2,
+      "model_cited_claims": 3,
+      "claims": 3,
+      "auto_attributed_lines": 0,
       "invalid_citations_removed": 0,
       "flag_counts": {}
     },
@@ -175,12 +200,12 @@
         "koi_stealer-04#0",
         "koi_stealer-01#2"
       ],
-      "seconds": 79.6,
+      "seconds": 69.9,
       "truncated": false,
       "dropped_partial_line": null,
       "model_cited_claims": 0,
-      "claims": 5,
-      "auto_attributed_lines": 4,
+      "claims": 4,
+      "auto_attributed_lines": 3,
       "invalid_citations_removed": 0,
       "flag_counts": {
         "uncited": 1
@@ -201,11 +226,11 @@
         "koi_stealer-06#3",
         "koi_stealer-06#1"
       ],
-      "seconds": 161.4,
+      "seconds": 138.0,
       "truncated": false,
       "dropped_partial_line": null,
-      "model_cited_claims": 6,
-      "claims": 6,
+      "model_cited_claims": 5,
+      "claims": 5,
       "auto_attributed_lines": 0,
       "invalid_citations_removed": 0,
       "flag_counts": {}
@@ -214,7 +239,7 @@
   "flagged": [
     {
       "section": "Corrective and Preventive Actions",
-      "line": "* Investigate and address the potential vulnerabilities in the Active Directory environment, specifically the Kerberos configuration, to prevent similar incidents in the future.",
+      "line": "* Review and update the network segmentation and access controls to prevent similar incidents in the future, considering the use of a more secure gateway and segment isolation.",
       "types": [
         "uncited"
       ],
@@ -222,19 +247,19 @@
     }
   ],
   "evaluation": {
-    "answer_precision": 0.6,
-    "answer_recall": 0.778,
-    "answer_f1": 0.678,
+    "answer_precision": 1.0,
+    "answer_recall": 0.667,
+    "answer_f1": 0.8,
     "question_recall": 0.875,
     "questions_correct": "7/8",
-    "answerable_entity_recall": 1.0,
+    "answerable_entity_recall": 0.875,
     "overall_entity_recall": 0.889,
-    "faithfulness": 0.921,
+    "faithfulness": 0.964,
     "grounding_rate": 1.0,
-    "citation_precision": 0.946,
-    "citation_rate": 0.974,
-    "claims": 38,
-    "assessment_lines": 4,
+    "citation_precision": 1.0,
+    "citation_rate": 0.964,
+    "claims": 28,
+    "assessment_lines": 6,
     "uncited_lines": 1,
     "hallucination_rate": 0.0,
     "unsupported_entities": [],
@@ -337,33 +362,16 @@
         "answerable_from_evidence": [
           "www.bellantonicioccolato.it"
         ],
-        "found_in_report": [
-          "www.bellantonicioccolato.it"
-        ],
+        "found_in_report": [],
         "missing_from_evidence": [],
-        "answer_text": "The likely fake or suspicious domains / URLs for initial infection are weathermapdata.blob.core.windows.net, sso.godaddy.com, www.bellantonicioccolato.it, img-s-msn-com.akamaized.net, and oneclient.sfx.ms.",
-        "status": "PARTIAL",
-        "predicted_entities": [
-          "img-s-msn-com.akamaized.net",
-          "oneclient.sfx.ms",
-          "sso.godaddy.com",
-          "weathermapdata.blob.core.windows.net",
-          "www.bellantonicioccolato.it"
-        ],
-        "correct_entities": [
-          "www.bellantonicioccolato.it"
-        ],
-        "atoms_found_in_answer": [
-          "www.bellantonicioccolato.it"
-        ],
-        "wrong_entities": [
-          "img-s-msn-com.akamaized.net",
-          "oneclient.sfx.ms",
-          "sso.godaddy.com",
-          "weathermapdata.blob.core.windows.net"
-        ],
-        "precision": 0.2,
-        "recall": 1.0
+        "answer_text": "Not established from the available artifacts.",
+        "status": "ABSTAINED",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 0.0
       },
       {
         "id": 5,
@@ -402,7 +410,9 @@
           "confidentiality"
         ],
         "answerable_from_evidence": [],
-        "found_in_report": [],
+        "found_in_report": [
+          "confidentiality"
+        ],
         "missing_from_evidence": [
           "confidentiality"
         ],
@@ -459,7 +469,7 @@
           "C2 server"
         ],
         "missing_from_evidence": [],
-        "answer_text": "According to the connection volume statistics, the single external IP address that received the most connections from the infected hosts is 79.124.78.197, which is likely a C2 server.",
+        "answer_text": "The single external IP address that received the most connections from the infected hosts is 79.124.78.197, which is likely a C2 server.",
         "status": "CORRECT",
         "predicted_entities": [
           "79.124.78.197"

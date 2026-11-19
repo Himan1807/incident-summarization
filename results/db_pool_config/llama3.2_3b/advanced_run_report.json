@@ -1,0 +1,570 @@
+{
+  "condition": "rag",
+  "model": "llama3.2:3b",
+  "scenario": "db_pool_config",
+  "seconds_total": 816.1,
+  "verification_totals": {
+    "unsupported_numbers": 5,
+    "unsupported_entities": 2
+  },
+  "mode": "drop",
+  "removed_unverified_lines": 7,
+  "postprocessing": {
+    "enabled": true,
+    "model_citation_rate_before_attribution": 0.838,
+    "auto_attributed_lines": 6,
+    "invalid_citations_removed": 0,
+    "partial_lines_dropped": 0,
+    "duplicate_lines_removed": 0,
+    "removed": []
+  },
+  "run_log": [
+    {
+      "section": "Affected Host and User",
+      "retrieved": [
+        "db_pool_config-05#0",
+        "db_pool_config-09#1",
+        "db_pool_config-04#0",
+        "db_pool_config-06#0",
+        "db_pool_config-09#0",
+        "db_pool_config-01#2"
+      ],
+      "seconds": 95.6,
+      "truncated": false,
+      "dropped_partial_line": null,
+      "model_cited_claims": 0,
+      "claims": 3,
+      "auto_attributed_lines": 3,
+      "invalid_citations_removed": 0,
+      "flag_counts": {}
+    },
+    {
+      "section": "Timeline",
+      "retrieved": [
+        "db_pool_config-03#0",
+        "db_pool_config-09#0",
+        "db_pool_config-08#0",
+        "db_pool_config-09#1",
+        "db_pool_config-07#4",
+        "db_pool_config-08#1",
+        "db_pool_config-07#5"
+      ],
+      "extractive": true,
+      "seconds": 0.0,
+      "claims": 9,
+      "model_cited_claims": 9,
+      "flag_counts": {}
+    },
+    {
+      "section": "Detection: IDS Alerts",
+      "retrieved": [
+        "db_pool_config-09#0",
+        "db_pool_config-07#1",
+        "db_pool_config-07#0",
+        "db_pool_config-07#5",
+        "db_pool_config-07#3",
+        "db_pool_config-07#2"
+      ],
+      "seconds": 101.8,
+      "truncated": false,
+      "dropped_partial_line": null,
+      "model_cited_claims": 6,
+      "claims": 6,
+      "auto_attributed_lines": 0,
+      "invalid_citations_removed": 0,
+      "flag_counts": {
+        "unsupported_numbers": 3
+      }
+    },
+    {
+      "section": "Initial Infection Indicators",
+      "retrieved": [
+        "db_pool_config-09#1",
+        "db_pool_config-06#0",
+        "db_pool_config-05#0",
+        "db_pool_config-02#0",
+        "db_pool_config-08#1",
+        "db_pool_config-10#0"
+      ],
+      "seconds": 94.4,
+      "truncated": false,
+      "dropped_partial_line": null,
+      "model_cited_claims": 4,
+      "claims": 4,
+      "auto_attributed_lines": 0,
+      "invalid_citations_removed": 0,
+      "flag_counts": {
+        "unsupported_entities": 2
+      }
+    },
+    {
+      "section": "Command-and-Control and Network Activity",
+      "retrieved": [
+        "db_pool_config-05#0",
+        "db_pool_config-06#0",
+        "db_pool_config-01#2",
+        "db_pool_config-01#1",
+        "db_pool_config-01#3",
+        "db_pool_config-01#4"
+      ],
+      "seconds": 82.2,
+      "truncated": false,
+      "dropped_partial_line": null,
+      "model_cited_claims": 0,
+      "claims": 3,
+      "auto_attributed_lines": 3,
+      "invalid_citations_removed": 0,
+      "flag_counts": {
+        "unsupported_numbers": 1
+      }
+    },
+    {
+      "section": "Impact Assessment",
+      "retrieved": [
+        "db_pool_config-05#0",
+        "db_pool_config-07#2",
+        "db_pool_config-08#1",
+        "db_pool_config-09#1",
+        "db_pool_config-06#0",
+        "db_pool_config-07#5"
+      ],
+      "seconds": 86.1,
+      "truncated": false,
+      "dropped_partial_line": null,
+      "model_cited_claims": 2,
+      "claims": 2,
+      "auto_attributed_lines": 0,
+      "invalid_citations_removed": 0,
+      "flag_counts": {
+        "unsupported_numbers": 1
+      }
+    },
+    {
+      "section": "Root Cause and Evidence Gaps",
+      "retrieved": [
+        "db_pool_config-10#0",
+        "db_pool_config-05#0",
+        "db_pool_config-09#0",
+        "db_pool_config-02#0",
+        "db_pool_config-06#0"
+      ],
+      "seconds": 101.0,
+      "truncated": false,
+      "dropped_partial_line": null,
+      "model_cited_claims": 0,
+      "claims": 0,
+      "auto_attributed_lines": 0,
+      "invalid_citations_removed": 0,
+      "flag_counts": {}
+    },
+    {
+      "section": "Corrective and Preventive Actions",
+      "retrieved": [
+        "db_pool_config-05#0",
+        "db_pool_config-09#0",
+        "db_pool_config-08#1",
+        "db_pool_config-07#3",
+        "db_pool_config-07#1",
+        "db_pool_config-07#0"
+      ],
+      "seconds": 76.5,
+      "truncated": false,
+      "dropped_partial_line": null,
+      "model_cited_claims": 5,
+      "claims": 5,
+      "auto_attributed_lines": 0,
+      "invalid_citations_removed": 0,
+      "flag_counts": {}
+    },
+    {
+      "section": "Answers to Investigation Questions",
+      "retrieved": [
+        "db_pool_config-02#1",
+        "db_pool_config-02#0",
+        "db_pool_config-01#2",
+        "db_pool_config-03#1",
+        "db_pool_config-03#0",
+        "db_pool_config-04#0",
+        "db_pool_config-09#0",
+        "db_pool_config-09#1",
+        "db_pool_config-08#1",
+        "db_pool_config-06#0",
+        "db_pool_config-05#0"
+      ],
+      "seconds": 178.5,
+      "truncated": false,
+      "dropped_partial_line": null,
+      "model_cited_claims": 5,
+      "claims": 5,
+      "auto_attributed_lines": 0,
+      "invalid_citations_removed": 0,
+      "flag_counts": {}
+    }
+  ],
+  "flagged": [
+    {
+      "section": "Detection: IDS Alerts",
+      "line": "* High-severity malicious signature: db_pool_config-07#3, critical alerts > critical instances: orders-api-6f8b9d7c5d-tr8kd:9404 \u2014 4 events [db_pool_config-07#3]",
+      "types": [
+        "unsupported_numbers"
+      ],
+      "action": "removed",
+      "unsupported_numbers": [
+        "3"
+      ]
+    },
+    {
+      "section": "Detection: IDS Alerts",
+      "line": "* High-severity malicious signature: db_pool_config-07#3, critical alerts > critical alert names: SLOErrorBudgetBurnFast \u2014 7 events [db_pool_config-07#3]",
+      "types": [
+        "unsupported_numbers"
+      ],
+      "action": "removed",
+      "unsupported_numbers": [
+        "3"
+      ]
+    },
+    {
+      "section": "Detection: IDS Alerts",
+      "line": "* Informational signature: db_pool_config-07#0, alert names: Watchdog (info) \u2014 72 events [db_pool_config-07#0]",
+      "types": [
+        "unsupported_numbers"
+      ],
+      "action": "removed",
+      "unsupported_numbers": [
+        "0"
+      ]
+    },
+    {
+      "section": "Initial Infection Indicators",
+      "line": "* Possible suspicious domain: orders-api.fintrail.com [db_pool_config-09#1]",
+      "types": [
+        "unsupported_entities"
+      ],
+      "action": "removed",
+      "unsupported_entities": [
+        "orders-api.fintrail.com"
+      ]
+    },
+    {
+      "section": "Initial Infection Indicators",
+      "line": "* Possible suspicious domain: checkout-api.fintrail.com [db_pool_config-08#1]",
+      "types": [
+        "unsupported_entities"
+      ],
+      "action": "removed",
+      "unsupported_entities": [
+        "checkout-api.fintrail.com"
+      ]
+    },
+    {
+      "section": "Command-and-Control and Network Activity",
+      "line": "* The affected host(s) received a total of 141 + 133 + 128 + 22 = 424 events from external IP(s). [db_pool_config-05#0]",
+      "types": [
+        "unsupported_numbers"
+      ],
+      "action": "removed",
+      "unsupported_numbers": [
+        "424"
+      ]
+    },
+    {
+      "section": "Impact Assessment",
+      "line": "* Affected Hosts: The Elasticsearch aggregation results indicate that the gke-fintrail-prod-pool-a nodes (3 events each) and the orders-db instance (22 events) were affected. [db_pool_config-05#0, db_pool_config-06#0]",
+      "types": [
+        "unsupported_numbers"
+      ],
+      "action": "removed",
+      "unsupported_numbers": [
+        "3"
+      ]
+    }
+  ],
+  "evaluation": {
+    "answer_precision": 0.4,
+    "answer_recall": 0.583,
+    "answer_f1": 0.474,
+    "question_recall": 0.9,
+    "questions_correct": "9/10",
+    "answerable_entity_recall": 1.0,
+    "overall_entity_recall": 0.917,
+    "faithfulness": 0.8,
+    "grounding_rate": 1.0,
+    "citation_precision": 0.8,
+    "citation_rate": 1.0,
+    "claims": 35,
+    "assessment_lines": 7,
+    "uncited_lines": 0,
+    "hallucination_rate": 0.0,
+    "unsupported_entities": [],
+    "unsupported_number_count": 0,
+    "unsupported_numbers": [],
+    "placeholder_count": 0,
+    "per_question": [
+      {
+        "id": 1,
+        "question": "Which service or component is the origin of the failure?",
+        "reference_answer": "orders-api",
+        "atoms": [
+          "orders-api"
+        ],
+        "answerable_from_evidence": [
+          "orders-api"
+        ],
+        "found_in_report": [
+          "orders-api"
+        ],
+        "missing_from_evidence": [],
+        "answer_text": "The origin of the failure is the orders-api service, as indicated by the top dependency in the failing requests: orders-api (21690 events).",
+        "status": "CORRECT",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [
+          "orders-api"
+        ],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 1.0
+      },
+      {
+        "id": 2,
+        "question": "What change, deployment or automation run triggered the incident? Provide its change identifier.",
+        "reference_answer": "CHG-30412",
+        "atoms": [
+          "CHG-30412"
+        ],
+        "answerable_from_evidence": [
+          "CHG-30412"
+        ],
+        "found_in_report": [
+          "CHG-30412"
+        ],
+        "missing_from_evidence": [],
+        "answer_text": "The change that triggered the incident was a deployment of the invoice-api chart 2.7.1 to 2.7.2, with a change identifier of CHG-30398, executed by the release-bot actor on 2022-11-08 10:04 UTC.",
+        "status": "WRONG",
+        "predicted_entities": [
+          "2022-11-08",
+          "2022-11-08 10:04"
+        ],
+        "correct_entities": [],
+        "atoms_found_in_answer": [],
+        "wrong_entities": [
+          "2022-11-08",
+          "2022-11-08 10:04"
+        ],
+        "precision": 0.0,
+        "recall": 0.0
+      },
+      {
+        "id": 3,
+        "question": "Which account or automation identity executed the triggering change?",
+        "reference_answer": "release-bot (approved by r.chaudhary)",
+        "atoms": [
+          "release-bot"
+        ],
+        "answerable_from_evidence": [
+          "release-bot"
+        ],
+        "found_in_report": [
+          "release-bot"
+        ],
+        "missing_from_evidence": [],
+        "answer_text": "The account or automation identity that executed the triggering change was the release-bot actor.",
+        "status": "CORRECT",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [
+          "release-bot"
+        ],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 1.0
+      },
+      {
+        "id": 4,
+        "question": "Which configuration parameter was changed by the triggering change, and which values file was it taken from?",
+        "reference_answer": "database.pool.maxOpenConns (200 -> 20), from values-staging.yaml",
+        "atoms": [
+          "maxOpenConns",
+          "values-staging.yaml"
+        ],
+        "answerable_from_evidence": [
+          "maxOpenConns",
+          "values-staging.yaml"
+        ],
+        "found_in_report": [
+          "maxOpenConns",
+          "values-staging.yaml"
+        ],
+        "missing_from_evidence": [],
+        "answer_text": "The configuration parameter that was changed by the triggering change was the database.pool.maxOpenConns value, which was set to 20, taken from the values-staging.yaml file.",
+        "status": "PARTIAL",
+        "predicted_entities": [
+          "database.pool.maxopenconns",
+          "values-staging.yaml"
+        ],
+        "correct_entities": [
+          "values-staging.yaml"
+        ],
+        "atoms_found_in_answer": [
+          "maxOpenConns",
+          "values-staging.yaml"
+        ],
+        "wrong_entities": [
+          "database.pool.maxopenconns"
+        ],
+        "precision": 0.5,
+        "recall": 1.0
+      },
+      {
+        "id": 5,
+        "question": "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+        "reference_answer": "2022-11-08 15:00 UTC",
+        "atoms": [
+          "2022-11-08 15:00 UTC"
+        ],
+        "answerable_from_evidence": [
+          "2022-11-08 15:00 UTC"
+        ],
+        "found_in_report": [
+          "2022-11-08 15:00 UTC"
+        ],
+        "missing_from_evidence": [],
+        "answer_text": "The first signs of the failure appeared during the hour of 16:00 UTC on 2022-11-08.",
+        "status": "WRONG",
+        "predicted_entities": [
+          "2022-11-08"
+        ],
+        "correct_entities": [
+          "2022-11-08"
+        ],
+        "atoms_found_in_answer": [],
+        "wrong_entities": [],
+        "precision": 1.0,
+        "recall": 0.0
+      },
+      {
+        "id": 6,
+        "question": "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+        "reference_answer": "configuration change",
+        "atoms": [
+          "configuration change"
+        ],
+        "answerable_from_evidence": [],
+        "found_in_report": [],
+        "missing_from_evidence": [
+          "configuration change"
+        ],
+        "answer_text": "The root cause category of the incident is not established from the available artifacts.",
+        "status": "ABSTAINED",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 0.0
+      },
+      {
+        "id": 7,
+        "question": "Did the failure stay isolated to one component or cascade across services? Answer 'isolated failure' or 'cascading failure'.",
+        "reference_answer": "cascading failure (orders-api -> checkout-api / invoice-api -> cart-service)",
+        "atoms": [
+          "cascading failure"
+        ],
+        "answerable_from_evidence": [],
+        "found_in_report": [
+          "cascading failure"
+        ],
+        "missing_from_evidence": [
+          "cascading failure"
+        ],
+        "answer_text": "The failure is not established as isolated or cascading failure from the available artifacts.",
+        "status": "CORRECT",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [
+          "cascading failure"
+        ],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 1.0
+      },
+      {
+        "id": 8,
+        "question": "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+        "reference_answer": "availability",
+        "atoms": [
+          "availability"
+        ],
+        "answerable_from_evidence": [
+          "availability"
+        ],
+        "found_in_report": [
+          "availability"
+        ],
+        "missing_from_evidence": [],
+        "answer_text": "The CIA component primarily affected is not established from the available artifacts.",
+        "status": "ABSTAINED",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 0.0
+      },
+      {
+        "id": 9,
+        "question": "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+        "reference_answer": "checkout-api, downstream symptom",
+        "atoms": [
+          "checkout-api",
+          "downstream symptom"
+        ],
+        "answerable_from_evidence": [
+          "checkout-api"
+        ],
+        "found_in_report": [
+          "checkout-api",
+          "downstream symptom"
+        ],
+        "missing_from_evidence": [
+          "downstream symptom"
+        ],
+        "answer_text": "The single service that emitted the most errors was the checkout-api, which is not established as the root cause or a downstream symptom from the available artifacts.",
+        "status": "CORRECT",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [
+          "checkout-api",
+          "downstream symptom"
+        ],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 1.0
+      },
+      {
+        "id": 10,
+        "question": "Which change restored normal service? Provide its change identifier.",
+        "reference_answer": "CHG-30433",
+        "atoms": [
+          "CHG-30433"
+        ],
+        "answerable_from_evidence": [
+          "CHG-30433"
+        ],
+        "found_in_report": [
+          "CHG-30433"
+        ],
+        "missing_from_evidence": [],
+        "answer_text": "The change that restored normal service is not established from the available artifacts.",
+        "status": "ABSTAINED",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 0.0
+      }
+    ]
+  }
+}

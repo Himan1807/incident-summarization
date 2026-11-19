@@ -1,0 +1,120 @@
+{
+  "source": "synthetic generator ground truth (ops expansion)",
+  "confidence": "synthetic ground truth",
+  "qa": [
+    {
+      "id": 1,
+      "question": "What is the hostname of the host or node where the failure originated?",
+      "answer": "tor-r14-a (top-of-rack switch)",
+      "atoms": [
+        {
+          "text": "tor-r14-a",
+          "kind": "hostname"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "question": "Which switch interface was flapping?",
+      "answer": "Ethernet1/12",
+      "atoms": [
+        {
+          "text": "Ethernet1/12",
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "question": "Which storage host was connected to the failing interface?",
+      "answer": "ceph-osd-14",
+      "atoms": [
+        {
+          "text": "ceph-osd-14",
+          "kind": "hostname"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "question": "What is the IP address of that storage host?",
+      "answer": "10.4.14.21",
+      "atoms": [
+        {
+          "text": "10.4.14.21",
+          "kind": "ip"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "question": "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+      "answer": "2021-10-05 05:00 UTC",
+      "atoms": [
+        {
+          "text": "2021-10-05 05:00 UTC",
+          "kind": "time"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "question": "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+      "answer": "hardware failure (failing optical transceiver)",
+      "atoms": [
+        {
+          "text": "hardware failure",
+          "kind": "label"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "question": "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+      "answer": "availability",
+      "atoms": [
+        {
+          "text": "availability",
+          "kind": "cia"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "question": "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+      "answer": "vm-agent, downstream symptom",
+      "atoms": [
+        {
+          "text": "vm-agent",
+          "kind": "other"
+        },
+        {
+          "text": "downstream symptom",
+          "kind": "label"
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "question": "Which network change is a red herring because it touched a different device? Provide its identifier.",
+      "answer": "NET-3302",
+      "atoms": [
+        {
+          "text": "NET-3302",
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "question": "Which change permanently fixed the fault? Provide its identifier.",
+      "answer": "NET-3311",
+      "atoms": [
+        {
+          "text": "NET-3311",
+          "kind": "other"
+        }
+      ]
+    }
+  ]
+}

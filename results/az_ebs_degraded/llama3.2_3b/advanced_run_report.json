@@ -1,0 +1,594 @@
+{
+  "condition": "rag",
+  "model": "llama3.2:3b",
+  "scenario": "az_ebs_degraded",
+  "seconds_total": 825.0,
+  "verification_totals": {
+    "unsupported_numbers": 10,
+    "uncited": 4
+  },
+  "mode": "drop",
+  "removed_unverified_lines": 10,
+  "postprocessing": {
+    "enabled": true,
+    "model_citation_rate_before_attribution": 0.34,
+    "auto_attributed_lines": 29,
+    "invalid_citations_removed": 0,
+    "partial_lines_dropped": 0,
+    "duplicate_lines_removed": 0,
+    "removed": []
+  },
+  "run_log": [
+    {
+      "section": "Affected Host and User",
+      "retrieved": [
+        "az_ebs_degraded-05#1",
+        "az_ebs_degraded-05#0",
+        "az_ebs_degraded-09#0",
+        "az_ebs_degraded-06#1",
+        "az_ebs_degraded-09#1",
+        "az_ebs_degraded-04#0"
+      ],
+      "seconds": 110.4,
+      "truncated": false,
+      "dropped_partial_line": null,
+      "model_cited_claims": 0,
+      "claims": 7,
+      "auto_attributed_lines": 7,
+      "invalid_citations_removed": 0,
+      "flag_counts": {}
+    },
+    {
+      "section": "Timeline",
+      "retrieved": [
+        "az_ebs_degraded-03#0",
+        "az_ebs_degraded-09#0",
+        "az_ebs_degraded-07#4",
+        "az_ebs_degraded-08#0",
+        "az_ebs_degraded-09#1",
+        "az_ebs_degraded-06#0",
+        "az_ebs_degraded-07#5",
+        "az_ebs_degraded-03#1"
+      ],
+      "extractive": true,
+      "seconds": 0.0,
+      "claims": 11,
+      "model_cited_claims": 11,
+      "flag_counts": {}
+    },
+    {
+      "section": "Detection: IDS Alerts",
+      "retrieved": [
+        "az_ebs_degraded-07#1",
+        "az_ebs_degraded-09#0",
+        "az_ebs_degraded-07#5",
+        "az_ebs_degraded-07#0",
+        "az_ebs_degraded-06#1",
+        "az_ebs_degraded-07#4"
+      ],
+      "seconds": 92.1,
+      "truncated": false,
+      "dropped_partial_line": null,
+      "model_cited_claims": 0,
+      "claims": 9,
+      "auto_attributed_lines": 9,
+      "invalid_citations_removed": 0,
+      "flag_counts": {
+        "unsupported_numbers": 4
+      }
+    },
+    {
+      "section": "Initial Infection Indicators",
+      "retrieved": [
+        "az_ebs_degraded-05#0",
+        "az_ebs_degraded-06#0",
+        "az_ebs_degraded-05#1",
+        "az_ebs_degraded-06#1",
+        "az_ebs_degraded-09#0"
+      ],
+      "seconds": 136.3,
+      "truncated": false,
+      "dropped_partial_line": null,
+      "model_cited_claims": 0,
+      "claims": 5,
+      "auto_attributed_lines": 5,
+      "invalid_citations_removed": 0,
+      "flag_counts": {
+        "unsupported_numbers": 3
+      }
+    },
+    {
+      "section": "Command-and-Control and Network Activity",
+      "retrieved": [
+        "az_ebs_degraded-05#0",
+        "az_ebs_degraded-05#1",
+        "az_ebs_degraded-01#3",
+        "az_ebs_degraded-01#4",
+        "az_ebs_degraded-06#1",
+        "az_ebs_degraded-01#2"
+      ],
+      "seconds": 102.2,
+      "truncated": false,
+      "dropped_partial_line": null,
+      "model_cited_claims": 0,
+      "claims": 5,
+      "auto_attributed_lines": 2,
+      "invalid_citations_removed": 0,
+      "flag_counts": {
+        "unsupported_numbers": 2,
+        "uncited": 3
+      }
+    },
+    {
+      "section": "Impact Assessment",
+      "retrieved": [
+        "az_ebs_degraded-05#1",
+        "az_ebs_degraded-05#0",
+        "az_ebs_degraded-03#1",
+        "az_ebs_degraded-07#5",
+        "az_ebs_degraded-07#4",
+        "az_ebs_degraded-09#1"
+      ],
+      "seconds": 67.8,
+      "truncated": false,
+      "dropped_partial_line": null,
+      "model_cited_claims": 0,
+      "claims": 2,
+      "auto_attributed_lines": 2,
+      "invalid_citations_removed": 0,
+      "flag_counts": {
+        "unsupported_numbers": 1
+      }
+    },
+    {
+      "section": "Root Cause and Evidence Gaps",
+      "retrieved": [
+        "az_ebs_degraded-10#0",
+        "az_ebs_degraded-09#0",
+        "az_ebs_degraded-02#0",
+        "az_ebs_degraded-05#0",
+        "az_ebs_degraded-05#1",
+        "az_ebs_degraded-09#1"
+      ],
+      "seconds": 71.5,
+      "truncated": false,
+      "dropped_partial_line": null,
+      "model_cited_claims": 0,
+      "claims": 0,
+      "auto_attributed_lines": 0,
+      "invalid_citations_removed": 0,
+      "flag_counts": {}
+    },
+    {
+      "section": "Corrective and Preventive Actions",
+      "retrieved": [
+        "az_ebs_degraded-09#0",
+        "az_ebs_degraded-05#0",
+        "az_ebs_degraded-07#1",
+        "az_ebs_degraded-07#0",
+        "az_ebs_degraded-07#4",
+        "az_ebs_degraded-09#1"
+      ],
+      "seconds": 82.2,
+      "truncated": false,
+      "dropped_partial_line": null,
+      "model_cited_claims": 0,
+      "claims": 5,
+      "auto_attributed_lines": 4,
+      "invalid_citations_removed": 0,
+      "flag_counts": {
+        "uncited": 1
+      }
+    },
+    {
+      "section": "Answers to Investigation Questions",
+      "retrieved": [
+        "az_ebs_degraded-09#0",
+        "az_ebs_degraded-05#0",
+        "az_ebs_degraded-05#1",
+        "az_ebs_degraded-06#0",
+        "az_ebs_degraded-02#0",
+        "az_ebs_degraded-09#1",
+        "az_ebs_degraded-08#0",
+        "az_ebs_degraded-03#2",
+        "az_ebs_degraded-03#1",
+        "az_ebs_degraded-06#1",
+        "az_ebs_degraded-01#4"
+      ],
+      "seconds": 162.5,
+      "truncated": false,
+      "dropped_partial_line": null,
+      "model_cited_claims": 6,
+      "claims": 6,
+      "auto_attributed_lines": 0,
+      "invalid_citations_removed": 0,
+      "flag_counts": {}
+    }
+  ],
+  "flagged": [
+    {
+      "section": "Detection: IDS Alerts",
+      "line": "* az_ebs_degraded-07#0: HighDiskIOLatency (critical) \u2014 19 events [az_ebs_degraded-07#1, az_ebs_degraded-07#0]",
+      "types": [
+        "unsupported_numbers"
+      ],
+      "action": "removed",
+      "unsupported_numbers": [
+        "0"
+      ]
+    },
+    {
+      "section": "Detection: IDS Alerts",
+      "line": "* az_ebs_degraded-07#0: WebFrontend5xxRateHigh (critical) \u2014 11 events [az_ebs_degraded-07#0]",
+      "types": [
+        "unsupported_numbers"
+      ],
+      "action": "removed",
+      "unsupported_numbers": [
+        "0"
+      ]
+    },
+    {
+      "section": "Detection: IDS Alerts",
+      "line": "* az_ebs_degraded-07#0: MySQLHighThreadsRunning (critical) \u2014 10 events [az_ebs_degraded-07#0]",
+      "types": [
+        "unsupported_numbers"
+      ],
+      "action": "removed",
+      "unsupported_numbers": [
+        "0"
+      ]
+    },
+    {
+      "section": "Detection: IDS Alerts",
+      "line": "* az_ebs_degraded-07#5: alert timeline: 2025-02-17 10:00 UTC \u2014 2 events [az_ebs_degraded-07#5]",
+      "types": [
+        "unsupported_numbers"
+      ],
+      "action": "removed",
+      "unsupported_numbers": [
+        "5"
+      ]
+    },
+    {
+      "section": "Initial Infection Indicators",
+      "line": "* Possible: az_ebs_degraded-05#0, hosts: db-mysql-01 \u2014 342 events; ip: 10.30.2.15; role: mysql-primary; zone: eu-central-1b [az_ebs_degraded-05#0]",
+      "types": [
+        "unsupported_numbers"
+      ],
+      "action": "removed",
+      "unsupported_numbers": [
+        "0"
+      ]
+    },
+    {
+      "section": "Initial Infection Indicators",
+      "line": "* Possible: az_ebs_degraded-06#0, cloud health events: AWS_EBS_DEGRADED_VOLUME_PERFORMANCE (eu-central-1b) opened 2025-02-17 06:38 UTC, closed 2025-02-17 09:51 UTC \u2014 3 events; top objects: vol-0a91c3e5f27d4b8e1 (i-0c4f2e9a71b3d5c08) (1), vol-04be7d21c9a0f3e66 (i-0e1a9c3b5d7f20a14) (1), vol-0d3f5a8c2e1b7094f (i-07b2d4f6a8c0e1359) (1) [az_ebs_degraded-06#0]",
+      "types": [
+        "unsupported_numbers"
+      ],
+      "action": "removed",
+      "unsupported_numbers": [
+        "0"
+      ]
+    },
+    {
+      "section": "Initial Infection Indicators",
+      "line": "* az_ebs_degraded-09#0, Derived: most-alerted critical instance 10.30.2.15:9100 (19 critical alerts) maps to hostname db-mysql-01; role mysql-primary; zone eu-central-1b [az_ebs_degraded-09#0]",
+      "types": [
+        "unsupported_numbers"
+      ],
+      "action": "removed",
+      "unsupported_numbers": [
+        "0"
+      ]
+    },
+    {
+      "section": "Command-and-Control and Network Activity",
+      "line": "* The affected hosts are db-mysql-01, db-mysql-02, app-web-02, app-web-01, app-web-03, app-content-02, and app-content-01, with a total of 342 + 121 + 91 + 88 + 86 + 66 + 64 = 768 events. [az_ebs_degraded-05#1, az_ebs_degraded-05#0]",
+      "types": [
+        "unsupported_numbers"
+      ],
+      "action": "removed",
+      "unsupported_numbers": [
+        "768"
+      ]
+    },
+    {
+      "section": "Command-and-Control and Network Activity",
+      "line": "* The external IP that received the most connections from the affected hosts is 10.30.12.21, with a total of 51330 + 17420 + 1104 = 70054 events.",
+      "types": [
+        "unsupported_numbers",
+        "uncited"
+      ],
+      "action": "removed",
+      "unsupported_numbers": [
+        "70054"
+      ]
+    },
+    {
+      "section": "Command-and-Control and Network Activity",
+      "line": "* The affected hosts are part of a Kubernetes cluster, with multiple zones (eu-central-1a/1b/1c) and a VPC range (10.30.0.0/16) that suggests a distributed environment.",
+      "types": [
+        "uncited"
+      ],
+      "action": "kept"
+    },
+    {
+      "section": "Command-and-Control and Network Activity",
+      "line": "* The evidence does not support the presence of a C2 server or a malicious actor, but further investigation is required to determine the root cause of the high network activity.",
+      "types": [
+        "uncited"
+      ],
+      "action": "kept"
+    },
+    {
+      "section": "Impact Assessment",
+      "line": "* Assessment: The number of affected hosts was moderate, with 5 hosts (app-web-03, app-content-02, app-content-01, db-mysql-01, and db-mysql-02) experiencing degraded storage performance. [az_ebs_degraded-05#1]",
+      "types": [
+        "unsupported_numbers"
+      ],
+      "action": "removed",
+      "unsupported_numbers": [
+        "5"
+      ]
+    },
+    {
+      "section": "Corrective and Preventive Actions",
+      "line": "* Reset the account associated with the most-failed dependency, content-api, to its default settings to prevent further errors.",
+      "types": [
+        "uncited"
+      ],
+      "action": "kept"
+    }
+  ],
+  "evaluation": {
+    "answer_precision": 1.0,
+    "answer_recall": 0.5,
+    "answer_f1": 0.667,
+    "question_recall": 0.889,
+    "questions_correct": "8/9",
+    "answerable_entity_recall": 1.0,
+    "overall_entity_recall": 0.9,
+    "faithfulness": 0.881,
+    "grounding_rate": 1.0,
+    "citation_precision": 0.949,
+    "citation_rate": 0.929,
+    "claims": 42,
+    "assessment_lines": 8,
+    "uncited_lines": 3,
+    "hallucination_rate": 0.0,
+    "unsupported_entities": [],
+    "unsupported_number_count": 0,
+    "unsupported_numbers": [],
+    "placeholder_count": 0,
+    "per_question": [
+      {
+        "id": 1,
+        "question": "What is the hostname of the host or node where the failure originated?",
+        "reference_answer": "db-mysql-01",
+        "atoms": [
+          "db-mysql-01"
+        ],
+        "answerable_from_evidence": [
+          "db-mysql-01"
+        ],
+        "found_in_report": [
+          "db-mysql-01"
+        ],
+        "missing_from_evidence": [],
+        "answer_text": "The hostname of the host or node where the failure originated is db-mysql-01.",
+        "status": "CORRECT",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [
+          "db-mysql-01"
+        ],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 1.0
+      },
+      {
+        "id": 2,
+        "question": "What is the IP address of the host or node where the failure originated?",
+        "reference_answer": "10.30.2.15",
+        "atoms": [
+          "10.30.2.15"
+        ],
+        "answerable_from_evidence": [
+          "10.30.2.15"
+        ],
+        "found_in_report": [
+          "10.30.2.15"
+        ],
+        "missing_from_evidence": [],
+        "answer_text": "The IP address of the host or node where the failure originated is 10.30.2.15.",
+        "status": "CORRECT",
+        "predicted_entities": [
+          "10.30.2.15"
+        ],
+        "correct_entities": [
+          "10.30.2.15"
+        ],
+        "atoms_found_in_answer": [
+          "10.30.2.15"
+        ],
+        "wrong_entities": [],
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      {
+        "id": 3,
+        "question": "Which availability zone was affected by the cloud provider event?",
+        "reference_answer": "eu-central-1b",
+        "atoms": [
+          "eu-central-1b"
+        ],
+        "answerable_from_evidence": [
+          "eu-central-1b"
+        ],
+        "found_in_report": [
+          "eu-central-1b"
+        ],
+        "missing_from_evidence": [],
+        "answer_text": "The availability zone affected by the cloud provider event is eu-central-1b.",
+        "status": "CORRECT",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [
+          "eu-central-1b"
+        ],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 1.0
+      },
+      {
+        "id": 4,
+        "question": "Which storage volume attached to the failing host was degraded?",
+        "reference_answer": "vol-0a91c3e5f27d4b8e1",
+        "atoms": [
+          "vol-0a91c3e5f27d4b8e1"
+        ],
+        "answerable_from_evidence": [
+          "vol-0a91c3e5f27d4b8e1"
+        ],
+        "found_in_report": [
+          "vol-0a91c3e5f27d4b8e1"
+        ],
+        "missing_from_evidence": [],
+        "answer_text": "Not established from the available artifacts.",
+        "status": "ABSTAINED",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 0.0
+      },
+      {
+        "id": 5,
+        "question": "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+        "reference_answer": "2025-02-17 06:00 UTC",
+        "atoms": [
+          "2025-02-17 06:00 UTC"
+        ],
+        "answerable_from_evidence": [
+          "2025-02-17 06:00 UTC"
+        ],
+        "found_in_report": [
+          "2025-02-17 06:00 UTC"
+        ],
+        "missing_from_evidence": [],
+        "answer_text": "The first signs of the failure appeared during the hour of 06:00 UTC on 2025-02-17.",
+        "status": "WRONG",
+        "predicted_entities": [
+          "2025-02-17"
+        ],
+        "correct_entities": [
+          "2025-02-17"
+        ],
+        "atoms_found_in_answer": [],
+        "wrong_entities": [],
+        "precision": 1.0,
+        "recall": 0.0
+      },
+      {
+        "id": 6,
+        "question": "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+        "reference_answer": "cloud provider failure",
+        "atoms": [
+          "cloud provider failure"
+        ],
+        "answerable_from_evidence": [],
+        "found_in_report": [],
+        "missing_from_evidence": [
+          "cloud provider failure"
+        ],
+        "answer_text": "Not established from the available artifacts.",
+        "status": "ABSTAINED",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 0.0
+      },
+      {
+        "id": 7,
+        "question": "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+        "reference_answer": "availability",
+        "atoms": [
+          "availability"
+        ],
+        "answerable_from_evidence": [
+          "availability"
+        ],
+        "found_in_report": [
+          "availability"
+        ],
+        "missing_from_evidence": [],
+        "answer_text": "Not established from the available artifacts.",
+        "status": "ABSTAINED",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 0.0
+      },
+      {
+        "id": 8,
+        "question": "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+        "reference_answer": "web-frontend, downstream symptom",
+        "atoms": [
+          "web-frontend",
+          "downstream symptom"
+        ],
+        "answerable_from_evidence": [
+          "web-frontend"
+        ],
+        "found_in_report": [
+          "web-frontend",
+          "downstream symptom"
+        ],
+        "missing_from_evidence": [
+          "downstream symptom"
+        ],
+        "answer_text": "The service that emitted the most errors is web-frontend, which is not the root cause but a downstream symptom.",
+        "status": "CORRECT",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [
+          "web-frontend",
+          "downstream symptom"
+        ],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 1.0
+      },
+      {
+        "id": 9,
+        "question": "Which change restored normal service? Provide its change identifier.",
+        "reference_answer": "CHG-7781 (manual failover to db-mysql-02)",
+        "atoms": [
+          "CHG-7781"
+        ],
+        "answerable_from_evidence": [
+          "CHG-7781"
+        ],
+        "found_in_report": [
+          "CHG-7781"
+        ],
+        "missing_from_evidence": [],
+        "answer_text": "The change that restored normal service is CHG-7802, which involved replacing the EBS volume of db-mysql-01 with a new gp3 volume.",
+        "status": "WRONG",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 0.0
+      }
+    ]
+  }
+}

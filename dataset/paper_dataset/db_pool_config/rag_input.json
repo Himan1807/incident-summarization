@@ -1,0 +1,155 @@
+{
+  "metadata": {
+    "incident_id": "INC-20221108",
+    "scenario": "db_pool_config",
+    "title": "Infrastructure reliability incident investigation",
+    "source": "synthetic/ops-incident-expansion (modeled on neu-nds2/llm-sec-incident-analysis)",
+    "query_window_start": "2022-11-08T00:00:00",
+    "query_window_end": "2022-11-10T23:59:59",
+    "evidence_types": [
+      "change_records",
+      "derived_findings",
+      "infrastructure_events",
+      "monitoring_alerts",
+      "query_coverage",
+      "resource_metrics",
+      "service_logs"
+    ],
+    "artifact_scope_note": "Evidence is aggregated query output (not raw log lines or metric samples); it contains no chat/communication records."
+  },
+  "incident_description": "Reliability incident investigation of a production environment. Evidence consists of Elasticsearch aggregation results over application and proxy logs, Kubernetes, cloud-provider and host system events, Prometheus Alertmanager alerts, change-management / CI-CD audit records and metric anomaly detection. No root cause, impact or trigger is stated; these must be established from the supplied artifacts. Environment context: Organization: Fintrail (payments and invoicing SaaS); Platform: Google Cloud europe-west1; Kubernetes cluster: fintrail-prod-ew1 (GKE, node range 10.70.0.0/20); Managed database: Cloud SQL for PostgreSQL instance orders-db (private IP 10.70.8.3); Deployments: Helm releases rolled out by a CI release bot after human approval; Change management: CHG- identifiers.",
+  "investigation_questions": [
+    "Which service or component is the origin of the failure?",
+    "What change, deployment or automation run triggered the incident? Provide its change identifier.",
+    "Which account or automation identity executed the triggering change?",
+    "Which configuration parameter was changed by the triggering change, and which values file was it taken from?",
+    "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+    "Did the failure stay isolated to one component or cascade across services? Answer 'isolated failure' or 'cascading failure'.",
+    "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+    "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+    "Which change restored normal service? Provide its change identifier."
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "db_pool_config-01",
+      "artifact_type": "service_logs",
+      "subtype": "error_logs",
+      "source": "error_logs",
+      "content": "{\"description\": \"Application and proxy error logs: HTTP/gRPC status codes, failing requests (caller -> callee:port : operation), error messages and the services emitting them.\", \"facts\": [\"error events: 70606 matching events\", \"error events > status codes: 504 \\u2014 37326 events\", \"error events > status codes: 503 \\u2014 10761 events\", \"error events > status codes: n/a (client-side pool timeout) \\u2014 21690 events\", \"error events > status codes: 500 \\u2014 717 events\", \"error events > status codes: 421 \\u2014 112 events\", \"failing requests: checkout-api -> orders-api:8080 : POST /v2/orders \\u2014 38914 events\", \"failing requests: orders-api -> orders-db:5432 : connection acquire (HikariPool-1) \\u2014 21690 events\", \"failing requests: invoice-api -> orders-api:8080 : GET /v2/orders/{id} \\u2014 6118 events\", \"failing requests: cart-service -> checkout-api:8080 : POST /v1/checkout \\u2014 3055 events\", \"failing requests: notification-worker -> smtp-relay.fintrail.internal:587 : SMTP \\u2014 112 events\", \"error messages: orders-api POST /v2/orders: 504 Gateway Timeout \\u2014 31208 events\", \"error messages: HikariPool-1 - Connection is not available, request timed out after 30000ms (total=20, active=20, idle=0, waiting=187) \\u2014 21690 events\", \"error messages: orders-api: retry budget exhausted \\u2014 7706 events\", \"error messages: orders-api GET /v2/orders/{id}: context deadline exceeded \\u2014 6118 events\", \"error messages: checkout-api: 503 Service Unavailable \\u2014 3055 events\", \"error messages: java.util.concurrent.TimeoutException: request processing exceeded 30s \\u2014 717 events\", \"error messages: smtp relay 421 4.7.0 try again later \\u2014 112 events\", \"emitting services: checkout-api \\u2014 38914 events\", \"emitting services: orders-api \\u2014 22407 events\", \"emitting services: invoice-api \\u2014 6118 events\", \"emitting services: cart-service \\u2014 3055 events\", \"emitting services: notification-worker \\u2014 112 events\"]}",
+      "metadata": {
+        "scenario": "db_pool_config",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "db_pool_config-02",
+      "artifact_type": "service_logs",
+      "subtype": "error_volume_by_service",
+      "source": "error_volume_by_service",
+      "content": "{\"description\": \"Services ranked by number of error events, with each service's most-failed downstream dependencies.\", \"facts\": [\"services: checkout-api \\u2014 38914 events; failing dependencies=1; top dependencies: orders-api (38914)\", \"services: orders-api \\u2014 22407 events; failing dependencies=1; top dependencies: orders-db (21690); 717 further events in other values\", \"services: invoice-api \\u2014 6118 events; failing dependencies=1; top dependencies: orders-api (6118)\", \"services: cart-service \\u2014 3055 events; failing dependencies=1; top dependencies: checkout-api (3055)\", \"services: notification-worker \\u2014 112 events; failing dependencies=1; top dependencies: smtp-relay.fintrail.internal (112)\"]}",
+      "metadata": {
+        "scenario": "db_pool_config",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "db_pool_config-03",
+      "artifact_type": "change_records",
+      "subtype": "change_log",
+      "source": "change_log",
+      "content": "{\"description\": \"Deployments, configuration pushes, infrastructure and automation runs from the change-management and CI/CD audit log: change ID, type, target, actor, time (UTC), status and recorded diff/summary.\", \"facts\": [\"changes: CHG-30398 | deployment | invoice-api chart 2.7.1 -> 2.7.2 | actor: release-bot | 2022-11-08 10:04 UTC | status: completed | approved_by: m.ferreira; PDF template fix \\u2014 1 events\", \"changes: CHG-30412 | helm_upgrade | orders-api chart 4.12.0 (revision 58) | actor: release-bot | 2022-11-08 15:21 UTC | status: completed | approved_by: r.chaudhary; values: database.pool.maxOpenConns 200 -> 20, logging.level INFO -> DEBUG; values file: values-staging.yaml \\u2014 1 events\", \"changes: CHG-30433 | helm_rollback | orders-api to revision 57 | actor: r.chaudhary | 2022-11-08 18:02 UTC | status: completed | helm rollback orders-api 57 \\u2014 1 events\", \"changes: CHG-30451 | deployment | cart-service chart 1.19.0 -> 1.19.1 | actor: release-bot | 2022-11-09 09:40 UTC | status: completed | approved_by: m.ferreira; promo banner flag \\u2014 1 events\", \"change types: deployment \\u2014 2 events\", \"change types: helm_upgrade \\u2014 1 events\", \"change types: helm_rollback \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "db_pool_config",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "db_pool_config-04",
+      "artifact_type": "change_records",
+      "subtype": "change_actors",
+      "source": "change_actors",
+      "content": "{\"description\": \"Accounts and automation identities that executed changes, with the hosts or targets they acted on.\", \"facts\": [\"actors: release-bot \\u2014 3 events; targets: fintrail-prod-ew1/invoice-api (1), fintrail-prod-ew1/orders-api (1), fintrail-prod-ew1/cart-service (1)\", \"actors: r.chaudhary \\u2014 1 events; targets: fintrail-prod-ew1/orders-api (1)\"]}",
+      "metadata": {
+        "scenario": "db_pool_config",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "db_pool_config-05",
+      "artifact_type": "infrastructure_events",
+      "subtype": "host_inventory",
+      "source": "host_inventory",
+      "content": "{\"description\": \"Host and node names seen in infrastructure events with their IP address, role and availability zone / rack.\", \"facts\": [\"hosts: gke-fintrail-prod-pool-a-3f1c \\u2014 141 events; ip: 10.70.0.14; role: gke-node; zone: europe-west1-b\", \"hosts: gke-fintrail-prod-pool-a-7d2e \\u2014 133 events; ip: 10.70.0.15; role: gke-node; zone: europe-west1-c\", \"hosts: gke-fintrail-prod-pool-a-9a4b \\u2014 128 events; ip: 10.70.0.17; role: gke-node; zone: europe-west1-d\", \"hosts: orders-db \\u2014 22 events; ip: 10.70.8.3; role: cloudsql-postgres-primary; zone: europe-west1-b\"]}",
+      "metadata": {
+        "scenario": "db_pool_config",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "db_pool_config-06",
+      "artifact_type": "infrastructure_events",
+      "subtype": "platform_events",
+      "source": "platform_events",
+      "content": "{\"description\": \"Kubernetes events, cloud-provider health events and host system messages (kernel, hardware, daemons) with the objects or hosts they refer to.\", \"facts\": [\"event reasons: Unhealthy \\u2014 214 events; top objects: pod/orders-api-6f8b9d7c5d-4hz2q (58), pod/orders-api-6f8b9d7c5d-9wq7m (55), pod/orders-api-6f8b9d7c5d-tr8kd (52)\", \"event reasons: Killing \\u2014 18 events; top objects: pod/orders-api-6f8b9d7c5d-4hz2q (6), pod/orders-api-6f8b9d7c5d-9wq7m (6), pod/orders-api-6f8b9d7c5d-tr8kd (6)\", \"event reasons: SuccessfulRescale \\u2014 6 events; top objects: hpa/checkout-api (4), hpa/orders-api (2)\", \"event reasons: Pulled \\u2014 24 events; top objects: pod/orders-api-6f8b9d7c5d-4hz2q (2), pod/invoice-api-58c7d9f6b-xm2kq (2)\"]}",
+      "metadata": {
+        "scenario": "db_pool_config",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "db_pool_config-07",
+      "artifact_type": "monitoring_alerts",
+      "subtype": "alertmanager_alerts",
+      "source": "alertmanager_alerts",
+      "content": "{\"description\": \"Prometheus Alertmanager alerts: alert names with severity, critical-alert instances, alert names and services, and an hourly timeline of warning and critical alerts (UTC).\", \"facts\": [\"alert names: Watchdog (info) \\u2014 72 events\", \"alert names: CheckoutErrorRateHigh (critical) \\u2014 14 events\", \"alert names: OrdersApiLatencyP99High (warning) \\u2014 14 events\", \"alert names: HikariPoolPendingThreadsHigh (critical) \\u2014 13 events\", \"alert names: SLOErrorBudgetBurnFast (critical) \\u2014 7 events\", \"alert names: KubeHpaMaxedOut (warning) \\u2014 2 events\", \"alert names: NodeFilesystemSpaceFillingUp (warning) \\u2014 1 events\", \"critical alerts: 34 matching events\", \"critical alerts > critical instances: checkout-api \\u2014 14 events\", \"critical alerts > critical instances: slo:checkout-availability \\u2014 7 events\", \"critical alerts > critical instances: orders-api-6f8b9d7c5d-4hz2q:9404 \\u2014 5 events\", \"critical alerts > critical instances: orders-api-6f8b9d7c5d-9wq7m:9404 \\u2014 4 events\", \"critical alerts > critical instances: orders-api-6f8b9d7c5d-tr8kd:9404 \\u2014 4 events\", \"critical alerts > critical alert names: CheckoutErrorRateHigh \\u2014 14 events\", \"critical alerts > critical alert names: HikariPoolPendingThreadsHigh \\u2014 13 events\", \"critical alerts > critical alert names: SLOErrorBudgetBurnFast \\u2014 7 events\", \"critical alerts > critical services: checkout-api \\u2014 21 events\", \"critical alerts > critical services: orders-api \\u2014 13 events\", \"alert timeline: 2022-11-08 16:00 UTC \\u2014 19 events\", \"alert timeline: 2022-11-08 17:00 UTC \\u2014 24 events\", \"alert timeline: 2022-11-08 18:00 UTC \\u2014 7 events\", \"alert timeline: 2022-11-09 04:00 UTC \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "db_pool_config",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "db_pool_config-08",
+      "artifact_type": "resource_metrics",
+      "subtype": "metric_anomalies",
+      "source": "metric_anomalies",
+      "content": "{\"description\": \"Metric series that deviated from their 7-day baseline (hourly resolution): baseline, peak or trough value, anomaly onset and recovery (UTC).\", \"facts\": [\"metric anomalies: hikaricp_connections_pending on orders-api \\u2014 baseline 0; peak 187; onset 2022-11-08 15:00 UTC; recovered 2022-11-08 18:00 UTC\", \"metric anomalies: hikaricp_connections_max on orders-api \\u2014 baseline 200; trough 20; onset 2022-11-08 15:00 UTC; recovered 2022-11-08 18:00 UTC\", \"metric anomalies: cloudsql.googleapis.com/database/postgresql/num_backends on orders-db \\u2014 baseline ~180; trough 24; onset 2022-11-08 15:00 UTC; recovered 2022-11-08 18:00 UTC\", \"metric anomalies: cloudsql.googleapis.com/database/cpu/utilization on orders-db \\u2014 baseline 41%; trough 19%; onset 2022-11-08 16:00 UTC; recovered 2022-11-08 18:00 UTC\", \"metric anomalies: http 5xx ratio on checkout-api \\u2014 baseline 0.2%; peak 38%; onset 2022-11-08 16:00 UTC; recovered 2022-11-08 18:00 UTC\"]}",
+      "metadata": {
+        "scenario": "db_pool_config",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "db_pool_config-09",
+      "artifact_type": "derived_findings",
+      "subtype": "derived_summary",
+      "source": "derived_summary",
+      "content": "{\"description\": \"Deterministic summary computed from the query results above (error ranking, instance-to-host join, alert timeline, change correlation, earliest metric anomaly).\", \"facts\": [\"Derived: service checkout-api ranks #1 by error volume (38914 events, 1 failing dependencies). Most-failed dependency: orders-api (38914 errors).\", \"Derived: most-alerted critical instance checkout-api (14 critical alerts); no matching host-inventory entry.\", \"Derived: warning/critical alerts span 2022-11-08 16:00 UTC to 2022-11-09 04:00 UTC; earliest alert hour 2022-11-08 16:00 UTC (19 alerts).\", \"Derived: changes recorded from 6 hours before the earliest alert hour to its end: CHG-30398 (deployment, invoice-api chart 2.7.1 -> 2.7.2, release-bot, 2022-11-08 10:04 UTC); CHG-30412 (helm_upgrade, orders-api chart 4.12.0 (revision 58), release-bot, 2022-11-08 15:21 UTC).\", \"Derived: earliest metric anomaly onset 2022-11-08 15:00 UTC (hikaricp_connections_pending on orders-api).\"]}",
+      "metadata": {
+        "scenario": "db_pool_config",
+        "source_kind": "derived_from_es_results",
+        "heuristic": true
+      }
+    },
+    {
+      "artifact_id": "db_pool_config-10",
+      "artifact_type": "query_coverage",
+      "subtype": "evidence_gaps",
+      "source": "evidence_gaps",
+      "content": "{\"description\": \"Queries that returned nothing or failed; use these to state what is NOT established.\", \"facts\": [\"No matching results for: tls certificates / expired certificates. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / expiring within 7 days. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / self signed. (Absence in this query is not proof of absence elsewhere.)\"]}",
+      "metadata": {
+        "scenario": "db_pool_config",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    }
+  ]
+}

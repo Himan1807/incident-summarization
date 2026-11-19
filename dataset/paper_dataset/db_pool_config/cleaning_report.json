@@ -1,0 +1,14 @@
+{
+  "scenario": "db_pool_config",
+  "cleaning": [],
+  "skipped": [
+    "tls_certificates: all aggregations empty"
+  ],
+  "gaps": [],
+  "artifacts": 10,
+  "facts": 80,
+  "empty_aggregations": 3,
+  "questions": 10,
+  "answers": 10,
+  "atoms": 12
+}

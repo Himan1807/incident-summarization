@@ -4,7 +4,7 @@ MODEL    : qwen2.5:7b-instruct
 CONDITION: RAG (advanced pipeline)
 RUN TIME : 32.6 min of LLM generation
 REPORT   : results\koi_stealer\qwen2.5_7b-instruct\advanced_postmortem.md
-CREATED  : 2026-11-10T10:51:03
+CREATED  : 2026-11-19T12:58:22
 ====================================================================================================
 
 A. QUESTION-BY-QUESTION EVALUATION

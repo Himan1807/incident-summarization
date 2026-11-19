@@ -1,0 +1,64 @@
+====================================================================================================
+INCIDENT: cert_expiry_mtls   -   comparison of 2 run(s) (models and conditions)
+CREATED : 2026-11-19T12:58:22
+====================================================================================================
+
+Runs:  R1 = llama3.2:3b (RAG)   R2 = llama3.2:3b (no RAG)
+
+A. METRICS PER RUN (higher is better except Halluc. and BadNum)
+
++------+------------------------------------+----------+----------+----------+----------+----------+----------+----------+----------+----------+----------+--------+
+| Run  | Model / condition                  | Ans-P    | Ans-R    | Ans-F1   | Q-recall | Faithful | Ground.  | CitePrec | CiteRate | Halluc.  | BadNum   | Min    |
++------+------------------------------------+----------+----------+----------+----------+----------+----------+----------+----------+----------+----------+--------+
+| R1   | llama3.2:3b (RAG)                  | -        | 0.111    | -        | 0.722    | 0.897    | 1.000    | 0.946    | 0.949    | 0.000    | 0        | 12.1   |
++------+------------------------------------+----------+----------+----------+----------+----------+----------+----------+----------+----------+----------+--------+
+| R2   | llama3.2:3b (no RAG)               | -        | 0.000    | -        | 0.111    | 0.000    | 0.696    | -        | 0.000    | 0.773    | 5        | 6.2    |
++------+------------------------------------+----------+----------+----------+----------+----------+----------+----------+----------+----------+----------+--------+
+
+B. ANSWER STATUS PER QUESTION  (OK = correct, PART = partial, WRONG, ABST = 'Not established', NONE = no answer in the report)
+
++-----+------------------------------------------+--------------------------------+--------+--------+
+| #   | Question                                 | Reference answer               | R1     | R2     |
++-----+------------------------------------------+--------------------------------+--------+--------+
+| 1   | Which certificate expired?               | cf-mesh-intermediate (Istio    | WRONG  | ABST   |
+|     |                                          | mesh intermediate CA)          |        |        |
++-----+------------------------------------------+--------------------------------+--------+--------+
+| 2   | When did the certificate expire? Provide | 2024-09-30 12:00 UTC           | ABST   | ABST   |
+|     | YYYY-MM-DD HH:MM UTC.                    |                                |        |        |
++-----+------------------------------------------+--------------------------------+--------+--------+
+| 3   | Why did automatic renewal fail?          | Vault denied the signing       | ABST   | ABST   |
+|     |                                          | request (403 permission denied |        |        |
+|     |                                          | for cert-manager's policy)     |        |        |
++-----+------------------------------------------+--------------------------------+--------+--------+
+| 4   | Which change fixed the cause of the      | CHG-5611                       | ABST   | ABST   |
+|     | renewal failure? Provide its change      |                                |        |        |
+|     | identifier.                              |                                |        |        |
++-----+------------------------------------------+--------------------------------+--------+--------+
+| 5   | During what hour did the service outage  | 2024-09-30 12:00 UTC           | NONE   | ABST   |
+|     | begin? Provide the earliest date and     |                                |        |        |
+|     | time in YYYY-MM-DD HH:MM UTC format.     |                                |        |        |
++-----+------------------------------------------+--------------------------------+--------+--------+
+| 6   | What is the root cause category of the   | certificate expiry             | ABST   | ABST   |
+|     | incident: configuration change, software |                                |        |        |
+|     | defect, hardware failure, cloud provider |                                |        |        |
+|     | failure, capacity exhaustion, automation |                                |        |        |
+|     | error, certificate expiry, or third-     |                                |        |        |
+|     | party dependency failure?                |                                |        |        |
++-----+------------------------------------------+--------------------------------+--------+--------+
+| 7   | Which of the three CIA components is     | availability                   | ABST   | ABST   |
+|     | primarily affected: availability,        |                                |        |        |
+|     | integrity, or confidentiality?           |                                |        |        |
++-----+------------------------------------------+--------------------------------+--------+--------+
+| 8   | According to the error volume            | istio-ingressgateway,          | PART   | ABST   |
+|     | statistics, what single service emitted  | downstream symptom             |        |        |
+|     | the most errors? Is it the root cause or |                                |        |        |
+|     | a downstream symptom?                    |                                |        |        |
++-----+------------------------------------------+--------------------------------+--------+--------+
+| 9   | Which deployment shortly before the      | CHG-5602                       | WRONG  | WRONG  |
+|     | outage is unrelated? Provide its change  |                                |        |        |
+|     | identifier.                              |                                |        |        |
++-----+------------------------------------------+--------------------------------+--------+--------+
+
+Best answer F1: llama3.2:3b (no RAG) (0.000)
+
+Metric definitions: see METRICS.md. 'no RAG' rows have no retrieved evidence, so their faithfulness and citation metrics are 0 or '-'.

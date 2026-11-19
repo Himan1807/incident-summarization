@@ -1,0 +1,154 @@
+{
+  "metadata": {
+    "incident_id": "INC-20231124",
+    "scenario": "conntrack_exhaustion",
+    "title": "Infrastructure reliability incident investigation",
+    "source": "synthetic/ops-incident-expansion (modeled on neu-nds2/llm-sec-incident-analysis)",
+    "query_window_start": "2023-11-24T00:00:00",
+    "query_window_end": "2023-11-26T23:59:59",
+    "evidence_types": [
+      "change_records",
+      "derived_findings",
+      "infrastructure_events",
+      "monitoring_alerts",
+      "query_coverage",
+      "resource_metrics",
+      "service_logs"
+    ],
+    "artifact_scope_note": "Evidence is aggregated query output (not raw log lines or metric samples); it contains no chat/communication records."
+  },
+  "incident_description": "Reliability incident investigation of a production environment. Evidence consists of Elasticsearch aggregation results over application and proxy logs, Kubernetes, cloud-provider and host system events, Prometheus Alertmanager alerts, change-management / CI-CD audit records and metric anomaly detection. No root cause, impact or trigger is stated; these must be established from the supplied artifacts. Environment context: Organization: Halden Outdoor (online retail); Platform: on-premises edge with two Linux NAT/egress gateways in active/active ECMP carrying all outbound traffic from the application network 10.50.0.0/16 to the internet; application tier on VMware (storefront, checkout-svc, payment-svc); external APIs for shipping rates, tax quotes and card payments; Change management: CHG- identifiers.",
+  "investigation_questions": [
+    "What is the hostname of the host or node where the failure originated?",
+    "What is the IP address of the host or node where the failure originated?",
+    "Which kernel table was exhausted?",
+    "Which kernel parameter limited that table on the failing host?",
+    "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+    "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+    "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+    "Which change restored normal service? Provide its change identifier."
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "conntrack_exhaustion-01",
+      "artifact_type": "service_logs",
+      "subtype": "error_logs",
+      "source": "error_logs",
+      "content": "{\"description\": \"Application and proxy error logs: HTTP/gRPC status codes, failing requests (caller -> callee:port : operation), error messages and the services emitting them.\", \"facts\": [\"error events: 64913 matching events\", \"error events > status codes: 504 \\u2014 30551 events\", \"error events > status codes: n/a (connect timeout) \\u2014 34362 events\", \"failing requests: storefront -> checkout-svc:8080 : POST /v1/checkout \\u2014 30551 events\", \"failing requests: checkout-svc -> api.shipcalc.io:443 : POST /v2/rates \\u2014 18402 events\", \"failing requests: checkout-svc -> api.taxquote.io:443 : POST /v1/quote \\u2014 9120 events\", \"failing requests: payment-svc -> pay.cardrail.net:443 : POST /v1/authorize \\u2014 6840 events\", \"error messages: checkout failed: checkout-svc 504 Gateway Timeout \\u2014 30551 events\", \"error messages: dial tcp 104.18.22.10:443: i/o timeout (api.shipcalc.io) \\u2014 18402 events\", \"error messages: tax quote failed: connect timeout to api.taxquote.io \\u2014 9120 events\", \"error messages: authorize failed: connect timeout to pay.cardrail.net \\u2014 6840 events\", \"emitting services: storefront \\u2014 30551 events\", \"emitting services: checkout-svc \\u2014 27522 events\", \"emitting services: payment-svc \\u2014 6840 events\"]}",
+      "metadata": {
+        "scenario": "conntrack_exhaustion",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "conntrack_exhaustion-02",
+      "artifact_type": "service_logs",
+      "subtype": "error_volume_by_service",
+      "source": "error_volume_by_service",
+      "content": "{\"description\": \"Services ranked by number of error events, with each service's most-failed downstream dependencies.\", \"facts\": [\"services: storefront \\u2014 30551 events; failing dependencies=1; top dependencies: checkout-svc (30551)\", \"services: checkout-svc \\u2014 27522 events; failing dependencies=2; top dependencies: api.shipcalc.io (18402), api.taxquote.io (9120)\", \"services: payment-svc \\u2014 6840 events; failing dependencies=1; top dependencies: pay.cardrail.net (6840)\"]}",
+      "metadata": {
+        "scenario": "conntrack_exhaustion",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "conntrack_exhaustion-03",
+      "artifact_type": "change_records",
+      "subtype": "change_log",
+      "source": "change_log",
+      "content": "{\"description\": \"Deployments, configuration pushes, infrastructure and automation runs from the change-management and CI/CD audit log: change ID, type, target, actor, time (UTC), status and recorded diff/summary.\", \"facts\": [\"changes: CHG-8814 | vm_scale | storefront VM pool | actor: m.berg | 2023-11-24 11:30 UTC | status: completed | 12 -> 20 VMs for Black Friday peak \\u2014 1 events\", \"changes: CHG-8826 | sysctl_change | natgw-01 | actor: m.berg | 2023-11-24 15:05 UTC | status: completed | net.netfilter.nf_conntrack_max 262144 -> 1048576 (matches natgw-02) \\u2014 1 events\", \"changes: CHG-8831 | config_management | puppet role egress_gateway | actor: puppet-ci | 2023-11-25 10:00 UTC | status: completed | enforce net.netfilter.nf_conntrack_max = 1048576 on all egress gateways \\u2014 1 events\", \"change types: vm_scale \\u2014 1 events\", \"change types: sysctl_change \\u2014 1 events\", \"change types: config_management \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "conntrack_exhaustion",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "conntrack_exhaustion-04",
+      "artifact_type": "change_records",
+      "subtype": "change_actors",
+      "source": "change_actors",
+      "content": "{\"description\": \"Accounts and automation identities that executed changes, with the hosts or targets they acted on.\", \"facts\": [\"actors: m.berg \\u2014 2 events; targets: vsphere/storefront-pool (1), natgw-01 (1)\", \"actors: puppet-ci \\u2014 1 events; targets: natgw-01 (1), natgw-02 (1)\"]}",
+      "metadata": {
+        "scenario": "conntrack_exhaustion",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "conntrack_exhaustion-05",
+      "artifact_type": "infrastructure_events",
+      "subtype": "host_inventory",
+      "source": "host_inventory",
+      "content": "{\"description\": \"Host and node names seen in infrastructure events with their IP address, role and availability zone / rack.\", \"facts\": [\"hosts: natgw-01 \\u2014 48640 events; ip: 10.50.0.11; role: nat-egress-gateway; zone: rack E1\", \"hosts: natgw-02 \\u2014 402 events; ip: 10.50.0.12; role: nat-egress-gateway; zone: rack E2\", \"hosts: store-web-01 \\u2014 140 events; ip: 10.50.10.21; role: storefront; zone: rack A3\", \"hosts: checkout-01 \\u2014 133 events; ip: 10.50.11.31; role: checkout-svc; zone: rack A4\"]}",
+      "metadata": {
+        "scenario": "conntrack_exhaustion",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "conntrack_exhaustion-06",
+      "artifact_type": "infrastructure_events",
+      "subtype": "platform_events",
+      "source": "platform_events",
+      "content": "{\"description\": \"Kubernetes events, cloud-provider health events and host system messages (kernel, hardware, daemons) with the objects or hosts they refer to.\", \"facts\": [\"system messages: kernel: nf_conntrack: nf_conntrack: table full, dropping packet \\u2014 48211 events; top objects: natgw-01 (48211)\", \"system messages: kernel: net_ratelimit: callbacks suppressed \\u2014 402 events; top objects: natgw-01 (402)\", \"system messages: sysctl: net.netfilter.nf_conntrack_max = 262144 \\u2014 1 events; top objects: natgw-01 (1)\", \"system messages: keepalived: VRRP_Script(chk_egress) succeeded \\u2014 288 events; top objects: natgw-01 (144), natgw-02 (144)\"]}",
+      "metadata": {
+        "scenario": "conntrack_exhaustion",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "conntrack_exhaustion-07",
+      "artifact_type": "monitoring_alerts",
+      "subtype": "alertmanager_alerts",
+      "source": "alertmanager_alerts",
+      "content": "{\"description\": \"Prometheus Alertmanager alerts: alert names with severity, critical-alert instances, alert names and services, and an hourly timeline of warning and critical alerts (UTC).\", \"facts\": [\"alert names: Watchdog (info) \\u2014 72 events\", \"alert names: CheckoutErrorRateHigh (critical) \\u2014 6 events\", \"alert names: ConntrackTableNearlyFull (warning) \\u2014 6 events\", \"alert names: ExternalAPITimeouts (critical) \\u2014 6 events\", \"alert names: ConntrackTableFull (critical) \\u2014 5 events\", \"critical alerts: 17 matching events\", \"critical alerts > critical instances: checkout-svc \\u2014 6 events\", \"critical alerts > critical instances: storefront \\u2014 6 events\", \"critical alerts > critical instances: 10.50.0.11:9100 \\u2014 5 events\", \"critical alerts > critical alert names: CheckoutErrorRateHigh \\u2014 6 events\", \"critical alerts > critical alert names: ExternalAPITimeouts \\u2014 6 events\", \"critical alerts > critical alert names: ConntrackTableFull \\u2014 5 events\", \"critical alerts > critical services: checkout-svc \\u2014 6 events\", \"critical alerts > critical services: storefront \\u2014 6 events\", \"critical alerts > critical services: node \\u2014 5 events\", \"alert timeline: 2023-11-24 12:00 UTC \\u2014 1 events\", \"alert timeline: 2023-11-24 13:00 UTC \\u2014 2 events\", \"alert timeline: 2023-11-24 14:00 UTC \\u2014 14 events\", \"alert timeline: 2023-11-24 15:00 UTC \\u2014 6 events\"]}",
+      "metadata": {
+        "scenario": "conntrack_exhaustion",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "conntrack_exhaustion-08",
+      "artifact_type": "resource_metrics",
+      "subtype": "metric_anomalies",
+      "source": "metric_anomalies",
+      "content": "{\"description\": \"Metric series that deviated from their 7-day baseline (hourly resolution): baseline, peak or trough value, anomaly onset and recovery (UTC).\", \"facts\": [\"metric anomalies: node_nf_conntrack_entries / node_nf_conntrack_entries_limit on natgw-01 \\u2014 baseline 38%; peak 100%; onset 2023-11-24 12:00 UTC; recovered 2023-11-24 15:00 UTC\", \"metric anomalies: node_nf_conntrack_entries / node_nf_conntrack_entries_limit on natgw-02 \\u2014 baseline 9%; peak 26%; onset 2023-11-24 12:00 UTC; recovered 2023-11-24 18:00 UTC\", \"metric anomalies: storefront requests per second on storefront \\u2014 baseline ~1,900/s; peak 6,850/s; onset 2023-11-24 12:00 UTC; recovered 2023-11-25 02:00 UTC\"]}",
+      "metadata": {
+        "scenario": "conntrack_exhaustion",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "conntrack_exhaustion-09",
+      "artifact_type": "derived_findings",
+      "subtype": "derived_summary",
+      "source": "derived_summary",
+      "content": "{\"description\": \"Deterministic summary computed from the query results above (error ranking, instance-to-host join, alert timeline, change correlation, earliest metric anomaly).\", \"facts\": [\"Derived: service storefront ranks #1 by error volume (30551 events, 1 failing dependencies). Most-failed dependency: checkout-svc (30551 errors).\", \"Derived: most-alerted critical instance checkout-svc (6 critical alerts); no matching host-inventory entry.\", \"Derived: warning/critical alerts span 2023-11-24 12:00 UTC to 2023-11-24 15:00 UTC; earliest alert hour 2023-11-24 12:00 UTC (1 alerts).\", \"Derived: changes recorded from 6 hours before the earliest alert hour to its end: CHG-8814 (vm_scale, storefront VM pool, m.berg, 2023-11-24 11:30 UTC).\", \"Derived: earliest metric anomaly onset 2023-11-24 12:00 UTC (node_nf_conntrack_entries / node_nf_conntrack_entries_limit on natgw-01).\"]}",
+      "metadata": {
+        "scenario": "conntrack_exhaustion",
+        "source_kind": "derived_from_es_results",
+        "heuristic": true
+      }
+    },
+    {
+      "artifact_id": "conntrack_exhaustion-10",
+      "artifact_type": "query_coverage",
+      "subtype": "evidence_gaps",
+      "source": "evidence_gaps",
+      "content": "{\"description\": \"Queries that returned nothing or failed; use these to state what is NOT established.\", \"facts\": [\"No matching results for: tls certificates / expired certificates. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / expiring within 7 days. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / self signed. (Absence in this query is not proof of absence elsewhere.)\"]}",
+      "metadata": {
+        "scenario": "conntrack_exhaustion",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    }
+  ]
+}

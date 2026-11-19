@@ -1,0 +1,119 @@
+====================================================================================================
+INCIDENT : db_pool_config
+MODEL    : llama3.2:3b
+CONDITION: RAG (advanced pipeline)
+RUN TIME : 13.6 min of LLM generation
+REPORT   : results\db_pool_config\llama3.2_3b\advanced_postmortem.md
+CREATED  : 2026-11-18T19:56:52
+====================================================================================================
+
+A. QUESTION-BY-QUESTION EVALUATION
+   Found = reference items present in the report's answer; Prec. = correct entities / entities the answer gave;
+   Wrong items = entities in the answer that are not in the reference answer.
+
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| #   | Question                         | Reference answer           | Answer from the report             | Found | Prec. | Wrong items      | Status    |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 1   | Which service or component is    | orders-api                 | The origin of the failure is the   | 1/1   | -     | -                | CORRECT   |
+|     | the origin of the failure?       |                            | orders-api service, as indicated   |       |       |                  |           |
+|     |                                  |                            | by the top dependency in the       |       |       |                  |           |
+|     |                                  |                            | failing requests: orders-api       |       |       |                  |           |
+|     |                                  |                            | (21690 events).                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 2   | What change, deployment or       | CHG-30412                  | The change that triggered the      | 0/1   | 0/2   | 2022-11-08,      | WRONG     |
+|     | automation run triggered the     |                            | incident was a deployment of the   |       |       | 2022-11-08 10:04 |           |
+|     | incident? Provide its change     |                            | invoice-api chart 2.7.1 to 2.7.2,  |       |       |                  |           |
+|     | identifier.                      |                            | with a change identifier of        |       |       |                  |           |
+|     |                                  |                            | CHG-30398, executed by the         |       |       |                  |           |
+|     |                                  |                            | release-bot actor on 2022-11-08    |       |       |                  |           |
+|     |                                  |                            | 10:04 UTC.                         |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 3   | Which account or automation      | release-bot (approved by   | The account or automation identity | 1/1   | -     | -                | CORRECT   |
+|     | identity executed the triggering | r.chaudhary)               | that executed the triggering       |       |       |                  |           |
+|     | change?                          |                            | change was the release-bot actor.  |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 4   | Which configuration parameter    | database.pool.maxOpenConns | The configuration parameter that   | 2/2   | 1/2   | database.pool.ma | PARTIAL   |
+|     | was changed by the triggering    | (200 -> 20), from values-  | was changed by the triggering      |       |       | xopenconns       |           |
+|     | change, and which values file    | staging.yaml               | change was the                     |       |       |                  |           |
+|     | was it taken from?               |                            | database.pool.maxOpenConns value,  |       |       |                  |           |
+|     |                                  |                            | which was set to 20, taken from    |       |       |                  |           |
+|     |                                  |                            | the values-staging.yaml file.      |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 5   | During what hour did the first   | 2022-11-08 15:00 UTC       | The first signs of the failure     | 0/1   | 1/1   | -                | WRONG     |
+|     | signs of the failure appear?     |                            | appeared during the hour of 16:00  |       |       |                  |           |
+|     | Provide the earliest date and    |                            | UTC on 2022-11-08.                 |       |       |                  |           |
+|     | time in YYYY-MM-DD HH:MM UTC     |                            |                                    |       |       |                  |           |
+|     | format.                          |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 6   | What is the root cause category  | configuration change       | The root cause category of the     | 0/1   | -     | -                | ABSTAINED |
+|     | of the incident: configuration   |                            | incident is not established from   |       |       |                  |           |
+|     | change, software defect,         |                            | the available artifacts.           |       |       |                  |           |
+|     | hardware failure, cloud provider |                            |                                    |       |       |                  |           |
+|     | failure, capacity exhaustion,    |                            |                                    |       |       |                  |           |
+|     | automation error, certificate    |                            |                                    |       |       |                  |           |
+|     | expiry, or third-party           |                            |                                    |       |       |                  |           |
+|     | dependency failure?              |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 7   | Did the failure stay isolated to | cascading failure (orders- | The failure is not established as  | 1/1   | -     | -                | CORRECT   |
+|     | one component or cascade across  | api -> checkout-api /      | isolated or cascading failure from |       |       |                  |           |
+|     | services? Answer 'isolated       | invoice-api -> cart-       | the available artifacts.           |       |       |                  |           |
+|     | failure' or 'cascading failure'. | service)                   |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 8   | Which of the three CIA           | availability               | The CIA component primarily        | 0/1   | -     | -                | ABSTAINED |
+|     | components is primarily          |                            | affected is not established from   |       |       |                  |           |
+|     | affected: availability,          |                            | the available artifacts.           |       |       |                  |           |
+|     | integrity, or confidentiality?   |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 9   | According to the error volume    | checkout-api, downstream   | The single service that emitted    | 2/2   | -     | -                | CORRECT   |
+|     | statistics, what single service  | symptom                    | the most errors was the checkout-  |       |       |                  |           |
+|     | emitted the most errors? Is it   |                            | api, which is not established as   |       |       |                  |           |
+|     | the root cause or a downstream   |                            | the root cause or a downstream     |       |       |                  |           |
+|     | symptom?                         |                            | symptom from the available         |       |       |                  |           |
+|     |                                  |                            | artifacts.                         |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 10  | Which change restored normal     | CHG-30433                  | The change that restored normal    | 0/1   | -     | -                | ABSTAINED |
+|     | service? Provide its change      |                            | service is not established from    |       |       |                  |           |
+|     | identifier.                      |                            | the available artifacts.           |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+
+B. METRICS
+
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Metric                                       | Value        | Meaning                                                                |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Answer precision                             | 0.400        | Entities (IPs, domains, hosts, URLs, times) in the report's answers    |
+|                                              |              | that also occur in the reference / all entities it gave                |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Answer recall                                | 0.583        | Reference answer items found in the report's answers / all reference   |
+|                                              |              | items                                                                  |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Answer F1                                    | 0.474        | Harmonic mean of answer precision and recall                           |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Question recall                              | 0.900        | Mean over questions of reference items found anywhere in the report    |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Faithfulness                                 | 0.800        | Claims whose facts are in the evidence AND in the chunks they cite /   |
+|                                              |              | all claims                                                             |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Grounding rate                               | 1.000        | Claims whose entities and numbers all exist in the evidence            |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Citation precision                           | 0.800        | Cited claims that are actually supported by the chunks they cite       |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Citation rate                                | 1.000        | Cited claims / all claims                                              |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Hallucination rate                           | 0.000        | Entities in the report that are absent from the evidence / all         |
+|                                              |              | entities (lower is better)                                             |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Unsupported numbers                          | 0            | Numbers in the report that are absent from the evidence (lower is      |
+|                                              |              | better)                                                                |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Placeholders                                 | 0            | '[insert ...]' placeholders left in the report (lower is better)       |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Questions correct / partial / wrong /        | 4 / 1 / 2 /  | Per-question status in the table above                                 |
+| abstained / unanswered                       | 3 / 0        |                                                                        |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Claims (cited / total)                       | 35 / 35      | Claim lines counted by the verifier; hedged assessments are excluded   |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+
+Status: CORRECT = every reference item found and nothing wrong; PARTIAL = some items found or wrong items present;
+        WRONG = answer given but no reference item found; ABSTAINED = the report says 'Not established from the available artifacts';
+        NO ANSWER = the report has no answer for that question.
