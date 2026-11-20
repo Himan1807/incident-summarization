@@ -3,14 +3,15 @@
 1. clean_model_output : strips chatty preambles, repeated section titles, turns stray headings into bold labels,
                         removes empty bullets, merges 'N. question? / answer' pairs.
 2. attribute_citations: for claim lines the model left uncited, attaches the retrieved chunk(s) that actually contain the
-                        line's entities/numbers (or most of its content words). Pure string matching; every attached
-                        citation is counted and reported (model_citation_rate vs citation_rate in the run report).
+                        line's entities/numbers (or most of its content words). Pure string matching. Attached citations are
+                        written as [auto: id#n] so they stay visible in the report but are EXCLUDED from citation metrics
+                        (citation rate, citation precision, faithfulness), which count model-written citations only.
 3. dedupe_sections    : removes near-duplicate lines inside a section and across sections (earlier occurrence wins).
 """
 import re
 
 from src.verify import (MARKER_RE, analyze_text, content_words, extract_entities, is_claim_line, is_heading, norm_ts,
-                        numbers_in, strip_cites, make_evidence, CITE_GROUP_RE, PAREN_CITE_RE, parse_citations)
+                        numbers_in, strip_cites, make_evidence, CITE_GROUP_RE, PAREN_CITE_RE, parse_citations, AUTO_GROUP_RE)
 
 PREAMBLE_RE = re.compile(r"^\s*(?:here is|here's|here are|sure|certainly|okay|below is|the following is)\b[^\n]*$", re.I)
 
@@ -20,7 +21,10 @@ def _norm_title(s: str) -> str:
 
 
 def normalize_citations(text: str) -> str:
-    """(id#1) -> [id#1]; several citation groups on one line -> one trailing group with unique ids."""
+    """(id#1) -> [id#1]; several citation groups on one line -> one trailing group with unique ids.
+    An [auto: ...] tag in MODEL output (copied from section text it was shown, e.g. for the Incident Summary) is the model's
+    own choice of citation, so it is turned into a plain citation here; only attribute_citations writes [auto: ...]."""
+    text = AUTO_GROUP_RE.sub(lambda m: "[" + re.sub(r"^\[\s*auto\s*:\s*", "", m.group(0), flags=re.I), text)
     text = PAREN_CITE_RE.sub(lambda m: "[" + m.group(0).strip("() ") + "]", text)
     out = []
     for ln in text.splitlines():
@@ -146,7 +150,7 @@ def attribute_citations(text: str, chunks: list[dict], valid_ids: set[str]):
         if r["uncited"]:
             ids = _best_chunks(line, chunks)
             if ids:
-                line = line.rstrip() + " [" + ", ".join(ids) + "]"
+                line = line.rstrip() + " [auto: " + ", ".join(ids) + "]"     # marked: excluded from citation metrics
                 n += 1
         out.append(line)
     return "\n".join(out), n, bad

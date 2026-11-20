@@ -19,6 +19,10 @@ TS_RE = re.compile(r"\b(\d{4}-\d{2}-\d{2})[T ](\d{2}:\d{2}:\d{2})(?:\.\d+)?Z?")
 DATE_RE = re.compile(r"\b\d{4}-\d{2}-\d{2}\b")
 NUM_RE = re.compile(r"(?<![\w.])\d+(?:,\d{3})*(?:\.\d+)?(?![\w])")
 CITE_GROUP_RE = re.compile(r"\[([^\[\]]*#\d+[^\[\]]*)\]")
+# Citations attached by post-processing (src/postprocess.attribute_citations), not by the model: [auto: id#1, id#2].
+# They are valid citations for the report, but citation metrics count model-generated citations only.
+AUTO_PREFIX_RE = re.compile(r"^\s*auto\s*:\s*", re.I)
+AUTO_GROUP_RE = re.compile(r"\[\s*auto\s*:[^\[\]]*#\d+[^\[\]]*\]", re.I)
 PAREN_CITE_RE = re.compile(r"\(\s*(?:[\w\-.]+)?#\d+(?:\s*[,;]\s*(?:[\w\-.]+)?#\d+)*\s*\)")
 PLACEHOLDER_RE = re.compile(r"\[insert[^\]]*\]", re.I)
 MARKER_RE = re.compile(r"^\s*(?:[-*+•]|\d+[.)])\s+")
@@ -114,6 +118,7 @@ def parse_citations(line: str) -> list[str]:
     ids = []
     for grp in CITE_GROUP_RE.findall(line):
         last_prefix = ""
+        grp = AUTO_PREFIX_RE.sub("", grp)
         for item in re.split(r"[;,]", grp):
             item = item.strip()
             if not item:
@@ -124,6 +129,11 @@ def parse_citations(line: str) -> list[str]:
                 last_prefix = item.split("#")[0]
                 ids.append(item)
     return ids
+
+
+def parse_model_citations(line: str) -> list[str]:
+    """Citations written by the model itself (auto-attributed [auto: ...] groups excluded)."""
+    return parse_citations(AUTO_GROUP_RE.sub(" ", line))
 
 
 def is_heading(line: str) -> bool:
@@ -168,10 +178,12 @@ def analyze_text(text: str, ev: Evidence, valid_ids: set[str]) -> list[dict]:
         if not is_heading(line) and line.rstrip().endswith(":") and any(g in line.lower() for g in GAP_WORDS):
             gap_indent = indent
         in_gap_now = in_gap or (gap_indent is not None and indent > gap_indent)
-        stack = [(i, c) for i, c in stack if i < indent]
+        stack = [(i, c, m) for i, c, m in stack if i < indent]
         cites = parse_citations(line)
         valid_c = [c for c in cites if c in valid_ids]
-        inherited = [x for _, c in stack for x in c]
+        valid_m = [c for c in parse_model_citations(line) if c in valid_ids]
+        inherited = [x for _, c, _ in stack for x in c]
+        inherited_m = [x for _, _, m in stack for x in m]
         body = MARKER_RE.sub("", line)
         ents = extract_entities(body)
         nums = numbers_in(body)
@@ -186,11 +198,12 @@ def analyze_text(text: str, ev: Evidence, valid_ids: set[str]) -> list[dict]:
             "role_conflicts": role_conflicts(strip_cites(body)),
             "is_assessment": is_assessment(line),
             "is_claim": is_claim_line(line) and not in_gap_now and not is_heading(line) and not is_assessment(line),
-            "cite_ids": valid_c or inherited,
+            "cite_ids": valid_c or inherited,                 # all citations (model + auto-attributed)
+            "model_cite_ids": valid_m or inherited_m,         # citations written by the model only
         }
         row["cited"] = bool(row["cite_ids"])
         row["uncited"] = row["is_claim"] and not row["cited"]
-        stack.append((indent, valid_c))
+        stack.append((indent, valid_c, valid_m))
         rows.append(row)
     return rows
 
@@ -227,20 +240,24 @@ def sanitize(text: str, ev: Evidence, valid_ids: set[str], mode: str = "drop"):
 def claim_stats(text: str, ev: Evidence, valid_ids: set[str], chunk_text: dict | None = None) -> dict:
     """Claim-level metrics.
       grounding_rate     claims whose entities/numbers all exist in the evidence (works for ANY report, cited or not)
-      citation_precision cited claims whose entities/numbers (or, if none, >=3 content words) are in the chunks they cite
-      faithfulness       claims that are grounded AND supported by their own cited chunks (needs citations)"""
+      citation_precision model-cited claims whose entities/numbers (or, if none, >=3 content words) are in the chunks they cite
+      faithfulness       claims that are grounded AND supported by their own MODEL-written cited chunks
+    Citation metrics use model-generated citations only. Citations added by post-processing ([auto: ...]) are chosen by the
+    same string matching these metrics use, so counting them would score the post-processor, not the model. They are
+    reported separately (auto_cited_claims, citation_rate_with_auto)."""
     all_rows = analyze_text(text, ev, valid_ids)
     rows = [r for r in all_rows if r["is_claim"]]
     n = len(rows)
-    grounded = cited = cite_ok = faithful = 0
+    grounded = cited = cite_ok = faithful = any_cited = 0
     for r in rows:
         g = not (r["unsupported_entities"] or r["unsupported_numbers"] or r["invalid_citations"] or r["placeholders"] or r["role_conflicts"])
         grounded += g
-        if not r["cite_ids"]:
+        any_cited += bool(r["cite_ids"])
+        if not r["model_cite_ids"]:
             continue
         cited += 1
         if chunk_text:
-            ct = norm_ts(" ".join(chunk_text.get(c, "") for c in r["cite_ids"])).lower()
+            ct = norm_ts(" ".join(chunk_text.get(c, "") for c in r["model_cite_ids"])).lower()
             cnum = numbers_in(ct)
             if r["entities"] or r["numbers"]:
                 ok = all(e.lower() in ct for e in r["entities"]) and all(x in cnum for x in r["numbers"])
@@ -254,7 +271,9 @@ def claim_stats(text: str, ev: Evidence, valid_ids: set[str], chunk_text: dict |
             "grounding_rate": round(grounded / n, 3) if n else None,
             "citation_precision": round(cite_ok / cited, 3) if cited else None,
             "faithfulness": round(faithful / n, 3) if n else None,
-            "uncited_claims": n - cited}
+            "uncited_claims": n - cited,
+            "auto_cited_claims": any_cited - cited,
+            "citation_rate_with_auto": round(any_cited / n, 3) if n else None}
 
 
 def verify_text(text: str, ev: Evidence, valid_ids: set[str]) -> dict:
