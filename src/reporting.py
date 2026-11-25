@@ -18,8 +18,6 @@ METRICS = [
     ("question_recall", "Question recall", "Mean over questions of reference items found anywhere in the report"),
     ("faithfulness", "Faithfulness", "Claims whose facts are in the evidence AND in the chunks they cite / all claims"),
     ("grounding_rate", "Grounding rate", "Claims whose entities and numbers all exist in the evidence"),
-    ("citation_precision", "Citation precision", "Cited claims that are actually supported by the chunks they cite"),
-    ("citation_rate", "Citation rate", "Cited claims / all claims"),
     ("hallucination_rate", "Hallucination rate", "Entities in the report that are absent from the evidence / all entities (lower is better)"),
     ("unsupported_number_count", "Unsupported numbers", "Numbers in the report that are absent from the evidence (lower is better)"),
     ("placeholder_count", "Placeholders", "'[insert ...]' placeholders left in the report (lower is better)"),
@@ -164,7 +162,7 @@ SHORT = {"CORRECT": "OK", "PARTIAL": "PART", "WRONG": "WRONG", "ABSTAINED": "ABS
 def write_model_comparison(path: Path, scenario: str, entries: list[dict]) -> str:
     """entries: [{label, model, condition, ev, seconds}]"""
     cols = [("answer_precision", "Ans-P"), ("answer_recall", "Ans-R"), ("answer_f1", "Ans-F1"), ("question_recall", "Q-recall"),
-            ("faithfulness", "Faithful"), ("grounding_rate", "Ground."), ("citation_precision", "CitePrec"), ("citation_rate", "CiteRate"),
+            ("faithfulness", "Faithful"), ("grounding_rate", "Ground."),
             ("hallucination_rate", "Halluc."), ("unsupported_number_count", "BadNum")]
     ids = [f"R{i}" for i in range(1, len(entries) + 1)]
     mrows = [[i, e["label"]] + [fmt(e["ev"].get(k)) for k, _ in cols] + [f"{e['seconds'] / 60:.1f}" if e.get("seconds") is not None else "-"]
@@ -188,7 +186,7 @@ def write_model_comparison(path: Path, scenario: str, entries: list[dict]) -> st
              "B. ANSWER STATUS PER QUESTION  (OK = correct, PART = partial, WRONG, ABST = 'Not established', NONE = no answer in the report)", "",
              render_table(["#", "Question", "Reference answer"] + ids, qrows, [3, 40, 30] + [6] * len(ids)), "",
              f"Best answer F1: {best[0][1]} ({best[0][0]:.3f})", "",
-             "Metric definitions: see METRICS.md. 'no RAG' rows have no retrieved evidence, so their faithfulness and citation metrics are 0 or '-'.", ""]
+             "Metric definitions: see METRICS.md. 'no RAG' rows have no retrieved evidence, so their faithfulness is 0 or '-'.", ""]
     text = "\n".join(lines)
     Path(path).write_text(text, encoding="utf-8")
     return text

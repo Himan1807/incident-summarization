@@ -32,7 +32,7 @@ a = argparse.Namespace(input=str(ROOT / "dataset/paper_dataset/koi_stealer/rag_i
 with contextlib.redirect_stdout(io.StringIO()):
     rep = run(a, embedder=HashEmb(), reranker=None, llm=canned)
 r = json.load(open(ROOT / "results_test/koi_stealer/test-model/advanced_run_report.json"))
-print(rep[:1600]); print("..."); print("eval:", {k: r["evaluation"][k] for k in ("answer_precision", "answer_recall", "faithfulness", "grounding_rate", "citation_rate")})
+print(rep[:1600]); print("..."); print("eval:", {k: r["evaluation"][k] for k in ("answer_precision", "answer_recall", "faithfulness", "grounding_rate")})
 print("postprocessing:", {k: v for k, v in r["postprocessing"].items() if k != "removed"}, "| removed lines:", r["removed_unverified_lines"])
 assert "⚠" not in rep and "TRUNCATED" not in rep, "no warning tags / truncation notes expected"
 assert "172.17.17.0" not in rep, "malformed IP line must be removed"

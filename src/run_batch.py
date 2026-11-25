@@ -33,7 +33,7 @@ def main():
         except Exception:                                  # keep going: one failing scenario must not stop the batch
             print(f"[error] {sc} failed:\\n{traceback.format_exc()}")
     rows, keys = [], ("answer_precision", "answer_recall", "answer_f1", "question_recall", "faithfulness", "grounding_rate",
-                      "citation_precision", "citation_rate", "hallucination_rate", "unsupported_number_count", "placeholder_count")
+                      "hallucination_rate", "unsupported_number_count", "placeholder_count")
     for sc in names:
         f = Path("results") / sc / "advanced_run_report.json"
         if f.exists():

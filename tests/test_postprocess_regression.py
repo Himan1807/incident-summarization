@@ -35,7 +35,7 @@ def go(post):
     return rep, r
 
 rep0, r0 = go(False); rep1, r1 = go(True)
-keys = ("faithfulness", "grounding_rate", "citation_rate", "answer_precision", "answer_recall", "answer_f1")
+keys = ("faithfulness", "grounding_rate", "answer_precision", "answer_recall", "answer_f1")
 print("%-18s %10s %10s" % ("", "raw model", "post-processed"))
 for k in keys: print("%-18s %10s %10s" % (k, r0["evaluation"][k], r1["evaluation"][k]))
 print("flag totals  raw:", r0["verification_totals"], "\n             post:", r1["verification_totals"])

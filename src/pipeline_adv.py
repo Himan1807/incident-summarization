@@ -200,7 +200,7 @@ def run(args, embedder=None, reranker=None, llm=None):
     if "evaluation" in result:
         ev = result["evaluation"]
         keys = ("answer_precision", "answer_recall", "answer_f1", "question_recall", "faithfulness", "grounding_rate",
-                "citation_precision", "citation_rate", "hallucination_rate", "unsupported_number_count", "placeholder_count")
+                "hallucination_rate", "unsupported_number_count", "placeholder_count")
         print("\n[eval]", {k: ev[k] for k in keys})
         print("[verify] mode:", mode, "| flagged by type:", totals or "none", "| removed:", n_removed,
               "| model-cited before attribution:", result["postprocessing"]["model_citation_rate_before_attribution"],

@@ -27,7 +27,7 @@ def main():
     corpus = make_evidence("\n".join(c["text"] for c in chunks), "\n".join(x["raw_text"] for x in data["artifacts"]), data["description"])
     ids = {c["id"] for c in chunks}
     cols = ("answer_precision", "answer_recall", "answer_f1", "question_recall", "faithfulness", "grounding_rate",
-            "citation_rate", "hallucination_rate", "unsupported_number_count", "placeholder_count")
+            "hallucination_rate", "unsupported_number_count", "placeholder_count")
     print(f"{'report':34s} " + " ".join(f"{c[:11]:>11s}" for c in cols))
     chunk_text = {c["id"]: c["text"] for c in chunks}
     for r in a.report:

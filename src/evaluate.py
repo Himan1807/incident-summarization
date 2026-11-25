@@ -16,8 +16,6 @@ REPORT-LEVEL (whole report):
 CLAIM-LEVEL:
   faithfulness       claims whose facts are in the evidence AND in the chunks they cite / all claims
   grounding_rate     claims whose facts are in the evidence (any report, cited or not)
-  citation_precision cited claims actually supported by the chunks they cite
-  citation_rate      cited claims / all claims
 Also: unsupported_number_count, placeholder_count.
 """
 import json
@@ -121,8 +119,6 @@ def evaluate_report(report: str, qa_path: str, ev: Evidence, valid_ids: set[str]
         "answerable_entity_recall": round(ans_hit / ans_tot, 3) if ans_tot else None,
         "overall_entity_recall": round(all_hit / all_tot, 3) if all_tot else None,
         "faithfulness": cs["faithfulness"], "grounding_rate": cs["grounding_rate"],
-        "citation_precision": cs["citation_precision"],
-        "citation_rate": round(cs["cited_claims"] / cs["claims"], 3) if cs["claims"] else None,
         "claims": cs["claims"], "assessment_lines": cs["assessments"], "uncited_lines": cs["uncited_claims"],
         "hallucination_rate": round(len(v["unsupported_entities"]) / max(len(v["entities"]), 1), 3),
         "unsupported_entities": v["unsupported_entities"],
