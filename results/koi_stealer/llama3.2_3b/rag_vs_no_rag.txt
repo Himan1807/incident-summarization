@@ -2,7 +2,7 @@
 INCIDENT : koi_stealer
 MODEL    : llama3.2:3b
 CONDITION: No RAG vs RAG (same LLM, same section plan, same questions)
-CREATED  : 2026-11-26T16:41:03
+CREATED  : 2026-11-27T21:04:28
 ====================================================================================================
 
 NO RAG : the LLM receives only the incident context (network description and the questions). It has NO logs, alerts or query results.

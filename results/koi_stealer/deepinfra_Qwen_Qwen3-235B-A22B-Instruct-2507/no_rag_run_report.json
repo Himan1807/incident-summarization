@@ -1,0 +1,282 @@
+{
+  "condition": "no_rag",
+  "model": "deepinfra:Qwen/Qwen3-235B-A22B-Instruct-2507",
+  "scenario": "koi_stealer",
+  "seconds_total": 1412.6,
+  "run_log": [
+    {
+      "section": "Affected Host and User",
+      "seconds": 55.8,
+      "truncated": false
+    },
+    {
+      "section": "Timeline",
+      "seconds": 82.0,
+      "truncated": false
+    },
+    {
+      "section": "Detection: IDS Alerts",
+      "seconds": 10.8,
+      "truncated": false
+    },
+    {
+      "section": "Initial Infection Indicators",
+      "seconds": 31.1,
+      "truncated": false
+    },
+    {
+      "section": "Command-and-Control and Network Activity",
+      "seconds": 88.1,
+      "truncated": false
+    },
+    {
+      "section": "Impact Assessment",
+      "seconds": 150.4,
+      "truncated": false
+    },
+    {
+      "section": "Root Cause and Evidence Gaps",
+      "seconds": 145.6,
+      "truncated": false
+    },
+    {
+      "section": "Corrective and Preventive Actions",
+      "seconds": 280.9,
+      "truncated": false
+    },
+    {
+      "section": "Answers to Investigation Questions",
+      "seconds": 567.9,
+      "truncated": false
+    }
+  ],
+  "llm_usage": {
+    "provider": "deepinfra",
+    "calls": 10,
+    "retries": 1,
+    "prompt_tokens": 7760,
+    "completion_tokens": 2889,
+    "estimated_cost_usd": 0.002286
+  },
+  "evaluation": {
+    "answer_precision": null,
+    "answer_recall": null,
+    "answer_f1": null,
+    "question_recall": 0.188,
+    "questions_correct": "2/8",
+    "answerable_entity_recall": 0.125,
+    "overall_entity_recall": 0.222,
+    "faithfulness": 0.0,
+    "grounding_rate": 0.038,
+    "claims": 52,
+    "assessment_lines": 2,
+    "hallucination_rate": 0.91,
+    "unsupported_entities": [
+      "/malware.php",
+      "104.27.154.10",
+      "172.17.0.102",
+      "172.17.0.105",
+      "172.17.0.122",
+      "172.17.0.123",
+      "172.17.0.124",
+      "172.17.0.15",
+      "172.17.0.22",
+      "172.17.0.35",
+      "172.17.0.51",
+      "172.17.0.67",
+      "185.132.101.67",
+      "185.199.108.153",
+      "185.63.90.147",
+      "185.71.59.142",
+      "185.71.65.248",
+      "198.51.100.33",
+      "2020-09-04",
+      "2020-09-04 07:00",
+      "2024-09-04 06:00",
+      "2024-09-04 07:00",
+      "2024-09-04 08:00",
+      "2024-09-04 08:14",
+      "2024-09-04 09:00",
+      "2024-09-04 10:00",
+      "2024-09-04 11:00",
+      "2024-09-04 12:00",
+      "2024-09-04 13:00",
+      "2024-09-04 14:00",
+      "2024-09-04 14:22:17",
+      "203.0.113.25",
+      "203.0.113.45",
+      "45.134.230.112",
+      "8.8.8.8",
+      "91.218.114.183",
+      "94.156.66.198",
+      "WIN-CL02T7P2ABC",
+      "WIN-DESKTOP",
+      "WIN-LAPTOP7UV",
+      "WIN-LT9M3N4OP",
+      "WIN-PC04J2K9L",
+      "WIN-USER1J9",
+      "WIN-WS1Q2R3ST",
+      "adobe-flashupdate.net",
+      "bepositive-update.com",
+      "bepositive-update.net",
+      "c2.beactive-malware.com",
+      "c2.fast-flux.net",
+      "cdn-update.com",
+      "cdn.bepositive.com",
+      "cloud-apple.org",
+      "exfil.beaconfwd.com",
+      "login.live.com.secure-auth-update.xyz",
+      "malicious-update.com",
+      "ncupdate.com",
+      "pastebin.com",
+      "raw.githubusercontent.com",
+      "sync-adobe.net",
+      "tracker.beacon-security.org",
+      "update-bepositive.com"
+    ],
+    "unsupported_number_count": 12,
+    "unsupported_numbers": [
+      "12",
+      "15",
+      "1789",
+      "1798",
+      "1842",
+      "24",
+      "4",
+      "445",
+      "45",
+      "6",
+      "60",
+      "7"
+    ],
+    "placeholder_count": 0,
+    "per_question": [
+      {
+        "id": 1,
+        "question": "What is the IP address of the potentially infected internal host in the LAN?",
+        "reference_answer": "172.17.0.99",
+        "atoms": [
+          "172.17.0.99"
+        ],
+        "answerable_from_evidence": [
+          "172.17.0.99"
+        ],
+        "found_in_report": [],
+        "missing_from_evidence": [],
+        "answer_text": null,
+        "status": "NO ANSWER"
+      },
+      {
+        "id": 2,
+        "question": "What is the hostname of the potentially infected machine in the LAN?",
+        "reference_answer": "DESKTOP-RNVO9AT",
+        "atoms": [
+          "DESKTOP-RNVO9AT"
+        ],
+        "answerable_from_evidence": [
+          "DESKTOP-RNVO9AT"
+        ],
+        "found_in_report": [],
+        "missing_from_evidence": [],
+        "answer_text": null,
+        "status": "NO ANSWER"
+      },
+      {
+        "id": 3,
+        "question": "What is the Windows human user account name (not machine accounts ending in $) of the potentially infected machine in the LAN?",
+        "reference_answer": "afletcher",
+        "atoms": [
+          "afletcher"
+        ],
+        "answerable_from_evidence": [
+          "afletcher"
+        ],
+        "found_in_report": [],
+        "missing_from_evidence": [],
+        "answer_text": null,
+        "status": "NO ANSWER"
+      },
+      {
+        "id": 4,
+        "question": "What are the likely fake or suspicious domains / URLs for initial infection?",
+        "reference_answer": "www.bellantonicioccolato.it (likely compromised site associated with Koi Loader/Koi Stealer)",
+        "atoms": [
+          "www.bellantonicioccolato.it"
+        ],
+        "answerable_from_evidence": [
+          "www.bellantonicioccolato.it"
+        ],
+        "found_in_report": [],
+        "missing_from_evidence": [],
+        "answer_text": null,
+        "status": "NO ANSWER"
+      },
+      {
+        "id": 5,
+        "question": "What are the suspicious external IP addresses contacted, which might be involved in command-and-control (C2) communication?",
+        "reference_answer": "79.124.78.197",
+        "atoms": [
+          "79.124.78.197"
+        ],
+        "answerable_from_evidence": [
+          "79.124.78.197"
+        ],
+        "found_in_report": [],
+        "missing_from_evidence": [],
+        "answer_text": null,
+        "status": "NO ANSWER"
+      },
+      {
+        "id": 6,
+        "question": "Which of the three CIA components does the attacker target primarily: availability, integrity, or confidentiality?",
+        "reference_answer": "confidentiality",
+        "atoms": [
+          "confidentiality"
+        ],
+        "answerable_from_evidence": [],
+        "found_in_report": [
+          "confidentiality"
+        ],
+        "missing_from_evidence": [
+          "confidentiality"
+        ],
+        "answer_text": null,
+        "status": "NO ANSWER"
+      },
+      {
+        "id": 7,
+        "question": "During what hour did the first signs of infection activity appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+        "reference_answer": "2024-09-04 17:00 UTC",
+        "atoms": [
+          "2024-09-04 17:00 UTC"
+        ],
+        "answerable_from_evidence": [
+          "2024-09-04 17:00 UTC"
+        ],
+        "found_in_report": [],
+        "missing_from_evidence": [],
+        "answer_text": null,
+        "status": "NO ANSWER"
+      },
+      {
+        "id": 8,
+        "question": "According to the connection volume statistics, what single external IP address received the most connections from the infected hosts? Is it a C2 server or a legitimate service?",
+        "reference_answer": "79.124.78.197, C2 server",
+        "atoms": [
+          "79.124.78.197",
+          "C2 server"
+        ],
+        "answerable_from_evidence": [
+          "79.124.78.197",
+          "C2 server"
+        ],
+        "found_in_report": [
+          "C2 server"
+        ],
+        "missing_from_evidence": [],
+        "answer_text": null,
+        "status": "NO ANSWER"
+      }
+    ]
+  }
+}

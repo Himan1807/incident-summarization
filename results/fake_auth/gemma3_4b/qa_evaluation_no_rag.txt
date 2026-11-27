@@ -1,0 +1,101 @@
+====================================================================================================
+INCIDENT : fake_auth
+MODEL    : gemma3:4b
+CONDITION: No RAG (LLM without retrieval)
+RUN TIME : 11.4 min of LLM generation
+REPORT   : results\fake_auth\gemma3_4b\no_rag_postmortem.md
+CREATED  : 2026-11-27T21:04:28
+====================================================================================================
+
+A. QUESTION-BY-QUESTION EVALUATION
+   Found = reference items present in the report's answer; Prec. = correct entities / entities the answer gave;
+   Wrong items = entities in the answer that are not in the reference answer.
+
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| #   | Question                         | Reference answer           | Answer from the report             | Found | Prec. | Wrong items      | Status    |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 1   | What is the IP address of the    | 10.1.17.215                | 10.1.17.12 [Evidence ID:           | 0/1   | 0/1   | 10.1.17.12       | WRONG     |
+|     | potentially infected internal    |                            | Aggregation Results - Zeek]        |       |       |                  |           |
+|     | host in the LAN?                 |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 2   | What is the hostname of the      | DESKTOP-L8C5GSJ            | WIN-GSH54QLW48D [Evidence ID:      | 0/1   | 0/1   | WIN-GSH54QLW48D  | WRONG     |
+|     | potentially infected machine in  |                            | Aggregation Results - Suricata]    |       |       |                  |           |
+|     | the LAN?                         |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 3   | What is the Windows human user   | shutchenson                | jsmith [Evidence ID: Aggregation   | 0/1   | -     | -                | WRONG     |
+|     | account name (not machine        |                            | Results - Zeek]                    |       |       |                  |           |
+|     | accounts ending in $) of the     |                            |                                    |       |       |                  |           |
+|     | potentially infected machine in  |                            |                                    |       |       |                  |           |
+|     | the LAN?                         |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 4   | What are the likely fake or      | authenticatoor.org         | bluemoontuesday.com, example.com,  | 0/1   | 0/3   | bluemoontuesday. | WRONG     |
+|     | suspicious domains / URLs for    |                            | suspicious-domain-123.net          |       |       | com,             |           |
+|     | initial infection?               |                            | [Evidence ID: Aggregation Results  |       |       | example.com,     |           |
+|     |                                  |                            | - Suricata]                        |       |       | suspicious-      |           |
+|     |                                  |                            |                                    |       |       | domain-123.net   |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 5   | What are the suspicious external | 5.252.153.241,             | 192.0.2.1, 203.0.113.45 [Evidence  | 0/3   | 0/2   | 192.0.2.1,       | WRONG     |
+|     | IP addresses contacted, which    | 45.125.66.32,              | ID: Aggregation Results - Zeek]    |       |       | 203.0.113.45     |           |
+|     | might be involved in command-    | 45.125.66.252              |                                    |       |       |                  |           |
+|     | and-control (C2) communication?  |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 6   | During what hour did the first   | 2025-01-22 19:00 UTC       | 2025-01-22 01:17 UTC [Evidence ID: | 0/1   | 1/2   | 2025-01-22 01:17 | WRONG     |
+|     | signs of infection activity      |                            | Aggregation Results - Suricata]    |       |       |                  |           |
+|     | appear? Provide the earliest     |                            |                                    |       |       |                  |           |
+|     | date and time in YYYY-MM-DD      |                            |                                    |       |       |                  |           |
+|     | HH:MM UTC format.                |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 7   | Were any suspicious certificates | 45.125.66.252,             | Certificates associated with       | 0/2   | 0/1   | bluemoontuesday. | WRONG     |
+|     | observed in the encrypted        | 45.125.66.32               | bluemoontuesday.com were observed  |       |       | com              |           |
+|     | network traffic? If so, identify |                            | [Evidence ID: Aggregation Results  |       |       |                  |           |
+|     | the domain or IP in the          |                            | - TLS Certificates]                |       |       |                  |           |
+|     | certificate.                     |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 8   | According to the connection      | 5.252.153.241, C2 server   | 192.0.2.1 received 147 connections | 1/2   | 0/2   | 10.1.17.12,      | PARTIAL   |
+|     | volume statistics, what single   |                            | from 10.1.17.12 during the         |       |       | 192.0.2.1        |           |
+|     | external IP address received the |                            | incident timeframe. This IP is     |       |       |                  |           |
+|     | most connections from the        |                            | currently unverified and requires  |       |       |                  |           |
+|     | infected hosts? Is it a C2       |                            | further investigation to determine |       |       |                  |           |
+|     | server or a legitimate service?  |                            | if it is a C2 server or a          |       |       |                  |           |
+|     |                                  |                            | legitimate service. [Evidence ID:  |       |       |                  |           |
+|     |                                  |                            | Aggregation Results - External     |       |       |                  |           |
+|     |                                  |                            | Destinations]                      |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+
+B. METRICS
+
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Metric                                       | Value        | Meaning                                                                |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Answer precision                             | 0.083        | Entities (IPs, domains, hosts, URLs, times) in the report's answers    |
+|                                              |              | that also occur in the reference / all entities it gave                |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Answer recall                                | 0.083        | Reference answer items found in the report's answers / all reference   |
+|                                              |              | items                                                                  |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Answer F1                                    | 0.083        | Harmonic mean of answer precision and recall                           |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Question recall                              | 0.062        | Mean over questions of reference items found anywhere in the report    |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Faithfulness                                 | 0.000        | Claims whose facts are in the evidence AND in the chunks they cite /   |
+|                                              |              | all claims                                                             |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Grounding rate                               | 0.193        | Claims whose entities and numbers all exist in the evidence            |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Hallucination rate                           | 0.860        | Entities in the report that are absent from the evidence / all         |
+|                                              |              | entities (lower is better)                                             |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Unsupported numbers                          | 5            | Numbers in the report that are absent from the evidence (lower is      |
+|                                              |              | better)                                                                |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Placeholders                                 | 0            | '[insert ...]' placeholders left in the report (lower is better)       |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Questions correct / partial / wrong /        | 0 / 1 / 7 /  | Per-question status in the table above                                 |
+| abstained / unanswered                       | 0 / 0        |                                                                        |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Claims                                       | 57           | Claim lines counted by the verifier; hedged assessments are excluded   |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+
+Status: CORRECT = every reference item found and nothing wrong; PARTIAL = some items found or wrong items present;
+        WRONG = answer given but no reference item found; ABSTAINED = the report says 'Not established from the available artifacts';
+        NO ANSWER = the report has no answer for that question.

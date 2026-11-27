@@ -1,0 +1,98 @@
+====================================================================================================
+INCIDENT : fake_auth
+MODEL    : deepinfra:deepseek-ai/DeepSeek-V3
+CONDITION: No RAG vs RAG (same LLM, same section plan, same questions)
+CREATED  : 2026-11-27T21:04:28
+====================================================================================================
+
+NO RAG : the LLM receives only the incident context (network description and the questions). It has NO logs, alerts or query results.
+         Output is formatted (titles/preambles removed) but not verified, de-duplicated or given citations.
+RAG    : the advanced pipeline (hybrid retrieval, reranking, section-wise generation with citations, verification).
+Hallucination, grounding and number checks are always measured against the REAL evidence of the incident.
+
+A. METRICS
+
++------------------------------------------------------+----------------+----------------+----------------+
+| Metric                                               | No RAG         | RAG            | RAG - No RAG   |
++------------------------------------------------------+----------------+----------------+----------------+
+| Answer precision                                     | -              | 0.889          | -              |
++------------------------------------------------------+----------------+----------------+----------------+
+| Answer recall                                        | 0.000          | 0.667          | +0.667         |
++------------------------------------------------------+----------------+----------------+----------------+
+| Answer F1                                            | -              | 0.762          | -              |
++------------------------------------------------------+----------------+----------------+----------------+
+| Question recall                                      | 0.062          | 0.875          | +0.813         |
++------------------------------------------------------+----------------+----------------+----------------+
+| Faithfulness                                         | 0.000          | 0.930          | +0.930         |
++------------------------------------------------------+----------------+----------------+----------------+
+| Grounding rate                                       | 0.195          | 1.000          | +0.805         |
++------------------------------------------------------+----------------+----------------+----------------+
+| Hallucination rate (lower is better)                 | 0.865          | 0.000          | -0.865         |
++------------------------------------------------------+----------------+----------------+----------------+
+| Unsupported numbers (lower is better)                | 4              | 0              | -4             |
++------------------------------------------------------+----------------+----------------+----------------+
+| Placeholders (lower is better)                       | 0              | 0              | +0             |
++------------------------------------------------------+----------------+----------------+----------------+
+| Questions CORRECT                                    | 0              | 5              | +5             |
++------------------------------------------------------+----------------+----------------+----------------+
+| Questions PARTIAL                                    | 0              | 2              | +2             |
++------------------------------------------------------+----------------+----------------+----------------+
+| Questions WRONG                                      | 0              | 0              | +0             |
++------------------------------------------------------+----------------+----------------+----------------+
+| Questions ABSTAINED / unanswered                     | 8 / 0          | 1 / 0          | -              |
++------------------------------------------------------+----------------+----------------+----------------+
+| LLM generation time (min)                            | 1.2            | 2.3            | -              |
++------------------------------------------------------+----------------+----------------+----------------+
+
+B. ANSWERS PER QUESTION
+
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| #   | Question                     | Reference answer         | No RAG answer                  | RAG answer                     | No RAG    | RAG       |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 1   | What is the IP address of    | 10.1.17.215              | Not established from the       | 10.1.17.215                    | ABSTAINED | CORRECT   |
+|     | the potentially infected     |                          | available artifacts [evidence  |                                |           |           |
+|     | internal host in the LAN?    |                          | id]                            |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 2   | What is the hostname of the  | DESKTOP-L8C5GSJ          | Not established from the       | desktop-l8c5gsj                | ABSTAINED | CORRECT   |
+|     | potentially infected machine |                          | available artifacts [evidence  |                                |           |           |
+|     | in the LAN?                  |                          | id]                            |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 3   | What is the Windows human    | shutchenson              | Not established from the       | shutchenson                    | ABSTAINED | CORRECT   |
+|     | user account name (not       |                          | available artifacts [evidence  |                                |           |           |
+|     | machine accounts ending in   |                          | id]                            |                                |           |           |
+|     | $) of the potentially        |                          |                                |                                |           |           |
+|     | infected machine in the LAN? |                          |                                |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 4   | What are the likely fake or  | authenticatoor.org       | Not established from the       | Not established from the       | ABSTAINED | ABSTAINED |
+|     | suspicious domains / URLs    |                          | available artifacts [evidence  | available artifacts.           |           |           |
+|     | for initial infection?       |                          | id]                            |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 5   | What are the suspicious      | 5.252.153.241,           | Not established from the       | 5.252.153.241, 185.188.32.26   | ABSTAINED | PARTIAL   |
+|     | external IP addresses        | 45.125.66.32,            | available artifacts [evidence  |                                |           |           |
+|     | contacted, which might be    | 45.125.66.252            | id]                            |                                |           |           |
+|     | involved in command-and-     |                          |                                |                                |           |           |
+|     | control (C2) communication?  |                          |                                |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 6   | During what hour did the     | 2025-01-22 19:00 UTC     | Not established from the       | 2025-01-22 19:00 UTC           | ABSTAINED | CORRECT   |
+|     | first signs of infection     |                          | available artifacts [evidence  |                                |           |           |
+|     | activity appear? Provide the |                          | id]                            |                                |           |           |
+|     | earliest date and time in    |                          |                                |                                |           |           |
+|     | YYYY-MM-DD HH:MM UTC format. |                          |                                |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 7   | Were any suspicious          | 45.125.66.252,           | Not established from the       | 45.125.66.252, 45.125.66.32    | ABSTAINED | CORRECT   |
+|     | certificates observed in the | 45.125.66.32             | available artifacts [evidence  |                                |           |           |
+|     | encrypted network traffic?   |                          | id]                            |                                |           |           |
+|     | If so, identify the domain   |                          |                                |                                |           |           |
+|     | or IP in the certificate.    |                          |                                |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 8   | According to the connection  | 5.252.153.241, C2 server | Not established from the       | 5.252.153.241                  | ABSTAINED | PARTIAL   |
+|     | volume statistics, what      |                          | available artifacts [evidence  |                                |           |           |
+|     | single external IP address   |                          | id]                            |                                |           |           |
+|     | received the most            |                          |                                |                                |           |           |
+|     | connections from the         |                          |                                |                                |           |           |
+|     | infected hosts? Is it a C2   |                          |                                |                                |           |           |
+|     | server or a legitimate       |                          |                                |                                |           |           |
+|     | service?                     |                          |                                |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+
+Faithfulness is 0 / '-' for No RAG by construction: without retrieved chunks it cannot cite evidence.

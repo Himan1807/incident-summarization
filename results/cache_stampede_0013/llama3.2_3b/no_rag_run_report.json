@@ -1,0 +1,234 @@
+{
+  "condition": "no_rag",
+  "model": "llama3.2:3b",
+  "scenario": "cache_stampede_0013",
+  "seconds_total": 361.5,
+  "run_log": [
+    {
+      "section": "Affected Host and User",
+      "seconds": 29.6,
+      "truncated": false
+    },
+    {
+      "section": "Timeline",
+      "seconds": 146.6,
+      "truncated": true
+    },
+    {
+      "section": "Detection: IDS Alerts",
+      "seconds": 27.7,
+      "truncated": false
+    },
+    {
+      "section": "Initial Infection Indicators",
+      "seconds": 15.2,
+      "truncated": false
+    },
+    {
+      "section": "Command-and-Control and Network Activity",
+      "seconds": 32.7,
+      "truncated": false
+    },
+    {
+      "section": "Impact Assessment",
+      "seconds": 24.0,
+      "truncated": false
+    },
+    {
+      "section": "Root Cause and Evidence Gaps",
+      "seconds": 28.6,
+      "truncated": false
+    },
+    {
+      "section": "Corrective and Preventive Actions",
+      "seconds": 24.2,
+      "truncated": false
+    },
+    {
+      "section": "Answers to Investigation Questions",
+      "seconds": 32.9,
+      "truncated": false
+    }
+  ],
+  "evaluation": {
+    "answer_precision": null,
+    "answer_recall": null,
+    "answer_f1": null,
+    "question_recall": 0.333,
+    "questions_correct": "3/9",
+    "answerable_entity_recall": 0.429,
+    "overall_entity_recall": 0.3,
+    "faithfulness": 0.0,
+    "grounding_rate": 0.867,
+    "citation_precision": null,
+    "citation_rate": 0.0,
+    "claims": 83,
+    "assessment_lines": 3,
+    "uncited_lines": 83,
+    "hallucination_rate": 0.615,
+    "unsupported_entities": [
+      "10.227.0.1",
+      "10.227.0.100",
+      "10.227.0.101",
+      "35.185.144.0",
+      "35.185.144.1",
+      "azure.com",
+      "brightus-trips.com",
+      "brightus.com"
+    ],
+    "unsupported_number_count": 4,
+    "unsupported_numbers": [
+      "00",
+      "123456",
+      "30",
+      "5"
+    ],
+    "placeholder_count": 0,
+    "per_question": [
+      {
+        "id": 1,
+        "question": "What is the hostname of the host or node where the failure originated?",
+        "reference_answer": "cache-redis-02",
+        "atoms": [
+          "cache-redis-02"
+        ],
+        "answerable_from_evidence": [
+          "cache-redis-02"
+        ],
+        "found_in_report": [
+          "cache-redis-02"
+        ],
+        "missing_from_evidence": [],
+        "answer_text": null,
+        "status": "NO ANSWER"
+      },
+      {
+        "id": 2,
+        "question": "What is the IP address of the host or node where the failure originated?",
+        "reference_answer": "10.227.167.238",
+        "atoms": [
+          "10.227.167.238"
+        ],
+        "answerable_from_evidence": [
+          "10.227.167.238"
+        ],
+        "found_in_report": [],
+        "missing_from_evidence": [],
+        "answer_text": null,
+        "status": "NO ANSWER"
+      },
+      {
+        "id": 3,
+        "question": "Which database host became overloaded as a consequence of the initial failure?",
+        "reference_answer": "inventory-db-01",
+        "atoms": [
+          "inventory-db-01"
+        ],
+        "answerable_from_evidence": [
+          "inventory-db-01"
+        ],
+        "found_in_report": [
+          "inventory-db-01"
+        ],
+        "missing_from_evidence": [],
+        "answer_text": null,
+        "status": "NO ANSWER"
+      },
+      {
+        "id": 4,
+        "question": "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+        "reference_answer": "2021-05-08 21:00 UTC",
+        "atoms": [
+          "2021-05-08 21:00 UTC"
+        ],
+        "answerable_from_evidence": [
+          "2021-05-08 21:00 UTC"
+        ],
+        "found_in_report": [],
+        "missing_from_evidence": [],
+        "answer_text": null,
+        "status": "NO ANSWER"
+      },
+      {
+        "id": 5,
+        "question": "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+        "reference_answer": "capacity exhaustion",
+        "atoms": [
+          "capacity exhaustion"
+        ],
+        "answerable_from_evidence": [],
+        "found_in_report": [],
+        "missing_from_evidence": [
+          "capacity exhaustion"
+        ],
+        "answer_text": null,
+        "status": "NO ANSWER"
+      },
+      {
+        "id": 6,
+        "question": "Did the failure stay isolated to one component or cascade across services? Answer 'isolated failure' or 'cascading failure'.",
+        "reference_answer": "cascading failure",
+        "atoms": [
+          "cascading failure"
+        ],
+        "answerable_from_evidence": [],
+        "found_in_report": [],
+        "missing_from_evidence": [
+          "cascading failure"
+        ],
+        "answer_text": null,
+        "status": "NO ANSWER"
+      },
+      {
+        "id": 7,
+        "question": "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+        "reference_answer": "availability",
+        "atoms": [
+          "availability"
+        ],
+        "answerable_from_evidence": [
+          "availability"
+        ],
+        "found_in_report": [
+          "availability"
+        ],
+        "missing_from_evidence": [],
+        "answer_text": null,
+        "status": "NO ANSWER"
+      },
+      {
+        "id": 8,
+        "question": "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+        "reference_answer": "booking-web, downstream symptom",
+        "atoms": [
+          "booking-web",
+          "downstream symptom"
+        ],
+        "answerable_from_evidence": [
+          "booking-web"
+        ],
+        "found_in_report": [],
+        "missing_from_evidence": [
+          "downstream symptom"
+        ],
+        "answer_text": null,
+        "status": "NO ANSWER"
+      },
+      {
+        "id": 9,
+        "question": "Which change restored normal service? Provide its change identifier.",
+        "reference_answer": "CHG-40380",
+        "atoms": [
+          "CHG-40380"
+        ],
+        "answerable_from_evidence": [
+          "CHG-40380"
+        ],
+        "found_in_report": [],
+        "missing_from_evidence": [],
+        "answer_text": null,
+        "status": "NO ANSWER"
+      }
+    ]
+  }
+}

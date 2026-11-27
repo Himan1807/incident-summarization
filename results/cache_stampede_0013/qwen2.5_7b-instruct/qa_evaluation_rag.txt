@@ -1,0 +1,102 @@
+====================================================================================================
+INCIDENT : cache_stampede_0013
+MODEL    : qwen2.5:7b-instruct
+CONDITION: RAG (advanced pipeline)
+RUN TIME : 25.1 min of LLM generation
+REPORT   : results\cache_stampede_0013\qwen2.5_7b-instruct\advanced_postmortem.md
+CREATED  : 2026-11-27T22:42:16
+====================================================================================================
+
+A. QUESTION-BY-QUESTION EVALUATION
+   Found = reference items present in the report's answer; Prec. = correct entities / entities the answer gave;
+   Wrong items = entities in the answer that are not in the reference answer.
+
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| #   | Question                         | Reference answer           | Answer from the report             | Found | Prec. | Wrong items      | Status    |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 1   | What is the hostname of the host | cache-redis-02             | The hostname of the host or node   | 1/1   | -     | -                | CORRECT   |
+|     | or node where the failure        |                            | where the failure originated is    |       |       |                  |           |
+|     | originated?                      |                            | cache-redis-02.                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 2   | What is the IP address of the    | 10.227.167.238             | The IP address of the host or node | 1/1   | 1/1   | -                | CORRECT   |
+|     | host or node where the failure   |                            | where the failure originated is    |       |       |                  |           |
+|     | originated?                      |                            | 10.227.167.238.                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 3   | Which database host became       | inventory-db-01            | The database host that became      | 1/1   | -     | -                | CORRECT   |
+|     | overloaded as a consequence of   |                            | overloaded as a consequence of the |       |       |                  |           |
+|     | the initial failure?             |                            | initial failure is inventory-      |       |       |                  |           |
+|     |                                  |                            | db-01.                             |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 4   | During what hour did the first   | 2021-05-08 21:00 UTC       | The first signs of the failure     | 0/1   | 1/2   | 2021-05-08 18:00 | WRONG     |
+|     | signs of the failure appear?     |                            | appeared during the hour           |       |       |                  |           |
+|     | Provide the earliest date and    |                            | 2021-05-08 18:00 UTC.              |       |       |                  |           |
+|     | time in YYYY-MM-DD HH:MM UTC     |                            |                                    |       |       |                  |           |
+|     | format.                          |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 5   | What is the root cause category  | capacity exhaustion        | The root cause category of the     | 1/1   | -     | -                | CORRECT   |
+|     | of the incident: configuration   |                            | incident is capacity exhaustion.   |       |       |                  |           |
+|     | change, software defect,         |                            |                                    |       |       |                  |           |
+|     | hardware failure, cloud provider |                            |                                    |       |       |                  |           |
+|     | failure, capacity exhaustion,    |                            |                                    |       |       |                  |           |
+|     | automation error, certificate    |                            |                                    |       |       |                  |           |
+|     | expiry, or third-party           |                            |                                    |       |       |                  |           |
+|     | dependency failure?              |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 6   | Did the failure stay isolated to | cascading failure          | The failure cascaded across        | 0/1   | -     | -                | WRONG     |
+|     | one component or cascade across  |                            | services.                          |       |       |                  |           |
+|     | services? Answer 'isolated       |                            |                                    |       |       |                  |           |
+|     | failure' or 'cascading failure'. |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 7   | Which of the three CIA           | availability               | The CIA component primarily        | 1/1   | -     | -                | CORRECT   |
+|     | components is primarily          |                            | affected is availability.          |       |       |                  |           |
+|     | affected: availability,          |                            |                                    |       |       |                  |           |
+|     | integrity, or confidentiality?   |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 8   | According to the error volume    | booking-web, downstream    | The single service that emitted    | 2/2   | -     | -                | CORRECT   |
+|     | statistics, what single service  | symptom                    | the most errors is booking-web,    |       |       |                  |           |
+|     | emitted the most errors? Is it   |                            | which is not the root cause but a  |       |       |                  |           |
+|     | the root cause or a downstream   |                            | downstream symptom.                |       |       |                  |           |
+|     | symptom?                         |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 9   | Which change restored normal     | CHG-40380                  | The change that restored normal    | 1/1   | -     | -                | CORRECT   |
+|     | service? Provide its change      |                            | service is CHG-40380.              |       |       |                  |           |
+|     | identifier.                      |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+
+B. METRICS
+
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Metric                                       | Value        | Meaning                                                                |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Answer precision                             | 0.667        | Entities (IPs, domains, hosts, URLs, times) in the report's answers    |
+|                                              |              | that also occur in the reference / all entities it gave                |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Answer recall                                | 0.800        | Reference answer items found in the report's answers / all reference   |
+|                                              |              | items                                                                  |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Answer F1                                    | 0.727        | Harmonic mean of answer precision and recall                           |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Question recall                              | 0.889        | Mean over questions of reference items found anywhere in the report    |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Faithfulness                                 | 0.816        | Claims whose facts are in the evidence AND in the chunks they cite /   |
+|                                              |              | all claims                                                             |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Grounding rate                               | 1.000        | Claims whose entities and numbers all exist in the evidence            |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Hallucination rate                           | 0.000        | Entities in the report that are absent from the evidence / all         |
+|                                              |              | entities (lower is better)                                             |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Unsupported numbers                          | 0            | Numbers in the report that are absent from the evidence (lower is      |
+|                                              |              | better)                                                                |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Placeholders                                 | 0            | '[insert ...]' placeholders left in the report (lower is better)       |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Questions correct / partial / wrong /        | 7 / 0 / 2 /  | Per-question status in the table above                                 |
+| abstained / unanswered                       | 0 / 0        |                                                                        |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Claims                                       | 38           | Claim lines counted by the verifier; hedged assessments are excluded   |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+
+Status: CORRECT = every reference item found and nothing wrong; PARTIAL = some items found or wrong items present;
+        WRONG = answer given but no reference item found; ABSTAINED = the report says 'Not established from the available artifacts';
+        NO ANSWER = the report has no answer for that question.

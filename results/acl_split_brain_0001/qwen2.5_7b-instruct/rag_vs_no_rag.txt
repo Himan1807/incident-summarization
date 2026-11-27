@@ -1,0 +1,104 @@
+====================================================================================================
+INCIDENT : acl_split_brain_0001
+MODEL    : qwen2.5:7b-instruct
+CONDITION: No RAG vs RAG (same LLM, same section plan, same questions)
+CREATED  : 2026-11-27T22:42:16
+====================================================================================================
+
+NO RAG : the LLM receives only the incident context (network description and the questions). It has NO logs, alerts or query results.
+         Output is formatted (titles/preambles removed) but not verified, de-duplicated or given citations.
+RAG    : the advanced pipeline (hybrid retrieval, reranking, section-wise generation with citations, verification).
+Hallucination, grounding and number checks are always measured against the REAL evidence of the incident.
+
+A. METRICS
+
++------------------------------------------------------+----------------+----------------+----------------+
+| Metric                                               | No RAG         | RAG            | RAG - No RAG   |
++------------------------------------------------------+----------------+----------------+----------------+
+| Answer precision                                     | -              | 0.333          | -              |
++------------------------------------------------------+----------------+----------------+----------------+
+| Answer recall                                        | -              | 0.400          | -              |
++------------------------------------------------------+----------------+----------------+----------------+
+| Answer F1                                            | -              | 0.363          | -              |
++------------------------------------------------------+----------------+----------------+----------------+
+| Question recall                                      | 0.222          | 0.778          | +0.556         |
++------------------------------------------------------+----------------+----------------+----------------+
+| Faithfulness                                         | 0.000          | 0.814          | +0.814         |
++------------------------------------------------------+----------------+----------------+----------------+
+| Grounding rate                                       | 0.396          | 1.000          | +0.604         |
++------------------------------------------------------+----------------+----------------+----------------+
+| Hallucination rate (lower is better)                 | 0.515          | 0.000          | -0.515         |
++------------------------------------------------------+----------------+----------------+----------------+
+| Unsupported numbers (lower is better)                | 25             | 0              | -25            |
++------------------------------------------------------+----------------+----------------+----------------+
+| Placeholders (lower is better)                       | 0              | 0              | +0             |
++------------------------------------------------------+----------------+----------------+----------------+
+| Questions CORRECT                                    | 0              | 3              | +3             |
++------------------------------------------------------+----------------+----------------+----------------+
+| Questions PARTIAL                                    | 0              | 0              | +0             |
++------------------------------------------------------+----------------+----------------+----------------+
+| Questions WRONG                                      | 0              | 4              | +4             |
++------------------------------------------------------+----------------+----------------+----------------+
+| Questions ABSTAINED / unanswered                     | 0 / 9          | 2 / 0          | -              |
++------------------------------------------------------+----------------+----------------+----------------+
+| LLM generation time (min)                            | 11.5           | 27.1           | -              |
++------------------------------------------------------+----------------+----------------+----------------+
+
+B. ANSWERS PER QUESTION
+
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| #   | Question                     | Reference answer         | No RAG answer                  | RAG answer                     | No RAG    | RAG       |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 1   | What change, deployment or   | AWX-54207                | (no answer)                    | CHG-16846                      | NO ANSWER | WRONG     |
+|     | automation run triggered the |                          |                                |                                |           |           |
+|     | incident? Provide its change |                          |                                |                                |           |           |
+|     | identifier.                  |                          |                                |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 2   | Which account or automation  | awx-svc                  | (no answer)                    | m.singh                        | NO ANSWER | WRONG     |
+|     | identity executed the        |                          |                                |                                |           |           |
+|     | triggering change?           |                          |                                |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 3   | Which network device dropped | core-b1                  | (no answer)                    | core-b1                        | NO ANSWER | CORRECT   |
+|     | the database heartbeat and   |                          |                                |                                |           |           |
+|     | replication traffic?         |                          |                                |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 4   | Which database node was      | db-b                     | (no answer)                    | db-b                           | NO ANSWER | CORRECT   |
+|     | promoted, creating a second  |                          |                                |                                |           |           |
+|     | writable primary?            |                          |                                |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 5   | During what hour did the     | 2022-02-15 19:00 UTC     | (no answer)                    | 2022-02-15 12:00 UTC           | NO ANSWER | WRONG     |
+|     | first signs of the failure   |                          |                                |                                |           |           |
+|     | appear? Provide the earliest |                          |                                |                                |           |           |
+|     | date and time in YYYY-MM-DD  |                          |                                |                                |           |           |
+|     | HH:MM UTC format.            |                          |                                |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 6   | What is the root cause       | automation error         | (no answer)                    | Not established from the       | NO ANSWER | ABSTAINED |
+|     | category of the incident:    |                          |                                | available artifacts            |           |           |
+|     | configuration change,        |                          |                                |                                |           |           |
+|     | software defect, hardware    |                          |                                |                                |           |           |
+|     | failure, cloud provider      |                          |                                |                                |           |           |
+|     | failure, capacity            |                          |                                |                                |           |           |
+|     | exhaustion, automation       |                          |                                |                                |           |           |
+|     | error, certificate expiry,   |                          |                                |                                |           |           |
+|     | or third-party dependency    |                          |                                |                                |           |           |
+|     | failure?                     |                          |                                |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 7   | Which of the three CIA       | integrity                | (no answer)                    | availability                   | NO ANSWER | WRONG     |
+|     | components is primarily      |                          |                                |                                |           |           |
+|     | affected: availability,      |                          |                                |                                |           |           |
+|     | integrity, or                |                          |                                |                                |           |           |
+|     | confidentiality?             |                          |                                |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 8   | According to the error       | reconciliation-job,      | (no answer)                    | reconciliation-job, a          | NO ANSWER | CORRECT   |
+|     | volume statistics, what      | downstream symptom       |                                | downstream symptom             |           |           |
+|     | single service emitted the   |                          |                                |                                |           |           |
+|     | most errors? Is it the root  |                          |                                |                                |           |           |
+|     | cause or a downstream        |                          |                                |                                |           |           |
+|     | symptom?                     |                          |                                |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 9   | Which change restored normal | CHG-16828                | (no answer)                    | Not established from the       | NO ANSWER | ABSTAINED |
+|     | service? Provide its change  |                          |                                | available artifacts            |           |           |
+|     | identifier.                  |                          |                                |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+
+Faithfulness is 0 / '-' for No RAG by construction: without retrieved chunks it cannot cite evidence.

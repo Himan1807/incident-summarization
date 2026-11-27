@@ -1,0 +1,104 @@
+====================================================================================================
+INCIDENT : acl_split_brain_0001
+MODEL    : deepinfra:Qwen/Qwen3-235B-A22B-Instruct-2507
+CONDITION: No RAG vs RAG (same LLM, same section plan, same questions)
+CREATED  : 2026-11-27T22:42:16
+====================================================================================================
+
+NO RAG : the LLM receives only the incident context (network description and the questions). It has NO logs, alerts or query results.
+         Output is formatted (titles/preambles removed) but not verified, de-duplicated or given citations.
+RAG    : the advanced pipeline (hybrid retrieval, reranking, section-wise generation with citations, verification).
+Hallucination, grounding and number checks are always measured against the REAL evidence of the incident.
+
+A. METRICS
+
++------------------------------------------------------+----------------+----------------+----------------+
+| Metric                                               | No RAG         | RAG            | RAG - No RAG   |
++------------------------------------------------------+----------------+----------------+----------------+
+| Answer precision                                     | 0.500          | 1.000          | +0.500         |
++------------------------------------------------------+----------------+----------------+----------------+
+| Answer recall                                        | 0.300          | 0.800          | +0.500         |
++------------------------------------------------------+----------------+----------------+----------------+
+| Answer F1                                            | 0.375          | 0.889          | +0.514         |
++------------------------------------------------------+----------------+----------------+----------------+
+| Question recall                                      | 0.278          | 0.889          | +0.611         |
++------------------------------------------------------+----------------+----------------+----------------+
+| Faithfulness                                         | 0.000          | 0.800          | +0.800         |
++------------------------------------------------------+----------------+----------------+----------------+
+| Grounding rate                                       | 0.174          | 1.000          | +0.826         |
++------------------------------------------------------+----------------+----------------+----------------+
+| Hallucination rate (lower is better)                 | 0.918          | 0.000          | -0.918         |
++------------------------------------------------------+----------------+----------------+----------------+
+| Unsupported numbers (lower is better)                | 28             | 0              | -28            |
++------------------------------------------------------+----------------+----------------+----------------+
+| Placeholders (lower is better)                       | 0              | 0              | +0             |
++------------------------------------------------------+----------------+----------------+----------------+
+| Questions CORRECT                                    | 2              | 7              | +5             |
++------------------------------------------------------+----------------+----------------+----------------+
+| Questions PARTIAL                                    | 1              | 0              | -1             |
++------------------------------------------------------+----------------+----------------+----------------+
+| Questions WRONG                                      | 6              | 2              | -4             |
++------------------------------------------------------+----------------+----------------+----------------+
+| Questions ABSTAINED / unanswered                     | 0 / 0          | 0 / 0          | -              |
++------------------------------------------------------+----------------+----------------+----------------+
+| LLM generation time (min)                            | 2.2            | 12.9           | -              |
++------------------------------------------------------+----------------+----------------+----------------+
+
+B. ANSWERS PER QUESTION
+
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| #   | Question                     | Reference answer         | No RAG answer                  | RAG answer                     | No RAG    | RAG       |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 1   | What change, deployment or   | AWX-54207                | CHG-20220215-001 [evidence id: | CHG-16809                      | WRONG     | WRONG     |
+|     | automation run triggered the |                          | change_mgmt_event_44a]         |                                |           |           |
+|     | incident? Provide its change |                          |                                |                                |           |           |
+|     | identifier.                  |                          |                                |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 2   | Which account or automation  | awx-svc                  | svc-ansible-automation         | awx-svc                        | WRONG     | CORRECT   |
+|     | identity executed the        |                          | [evidence id:                  |                                |           |           |
+|     | triggering change?           |                          | change_mgmt_event_44a]         |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 3   | Which network device dropped | core-b1                  | rtr-dc-a-core-01 [evidence id: | core-b1                        | WRONG     | CORRECT   |
+|     | the database heartbeat and   |                          | netflow_agg_77b]               |                                |           |           |
+|     | replication traffic?         |                          |                                |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 4   | Which database node was      | db-b                     | db-b [evidence id:             | db-b                           | CORRECT   | CORRECT   |
+|     | promoted, creating a second  |                          | k8s_event_88c,                 |                                |           |           |
+|     | writable primary?            |                          | postgres_log_agg_33d]          |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 5   | During what hour did the     | 2022-02-15 19:00 UTC     | 2022-02-15 03:14 UTC [evidence | 2022-02-15 19:00 UTC           | WRONG     | CORRECT   |
+|     | first signs of the failure   |                          | id: prom_alert_09a]            |                                |           |           |
+|     | appear? Provide the earliest |                          |                                |                                |           |           |
+|     | date and time in YYYY-MM-DD  |                          |                                |                                |           |           |
+|     | HH:MM UTC format.            |                          |                                |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 6   | What is the root cause       | automation error         | configuration change [evidence | configuration change           | WRONG     | WRONG     |
+|     | category of the incident:    |                          | id: change_mgmt_event_44a,     |                                |           |           |
+|     | configuration change,        |                          | netflow_agg_77b]               |                                |           |           |
+|     | software defect, hardware    |                          |                                |                                |           |           |
+|     | failure, cloud provider      |                          |                                |                                |           |           |
+|     | failure, capacity            |                          |                                |                                |           |           |
+|     | exhaustion, automation       |                          |                                |                                |           |           |
+|     | error, certificate expiry,   |                          |                                |                                |           |           |
+|     | or third-party dependency    |                          |                                |                                |           |           |
+|     | failure?                     |                          |                                |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 7   | Which of the three CIA       | integrity                | integrity [evidence id:        | integrity                      | CORRECT   | CORRECT   |
+|     | components is primarily      |                          | postgres_log_agg_33d,          |                                |           |           |
+|     | affected: availability,      |                          | vrrp_event_55e]                |                                |           |           |
+|     | integrity, or                |                          |                                |                                |           |           |
+|     | confidentiality?             |                          |                                |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 8   | According to the error       | reconciliation-job,      | ride-match-service; downstream | reconciliation-job; downstream | PARTIAL   | CORRECT   |
+|     | volume statistics, what      | downstream symptom       | symptom [evidence id:          | symptom                        |           |           |
+|     | single service emitted the   |                          | error_volume_agg_12f]          |                                |           |           |
+|     | most errors? Is it the root  |                          |                                |                                |           |           |
+|     | cause or a downstream        |                          |                                |                                |           |           |
+|     | symptom?                     |                          |                                |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 9   | Which change restored normal | CHG-16828                | CHG-20220215-003 [evidence id: | CHG-16828                      | WRONG     | CORRECT   |
+|     | service? Provide its change  |                          | change_mgmt_event_66g]         |                                |           |           |
+|     | identifier.                  |                          |                                |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+
+Faithfulness is 0 / '-' for No RAG by construction: without retrieved chunks it cannot cite evidence.

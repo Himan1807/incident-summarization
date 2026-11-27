@@ -1,0 +1,99 @@
+====================================================================================================
+INCIDENT : koi_stealer
+MODEL    : deepinfra:google/gemma-4-26B-A4B-it
+CONDITION: No RAG vs RAG (same LLM, same section plan, same questions)
+CREATED  : 2026-11-27T21:04:28
+====================================================================================================
+
+NO RAG : the LLM receives only the incident context (network description and the questions). It has NO logs, alerts or query results.
+         Output is formatted (titles/preambles removed) but not verified, de-duplicated or given citations.
+RAG    : the advanced pipeline (hybrid retrieval, reranking, section-wise generation with citations, verification).
+Hallucination, grounding and number checks are always measured against the REAL evidence of the incident.
+
+A. METRICS
+
++------------------------------------------------------+----------------+----------------+----------------+
+| Metric                                               | No RAG         | RAG            | RAG - No RAG   |
++------------------------------------------------------+----------------+----------------+----------------+
+| Answer precision                                     | -              | 0.600          | -              |
++------------------------------------------------------+----------------+----------------+----------------+
+| Answer recall                                        | -              | 0.778          | -              |
++------------------------------------------------------+----------------+----------------+----------------+
+| Answer F1                                            | -              | 0.678          | -              |
++------------------------------------------------------+----------------+----------------+----------------+
+| Question recall                                      | 0.188          | 0.875          | +0.687         |
++------------------------------------------------------+----------------+----------------+----------------+
+| Faithfulness                                         | 0.000          | 1.000          | +1.000         |
++------------------------------------------------------+----------------+----------------+----------------+
+| Grounding rate                                       | 0.577          | 1.000          | +0.423         |
++------------------------------------------------------+----------------+----------------+----------------+
+| Hallucination rate (lower is better)                 | 0.562          | 0.000          | -0.562         |
++------------------------------------------------------+----------------+----------------+----------------+
+| Unsupported numbers (lower is better)                | 7              | 0              | -7             |
++------------------------------------------------------+----------------+----------------+----------------+
+| Placeholders (lower is better)                       | 0              | 0              | +0             |
++------------------------------------------------------+----------------+----------------+----------------+
+| Questions CORRECT                                    | 0              | 5              | +5             |
++------------------------------------------------------+----------------+----------------+----------------+
+| Questions PARTIAL                                    | 0              | 1              | +1             |
++------------------------------------------------------+----------------+----------------+----------------+
+| Questions WRONG                                      | 0              | 0              | +0             |
++------------------------------------------------------+----------------+----------------+----------------+
+| Questions ABSTAINED / unanswered                     | 0 / 8          | 2 / 0          | -              |
++------------------------------------------------------+----------------+----------------+----------------+
+| LLM generation time (min)                            | 0.6            | 1.2            | -              |
++------------------------------------------------------+----------------+----------------+----------------+
+
+B. ANSWERS PER QUESTION
+
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| #   | Question                     | Reference answer         | No RAG answer                  | RAG answer                     | No RAG    | RAG       |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 1   | What is the IP address of    | 172.17.0.99              | (no answer)                    | 172.17.0.99                    | NO ANSWER | CORRECT   |
+|     | the potentially infected     |                          |                                |                                |           |           |
+|     | internal host in the LAN?    |                          |                                |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 2   | What is the hostname of the  | DESKTOP-RNVO9AT          | (no answer)                    | desktop-rnvo9at                | NO ANSWER | CORRECT   |
+|     | potentially infected machine |                          |                                |                                |           |           |
+|     | in the LAN?                  |                          |                                |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 3   | What is the Windows human    | afletcher                | (no answer)                    | afletcher                      | NO ANSWER | CORRECT   |
+|     | user account name (not       |                          |                                |                                |           |           |
+|     | machine accounts ending in   |                          |                                |                                |           |           |
+|     | $) of the potentially        |                          |                                |                                |           |           |
+|     | infected machine in the LAN? |                          |                                |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 4   | What are the likely fake or  | www.bellantonicioccolato | (no answer)                    | Not established from the       | NO ANSWER | ABSTAINED |
+|     | suspicious domains / URLs    | .it (likely compromised  |                                | available artifacts.           |           |           |
+|     | for initial infection?       | site associated with Koi |                                |                                |           |           |
+|     |                              | Loader/Koi Stealer)      |                                |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 5   | What are the suspicious      | 79.124.78.197            | (no answer)                    | 79.124.78.197, 23.45.119.144,  | NO ANSWER | PARTIAL   |
+|     | external IP addresses        |                          |                                | 204.79.197.203,                |           |           |
+|     | contacted, which might be    |                          |                                | 52.113.194.132, 23.195.212.189 |           |           |
+|     | involved in command-and-     |                          |                                |                                |           |           |
+|     | control (C2) communication?  |                          |                                |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 6   | Which of the three CIA       | confidentiality          | (no answer)                    | Not established from the       | NO ANSWER | ABSTAINED |
+|     | components does the attacker |                          |                                | available artifacts.           |           |           |
+|     | target primarily:            |                          |                                |                                |           |           |
+|     | availability, integrity, or  |                          |                                |                                |           |           |
+|     | confidentiality?             |                          |                                |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 7   | During what hour did the     | 2024-09-04 17:00 UTC     | (no answer)                    | 2024-09-04 17:00 UTC           | NO ANSWER | CORRECT   |
+|     | first signs of infection     |                          |                                |                                |           |           |
+|     | activity appear? Provide the |                          |                                |                                |           |           |
+|     | earliest date and time in    |                          |                                |                                |           |           |
+|     | YYYY-MM-DD HH:MM UTC format. |                          |                                |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 8   | According to the connection  | 79.124.78.197, C2 server | (no answer)                    | 79.124.78.197; Assessment:     | NO ANSWER | CORRECT   |
+|     | volume statistics, what      |                          |                                | Likely a C2 server             |           |           |
+|     | single external IP address   |                          |                                |                                |           |           |
+|     | received the most            |                          |                                |                                |           |           |
+|     | connections from the         |                          |                                |                                |           |           |
+|     | infected hosts? Is it a C2   |                          |                                |                                |           |           |
+|     | server or a legitimate       |                          |                                |                                |           |           |
+|     | service?                     |                          |                                |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+
+Faithfulness is 0 / '-' for No RAG by construction: without retrieved chunks it cannot cite evidence.

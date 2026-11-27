@@ -1,0 +1,214 @@
+{
+  "condition": "no_rag",
+  "model": "qwen3:4b",
+  "scenario": "cache_stampede_0013",
+  "seconds_total": 1253.8,
+  "run_log": [
+    {
+      "section": "Affected Host and User",
+      "seconds": 142.7,
+      "truncated": true
+    },
+    {
+      "section": "Timeline",
+      "seconds": 193.5,
+      "truncated": true
+    },
+    {
+      "section": "Detection: IDS Alerts",
+      "seconds": 120.6,
+      "truncated": true
+    },
+    {
+      "section": "Initial Infection Indicators",
+      "seconds": 120.0,
+      "truncated": true
+    },
+    {
+      "section": "Command-and-Control and Network Activity",
+      "seconds": 118.2,
+      "truncated": true
+    },
+    {
+      "section": "Impact Assessment",
+      "seconds": 114.9,
+      "truncated": true
+    },
+    {
+      "section": "Root Cause and Evidence Gaps",
+      "seconds": 116.5,
+      "truncated": true
+    },
+    {
+      "section": "Corrective and Preventive Actions",
+      "seconds": 118.1,
+      "truncated": true
+    },
+    {
+      "section": "Answers to Investigation Questions",
+      "seconds": 209.3,
+      "truncated": true
+    }
+  ],
+  "evaluation": {
+    "answer_precision": null,
+    "answer_recall": null,
+    "answer_f1": null,
+    "question_recall": 0.0,
+    "questions_correct": "0/9",
+    "answerable_entity_recall": 0.0,
+    "overall_entity_recall": 0.0,
+    "faithfulness": null,
+    "grounding_rate": null,
+    "citation_precision": null,
+    "citation_rate": null,
+    "claims": 0,
+    "assessment_lines": 1,
+    "uncited_lines": 0,
+    "hallucination_rate": 0.0,
+    "unsupported_entities": [],
+    "unsupported_number_count": 0,
+    "unsupported_numbers": [],
+    "placeholder_count": 0,
+    "per_question": [
+      {
+        "id": 1,
+        "question": "What is the hostname of the host or node where the failure originated?",
+        "reference_answer": "cache-redis-02",
+        "atoms": [
+          "cache-redis-02"
+        ],
+        "answerable_from_evidence": [
+          "cache-redis-02"
+        ],
+        "found_in_report": [],
+        "missing_from_evidence": [],
+        "answer_text": null,
+        "status": "NO ANSWER"
+      },
+      {
+        "id": 2,
+        "question": "What is the IP address of the host or node where the failure originated?",
+        "reference_answer": "10.227.167.238",
+        "atoms": [
+          "10.227.167.238"
+        ],
+        "answerable_from_evidence": [
+          "10.227.167.238"
+        ],
+        "found_in_report": [],
+        "missing_from_evidence": [],
+        "answer_text": null,
+        "status": "NO ANSWER"
+      },
+      {
+        "id": 3,
+        "question": "Which database host became overloaded as a consequence of the initial failure?",
+        "reference_answer": "inventory-db-01",
+        "atoms": [
+          "inventory-db-01"
+        ],
+        "answerable_from_evidence": [
+          "inventory-db-01"
+        ],
+        "found_in_report": [],
+        "missing_from_evidence": [],
+        "answer_text": null,
+        "status": "NO ANSWER"
+      },
+      {
+        "id": 4,
+        "question": "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+        "reference_answer": "2021-05-08 21:00 UTC",
+        "atoms": [
+          "2021-05-08 21:00 UTC"
+        ],
+        "answerable_from_evidence": [
+          "2021-05-08 21:00 UTC"
+        ],
+        "found_in_report": [],
+        "missing_from_evidence": [],
+        "answer_text": null,
+        "status": "NO ANSWER"
+      },
+      {
+        "id": 5,
+        "question": "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+        "reference_answer": "capacity exhaustion",
+        "atoms": [
+          "capacity exhaustion"
+        ],
+        "answerable_from_evidence": [],
+        "found_in_report": [],
+        "missing_from_evidence": [
+          "capacity exhaustion"
+        ],
+        "answer_text": null,
+        "status": "NO ANSWER"
+      },
+      {
+        "id": 6,
+        "question": "Did the failure stay isolated to one component or cascade across services? Answer 'isolated failure' or 'cascading failure'.",
+        "reference_answer": "cascading failure",
+        "atoms": [
+          "cascading failure"
+        ],
+        "answerable_from_evidence": [],
+        "found_in_report": [],
+        "missing_from_evidence": [
+          "cascading failure"
+        ],
+        "answer_text": null,
+        "status": "NO ANSWER"
+      },
+      {
+        "id": 7,
+        "question": "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+        "reference_answer": "availability",
+        "atoms": [
+          "availability"
+        ],
+        "answerable_from_evidence": [
+          "availability"
+        ],
+        "found_in_report": [],
+        "missing_from_evidence": [],
+        "answer_text": null,
+        "status": "NO ANSWER"
+      },
+      {
+        "id": 8,
+        "question": "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+        "reference_answer": "booking-web, downstream symptom",
+        "atoms": [
+          "booking-web",
+          "downstream symptom"
+        ],
+        "answerable_from_evidence": [
+          "booking-web"
+        ],
+        "found_in_report": [],
+        "missing_from_evidence": [
+          "downstream symptom"
+        ],
+        "answer_text": null,
+        "status": "NO ANSWER"
+      },
+      {
+        "id": 9,
+        "question": "Which change restored normal service? Provide its change identifier.",
+        "reference_answer": "CHG-40380",
+        "atoms": [
+          "CHG-40380"
+        ],
+        "answerable_from_evidence": [
+          "CHG-40380"
+        ],
+        "found_in_report": [],
+        "missing_from_evidence": [],
+        "answer_text": null,
+        "status": "NO ANSWER"
+      }
+    ]
+  }
+}

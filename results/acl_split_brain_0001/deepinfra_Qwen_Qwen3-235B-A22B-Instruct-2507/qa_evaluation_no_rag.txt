@@ -1,0 +1,101 @@
+====================================================================================================
+INCIDENT : acl_split_brain_0001
+MODEL    : deepinfra:Qwen/Qwen3-235B-A22B-Instruct-2507
+CONDITION: No RAG (LLM without retrieval)
+RUN TIME : 2.2 min of LLM generation
+REPORT   : results\acl_split_brain_0001\deepinfra_Qwen_Qwen3-235B-A22B-Instruct-2507\no_rag_postmortem.md
+CREATED  : 2026-11-27T22:42:16
+====================================================================================================
+
+A. QUESTION-BY-QUESTION EVALUATION
+   Found = reference items present in the report's answer; Prec. = correct entities / entities the answer gave;
+   Wrong items = entities in the answer that are not in the reference answer.
+
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| #   | Question                         | Reference answer           | Answer from the report             | Found | Prec. | Wrong items      | Status    |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 1   | What change, deployment or       | AWX-54207                  | CHG-20220215-001 [evidence id:     | 0/1   | -     | -                | WRONG     |
+|     | automation run triggered the     |                            | change_mgmt_event_44a]             |       |       |                  |           |
+|     | incident? Provide its change     |                            |                                    |       |       |                  |           |
+|     | identifier.                      |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 2   | Which account or automation      | awx-svc                    | svc-ansible-automation [evidence   | 0/1   | -     | -                | WRONG     |
+|     | identity executed the triggering |                            | id: change_mgmt_event_44a]         |       |       |                  |           |
+|     | change?                          |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 3   | Which network device dropped the | core-b1                    | rtr-dc-a-core-01 [evidence id:     | 0/1   | -     | -                | WRONG     |
+|     | database heartbeat and           |                            | netflow_agg_77b]                   |       |       |                  |           |
+|     | replication traffic?             |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 4   | Which database node was          | db-b                       | db-b [evidence id: k8s_event_88c,  | 1/1   | -     | -                | CORRECT   |
+|     | promoted, creating a second      |                            | postgres_log_agg_33d]              |       |       |                  |           |
+|     | writable primary?                |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 5   | During what hour did the first   | 2022-02-15 19:00 UTC       | 2022-02-15 03:14 UTC [evidence id: | 0/1   | 1/2   | 2022-02-15 03:14 | WRONG     |
+|     | signs of the failure appear?     |                            | prom_alert_09a]                    |       |       |                  |           |
+|     | Provide the earliest date and    |                            |                                    |       |       |                  |           |
+|     | time in YYYY-MM-DD HH:MM UTC     |                            |                                    |       |       |                  |           |
+|     | format.                          |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 6   | What is the root cause category  | automation error           | configuration change [evidence id: | 0/1   | -     | -                | WRONG     |
+|     | of the incident: configuration   |                            | change_mgmt_event_44a,             |       |       |                  |           |
+|     | change, software defect,         |                            | netflow_agg_77b]                   |       |       |                  |           |
+|     | hardware failure, cloud provider |                            |                                    |       |       |                  |           |
+|     | failure, capacity exhaustion,    |                            |                                    |       |       |                  |           |
+|     | automation error, certificate    |                            |                                    |       |       |                  |           |
+|     | expiry, or third-party           |                            |                                    |       |       |                  |           |
+|     | dependency failure?              |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 7   | Which of the three CIA           | integrity                  | integrity [evidence id:            | 1/1   | -     | -                | CORRECT   |
+|     | components is primarily          |                            | postgres_log_agg_33d,              |       |       |                  |           |
+|     | affected: availability,          |                            | vrrp_event_55e]                    |       |       |                  |           |
+|     | integrity, or confidentiality?   |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 8   | According to the error volume    | reconciliation-job,        | ride-match-service; downstream     | 1/2   | -     | -                | PARTIAL   |
+|     | statistics, what single service  | downstream symptom         | symptom [evidence id:              |       |       |                  |           |
+|     | emitted the most errors? Is it   |                            | error_volume_agg_12f]              |       |       |                  |           |
+|     | the root cause or a downstream   |                            |                                    |       |       |                  |           |
+|     | symptom?                         |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 9   | Which change restored normal     | CHG-16828                  | CHG-20220215-003 [evidence id:     | 0/1   | -     | -                | WRONG     |
+|     | service? Provide its change      |                            | change_mgmt_event_66g]             |       |       |                  |           |
+|     | identifier.                      |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+
+B. METRICS
+
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Metric                                       | Value        | Meaning                                                                |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Answer precision                             | 0.500        | Entities (IPs, domains, hosts, URLs, times) in the report's answers    |
+|                                              |              | that also occur in the reference / all entities it gave                |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Answer recall                                | 0.300        | Reference answer items found in the report's answers / all reference   |
+|                                              |              | items                                                                  |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Answer F1                                    | 0.375        | Harmonic mean of answer precision and recall                           |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Question recall                              | 0.278        | Mean over questions of reference items found anywhere in the report    |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Faithfulness                                 | 0.000        | Claims whose facts are in the evidence AND in the chunks they cite /   |
+|                                              |              | all claims                                                             |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Grounding rate                               | 0.174        | Claims whose entities and numbers all exist in the evidence            |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Hallucination rate                           | 0.918        | Entities in the report that are absent from the evidence / all         |
+|                                              |              | entities (lower is better)                                             |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Unsupported numbers                          | 28           | Numbers in the report that are absent from the evidence (lower is      |
+|                                              |              | better)                                                                |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Placeholders                                 | 0            | '[insert ...]' placeholders left in the report (lower is better)       |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Questions correct / partial / wrong /        | 2 / 1 / 6 /  | Per-question status in the table above                                 |
+| abstained / unanswered                       | 0 / 0        |                                                                        |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Claims                                       | 46           | Claim lines counted by the verifier; hedged assessments are excluded   |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+
+Status: CORRECT = every reference item found and nothing wrong; PARTIAL = some items found or wrong items present;
+        WRONG = answer given but no reference item found; ABSTAINED = the report says 'Not established from the available artifacts';
+        NO ANSWER = the report has no answer for that question.

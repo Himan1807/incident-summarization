@@ -1,0 +1,116 @@
+====================================================================================================
+INCIDENT : fake_auth
+MODEL    : llama3.2:3b
+CONDITION: RAG (advanced pipeline)
+RUN TIME : 16.2 min of LLM generation
+REPORT   : results\fake_auth\llama3.2_3b\advanced_postmortem.md
+CREATED  : 2026-11-27T21:04:28
+====================================================================================================
+
+A. QUESTION-BY-QUESTION EVALUATION
+   Found = reference items present in the report's answer; Prec. = correct entities / entities the answer gave;
+   Wrong items = entities in the answer that are not in the reference answer.
+
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| #   | Question                         | Reference answer           | Answer from the report             | Found | Prec. | Wrong items      | Status    |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 1   | What is the IP address of the    | 10.1.17.215                | The IP address of the potentially  | 1/1   | 1/1   | -                | CORRECT   |
+|     | potentially infected internal    |                            | infected internal host in the LAN  |       |       |                  |           |
+|     | host in the LAN?                 |                            | is 10.1.17.215.                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 2   | What is the hostname of the      | DESKTOP-L8C5GSJ            | The hostname of the potentially    | 1/1   | 1/1   | -                | CORRECT   |
+|     | potentially infected machine in  |                            | infected machine in the LAN is     |       |       |                  |           |
+|     | the LAN?                         |                            | desktop-l8c5gsj.                   |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 3   | What is the Windows human user   | shutchenson                | The Windows human user account     | 1/1   | -     | -                | CORRECT   |
+|     | account name (not machine        |                            | name (not machine accounts ending  |       |       |                  |           |
+|     | accounts ending in $) of the     |                            | in $) of the potentially infected  |       |       |                  |           |
+|     | potentially infected machine in  |                            | machine in the LAN is shutchenson. |       |       |                  |           |
+|     | the LAN?                         |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 4   | What are the likely fake or      | authenticatoor.org         | The likely fake or suspicious      | 0/1   | 0/11  | ag.innovid.com,  | WRONG     |
+|     | suspicious domains / URLs for    |                            | domains / URLs for initial         |       |       | c.go-mpulse.net, |           |
+|     | initial infection?               |                            | infection are: * c.go-mpulse.net * |       |       | dmpsync.3lift.co |           |
+|     |                                  |                            | dmpsync.3lift.com * dpm.demdex.net |       |       | m,               |           |
+|     |                                  |                            | * oneclient.sfx.ms * img-s-msn-    |       |       | dpm.demdex.net,  |           |
+|     |                                  |                            | com.akamaized.net * px.owneriq.net |       |       | google-authentic |           |
+|     |                                  |                            | * ag.innovid.com * google-         |       |       | ator.burleson-   |           |
+|     |                                  |                            | authenticator.burleson-            |       |       | appliance.net,   |           |
+|     |                                  |                            | appliance.net *                    |       |       | img-s-msn-com.ak |           |
+|     |                                  |                            | jadserve.postrelease.com *         |       |       | amaized.net, jad |           |
+|     |                                  |                            | mscom.demdex.net *                 |       |       | serve.postreleas |           |
+|     |                                  |                            | play.vidyard.com                   |       |       | e.com, mscom.dem |           |
+|     |                                  |                            |                                    |       |       | dex.net, oneclie |           |
+|     |                                  |                            |                                    |       |       | nt.sfx.ms, play. |           |
+|     |                                  |                            |                                    |       |       | vidyard.com,     |           |
+|     |                                  |                            |                                    |       |       | px.owneriq.net   |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 5   | What are the suspicious external | 5.252.153.241,             | The suspicious external IP         | 3/3   | 3/14  | 104.18.8.76,     | PARTIAL   |
+|     | IP addresses contacted, which    | 45.125.66.32,              | addresses contacted, which might   |       |       | 104.21.64.1,     |           |
+|     | might be involved in command-    | 45.125.66.252              | be involved in command-and-control |       |       | 151.101.1.181,   |           |
+|     | and-control (C2) communication?  |                            | (C2) communication, are: *         |       |       | 23.199.168.146,  |           |
+|     |                                  |                            | 5.252.153.241 * 23.207.164.186 *   |       |       | 23.205.110.12,   |           |
+|     |                                  |                            | 23.207.166.9 * 23.205.110.12 *     |       |       | 23.205.110.59,   |           |
+|     |                                  |                            | 23.205.110.59 * 23.199.168.146 *   |       |       | 23.207.164.186,  |           |
+|     |                                  |                            | 104.18.8.76 * 104.21.64.1 *        |       |       | 23.207.166.9,    |           |
+|     |                                  |                            | 44.237.90.153 * 35.71.139.29 *     |       |       | 35.71.139.29,    |           |
+|     |                                  |                            | 35.84.233.181 * 151.101.1.181 *    |       |       | 35.84.233.181,   |           |
+|     |                                  |                            | 45.125.66.32 * 45.125.66.252       |       |       | 44.237.90.153    |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 6   | During what hour did the first   | 2025-01-22 19:00 UTC       | The first signs of infection       | 0/1   | 1/1   | -                | WRONG     |
+|     | signs of infection activity      |                            | activity appeared during the hour  |       |       |                  |           |
+|     | appear? Provide the earliest     |                            | of 19:00 UTC on 2025-01-22.        |       |       |                  |           |
+|     | date and time in YYYY-MM-DD      |                            |                                    |       |       |                  |           |
+|     | HH:MM UTC format.                |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 7   | Were any suspicious certificates | 45.125.66.252,             | Not established from the available | 0/2   | -     | -                | ABSTAINED |
+|     | observed in the encrypted        | 45.125.66.32               | artifacts.                         |       |       |                  |           |
+|     | network traffic? If so, identify |                            |                                    |       |       |                  |           |
+|     | the domain or IP in the          |                            |                                    |       |       |                  |           |
+|     | certificate.                     |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 8   | According to the connection      | 5.252.153.241, C2 server   | Not established from the available | 0/2   | -     | -                | ABSTAINED |
+|     | volume statistics, what single   |                            | artifacts.                         |       |       |                  |           |
+|     | external IP address received the |                            |                                    |       |       |                  |           |
+|     | most connections from the        |                            |                                    |       |       |                  |           |
+|     | infected hosts? Is it a C2       |                            |                                    |       |       |                  |           |
+|     | server or a legitimate service?  |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+
+B. METRICS
+
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Metric                                       | Value        | Meaning                                                                |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Answer precision                             | 0.214        | Entities (IPs, domains, hosts, URLs, times) in the report's answers    |
+|                                              |              | that also occur in the reference / all entities it gave                |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Answer recall                                | 0.500        | Reference answer items found in the report's answers / all reference   |
+|                                              |              | items                                                                  |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Answer F1                                    | 0.300        | Harmonic mean of answer precision and recall                           |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Question recall                              | 0.875        | Mean over questions of reference items found anywhere in the report    |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Faithfulness                                 | 0.692        | Claims whose facts are in the evidence AND in the chunks they cite /   |
+|                                              |              | all claims                                                             |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Grounding rate                               | 1.000        | Claims whose entities and numbers all exist in the evidence            |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Hallucination rate                           | 0.000        | Entities in the report that are absent from the evidence / all         |
+|                                              |              | entities (lower is better)                                             |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Unsupported numbers                          | 0            | Numbers in the report that are absent from the evidence (lower is      |
+|                                              |              | better)                                                                |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Placeholders                                 | 0            | '[insert ...]' placeholders left in the report (lower is better)       |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Questions correct / partial / wrong /        | 3 / 1 / 2 /  | Per-question status in the table above                                 |
+| abstained / unanswered                       | 2 / 0        |                                                                        |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Claims                                       | 52           | Claim lines counted by the verifier; hedged assessments are excluded   |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+
+Status: CORRECT = every reference item found and nothing wrong; PARTIAL = some items found or wrong items present;
+        WRONG = answer given but no reference item found; ABSTAINED = the report says 'Not established from the available artifacts';
+        NO ANSWER = the report has no answer for that question.

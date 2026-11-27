@@ -1,0 +1,219 @@
+{
+  "condition": "no_rag",
+  "model": "deepinfra:zai-org/GLM-4.7",
+  "scenario": "acl_split_brain_0001",
+  "seconds_total": 207.5,
+  "run_log": [
+    {
+      "section": "Affected Host and User",
+      "seconds": 21.9,
+      "truncated": true
+    },
+    {
+      "section": "Timeline",
+      "seconds": 34.3,
+      "truncated": true
+    },
+    {
+      "section": "Detection: IDS Alerts",
+      "seconds": 24.6,
+      "truncated": true
+    },
+    {
+      "section": "Initial Infection Indicators",
+      "seconds": 20.2,
+      "truncated": true
+    },
+    {
+      "section": "Command-and-Control and Network Activity",
+      "seconds": 21.2,
+      "truncated": true
+    },
+    {
+      "section": "Impact Assessment",
+      "seconds": 22.8,
+      "truncated": true
+    },
+    {
+      "section": "Root Cause and Evidence Gaps",
+      "seconds": 19.7,
+      "truncated": true
+    },
+    {
+      "section": "Corrective and Preventive Actions",
+      "seconds": 18.6,
+      "truncated": true
+    },
+    {
+      "section": "Answers to Investigation Questions",
+      "seconds": 24.2,
+      "truncated": true
+    }
+  ],
+  "llm_usage": {
+    "provider": "deepinfra",
+    "calls": 10,
+    "retries": 0,
+    "prompt_tokens": 5178,
+    "completion_tokens": 6600,
+    "estimated_cost_usd": 0.012803
+  },
+  "evaluation": {
+    "answer_precision": null,
+    "answer_recall": null,
+    "answer_f1": null,
+    "question_recall": 0.0,
+    "questions_correct": "0/9",
+    "answerable_entity_recall": 0.0,
+    "overall_entity_recall": 0.0,
+    "faithfulness": null,
+    "grounding_rate": null,
+    "claims": 0,
+    "assessment_lines": 1,
+    "hallucination_rate": 0.0,
+    "unsupported_entities": [],
+    "unsupported_number_count": 0,
+    "unsupported_numbers": [],
+    "placeholder_count": 0,
+    "per_question": [
+      {
+        "id": 1,
+        "question": "What change, deployment or automation run triggered the incident? Provide its change identifier.",
+        "reference_answer": "AWX-54207",
+        "atoms": [
+          "AWX-54207"
+        ],
+        "answerable_from_evidence": [
+          "AWX-54207"
+        ],
+        "found_in_report": [],
+        "missing_from_evidence": [],
+        "answer_text": null,
+        "status": "NO ANSWER"
+      },
+      {
+        "id": 2,
+        "question": "Which account or automation identity executed the triggering change?",
+        "reference_answer": "awx-svc",
+        "atoms": [
+          "awx-svc"
+        ],
+        "answerable_from_evidence": [
+          "awx-svc"
+        ],
+        "found_in_report": [],
+        "missing_from_evidence": [],
+        "answer_text": null,
+        "status": "NO ANSWER"
+      },
+      {
+        "id": 3,
+        "question": "Which network device dropped the database heartbeat and replication traffic?",
+        "reference_answer": "core-b1",
+        "atoms": [
+          "core-b1"
+        ],
+        "answerable_from_evidence": [
+          "core-b1"
+        ],
+        "found_in_report": [],
+        "missing_from_evidence": [],
+        "answer_text": null,
+        "status": "NO ANSWER"
+      },
+      {
+        "id": 4,
+        "question": "Which database node was promoted, creating a second writable primary?",
+        "reference_answer": "db-b",
+        "atoms": [
+          "db-b"
+        ],
+        "answerable_from_evidence": [
+          "db-b"
+        ],
+        "found_in_report": [],
+        "missing_from_evidence": [],
+        "answer_text": null,
+        "status": "NO ANSWER"
+      },
+      {
+        "id": 5,
+        "question": "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+        "reference_answer": "2022-02-15 19:00 UTC",
+        "atoms": [
+          "2022-02-15 19:00 UTC"
+        ],
+        "answerable_from_evidence": [
+          "2022-02-15 19:00 UTC"
+        ],
+        "found_in_report": [],
+        "missing_from_evidence": [],
+        "answer_text": null,
+        "status": "NO ANSWER"
+      },
+      {
+        "id": 6,
+        "question": "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+        "reference_answer": "automation error",
+        "atoms": [
+          "automation error"
+        ],
+        "answerable_from_evidence": [],
+        "found_in_report": [],
+        "missing_from_evidence": [
+          "automation error"
+        ],
+        "answer_text": null,
+        "status": "NO ANSWER"
+      },
+      {
+        "id": 7,
+        "question": "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+        "reference_answer": "integrity",
+        "atoms": [
+          "integrity"
+        ],
+        "answerable_from_evidence": [],
+        "found_in_report": [],
+        "missing_from_evidence": [
+          "integrity"
+        ],
+        "answer_text": null,
+        "status": "NO ANSWER"
+      },
+      {
+        "id": 8,
+        "question": "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+        "reference_answer": "reconciliation-job, downstream symptom",
+        "atoms": [
+          "reconciliation-job",
+          "downstream symptom"
+        ],
+        "answerable_from_evidence": [
+          "reconciliation-job"
+        ],
+        "found_in_report": [],
+        "missing_from_evidence": [
+          "downstream symptom"
+        ],
+        "answer_text": null,
+        "status": "NO ANSWER"
+      },
+      {
+        "id": 9,
+        "question": "Which change restored normal service? Provide its change identifier.",
+        "reference_answer": "CHG-16828",
+        "atoms": [
+          "CHG-16828"
+        ],
+        "answerable_from_evidence": [
+          "CHG-16828"
+        ],
+        "found_in_report": [],
+        "missing_from_evidence": [],
+        "answer_text": null,
+        "status": "NO ANSWER"
+      }
+    ]
+  }
+}

@@ -1,0 +1,288 @@
+{
+  "condition": "no_rag",
+  "model": "deepinfra:anthropic/claude-sonnet-4-6",
+  "scenario": "koi_stealer",
+  "seconds_total": 97.3,
+  "run_log": [
+    {
+      "section": "Affected Host and User",
+      "seconds": 7.0,
+      "truncated": false
+    },
+    {
+      "section": "Timeline",
+      "seconds": 14.6,
+      "truncated": false
+    },
+    {
+      "section": "Detection: IDS Alerts",
+      "seconds": 11.2,
+      "truncated": false
+    },
+    {
+      "section": "Initial Infection Indicators",
+      "seconds": 11.3,
+      "truncated": false
+    },
+    {
+      "section": "Command-and-Control and Network Activity",
+      "seconds": 12.3,
+      "truncated": false
+    },
+    {
+      "section": "Impact Assessment",
+      "seconds": 9.4,
+      "truncated": false
+    },
+    {
+      "section": "Root Cause and Evidence Gaps",
+      "seconds": 11.8,
+      "truncated": false
+    },
+    {
+      "section": "Corrective and Preventive Actions",
+      "seconds": 8.4,
+      "truncated": false
+    },
+    {
+      "section": "Answers to Investigation Questions",
+      "seconds": 11.3,
+      "truncated": false
+    }
+  ],
+  "llm_usage": {
+    "provider": "deepinfra",
+    "calls": 10,
+    "retries": 0,
+    "prompt_tokens": 8356,
+    "completion_tokens": 3317,
+    "estimated_cost_usd": 0.074823
+  },
+  "evaluation": {
+    "answer_precision": 0.167,
+    "answer_recall": 0.111,
+    "answer_f1": 0.133,
+    "question_recall": 0.188,
+    "questions_correct": "2/8",
+    "answerable_entity_recall": 0.125,
+    "overall_entity_recall": 0.222,
+    "faithfulness": 0.0,
+    "grounding_rate": 0.583,
+    "claims": 36,
+    "assessment_lines": 10,
+    "hallucination_rate": 0.5,
+    "unsupported_entities": [
+      "172.17.0.121",
+      "2024-09-04 06:00",
+      "2024-09-04 07:00",
+      "2024-09-04 08:00",
+      "2024-09-04 09:00",
+      "2024-09-04 10:00",
+      "2024-09-04 12:00",
+      "2024-09-04 15:00"
+    ],
+    "unsupported_number_count": 2,
+    "unsupported_numbers": [
+      "172.17",
+      "24"
+    ],
+    "placeholder_count": 0,
+    "per_question": [
+      {
+        "id": 1,
+        "question": "What is the IP address of the potentially infected internal host in the LAN?",
+        "reference_answer": "172.17.0.99",
+        "atoms": [
+          "172.17.0.99"
+        ],
+        "answerable_from_evidence": [
+          "172.17.0.99"
+        ],
+        "found_in_report": [],
+        "missing_from_evidence": [],
+        "answer_text": "Not established from the available artifacts \u2014 no aggregated query output or log results were supplied with the incident context; the LAN range is 172.17.0.0/24 but no specific infected host IP is identifiable from the provided information alone.",
+        "status": "ABSTAINED",
+        "predicted_entities": [
+          "172.17.0.0"
+        ],
+        "correct_entities": [],
+        "atoms_found_in_answer": [],
+        "wrong_entities": [
+          "172.17.0.0"
+        ],
+        "precision": 0.0,
+        "recall": 0.0
+      },
+      {
+        "id": 2,
+        "question": "What is the hostname of the potentially infected machine in the LAN?",
+        "reference_answer": "DESKTOP-RNVO9AT",
+        "atoms": [
+          "DESKTOP-RNVO9AT"
+        ],
+        "answerable_from_evidence": [
+          "DESKTOP-RNVO9AT"
+        ],
+        "found_in_report": [],
+        "missing_from_evidence": [],
+        "answer_text": "Not established from the available artifacts \u2014 hostname cannot be derived without Kerberos, DNS, or DHCP log results; the only named host in the context is the domain controller WIN-CTL9XBQ9Y19 (172.17.0.17), which is infrastructure, not the victim workstation.",
+        "status": "ABSTAINED",
+        "predicted_entities": [
+          "172.17.0.17",
+          "WIN-CTL9XBQ9Y19"
+        ],
+        "correct_entities": [],
+        "atoms_found_in_answer": [],
+        "wrong_entities": [
+          "172.17.0.17",
+          "WIN-CTL9XBQ9Y19"
+        ],
+        "precision": 0.0,
+        "recall": 0.0
+      },
+      {
+        "id": 3,
+        "question": "What is the Windows human user account name (not machine accounts ending in $) of the potentially infected machine in the LAN?",
+        "reference_answer": "afletcher",
+        "atoms": [
+          "afletcher"
+        ],
+        "answerable_from_evidence": [
+          "afletcher"
+        ],
+        "found_in_report": [],
+        "missing_from_evidence": [],
+        "answer_text": "Not established from the available artifacts \u2014 no Kerberos authentication records, Windows event log extracts, or user-account fields were included in the supplied evidence; machine accounts and the AD domain BEPOSITIVE are noted but no human user account name is resolvable.",
+        "status": "ABSTAINED",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 0.0
+      },
+      {
+        "id": 4,
+        "question": "What are the likely fake or suspicious domains / URLs for initial infection?",
+        "reference_answer": "www.bellantonicioccolato.it (likely compromised site associated with Koi Loader/Koi Stealer)",
+        "atoms": [
+          "www.bellantonicioccolato.it"
+        ],
+        "answerable_from_evidence": [
+          "www.bellantonicioccolato.it"
+        ],
+        "found_in_report": [],
+        "missing_from_evidence": [],
+        "answer_text": "Not established from the available artifacts \u2014 no HTTP download URLs, TLS certificate subject names, or suspicious domain strings were provided in the aggregated query output for analysis.",
+        "status": "ABSTAINED",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 0.0
+      },
+      {
+        "id": 5,
+        "question": "What are the suspicious external IP addresses contacted, which might be involved in command-and-control (C2) communication?",
+        "reference_answer": "79.124.78.197",
+        "atoms": [
+          "79.124.78.197"
+        ],
+        "answerable_from_evidence": [
+          "79.124.78.197"
+        ],
+        "found_in_report": [],
+        "missing_from_evidence": [],
+        "answer_text": "Not established from the available artifacts \u2014 no external-destination IP addresses, connection records, or Suricata alert destination fields were included in the supplied evidence.",
+        "status": "ABSTAINED",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 0.0
+      },
+      {
+        "id": 6,
+        "question": "Which of the three CIA components does the attacker target primarily: availability, integrity, or confidentiality?",
+        "reference_answer": "confidentiality",
+        "atoms": [
+          "confidentiality"
+        ],
+        "answerable_from_evidence": [],
+        "found_in_report": [
+          "confidentiality"
+        ],
+        "missing_from_evidence": [
+          "confidentiality"
+        ],
+        "answer_text": "Not established from the available artifacts \u2014 no payload, exfiltration, encryption, or service-disruption indicators were present in the supplied evidence; a CIA targeting assessment cannot be made without artifact content.",
+        "status": "ABSTAINED",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 0.0
+      },
+      {
+        "id": 7,
+        "question": "During what hour did the first signs of infection activity appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+        "reference_answer": "2024-09-04 17:00 UTC",
+        "atoms": [
+          "2024-09-04 17:00 UTC"
+        ],
+        "answerable_from_evidence": [
+          "2024-09-04 17:00 UTC"
+        ],
+        "found_in_report": [],
+        "missing_from_evidence": [],
+        "answer_text": "Not established from the available artifacts \u2014 the query window is 2024-09-04T00:00:00 to 2024-09-04T23:59:59 UTC but no timestamped alert or connection records were supplied to identify the earliest infection activity.",
+        "status": "ABSTAINED",
+        "predicted_entities": [
+          "2024-09-04",
+          "2024-09-04 00:00",
+          "2024-09-04 23:59:59"
+        ],
+        "correct_entities": [
+          "2024-09-04"
+        ],
+        "atoms_found_in_answer": [],
+        "wrong_entities": [
+          "2024-09-04 00:00",
+          "2024-09-04 23:59:59"
+        ],
+        "precision": 0.333,
+        "recall": 0.0
+      },
+      {
+        "id": 8,
+        "question": "According to the connection volume statistics, what single external IP address received the most connections from the infected hosts? Is it a C2 server or a legitimate service?",
+        "reference_answer": "79.124.78.197, C2 server",
+        "atoms": [
+          "79.124.78.197",
+          "C2 server"
+        ],
+        "answerable_from_evidence": [
+          "79.124.78.197",
+          "C2 server"
+        ],
+        "found_in_report": [
+          "C2 server"
+        ],
+        "missing_from_evidence": [],
+        "answer_text": "Not established from the available artifacts \u2014 no connection-volume aggregation results or external IP frequency counts were included in the supplied evidence; no determination of top destination IP or its classification (C2 vs. legitimate) is possible.",
+        "status": "PARTIAL",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [
+          "C2 server"
+        ],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 0.5
+      }
+    ]
+  }
+}

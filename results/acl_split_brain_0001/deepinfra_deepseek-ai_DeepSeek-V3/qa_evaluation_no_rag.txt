@@ -1,0 +1,101 @@
+====================================================================================================
+INCIDENT : acl_split_brain_0001
+MODEL    : deepinfra:deepseek-ai/DeepSeek-V3
+CONDITION: No RAG (LLM without retrieval)
+RUN TIME : 1.2 min of LLM generation
+REPORT   : results\acl_split_brain_0001\deepinfra_deepseek-ai_DeepSeek-V3\no_rag_postmortem.md
+CREATED  : 2026-11-27T22:42:16
+====================================================================================================
+
+A. QUESTION-BY-QUESTION EVALUATION
+   Found = reference items present in the report's answer; Prec. = correct entities / entities the answer gave;
+   Wrong items = entities in the answer that are not in the reference answer.
+
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| #   | Question                         | Reference answer           | Answer from the report             | Found | Prec. | Wrong items      | Status    |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 1   | What change, deployment or       | AWX-54207                  | Not established from the available | 0/1   | -     | -                | ABSTAINED |
+|     | automation run triggered the     |                            | artifacts.                         |       |       |                  |           |
+|     | incident? Provide its change     |                            |                                    |       |       |                  |           |
+|     | identifier.                      |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 2   | Which account or automation      | awx-svc                    | Not established from the available | 0/1   | -     | -                | ABSTAINED |
+|     | identity executed the triggering |                            | artifacts.                         |       |       |                  |           |
+|     | change?                          |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 3   | Which network device dropped the | core-b1                    | Not established from the available | 0/1   | -     | -                | ABSTAINED |
+|     | database heartbeat and           |                            | artifacts.                         |       |       |                  |           |
+|     | replication traffic?             |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 4   | Which database node was          | db-b                       | db-b [evidence id: PostgreSQL      | 1/1   | -     | -                | CORRECT   |
+|     | promoted, creating a second      |                            | promote-on-MASTER script logs]     |       |       |                  |           |
+|     | writable primary?                |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 5   | During what hour did the first   | 2022-02-15 19:00 UTC       | 2022-02-15 03:00 UTC [evidence id: | 0/1   | 1/2   | 2022-02-15 03:00 | WRONG     |
+|     | signs of the failure appear?     |                            | Prometheus Alertmanager alerts]    |       |       |                  |           |
+|     | Provide the earliest date and    |                            |                                    |       |       |                  |           |
+|     | time in YYYY-MM-DD HH:MM UTC     |                            |                                    |       |       |                  |           |
+|     | format.                          |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 6   | What is the root cause category  | automation error           | Not established from the available | 0/1   | -     | -                | ABSTAINED |
+|     | of the incident: configuration   |                            | artifacts.                         |       |       |                  |           |
+|     | change, software defect,         |                            |                                    |       |       |                  |           |
+|     | hardware failure, cloud provider |                            |                                    |       |       |                  |           |
+|     | failure, capacity exhaustion,    |                            |                                    |       |       |                  |           |
+|     | automation error, certificate    |                            |                                    |       |       |                  |           |
+|     | expiry, or third-party           |                            |                                    |       |       |                  |           |
+|     | dependency failure?              |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 7   | Which of the three CIA           | integrity                  | Availability [evidence id:         | 0/1   | -     | -                | WRONG     |
+|     | components is primarily          |                            | PostgreSQL primary/standby pair    |       |       |                  |           |
+|     | affected: availability,          |                            | failure]                           |       |       |                  |           |
+|     | integrity, or confidentiality?   |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 8   | According to the error volume    | reconciliation-job,        | PostgreSQL [evidence id:           | 0/2   | -     | -                | WRONG     |
+|     | statistics, what single service  | downstream symptom         | Elasticsearch aggregation results] |       |       |                  |           |
+|     | emitted the most errors? Is it   |                            |                                    |       |       |                  |           |
+|     | the root cause or a downstream   |                            |                                    |       |       |                  |           |
+|     | symptom?                         |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 9   | Which change restored normal     | CHG-16828                  | Not established from the available | 0/1   | -     | -                | ABSTAINED |
+|     | service? Provide its change      |                            | artifacts.                         |       |       |                  |           |
+|     | identifier.                      |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+
+B. METRICS
+
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Metric                                       | Value        | Meaning                                                                |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Answer precision                             | 0.500        | Entities (IPs, domains, hosts, URLs, times) in the report's answers    |
+|                                              |              | that also occur in the reference / all entities it gave                |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Answer recall                                | 0.100        | Reference answer items found in the report's answers / all reference   |
+|                                              |              | items                                                                  |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Answer F1                                    | 0.167        | Harmonic mean of answer precision and recall                           |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Question recall                              | 0.111        | Mean over questions of reference items found anywhere in the report    |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Faithfulness                                 | 0.000        | Claims whose facts are in the evidence AND in the chunks they cite /   |
+|                                              |              | all claims                                                             |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Grounding rate                               | 0.286        | Claims whose entities and numbers all exist in the evidence            |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Hallucination rate                           | 0.923        | Entities in the report that are absent from the evidence / all         |
+|                                              |              | entities (lower is better)                                             |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Unsupported numbers                          | 5            | Numbers in the report that are absent from the evidence (lower is      |
+|                                              |              | better)                                                                |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Placeholders                                 | 0            | '[insert ...]' placeholders left in the report (lower is better)       |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Questions correct / partial / wrong /        | 1 / 0 / 3 /  | Per-question status in the table above                                 |
+| abstained / unanswered                       | 5 / 0        |                                                                        |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Claims                                       | 49           | Claim lines counted by the verifier; hedged assessments are excluded   |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+
+Status: CORRECT = every reference item found and nothing wrong; PARTIAL = some items found or wrong items present;
+        WRONG = answer given but no reference item found; ABSTAINED = the report says 'Not established from the available artifacts';
+        NO ANSWER = the report has no answer for that question.

@@ -1,0 +1,123 @@
+====================================================================================================
+INCIDENT : koi_stealer
+MODEL    : deepinfra:anthropic/claude-sonnet-4-6
+CONDITION: No RAG (LLM without retrieval)
+RUN TIME : 1.6 min of LLM generation
+REPORT   : results\koi_stealer\deepinfra_anthropic_claude-sonnet-4-6\no_rag_postmortem.md
+CREATED  : 2026-11-27T21:04:28
+====================================================================================================
+
+A. QUESTION-BY-QUESTION EVALUATION
+   Found = reference items present in the report's answer; Prec. = correct entities / entities the answer gave;
+   Wrong items = entities in the answer that are not in the reference answer.
+
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| #   | Question                         | Reference answer           | Answer from the report             | Found | Prec. | Wrong items      | Status    |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 1   | What is the IP address of the    | 172.17.0.99                | Not established from the available | 0/1   | 0/1   | 172.17.0.0       | ABSTAINED |
+|     | potentially infected internal    |                            | artifacts — no aggregated query    |       |       |                  |           |
+|     | host in the LAN?                 |                            | output or log results were         |       |       |                  |           |
+|     |                                  |                            | supplied with the incident         |       |       |                  |           |
+|     |                                  |                            | context; the LAN range is          |       |       |                  |           |
+|     |                                  |                            | 172.17.0.0/24 but no specific      |       |       |                  |           |
+|     |                                  |                            | infected host IP is identifiable   |       |       |                  |           |
+|     |                                  |                            | from the provided information      |       |       |                  |           |
+|     |                                  |                            | alone.                             |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 2   | What is the hostname of the      | DESKTOP-RNVO9AT            | Not established from the available | 0/1   | 0/2   | 172.17.0.17,     | ABSTAINED |
+|     | potentially infected machine in  |                            | artifacts — hostname cannot be     |       |       | WIN-CTL9XBQ9Y19  |           |
+|     | the LAN?                         |                            | derived without Kerberos, DNS, or  |       |       |                  |           |
+|     |                                  |                            | DHCP log results; the only named   |       |       |                  |           |
+|     |                                  |                            | host in the context is the domain  |       |       |                  |           |
+|     |                                  |                            | controller WIN-CTL9XBQ9Y19         |       |       |                  |           |
+|     |                                  |                            | (172.17.0.17), which is            |       |       |                  |           |
+|     |                                  |                            | infrastructure, not the victim     |       |       |                  |           |
+|     |                                  |                            | workstation.                       |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 3   | What is the Windows human user   | afletcher                  | Not established from the available | 0/1   | -     | -                | ABSTAINED |
+|     | account name (not machine        |                            | artifacts — no Kerberos            |       |       |                  |           |
+|     | accounts ending in $) of the     |                            | authentication records, Windows    |       |       |                  |           |
+|     | potentially infected machine in  |                            | event log extracts, or user-       |       |       |                  |           |
+|     | the LAN?                         |                            | account fields were included in    |       |       |                  |           |
+|     |                                  |                            | the supplied evidence; machine     |       |       |                  |           |
+|     |                                  |                            | accounts and the AD domain         |       |       |                  |           |
+|     |                                  |                            | BEPOSITIVE are noted but no human  |       |       |                  |           |
+|     |                                  |                            | user account name is resolvable.   |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 4   | What are the likely fake or      | www.bellantonicioccolato.i | Not established from the available | 0/1   | -     | -                | ABSTAINED |
+|     | suspicious domains / URLs for    | t (likely compromised site | artifacts — no HTTP download URLs, |       |       |                  |           |
+|     | initial infection?               | associated with Koi        | TLS certificate subject names, or  |       |       |                  |           |
+|     |                                  | Loader/Koi Stealer)        | suspicious domain strings were     |       |       |                  |           |
+|     |                                  |                            | provided in the aggregated query   |       |       |                  |           |
+|     |                                  |                            | output for analysis.               |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 5   | What are the suspicious external | 79.124.78.197              | Not established from the available | 0/1   | -     | -                | ABSTAINED |
+|     | IP addresses contacted, which    |                            | artifacts — no external-           |       |       |                  |           |
+|     | might be involved in command-    |                            | destination IP addresses,          |       |       |                  |           |
+|     | and-control (C2) communication?  |                            | connection records, or Suricata    |       |       |                  |           |
+|     |                                  |                            | alert destination fields were      |       |       |                  |           |
+|     |                                  |                            | included in the supplied evidence. |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 6   | Which of the three CIA           | confidentiality            | Not established from the available | 0/1   | -     | -                | ABSTAINED |
+|     | components does the attacker     |                            | artifacts — no payload,            |       |       |                  |           |
+|     | target primarily: availability,  |                            | exfiltration, encryption, or       |       |       |                  |           |
+|     | integrity, or confidentiality?   |                            | service-disruption indicators were |       |       |                  |           |
+|     |                                  |                            | present in the supplied evidence;  |       |       |                  |           |
+|     |                                  |                            | a CIA targeting assessment cannot  |       |       |                  |           |
+|     |                                  |                            | be made without artifact content.  |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 7   | During what hour did the first   | 2024-09-04 17:00 UTC       | Not established from the available | 0/1   | 1/3   | 2024-09-04       | ABSTAINED |
+|     | signs of infection activity      |                            | artifacts — the query window is    |       |       | 00:00,           |           |
+|     | appear? Provide the earliest     |                            | 2024-09-04T00:00:00 to             |       |       | 2024-09-04       |           |
+|     | date and time in YYYY-MM-DD      |                            | 2024-09-04T23:59:59 UTC but no     |       |       | 23:59:59         |           |
+|     | HH:MM UTC format.                |                            | timestamped alert or connection    |       |       |                  |           |
+|     |                                  |                            | records were supplied to identify  |       |       |                  |           |
+|     |                                  |                            | the earliest infection activity.   |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 8   | According to the connection      | 79.124.78.197, C2 server   | Not established from the available | 1/2   | -     | -                | PARTIAL   |
+|     | volume statistics, what single   |                            | artifacts — no connection-volume   |       |       |                  |           |
+|     | external IP address received the |                            | aggregation results or external IP |       |       |                  |           |
+|     | most connections from the        |                            | frequency counts were included in  |       |       |                  |           |
+|     | infected hosts? Is it a C2       |                            | the supplied evidence; no          |       |       |                  |           |
+|     | server or a legitimate service?  |                            | determination of top destination   |       |       |                  |           |
+|     |                                  |                            | IP or its classification (C2 vs.   |       |       |                  |           |
+|     |                                  |                            | legitimate) is possible.           |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+
+B. METRICS
+
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Metric                                       | Value        | Meaning                                                                |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Answer precision                             | 0.167        | Entities (IPs, domains, hosts, URLs, times) in the report's answers    |
+|                                              |              | that also occur in the reference / all entities it gave                |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Answer recall                                | 0.111        | Reference answer items found in the report's answers / all reference   |
+|                                              |              | items                                                                  |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Answer F1                                    | 0.133        | Harmonic mean of answer precision and recall                           |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Question recall                              | 0.188        | Mean over questions of reference items found anywhere in the report    |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Faithfulness                                 | 0.000        | Claims whose facts are in the evidence AND in the chunks they cite /   |
+|                                              |              | all claims                                                             |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Grounding rate                               | 0.583        | Claims whose entities and numbers all exist in the evidence            |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Hallucination rate                           | 0.500        | Entities in the report that are absent from the evidence / all         |
+|                                              |              | entities (lower is better)                                             |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Unsupported numbers                          | 2            | Numbers in the report that are absent from the evidence (lower is      |
+|                                              |              | better)                                                                |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Placeholders                                 | 0            | '[insert ...]' placeholders left in the report (lower is better)       |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Questions correct / partial / wrong /        | 0 / 1 / 0 /  | Per-question status in the table above                                 |
+| abstained / unanswered                       | 7 / 0        |                                                                        |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Claims                                       | 36           | Claim lines counted by the verifier; hedged assessments are excluded   |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+
+Status: CORRECT = every reference item found and nothing wrong; PARTIAL = some items found or wrong items present;
+        WRONG = answer given but no reference item found; ABSTAINED = the report says 'Not established from the available artifacts';
+        NO ANSWER = the report has no answer for that question.

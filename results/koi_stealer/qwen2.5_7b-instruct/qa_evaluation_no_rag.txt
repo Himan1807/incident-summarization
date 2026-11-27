@@ -3,8 +3,8 @@ INCIDENT : koi_stealer
 MODEL    : qwen2.5:7b-instruct
 CONDITION: No RAG (LLM without retrieval)
 RUN TIME : 11.9 min of LLM generation
-REPORT   : results/koi_stealer/qwen2.5_7b-instruct/no_rag_postmortem.md
-CREATED  : 2026-11-26T16:41:03
+REPORT   : results\koi_stealer\qwen2.5_7b-instruct\no_rag_postmortem.md
+CREATED  : 2026-11-27T21:04:28
 ====================================================================================================
 
 A. QUESTION-BY-QUESTION EVALUATION

@@ -1,0 +1,367 @@
+{
+  "condition": "no_rag",
+  "model": "deepinfra:Qwen/Qwen3-235B-A22B-Instruct-2507",
+  "scenario": "acl_split_brain_0001",
+  "seconds_total": 133.7,
+  "run_log": [
+    {
+      "section": "Affected Host and User",
+      "seconds": 8.9,
+      "truncated": false
+    },
+    {
+      "section": "Timeline",
+      "seconds": 60.6,
+      "truncated": false
+    },
+    {
+      "section": "Detection: IDS Alerts",
+      "seconds": 12.4,
+      "truncated": false
+    },
+    {
+      "section": "Initial Infection Indicators",
+      "seconds": 2.6,
+      "truncated": false
+    },
+    {
+      "section": "Command-and-Control and Network Activity",
+      "seconds": 12.0,
+      "truncated": false
+    },
+    {
+      "section": "Impact Assessment",
+      "seconds": 5.2,
+      "truncated": false
+    },
+    {
+      "section": "Root Cause and Evidence Gaps",
+      "seconds": 8.8,
+      "truncated": false
+    },
+    {
+      "section": "Corrective and Preventive Actions",
+      "seconds": 16.1,
+      "truncated": false
+    },
+    {
+      "section": "Answers to Investigation Questions",
+      "seconds": 7.1,
+      "truncated": false
+    }
+  ],
+  "llm_usage": {
+    "provider": "deepinfra",
+    "calls": 10,
+    "retries": 0,
+    "prompt_tokens": 7831,
+    "completion_tokens": 2763,
+    "estimated_cost_usd": 0.002224
+  },
+  "evaluation": {
+    "answer_precision": 0.5,
+    "answer_recall": 0.3,
+    "answer_f1": 0.375,
+    "question_recall": 0.278,
+    "questions_correct": "3/9",
+    "answerable_entity_recall": 0.143,
+    "overall_entity_recall": 0.3,
+    "faithfulness": 0.0,
+    "grounding_rate": 0.174,
+    "claims": 46,
+    "assessment_lines": 5,
+    "hallucination_rate": 0.918,
+    "unsupported_entities": [
+      "172.31.0.5",
+      "172.31.10.10",
+      "172.31.10.101",
+      "172.31.10.11",
+      "172.31.12.0",
+      "172.31.12.44",
+      "172.31.12.45",
+      "172.31.12.66",
+      "172.31.15.45",
+      "172.31.16.0",
+      "172.31.16.42",
+      "172.31.173.197",
+      "172.31.20.10",
+      "172.31.20.102",
+      "172.31.20.12",
+      "172.31.52.34",
+      "172.31.52.35",
+      "185.130.105.22",
+      "198.51.100.44",
+      "2022-02-15 03:14",
+      "2022-02-15 04:00",
+      "2022-02-15 04:15",
+      "2022-02-15 04:30",
+      "2022-02-15 04:45",
+      "2022-02-15 05:00",
+      "2022-02-15 05:15",
+      "2022-02-15 05:30",
+      "2022-02-15 06:00",
+      "2022-02-15 06:15",
+      "2022-02-15 06:30",
+      "2022-02-15 07:00",
+      "2022-02-15 08:12",
+      "2022-02-15 08:39:44",
+      "2022-02-15 08:47:12",
+      "2022-02-16 14:33:47",
+      "203.0.113.25",
+      "94.130.18.42",
+      "api-gateway.pixfold.internal",
+      "api.pixfold-ride.com",
+      "app-server-04.dc-south.pixfold.internal",
+      "exfil.podnet.local",
+      "host78.example-cdn.com",
+      "mon.dc-south.pixfold-ride.com",
+      "pixfold.internal",
+      "tracker.xyz"
+    ],
+    "unsupported_number_count": 28,
+    "unsupported_numbers": [
+      "001",
+      "003",
+      "088",
+      "11",
+      "11345",
+      "1203",
+      "14",
+      "142",
+      "172",
+      "1842",
+      "200",
+      "2021",
+      "20220215",
+      "215",
+      "23222",
+      "27",
+      "31",
+      "341",
+      "443",
+      "45",
+      "47",
+      "7841",
+      "7842",
+      "8080",
+      "8823",
+      "89",
+      "9432",
+      "95"
+    ],
+    "placeholder_count": 0,
+    "per_question": [
+      {
+        "id": 1,
+        "question": "What change, deployment or automation run triggered the incident? Provide its change identifier.",
+        "reference_answer": "AWX-54207",
+        "atoms": [
+          "AWX-54207"
+        ],
+        "answerable_from_evidence": [
+          "AWX-54207"
+        ],
+        "found_in_report": [],
+        "missing_from_evidence": [],
+        "answer_text": "CHG-20220215-001 [evidence id: change_mgmt_event_44a]",
+        "status": "WRONG",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 0.0
+      },
+      {
+        "id": 2,
+        "question": "Which account or automation identity executed the triggering change?",
+        "reference_answer": "awx-svc",
+        "atoms": [
+          "awx-svc"
+        ],
+        "answerable_from_evidence": [
+          "awx-svc"
+        ],
+        "found_in_report": [],
+        "missing_from_evidence": [],
+        "answer_text": "svc-ansible-automation [evidence id: change_mgmt_event_44a]",
+        "status": "WRONG",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 0.0
+      },
+      {
+        "id": 3,
+        "question": "Which network device dropped the database heartbeat and replication traffic?",
+        "reference_answer": "core-b1",
+        "atoms": [
+          "core-b1"
+        ],
+        "answerable_from_evidence": [
+          "core-b1"
+        ],
+        "found_in_report": [],
+        "missing_from_evidence": [],
+        "answer_text": "rtr-dc-a-core-01 [evidence id: netflow_agg_77b]",
+        "status": "WRONG",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 0.0
+      },
+      {
+        "id": 4,
+        "question": "Which database node was promoted, creating a second writable primary?",
+        "reference_answer": "db-b",
+        "atoms": [
+          "db-b"
+        ],
+        "answerable_from_evidence": [
+          "db-b"
+        ],
+        "found_in_report": [
+          "db-b"
+        ],
+        "missing_from_evidence": [],
+        "answer_text": "db-b [evidence id: k8s_event_88c, postgres_log_agg_33d]",
+        "status": "CORRECT",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [
+          "db-b"
+        ],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 1.0
+      },
+      {
+        "id": 5,
+        "question": "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+        "reference_answer": "2022-02-15 19:00 UTC",
+        "atoms": [
+          "2022-02-15 19:00 UTC"
+        ],
+        "answerable_from_evidence": [
+          "2022-02-15 19:00 UTC"
+        ],
+        "found_in_report": [],
+        "missing_from_evidence": [],
+        "answer_text": "2022-02-15 03:14 UTC [evidence id: prom_alert_09a]",
+        "status": "WRONG",
+        "predicted_entities": [
+          "2022-02-15",
+          "2022-02-15 03:14"
+        ],
+        "correct_entities": [
+          "2022-02-15"
+        ],
+        "atoms_found_in_answer": [],
+        "wrong_entities": [
+          "2022-02-15 03:14"
+        ],
+        "precision": 0.5,
+        "recall": 0.0
+      },
+      {
+        "id": 6,
+        "question": "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+        "reference_answer": "automation error",
+        "atoms": [
+          "automation error"
+        ],
+        "answerable_from_evidence": [],
+        "found_in_report": [],
+        "missing_from_evidence": [
+          "automation error"
+        ],
+        "answer_text": "configuration change [evidence id: change_mgmt_event_44a, netflow_agg_77b]",
+        "status": "WRONG",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 0.0
+      },
+      {
+        "id": 7,
+        "question": "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+        "reference_answer": "integrity",
+        "atoms": [
+          "integrity"
+        ],
+        "answerable_from_evidence": [],
+        "found_in_report": [
+          "integrity"
+        ],
+        "missing_from_evidence": [
+          "integrity"
+        ],
+        "answer_text": "integrity [evidence id: postgres_log_agg_33d, vrrp_event_55e]",
+        "status": "CORRECT",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [
+          "integrity"
+        ],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 1.0
+      },
+      {
+        "id": 8,
+        "question": "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+        "reference_answer": "reconciliation-job, downstream symptom",
+        "atoms": [
+          "reconciliation-job",
+          "downstream symptom"
+        ],
+        "answerable_from_evidence": [
+          "reconciliation-job"
+        ],
+        "found_in_report": [
+          "downstream symptom"
+        ],
+        "missing_from_evidence": [
+          "downstream symptom"
+        ],
+        "answer_text": "ride-match-service; downstream symptom [evidence id: error_volume_agg_12f]",
+        "status": "PARTIAL",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [
+          "downstream symptom"
+        ],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 0.5
+      },
+      {
+        "id": 9,
+        "question": "Which change restored normal service? Provide its change identifier.",
+        "reference_answer": "CHG-16828",
+        "atoms": [
+          "CHG-16828"
+        ],
+        "answerable_from_evidence": [
+          "CHG-16828"
+        ],
+        "found_in_report": [],
+        "missing_from_evidence": [],
+        "answer_text": "CHG-20220215-003 [evidence id: change_mgmt_event_66g]",
+        "status": "WRONG",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 0.0
+      }
+    ]
+  }
+}

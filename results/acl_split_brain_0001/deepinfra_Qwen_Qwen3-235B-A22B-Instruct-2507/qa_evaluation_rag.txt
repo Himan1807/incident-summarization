@@ -1,0 +1,101 @@
+====================================================================================================
+INCIDENT : acl_split_brain_0001
+MODEL    : deepinfra:Qwen/Qwen3-235B-A22B-Instruct-2507
+CONDITION: RAG (advanced pipeline)
+RUN TIME : 12.9 min of LLM generation
+REPORT   : results\acl_split_brain_0001\deepinfra_Qwen_Qwen3-235B-A22B-Instruct-2507\advanced_postmortem.md
+CREATED  : 2026-11-27T22:42:16
+====================================================================================================
+
+A. QUESTION-BY-QUESTION EVALUATION
+   Found = reference items present in the report's answer; Prec. = correct entities / entities the answer gave;
+   Wrong items = entities in the answer that are not in the reference answer.
+
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| #   | Question                         | Reference answer           | Answer from the report             | Found | Prec. | Wrong items      | Status    |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 1   | What change, deployment or       | AWX-54207                  | CHG-16809                          | 0/1   | -     | -                | WRONG     |
+|     | automation run triggered the     |                            |                                    |       |       |                  |           |
+|     | incident? Provide its change     |                            |                                    |       |       |                  |           |
+|     | identifier.                      |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 2   | Which account or automation      | awx-svc                    | awx-svc                            | 1/1   | -     | -                | CORRECT   |
+|     | identity executed the triggering |                            |                                    |       |       |                  |           |
+|     | change?                          |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 3   | Which network device dropped the | core-b1                    | core-b1                            | 1/1   | -     | -                | CORRECT   |
+|     | database heartbeat and           |                            |                                    |       |       |                  |           |
+|     | replication traffic?             |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 4   | Which database node was          | db-b                       | db-b                               | 1/1   | -     | -                | CORRECT   |
+|     | promoted, creating a second      |                            |                                    |       |       |                  |           |
+|     | writable primary?                |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 5   | During what hour did the first   | 2022-02-15 19:00 UTC       | 2022-02-15 19:00 UTC               | 1/1   | 2/2   | -                | CORRECT   |
+|     | signs of the failure appear?     |                            |                                    |       |       |                  |           |
+|     | Provide the earliest date and    |                            |                                    |       |       |                  |           |
+|     | time in YYYY-MM-DD HH:MM UTC     |                            |                                    |       |       |                  |           |
+|     | format.                          |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 6   | What is the root cause category  | automation error           | configuration change               | 0/1   | -     | -                | WRONG     |
+|     | of the incident: configuration   |                            |                                    |       |       |                  |           |
+|     | change, software defect,         |                            |                                    |       |       |                  |           |
+|     | hardware failure, cloud provider |                            |                                    |       |       |                  |           |
+|     | failure, capacity exhaustion,    |                            |                                    |       |       |                  |           |
+|     | automation error, certificate    |                            |                                    |       |       |                  |           |
+|     | expiry, or third-party           |                            |                                    |       |       |                  |           |
+|     | dependency failure?              |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 7   | Which of the three CIA           | integrity                  | integrity                          | 1/1   | -     | -                | CORRECT   |
+|     | components is primarily          |                            |                                    |       |       |                  |           |
+|     | affected: availability,          |                            |                                    |       |       |                  |           |
+|     | integrity, or confidentiality?   |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 8   | According to the error volume    | reconciliation-job,        | reconciliation-job; downstream     | 2/2   | -     | -                | CORRECT   |
+|     | statistics, what single service  | downstream symptom         | symptom                            |       |       |                  |           |
+|     | emitted the most errors? Is it   |                            |                                    |       |       |                  |           |
+|     | the root cause or a downstream   |                            |                                    |       |       |                  |           |
+|     | symptom?                         |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 9   | Which change restored normal     | CHG-16828                  | CHG-16828                          | 1/1   | -     | -                | CORRECT   |
+|     | service? Provide its change      |                            |                                    |       |       |                  |           |
+|     | identifier.                      |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+
+B. METRICS
+
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Metric                                       | Value        | Meaning                                                                |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Answer precision                             | 1.000        | Entities (IPs, domains, hosts, URLs, times) in the report's answers    |
+|                                              |              | that also occur in the reference / all entities it gave                |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Answer recall                                | 0.800        | Reference answer items found in the report's answers / all reference   |
+|                                              |              | items                                                                  |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Answer F1                                    | 0.889        | Harmonic mean of answer precision and recall                           |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Question recall                              | 0.889        | Mean over questions of reference items found anywhere in the report    |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Faithfulness                                 | 0.800        | Claims whose facts are in the evidence AND in the chunks they cite /   |
+|                                              |              | all claims                                                             |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Grounding rate                               | 1.000        | Claims whose entities and numbers all exist in the evidence            |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Hallucination rate                           | 0.000        | Entities in the report that are absent from the evidence / all         |
+|                                              |              | entities (lower is better)                                             |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Unsupported numbers                          | 0            | Numbers in the report that are absent from the evidence (lower is      |
+|                                              |              | better)                                                                |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Placeholders                                 | 0            | '[insert ...]' placeholders left in the report (lower is better)       |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Questions correct / partial / wrong /        | 7 / 0 / 2 /  | Per-question status in the table above                                 |
+| abstained / unanswered                       | 0 / 0        |                                                                        |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Claims                                       | 50           | Claim lines counted by the verifier; hedged assessments are excluded   |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+
+Status: CORRECT = every reference item found and nothing wrong; PARTIAL = some items found or wrong items present;
+        WRONG = answer given but no reference item found; ABSTAINED = the report says 'Not established from the available artifacts';
+        NO ANSWER = the report has no answer for that question.

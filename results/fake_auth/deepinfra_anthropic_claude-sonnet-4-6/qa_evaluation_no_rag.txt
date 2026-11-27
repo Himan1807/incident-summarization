@@ -1,0 +1,116 @@
+====================================================================================================
+INCIDENT : fake_auth
+MODEL    : deepinfra:anthropic/claude-sonnet-4-6
+CONDITION: No RAG (LLM without retrieval)
+RUN TIME : 1.5 min of LLM generation
+REPORT   : results\fake_auth\deepinfra_anthropic_claude-sonnet-4-6\no_rag_postmortem.md
+CREATED  : 2026-11-27T21:04:27
+====================================================================================================
+
+A. QUESTION-BY-QUESTION EVALUATION
+   Found = reference items present in the report's answer; Prec. = correct entities / entities the answer gave;
+   Wrong items = entities in the answer that are not in the reference answer.
+
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| #   | Question                         | Reference answer           | Answer from the report             | Found | Prec. | Wrong items      | Status    |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 1   | What is the IP address of the    | 10.1.17.215                | Not established from the available | 0/1   | 0/1   | 10.1.17.0        | ABSTAINED |
+|     | potentially infected internal    |                            | artifacts — no Zeek/Suricata query |       |       |                  |           |
+|     | host in the LAN?                 |                            | results were provided to identify  |       |       |                  |           |
+|     |                                  |                            | a specific internal IP; the LAN    |       |       |                  |           |
+|     |                                  |                            | range is 10.1.17.0/24 but no per-  |       |       |                  |           |
+|     |                                  |                            | host connection counts or alert    |       |       |                  |           |
+|     |                                  |                            | sources were supplied.             |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 2   | What is the hostname of the      | DESKTOP-L8C5GSJ            | Not established from the available | 0/1   | -     | -                | ABSTAINED |
+|     | potentially infected machine in  |                            | artifacts — no Kerberos            |       |       |                  |           |
+|     | the LAN?                         |                            | authentication records or DHCP     |       |       |                  |           |
+|     |                                  |                            | hostname mappings were provided to |       |       |                  |           |
+|     |                                  |                            | resolve a specific hostname within |       |       |                  |           |
+|     |                                  |                            | the BLUEMOONTUESDAY domain.        |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 3   | What is the Windows human user   | shutchenson                | Not established from the available | 0/1   | -     | -                | ABSTAINED |
+|     | account name (not machine        |                            | artifacts — no Kerberos TGT/TGS    |       |       |                  |           |
+|     | accounts ending in $) of the     |                            | ticket logs or SMB session records |       |       |                  |           |
+|     | potentially infected machine in  |                            | listing a human (non-machine-      |       |       |                  |           |
+|     | the LAN?                         |                            | account) username were included in |       |       |                  |           |
+|     |                                  |                            | the supplied evidence.             |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 4   | What are the likely fake or      | authenticatoor.org         | Not established from the available | 0/1   | -     | -                | ABSTAINED |
+|     | suspicious domains / URLs for    |                            | artifacts — no HTTP download URLs, |       |       |                  |           |
+|     | initial infection?               |                            | DNS query aggregations, or         |       |       |                  |           |
+|     |                                  |                            | Suricata HTTP log entries were     |       |       |                  |           |
+|     |                                  |                            | provided to identify malicious or  |       |       |                  |           |
+|     |                                  |                            | typosquatted domains used for      |       |       |                  |           |
+|     |                                  |                            | initial access.                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 5   | What are the suspicious external | 5.252.153.241,             | Not established from the available | 0/3   | -     | -                | ABSTAINED |
+|     | IP addresses contacted, which    | 45.125.66.32,              | artifacts — no external-           |       |       |                  |           |
+|     | might be involved in command-    | 45.125.66.252              | destination aggregation results,   |       |       |                  |           |
+|     | and-control (C2) communication?  |                            | Suricata C2 signature hits, or     |       |       |                  |           |
+|     |                                  |                            | outbound connection summaries to   |       |       |                  |           |
+|     |                                  |                            | non-RFC-1918 addresses were        |       |       |                  |           |
+|     |                                  |                            | included in the supplied evidence. |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 6   | During what hour did the first   | 2025-01-22 19:00 UTC       | Not established from the available | 0/1   | 1/2   | 2025-01-22 00:00 | ABSTAINED |
+|     | signs of infection activity      |                            | artifacts — no timestamped alert   |       |       |                  |           |
+|     | appear? Provide the earliest     |                            | or connection records were         |       |       |                  |           |
+|     | date and time in YYYY-MM-DD      |                            | provided to identify the earliest  |       |       |                  |           |
+|     | HH:MM UTC format.                |                            | suspicious event within the        |       |       |                  |           |
+|     |                                  |                            | 2025-01-22T00:00:00–23:59:59 UTC   |       |       |                  |           |
+|     |                                  |                            | window.                            |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 7   | Were any suspicious certificates | 45.125.66.252,             | Not established from the available | 0/2   | -     | -                | ABSTAINED |
+|     | observed in the encrypted        | 45.125.66.32               | artifacts — no TLS certificate     |       |       |                  |           |
+|     | network traffic? If so, identify |                            | field extractions (issuer, subject |       |       |                  |           |
+|     | the domain or IP in the          |                            | CN, SAN, or self-signed flags)     |       |       |                  |           |
+|     | certificate.                     |                            | from Zeek `ssl.log` or Suricata    |       |       |                  |           |
+|     |                                  |                            | TLS records were included in the   |       |       |                  |           |
+|     |                                  |                            | supplied evidence.                 |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 8   | According to the connection      | 5.252.153.241, C2 server   | Not established from the available | 1/2   | -     | -                | PARTIAL   |
+|     | volume statistics, what single   |                            | artifacts — no connection-count    |       |       |                  |           |
+|     | external IP address received the |                            | aggregation ranked by destination  |       |       |                  |           |
+|     | most connections from the        |                            | IP was provided to identify the    |       |       |                  |           |
+|     | infected hosts? Is it a C2       |                            | highest-volume external endpoint   |       |       |                  |           |
+|     | server or a legitimate service?  |                            | or classify it as C2 versus        |       |       |                  |           |
+|     |                                  |                            | legitimate infrastructure.         |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+
+B. METRICS
+
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Metric                                       | Value        | Meaning                                                                |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Answer precision                             | 0.333        | Entities (IPs, domains, hosts, URLs, times) in the report's answers    |
+|                                              |              | that also occur in the reference / all entities it gave                |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Answer recall                                | 0.083        | Reference answer items found in the report's answers / all reference   |
+|                                              |              | items                                                                  |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Answer F1                                    | 0.133        | Harmonic mean of answer precision and recall                           |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Question recall                              | 0.188        | Mean over questions of reference items found anywhere in the report    |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Faithfulness                                 | 0.000        | Claims whose facts are in the evidence AND in the chunks they cite /   |
+|                                              |              | all claims                                                             |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Grounding rate                               | 0.553        | Claims whose entities and numbers all exist in the evidence            |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Hallucination rate                           | 0.500        | Entities in the report that are absent from the evidence / all         |
+|                                              |              | entities (lower is better)                                             |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Unsupported numbers                          | 3            | Numbers in the report that are absent from the evidence (lower is      |
+|                                              |              | better)                                                                |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Placeholders                                 | 0            | '[insert ...]' placeholders left in the report (lower is better)       |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Questions correct / partial / wrong /        | 0 / 1 / 0 /  | Per-question status in the table above                                 |
+| abstained / unanswered                       | 7 / 0        |                                                                        |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Claims                                       | 38           | Claim lines counted by the verifier; hedged assessments are excluded   |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+
+Status: CORRECT = every reference item found and nothing wrong; PARTIAL = some items found or wrong items present;
+        WRONG = answer given but no reference item found; ABSTAINED = the report says 'Not established from the available artifacts';
+        NO ANSWER = the report has no answer for that question.

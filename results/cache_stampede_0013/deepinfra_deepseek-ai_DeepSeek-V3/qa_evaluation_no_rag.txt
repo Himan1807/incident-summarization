@@ -1,0 +1,101 @@
+====================================================================================================
+INCIDENT : cache_stampede_0013
+MODEL    : deepinfra:deepseek-ai/DeepSeek-V3
+CONDITION: No RAG (LLM without retrieval)
+RUN TIME : 2.1 min of LLM generation
+REPORT   : results\cache_stampede_0013\deepinfra_deepseek-ai_DeepSeek-V3\no_rag_postmortem.md
+CREATED  : 2026-11-27T22:42:16
+====================================================================================================
+
+A. QUESTION-BY-QUESTION EVALUATION
+   Found = reference items present in the report's answer; Prec. = correct entities / entities the answer gave;
+   Wrong items = entities in the answer that are not in the reference answer.
+
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| #   | Question                         | Reference answer           | Answer from the report             | Found | Prec. | Wrong items      | Status    |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 1   | What is the hostname of the host | cache-redis-02             | Not established from the available | 0/1   | -     | -                | ABSTAINED |
+|     | or node where the failure        |                            | artifacts [evidence id]            |       |       |                  |           |
+|     | originated?                      |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 2   | What is the IP address of the    | 10.227.167.238             | Not established from the available | 0/1   | -     | -                | ABSTAINED |
+|     | host or node where the failure   |                            | artifacts [evidence id]            |       |       |                  |           |
+|     | originated?                      |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 3   | Which database host became       | inventory-db-01            | inventory-db-01 [evidence id]      | 1/1   | -     | -                | CORRECT   |
+|     | overloaded as a consequence of   |                            |                                    |       |       |                  |           |
+|     | the initial failure?             |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 4   | During what hour did the first   | 2021-05-08 21:00 UTC       | 2021-05-07 03:00 UTC [evidence id] | 0/1   | 0/2   | 2021-05-07,      | WRONG     |
+|     | signs of the failure appear?     |                            |                                    |       |       | 2021-05-07 03:00 |           |
+|     | Provide the earliest date and    |                            |                                    |       |       |                  |           |
+|     | time in YYYY-MM-DD HH:MM UTC     |                            |                                    |       |       |                  |           |
+|     | format.                          |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 5   | What is the root cause category  | capacity exhaustion        | Not established from the available | 0/1   | -     | -                | ABSTAINED |
+|     | of the incident: configuration   |                            | artifacts [evidence id]            |       |       |                  |           |
+|     | change, software defect,         |                            |                                    |       |       |                  |           |
+|     | hardware failure, cloud provider |                            |                                    |       |       |                  |           |
+|     | failure, capacity exhaustion,    |                            |                                    |       |       |                  |           |
+|     | automation error, certificate    |                            |                                    |       |       |                  |           |
+|     | expiry, or third-party           |                            |                                    |       |       |                  |           |
+|     | dependency failure?              |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 6   | Did the failure stay isolated to | cascading failure          | cascading failure [evidence id]    | 1/1   | -     | -                | CORRECT   |
+|     | one component or cascade across  |                            |                                    |       |       |                  |           |
+|     | services? Answer 'isolated       |                            |                                    |       |       |                  |           |
+|     | failure' or 'cascading failure'. |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 7   | Which of the three CIA           | availability               | availability [evidence id]         | 1/1   | -     | -                | CORRECT   |
+|     | components is primarily          |                            |                                    |       |       |                  |           |
+|     | affected: availability,          |                            |                                    |       |       |                  |           |
+|     | integrity, or confidentiality?   |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 8   | According to the error volume    | booking-web, downstream    | Not established from the available | 0/2   | -     | -                | ABSTAINED |
+|     | statistics, what single service  | symptom                    | artifacts [evidence id]            |       |       |                  |           |
+|     | emitted the most errors? Is it   |                            |                                    |       |       |                  |           |
+|     | the root cause or a downstream   |                            |                                    |       |       |                  |           |
+|     | symptom?                         |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 9   | Which change restored normal     | CHG-40380                  | Not established from the available | 0/1   | -     | -                | ABSTAINED |
+|     | service? Provide its change      |                            | artifacts [evidence id]            |       |       |                  |           |
+|     | identifier.                      |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+
+B. METRICS
+
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Metric                                       | Value        | Meaning                                                                |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Answer precision                             | 0.000        | Entities (IPs, domains, hosts, URLs, times) in the report's answers    |
+|                                              |              | that also occur in the reference / all entities it gave                |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Answer recall                                | 0.300        | Reference answer items found in the report's answers / all reference   |
+|                                              |              | items                                                                  |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Answer F1                                    | 0.000        | Harmonic mean of answer precision and recall                           |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Question recall                              | 0.444        | Mean over questions of reference items found anywhere in the report    |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Faithfulness                                 | 0.000        | Claims whose facts are in the evidence AND in the chunks they cite /   |
+|                                              |              | all claims                                                             |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Grounding rate                               | 0.233        | Claims whose entities and numbers all exist in the evidence            |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Hallucination rate                           | 0.865        | Entities in the report that are absent from the evidence / all         |
+|                                              |              | entities (lower is better)                                             |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Unsupported numbers                          | 5            | Numbers in the report that are absent from the evidence (lower is      |
+|                                              |              | better)                                                                |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Placeholders                                 | 0            | '[insert ...]' placeholders left in the report (lower is better)       |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Questions correct / partial / wrong /        | 3 / 0 / 1 /  | Per-question status in the table above                                 |
+| abstained / unanswered                       | 5 / 0        |                                                                        |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Claims                                       | 43           | Claim lines counted by the verifier; hedged assessments are excluded   |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+
+Status: CORRECT = every reference item found and nothing wrong; PARTIAL = some items found or wrong items present;
+        WRONG = answer given but no reference item found; ABSTAINED = the report says 'Not established from the available artifacts';
+        NO ANSWER = the report has no answer for that question.

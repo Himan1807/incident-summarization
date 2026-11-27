@@ -1,0 +1,332 @@
+{
+  "condition": "no_rag",
+  "model": "deepinfra:deepseek-ai/DeepSeek-V3",
+  "scenario": "cache_stampede_0013",
+  "seconds_total": 123.1,
+  "run_log": [
+    {
+      "section": "Affected Host and User",
+      "seconds": 9.8,
+      "truncated": false
+    },
+    {
+      "section": "Timeline",
+      "seconds": 19.7,
+      "truncated": false
+    },
+    {
+      "section": "Detection: IDS Alerts",
+      "seconds": 21.8,
+      "truncated": false
+    },
+    {
+      "section": "Initial Infection Indicators",
+      "seconds": 15.1,
+      "truncated": false
+    },
+    {
+      "section": "Command-and-Control and Network Activity",
+      "seconds": 16.2,
+      "truncated": false
+    },
+    {
+      "section": "Impact Assessment",
+      "seconds": 7.9,
+      "truncated": false
+    },
+    {
+      "section": "Root Cause and Evidence Gaps",
+      "seconds": 7.9,
+      "truncated": false
+    },
+    {
+      "section": "Corrective and Preventive Actions",
+      "seconds": 14.2,
+      "truncated": false
+    },
+    {
+      "section": "Answers to Investigation Questions",
+      "seconds": 10.5,
+      "truncated": false
+    }
+  ],
+  "llm_usage": {
+    "provider": "deepinfra",
+    "calls": 10,
+    "retries": 0,
+    "prompt_tokens": 6569,
+    "completion_tokens": 1905,
+    "estimated_cost_usd": 0.003797
+  },
+  "evaluation": {
+    "answer_precision": 0.0,
+    "answer_recall": 0.3,
+    "answer_f1": 0.0,
+    "question_recall": 0.444,
+    "questions_correct": "4/9",
+    "answerable_entity_recall": 0.429,
+    "overall_entity_recall": 0.4,
+    "faithfulness": 0.0,
+    "grounding_rate": 0.233,
+    "claims": 43,
+    "assessment_lines": 6,
+    "hallucination_rate": 0.865,
+    "unsupported_entities": [
+      "/exploit",
+      "10.227.102.78",
+      "10.227.12.78",
+      "10.227.33.21",
+      "10.227.45.12",
+      "10.227.56.89",
+      "10.227.67.34",
+      "10.227.89.34",
+      "10.227.89.56",
+      "185.163.45.22",
+      "192.168.1.100",
+      "2021-05-07 03:00",
+      "2021-05-07 08:00",
+      "2021-05-07 12:00",
+      "2021-05-07 14:32:18",
+      "2021-05-07 15:00",
+      "2021-05-08 02:00",
+      "2021-05-08 09:00",
+      "2021-05-08 09:12:45",
+      "2021-05-08 14:00",
+      "2021-05-08 14:30",
+      "2021-05-08 17:45:23",
+      "2021-05-09 10:00",
+      "2021-05-09 11:23:56",
+      "2021-05-09 15:34:12",
+      "2021-05-09 18:00",
+      "2021-05-09 20:01:34",
+      "203.0.113.45",
+      "downloads.badware.net",
+      "malicious.xyz",
+      "phishy.site",
+      "suspicious.domain"
+    ],
+    "unsupported_number_count": 5,
+    "unsupported_numbers": [
+      "001",
+      "1247",
+      "20210507",
+      "5",
+      "6379"
+    ],
+    "placeholder_count": 0,
+    "per_question": [
+      {
+        "id": 1,
+        "question": "What is the hostname of the host or node where the failure originated?",
+        "reference_answer": "cache-redis-02",
+        "atoms": [
+          "cache-redis-02"
+        ],
+        "answerable_from_evidence": [
+          "cache-redis-02"
+        ],
+        "found_in_report": [
+          "cache-redis-02"
+        ],
+        "missing_from_evidence": [],
+        "answer_text": "Not established from the available artifacts [evidence id]",
+        "status": "ABSTAINED",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 0.0
+      },
+      {
+        "id": 2,
+        "question": "What is the IP address of the host or node where the failure originated?",
+        "reference_answer": "10.227.167.238",
+        "atoms": [
+          "10.227.167.238"
+        ],
+        "answerable_from_evidence": [
+          "10.227.167.238"
+        ],
+        "found_in_report": [],
+        "missing_from_evidence": [],
+        "answer_text": "Not established from the available artifacts [evidence id]",
+        "status": "ABSTAINED",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 0.0
+      },
+      {
+        "id": 3,
+        "question": "Which database host became overloaded as a consequence of the initial failure?",
+        "reference_answer": "inventory-db-01",
+        "atoms": [
+          "inventory-db-01"
+        ],
+        "answerable_from_evidence": [
+          "inventory-db-01"
+        ],
+        "found_in_report": [
+          "inventory-db-01"
+        ],
+        "missing_from_evidence": [],
+        "answer_text": "inventory-db-01 [evidence id]",
+        "status": "CORRECT",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [
+          "inventory-db-01"
+        ],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 1.0
+      },
+      {
+        "id": 4,
+        "question": "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+        "reference_answer": "2021-05-08 21:00 UTC",
+        "atoms": [
+          "2021-05-08 21:00 UTC"
+        ],
+        "answerable_from_evidence": [
+          "2021-05-08 21:00 UTC"
+        ],
+        "found_in_report": [],
+        "missing_from_evidence": [],
+        "answer_text": "2021-05-07 03:00 UTC [evidence id]",
+        "status": "WRONG",
+        "predicted_entities": [
+          "2021-05-07",
+          "2021-05-07 03:00"
+        ],
+        "correct_entities": [],
+        "atoms_found_in_answer": [],
+        "wrong_entities": [
+          "2021-05-07",
+          "2021-05-07 03:00"
+        ],
+        "precision": 0.0,
+        "recall": 0.0
+      },
+      {
+        "id": 5,
+        "question": "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+        "reference_answer": "capacity exhaustion",
+        "atoms": [
+          "capacity exhaustion"
+        ],
+        "answerable_from_evidence": [],
+        "found_in_report": [],
+        "missing_from_evidence": [
+          "capacity exhaustion"
+        ],
+        "answer_text": "Not established from the available artifacts [evidence id]",
+        "status": "ABSTAINED",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 0.0
+      },
+      {
+        "id": 6,
+        "question": "Did the failure stay isolated to one component or cascade across services? Answer 'isolated failure' or 'cascading failure'.",
+        "reference_answer": "cascading failure",
+        "atoms": [
+          "cascading failure"
+        ],
+        "answerable_from_evidence": [],
+        "found_in_report": [
+          "cascading failure"
+        ],
+        "missing_from_evidence": [
+          "cascading failure"
+        ],
+        "answer_text": "cascading failure [evidence id]",
+        "status": "CORRECT",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [
+          "cascading failure"
+        ],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 1.0
+      },
+      {
+        "id": 7,
+        "question": "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+        "reference_answer": "availability",
+        "atoms": [
+          "availability"
+        ],
+        "answerable_from_evidence": [
+          "availability"
+        ],
+        "found_in_report": [
+          "availability"
+        ],
+        "missing_from_evidence": [],
+        "answer_text": "availability [evidence id]",
+        "status": "CORRECT",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [
+          "availability"
+        ],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 1.0
+      },
+      {
+        "id": 8,
+        "question": "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+        "reference_answer": "booking-web, downstream symptom",
+        "atoms": [
+          "booking-web",
+          "downstream symptom"
+        ],
+        "answerable_from_evidence": [
+          "booking-web"
+        ],
+        "found_in_report": [],
+        "missing_from_evidence": [
+          "downstream symptom"
+        ],
+        "answer_text": "Not established from the available artifacts [evidence id]",
+        "status": "ABSTAINED",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 0.0
+      },
+      {
+        "id": 9,
+        "question": "Which change restored normal service? Provide its change identifier.",
+        "reference_answer": "CHG-40380",
+        "atoms": [
+          "CHG-40380"
+        ],
+        "answerable_from_evidence": [
+          "CHG-40380"
+        ],
+        "found_in_report": [],
+        "missing_from_evidence": [],
+        "answer_text": "Not established from the available artifacts [evidence id]",
+        "status": "ABSTAINED",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 0.0
+      }
+    ]
+  }
+}

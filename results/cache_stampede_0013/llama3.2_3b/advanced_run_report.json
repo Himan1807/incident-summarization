@@ -1,0 +1,475 @@
+{
+  "condition": "rag",
+  "model": "llama3.2:3b",
+  "scenario": "cache_stampede_0013",
+  "seconds_total": 803.1,
+  "verification_totals": {
+    "uncited": 2
+  },
+  "mode": "drop",
+  "removed_unverified_lines": 0,
+  "postprocessing": {
+    "enabled": true,
+    "model_citation_rate_before_attribution": 0.528,
+    "auto_attributed_lines": 23,
+    "invalid_citations_removed": 0,
+    "partial_lines_dropped": 0,
+    "duplicate_lines_removed": 1,
+    "removed": [
+      {
+        "section": "Affected Host and User",
+        "line": "Assessment:",
+        "duplicate_of": "(orphaned parent)"
+      }
+    ]
+  },
+  "run_log": [
+    {
+      "section": "Affected Host and User",
+      "retrieved": [
+        "cache_stampede_0013-05#0",
+        "cache_stampede_0013-09#0",
+        "cache_stampede_0013-06#0",
+        "cache_stampede_0013-04#0",
+        "cache_stampede_0013-09#1",
+        "cache_stampede_0013-01#3"
+      ],
+      "seconds": 95.4,
+      "truncated": false,
+      "dropped_partial_line": null,
+      "model_cited_claims": 0,
+      "claims": 4,
+      "auto_attributed_lines": 4,
+      "invalid_citations_removed": 0,
+      "flag_counts": {}
+    },
+    {
+      "section": "Timeline",
+      "retrieved": [
+        "cache_stampede_0013-03#0",
+        "cache_stampede_0013-09#0",
+        "cache_stampede_0013-07#1",
+        "cache_stampede_0013-07#5",
+        "cache_stampede_0013-07#0",
+        "cache_stampede_0013-07#6",
+        "cache_stampede_0013-08#0",
+        "cache_stampede_0013-09#1",
+        "cache_stampede_0013-07#7"
+      ],
+      "extractive": true,
+      "seconds": 0.0,
+      "claims": 13,
+      "model_cited_claims": 13,
+      "flag_counts": {}
+    },
+    {
+      "section": "Detection: IDS Alerts",
+      "retrieved": [
+        "cache_stampede_0013-09#0",
+        "cache_stampede_0013-06#0",
+        "cache_stampede_0013-07#1",
+        "cache_stampede_0013-07#0",
+        "cache_stampede_0013-07#7"
+      ],
+      "seconds": 94.2,
+      "truncated": false,
+      "dropped_partial_line": null,
+      "model_cited_claims": 0,
+      "claims": 7,
+      "auto_attributed_lines": 7,
+      "invalid_citations_removed": 0,
+      "flag_counts": {}
+    },
+    {
+      "section": "Initial Infection Indicators",
+      "retrieved": [
+        "cache_stampede_0013-09#1",
+        "cache_stampede_0013-05#0",
+        "cache_stampede_0013-06#0",
+        "cache_stampede_0013-09#0",
+        "cache_stampede_0013-10#0",
+        "cache_stampede_0013-02#0"
+      ],
+      "seconds": 111.0,
+      "truncated": false,
+      "dropped_partial_line": null,
+      "model_cited_claims": 6,
+      "claims": 6,
+      "auto_attributed_lines": 0,
+      "invalid_citations_removed": 0,
+      "flag_counts": {}
+    },
+    {
+      "section": "Command-and-Control and Network Activity",
+      "retrieved": [
+        "cache_stampede_0013-05#0",
+        "cache_stampede_0013-06#0",
+        "cache_stampede_0013-01#4",
+        "cache_stampede_0013-01#1",
+        "cache_stampede_0013-01#3",
+        "cache_stampede_0013-01#0"
+      ],
+      "seconds": 72.9,
+      "truncated": false,
+      "dropped_partial_line": null,
+      "model_cited_claims": 0,
+      "claims": 7,
+      "auto_attributed_lines": 7,
+      "invalid_citations_removed": 0,
+      "flag_counts": {}
+    },
+    {
+      "section": "Impact Assessment",
+      "retrieved": [
+        "cache_stampede_0013-04#0",
+        "cache_stampede_0013-05#0",
+        "cache_stampede_0013-03#1",
+        "cache_stampede_0013-03#0",
+        "cache_stampede_0013-07#1",
+        "cache_stampede_0013-07#7"
+      ],
+      "seconds": 97.6,
+      "truncated": false,
+      "dropped_partial_line": null,
+      "model_cited_claims": 1,
+      "claims": 3,
+      "auto_attributed_lines": 2,
+      "invalid_citations_removed": 0,
+      "flag_counts": {}
+    },
+    {
+      "section": "Root Cause and Evidence Gaps",
+      "retrieved": [
+        "cache_stampede_0013-10#0",
+        "cache_stampede_0013-05#0",
+        "cache_stampede_0013-02#0",
+        "cache_stampede_0013-09#0",
+        "cache_stampede_0013-08#0"
+      ],
+      "seconds": 81.3,
+      "truncated": false,
+      "dropped_partial_line": null,
+      "model_cited_claims": 0,
+      "claims": 0,
+      "auto_attributed_lines": 0,
+      "invalid_citations_removed": 0,
+      "flag_counts": {}
+    },
+    {
+      "section": "Corrective and Preventive Actions",
+      "retrieved": [
+        "cache_stampede_0013-07#1",
+        "cache_stampede_0013-07#0",
+        "cache_stampede_0013-05#0",
+        "cache_stampede_0013-09#0",
+        "cache_stampede_0013-07#6"
+      ],
+      "seconds": 92.8,
+      "truncated": false,
+      "dropped_partial_line": null,
+      "model_cited_claims": 0,
+      "claims": 5,
+      "auto_attributed_lines": 3,
+      "invalid_citations_removed": 0,
+      "flag_counts": {
+        "uncited": 2
+      }
+    },
+    {
+      "section": "Answers to Investigation Questions",
+      "retrieved": [
+        "cache_stampede_0013-09#0",
+        "cache_stampede_0013-05#0",
+        "cache_stampede_0013-06#0",
+        "cache_stampede_0013-01#3",
+        "cache_stampede_0013-01#2",
+        "cache_stampede_0013-02#0",
+        "cache_stampede_0013-09#1",
+        "cache_stampede_0013-07#1",
+        "cache_stampede_0013-03#0",
+        "cache_stampede_0013-01#4",
+        "cache_stampede_0013-04#0",
+        "cache_stampede_0013-03#1"
+      ],
+      "seconds": 157.9,
+      "truncated": false,
+      "dropped_partial_line": null,
+      "model_cited_claims": 8,
+      "claims": 8,
+      "auto_attributed_lines": 0,
+      "invalid_citations_removed": 0,
+      "flag_counts": {}
+    }
+  ],
+  "flagged": [
+    {
+      "section": "Corrective and Preventive Actions",
+      "line": "* Check the Prometheus Alertmanager alerts for any potential false positives or misconfigurations that may be contributing to the high alert volume.",
+      "types": [
+        "uncited"
+      ],
+      "action": "kept"
+    },
+    {
+      "section": "Corrective and Preventive Actions",
+      "line": "* Run a thorough analysis of the Kubernetes job failures to identify any potential issues with the batch service and its dependencies.",
+      "types": [
+        "uncited"
+      ],
+      "action": "kept"
+    }
+  ],
+  "evaluation": {
+    "answer_precision": 1.0,
+    "answer_recall": 0.7,
+    "answer_f1": 0.824,
+    "question_recall": 0.833,
+    "questions_correct": "8/9",
+    "answerable_entity_recall": 1.0,
+    "overall_entity_recall": 0.8,
+    "faithfulness": 0.455,
+    "grounding_rate": 1.0,
+    "citation_precision": 0.893,
+    "citation_rate": 0.509,
+    "claims": 55,
+    "assessment_lines": 5,
+    "uncited_lines": 27,
+    "hallucination_rate": 0.0,
+    "unsupported_entities": [],
+    "unsupported_number_count": 0,
+    "unsupported_numbers": [],
+    "placeholder_count": 0,
+    "per_question": [
+      {
+        "id": 1,
+        "question": "What is the hostname of the host or node where the failure originated?",
+        "reference_answer": "cache-redis-02",
+        "atoms": [
+          "cache-redis-02"
+        ],
+        "answerable_from_evidence": [
+          "cache-redis-02"
+        ],
+        "found_in_report": [
+          "cache-redis-02"
+        ],
+        "missing_from_evidence": [],
+        "answer_text": "The hostname of the host or node where the failure originated is cache-redis-02.",
+        "status": "CORRECT",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [
+          "cache-redis-02"
+        ],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 1.0
+      },
+      {
+        "id": 2,
+        "question": "What is the IP address of the host or node where the failure originated?",
+        "reference_answer": "10.227.167.238",
+        "atoms": [
+          "10.227.167.238"
+        ],
+        "answerable_from_evidence": [
+          "10.227.167.238"
+        ],
+        "found_in_report": [
+          "10.227.167.238"
+        ],
+        "missing_from_evidence": [],
+        "answer_text": "The IP address of the host or node where the failure originated is 10.227.167.238.",
+        "status": "CORRECT",
+        "predicted_entities": [
+          "10.227.167.238"
+        ],
+        "correct_entities": [
+          "10.227.167.238"
+        ],
+        "atoms_found_in_answer": [
+          "10.227.167.238"
+        ],
+        "wrong_entities": [],
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      {
+        "id": 3,
+        "question": "Which database host became overloaded as a consequence of the initial failure?",
+        "reference_answer": "inventory-db-01",
+        "atoms": [
+          "inventory-db-01"
+        ],
+        "answerable_from_evidence": [
+          "inventory-db-01"
+        ],
+        "found_in_report": [
+          "inventory-db-01"
+        ],
+        "missing_from_evidence": [],
+        "answer_text": "The database host that became overloaded as a consequence of the initial failure is inventory-db-01.",
+        "status": "CORRECT",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [
+          "inventory-db-01"
+        ],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 1.0
+      },
+      {
+        "id": 4,
+        "question": "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+        "reference_answer": "2021-05-08 21:00 UTC",
+        "atoms": [
+          "2021-05-08 21:00 UTC"
+        ],
+        "answerable_from_evidence": [
+          "2021-05-08 21:00 UTC"
+        ],
+        "found_in_report": [
+          "2021-05-08 21:00 UTC"
+        ],
+        "missing_from_evidence": [],
+        "answer_text": "The first signs of the failure appeared during the hour of 18:00 UTC on 2021-05-08.",
+        "status": "WRONG",
+        "predicted_entities": [
+          "2021-05-08"
+        ],
+        "correct_entities": [
+          "2021-05-08"
+        ],
+        "atoms_found_in_answer": [],
+        "wrong_entities": [],
+        "precision": 1.0,
+        "recall": 0.0
+      },
+      {
+        "id": 5,
+        "question": "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+        "reference_answer": "capacity exhaustion",
+        "atoms": [
+          "capacity exhaustion"
+        ],
+        "answerable_from_evidence": [],
+        "found_in_report": [],
+        "missing_from_evidence": [
+          "capacity exhaustion"
+        ],
+        "answer_text": "Not established from the available artifacts.",
+        "status": "ABSTAINED",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 0.0
+      },
+      {
+        "id": 6,
+        "question": "Did the failure stay isolated to one component or cascade across services? Answer 'isolated failure' or 'cascading failure'.",
+        "reference_answer": "cascading failure",
+        "atoms": [
+          "cascading failure"
+        ],
+        "answerable_from_evidence": [],
+        "found_in_report": [
+          "cascading failure"
+        ],
+        "missing_from_evidence": [
+          "cascading failure"
+        ],
+        "answer_text": "The failure is a cascading failure.",
+        "status": "CORRECT",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [
+          "cascading failure"
+        ],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 1.0
+      },
+      {
+        "id": 7,
+        "question": "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+        "reference_answer": "availability",
+        "atoms": [
+          "availability"
+        ],
+        "answerable_from_evidence": [
+          "availability"
+        ],
+        "found_in_report": [
+          "availability"
+        ],
+        "missing_from_evidence": [],
+        "answer_text": "The CIA component primarily affected is availability.",
+        "status": "CORRECT",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [
+          "availability"
+        ],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 1.0
+      },
+      {
+        "id": 8,
+        "question": "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+        "reference_answer": "booking-web, downstream symptom",
+        "atoms": [
+          "booking-web",
+          "downstream symptom"
+        ],
+        "answerable_from_evidence": [
+          "booking-web"
+        ],
+        "found_in_report": [
+          "booking-web"
+        ],
+        "missing_from_evidence": [
+          "downstream symptom"
+        ],
+        "answer_text": "The single service that emitted the most errors is booking-web, which is the root cause.",
+        "status": "PARTIAL",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [
+          "booking-web"
+        ],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 0.5
+      },
+      {
+        "id": 9,
+        "question": "Which change restored normal service? Provide its change identifier.",
+        "reference_answer": "CHG-40380",
+        "atoms": [
+          "CHG-40380"
+        ],
+        "answerable_from_evidence": [
+          "CHG-40380"
+        ],
+        "found_in_report": [
+          "CHG-40380"
+        ],
+        "missing_from_evidence": [],
+        "answer_text": "The change that restored normal service is CHG-40380, which increased the maxmemory of cache-redis-02 from 16gb to 32gb.",
+        "status": "CORRECT",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [
+          "CHG-40380"
+        ],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 1.0
+      }
+    ]
+  }
+}

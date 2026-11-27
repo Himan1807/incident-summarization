@@ -1,0 +1,111 @@
+====================================================================================================
+INCIDENT : fake_auth
+MODEL    : qwen2.5:7b-instruct
+CONDITION: No RAG vs RAG (same LLM, same section plan, same questions)
+CREATED  : 2026-11-27T21:04:28
+====================================================================================================
+
+NO RAG : the LLM receives only the incident context (network description and the questions). It has NO logs, alerts or query results.
+         Output is formatted (titles/preambles removed) but not verified, de-duplicated or given citations.
+RAG    : the advanced pipeline (hybrid retrieval, reranking, section-wise generation with citations, verification).
+Hallucination, grounding and number checks are always measured against the REAL evidence of the incident.
+
+A. METRICS
+
++------------------------------------------------------+----------------+----------------+----------------+
+| Metric                                               | No RAG         | RAG            | RAG - No RAG   |
++------------------------------------------------------+----------------+----------------+----------------+
+| Answer precision                                     | -              | 0.562          | -              |
++------------------------------------------------------+----------------+----------------+----------------+
+| Answer recall                                        | -              | 0.900          | -              |
++------------------------------------------------------+----------------+----------------+----------------+
+| Answer F1                                            | -              | 0.692          | -              |
++------------------------------------------------------+----------------+----------------+----------------+
+| Question recall                                      | 0.062          | 0.875          | +0.813         |
++------------------------------------------------------+----------------+----------------+----------------+
+| Faithfulness                                         | 0.000          | 0.780          | +0.780         |
++------------------------------------------------------+----------------+----------------+----------------+
+| Grounding rate                                       | 0.125          | 1.000          | +0.875         |
++------------------------------------------------------+----------------+----------------+----------------+
+| Hallucination rate (lower is better)                 | 0.850          | 0.000          | -0.850         |
++------------------------------------------------------+----------------+----------------+----------------+
+| Unsupported numbers (lower is better)                | 10             | 0              | -10            |
++------------------------------------------------------+----------------+----------------+----------------+
+| Placeholders (lower is better)                       | 0              | 0              | +0             |
++------------------------------------------------------+----------------+----------------+----------------+
+| Questions CORRECT                                    | 0              | 4              | +4             |
++------------------------------------------------------+----------------+----------------+----------------+
+| Questions PARTIAL                                    | 0              | 2              | +2             |
++------------------------------------------------------+----------------+----------------+----------------+
+| Questions WRONG                                      | 0              | 1              | +1             |
++------------------------------------------------------+----------------+----------------+----------------+
+| Questions ABSTAINED / unanswered                     | 0 / 8          | 0 / 1          | -              |
++------------------------------------------------------+----------------+----------------+----------------+
+| LLM generation time (min)                            | 11.3           | 401.7          | -              |
++------------------------------------------------------+----------------+----------------+----------------+
+
+B. ANSWERS PER QUESTION
+
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| #   | Question                     | Reference answer         | No RAG answer                  | RAG answer                     | No RAG    | RAG       |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 1   | What is the IP address of    | 10.1.17.215              | (no answer)                    | The IP address of the          | NO ANSWER | CORRECT   |
+|     | the potentially infected     |                          |                                | potentially infected internal  |           |           |
+|     | internal host in the LAN?    |                          |                                | host in the LAN is             |           |           |
+|     |                              |                          |                                | 10.1.17.215.                   |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 2   | What is the hostname of the  | DESKTOP-L8C5GSJ          | (no answer)                    | The hostname of the            | NO ANSWER | CORRECT   |
+|     | potentially infected machine |                          |                                | potentially infected machine   |           |           |
+|     | in the LAN?                  |                          |                                | in the LAN is desktop-l8c5gsj. |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 3   | What is the Windows human    | shutchenson              | (no answer)                    | The Windows human user account | NO ANSWER | CORRECT   |
+|     | user account name (not       |                          |                                | name of the potentially        |           |           |
+|     | machine accounts ending in   |                          |                                | infected machine in the LAN is |           |           |
+|     | $) of the potentially        |                          |                                | shutchenson.                   |           |           |
+|     | infected machine in the LAN? |                          |                                |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 4   | What are the likely fake or  | authenticatoor.org       | (no answer)                    | The likely fake or suspicious  | NO ANSWER | WRONG     |
+|     | suspicious domains / URLs    |                          |                                | domains/URLs for initial       |           |           |
+|     | for initial infection?       |                          |                                | infection are c.go-mpulse.net, |           |           |
+|     |                              |                          |                                | dmpsync.3lift.com,             |           |           |
+|     |                              |                          |                                | dpm.demdex.net, and            |           |           |
+|     |                              |                          |                                | ds.reson8.com.                 |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 5   | What are the suspicious      | 5.252.153.241,           | (no answer)                    | The suspicious external IP     | NO ANSWER | PARTIAL   |
+|     | external IP addresses        | 45.125.66.32,            |                                | addresses contacted, which     |           |           |
+|     | contacted, which might be    | 45.125.66.252            |                                | might be involved in command-  |           |           |
+|     | involved in command-and-     |                          |                                | and-control (C2)               |           |           |
+|     | control (C2) communication?  |                          |                                | communication, are             |           |           |
+|     |                              |                          |                                | 5.252.153.241, 185.188.32.26,  |           |           |
+|     |                              |                          |                                | and 45.125.66.32,              |           |           |
+|     |                              |                          |                                | 45.125.66.252.                 |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 6   | During what hour did the     | 2025-01-22 19:00 UTC     | (no answer)                    | The first signs of infection   | NO ANSWER | CORRECT   |
+|     | first signs of infection     |                          |                                | activity appeared during the   |           |           |
+|     | activity appear? Provide the |                          |                                | hour 2025-01-22 19:00 UTC.     |           |           |
+|     | earliest date and time in    |                          |                                |                                |           |           |
+|     | YYYY-MM-DD HH:MM UTC format. |                          |                                |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 7   | Were any suspicious          | 45.125.66.252,           | (no answer)                    | Suspicious certificates were   | NO ANSWER | PARTIAL   |
+|     | certificates observed in the | 45.125.66.32             |                                | observed in the encrypted      |           |           |
+|     | encrypted network traffic?   |                          |                                | network traffic. The domain or |           |           |
+|     | If so, identify the domain   |                          |                                | IP in the certificate is       |           |           |
+|     | or IP in the certificate.    |                          |                                | 45.125.66.252 and              |           |           |
+|     |                              |                          |                                | 45.125.66.32. Not established  |           |           |
+|     |                              |                          |                                | from the available artifacts   |           |           |
+|     |                              |                          |                                | regarding whether the IP       |           |           |
+|     |                              |                          |                                | 5.252.153.241 or 185.188.32.26 |           |           |
+|     |                              |                          |                                | is a C2 server or a legitimate |           |           |
+|     |                              |                          |                                | service.                       |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 8   | According to the connection  | 5.252.153.241, C2 server | (no answer)                    | (no answer)                    | NO ANSWER | NO ANSWER |
+|     | volume statistics, what      |                          |                                |                                |           |           |
+|     | single external IP address   |                          |                                |                                |           |           |
+|     | received the most            |                          |                                |                                |           |           |
+|     | connections from the         |                          |                                |                                |           |           |
+|     | infected hosts? Is it a C2   |                          |                                |                                |           |           |
+|     | server or a legitimate       |                          |                                |                                |           |           |
+|     | service?                     |                          |                                |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+
+Faithfulness is 0 / '-' for No RAG by construction: without retrieved chunks it cannot cite evidence.

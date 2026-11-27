@@ -1,0 +1,564 @@
+{
+  "condition": "rag",
+  "model": "llama3.2:3b",
+  "scenario": "acl_split_brain_0001",
+  "seconds_total": 811.7,
+  "verification_totals": {
+    "unsupported_numbers": 9,
+    "uncited": 2
+  },
+  "mode": "drop",
+  "removed_unverified_lines": 9,
+  "postprocessing": {
+    "enabled": true,
+    "model_citation_rate_before_attribution": 0.642,
+    "auto_attributed_lines": 17,
+    "invalid_citations_removed": 0,
+    "partial_lines_dropped": 0,
+    "duplicate_lines_removed": 0,
+    "removed": []
+  },
+  "run_log": [
+    {
+      "section": "Affected Host and User",
+      "retrieved": [
+        "acl_split_brain_0001-05#1",
+        "acl_split_brain_0001-05#0",
+        "acl_split_brain_0001-06#1",
+        "acl_split_brain_0001-09#1",
+        "acl_split_brain_0001-06#0",
+        "acl_split_brain_0001-04#0"
+      ],
+      "seconds": 96.1,
+      "truncated": false,
+      "dropped_partial_line": null,
+      "model_cited_claims": 4,
+      "claims": 4,
+      "auto_attributed_lines": 0,
+      "invalid_citations_removed": 0,
+      "flag_counts": {}
+    },
+    {
+      "section": "Timeline",
+      "retrieved": [
+        "acl_split_brain_0001-08#0",
+        "acl_split_brain_0001-09#1",
+        "acl_split_brain_0001-07#1",
+        "acl_split_brain_0001-07#3",
+        "acl_split_brain_0001-09#0",
+        "acl_split_brain_0001-03#0",
+        "acl_split_brain_0001-07#0",
+        "acl_split_brain_0001-07#4",
+        "acl_split_brain_0001-07#5"
+      ],
+      "extractive": true,
+      "seconds": 0.0,
+      "claims": 14,
+      "model_cited_claims": 14,
+      "flag_counts": {}
+    },
+    {
+      "section": "Detection: IDS Alerts",
+      "retrieved": [
+        "acl_split_brain_0001-09#0",
+        "acl_split_brain_0001-06#0",
+        "acl_split_brain_0001-07#6",
+        "acl_split_brain_0001-07#2",
+        "acl_split_brain_0001-07#0"
+      ],
+      "seconds": 120.7,
+      "truncated": false,
+      "dropped_partial_line": null,
+      "model_cited_claims": 0,
+      "claims": 9,
+      "auto_attributed_lines": 9,
+      "invalid_citations_removed": 0,
+      "flag_counts": {
+        "unsupported_numbers": 8
+      }
+    },
+    {
+      "section": "Initial Infection Indicators",
+      "retrieved": [
+        "acl_split_brain_0001-09#1",
+        "acl_split_brain_0001-05#0",
+        "acl_split_brain_0001-06#0",
+        "acl_split_brain_0001-02#0",
+        "acl_split_brain_0001-05#1",
+        "acl_split_brain_0001-06#1"
+      ],
+      "seconds": 82.2,
+      "truncated": false,
+      "dropped_partial_line": null,
+      "model_cited_claims": 4,
+      "claims": 4,
+      "auto_attributed_lines": 0,
+      "invalid_citations_removed": 0,
+      "flag_counts": {}
+    },
+    {
+      "section": "Command-and-Control and Network Activity",
+      "retrieved": [
+        "acl_split_brain_0001-05#1",
+        "acl_split_brain_0001-05#0",
+        "acl_split_brain_0001-06#1",
+        "acl_split_brain_0001-06#0",
+        "acl_split_brain_0001-01#3",
+        "acl_split_brain_0001-01#1"
+      ],
+      "seconds": 81.1,
+      "truncated": false,
+      "dropped_partial_line": null,
+      "model_cited_claims": 0,
+      "claims": 5,
+      "auto_attributed_lines": 5,
+      "invalid_citations_removed": 0,
+      "flag_counts": {}
+    },
+    {
+      "section": "Impact Assessment",
+      "retrieved": [
+        "acl_split_brain_0001-05#1",
+        "acl_split_brain_0001-05#0",
+        "acl_split_brain_0001-03#2",
+        "acl_split_brain_0001-07#1",
+        "acl_split_brain_0001-03#1",
+        "acl_split_brain_0001-09#1"
+      ],
+      "seconds": 70.8,
+      "truncated": false,
+      "dropped_partial_line": null,
+      "model_cited_claims": 1,
+      "claims": 1,
+      "auto_attributed_lines": 0,
+      "invalid_citations_removed": 0,
+      "flag_counts": {
+        "unsupported_numbers": 1
+      }
+    },
+    {
+      "section": "Root Cause and Evidence Gaps",
+      "retrieved": [
+        "acl_split_brain_0001-10#0",
+        "acl_split_brain_0001-02#0",
+        "acl_split_brain_0001-09#0",
+        "acl_split_brain_0001-05#0",
+        "acl_split_brain_0001-08#0",
+        "acl_split_brain_0001-09#1"
+      ],
+      "seconds": 71.5,
+      "truncated": false,
+      "dropped_partial_line": null,
+      "model_cited_claims": 0,
+      "claims": 0,
+      "auto_attributed_lines": 0,
+      "invalid_citations_removed": 0,
+      "flag_counts": {}
+    },
+    {
+      "section": "Corrective and Preventive Actions",
+      "retrieved": [
+        "acl_split_brain_0001-07#0",
+        "acl_split_brain_0001-09#0",
+        "acl_split_brain_0001-07#1",
+        "acl_split_brain_0001-05#0",
+        "acl_split_brain_0001-09#1"
+      ],
+      "seconds": 87.6,
+      "truncated": false,
+      "dropped_partial_line": null,
+      "model_cited_claims": 0,
+      "claims": 5,
+      "auto_attributed_lines": 3,
+      "invalid_citations_removed": 0,
+      "flag_counts": {
+        "uncited": 2
+      }
+    },
+    {
+      "section": "Answers to Investigation Questions",
+      "retrieved": [
+        "acl_split_brain_0001-03#2",
+        "acl_split_brain_0001-03#1",
+        "acl_split_brain_0001-03#0",
+        "acl_split_brain_0001-04#0",
+        "acl_split_brain_0001-06#1",
+        "acl_split_brain_0001-08#0",
+        "acl_split_brain_0001-06#0",
+        "acl_split_brain_0001-05#0",
+        "acl_split_brain_0001-01#2",
+        "acl_split_brain_0001-09#0",
+        "acl_split_brain_0001-09#1",
+        "acl_split_brain_0001-05#1"
+      ],
+      "seconds": 201.7,
+      "truncated": false,
+      "dropped_partial_line": null,
+      "model_cited_claims": 11,
+      "claims": 11,
+      "auto_attributed_lines": 0,
+      "invalid_citations_removed": 0,
+      "flag_counts": {}
+    }
+  ],
+  "flagged": [
+    {
+      "section": "Detection: IDS Alerts",
+      "line": "* acl_split_brain_0001-07#2: critical alerts > critical instances: 172.31.240.72:9187 \u2014 4 events [acl_split_brain_0001-07#2]",
+      "types": [
+        "unsupported_numbers"
+      ],
+      "action": "removed",
+      "unsupported_numbers": [
+        "2"
+      ]
+    },
+    {
+      "section": "Detection: IDS Alerts",
+      "line": "* acl_split_brain_0001-07#2: critical alerts > critical alert names: ReconciliationConflicts \u2014 8 events [acl_split_brain_0001-07#2, acl_split_brain_0001-07#0]",
+      "types": [
+        "unsupported_numbers"
+      ],
+      "action": "removed",
+      "unsupported_numbers": [
+        "2"
+      ]
+    },
+    {
+      "section": "Detection: IDS Alerts",
+      "line": "* acl_split_brain_0001-07#2: critical alerts > critical alert names: PostgresReplicationBroken \u2014 4 events [acl_split_brain_0001-07#2, acl_split_brain_0001-07#0]",
+      "types": [
+        "unsupported_numbers"
+      ],
+      "action": "removed",
+      "unsupported_numbers": [
+        "2"
+      ]
+    },
+    {
+      "section": "Detection: IDS Alerts",
+      "line": "* acl_split_brain_0001-07#2: critical alerts > critical services: reconciliation-job \u2014 8 events [acl_split_brain_0001-07#2, acl_split_brain_0001-07#0]",
+      "types": [
+        "unsupported_numbers"
+      ],
+      "action": "removed",
+      "unsupported_numbers": [
+        "2"
+      ]
+    },
+    {
+      "section": "Detection: IDS Alerts",
+      "line": "* acl_split_brain_0001-07#0: alert names: Watchdog (info) \u2014 72 events; service: alertmanager; firing continuously [acl_split_brain_0001-07#0]",
+      "types": [
+        "unsupported_numbers"
+      ],
+      "action": "removed",
+      "unsupported_numbers": [
+        "0"
+      ]
+    },
+    {
+      "section": "Detection: IDS Alerts",
+      "line": "* acl_split_brain_0001-07#0: alert names: KubeJobFailed (warning) \u2014 4 events; service: batch; first seen in hour 2022-02-16 13:00 UTC; last seen in hour 2022-02-16 15:00 UTC [acl_split_brain_0001-07#0]",
+      "types": [
+        "unsupported_numbers"
+      ],
+      "action": "removed",
+      "unsupported_numbers": [
+        "0"
+      ]
+    },
+    {
+      "section": "Detection: IDS Alerts",
+      "line": "* acl_split_brain_0001-07#0: alert names: PostgresReplicationBroken (critical) \u2014 4 events; service: postgres; first seen in hour 2022-02-15 19:00 UTC; last seen in hour 2022-02-15 20:00 UTC [acl_split_brain_0001-07#0]",
+      "types": [
+        "unsupported_numbers"
+      ],
+      "action": "removed",
+      "unsupported_numbers": [
+        "0"
+      ]
+    },
+    {
+      "section": "Detection: IDS Alerts",
+      "line": "* acl_split_brain_0001-06#0: network device logs: %ACL-6-LOG: INTERCONNECT-IN denied protocol 112 172.31.173.231 -> 224.0.0.18 \u2014 12879 events; top objects: core-b1 (1) [acl_split_brain_0001-06#0]",
+      "types": [
+        "unsupported_numbers"
+      ],
+      "action": "removed",
+      "unsupported_numbers": [
+        "0"
+      ]
+    },
+    {
+      "section": "Impact Assessment",
+      "line": "* Assessment: The number of affected hosts was moderate, with at least 5 hosts experiencing issues, including core routers, rider-app-bff hosts, and PostgreSQL databases. [acl_split_brain_0001-05#1]",
+      "types": [
+        "unsupported_numbers"
+      ],
+      "action": "removed",
+      "unsupported_numbers": [
+        "5"
+      ]
+    },
+    {
+      "section": "Corrective and Preventive Actions",
+      "line": "* Review and update the Ansible AWX job IDs (AWX-) to ensure that router ACLs are properly configured and up-to-date.",
+      "types": [
+        "uncited"
+      ],
+      "action": "kept"
+    },
+    {
+      "section": "Corrective and Preventive Actions",
+      "line": "* Monitor the PostgreSQL primary/standby pair (db-a in DC-A, db-b in DC-B) and the keepalived VRRP virtual IP (172.31.173.196) for any signs of instability or misconfiguration.",
+      "types": [
+        "uncited"
+      ],
+      "action": "kept"
+    }
+  ],
+  "evaluation": {
+    "answer_precision": 0.0,
+    "answer_recall": 0.5,
+    "answer_f1": 0.0,
+    "question_recall": 0.722,
+    "questions_correct": "7/9",
+    "answerable_entity_recall": 1.0,
+    "overall_entity_recall": 0.7,
+    "faithfulness": 0.75,
+    "grounding_rate": 1.0,
+    "citation_precision": 0.783,
+    "citation_rate": 0.958,
+    "claims": 48,
+    "assessment_lines": 7,
+    "uncited_lines": 2,
+    "hallucination_rate": 0.0,
+    "unsupported_entities": [],
+    "unsupported_number_count": 0,
+    "unsupported_numbers": [],
+    "placeholder_count": 0,
+    "per_question": [
+      {
+        "id": 1,
+        "question": "What change, deployment or automation run triggered the incident? Provide its change identifier.",
+        "reference_answer": "AWX-54207",
+        "atoms": [
+          "AWX-54207"
+        ],
+        "answerable_from_evidence": [
+          "AWX-54207"
+        ],
+        "found_in_report": [
+          "AWX-54207"
+        ],
+        "missing_from_evidence": [],
+        "answer_text": "CHG-16855 * CHG-16809 * AWX-54207 * CHG-16846",
+        "status": "CORRECT",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [
+          "AWX-54207"
+        ],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 1.0
+      },
+      {
+        "id": 2,
+        "question": "Which account or automation identity executed the triggering change?",
+        "reference_answer": "awx-svc",
+        "atoms": [
+          "awx-svc"
+        ],
+        "answerable_from_evidence": [
+          "awx-svc"
+        ],
+        "found_in_report": [
+          "awx-svc"
+        ],
+        "missing_from_evidence": [],
+        "answer_text": "ansible-deploy * m.singh * awx-svc",
+        "status": "PARTIAL",
+        "predicted_entities": [
+          "m.singh"
+        ],
+        "correct_entities": [],
+        "atoms_found_in_answer": [
+          "awx-svc"
+        ],
+        "wrong_entities": [
+          "m.singh"
+        ],
+        "precision": 0.0,
+        "recall": 1.0
+      },
+      {
+        "id": 3,
+        "question": "Which network device dropped the database heartbeat and replication traffic?",
+        "reference_answer": "core-b1",
+        "atoms": [
+          "core-b1"
+        ],
+        "answerable_from_evidence": [
+          "core-b1"
+        ],
+        "found_in_report": [
+          "core-b1"
+        ],
+        "missing_from_evidence": [],
+        "answer_text": "core-b1",
+        "status": "CORRECT",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [
+          "core-b1"
+        ],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 1.0
+      },
+      {
+        "id": 4,
+        "question": "Which database node was promoted, creating a second writable primary?",
+        "reference_answer": "db-b",
+        "atoms": [
+          "db-b"
+        ],
+        "answerable_from_evidence": [
+          "db-b"
+        ],
+        "found_in_report": [
+          "db-b"
+        ],
+        "missing_from_evidence": [],
+        "answer_text": "db-b",
+        "status": "CORRECT",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [
+          "db-b"
+        ],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 1.0
+      },
+      {
+        "id": 5,
+        "question": "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+        "reference_answer": "2022-02-15 19:00 UTC",
+        "atoms": [
+          "2022-02-15 19:00 UTC"
+        ],
+        "answerable_from_evidence": [
+          "2022-02-15 19:00 UTC"
+        ],
+        "found_in_report": [
+          "2022-02-15 19:00 UTC"
+        ],
+        "missing_from_evidence": [],
+        "answer_text": "16:00 UTC",
+        "status": "WRONG",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 0.0
+      },
+      {
+        "id": 6,
+        "question": "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+        "reference_answer": "automation error",
+        "atoms": [
+          "automation error"
+        ],
+        "answerable_from_evidence": [],
+        "found_in_report": [],
+        "missing_from_evidence": [
+          "automation error"
+        ],
+        "answer_text": "Not established from the available artifacts",
+        "status": "ABSTAINED",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 0.0
+      },
+      {
+        "id": 7,
+        "question": "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+        "reference_answer": "integrity",
+        "atoms": [
+          "integrity"
+        ],
+        "answerable_from_evidence": [],
+        "found_in_report": [],
+        "missing_from_evidence": [
+          "integrity"
+        ],
+        "answer_text": "Not established from the available artifacts",
+        "status": "ABSTAINED",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 0.0
+      },
+      {
+        "id": 8,
+        "question": "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+        "reference_answer": "reconciliation-job, downstream symptom",
+        "atoms": [
+          "reconciliation-job",
+          "downstream symptom"
+        ],
+        "answerable_from_evidence": [
+          "reconciliation-job"
+        ],
+        "found_in_report": [
+          "reconciliation-job"
+        ],
+        "missing_from_evidence": [
+          "downstream symptom"
+        ],
+        "answer_text": "reconciliation-job",
+        "status": "PARTIAL",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [
+          "reconciliation-job"
+        ],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 0.5
+      },
+      {
+        "id": 9,
+        "question": "Which change restored normal service? Provide its change identifier.",
+        "reference_answer": "CHG-16828",
+        "atoms": [
+          "CHG-16828"
+        ],
+        "answerable_from_evidence": [
+          "CHG-16828"
+        ],
+        "found_in_report": [
+          "CHG-16828"
+        ],
+        "missing_from_evidence": [],
+        "answer_text": "Not established from the available artifacts",
+        "status": "ABSTAINED",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 0.0
+      }
+    ]
+  }
+}

@@ -1,0 +1,435 @@
+{
+  "condition": "rag",
+  "model": "deepinfra:anthropic/claude-sonnet-4-6",
+  "scenario": "koi_stealer",
+  "seconds_total": 93.6,
+  "verification_totals": {},
+  "mode": "drop",
+  "removed_unverified_lines": 0,
+  "postprocessing": {
+    "enabled": true,
+    "auto_attributed_lines": 0,
+    "invalid_citations_removed": 0,
+    "partial_lines_dropped": 1,
+    "duplicate_lines_removed": 0,
+    "removed": []
+  },
+  "run_log": [
+    {
+      "section": "Affected Host and User",
+      "retrieved": [
+        "koi_stealer-08#0",
+        "koi_stealer-05#0",
+        "koi_stealer-04#1",
+        "koi_stealer-04#0",
+        "koi_stealer-03#0",
+        "koi_stealer-02#0"
+      ],
+      "seconds": 6.3,
+      "truncated": false,
+      "dropped_partial_line": null,
+      "auto_attributed_lines": 0,
+      "invalid_citations_removed": 0,
+      "flag_counts": {}
+    },
+    {
+      "section": "Timeline",
+      "retrieved": [
+        "koi_stealer-06#3",
+        "koi_stealer-08#0"
+      ],
+      "extractive": true,
+      "seconds": 0.0,
+      "flag_counts": {}
+    },
+    {
+      "section": "Detection: IDS Alerts",
+      "retrieved": [
+        "koi_stealer-06#1",
+        "koi_stealer-06#2",
+        "koi_stealer-06#3",
+        "koi_stealer-08#0",
+        "koi_stealer-06#0",
+        "koi_stealer-05#0"
+      ],
+      "seconds": 10.7,
+      "truncated": false,
+      "dropped_partial_line": null,
+      "auto_attributed_lines": 0,
+      "invalid_citations_removed": 0,
+      "flag_counts": {}
+    },
+    {
+      "section": "Initial Infection Indicators",
+      "retrieved": [
+        "koi_stealer-01#0",
+        "koi_stealer-01#1",
+        "koi_stealer-01#6",
+        "koi_stealer-01#2",
+        "koi_stealer-01#3",
+        "koi_stealer-01#5"
+      ],
+      "seconds": 12.7,
+      "truncated": false,
+      "dropped_partial_line": null,
+      "auto_attributed_lines": 0,
+      "invalid_citations_removed": 0,
+      "flag_counts": {}
+    },
+    {
+      "section": "Command-and-Control and Network Activity",
+      "retrieved": [
+        "koi_stealer-08#0",
+        "koi_stealer-05#0",
+        "koi_stealer-02#0",
+        "koi_stealer-07#1",
+        "koi_stealer-01#2",
+        "koi_stealer-07#0"
+      ],
+      "seconds": 12.0,
+      "truncated": true,
+      "dropped_partial_line": "- Whether the Azure Blob Storage domain (weathermapdata.blob.core.windows.net) represents legitimate cloud activity or advers",
+      "auto_attributed_lines": 0,
+      "invalid_citations_removed": 0,
+      "flag_counts": {}
+    },
+    {
+      "section": "Impact Assessment",
+      "retrieved": [
+        "koi_stealer-02#0",
+        "koi_stealer-06#3",
+        "koi_stealer-07#1",
+        "koi_stealer-06#1",
+        "koi_stealer-08#0",
+        "koi_stealer-06#2"
+      ],
+      "seconds": 11.2,
+      "truncated": false,
+      "dropped_partial_line": null,
+      "auto_attributed_lines": 0,
+      "invalid_citations_removed": 0,
+      "flag_counts": {}
+    },
+    {
+      "section": "Root Cause and Evidence Gaps",
+      "retrieved": [
+        "koi_stealer-09#0",
+        "koi_stealer-08#0",
+        "koi_stealer-01#4",
+        "koi_stealer-04#0",
+        "koi_stealer-04#1",
+        "koi_stealer-01#5"
+      ],
+      "seconds": 12.7,
+      "truncated": false,
+      "dropped_partial_line": null,
+      "auto_attributed_lines": 0,
+      "invalid_citations_removed": 0,
+      "flag_counts": {}
+    },
+    {
+      "section": "Corrective and Preventive Actions",
+      "retrieved": [
+        "koi_stealer-08#0",
+        "koi_stealer-01#4",
+        "koi_stealer-04#1",
+        "koi_stealer-01#5",
+        "koi_stealer-04#0",
+        "koi_stealer-01#2"
+      ],
+      "seconds": 11.2,
+      "truncated": false,
+      "dropped_partial_line": null,
+      "auto_attributed_lines": 0,
+      "invalid_citations_removed": 0,
+      "flag_counts": {}
+    },
+    {
+      "section": "Answers to Investigation Questions",
+      "retrieved": [
+        "koi_stealer-08#0",
+        "koi_stealer-05#0",
+        "koi_stealer-04#1",
+        "koi_stealer-09#0",
+        "koi_stealer-03#0",
+        "koi_stealer-07#1",
+        "koi_stealer-07#0",
+        "koi_stealer-06#2",
+        "koi_stealer-02#0",
+        "koi_stealer-06#3",
+        "koi_stealer-06#1"
+      ],
+      "seconds": 16.8,
+      "truncated": false,
+      "dropped_partial_line": null,
+      "auto_attributed_lines": 0,
+      "invalid_citations_removed": 0,
+      "flag_counts": {}
+    }
+  ],
+  "flagged": [],
+  "llm_usage": {
+    "provider": "deepinfra",
+    "calls": 9,
+    "retries": 0,
+    "prompt_tokens": 17914,
+    "completion_tokens": 3920,
+    "estimated_cost_usd": 0.112542
+  },
+  "evaluation": {
+    "answer_precision": 0.778,
+    "answer_recall": 1.0,
+    "answer_f1": 0.875,
+    "question_recall": 1.0,
+    "questions_correct": "8/8",
+    "answerable_entity_recall": 1.0,
+    "overall_entity_recall": 1.0,
+    "faithfulness": 0.851,
+    "grounding_rate": 1.0,
+    "claims": 47,
+    "assessment_lines": 3,
+    "hallucination_rate": 0.0,
+    "unsupported_entities": [],
+    "unsupported_number_count": 0,
+    "unsupported_numbers": [],
+    "placeholder_count": 0,
+    "per_question": [
+      {
+        "id": 1,
+        "question": "What is the IP address of the potentially infected internal host in the LAN?",
+        "reference_answer": "172.17.0.99",
+        "atoms": [
+          "172.17.0.99"
+        ],
+        "answerable_from_evidence": [
+          "172.17.0.99"
+        ],
+        "found_in_report": [
+          "172.17.0.99"
+        ],
+        "missing_from_evidence": [],
+        "answer_text": "172.17.0.99",
+        "status": "CORRECT",
+        "predicted_entities": [
+          "172.17.0.99"
+        ],
+        "correct_entities": [
+          "172.17.0.99"
+        ],
+        "atoms_found_in_answer": [
+          "172.17.0.99"
+        ],
+        "wrong_entities": [],
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      {
+        "id": 2,
+        "question": "What is the hostname of the potentially infected machine in the LAN?",
+        "reference_answer": "DESKTOP-RNVO9AT",
+        "atoms": [
+          "DESKTOP-RNVO9AT"
+        ],
+        "answerable_from_evidence": [
+          "DESKTOP-RNVO9AT"
+        ],
+        "found_in_report": [
+          "DESKTOP-RNVO9AT"
+        ],
+        "missing_from_evidence": [],
+        "answer_text": "DESKTOP-RNVO9AT",
+        "status": "CORRECT",
+        "predicted_entities": [
+          "DESKTOP-RNVO9AT"
+        ],
+        "correct_entities": [
+          "DESKTOP-RNVO9AT"
+        ],
+        "atoms_found_in_answer": [
+          "DESKTOP-RNVO9AT"
+        ],
+        "wrong_entities": [],
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      {
+        "id": 3,
+        "question": "What is the Windows human user account name (not machine accounts ending in $) of the potentially infected machine in the LAN?",
+        "reference_answer": "afletcher",
+        "atoms": [
+          "afletcher"
+        ],
+        "answerable_from_evidence": [
+          "afletcher"
+        ],
+        "found_in_report": [
+          "afletcher"
+        ],
+        "missing_from_evidence": [],
+        "answer_text": "afletcher",
+        "status": "CORRECT",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [
+          "afletcher"
+        ],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 1.0
+      },
+      {
+        "id": 4,
+        "question": "What are the likely fake or suspicious domains / URLs for initial infection?",
+        "reference_answer": "www.bellantonicioccolato.it (likely compromised site associated with Koi Loader/Koi Stealer)",
+        "atoms": [
+          "www.bellantonicioccolato.it"
+        ],
+        "answerable_from_evidence": [
+          "www.bellantonicioccolato.it"
+        ],
+        "found_in_report": [
+          "www.bellantonicioccolato.it"
+        ],
+        "missing_from_evidence": [],
+        "answer_text": "www.bellantonicioccolato.it (2 events, no clear legitimate business relationship with the environment) and weathermapdata.blob.core.windows.net (1 event, atypical Azure Blob Storage subdomain pattern); Assessment: both domains are assessed as likely delivery or staging vectors given their anomalous presence in the traffic record alongside confirmed Koi Stealer alerts",
+        "status": "PARTIAL",
+        "predicted_entities": [
+          "weathermapdata.blob.core.windows.net",
+          "www.bellantonicioccolato.it"
+        ],
+        "correct_entities": [
+          "www.bellantonicioccolato.it"
+        ],
+        "atoms_found_in_answer": [
+          "www.bellantonicioccolato.it"
+        ],
+        "wrong_entities": [
+          "weathermapdata.blob.core.windows.net"
+        ],
+        "precision": 0.5,
+        "recall": 1.0
+      },
+      {
+        "id": 5,
+        "question": "What are the suspicious external IP addresses contacted, which might be involved in command-and-control (C2) communication?",
+        "reference_answer": "79.124.78.197",
+        "atoms": [
+          "79.124.78.197"
+        ],
+        "answerable_from_evidence": [
+          "79.124.78.197"
+        ],
+        "found_in_report": [
+          "79.124.78.197"
+        ],
+        "missing_from_evidence": [],
+        "answer_text": "79.124.78.197, which received 49 high-severity alert hits including \"ET MALWARE Win32/Koi Stealer CnC Checkin (GET)\" and \"ET HUNTING GENERIC SUSPICIOUS POST to Dotted Quad with Fake Browser 1\" signatures; Assessment: 79.124.78.197 is the primary suspected C2 endpoint",
+        "status": "CORRECT",
+        "predicted_entities": [
+          "79.124.78.197"
+        ],
+        "correct_entities": [
+          "79.124.78.197"
+        ],
+        "atoms_found_in_answer": [
+          "79.124.78.197"
+        ],
+        "wrong_entities": [],
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      {
+        "id": 6,
+        "question": "Which of the three CIA components does the attacker target primarily: availability, integrity, or confidentiality?",
+        "reference_answer": "confidentiality",
+        "atoms": [
+          "confidentiality"
+        ],
+        "answerable_from_evidence": [],
+        "found_in_report": [
+          "confidentiality"
+        ],
+        "missing_from_evidence": [
+          "confidentiality"
+        ],
+        "answer_text": "Confidentiality; Assessment: the malware family identified is Koi Stealer, a credential and data-theft tool, making confidentiality the primary CIA component targeted",
+        "status": "CORRECT",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [
+          "confidentiality"
+        ],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 1.0
+      },
+      {
+        "id": 7,
+        "question": "During what hour did the first signs of infection activity appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+        "reference_answer": "2024-09-04 17:00 UTC",
+        "atoms": [
+          "2024-09-04 17:00 UTC"
+        ],
+        "answerable_from_evidence": [
+          "2024-09-04 17:00 UTC"
+        ],
+        "found_in_report": [
+          "2024-09-04 17:00 UTC"
+        ],
+        "missing_from_evidence": [],
+        "answer_text": "2024-09-04 17:00 UTC",
+        "status": "CORRECT",
+        "predicted_entities": [
+          "2024-09-04",
+          "2024-09-04 17:00"
+        ],
+        "correct_entities": [
+          "2024-09-04",
+          "2024-09-04 17:00"
+        ],
+        "atoms_found_in_answer": [
+          "2024-09-04 17:00 UTC"
+        ],
+        "wrong_entities": [],
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      {
+        "id": 8,
+        "question": "According to the connection volume statistics, what single external IP address received the most connections from the infected hosts? Is it a C2 server or a legitimate service?",
+        "reference_answer": "79.124.78.197, C2 server",
+        "atoms": [
+          "79.124.78.197",
+          "C2 server"
+        ],
+        "answerable_from_evidence": [
+          "79.124.78.197",
+          "C2 server"
+        ],
+        "found_in_report": [
+          "79.124.78.197",
+          "C2 server"
+        ],
+        "missing_from_evidence": [],
+        "answer_text": "79.124.78.197 received the most connections (218 out of 361 total external connections from 172.17.0.99); Assessment: it is assessed as a C2 server based on corroborating Suricata signatures identifying Koi Stealer check-in and inbound C2 config traffic directed to that IP",
+        "status": "PARTIAL",
+        "predicted_entities": [
+          "172.17.0.99",
+          "79.124.78.197"
+        ],
+        "correct_entities": [
+          "79.124.78.197"
+        ],
+        "atoms_found_in_answer": [
+          "79.124.78.197",
+          "C2 server"
+        ],
+        "wrong_entities": [
+          "172.17.0.99"
+        ],
+        "precision": 0.5,
+        "recall": 1.0
+      }
+    ]
+  }
+}

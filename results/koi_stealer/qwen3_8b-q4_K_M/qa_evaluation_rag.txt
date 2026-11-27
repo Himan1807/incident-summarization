@@ -3,8 +3,8 @@ INCIDENT : koi_stealer
 MODEL    : qwen3:8b-q4_K_M
 CONDITION: RAG (advanced pipeline)
 RUN TIME : 56.6 min of LLM generation
-REPORT   : results/koi_stealer/qwen3_8b-q4_K_M/advanced_postmortem.md
-CREATED  : 2026-11-26T16:41:03
+REPORT   : results\koi_stealer\qwen3_8b-q4_K_M\advanced_postmortem.md
+CREATED  : 2026-11-27T21:04:28
 ====================================================================================================
 
 A. QUESTION-BY-QUESTION EVALUATION

@@ -1,0 +1,289 @@
+{
+  "condition": "no_rag",
+  "model": "deepinfra:anthropic/claude-sonnet-4-6",
+  "scenario": "fake_auth",
+  "seconds_total": 89.8,
+  "run_log": [
+    {
+      "section": "Affected Host and User",
+      "seconds": 6.0,
+      "truncated": false
+    },
+    {
+      "section": "Timeline",
+      "seconds": 12.9,
+      "truncated": false
+    },
+    {
+      "section": "Detection: IDS Alerts",
+      "seconds": 10.7,
+      "truncated": false
+    },
+    {
+      "section": "Initial Infection Indicators",
+      "seconds": 10.2,
+      "truncated": false
+    },
+    {
+      "section": "Command-and-Control and Network Activity",
+      "seconds": 13.0,
+      "truncated": false
+    },
+    {
+      "section": "Impact Assessment",
+      "seconds": 9.1,
+      "truncated": false
+    },
+    {
+      "section": "Root Cause and Evidence Gaps",
+      "seconds": 10.7,
+      "truncated": false
+    },
+    {
+      "section": "Corrective and Preventive Actions",
+      "seconds": 7.3,
+      "truncated": false
+    },
+    {
+      "section": "Answers to Investigation Questions",
+      "seconds": 9.9,
+      "truncated": false
+    }
+  ],
+  "llm_usage": {
+    "provider": "deepinfra",
+    "calls": 10,
+    "retries": 0,
+    "prompt_tokens": 8185,
+    "completion_tokens": 3200,
+    "estimated_cost_usd": 0.072555
+  },
+  "evaluation": {
+    "answer_precision": 0.333,
+    "answer_recall": 0.083,
+    "answer_f1": 0.133,
+    "question_recall": 0.188,
+    "questions_correct": "2/8",
+    "answerable_entity_recall": 0.167,
+    "overall_entity_recall": 0.167,
+    "faithfulness": 0.0,
+    "grounding_rate": 0.553,
+    "claims": 38,
+    "assessment_lines": 7,
+    "hallucination_rate": 0.5,
+    "unsupported_entities": [
+      "10.1.17.132",
+      "2025-01-22 06:00",
+      "2025-01-22 08:00",
+      "2025-01-22 09:00",
+      "2025-01-22 10:00",
+      "2025-01-22 12:00",
+      "2025-01-22 14:00",
+      "2025-01-22 17:00",
+      "bluemoontuesdayy.com",
+      "connecttest.microsoft.com"
+    ],
+    "unsupported_number_count": 3,
+    "unsupported_numbers": [
+      "10.1",
+      "1918",
+      "24"
+    ],
+    "placeholder_count": 0,
+    "per_question": [
+      {
+        "id": 1,
+        "question": "What is the IP address of the potentially infected internal host in the LAN?",
+        "reference_answer": "10.1.17.215",
+        "atoms": [
+          "10.1.17.215"
+        ],
+        "answerable_from_evidence": [
+          "10.1.17.215"
+        ],
+        "found_in_report": [
+          "10.1.17.215"
+        ],
+        "missing_from_evidence": [],
+        "answer_text": "Not established from the available artifacts \u2014 no Zeek/Suricata query results were provided to identify a specific internal IP; the LAN range is 10.1.17.0/24 but no per-host connection counts or alert sources were supplied.",
+        "status": "ABSTAINED",
+        "predicted_entities": [
+          "10.1.17.0"
+        ],
+        "correct_entities": [],
+        "atoms_found_in_answer": [],
+        "wrong_entities": [
+          "10.1.17.0"
+        ],
+        "precision": 0.0,
+        "recall": 0.0
+      },
+      {
+        "id": 2,
+        "question": "What is the hostname of the potentially infected machine in the LAN?",
+        "reference_answer": "DESKTOP-L8C5GSJ",
+        "atoms": [
+          "DESKTOP-L8C5GSJ"
+        ],
+        "answerable_from_evidence": [
+          "DESKTOP-L8C5GSJ"
+        ],
+        "found_in_report": [],
+        "missing_from_evidence": [],
+        "answer_text": "Not established from the available artifacts \u2014 no Kerberos authentication records or DHCP hostname mappings were provided to resolve a specific hostname within the BLUEMOONTUESDAY domain.",
+        "status": "ABSTAINED",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 0.0
+      },
+      {
+        "id": 3,
+        "question": "What is the Windows human user account name (not machine accounts ending in $) of the potentially infected machine in the LAN?",
+        "reference_answer": "shutchenson",
+        "atoms": [
+          "shutchenson"
+        ],
+        "answerable_from_evidence": [
+          "shutchenson"
+        ],
+        "found_in_report": [],
+        "missing_from_evidence": [],
+        "answer_text": "Not established from the available artifacts \u2014 no Kerberos TGT/TGS ticket logs or SMB session records listing a human (non-machine-account) username were included in the supplied evidence.",
+        "status": "ABSTAINED",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 0.0
+      },
+      {
+        "id": 4,
+        "question": "What are the likely fake or suspicious domains / URLs for initial infection?",
+        "reference_answer": "authenticatoor.org",
+        "atoms": [
+          "authenticatoor.org"
+        ],
+        "answerable_from_evidence": [
+          "authenticatoor.org"
+        ],
+        "found_in_report": [],
+        "missing_from_evidence": [],
+        "answer_text": "Not established from the available artifacts \u2014 no HTTP download URLs, DNS query aggregations, or Suricata HTTP log entries were provided to identify malicious or typosquatted domains used for initial access.",
+        "status": "ABSTAINED",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 0.0
+      },
+      {
+        "id": 5,
+        "question": "What are the suspicious external IP addresses contacted, which might be involved in command-and-control (C2) communication?",
+        "reference_answer": "5.252.153.241, 45.125.66.32, 45.125.66.252",
+        "atoms": [
+          "5.252.153.241",
+          "45.125.66.32",
+          "45.125.66.252"
+        ],
+        "answerable_from_evidence": [
+          "5.252.153.241",
+          "45.125.66.32",
+          "45.125.66.252"
+        ],
+        "found_in_report": [],
+        "missing_from_evidence": [],
+        "answer_text": "Not established from the available artifacts \u2014 no external-destination aggregation results, Suricata C2 signature hits, or outbound connection summaries to non-RFC-1918 addresses were included in the supplied evidence.",
+        "status": "ABSTAINED",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 0.0
+      },
+      {
+        "id": 6,
+        "question": "During what hour did the first signs of infection activity appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+        "reference_answer": "2025-01-22 19:00 UTC",
+        "atoms": [
+          "2025-01-22 19:00 UTC"
+        ],
+        "answerable_from_evidence": [
+          "2025-01-22 19:00 UTC"
+        ],
+        "found_in_report": [],
+        "missing_from_evidence": [],
+        "answer_text": "Not established from the available artifacts \u2014 no timestamped alert or connection records were provided to identify the earliest suspicious event within the 2025-01-22T00:00:00\u201323:59:59 UTC window.",
+        "status": "ABSTAINED",
+        "predicted_entities": [
+          "2025-01-22",
+          "2025-01-22 00:00"
+        ],
+        "correct_entities": [
+          "2025-01-22"
+        ],
+        "atoms_found_in_answer": [],
+        "wrong_entities": [
+          "2025-01-22 00:00"
+        ],
+        "precision": 0.5,
+        "recall": 0.0
+      },
+      {
+        "id": 7,
+        "question": "Were any suspicious certificates observed in the encrypted network traffic? If so, identify the domain or IP in the certificate.",
+        "reference_answer": "45.125.66.252, 45.125.66.32",
+        "atoms": [
+          "45.125.66.252",
+          "45.125.66.32"
+        ],
+        "answerable_from_evidence": [
+          "45.125.66.252",
+          "45.125.66.32"
+        ],
+        "found_in_report": [],
+        "missing_from_evidence": [],
+        "answer_text": "Not established from the available artifacts \u2014 no TLS certificate field extractions (issuer, subject CN, SAN, or self-signed flags) from Zeek `ssl.log` or Suricata TLS records were included in the supplied evidence.",
+        "status": "ABSTAINED",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 0.0
+      },
+      {
+        "id": 8,
+        "question": "According to the connection volume statistics, what single external IP address received the most connections from the infected hosts? Is it a C2 server or a legitimate service?",
+        "reference_answer": "5.252.153.241, C2 server",
+        "atoms": [
+          "5.252.153.241",
+          "C2 server"
+        ],
+        "answerable_from_evidence": [
+          "5.252.153.241",
+          "C2 server"
+        ],
+        "found_in_report": [
+          "C2 server"
+        ],
+        "missing_from_evidence": [],
+        "answer_text": "Not established from the available artifacts \u2014 no connection-count aggregation ranked by destination IP was provided to identify the highest-volume external endpoint or classify it as C2 versus legitimate infrastructure.",
+        "status": "PARTIAL",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [
+          "C2 server"
+        ],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 0.5
+      }
+    ]
+  }
+}

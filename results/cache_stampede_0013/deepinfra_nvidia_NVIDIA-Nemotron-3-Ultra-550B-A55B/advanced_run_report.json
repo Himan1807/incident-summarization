@@ -1,0 +1,352 @@
+{
+  "condition": "rag",
+  "model": "deepinfra:nvidia/NVIDIA-Nemotron-3-Ultra-550B-A55B",
+  "scenario": "cache_stampede_0013",
+  "seconds_total": 42.3,
+  "verification_totals": {},
+  "mode": "drop",
+  "removed_unverified_lines": 0,
+  "postprocessing": {
+    "enabled": true,
+    "auto_attributed_lines": 0,
+    "invalid_citations_removed": 0,
+    "partial_lines_dropped": 0,
+    "duplicate_lines_removed": 0,
+    "removed": []
+  },
+  "run_log": [
+    {
+      "section": "Affected Host and User",
+      "retrieved": [
+        "cache_stampede_0013-05#0",
+        "cache_stampede_0013-09#0",
+        "cache_stampede_0013-06#0",
+        "cache_stampede_0013-04#0",
+        "cache_stampede_0013-09#1",
+        "cache_stampede_0013-01#3"
+      ],
+      "seconds": 4.7,
+      "truncated": true,
+      "dropped_partial_line": null,
+      "auto_attributed_lines": 0,
+      "invalid_citations_removed": 0,
+      "flag_counts": {}
+    },
+    {
+      "section": "Timeline",
+      "retrieved": [
+        "cache_stampede_0013-03#0",
+        "cache_stampede_0013-09#0",
+        "cache_stampede_0013-07#1",
+        "cache_stampede_0013-07#5",
+        "cache_stampede_0013-07#0",
+        "cache_stampede_0013-07#6",
+        "cache_stampede_0013-08#0",
+        "cache_stampede_0013-09#1",
+        "cache_stampede_0013-07#7"
+      ],
+      "extractive": true,
+      "seconds": 0.0,
+      "flag_counts": {}
+    },
+    {
+      "section": "Detection: IDS Alerts",
+      "retrieved": [
+        "cache_stampede_0013-09#0",
+        "cache_stampede_0013-06#0",
+        "cache_stampede_0013-07#1",
+        "cache_stampede_0013-07#0",
+        "cache_stampede_0013-07#7"
+      ],
+      "seconds": 4.4,
+      "truncated": true,
+      "dropped_partial_line": null,
+      "auto_attributed_lines": 0,
+      "invalid_citations_removed": 0,
+      "flag_counts": {}
+    },
+    {
+      "section": "Initial Infection Indicators",
+      "retrieved": [
+        "cache_stampede_0013-09#1",
+        "cache_stampede_0013-05#0",
+        "cache_stampede_0013-06#0",
+        "cache_stampede_0013-09#0",
+        "cache_stampede_0013-10#0",
+        "cache_stampede_0013-02#0"
+      ],
+      "seconds": 4.0,
+      "truncated": false,
+      "dropped_partial_line": null,
+      "auto_attributed_lines": 0,
+      "invalid_citations_removed": 0,
+      "flag_counts": {}
+    },
+    {
+      "section": "Command-and-Control and Network Activity",
+      "retrieved": [
+        "cache_stampede_0013-05#0",
+        "cache_stampede_0013-06#0",
+        "cache_stampede_0013-01#4",
+        "cache_stampede_0013-01#1",
+        "cache_stampede_0013-01#3",
+        "cache_stampede_0013-01#0"
+      ],
+      "seconds": 4.2,
+      "truncated": true,
+      "dropped_partial_line": null,
+      "auto_attributed_lines": 0,
+      "invalid_citations_removed": 0,
+      "flag_counts": {}
+    },
+    {
+      "section": "Impact Assessment",
+      "retrieved": [
+        "cache_stampede_0013-04#0",
+        "cache_stampede_0013-05#0",
+        "cache_stampede_0013-03#1",
+        "cache_stampede_0013-03#0",
+        "cache_stampede_0013-07#1",
+        "cache_stampede_0013-07#7"
+      ],
+      "seconds": 4.5,
+      "truncated": true,
+      "dropped_partial_line": null,
+      "auto_attributed_lines": 0,
+      "invalid_citations_removed": 0,
+      "flag_counts": {}
+    },
+    {
+      "section": "Root Cause and Evidence Gaps",
+      "retrieved": [
+        "cache_stampede_0013-10#0",
+        "cache_stampede_0013-05#0",
+        "cache_stampede_0013-02#0",
+        "cache_stampede_0013-09#0",
+        "cache_stampede_0013-08#0"
+      ],
+      "seconds": 4.3,
+      "truncated": true,
+      "dropped_partial_line": null,
+      "auto_attributed_lines": 0,
+      "invalid_citations_removed": 0,
+      "flag_counts": {}
+    },
+    {
+      "section": "Corrective and Preventive Actions",
+      "retrieved": [
+        "cache_stampede_0013-07#1",
+        "cache_stampede_0013-07#0",
+        "cache_stampede_0013-05#0",
+        "cache_stampede_0013-09#0",
+        "cache_stampede_0013-07#6"
+      ],
+      "seconds": 4.5,
+      "truncated": true,
+      "dropped_partial_line": null,
+      "auto_attributed_lines": 0,
+      "invalid_citations_removed": 0,
+      "flag_counts": {}
+    },
+    {
+      "section": "Answers to Investigation Questions",
+      "retrieved": [
+        "cache_stampede_0013-09#0",
+        "cache_stampede_0013-05#0",
+        "cache_stampede_0013-06#0",
+        "cache_stampede_0013-01#3",
+        "cache_stampede_0013-01#2",
+        "cache_stampede_0013-02#0",
+        "cache_stampede_0013-09#1",
+        "cache_stampede_0013-07#1",
+        "cache_stampede_0013-03#0",
+        "cache_stampede_0013-01#4",
+        "cache_stampede_0013-04#0",
+        "cache_stampede_0013-03#1"
+      ],
+      "seconds": 11.7,
+      "truncated": true,
+      "dropped_partial_line": null,
+      "auto_attributed_lines": 0,
+      "invalid_citations_removed": 0,
+      "flag_counts": {}
+    }
+  ],
+  "flagged": [],
+  "llm_usage": {
+    "provider": "deepinfra",
+    "calls": 9,
+    "retries": 0,
+    "prompt_tokens": 17200,
+    "completion_tokens": 5604,
+    "estimated_cost_usd": 0.020928
+  },
+  "evaluation": {
+    "answer_precision": null,
+    "answer_recall": null,
+    "answer_f1": null,
+    "question_recall": 0.5,
+    "questions_correct": "5/9",
+    "answerable_entity_recall": 0.714,
+    "overall_entity_recall": 0.5,
+    "faithfulness": 1.0,
+    "grounding_rate": 1.0,
+    "claims": 13,
+    "assessment_lines": 1,
+    "hallucination_rate": 0.0,
+    "unsupported_entities": [],
+    "unsupported_number_count": 0,
+    "unsupported_numbers": [],
+    "placeholder_count": 0,
+    "per_question": [
+      {
+        "id": 1,
+        "question": "What is the hostname of the host or node where the failure originated?",
+        "reference_answer": "cache-redis-02",
+        "atoms": [
+          "cache-redis-02"
+        ],
+        "answerable_from_evidence": [
+          "cache-redis-02"
+        ],
+        "found_in_report": [
+          "cache-redis-02"
+        ],
+        "missing_from_evidence": [],
+        "answer_text": null,
+        "status": "NO ANSWER"
+      },
+      {
+        "id": 2,
+        "question": "What is the IP address of the host or node where the failure originated?",
+        "reference_answer": "10.227.167.238",
+        "atoms": [
+          "10.227.167.238"
+        ],
+        "answerable_from_evidence": [
+          "10.227.167.238"
+        ],
+        "found_in_report": [],
+        "missing_from_evidence": [],
+        "answer_text": null,
+        "status": "NO ANSWER"
+      },
+      {
+        "id": 3,
+        "question": "Which database host became overloaded as a consequence of the initial failure?",
+        "reference_answer": "inventory-db-01",
+        "atoms": [
+          "inventory-db-01"
+        ],
+        "answerable_from_evidence": [
+          "inventory-db-01"
+        ],
+        "found_in_report": [
+          "inventory-db-01"
+        ],
+        "missing_from_evidence": [],
+        "answer_text": null,
+        "status": "NO ANSWER"
+      },
+      {
+        "id": 4,
+        "question": "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+        "reference_answer": "2021-05-08 21:00 UTC",
+        "atoms": [
+          "2021-05-08 21:00 UTC"
+        ],
+        "answerable_from_evidence": [
+          "2021-05-08 21:00 UTC"
+        ],
+        "found_in_report": [
+          "2021-05-08 21:00 UTC"
+        ],
+        "missing_from_evidence": [],
+        "answer_text": null,
+        "status": "NO ANSWER"
+      },
+      {
+        "id": 5,
+        "question": "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+        "reference_answer": "capacity exhaustion",
+        "atoms": [
+          "capacity exhaustion"
+        ],
+        "answerable_from_evidence": [],
+        "found_in_report": [],
+        "missing_from_evidence": [
+          "capacity exhaustion"
+        ],
+        "answer_text": null,
+        "status": "NO ANSWER"
+      },
+      {
+        "id": 6,
+        "question": "Did the failure stay isolated to one component or cascade across services? Answer 'isolated failure' or 'cascading failure'.",
+        "reference_answer": "cascading failure",
+        "atoms": [
+          "cascading failure"
+        ],
+        "answerable_from_evidence": [],
+        "found_in_report": [],
+        "missing_from_evidence": [
+          "cascading failure"
+        ],
+        "answer_text": null,
+        "status": "NO ANSWER"
+      },
+      {
+        "id": 7,
+        "question": "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+        "reference_answer": "availability",
+        "atoms": [
+          "availability"
+        ],
+        "answerable_from_evidence": [
+          "availability"
+        ],
+        "found_in_report": [],
+        "missing_from_evidence": [],
+        "answer_text": null,
+        "status": "NO ANSWER"
+      },
+      {
+        "id": 8,
+        "question": "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+        "reference_answer": "booking-web, downstream symptom",
+        "atoms": [
+          "booking-web",
+          "downstream symptom"
+        ],
+        "answerable_from_evidence": [
+          "booking-web"
+        ],
+        "found_in_report": [
+          "booking-web"
+        ],
+        "missing_from_evidence": [
+          "downstream symptom"
+        ],
+        "answer_text": null,
+        "status": "NO ANSWER"
+      },
+      {
+        "id": 9,
+        "question": "Which change restored normal service? Provide its change identifier.",
+        "reference_answer": "CHG-40380",
+        "atoms": [
+          "CHG-40380"
+        ],
+        "answerable_from_evidence": [
+          "CHG-40380"
+        ],
+        "found_in_report": [
+          "CHG-40380"
+        ],
+        "missing_from_evidence": [],
+        "answer_text": null,
+        "status": "NO ANSWER"
+      }
+    ]
+  }
+}

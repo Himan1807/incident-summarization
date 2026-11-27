@@ -1,0 +1,103 @@
+====================================================================================================
+INCIDENT : fake_auth
+MODEL    : gemma3:4b
+CONDITION: No RAG vs RAG (same LLM, same section plan, same questions)
+CREATED  : 2026-11-27T21:04:28
+====================================================================================================
+
+NO RAG : the LLM receives only the incident context (network description and the questions). It has NO logs, alerts or query results.
+         Output is formatted (titles/preambles removed) but not verified, de-duplicated or given citations.
+RAG    : the advanced pipeline (hybrid retrieval, reranking, section-wise generation with citations, verification).
+Hallucination, grounding and number checks are always measured against the REAL evidence of the incident.
+
+A. METRICS
+
++------------------------------------------------------+----------------+----------------+----------------+
+| Metric                                               | No RAG         | RAG            | RAG - No RAG   |
++------------------------------------------------------+----------------+----------------+----------------+
+| Answer precision                                     | 0.083          | -              | -              |
++------------------------------------------------------+----------------+----------------+----------------+
+| Answer recall                                        | 0.083          | -              | -              |
++------------------------------------------------------+----------------+----------------+----------------+
+| Answer F1                                            | 0.083          | -              | -              |
++------------------------------------------------------+----------------+----------------+----------------+
+| Question recall                                      | 0.062          | 0.875          | +0.813         |
++------------------------------------------------------+----------------+----------------+----------------+
+| Faithfulness                                         | 0.000          | 0.842          | +0.842         |
++------------------------------------------------------+----------------+----------------+----------------+
+| Grounding rate                                       | 0.193          | 1.000          | +0.807         |
++------------------------------------------------------+----------------+----------------+----------------+
+| Hallucination rate (lower is better)                 | 0.860          | 0.000          | -0.860         |
++------------------------------------------------------+----------------+----------------+----------------+
+| Unsupported numbers (lower is better)                | 5              | 0              | -5             |
++------------------------------------------------------+----------------+----------------+----------------+
+| Placeholders (lower is better)                       | 0              | 0              | +0             |
++------------------------------------------------------+----------------+----------------+----------------+
+| Questions CORRECT                                    | 0              | 0              | +0             |
++------------------------------------------------------+----------------+----------------+----------------+
+| Questions PARTIAL                                    | 1              | 0              | -1             |
++------------------------------------------------------+----------------+----------------+----------------+
+| Questions WRONG                                      | 7              | 0              | -7             |
++------------------------------------------------------+----------------+----------------+----------------+
+| Questions ABSTAINED / unanswered                     | 0 / 0          | 0 / 8          | -              |
++------------------------------------------------------+----------------+----------------+----------------+
+| LLM generation time (min)                            | 11.4           | 33.4           | -              |
++------------------------------------------------------+----------------+----------------+----------------+
+
+B. ANSWERS PER QUESTION
+
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| #   | Question                     | Reference answer         | No RAG answer                  | RAG answer                     | No RAG    | RAG       |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 1   | What is the IP address of    | 10.1.17.215              | 10.1.17.12 [Evidence ID:       | (no answer)                    | WRONG     | NO ANSWER |
+|     | the potentially infected     |                          | Aggregation Results - Zeek]    |                                |           |           |
+|     | internal host in the LAN?    |                          |                                |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 2   | What is the hostname of the  | DESKTOP-L8C5GSJ          | WIN-GSH54QLW48D [Evidence ID:  | (no answer)                    | WRONG     | NO ANSWER |
+|     | potentially infected machine |                          | Aggregation Results -          |                                |           |           |
+|     | in the LAN?                  |                          | Suricata]                      |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 3   | What is the Windows human    | shutchenson              | jsmith [Evidence ID:           | (no answer)                    | WRONG     | NO ANSWER |
+|     | user account name (not       |                          | Aggregation Results - Zeek]    |                                |           |           |
+|     | machine accounts ending in   |                          |                                |                                |           |           |
+|     | $) of the potentially        |                          |                                |                                |           |           |
+|     | infected machine in the LAN? |                          |                                |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 4   | What are the likely fake or  | authenticatoor.org       | bluemoontuesday.com,           | (no answer)                    | WRONG     | NO ANSWER |
+|     | suspicious domains / URLs    |                          | example.com, suspicious-       |                                |           |           |
+|     | for initial infection?       |                          | domain-123.net [Evidence ID:   |                                |           |           |
+|     |                              |                          | Aggregation Results -          |                                |           |           |
+|     |                              |                          | Suricata]                      |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 5   | What are the suspicious      | 5.252.153.241,           | 192.0.2.1, 203.0.113.45        | (no answer)                    | WRONG     | NO ANSWER |
+|     | external IP addresses        | 45.125.66.32,            | [Evidence ID: Aggregation      |                                |           |           |
+|     | contacted, which might be    | 45.125.66.252            | Results - Zeek]                |                                |           |           |
+|     | involved in command-and-     |                          |                                |                                |           |           |
+|     | control (C2) communication?  |                          |                                |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 6   | During what hour did the     | 2025-01-22 19:00 UTC     | 2025-01-22 01:17 UTC [Evidence | (no answer)                    | WRONG     | NO ANSWER |
+|     | first signs of infection     |                          | ID: Aggregation Results -      |                                |           |           |
+|     | activity appear? Provide the |                          | Suricata]                      |                                |           |           |
+|     | earliest date and time in    |                          |                                |                                |           |           |
+|     | YYYY-MM-DD HH:MM UTC format. |                          |                                |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 7   | Were any suspicious          | 45.125.66.252,           | Certificates associated with   | (no answer)                    | WRONG     | NO ANSWER |
+|     | certificates observed in the | 45.125.66.32             | bluemoontuesday.com were       |                                |           |           |
+|     | encrypted network traffic?   |                          | observed [Evidence ID:         |                                |           |           |
+|     | If so, identify the domain   |                          | Aggregation Results - TLS      |                                |           |           |
+|     | or IP in the certificate.    |                          | Certificates]                  |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 8   | According to the connection  | 5.252.153.241, C2 server | 192.0.2.1 received 147         | (no answer)                    | PARTIAL   | NO ANSWER |
+|     | volume statistics, what      |                          | connections from 10.1.17.12    |                                |           |           |
+|     | single external IP address   |                          | during the incident timeframe. |                                |           |           |
+|     | received the most            |                          | This IP is currently           |                                |           |           |
+|     | connections from the         |                          | unverified and requires        |                                |           |           |
+|     | infected hosts? Is it a C2   |                          | further investigation to       |                                |           |           |
+|     | server or a legitimate       |                          | determine if it is a C2 server |                                |           |           |
+|     | service?                     |                          | or a legitimate service.       |                                |           |           |
+|     |                              |                          | [Evidence ID: Aggregation      |                                |           |           |
+|     |                              |                          | Results - External             |                                |           |           |
+|     |                              |                          | Destinations]                  |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+
+Faithfulness is 0 / '-' for No RAG by construction: without retrieved chunks it cannot cite evidence.

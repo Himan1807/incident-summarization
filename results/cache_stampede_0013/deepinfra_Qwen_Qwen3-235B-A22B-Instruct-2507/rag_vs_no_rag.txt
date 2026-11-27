@@ -1,0 +1,105 @@
+====================================================================================================
+INCIDENT : cache_stampede_0013
+MODEL    : deepinfra:Qwen/Qwen3-235B-A22B-Instruct-2507
+CONDITION: No RAG vs RAG (same LLM, same section plan, same questions)
+CREATED  : 2026-11-27T22:42:16
+====================================================================================================
+
+NO RAG : the LLM receives only the incident context (network description and the questions). It has NO logs, alerts or query results.
+         Output is formatted (titles/preambles removed) but not verified, de-duplicated or given citations.
+RAG    : the advanced pipeline (hybrid retrieval, reranking, section-wise generation with citations, verification).
+Hallucination, grounding and number checks are always measured against the REAL evidence of the incident.
+
+A. METRICS
+
++------------------------------------------------------+----------------+----------------+----------------+
+| Metric                                               | No RAG         | RAG            | RAG - No RAG   |
++------------------------------------------------------+----------------+----------------+----------------+
+| Answer precision                                     | 0.000          | 0.667          | +0.667         |
++------------------------------------------------------+----------------+----------------+----------------+
+| Answer recall                                        | 0.500          | 0.800          | +0.300         |
++------------------------------------------------------+----------------+----------------+----------------+
+| Answer F1                                            | 0.000          | 0.727          | +0.727         |
++------------------------------------------------------+----------------+----------------+----------------+
+| Question recall                                      | 0.500          | 0.889          | +0.389         |
++------------------------------------------------------+----------------+----------------+----------------+
+| Faithfulness                                         | 0.000          | 0.702          | +0.702         |
++------------------------------------------------------+----------------+----------------+----------------+
+| Grounding rate                                       | 0.151          | 1.000          | +0.849         |
++------------------------------------------------------+----------------+----------------+----------------+
+| Hallucination rate (lower is better)                 | 0.941          | 0.000          | -0.941         |
++------------------------------------------------------+----------------+----------------+----------------+
+| Unsupported numbers (lower is better)                | 22             | 0              | -22            |
++------------------------------------------------------+----------------+----------------+----------------+
+| Placeholders (lower is better)                       | 0              | 0              | +0             |
++------------------------------------------------------+----------------+----------------+----------------+
+| Questions CORRECT                                    | 4              | 7              | +3             |
++------------------------------------------------------+----------------+----------------+----------------+
+| Questions PARTIAL                                    | 1              | 0              | -1             |
++------------------------------------------------------+----------------+----------------+----------------+
+| Questions WRONG                                      | 4              | 2              | -2             |
++------------------------------------------------------+----------------+----------------+----------------+
+| Questions ABSTAINED / unanswered                     | 0 / 0          | 0 / 0          | -              |
++------------------------------------------------------+----------------+----------------+----------------+
+| LLM generation time (min)                            | 0.9            | 10.9           | -              |
++------------------------------------------------------+----------------+----------------+----------------+
+
+B. ANSWERS PER QUESTION
+
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| #   | Question                     | Reference answer         | No RAG answer                  | RAG answer                     | No RAG    | RAG       |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 1   | What is the hostname of the  | cache-redis-02           | cache-redis-02 [evidence id:   | cache-redis-02                 | CORRECT   | CORRECT   |
+|     | host or node where the       |                          | agg-elasticsearch-redis-       |                                |           |           |
+|     | failure originated?          |                          | failures-01]                   |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 2   | What is the IP address of    | 10.227.167.238           | 10.227.12.15 [evidence id:     | 10.227.167.238                 | WRONG     | CORRECT   |
+|     | the host or node where the   |                          | agg-kubernetes-events-         |                                |           |           |
+|     | failure originated?          |                          | westeurope-03]                 |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 3   | Which database host became   | inventory-db-01          | inventory-db-01 [evidence id:  | inventory-db-01                | CORRECT   | CORRECT   |
+|     | overloaded as a consequence  |                          | prometheus-alert-inventory-db- |                                |           |           |
+|     | of the initial failure?      |                          | overload-01]                   |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 4   | During what hour did the     | 2021-05-08 21:00 UTC     | 2021-05-07 04:17 UTC [evidence | 2021-05-08 18:00 UTC           | WRONG     | WRONG     |
+|     | first signs of the failure   |                          | id: agg-metric-anomalies-      |                                |           |           |
+|     | appear? Provide the earliest |                          | redis-memory-01]               |                                |           |           |
+|     | date and time in YYYY-MM-DD  |                          |                                |                                |           |           |
+|     | HH:MM UTC format.            |                          |                                |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 5   | What is the root cause       | capacity exhaustion      | configuration change [evidence | automation error               | WRONG     | WRONG     |
+|     | category of the incident:    |                          | id: cm-change-log-CHG-88420]   |                                |           |           |
+|     | configuration change,        |                          |                                |                                |           |           |
+|     | software defect, hardware    |                          |                                |                                |           |           |
+|     | failure, cloud provider      |                          |                                |                                |           |           |
+|     | failure, capacity            |                          |                                |                                |           |           |
+|     | exhaustion, automation       |                          |                                |                                |           |           |
+|     | error, certificate expiry,   |                          |                                |                                |           |           |
+|     | or third-party dependency    |                          |                                |                                |           |           |
+|     | failure?                     |                          |                                |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 6   | Did the failure stay         | cascading failure        | cascading failure [evidence    | cascading failure              | CORRECT   | CORRECT   |
+|     | isolated to one component or |                          | id: agg-elasticsearch-service- |                                |           |           |
+|     | cascade across services?     |                          | chain-reports-02]              |                                |           |           |
+|     | Answer 'isolated failure' or |                          |                                |                                |           |           |
+|     | 'cascading failure'.         |                          |                                |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 7   | Which of the three CIA       | availability             | availability [evidence id:     | availability                   | CORRECT   | CORRECT   |
+|     | components is primarily      |                          | prometheus-alert-inventory-db- |                                |           |           |
+|     | affected: availability,      |                          | overload-01]                   |                                |           |           |
+|     | integrity, or                |                          |                                |                                |           |           |
+|     | confidentiality?             |                          |                                |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 8   | According to the error       | booking-web, downstream  | inventory-sync service;        | booking-web; downstream        | PARTIAL   | CORRECT   |
+|     | volume statistics, what      | symptom                  | downstream symptom [evidence   | symptom                        |           |           |
+|     | single service emitted the   |                          | id: agg-error-volume-top-5-01] |                                |           |           |
+|     | most errors? Is it the root  |                          |                                |                                |           |           |
+|     | cause or a downstream        |                          |                                |                                |           |           |
+|     | symptom?                     |                          |                                |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 9   | Which change restored normal | CHG-40380                | CHG-88420 [evidence id: cm-    | CHG-40380                      | WRONG     | CORRECT   |
+|     | service? Provide its change  |                          | change-log-CHG-88420]          |                                |           |           |
+|     | identifier.                  |                          |                                |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+
+Faithfulness is 0 / '-' for No RAG by construction: without retrieved chunks it cannot cite evidence.

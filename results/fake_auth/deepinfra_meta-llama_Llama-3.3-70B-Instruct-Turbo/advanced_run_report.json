@@ -1,0 +1,417 @@
+{
+  "condition": "rag",
+  "model": "deepinfra:meta-llama/Llama-3.3-70B-Instruct-Turbo",
+  "scenario": "fake_auth",
+  "seconds_total": 135.7,
+  "verification_totals": {
+    "unsupported_entities": 1,
+    "unsupported_numbers": 4
+  },
+  "mode": "drop",
+  "removed_unverified_lines": 5,
+  "postprocessing": {
+    "enabled": true,
+    "auto_attributed_lines": 0,
+    "invalid_citations_removed": 0,
+    "partial_lines_dropped": 0,
+    "duplicate_lines_removed": 2,
+    "removed": [
+      {
+        "section": "Affected Host and User",
+        "line": "* The affected host 10.1.17.215 has been observed to have Kerberos identity associated with the hostname desktop-l8c5gsj and the human user account shutchenson [fake_auth-09#0].",
+        "duplicate_of": "Affected Host and User"
+      },
+      {
+        "section": "Command-and-Control and Network Activity",
+        "line": "* The top destinations of high-severity alerts include 5.252.153.241, 10.1.17.215, and 185.188.32.26 [fake_auth-09#0].",
+        "duplicate_of": "Detection: IDS Alerts"
+      }
+    ]
+  },
+  "run_log": [
+    {
+      "section": "Affected Host and User",
+      "retrieved": [
+        "fake_auth-09#0",
+        "fake_auth-05#0",
+        "fake_auth-04#3",
+        "fake_auth-04#2",
+        "fake_auth-04#0",
+        "fake_auth-04#1"
+      ],
+      "seconds": 9.7,
+      "truncated": false,
+      "dropped_partial_line": null,
+      "auto_attributed_lines": 0,
+      "invalid_citations_removed": 0,
+      "flag_counts": {}
+    },
+    {
+      "section": "Timeline",
+      "retrieved": [
+        "fake_auth-06#4",
+        "fake_auth-09#0"
+      ],
+      "extractive": true,
+      "seconds": 0.0,
+      "flag_counts": {}
+    },
+    {
+      "section": "Detection: IDS Alerts",
+      "retrieved": [
+        "fake_auth-06#1",
+        "fake_auth-06#2",
+        "fake_auth-06#4",
+        "fake_auth-06#3",
+        "fake_auth-09#0",
+        "fake_auth-06#0"
+      ],
+      "seconds": 13.3,
+      "truncated": false,
+      "dropped_partial_line": null,
+      "auto_attributed_lines": 0,
+      "invalid_citations_removed": 0,
+      "flag_counts": {}
+    },
+    {
+      "section": "Initial Infection Indicators",
+      "retrieved": [
+        "fake_auth-01#1",
+        "fake_auth-01#0",
+        "fake_auth-01#7",
+        "fake_auth-01#2",
+        "fake_auth-01#4",
+        "fake_auth-01#6"
+      ],
+      "seconds": 17.9,
+      "truncated": false,
+      "dropped_partial_line": null,
+      "auto_attributed_lines": 0,
+      "invalid_citations_removed": 0,
+      "flag_counts": {}
+    },
+    {
+      "section": "Command-and-Control and Network Activity",
+      "retrieved": [
+        "fake_auth-09#0",
+        "fake_auth-05#0",
+        "fake_auth-02#0",
+        "fake_auth-08#2",
+        "fake_auth-08#3",
+        "fake_auth-08#0"
+      ],
+      "seconds": 22.9,
+      "truncated": false,
+      "dropped_partial_line": null,
+      "auto_attributed_lines": 0,
+      "invalid_citations_removed": 0,
+      "flag_counts": {}
+    },
+    {
+      "section": "Impact Assessment",
+      "retrieved": [
+        "fake_auth-02#0",
+        "fake_auth-06#2",
+        "fake_auth-06#4",
+        "fake_auth-09#0",
+        "fake_auth-08#0",
+        "fake_auth-08#2"
+      ],
+      "seconds": 16.0,
+      "truncated": false,
+      "dropped_partial_line": null,
+      "auto_attributed_lines": 0,
+      "invalid_citations_removed": 0,
+      "flag_counts": {}
+    },
+    {
+      "section": "Root Cause and Evidence Gaps",
+      "retrieved": [
+        "fake_auth-09#0",
+        "fake_auth-02#0",
+        "fake_auth-04#1",
+        "fake_auth-04#0",
+        "fake_auth-03#0",
+        "fake_auth-01#2"
+      ],
+      "seconds": 11.9,
+      "truncated": false,
+      "dropped_partial_line": null,
+      "auto_attributed_lines": 0,
+      "invalid_citations_removed": 0,
+      "flag_counts": {}
+    },
+    {
+      "section": "Corrective and Preventive Actions",
+      "retrieved": [
+        "fake_auth-06#1",
+        "fake_auth-09#0",
+        "fake_auth-03#0",
+        "fake_auth-08#0",
+        "fake_auth-08#3",
+        "fake_auth-01#2"
+      ],
+      "seconds": 15.4,
+      "truncated": false,
+      "dropped_partial_line": null,
+      "auto_attributed_lines": 0,
+      "invalid_citations_removed": 0,
+      "flag_counts": {
+        "unsupported_entities": 1
+      }
+    },
+    {
+      "section": "Answers to Investigation Questions",
+      "retrieved": [
+        "fake_auth-09#0",
+        "fake_auth-05#0",
+        "fake_auth-04#2",
+        "fake_auth-04#3",
+        "fake_auth-03#0",
+        "fake_auth-04#1",
+        "fake_auth-08#2",
+        "fake_auth-08#0",
+        "fake_auth-08#3",
+        "fake_auth-06#4",
+        "fake_auth-06#2",
+        "fake_auth-07#0",
+        "fake_auth-07#1",
+        "fake_auth-02#0"
+      ],
+      "seconds": 28.6,
+      "truncated": false,
+      "dropped_partial_line": null,
+      "auto_attributed_lines": 0,
+      "invalid_citations_removed": 0,
+      "flag_counts": {
+        "unsupported_numbers": 4
+      }
+    }
+  ],
+  "flagged": [
+    {
+      "section": "Corrective and Preventive Actions",
+      "line": "* Investigate and potentially block the domain teamviewer.com as it was observed in a DNS lookup alert [fake_auth-06#1]",
+      "types": [
+        "unsupported_entities"
+      ],
+      "action": "removed",
+      "unsupported_entities": [
+        "teamviewer.com"
+      ]
+    },
+    {
+      "section": "Answers to Investigation Questions",
+      "line": "* 3. The Windows human user account name of the potentially infected machine in the LAN is shutchenson [fake_auth-09#0]",
+      "types": [
+        "unsupported_numbers"
+      ],
+      "action": "removed",
+      "unsupported_numbers": [
+        "3"
+      ]
+    },
+    {
+      "section": "Answers to Investigation Questions",
+      "line": "* 6. The first signs of infection activity appeared during 2025-01-22 19:00 UTC [fake_auth-09#0]",
+      "types": [
+        "unsupported_numbers"
+      ],
+      "action": "removed",
+      "unsupported_numbers": [
+        "6"
+      ]
+    },
+    {
+      "section": "Answers to Investigation Questions",
+      "line": "* 7. Suspicious certificates were observed in the encrypted network traffic for IPs 45.125.66.252, 45.125.66.32 [fake_auth-07#0]",
+      "types": [
+        "unsupported_numbers"
+      ],
+      "action": "removed",
+      "unsupported_numbers": [
+        "7"
+      ]
+    },
+    {
+      "section": "Answers to Investigation Questions",
+      "line": "* 8. The single external IP address that received the most connections from the infected hosts is 5.252.153.241, but it is Not established from the available artifacts if it is a C2 server or a legitimate service [fake_auth-09#0]",
+      "types": [
+        "unsupported_numbers"
+      ],
+      "action": "removed",
+      "unsupported_numbers": [
+        "8"
+      ]
+    }
+  ],
+  "llm_usage": {
+    "provider": "deepinfra",
+    "calls": 9,
+    "retries": 0,
+    "prompt_tokens": 15515,
+    "completion_tokens": 2128,
+    "estimated_cost_usd": 0.002232
+  },
+  "evaluation": {
+    "answer_precision": null,
+    "answer_recall": null,
+    "answer_f1": null,
+    "question_recall": 0.667,
+    "questions_correct": "6/8",
+    "answerable_entity_recall": 0.583,
+    "overall_entity_recall": 0.583,
+    "faithfulness": 0.879,
+    "grounding_rate": 1.0,
+    "claims": 33,
+    "assessment_lines": 3,
+    "hallucination_rate": 0.0,
+    "unsupported_entities": [],
+    "unsupported_number_count": 0,
+    "unsupported_numbers": [],
+    "placeholder_count": 0,
+    "per_question": [
+      {
+        "id": 1,
+        "question": "What is the IP address of the potentially infected internal host in the LAN?",
+        "reference_answer": "10.1.17.215",
+        "atoms": [
+          "10.1.17.215"
+        ],
+        "answerable_from_evidence": [
+          "10.1.17.215"
+        ],
+        "found_in_report": [
+          "10.1.17.215"
+        ],
+        "missing_from_evidence": [],
+        "answer_text": null,
+        "status": "NO ANSWER"
+      },
+      {
+        "id": 2,
+        "question": "What is the hostname of the potentially infected machine in the LAN?",
+        "reference_answer": "DESKTOP-L8C5GSJ",
+        "atoms": [
+          "DESKTOP-L8C5GSJ"
+        ],
+        "answerable_from_evidence": [
+          "DESKTOP-L8C5GSJ"
+        ],
+        "found_in_report": [
+          "DESKTOP-L8C5GSJ"
+        ],
+        "missing_from_evidence": [],
+        "answer_text": null,
+        "status": "NO ANSWER"
+      },
+      {
+        "id": 3,
+        "question": "What is the Windows human user account name (not machine accounts ending in $) of the potentially infected machine in the LAN?",
+        "reference_answer": "shutchenson",
+        "atoms": [
+          "shutchenson"
+        ],
+        "answerable_from_evidence": [
+          "shutchenson"
+        ],
+        "found_in_report": [
+          "shutchenson"
+        ],
+        "missing_from_evidence": [],
+        "answer_text": null,
+        "status": "NO ANSWER"
+      },
+      {
+        "id": 4,
+        "question": "What are the likely fake or suspicious domains / URLs for initial infection?",
+        "reference_answer": "authenticatoor.org",
+        "atoms": [
+          "authenticatoor.org"
+        ],
+        "answerable_from_evidence": [
+          "authenticatoor.org"
+        ],
+        "found_in_report": [],
+        "missing_from_evidence": [],
+        "answer_text": null,
+        "status": "NO ANSWER"
+      },
+      {
+        "id": 5,
+        "question": "What are the suspicious external IP addresses contacted, which might be involved in command-and-control (C2) communication?",
+        "reference_answer": "5.252.153.241, 45.125.66.32, 45.125.66.252",
+        "atoms": [
+          "5.252.153.241",
+          "45.125.66.32",
+          "45.125.66.252"
+        ],
+        "answerable_from_evidence": [
+          "5.252.153.241",
+          "45.125.66.32",
+          "45.125.66.252"
+        ],
+        "found_in_report": [
+          "5.252.153.241"
+        ],
+        "missing_from_evidence": [],
+        "answer_text": null,
+        "status": "NO ANSWER"
+      },
+      {
+        "id": 6,
+        "question": "During what hour did the first signs of infection activity appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+        "reference_answer": "2025-01-22 19:00 UTC",
+        "atoms": [
+          "2025-01-22 19:00 UTC"
+        ],
+        "answerable_from_evidence": [
+          "2025-01-22 19:00 UTC"
+        ],
+        "found_in_report": [
+          "2025-01-22 19:00 UTC"
+        ],
+        "missing_from_evidence": [],
+        "answer_text": null,
+        "status": "NO ANSWER"
+      },
+      {
+        "id": 7,
+        "question": "Were any suspicious certificates observed in the encrypted network traffic? If so, identify the domain or IP in the certificate.",
+        "reference_answer": "45.125.66.252, 45.125.66.32",
+        "atoms": [
+          "45.125.66.252",
+          "45.125.66.32"
+        ],
+        "answerable_from_evidence": [
+          "45.125.66.252",
+          "45.125.66.32"
+        ],
+        "found_in_report": [],
+        "missing_from_evidence": [],
+        "answer_text": null,
+        "status": "NO ANSWER"
+      },
+      {
+        "id": 8,
+        "question": "According to the connection volume statistics, what single external IP address received the most connections from the infected hosts? Is it a C2 server or a legitimate service?",
+        "reference_answer": "5.252.153.241, C2 server",
+        "atoms": [
+          "5.252.153.241",
+          "C2 server"
+        ],
+        "answerable_from_evidence": [
+          "5.252.153.241",
+          "C2 server"
+        ],
+        "found_in_report": [
+          "5.252.153.241",
+          "C2 server"
+        ],
+        "missing_from_evidence": [],
+        "answer_text": null,
+        "status": "NO ANSWER"
+      }
+    ]
+  }
+}

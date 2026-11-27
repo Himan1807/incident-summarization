@@ -1,0 +1,297 @@
+{
+  "condition": "no_rag",
+  "model": "deepinfra:deepseek-ai/DeepSeek-V3",
+  "scenario": "fake_auth",
+  "seconds_total": 70.6,
+  "run_log": [
+    {
+      "section": "Affected Host and User",
+      "seconds": 6.8,
+      "truncated": false
+    },
+    {
+      "section": "Timeline",
+      "seconds": 14.7,
+      "truncated": false
+    },
+    {
+      "section": "Detection: IDS Alerts",
+      "seconds": 10.7,
+      "truncated": false
+    },
+    {
+      "section": "Initial Infection Indicators",
+      "seconds": 7.5,
+      "truncated": false
+    },
+    {
+      "section": "Command-and-Control and Network Activity",
+      "seconds": 10.6,
+      "truncated": false
+    },
+    {
+      "section": "Impact Assessment",
+      "seconds": 4.9,
+      "truncated": false
+    },
+    {
+      "section": "Root Cause and Evidence Gaps",
+      "seconds": 5.3,
+      "truncated": false
+    },
+    {
+      "section": "Corrective and Preventive Actions",
+      "seconds": 5.5,
+      "truncated": false
+    },
+    {
+      "section": "Answers to Investigation Questions",
+      "seconds": 4.6,
+      "truncated": false
+    }
+  ],
+  "llm_usage": {
+    "provider": "deepinfra",
+    "calls": 10,
+    "retries": 0,
+    "prompt_tokens": 6462,
+    "completion_tokens": 1824,
+    "estimated_cost_usd": 0.003691
+  },
+  "evaluation": {
+    "answer_precision": null,
+    "answer_recall": 0.0,
+    "answer_f1": null,
+    "question_recall": 0.062,
+    "questions_correct": "1/8",
+    "answerable_entity_recall": 0.083,
+    "overall_entity_recall": 0.083,
+    "faithfulness": 0.0,
+    "grounding_rate": 0.195,
+    "claims": 41,
+    "assessment_lines": 4,
+    "hallucination_rate": 0.865,
+    "unsupported_entities": [
+      "10.1.17.102",
+      "10.1.17.134",
+      "10.1.17.23",
+      "10.1.17.34",
+      "10.1.17.45",
+      "10.1.17.56",
+      "10.1.17.67",
+      "10.1.17.78",
+      "10.1.17.89",
+      "185.56.83.21",
+      "2025-01-22 03:00",
+      "2025-01-22 03:15",
+      "2025-01-22 04:30",
+      "2025-01-22 05:45",
+      "2025-01-22 07:00",
+      "2025-01-22 09:30",
+      "2025-01-22 12:00",
+      "2025-01-22 15:45",
+      "2025-01-22 18:00",
+      "203.0.113.17",
+      "203.0.113.78",
+      "45.67.89.123",
+      "WIN-3E4R5T6Y7U8",
+      "WIN-4D8G2H7Q9R1",
+      "WIN-5T6Y8U1I9O0",
+      "WIN-7H9FJ3K1L2P",
+      "malicious.example.com",
+      "malware-c2.example.com",
+      "malwaretracker.xyz",
+      "payloadserver.net",
+      "phishingsite.com",
+      "suspicious.example.net"
+    ],
+    "unsupported_number_count": 4,
+    "unsupported_numbers": [
+      "12",
+      "1243",
+      "2025",
+      "22"
+    ],
+    "placeholder_count": 0,
+    "per_question": [
+      {
+        "id": 1,
+        "question": "What is the IP address of the potentially infected internal host in the LAN?",
+        "reference_answer": "10.1.17.215",
+        "atoms": [
+          "10.1.17.215"
+        ],
+        "answerable_from_evidence": [
+          "10.1.17.215"
+        ],
+        "found_in_report": [],
+        "missing_from_evidence": [],
+        "answer_text": "Not established from the available artifacts [evidence id]",
+        "status": "ABSTAINED",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 0.0
+      },
+      {
+        "id": 2,
+        "question": "What is the hostname of the potentially infected machine in the LAN?",
+        "reference_answer": "DESKTOP-L8C5GSJ",
+        "atoms": [
+          "DESKTOP-L8C5GSJ"
+        ],
+        "answerable_from_evidence": [
+          "DESKTOP-L8C5GSJ"
+        ],
+        "found_in_report": [],
+        "missing_from_evidence": [],
+        "answer_text": "Not established from the available artifacts [evidence id]",
+        "status": "ABSTAINED",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 0.0
+      },
+      {
+        "id": 3,
+        "question": "What is the Windows human user account name (not machine accounts ending in $) of the potentially infected machine in the LAN?",
+        "reference_answer": "shutchenson",
+        "atoms": [
+          "shutchenson"
+        ],
+        "answerable_from_evidence": [
+          "shutchenson"
+        ],
+        "found_in_report": [],
+        "missing_from_evidence": [],
+        "answer_text": "Not established from the available artifacts [evidence id]",
+        "status": "ABSTAINED",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 0.0
+      },
+      {
+        "id": 4,
+        "question": "What are the likely fake or suspicious domains / URLs for initial infection?",
+        "reference_answer": "authenticatoor.org",
+        "atoms": [
+          "authenticatoor.org"
+        ],
+        "answerable_from_evidence": [
+          "authenticatoor.org"
+        ],
+        "found_in_report": [],
+        "missing_from_evidence": [],
+        "answer_text": "Not established from the available artifacts [evidence id]",
+        "status": "ABSTAINED",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 0.0
+      },
+      {
+        "id": 5,
+        "question": "What are the suspicious external IP addresses contacted, which might be involved in command-and-control (C2) communication?",
+        "reference_answer": "5.252.153.241, 45.125.66.32, 45.125.66.252",
+        "atoms": [
+          "5.252.153.241",
+          "45.125.66.32",
+          "45.125.66.252"
+        ],
+        "answerable_from_evidence": [
+          "5.252.153.241",
+          "45.125.66.32",
+          "45.125.66.252"
+        ],
+        "found_in_report": [],
+        "missing_from_evidence": [],
+        "answer_text": "Not established from the available artifacts [evidence id]",
+        "status": "ABSTAINED",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 0.0
+      },
+      {
+        "id": 6,
+        "question": "During what hour did the first signs of infection activity appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+        "reference_answer": "2025-01-22 19:00 UTC",
+        "atoms": [
+          "2025-01-22 19:00 UTC"
+        ],
+        "answerable_from_evidence": [
+          "2025-01-22 19:00 UTC"
+        ],
+        "found_in_report": [],
+        "missing_from_evidence": [],
+        "answer_text": "Not established from the available artifacts [evidence id]",
+        "status": "ABSTAINED",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 0.0
+      },
+      {
+        "id": 7,
+        "question": "Were any suspicious certificates observed in the encrypted network traffic? If so, identify the domain or IP in the certificate.",
+        "reference_answer": "45.125.66.252, 45.125.66.32",
+        "atoms": [
+          "45.125.66.252",
+          "45.125.66.32"
+        ],
+        "answerable_from_evidence": [
+          "45.125.66.252",
+          "45.125.66.32"
+        ],
+        "found_in_report": [],
+        "missing_from_evidence": [],
+        "answer_text": "Not established from the available artifacts [evidence id]",
+        "status": "ABSTAINED",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 0.0
+      },
+      {
+        "id": 8,
+        "question": "According to the connection volume statistics, what single external IP address received the most connections from the infected hosts? Is it a C2 server or a legitimate service?",
+        "reference_answer": "5.252.153.241, C2 server",
+        "atoms": [
+          "5.252.153.241",
+          "C2 server"
+        ],
+        "answerable_from_evidence": [
+          "5.252.153.241",
+          "C2 server"
+        ],
+        "found_in_report": [
+          "C2 server"
+        ],
+        "missing_from_evidence": [],
+        "answer_text": "Not established from the available artifacts [evidence id]",
+        "status": "ABSTAINED",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 0.0
+      }
+    ]
+  }
+}

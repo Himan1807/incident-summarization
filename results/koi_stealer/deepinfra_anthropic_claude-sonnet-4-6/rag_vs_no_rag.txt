@@ -1,0 +1,142 @@
+====================================================================================================
+INCIDENT : koi_stealer
+MODEL    : deepinfra:anthropic/claude-sonnet-4-6
+CONDITION: No RAG vs RAG (same LLM, same section plan, same questions)
+CREATED  : 2026-11-27T21:04:28
+====================================================================================================
+
+NO RAG : the LLM receives only the incident context (network description and the questions). It has NO logs, alerts or query results.
+         Output is formatted (titles/preambles removed) but not verified, de-duplicated or given citations.
+RAG    : the advanced pipeline (hybrid retrieval, reranking, section-wise generation with citations, verification).
+Hallucination, grounding and number checks are always measured against the REAL evidence of the incident.
+
+A. METRICS
+
++------------------------------------------------------+----------------+----------------+----------------+
+| Metric                                               | No RAG         | RAG            | RAG - No RAG   |
++------------------------------------------------------+----------------+----------------+----------------+
+| Answer precision                                     | 0.167          | 0.778          | +0.611         |
++------------------------------------------------------+----------------+----------------+----------------+
+| Answer recall                                        | 0.111          | 1.000          | +0.889         |
++------------------------------------------------------+----------------+----------------+----------------+
+| Answer F1                                            | 0.133          | 0.875          | +0.742         |
++------------------------------------------------------+----------------+----------------+----------------+
+| Question recall                                      | 0.188          | 1.000          | +0.812         |
++------------------------------------------------------+----------------+----------------+----------------+
+| Faithfulness                                         | 0.000          | 0.851          | +0.851         |
++------------------------------------------------------+----------------+----------------+----------------+
+| Grounding rate                                       | 0.583          | 1.000          | +0.417         |
++------------------------------------------------------+----------------+----------------+----------------+
+| Hallucination rate (lower is better)                 | 0.500          | 0.000          | -0.500         |
++------------------------------------------------------+----------------+----------------+----------------+
+| Unsupported numbers (lower is better)                | 2              | 0              | -2             |
++------------------------------------------------------+----------------+----------------+----------------+
+| Placeholders (lower is better)                       | 0              | 0              | +0             |
++------------------------------------------------------+----------------+----------------+----------------+
+| Questions CORRECT                                    | 0              | 6              | +6             |
++------------------------------------------------------+----------------+----------------+----------------+
+| Questions PARTIAL                                    | 1              | 2              | +1             |
++------------------------------------------------------+----------------+----------------+----------------+
+| Questions WRONG                                      | 0              | 0              | +0             |
++------------------------------------------------------+----------------+----------------+----------------+
+| Questions ABSTAINED / unanswered                     | 7 / 0          | 0 / 0          | -              |
++------------------------------------------------------+----------------+----------------+----------------+
+| LLM generation time (min)                            | 1.6            | 1.6            | -              |
++------------------------------------------------------+----------------+----------------+----------------+
+
+B. ANSWERS PER QUESTION
+
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| #   | Question                     | Reference answer         | No RAG answer                  | RAG answer                     | No RAG    | RAG       |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 1   | What is the IP address of    | 172.17.0.99              | Not established from the       | 172.17.0.99                    | ABSTAINED | CORRECT   |
+|     | the potentially infected     |                          | available artifacts — no       |                                |           |           |
+|     | internal host in the LAN?    |                          | aggregated query output or log |                                |           |           |
+|     |                              |                          | results were supplied with the |                                |           |           |
+|     |                              |                          | incident context; the LAN      |                                |           |           |
+|     |                              |                          | range is 172.17.0.0/24 but no  |                                |           |           |
+|     |                              |                          | specific infected host IP is   |                                |           |           |
+|     |                              |                          | identifiable from the provided |                                |           |           |
+|     |                              |                          | information alone.             |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 2   | What is the hostname of the  | DESKTOP-RNVO9AT          | Not established from the       | DESKTOP-RNVO9AT                | ABSTAINED | CORRECT   |
+|     | potentially infected machine |                          | available artifacts — hostname |                                |           |           |
+|     | in the LAN?                  |                          | cannot be derived without      |                                |           |           |
+|     |                              |                          | Kerberos, DNS, or DHCP log     |                                |           |           |
+|     |                              |                          | results; the only named host   |                                |           |           |
+|     |                              |                          | in the context is the domain   |                                |           |           |
+|     |                              |                          | controller WIN-CTL9XBQ9Y19     |                                |           |           |
+|     |                              |                          | (172.17.0.17), which is        |                                |           |           |
+|     |                              |                          | infrastructure, not the victim |                                |           |           |
+|     |                              |                          | workstation.                   |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 3   | What is the Windows human    | afletcher                | Not established from the       | afletcher                      | ABSTAINED | CORRECT   |
+|     | user account name (not       |                          | available artifacts — no       |                                |           |           |
+|     | machine accounts ending in   |                          | Kerberos authentication        |                                |           |           |
+|     | $) of the potentially        |                          | records, Windows event log     |                                |           |           |
+|     | infected machine in the LAN? |                          | extracts, or user-account      |                                |           |           |
+|     |                              |                          | fields were included in the    |                                |           |           |
+|     |                              |                          | supplied evidence; machine     |                                |           |           |
+|     |                              |                          | accounts and the AD domain     |                                |           |           |
+|     |                              |                          | BEPOSITIVE are noted but no    |                                |           |           |
+|     |                              |                          | human user account name is     |                                |           |           |
+|     |                              |                          | resolvable.                    |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 4   | What are the likely fake or  | www.bellantonicioccolato | Not established from the       | www.bellantonicioccolato.it (2 | ABSTAINED | PARTIAL   |
+|     | suspicious domains / URLs    | .it (likely compromised  | available artifacts — no HTTP  | events, no clear legitimate    |           |           |
+|     | for initial infection?       | site associated with Koi | download URLs, TLS certificate | business relationship with the |           |           |
+|     |                              | Loader/Koi Stealer)      | subject names, or suspicious   | environment) and weathermapdat |           |           |
+|     |                              |                          | domain strings were provided   | a.blob.core.windows.net (1     |           |           |
+|     |                              |                          | in the aggregated query output | event, atypical Azure Blob     |           |           |
+|     |                              |                          | for analysis.                  | Storage subdomain pattern);    |           |           |
+|     |                              |                          |                                | Assessment: both domains are   |           |           |
+|     |                              |                          |                                | assessed as likely delivery or |           |           |
+|     |                              |                          |                                | staging vectors given their    |           |           |
+|     |                              |                          |                                | anomalous presence in the      |           |           |
+|     |                              |                          |                                | traffic record alongside       |           |           |
+|     |                              |                          |                                | confirmed Koi Stealer alerts   |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 5   | What are the suspicious      | 79.124.78.197            | Not established from the       | 79.124.78.197, which received  | ABSTAINED | CORRECT   |
+|     | external IP addresses        |                          | available artifacts — no       | 49 high-severity alert hits    |           |           |
+|     | contacted, which might be    |                          | external-destination IP        | including "ET MALWARE          |           |           |
+|     | involved in command-and-     |                          | addresses, connection records, | Win32/Koi Stealer CnC Checkin  |           |           |
+|     | control (C2) communication?  |                          | or Suricata alert destination  | (GET)" and "ET HUNTING GENERIC |           |           |
+|     |                              |                          | fields were included in the    | SUSPICIOUS POST to Dotted Quad |           |           |
+|     |                              |                          | supplied evidence.             | with Fake Browser 1"           |           |           |
+|     |                              |                          |                                | signatures; Assessment:        |           |           |
+|     |                              |                          |                                | 79.124.78.197 is the primary   |           |           |
+|     |                              |                          |                                | suspected C2 endpoint          |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 6   | Which of the three CIA       | confidentiality          | Not established from the       | Confidentiality; Assessment:   | ABSTAINED | CORRECT   |
+|     | components does the attacker |                          | available artifacts — no       | the malware family identified  |           |           |
+|     | target primarily:            |                          | payload, exfiltration,         | is Koi Stealer, a credential   |           |           |
+|     | availability, integrity, or  |                          | encryption, or service-        | and data-theft tool, making    |           |           |
+|     | confidentiality?             |                          | disruption indicators were     | confidentiality the primary    |           |           |
+|     |                              |                          | present in the supplied        | CIA component targeted         |           |           |
+|     |                              |                          | evidence; a CIA targeting      |                                |           |           |
+|     |                              |                          | assessment cannot be made      |                                |           |           |
+|     |                              |                          | without artifact content.      |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 7   | During what hour did the     | 2024-09-04 17:00 UTC     | Not established from the       | 2024-09-04 17:00 UTC           | ABSTAINED | CORRECT   |
+|     | first signs of infection     |                          | available artifacts — the      |                                |           |           |
+|     | activity appear? Provide the |                          | query window is                |                                |           |           |
+|     | earliest date and time in    |                          | 2024-09-04T00:00:00 to         |                                |           |           |
+|     | YYYY-MM-DD HH:MM UTC format. |                          | 2024-09-04T23:59:59 UTC but no |                                |           |           |
+|     |                              |                          | timestamped alert or           |                                |           |           |
+|     |                              |                          | connection records were        |                                |           |           |
+|     |                              |                          | supplied to identify the       |                                |           |           |
+|     |                              |                          | earliest infection activity.   |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 8   | According to the connection  | 79.124.78.197, C2 server | Not established from the       | 79.124.78.197 received the     | PARTIAL   | PARTIAL   |
+|     | volume statistics, what      |                          | available artifacts — no       | most connections (218 out of   |           |           |
+|     | single external IP address   |                          | connection-volume aggregation  | 361 total external connections |           |           |
+|     | received the most            |                          | results or external IP         | from 172.17.0.99); Assessment: |           |           |
+|     | connections from the         |                          | frequency counts were included | it is assessed as a C2 server  |           |           |
+|     | infected hosts? Is it a C2   |                          | in the supplied evidence; no   | based on corroborating         |           |           |
+|     | server or a legitimate       |                          | determination of top           | Suricata signatures            |           |           |
+|     | service?                     |                          | destination IP or its          | identifying Koi Stealer check- |           |           |
+|     |                              |                          | classification (C2 vs.         | in and inbound C2 config       |           |           |
+|     |                              |                          | legitimate) is possible.       | traffic directed to that IP    |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+
+Faithfulness is 0 / '-' for No RAG by construction: without retrieved chunks it cannot cite evidence.

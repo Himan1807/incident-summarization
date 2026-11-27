@@ -1,0 +1,345 @@
+{
+  "condition": "no_rag",
+  "model": "gemma3:4b",
+  "scenario": "fake_auth",
+  "seconds_total": 681.9,
+  "run_log": [
+    {
+      "section": "Affected Host and User",
+      "seconds": 48.5,
+      "truncated": false
+    },
+    {
+      "section": "Timeline",
+      "seconds": 193.4,
+      "truncated": true
+    },
+    {
+      "section": "Detection: IDS Alerts",
+      "seconds": 58.1,
+      "truncated": false
+    },
+    {
+      "section": "Initial Infection Indicators",
+      "seconds": 48.9,
+      "truncated": false
+    },
+    {
+      "section": "Command-and-Control and Network Activity",
+      "seconds": 67.9,
+      "truncated": false
+    },
+    {
+      "section": "Impact Assessment",
+      "seconds": 49.2,
+      "truncated": false
+    },
+    {
+      "section": "Root Cause and Evidence Gaps",
+      "seconds": 55.8,
+      "truncated": false
+    },
+    {
+      "section": "Corrective and Preventive Actions",
+      "seconds": 54.9,
+      "truncated": false
+    },
+    {
+      "section": "Answers to Investigation Questions",
+      "seconds": 105.2,
+      "truncated": false
+    }
+  ],
+  "evaluation": {
+    "answer_precision": 0.083,
+    "answer_recall": 0.083,
+    "answer_f1": 0.083,
+    "question_recall": 0.062,
+    "questions_correct": "1/8",
+    "answerable_entity_recall": 0.083,
+    "overall_entity_recall": 0.083,
+    "faithfulness": 0.0,
+    "grounding_rate": 0.193,
+    "citation_precision": null,
+    "citation_rate": 0.0,
+    "claims": 57,
+    "assessment_lines": 4,
+    "uncited_lines": 57,
+    "hallucination_rate": 0.86,
+    "unsupported_entities": [
+      "/wp-content/uploads/2025/01/malware.exe",
+      "10.1.17.10",
+      "10.1.17.11",
+      "10.1.17.12",
+      "10.1.17.13",
+      "10.1.17.137",
+      "10.1.17.14",
+      "10.1.17.15",
+      "10.1.17.16",
+      "10.1.17.17",
+      "10.1.17.18",
+      "192.0.2.1",
+      "192.168.1.100",
+      "2025-01-22 00:15:32",
+      "2025-01-22 00:38:51",
+      "2025-01-22 01:02:17",
+      "2025-01-22 01:17",
+      "2025-01-22 01:29:43",
+      "2025-01-22 01:37:12",
+      "2025-01-22 01:55:28",
+      "2025-01-22 02:11:55",
+      "2025-01-22 02:37:19",
+      "2025-01-22 03:03:46",
+      "2025-01-22 03:29:31",
+      "2025-01-22 03:55:17",
+      "2025-01-22 04:21:02",
+      "2025-01-22 04:46:58",
+      "2025-01-22 05:12:34",
+      "2025-01-22 05:38:10",
+      "2025-01-22 06:04:46",
+      "2025-01-22 06:30:22",
+      "2025-01-22 06:56:08",
+      "2025-01-22 07:21:44",
+      "203.0.113.45",
+      "203.0.113.5",
+      "93.184.213.154",
+      "a.jones",
+      "darknet.xyz",
+      "example.com",
+      "j.smith",
+      "john.doe",
+      "s.brown",
+      "suspicious-domain-123.net"
+    ],
+    "unsupported_number_count": 5,
+    "unsupported_numbers": [
+      "12",
+      "147",
+      "15",
+      "2025",
+      "35"
+    ],
+    "placeholder_count": 0,
+    "per_question": [
+      {
+        "id": 1,
+        "question": "What is the IP address of the potentially infected internal host in the LAN?",
+        "reference_answer": "10.1.17.215",
+        "atoms": [
+          "10.1.17.215"
+        ],
+        "answerable_from_evidence": [
+          "10.1.17.215"
+        ],
+        "found_in_report": [],
+        "missing_from_evidence": [],
+        "answer_text": "10.1.17.12 [Evidence ID: Aggregation Results - Zeek]",
+        "status": "WRONG",
+        "predicted_entities": [
+          "10.1.17.12"
+        ],
+        "correct_entities": [],
+        "atoms_found_in_answer": [],
+        "wrong_entities": [
+          "10.1.17.12"
+        ],
+        "precision": 0.0,
+        "recall": 0.0
+      },
+      {
+        "id": 2,
+        "question": "What is the hostname of the potentially infected machine in the LAN?",
+        "reference_answer": "DESKTOP-L8C5GSJ",
+        "atoms": [
+          "DESKTOP-L8C5GSJ"
+        ],
+        "answerable_from_evidence": [
+          "DESKTOP-L8C5GSJ"
+        ],
+        "found_in_report": [],
+        "missing_from_evidence": [],
+        "answer_text": "WIN-GSH54QLW48D [Evidence ID: Aggregation Results - Suricata]",
+        "status": "WRONG",
+        "predicted_entities": [
+          "WIN-GSH54QLW48D"
+        ],
+        "correct_entities": [],
+        "atoms_found_in_answer": [],
+        "wrong_entities": [
+          "WIN-GSH54QLW48D"
+        ],
+        "precision": 0.0,
+        "recall": 0.0
+      },
+      {
+        "id": 3,
+        "question": "What is the Windows human user account name (not machine accounts ending in $) of the potentially infected machine in the LAN?",
+        "reference_answer": "shutchenson",
+        "atoms": [
+          "shutchenson"
+        ],
+        "answerable_from_evidence": [
+          "shutchenson"
+        ],
+        "found_in_report": [],
+        "missing_from_evidence": [],
+        "answer_text": "jsmith [Evidence ID: Aggregation Results - Zeek]",
+        "status": "WRONG",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 0.0
+      },
+      {
+        "id": 4,
+        "question": "What are the likely fake or suspicious domains / URLs for initial infection?",
+        "reference_answer": "authenticatoor.org",
+        "atoms": [
+          "authenticatoor.org"
+        ],
+        "answerable_from_evidence": [
+          "authenticatoor.org"
+        ],
+        "found_in_report": [],
+        "missing_from_evidence": [],
+        "answer_text": "bluemoontuesday.com, example.com, suspicious-domain-123.net [Evidence ID: Aggregation Results - Suricata]",
+        "status": "WRONG",
+        "predicted_entities": [
+          "bluemoontuesday.com",
+          "example.com",
+          "suspicious-domain-123.net"
+        ],
+        "correct_entities": [],
+        "atoms_found_in_answer": [],
+        "wrong_entities": [
+          "bluemoontuesday.com",
+          "example.com",
+          "suspicious-domain-123.net"
+        ],
+        "precision": 0.0,
+        "recall": 0.0
+      },
+      {
+        "id": 5,
+        "question": "What are the suspicious external IP addresses contacted, which might be involved in command-and-control (C2) communication?",
+        "reference_answer": "5.252.153.241, 45.125.66.32, 45.125.66.252",
+        "atoms": [
+          "5.252.153.241",
+          "45.125.66.32",
+          "45.125.66.252"
+        ],
+        "answerable_from_evidence": [
+          "5.252.153.241",
+          "45.125.66.32",
+          "45.125.66.252"
+        ],
+        "found_in_report": [],
+        "missing_from_evidence": [],
+        "answer_text": "192.0.2.1, 203.0.113.45 [Evidence ID: Aggregation Results - Zeek]",
+        "status": "WRONG",
+        "predicted_entities": [
+          "192.0.2.1",
+          "203.0.113.45"
+        ],
+        "correct_entities": [],
+        "atoms_found_in_answer": [],
+        "wrong_entities": [
+          "192.0.2.1",
+          "203.0.113.45"
+        ],
+        "precision": 0.0,
+        "recall": 0.0
+      },
+      {
+        "id": 6,
+        "question": "During what hour did the first signs of infection activity appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+        "reference_answer": "2025-01-22 19:00 UTC",
+        "atoms": [
+          "2025-01-22 19:00 UTC"
+        ],
+        "answerable_from_evidence": [
+          "2025-01-22 19:00 UTC"
+        ],
+        "found_in_report": [],
+        "missing_from_evidence": [],
+        "answer_text": "2025-01-22 01:17 UTC [Evidence ID: Aggregation Results - Suricata]",
+        "status": "WRONG",
+        "predicted_entities": [
+          "2025-01-22",
+          "2025-01-22 01:17"
+        ],
+        "correct_entities": [
+          "2025-01-22"
+        ],
+        "atoms_found_in_answer": [],
+        "wrong_entities": [
+          "2025-01-22 01:17"
+        ],
+        "precision": 0.5,
+        "recall": 0.0
+      },
+      {
+        "id": 7,
+        "question": "Were any suspicious certificates observed in the encrypted network traffic? If so, identify the domain or IP in the certificate.",
+        "reference_answer": "45.125.66.252, 45.125.66.32",
+        "atoms": [
+          "45.125.66.252",
+          "45.125.66.32"
+        ],
+        "answerable_from_evidence": [
+          "45.125.66.252",
+          "45.125.66.32"
+        ],
+        "found_in_report": [],
+        "missing_from_evidence": [],
+        "answer_text": "Certificates associated with bluemoontuesday.com were observed [Evidence ID: Aggregation Results - TLS Certificates]",
+        "status": "WRONG",
+        "predicted_entities": [
+          "bluemoontuesday.com"
+        ],
+        "correct_entities": [],
+        "atoms_found_in_answer": [],
+        "wrong_entities": [
+          "bluemoontuesday.com"
+        ],
+        "precision": 0.0,
+        "recall": 0.0
+      },
+      {
+        "id": 8,
+        "question": "According to the connection volume statistics, what single external IP address received the most connections from the infected hosts? Is it a C2 server or a legitimate service?",
+        "reference_answer": "5.252.153.241, C2 server",
+        "atoms": [
+          "5.252.153.241",
+          "C2 server"
+        ],
+        "answerable_from_evidence": [
+          "5.252.153.241",
+          "C2 server"
+        ],
+        "found_in_report": [
+          "C2 server"
+        ],
+        "missing_from_evidence": [],
+        "answer_text": "192.0.2.1 received 147 connections from 10.1.17.12 during the incident timeframe. This IP is currently unverified and requires further investigation to determine if it is a C2 server or a legitimate service. [Evidence ID: Aggregation Results - External Destinations]",
+        "status": "PARTIAL",
+        "predicted_entities": [
+          "10.1.17.12",
+          "192.0.2.1"
+        ],
+        "correct_entities": [],
+        "atoms_found_in_answer": [
+          "C2 server"
+        ],
+        "wrong_entities": [
+          "10.1.17.12",
+          "192.0.2.1"
+        ],
+        "precision": 0.0,
+        "recall": 0.5
+      }
+    ]
+  }
+}

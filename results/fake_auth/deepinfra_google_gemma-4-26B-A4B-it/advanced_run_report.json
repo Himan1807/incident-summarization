@@ -1,0 +1,531 @@
+{
+  "condition": "rag",
+  "model": "deepinfra:google/gemma-4-26B-A4B-it",
+  "scenario": "fake_auth",
+  "seconds_total": 65.8,
+  "verification_totals": {
+    "unsupported_numbers": 1
+  },
+  "mode": "drop",
+  "removed_unverified_lines": 1,
+  "postprocessing": {
+    "enabled": true,
+    "auto_attributed_lines": 1,
+    "invalid_citations_removed": 0,
+    "partial_lines_dropped": 0,
+    "duplicate_lines_removed": 0,
+    "removed": []
+  },
+  "run_log": [
+    {
+      "section": "Affected Host and User",
+      "retrieved": [
+        "fake_auth-09#0",
+        "fake_auth-05#0",
+        "fake_auth-04#3",
+        "fake_auth-04#2",
+        "fake_auth-04#0",
+        "fake_auth-04#1"
+      ],
+      "seconds": 6.4,
+      "truncated": false,
+      "dropped_partial_line": null,
+      "auto_attributed_lines": 0,
+      "invalid_citations_removed": 0,
+      "flag_counts": {}
+    },
+    {
+      "section": "Timeline",
+      "retrieved": [
+        "fake_auth-06#4",
+        "fake_auth-09#0"
+      ],
+      "extractive": true,
+      "seconds": 0.0,
+      "flag_counts": {}
+    },
+    {
+      "section": "Detection: IDS Alerts",
+      "retrieved": [
+        "fake_auth-06#1",
+        "fake_auth-06#2",
+        "fake_auth-06#4",
+        "fake_auth-06#3",
+        "fake_auth-09#0",
+        "fake_auth-06#0"
+      ],
+      "seconds": 8.0,
+      "truncated": false,
+      "dropped_partial_line": null,
+      "auto_attributed_lines": 0,
+      "invalid_citations_removed": 0,
+      "flag_counts": {}
+    },
+    {
+      "section": "Initial Infection Indicators",
+      "retrieved": [
+        "fake_auth-01#1",
+        "fake_auth-01#0",
+        "fake_auth-01#7",
+        "fake_auth-01#2",
+        "fake_auth-01#4",
+        "fake_auth-01#6"
+      ],
+      "seconds": 7.1,
+      "truncated": false,
+      "dropped_partial_line": null,
+      "auto_attributed_lines": 0,
+      "invalid_citations_removed": 0,
+      "flag_counts": {
+        "unsupported_numbers": 1
+      }
+    },
+    {
+      "section": "Command-and-Control and Network Activity",
+      "retrieved": [
+        "fake_auth-09#0",
+        "fake_auth-05#0",
+        "fake_auth-02#0",
+        "fake_auth-08#2",
+        "fake_auth-08#3",
+        "fake_auth-08#0"
+      ],
+      "seconds": 8.6,
+      "truncated": false,
+      "dropped_partial_line": null,
+      "auto_attributed_lines": 0,
+      "invalid_citations_removed": 0,
+      "flag_counts": {}
+    },
+    {
+      "section": "Impact Assessment",
+      "retrieved": [
+        "fake_auth-02#0",
+        "fake_auth-06#2",
+        "fake_auth-06#4",
+        "fake_auth-09#0",
+        "fake_auth-08#0",
+        "fake_auth-08#2"
+      ],
+      "seconds": 5.4,
+      "truncated": false,
+      "dropped_partial_line": null,
+      "auto_attributed_lines": 0,
+      "invalid_citations_removed": 0,
+      "flag_counts": {}
+    },
+    {
+      "section": "Root Cause and Evidence Gaps",
+      "retrieved": [
+        "fake_auth-09#0",
+        "fake_auth-02#0",
+        "fake_auth-04#1",
+        "fake_auth-04#0",
+        "fake_auth-03#0",
+        "fake_auth-01#2"
+      ],
+      "seconds": 4.8,
+      "truncated": false,
+      "dropped_partial_line": null,
+      "auto_attributed_lines": 1,
+      "invalid_citations_removed": 0,
+      "flag_counts": {}
+    },
+    {
+      "section": "Corrective and Preventive Actions",
+      "retrieved": [
+        "fake_auth-06#1",
+        "fake_auth-09#0",
+        "fake_auth-03#0",
+        "fake_auth-08#0",
+        "fake_auth-08#3",
+        "fake_auth-01#2"
+      ],
+      "seconds": 4.8,
+      "truncated": false,
+      "dropped_partial_line": null,
+      "auto_attributed_lines": 0,
+      "invalid_citations_removed": 0,
+      "flag_counts": {}
+    },
+    {
+      "section": "Answers to Investigation Questions",
+      "retrieved": [
+        "fake_auth-09#0",
+        "fake_auth-05#0",
+        "fake_auth-04#2",
+        "fake_auth-04#3",
+        "fake_auth-03#0",
+        "fake_auth-04#1",
+        "fake_auth-08#2",
+        "fake_auth-08#0",
+        "fake_auth-08#3",
+        "fake_auth-06#4",
+        "fake_auth-06#2",
+        "fake_auth-07#0",
+        "fake_auth-07#1",
+        "fake_auth-02#0"
+      ],
+      "seconds": 20.7,
+      "truncated": false,
+      "dropped_partial_line": null,
+      "auto_attributed_lines": 0,
+      "invalid_citations_removed": 0,
+      "flag_counts": {}
+    }
+  ],
+  "flagged": [
+    {
+      "section": "Initial Infection Indicators",
+      "line": "* Possible suspicious download of 29842.ps1 from 5.252.153.241 by 10.1.17.215 [fake_auth-01#2].",
+      "types": [
+        "unsupported_numbers"
+      ],
+      "action": "removed",
+      "unsupported_numbers": [
+        "29842"
+      ]
+    }
+  ],
+  "section_profile": "security",
+  "llm_usage": {
+    "provider": "deepinfra",
+    "calls": 10,
+    "retries": 0,
+    "prompt_tokens": 19960,
+    "completion_tokens": 1570,
+    "estimated_cost_usd": 0.001932
+  },
+  "evaluation": {
+    "answer_precision": 0.909,
+    "answer_recall": 0.833,
+    "answer_f1": 0.869,
+    "question_recall": 0.875,
+    "questions_correct": "7/8",
+    "answerable_entity_recall": 0.917,
+    "overall_entity_recall": 0.917,
+    "faithfulness": 0.931,
+    "grounding_rate": 1.0,
+    "claims": 29,
+    "assessment_lines": 3,
+    "hallucination_rate": 0.0,
+    "unsupported_entities": [],
+    "unsupported_number_count": 0,
+    "unsupported_numbers": [],
+    "placeholder_count": 0,
+    "per_question": [
+      {
+        "id": 1,
+        "question": "What is the IP address of the potentially infected internal host in the LAN?",
+        "reference_answer": "10.1.17.215",
+        "atoms": [
+          "10.1.17.215"
+        ],
+        "answerable_from_evidence": [
+          "10.1.17.215"
+        ],
+        "found_in_report": [
+          "10.1.17.215"
+        ],
+        "missing_from_evidence": [],
+        "answer_text": "10.1.17.215",
+        "status": "CORRECT",
+        "predicted_entities": [
+          "10.1.17.215"
+        ],
+        "correct_entities": [
+          "10.1.17.215"
+        ],
+        "atoms_found_in_answer": [
+          "10.1.17.215"
+        ],
+        "wrong_entities": [],
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      {
+        "id": 2,
+        "question": "What is the hostname of the potentially infected machine in the LAN?",
+        "reference_answer": "DESKTOP-L8C5GSJ",
+        "atoms": [
+          "DESKTOP-L8C5GSJ"
+        ],
+        "answerable_from_evidence": [
+          "DESKTOP-L8C5GSJ"
+        ],
+        "found_in_report": [
+          "DESKTOP-L8C5GSJ"
+        ],
+        "missing_from_evidence": [],
+        "answer_text": "desktop-l8c5gsj",
+        "status": "CORRECT",
+        "predicted_entities": [
+          "DESKTOP-L8C5GSJ"
+        ],
+        "correct_entities": [
+          "DESKTOP-L8C5GSJ"
+        ],
+        "atoms_found_in_answer": [
+          "DESKTOP-L8C5GSJ"
+        ],
+        "wrong_entities": [],
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      {
+        "id": 3,
+        "question": "What is the Windows human user account name (not machine accounts ending in $) of the potentially infected machine in the LAN?",
+        "reference_answer": "shutchenson",
+        "atoms": [
+          "shutchenson"
+        ],
+        "answerable_from_evidence": [
+          "shutchenson"
+        ],
+        "found_in_report": [
+          "shutchenson"
+        ],
+        "missing_from_evidence": [],
+        "answer_text": "shutchenson",
+        "status": "CORRECT",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [
+          "shutchenson"
+        ],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 1.0
+      },
+      {
+        "id": 4,
+        "question": "What are the likely fake or suspicious domains / URLs for initial infection?",
+        "reference_answer": "authenticatoor.org",
+        "atoms": [
+          "authenticatoor.org"
+        ],
+        "answerable_from_evidence": [
+          "authenticatoor.org"
+        ],
+        "found_in_report": [],
+        "missing_from_evidence": [],
+        "answer_text": "Not established from the available artifacts.",
+        "status": "ABSTAINED",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 0.0
+      },
+      {
+        "id": 5,
+        "question": "What are the suspicious external IP addresses contacted, which might be involved in command-and-control (C2) communication?",
+        "reference_answer": "5.252.153.241, 45.125.66.32, 45.125.66.252",
+        "atoms": [
+          "5.252.153.241",
+          "45.125.66.32",
+          "45.125.66.252"
+        ],
+        "answerable_from_evidence": [
+          "5.252.153.241",
+          "45.125.66.32",
+          "45.125.66.252"
+        ],
+        "found_in_report": [
+          "5.252.153.241",
+          "45.125.66.32",
+          "45.125.66.252"
+        ],
+        "missing_from_evidence": [],
+        "answer_text": "5.252.153.241, 185.188.32.26, 45.125.66.32, 45.125.66.252",
+        "status": "PARTIAL",
+        "predicted_entities": [
+          "185.188.32.26",
+          "45.125.66.252",
+          "45.125.66.32",
+          "5.252.153.241"
+        ],
+        "correct_entities": [
+          "45.125.66.252",
+          "45.125.66.32",
+          "5.252.153.241"
+        ],
+        "atoms_found_in_answer": [
+          "5.252.153.241",
+          "45.125.66.32",
+          "45.125.66.252"
+        ],
+        "wrong_entities": [
+          "185.188.32.26"
+        ],
+        "precision": 0.75,
+        "recall": 1.0
+      },
+      {
+        "id": 6,
+        "question": "During what hour did the first signs of infection activity appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+        "reference_answer": "2025-01-22 19:00 UTC",
+        "atoms": [
+          "2025-01-22 19:00 UTC"
+        ],
+        "answerable_from_evidence": [
+          "2025-01-22 19:00 UTC"
+        ],
+        "found_in_report": [
+          "2025-01-22 19:00 UTC"
+        ],
+        "missing_from_evidence": [],
+        "answer_text": "2025-01-22 19:00 UTC",
+        "status": "CORRECT",
+        "predicted_entities": [
+          "2025-01-22",
+          "2025-01-22 19:00"
+        ],
+        "correct_entities": [
+          "2025-01-22",
+          "2025-01-22 19:00"
+        ],
+        "atoms_found_in_answer": [
+          "2025-01-22 19:00 UTC"
+        ],
+        "wrong_entities": [],
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      {
+        "id": 7,
+        "question": "Were any suspicious certificates observed in the encrypted network traffic? If so, identify the domain or IP in the certificate.",
+        "reference_answer": "45.125.66.252, 45.125.66.32",
+        "atoms": [
+          "45.125.66.252",
+          "45.125.66.32"
+        ],
+        "answerable_from_evidence": [
+          "45.125.66.252",
+          "45.125.66.32"
+        ],
+        "found_in_report": [
+          "45.125.66.252",
+          "45.125.66.32"
+        ],
+        "missing_from_evidence": [],
+        "answer_text": "45.125.66.252 and 45.125.66.32",
+        "status": "CORRECT",
+        "predicted_entities": [
+          "45.125.66.252",
+          "45.125.66.32"
+        ],
+        "correct_entities": [
+          "45.125.66.252",
+          "45.125.66.32"
+        ],
+        "atoms_found_in_answer": [
+          "45.125.66.252",
+          "45.125.66.32"
+        ],
+        "wrong_entities": [],
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      {
+        "id": 8,
+        "question": "According to the connection volume statistics, what single external IP address received the most connections from the infected hosts? Is it a C2 server or a legitimate service?",
+        "reference_answer": "5.252.153.241, C2 server",
+        "atoms": [
+          "5.252.153.241",
+          "C2 server"
+        ],
+        "answerable_from_evidence": [
+          "5.252.153.241",
+          "C2 server"
+        ],
+        "found_in_report": [
+          "5.252.153.241",
+          "C2 server"
+        ],
+        "missing_from_evidence": [],
+        "answer_text": "5.252.153.241; Assessment: Not established from the available artifacts.",
+        "status": "PARTIAL",
+        "predicted_entities": [
+          "5.252.153.241"
+        ],
+        "correct_entities": [
+          "5.252.153.241"
+        ],
+        "atoms_found_in_answer": [
+          "5.252.153.241"
+        ],
+        "wrong_entities": [],
+        "precision": 1.0,
+        "recall": 0.5
+      }
+    ]
+  },
+  "unanswerable": {
+    "domain": "security",
+    "section_profile_used": "security",
+    "questions": 3,
+    "correct_abstention_rate": 1.0,
+    "invention_rate": 0.0,
+    "invention_rate_after_fact_check": 0.0,
+    "invented_removed_by_fact_check": 0,
+    "other_rate": 0.0,
+    "no_answer_rate": 0.0,
+    "per_question": [
+      {
+        "id": "U1",
+        "question": "What is the MD5 hash of the payload executed on the potentially infected host?",
+        "absent_type": "md5",
+        "raw_answer": "Not established from the available artifacts.",
+        "raw_status": "ABSTAINED",
+        "raw_values": [],
+        "final_answer": "Not established from the available artifacts.",
+        "final_status": "ABSTAINED",
+        "final_values": [],
+        "removed_by_fact_check": false
+      },
+      {
+        "id": "U2",
+        "question": "What is the process ID (PID) of the malicious process on the potentially infected host?",
+        "absent_type": "pid",
+        "raw_answer": "Not established from the available artifacts.",
+        "raw_status": "ABSTAINED",
+        "raw_values": [],
+        "final_answer": "Not established from the available artifacts.",
+        "final_status": "ABSTAINED",
+        "final_values": [],
+        "removed_by_fact_check": false
+      },
+      {
+        "id": "U3",
+        "question": "What is the SHA256 hash of the malicious file downloaded by the potentially infected host?",
+        "absent_type": "sha256",
+        "raw_answer": "Not established from the available artifacts.",
+        "raw_status": "ABSTAINED",
+        "raw_values": [],
+        "final_answer": "Not established from the available artifacts.",
+        "final_status": "ABSTAINED",
+        "final_values": [],
+        "removed_by_fact_check": false
+      }
+    ],
+    "answerable_questions": 8,
+    "over_abstention_rate": 0.125,
+    "over_abstention_rate_all_questions": 0.125,
+    "run": {
+      "section": "Additional Investigation Questions",
+      "retrieved": [
+        "fake_auth-05#0",
+        "fake_auth-09#0",
+        "fake_auth-06#1",
+        "fake_auth-01#2",
+        "fake_auth-01#3"
+      ],
+      "seconds": 7.5,
+      "truncated": false,
+      "flag_counts": {}
+    },
+    "flagged": []
+  }
+}

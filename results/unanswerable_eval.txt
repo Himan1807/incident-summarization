@@ -1,0 +1,217 @@
+====================================================================================================
+RQ4 - UNANSWERABLE QUESTIONS: does the system say the answer is not in the evidence, or invent one?
+CREATED: 2026-11-27T22:42:16
+====================================================================================================
+
+Questions: unanswerable_qa.json (3 per incident; each asks for a value whose type does not occur anywhere in the incident's
+evidence, checked by src/check_unanswerable.py), asked with --with-unanswerable in a separate Q&A call.
+Correct abstention = the answer says 'Not established' and gives no value of the asked type. Invention = it gives a value of the
+asked type, or any entity/number without abstaining. 'Model' = the LLM's answer before the fact-check; 'after check' = as published.
+Over-abstention = real questions whose reference answer is fully in the evidence but which the report marks 'Not established'.
+
+A. RATES PER MODEL (security = network-security incidents, outage = RCAEval microservice failures)
+
++----------------------------+----------+--------+--------+------------+------------+------------+----------+---------+---------+------------+
+| Model                      | Domain   | Incid. | Quest. | Correct    | Invention  | Invention  | Removed  | Other   | No      | Over-      |
+|                            |          |        |        | abstention | (model)    | after      | by check |         | answer  | abstention |
+|                            |          |        |        |            |            | check      |          |         |         |            |
++----------------------------+----------+--------+--------+------------+------------+------------+----------+---------+---------+------------+
+| deepinfra:Qwen/Qwen3-235B- | security | 2      | 6      | 1.000      | 0.000      | 0.000      | 0        | 0.000   | 0.000   | 0.067      |
+| A22B-Instruct-2507         |          |        |        |            |            |            |          |         |         |            |
++----------------------------+----------+--------+--------+------------+------------+------------+----------+---------+---------+------------+
+| deepinfra:Qwen/Qwen3-235B- | outage   | 2      | 6      | 1.000      | 0.000      | 0.000      | 0        | 0.000   | 0.000   | 0.000      |
+| A22B-Instruct-2507         |          |        |        |            |            |            |          |         |         |            |
++----------------------------+----------+--------+--------+------------+------------+------------+----------+---------+---------+------------+
+| deepinfra:Qwen/Qwen3-235B- | all      | 4      | 12     | 1.000      | 0.000      | 0.000      | 0        | 0.000   | 0.000   | 0.037      |
+| A22B-Instruct-2507         |          |        |        |            |            |            |          |         |         |            |
++----------------------------+----------+--------+--------+------------+------------+------------+----------+---------+---------+------------+
+| deepinfra:deepseek-        | security | 2      | 6      | 1.000      | 0.000      | 0.000      | 0        | 0.000   | 0.000   | 0.133      |
+| ai/DeepSeek-V3             |          |        |        |            |            |            |          |         |         |            |
++----------------------------+----------+--------+--------+------------+------------+------------+----------+---------+---------+------------+
+| deepinfra:deepseek-        | outage   | 2      | 6      | 1.000      | 0.000      | 0.000      | 0        | 0.000   | 0.000   | 0.000      |
+| ai/DeepSeek-V3             |          |        |        |            |            |            |          |         |         |            |
++----------------------------+----------+--------+--------+------------+------------+------------+----------+---------+---------+------------+
+| deepinfra:deepseek-        | all      | 4      | 12     | 1.000      | 0.000      | 0.000      | 0        | 0.000   | 0.000   | 0.074      |
+| ai/DeepSeek-V3             |          |        |        |            |            |            |          |         |         |            |
++----------------------------+----------+--------+--------+------------+------------+------------+----------+---------+---------+------------+
+| deepinfra:google/gemma-4-  | security | 2      | 6      | 1.000      | 0.000      | 0.000      | 0        | 0.000   | 0.000   | 0.133      |
+| 26B-A4B-it                 |          |        |        |            |            |            |          |         |         |            |
++----------------------------+----------+--------+--------+------------+------------+------------+----------+---------+---------+------------+
+| deepinfra:google/gemma-4-  | outage   | 2      | 6      | 1.000      | 0.000      | 0.000      | 0        | 0.000   | 0.000   | 0.083      |
+| 26B-A4B-it                 |          |        |        |            |            |            |          |         |         |            |
++----------------------------+----------+--------+--------+------------+------------+------------+----------+---------+---------+------------+
+| deepinfra:google/gemma-4-  | all      | 4      | 12     | 1.000      | 0.000      | 0.000      | 0        | 0.000   | 0.000   | 0.111      |
+| 26B-A4B-it                 |          |        |        |            |            |            |          |         |         |            |
++----------------------------+----------+--------+--------+------------+------------+------------+----------+---------+---------+------------+
+| qwen2.5:7b-instruct        | outage   | 2      | 6      | 1.000      | 0.000      | 0.000      | 0        | 0.000   | 0.000   | 0.083      |
++----------------------------+----------+--------+--------+------------+------------+------------+----------+---------+---------+------------+
+| qwen2.5:7b-instruct        | all      | 2      | 6      | 1.000      | 0.000      | 0.000      | 0        | 0.000   | 0.000   | 0.083      |
++----------------------------+----------+--------+--------+------------+------------+------------+----------+---------+---------+------------+
+
+B. McNEMAR TESTS ON CORRECT ABSTENTION (same questions, exact two-sided; A-only / B-only = questions only that model abstained on)
+
++----------------------------+----------------------------+---------+----------+----------+---------+---------+----------+
+| Model A                    | Model B                    | Shared  | A abst.  | B abst.  | A only  | B only  | p        |
++----------------------------+----------------------------+---------+----------+----------+---------+---------+----------+
+| deepinfra:Qwen/Qwen3-235B- | deepinfra:deepseek-        | 12      | 1.000    | 1.000    | 0       | 0       | 1.0000   |
+| A22B-Instruct-2507         | ai/DeepSeek-V3             |         |          |          |         |         |          |
++----------------------------+----------------------------+---------+----------+----------+---------+---------+----------+
+| deepinfra:Qwen/Qwen3-235B- | deepinfra:google/gemma-4-  | 12      | 1.000    | 1.000    | 0       | 0       | 1.0000   |
+| A22B-Instruct-2507         | 26B-A4B-it                 |         |          |          |         |         |          |
++----------------------------+----------------------------+---------+----------+----------+---------+---------+----------+
+| deepinfra:Qwen/Qwen3-235B- | qwen2.5:7b-instruct        | 6       | 1.000    | 1.000    | 0       | 0       | 1.0000   |
+| A22B-Instruct-2507         |                            |         |          |          |         |         |          |
++----------------------------+----------------------------+---------+----------+----------+---------+---------+----------+
+| deepinfra:deepseek-        | deepinfra:google/gemma-4-  | 12      | 1.000    | 1.000    | 0       | 0       | 1.0000   |
+| ai/DeepSeek-V3             | 26B-A4B-it                 |         |          |          |         |         |          |
++----------------------------+----------------------------+---------+----------+----------+---------+---------+----------+
+| deepinfra:deepseek-        | qwen2.5:7b-instruct        | 6       | 1.000    | 1.000    | 0       | 0       | 1.0000   |
+| ai/DeepSeek-V3             |                            |         |          |          |         |         |          |
++----------------------------+----------------------------+---------+----------+----------+---------+---------+----------+
+| deepinfra:google/gemma-4-  | qwen2.5:7b-instruct        | 6       | 1.000    | 1.000    | 0       | 0       | 1.0000   |
+| 26B-A4B-it                 |                            |         |          |          |         |         |          |
++----------------------------+----------------------------+---------+----------+----------+---------+---------+----------+
+
+C. EVERY QUESTION
+
++---------------+----------------------+-----+---------------+----------------------------------------------------+-----------+-------------+---------+
+| Incident      | Model                | Q   | Absent type   | Answer (model, before the fact-check)              | Model     | After check | Removed |
++---------------+----------------------+-----+---------------+----------------------------------------------------+-----------+-------------+---------+
+| acl_split_bra | deepinfra:deepseek-  | U1  | email         | Not established from the available artifacts.      | ABSTAINED | ABSTAINED   | -       |
+| in_0001       | ai/DeepSeek-V3       |     |               | [acl_split_brain_0001-06#1]                        |           |             |         |
++---------------+----------------------+-----+---------------+----------------------------------------------------+-----------+-------------+---------+
+| acl_split_bra | deepinfra:deepseek-  | U2  | git_commit    | Not established from the available artifacts.      | ABSTAINED | ABSTAINED   | -       |
+| in_0001       | ai/DeepSeek-V3       |     |               | [acl_split_brain_0001-05#0]                        |           |             |         |
++---------------+----------------------+-----+---------------+----------------------------------------------------+-----------+-------------+---------+
+| acl_split_bra | deepinfra:deepseek-  | U3  | kernel_versio | Not established from the available artifacts.      | ABSTAINED | ABSTAINED   | -       |
+| in_0001       | ai/DeepSeek-V3       |     | n             | [acl_split_brain_0001-01#2]                        |           |             |         |
++---------------+----------------------+-----+---------------+----------------------------------------------------+-----------+-------------+---------+
+| acl_split_bra | deepinfra:google/gem | U1  | email         | Not established from the available artifacts.      | ABSTAINED | ABSTAINED   | -       |
+| in_0001       | ma-4-26B-A4B-it      |     |               |                                                    |           |             |         |
++---------------+----------------------+-----+---------------+----------------------------------------------------+-----------+-------------+---------+
+| acl_split_bra | deepinfra:google/gem | U2  | git_commit    | Not established from the available artifacts.      | ABSTAINED | ABSTAINED   | -       |
+| in_0001       | ma-4-26B-A4B-it      |     |               |                                                    |           |             |         |
++---------------+----------------------+-----+---------------+----------------------------------------------------+-----------+-------------+---------+
+| acl_split_bra | deepinfra:google/gem | U3  | kernel_versio | Not established from the available artifacts.      | ABSTAINED | ABSTAINED   | -       |
+| in_0001       | ma-4-26B-A4B-it      |     | n             |                                                    |           |             |         |
++---------------+----------------------+-----+---------------+----------------------------------------------------+-----------+-------------+---------+
+| acl_split_bra | deepinfra:Qwen/Qwen3 | U1  | email         | Not established from the available artifacts       | ABSTAINED | ABSTAINED   | -       |
+| in_0001       | -235B-A22B-Instruct- |     |               |                                                    |           |             |         |
+|               | 2507                 |     |               |                                                    |           |             |         |
++---------------+----------------------+-----+---------------+----------------------------------------------------+-----------+-------------+---------+
+| acl_split_bra | deepinfra:Qwen/Qwen3 | U2  | git_commit    | Not established from the available artifacts       | ABSTAINED | ABSTAINED   | -       |
+| in_0001       | -235B-A22B-Instruct- |     |               |                                                    |           |             |         |
+|               | 2507                 |     |               |                                                    |           |             |         |
++---------------+----------------------+-----+---------------+----------------------------------------------------+-----------+-------------+---------+
+| acl_split_bra | deepinfra:Qwen/Qwen3 | U3  | kernel_versio | Not established from the available artifacts       | ABSTAINED | ABSTAINED   | -       |
+| in_0001       | -235B-A22B-Instruct- |     | n             |                                                    |           |             |         |
+|               | 2507                 |     |               |                                                    |           |             |         |
++---------------+----------------------+-----+---------------+----------------------------------------------------+-----------+-------------+---------+
+| acl_split_bra | qwen2.5:7b-instruct  | U1  | email         | Not established from the available artifacts       | ABSTAINED | ABSTAINED   | -       |
+| in_0001       |                      |     |               | [acl_split_brain_0001-06#1]                        |           |             |         |
++---------------+----------------------+-----+---------------+----------------------------------------------------+-----------+-------------+---------+
+| acl_split_bra | qwen2.5:7b-instruct  | U2  | git_commit    | Not established from the available artifacts       | ABSTAINED | ABSTAINED   | -       |
+| in_0001       |                      |     |               | [acl_split_brain_0001-06#1]                        |           |             |         |
++---------------+----------------------+-----+---------------+----------------------------------------------------+-----------+-------------+---------+
+| acl_split_bra | qwen2.5:7b-instruct  | U3  | kernel_versio | Not established from the available artifacts       | ABSTAINED | ABSTAINED   | -       |
+| in_0001       |                      |     | n             | [acl_split_brain_0001-06#1]                        |           |             |         |
++---------------+----------------------+-----+---------------+----------------------------------------------------+-----------+-------------+---------+
+| cache_stamped | deepinfra:deepseek-  | U1  | email         | Not established from the available artifacts       | ABSTAINED | ABSTAINED   | -       |
+| e_0013        | ai/DeepSeek-V3       |     |               | [cache_stampede_0013-01#4].                        |           |             |         |
++---------------+----------------------+-----+---------------+----------------------------------------------------+-----------+-------------+---------+
+| cache_stamped | deepinfra:deepseek-  | U2  | git_commit    | Not established from the available artifacts       | ABSTAINED | ABSTAINED   | -       |
+| e_0013        | ai/DeepSeek-V3       |     |               | [cache_stampede_0013-01#0].                        |           |             |         |
++---------------+----------------------+-----+---------------+----------------------------------------------------+-----------+-------------+---------+
+| cache_stamped | deepinfra:deepseek-  | U3  | kernel_versio | Not established from the available artifacts       | ABSTAINED | ABSTAINED   | -       |
+| e_0013        | ai/DeepSeek-V3       |     | n             | [cache_stampede_0013-06#0].                        |           |             |         |
++---------------+----------------------+-----+---------------+----------------------------------------------------+-----------+-------------+---------+
+| cache_stamped | deepinfra:google/gem | U1  | email         | Not established from the available artifacts.      | ABSTAINED | ABSTAINED   | -       |
+| e_0013        | ma-4-26B-A4B-it      |     |               |                                                    |           |             |         |
++---------------+----------------------+-----+---------------+----------------------------------------------------+-----------+-------------+---------+
+| cache_stamped | deepinfra:google/gem | U2  | git_commit    | Not established from the available artifacts.      | ABSTAINED | ABSTAINED   | -       |
+| e_0013        | ma-4-26B-A4B-it      |     |               |                                                    |           |             |         |
++---------------+----------------------+-----+---------------+----------------------------------------------------+-----------+-------------+---------+
+| cache_stamped | deepinfra:google/gem | U3  | kernel_versio | Not established from the available artifacts.      | ABSTAINED | ABSTAINED   | -       |
+| e_0013        | ma-4-26B-A4B-it      |     | n             |                                                    |           |             |         |
++---------------+----------------------+-----+---------------+----------------------------------------------------+-----------+-------------+---------+
+| cache_stamped | deepinfra:Qwen/Qwen3 | U1  | email         | Not established from the available artifacts       | ABSTAINED | ABSTAINED   | -       |
+| e_0013        | -235B-A22B-Instruct- |     |               | [cache_stampede_0013-09#0]                         |           |             |         |
+|               | 2507                 |     |               |                                                    |           |             |         |
++---------------+----------------------+-----+---------------+----------------------------------------------------+-----------+-------------+---------+
+| cache_stamped | deepinfra:Qwen/Qwen3 | U2  | git_commit    | Not established from the available artifacts       | ABSTAINED | ABSTAINED   | -       |
+| e_0013        | -235B-A22B-Instruct- |     |               | [cache_stampede_0013-09#0]                         |           |             |         |
+|               | 2507                 |     |               |                                                    |           |             |         |
++---------------+----------------------+-----+---------------+----------------------------------------------------+-----------+-------------+---------+
+| cache_stamped | deepinfra:Qwen/Qwen3 | U3  | kernel_versio | Not established from the available artifacts       | ABSTAINED | ABSTAINED   | -       |
+| e_0013        | -235B-A22B-Instruct- |     | n             | [cache_stampede_0013-09#0]                         |           |             |         |
+|               | 2507                 |     |               |                                                    |           |             |         |
++---------------+----------------------+-----+---------------+----------------------------------------------------+-----------+-------------+---------+
+| cache_stamped | qwen2.5:7b-instruct  | U1  | email         | Not established from the available artifacts       | ABSTAINED | ABSTAINED   | -       |
+| e_0013        |                      |     |               | [cache_stampede_0013-01#4]                         |           |             |         |
++---------------+----------------------+-----+---------------+----------------------------------------------------+-----------+-------------+---------+
+| cache_stamped | qwen2.5:7b-instruct  | U2  | git_commit    | Not established from the available artifacts       | ABSTAINED | ABSTAINED   | -       |
+| e_0013        |                      |     |               | [cache_stampede_0013-01#4]                         |           |             |         |
++---------------+----------------------+-----+---------------+----------------------------------------------------+-----------+-------------+---------+
+| cache_stamped | qwen2.5:7b-instruct  | U3  | kernel_versio | Not established from the available artifacts       | ABSTAINED | ABSTAINED   | -       |
+| e_0013        |                      |     | n             | [cache_stampede_0013-05#0]                         |           |             |         |
++---------------+----------------------+-----+---------------+----------------------------------------------------+-----------+-------------+---------+
+| fake_auth     | deepinfra:deepseek-  | U1  | md5           | Not established from the available artifacts.      | ABSTAINED | ABSTAINED   | -       |
+|               | ai/DeepSeek-V3       |     |               |                                                    |           |             |         |
++---------------+----------------------+-----+---------------+----------------------------------------------------+-----------+-------------+---------+
+| fake_auth     | deepinfra:deepseek-  | U2  | pid           | Not established from the available artifacts.      | ABSTAINED | ABSTAINED   | -       |
+|               | ai/DeepSeek-V3       |     |               |                                                    |           |             |         |
++---------------+----------------------+-----+---------------+----------------------------------------------------+-----------+-------------+---------+
+| fake_auth     | deepinfra:deepseek-  | U3  | sha256        | Not established from the available artifacts.      | ABSTAINED | ABSTAINED   | -       |
+|               | ai/DeepSeek-V3       |     |               |                                                    |           |             |         |
++---------------+----------------------+-----+---------------+----------------------------------------------------+-----------+-------------+---------+
+| fake_auth     | deepinfra:google/gem | U1  | md5           | Not established from the available artifacts.      | ABSTAINED | ABSTAINED   | -       |
+|               | ma-4-26B-A4B-it      |     |               |                                                    |           |             |         |
++---------------+----------------------+-----+---------------+----------------------------------------------------+-----------+-------------+---------+
+| fake_auth     | deepinfra:google/gem | U2  | pid           | Not established from the available artifacts.      | ABSTAINED | ABSTAINED   | -       |
+|               | ma-4-26B-A4B-it      |     |               |                                                    |           |             |         |
++---------------+----------------------+-----+---------------+----------------------------------------------------+-----------+-------------+---------+
+| fake_auth     | deepinfra:google/gem | U3  | sha256        | Not established from the available artifacts.      | ABSTAINED | ABSTAINED   | -       |
+|               | ma-4-26B-A4B-it      |     |               |                                                    |           |             |         |
++---------------+----------------------+-----+---------------+----------------------------------------------------+-----------+-------------+---------+
+| fake_auth     | deepinfra:Qwen/Qwen3 | U1  | md5           | Not established from the available artifacts       | ABSTAINED | ABSTAINED   | -       |
+|               | -235B-A22B-Instruct- |     |               | [fake_auth-05#0]                                   |           |             |         |
+|               | 2507                 |     |               |                                                    |           |             |         |
++---------------+----------------------+-----+---------------+----------------------------------------------------+-----------+-------------+---------+
+| fake_auth     | deepinfra:Qwen/Qwen3 | U2  | pid           | Not established from the available artifacts       | ABSTAINED | ABSTAINED   | -       |
+|               | -235B-A22B-Instruct- |     |               | [fake_auth-09#0]                                   |           |             |         |
+|               | 2507                 |     |               |                                                    |           |             |         |
++---------------+----------------------+-----+---------------+----------------------------------------------------+-----------+-------------+---------+
+| fake_auth     | deepinfra:Qwen/Qwen3 | U3  | sha256        | Not established from the available artifacts       | ABSTAINED | ABSTAINED   | -       |
+|               | -235B-A22B-Instruct- |     |               | [fake_auth-01#2]                                   |           |             |         |
+|               | 2507                 |     |               |                                                    |           |             |         |
++---------------+----------------------+-----+---------------+----------------------------------------------------+-----------+-------------+---------+
+| koi_stealer   | deepinfra:deepseek-  | U1  | cve           | Not established from the available artifacts.      | ABSTAINED | ABSTAINED   | -       |
+|               | ai/DeepSeek-V3       |     |               |                                                    |           |             |         |
++---------------+----------------------+-----+---------------+----------------------------------------------------+-----------+-------------+---------+
+| koi_stealer   | deepinfra:deepseek-  | U2  | email         | Not established from the available artifacts.      | ABSTAINED | ABSTAINED   | -       |
+|               | ai/DeepSeek-V3       |     |               |                                                    |           |             |         |
++---------------+----------------------+-----+---------------+----------------------------------------------------+-----------+-------------+---------+
+| koi_stealer   | deepinfra:deepseek-  | U3  | ticket        | Not established from the available artifacts.      | ABSTAINED | ABSTAINED   | -       |
+|               | ai/DeepSeek-V3       |     |               |                                                    |           |             |         |
++---------------+----------------------+-----+---------------+----------------------------------------------------+-----------+-------------+---------+
+| koi_stealer   | deepinfra:google/gem | U1  | cve           | Not established from the available artifacts.      | ABSTAINED | ABSTAINED   | -       |
+|               | ma-4-26B-A4B-it      |     |               |                                                    |           |             |         |
++---------------+----------------------+-----+---------------+----------------------------------------------------+-----------+-------------+---------+
+| koi_stealer   | deepinfra:google/gem | U2  | email         | Not established from the available artifacts.      | ABSTAINED | ABSTAINED   | -       |
+|               | ma-4-26B-A4B-it      |     |               |                                                    |           |             |         |
++---------------+----------------------+-----+---------------+----------------------------------------------------+-----------+-------------+---------+
+| koi_stealer   | deepinfra:google/gem | U3  | ticket        | Not established from the available artifacts.      | ABSTAINED | ABSTAINED   | -       |
+|               | ma-4-26B-A4B-it      |     |               |                                                    |           |             |         |
++---------------+----------------------+-----+---------------+----------------------------------------------------+-----------+-------------+---------+
+| koi_stealer   | deepinfra:Qwen/Qwen3 | U1  | cve           | Not established from the available artifacts       | ABSTAINED | ABSTAINED   | -       |
+|               | -235B-A22B-Instruct- |     |               |                                                    |           |             |         |
+|               | 2507                 |     |               |                                                    |           |             |         |
++---------------+----------------------+-----+---------------+----------------------------------------------------+-----------+-------------+---------+
+| koi_stealer   | deepinfra:Qwen/Qwen3 | U2  | email         | Not established from the available artifacts       | ABSTAINED | ABSTAINED   | -       |
+|               | -235B-A22B-Instruct- |     |               |                                                    |           |             |         |
+|               | 2507                 |     |               |                                                    |           |             |         |
++---------------+----------------------+-----+---------------+----------------------------------------------------+-----------+-------------+---------+
+| koi_stealer   | deepinfra:Qwen/Qwen3 | U3  | ticket        | Not established from the available artifacts       | ABSTAINED | ABSTAINED   | -       |
+|               | -235B-A22B-Instruct- |     |               |                                                    |           |             |         |
+|               | 2507                 |     |               |                                                    |           |             |         |
++---------------+----------------------+-----+---------------+----------------------------------------------------+-----------+-------------+---------+

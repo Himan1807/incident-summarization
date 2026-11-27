@@ -1,0 +1,106 @@
+====================================================================================================
+INCIDENT : cache_stampede_0013
+MODEL    : qwen2.5:7b-instruct
+CONDITION: No RAG vs RAG (same LLM, same section plan, same questions)
+CREATED  : 2026-11-27T22:42:16
+====================================================================================================
+
+NO RAG : the LLM receives only the incident context (network description and the questions). It has NO logs, alerts or query results.
+         Output is formatted (titles/preambles removed) but not verified, de-duplicated or given citations.
+RAG    : the advanced pipeline (hybrid retrieval, reranking, section-wise generation with citations, verification).
+Hallucination, grounding and number checks are always measured against the REAL evidence of the incident.
+
+A. METRICS
+
++------------------------------------------------------+----------------+----------------+----------------+
+| Metric                                               | No RAG         | RAG            | RAG - No RAG   |
++------------------------------------------------------+----------------+----------------+----------------+
+| Answer precision                                     | -              | 0.667          | -              |
++------------------------------------------------------+----------------+----------------+----------------+
+| Answer recall                                        | -              | 0.800          | -              |
++------------------------------------------------------+----------------+----------------+----------------+
+| Answer F1                                            | -              | 0.727          | -              |
++------------------------------------------------------+----------------+----------------+----------------+
+| Question recall                                      | 0.444          | 0.889          | +0.445         |
++------------------------------------------------------+----------------+----------------+----------------+
+| Faithfulness                                         | 0.000          | 0.816          | +0.816         |
++------------------------------------------------------+----------------+----------------+----------------+
+| Grounding rate                                       | 0.314          | 1.000          | +0.686         |
++------------------------------------------------------+----------------+----------------+----------------+
+| Hallucination rate (lower is better)                 | 0.846          | 0.000          | -0.846         |
++------------------------------------------------------+----------------+----------------+----------------+
+| Unsupported numbers (lower is better)                | 7              | 0              | -7             |
++------------------------------------------------------+----------------+----------------+----------------+
+| Placeholders (lower is better)                       | 0              | 0              | +0             |
++------------------------------------------------------+----------------+----------------+----------------+
+| Questions CORRECT                                    | 0              | 7              | +7             |
++------------------------------------------------------+----------------+----------------+----------------+
+| Questions PARTIAL                                    | 0              | 0              | +0             |
++------------------------------------------------------+----------------+----------------+----------------+
+| Questions WRONG                                      | 0              | 2              | +2             |
++------------------------------------------------------+----------------+----------------+----------------+
+| Questions ABSTAINED / unanswered                     | 0 / 9          | 0 / 0          | -              |
++------------------------------------------------------+----------------+----------------+----------------+
+| LLM generation time (min)                            | 8.6            | 25.1           | -              |
++------------------------------------------------------+----------------+----------------+----------------+
+
+B. ANSWERS PER QUESTION
+
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| #   | Question                     | Reference answer         | No RAG answer                  | RAG answer                     | No RAG    | RAG       |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 1   | What is the hostname of the  | cache-redis-02           | (no answer)                    | The hostname of the host or    | NO ANSWER | CORRECT   |
+|     | host or node where the       |                          |                                | node where the failure         |           |           |
+|     | failure originated?          |                          |                                | originated is cache-redis-02.  |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 2   | What is the IP address of    | 10.227.167.238           | (no answer)                    | The IP address of the host or  | NO ANSWER | CORRECT   |
+|     | the host or node where the   |                          |                                | node where the failure         |           |           |
+|     | failure originated?          |                          |                                | originated is 10.227.167.238.  |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 3   | Which database host became   | inventory-db-01          | (no answer)                    | The database host that became  | NO ANSWER | CORRECT   |
+|     | overloaded as a consequence  |                          |                                | overloaded as a consequence of |           |           |
+|     | of the initial failure?      |                          |                                | the initial failure is         |           |           |
+|     |                              |                          |                                | inventory-db-01.               |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 4   | During what hour did the     | 2021-05-08 21:00 UTC     | (no answer)                    | The first signs of the failure | NO ANSWER | WRONG     |
+|     | first signs of the failure   |                          |                                | appeared during the hour       |           |           |
+|     | appear? Provide the earliest |                          |                                | 2021-05-08 18:00 UTC.          |           |           |
+|     | date and time in YYYY-MM-DD  |                          |                                |                                |           |           |
+|     | HH:MM UTC format.            |                          |                                |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 5   | What is the root cause       | capacity exhaustion      | (no answer)                    | The root cause category of the | NO ANSWER | CORRECT   |
+|     | category of the incident:    |                          |                                | incident is capacity           |           |           |
+|     | configuration change,        |                          |                                | exhaustion.                    |           |           |
+|     | software defect, hardware    |                          |                                |                                |           |           |
+|     | failure, cloud provider      |                          |                                |                                |           |           |
+|     | failure, capacity            |                          |                                |                                |           |           |
+|     | exhaustion, automation       |                          |                                |                                |           |           |
+|     | error, certificate expiry,   |                          |                                |                                |           |           |
+|     | or third-party dependency    |                          |                                |                                |           |           |
+|     | failure?                     |                          |                                |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 6   | Did the failure stay         | cascading failure        | (no answer)                    | The failure cascaded across    | NO ANSWER | WRONG     |
+|     | isolated to one component or |                          |                                | services.                      |           |           |
+|     | cascade across services?     |                          |                                |                                |           |           |
+|     | Answer 'isolated failure' or |                          |                                |                                |           |           |
+|     | 'cascading failure'.         |                          |                                |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 7   | Which of the three CIA       | availability             | (no answer)                    | The CIA component primarily    | NO ANSWER | CORRECT   |
+|     | components is primarily      |                          |                                | affected is availability.      |           |           |
+|     | affected: availability,      |                          |                                |                                |           |           |
+|     | integrity, or                |                          |                                |                                |           |           |
+|     | confidentiality?             |                          |                                |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 8   | According to the error       | booking-web, downstream  | (no answer)                    | The single service that        | NO ANSWER | CORRECT   |
+|     | volume statistics, what      | symptom                  |                                | emitted the most errors is     |           |           |
+|     | single service emitted the   |                          |                                | booking-web, which is not the  |           |           |
+|     | most errors? Is it the root  |                          |                                | root cause but a downstream    |           |           |
+|     | cause or a downstream        |                          |                                | symptom.                       |           |           |
+|     | symptom?                     |                          |                                |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 9   | Which change restored normal | CHG-40380                | (no answer)                    | The change that restored       | NO ANSWER | CORRECT   |
+|     | service? Provide its change  |                          |                                | normal service is CHG-40380.   |           |           |
+|     | identifier.                  |                          |                                |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+
+Faithfulness is 0 / '-' for No RAG by construction: without retrieved chunks it cannot cite evidence.
