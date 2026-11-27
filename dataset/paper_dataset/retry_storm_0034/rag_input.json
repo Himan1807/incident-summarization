@@ -1,0 +1,155 @@
+{
+  "metadata": {
+    "incident_id": "INC-20240522",
+    "scenario": "retry_storm_0034",
+    "title": "Infrastructure reliability incident investigation",
+    "source": "synthetic/ops-incident-expansion (modeled on neu-nds2/llm-sec-incident-analysis)",
+    "query_window_start": "2024-05-22T00:00:00",
+    "query_window_end": "2024-05-24T23:59:59",
+    "evidence_types": [
+      "change_records",
+      "derived_findings",
+      "infrastructure_events",
+      "monitoring_alerts",
+      "query_coverage",
+      "resource_metrics",
+      "service_logs"
+    ],
+    "artifact_scope_note": "Evidence is aggregated query output (not raw log lines or metric samples); it contains no chat/communication records."
+  },
+  "incident_description": "Reliability incident investigation of a production environment. Evidence consists of Elasticsearch aggregation results over application and proxy logs, Kubernetes, cloud-provider and host system events, Prometheus Alertmanager alerts, change-management / CI-CD audit records and metric anomaly detection. No root cause, impact or trigger is stated; these must be established from the supplied artifacts. Environment context: Organization: Nimeron Logistics (freight and logistics); Platform: Google Cloud asia-south1 (zones asia-south1-a/asia-south1-b/asia-south1-c); network range 10.172.0.0/16; Kubernetes cluster nimero-prod-asiaso (GKE); Identity/token service auth-svc is called synchronously by every API request and is backed by PostgreSQL auth-db-01; deployments may bundle database migrations; Change management: production changes carry CHG- identifiers.",
+  "investigation_questions": [
+    "Which service or infrastructure component did the incident originate in?",
+    "What is the identifier of the change that caused the incident?",
+    "Which account or automation identity executed the triggering change?",
+    "Which database index removal caused the slowdown?",
+    "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+    "Did the failure stay isolated to one component or cascade across services? Answer 'isolated failure' or 'cascading failure'.",
+    "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+    "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+    "Which change happened shortly before the incident began but did not cause it? Provide its identifier."
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "retry_storm_0034-01",
+      "artifact_type": "service_logs",
+      "subtype": "error_logs",
+      "source": "error_logs",
+      "content": "{\"description\": \"Application and proxy error logs: HTTP/gRPC status codes, failing requests (caller -> callee:port : operation), error messages and the services emitting them.\", \"facts\": [\"error events: 123653 matching events\", \"error events > status codes: 504 \\u2014 112115 events\", \"error events > status codes: 500 \\u2014 11532 events\", \"error events > status codes: 429 \\u2014 6 events\", \"failing requests: portal-bff -> auth-svc:8443 : POST /introspect (gateway auth) \\u2014 81985 events\", \"failing requests: booking-api -> auth-svc:8443 : POST /introspect \\u2014 22534 events\", \"failing requests: auth-svc -> auth-db-01:5432 : SELECT grants by session_key \\u2014 11532 events\", \"failing requests: tracking-api -> auth-svc:8443 : POST /introspect \\u2014 7596 events\", \"failing requests: shipment-api -> shipment-db:5432 : query \\u2014 6 events\", \"error messages: auth-svc call failed: context deadline exceeded (attempt 3/3, backoff 0ms) \\u2014 112115 events\", \"error messages: ERROR: canceling statement due to statement timeout \\u2014 11532 events\", \"error messages: HTTP 429 Too Many Requests from upstream \\u2014 6 events\", \"emitting services: portal-bff \\u2014 81985 events\", \"emitting services: booking-api \\u2014 22534 events\", \"emitting services: auth-svc \\u2014 11532 events\", \"emitting services: tracking-api \\u2014 7596 events\", \"emitting services: shipment-api \\u2014 6 events\"]}",
+      "metadata": {
+        "scenario": "retry_storm_0034",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "retry_storm_0034-02",
+      "artifact_type": "service_logs",
+      "subtype": "error_volume_by_service",
+      "source": "error_volume_by_service",
+      "content": "{\"description\": \"Services ranked by number of error events, with each service's most-failed downstream dependencies.\", \"facts\": [\"services: portal-bff \\u2014 81985 events; failing dependencies=1; top dependencies: auth-svc (81985)\", \"services: booking-api \\u2014 22534 events; failing dependencies=1; top dependencies: auth-svc (22534)\", \"services: auth-svc \\u2014 11532 events; failing dependencies=1; top dependencies: auth-db-01 (11532)\", \"services: tracking-api \\u2014 7596 events; failing dependencies=1; top dependencies: auth-svc (7596)\", \"services: shipment-api \\u2014 6 events; failing dependencies=1; top dependencies: shipment-db (6)\"]}",
+      "metadata": {
+        "scenario": "retry_storm_0034",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "retry_storm_0034-03",
+      "artifact_type": "change_records",
+      "subtype": "change_log",
+      "source": "change_log",
+      "content": "{\"description\": \"Deployments, configuration pushes, infrastructure and automation runs from the change-management and CI/CD audit log: change ID, type, target, actor, time (UTC), status and recorded diff/summary.\", \"facts\": [\"changes: CHG-37344 | deployment | dock-scheduler 3.16.3 -> 3.17.0 | actor: argocd | 2024-05-23 19:33 UTC | status: Synced/Healthy | new optional API field \\u2014 1 events\", \"changes: CHG-37372 | deployment | auth-svc 5.16.9 -> 5.17.0 | actor: argocd | 2024-05-23 20:34 UTC | status: succeeded | bundled migration 20240523_2034_drop_legacy_indexes.sql (DROP INDEX idx_grants_legacy; DROP INDEX idx_grants_session_key) \\u2014 1 events\", \"changes: CHG-37409 | config_push | retry policy for auth-svc callers | actor: n.kim | 2024-05-23 22:59 UTC | status: succeeded | retries 3 -> 0 (temporary) \\u2014 1 events\", \"changes: CHG-37440 | db_migration | auth-db-01 | actor: n.kim | 2024-05-24 00:22 UTC | status: succeeded | CREATE INDEX CONCURRENTLY idx_grants_session_key ON grants(session_key) \\u2014 1 events\", \"changes: CHG-37459 | deployment | shipment-api 4.30.7 -> 4.30.8 | actor: argocd | 2024-05-24 13:25 UTC | status: succeeded | logging improvements \\u2014 1 events\", \"change types: deployment \\u2014 3 events\", \"change types: config_push \\u2014 1 events\", \"change types: db_migration \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "retry_storm_0034",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "retry_storm_0034-04",
+      "artifact_type": "change_records",
+      "subtype": "change_actors",
+      "source": "change_actors",
+      "content": "{\"description\": \"Accounts and automation identities that executed changes, with the hosts or targets they acted on.\", \"facts\": [\"actors: argocd \\u2014 3 events; targets: nimero-prod-asiaso/auth-svc (1), auth-db-01 (1), nimero-prod-asiaso/dock-scheduler (1), nimero-prod-asiaso/shipment-api (1)\", \"actors: n.kim \\u2014 2 events; targets: nimero-prod-asiaso/portal-bff (1), nimero-prod-asiaso/tracking-api (1), nimero-prod-asiaso/booking-api (1), auth-db-01 (1)\"]}",
+      "metadata": {
+        "scenario": "retry_storm_0034",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "retry_storm_0034-05",
+      "artifact_type": "infrastructure_events",
+      "subtype": "host_inventory",
+      "source": "host_inventory",
+      "content": "{\"description\": \"Host and node names seen in infrastructure events with their IP address, role and availability zone / rack.\", \"facts\": [\"hosts: gke-nimero-prod-as-pool-a-959c \\u2014 213 events; ip: 10.172.223.183; role: k8s-worker; zone: asia-south1-a\", \"hosts: gke-nimero-prod-as-pool-c-2ff8 \\u2014 203 events; ip: 10.172.223.130; role: k8s-worker; zone: asia-south1-a\", \"hosts: gke-nimero-prod-as-pool-b-5797 \\u2014 179 events; ip: 10.172.120.135; role: k8s-worker; zone: asia-south1-c\", \"hosts: auth-db-01 \\u2014 157 events; ip: 10.172.76.84; role: postgres-primary; zone: asia-south1-c\"]}",
+      "metadata": {
+        "scenario": "retry_storm_0034",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "retry_storm_0034-06",
+      "artifact_type": "infrastructure_events",
+      "subtype": "platform_events",
+      "source": "platform_events",
+      "content": "{\"description\": \"Kubernetes events, cloud-provider health events and host system messages (kernel, hardware, daemons) with the objects or hosts they refer to.\", \"facts\": [\"system messages: postgres: LOG: duration: 1860.929 ms statement: SELECT * FROM grants WHERE session_key = $1 \\u2014 45251 events; top objects: auth-db-01 (1)\", \"event reasons: Pulled \\u2014 30 events; top objects: pod/dock-scheduler-ca1a1d508-snpst (2)\", \"event reasons: ScalingReplicaSet \\u2014 3 events; top objects: deployment/dock-scheduler (1)\", \"event reasons: Pulled \\u2014 10 events; top objects: pod/shipment-api-b58a03b0e-mmwjj (2)\", \"event reasons: ScalingReplicaSet \\u2014 4 events; top objects: deployment/shipment-api (3)\"]}",
+      "metadata": {
+        "scenario": "retry_storm_0034",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "retry_storm_0034-07",
+      "artifact_type": "monitoring_alerts",
+      "subtype": "alertmanager_alerts",
+      "source": "alertmanager_alerts",
+      "content": "{\"description\": \"Prometheus Alertmanager alerts: alert names with severity, critical-alert instances, alert names and services, and an hourly timeline of warning and critical alerts (UTC).\", \"facts\": [\"alert names: Watchdog (info) \\u2014 72 events; service: alertmanager; firing continuously\", \"alert names: AuthSvcLatencyP99High (warning) \\u2014 12 events; service: auth-svc; first seen in hour 2024-05-23 20:00 UTC; last seen in hour 2024-05-24 00:00 UTC\", \"alert names: PortalBffErrorBudgetBurn (critical) \\u2014 10 events; service: portal-bff; first seen in hour 2024-05-23 21:00 UTC; last seen in hour 2024-05-24 00:00 UTC\", \"alert names: PostgresConnectionsExhausted (critical) \\u2014 8 events; service: postgres; first seen in hour 2024-05-23 21:00 UTC; last seen in hour 2024-05-24 00:00 UTC\", \"alert names: KubeCPUOvercommit (warning) \\u2014 6 events; service: cluster; first seen in hour 2024-05-24 07:00 UTC; last seen in hour 2024-05-24 09:00 UTC\", \"alert names: NodeFilesystemSpaceFillingUp (warning) \\u2014 3 events; service: node; first seen in hour 2024-05-24 20:00 UTC; last seen in hour 2024-05-24 21:00 UTC\", \"critical alerts: 18 matching events\", \"critical alerts > critical instances: slo:portal-bff-availability \\u2014 10 events\", \"critical alerts > critical instances: 10.172.76.84:9187 \\u2014 8 events\", \"critical alerts > critical alert names: PortalBffErrorBudgetBurn \\u2014 10 events\", \"critical alerts > critical alert names: PostgresConnectionsExhausted \\u2014 8 events\", \"critical alerts > critical services: portal-bff \\u2014 10 events\", \"critical alerts > critical services: postgres \\u2014 8 events\", \"alert timeline: 2024-05-23 20:00 UTC \\u2014 4 events\", \"alert timeline: 2024-05-23 21:00 UTC \\u2014 6 events\", \"alert timeline: 2024-05-23 22:00 UTC \\u2014 5 events\", \"alert timeline: 2024-05-23 23:00 UTC \\u2014 5 events\", \"alert timeline: 2024-05-24 00:00 UTC \\u2014 10 events\", \"alert timeline: 2024-05-24 07:00 UTC \\u2014 2 events\", \"alert timeline: 2024-05-24 08:00 UTC \\u2014 2 events\", \"alert timeline: 2024-05-24 09:00 UTC \\u2014 2 events\", \"alert timeline: 2024-05-24 20:00 UTC \\u2014 2 events\", \"alert timeline: 2024-05-24 21:00 UTC \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "retry_storm_0034",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "retry_storm_0034-08",
+      "artifact_type": "resource_metrics",
+      "subtype": "metric_anomalies",
+      "source": "metric_anomalies",
+      "content": "{\"description\": \"Metric series that deviated from their 7-day baseline (hourly resolution): baseline, peak or trough value, anomaly onset and recovery (UTC).\", \"facts\": [\"metric anomalies: mean execution time (SELECT grants by session_key) on auth-db-01 \\u2014 baseline 0.4 ms; peak 3,551 ms; onset 2024-05-23 20:00 UTC; recovered 2024-05-24 01:00 UTC\", \"metric anomalies: auth-svc request rate on auth-svc \\u2014 baseline ~745 req/s; peak 3x baseline; onset 2024-05-23 21:00 UTC; recovered 2024-05-24 01:00 UTC\"]}",
+      "metadata": {
+        "scenario": "retry_storm_0034",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "retry_storm_0034-09",
+      "artifact_type": "derived_findings",
+      "subtype": "derived_summary",
+      "source": "derived_summary",
+      "content": "{\"description\": \"Deterministic summary computed from the query results above (error ranking, instance-to-host join, alert timeline, change correlation, earliest metric anomaly).\", \"facts\": [\"Derived: service portal-bff ranks #1 by error volume (81985 events, 1 failing dependencies). Most-failed dependency: auth-svc (81985 errors).\", \"Derived: most-alerted critical instance slo:portal-bff-availability (10 critical alerts); no matching host-inventory entry.\", \"Derived: warning/critical alerts span 2024-05-23 20:00 UTC to 2024-05-24 21:00 UTC; earliest alert hour 2024-05-23 20:00 UTC (4 alerts).\", \"Derived: changes recorded from 6 hours before the earliest alert hour to its end: CHG-37344 (deployment, dock-scheduler 3.16.3 -> 3.17.0, argocd, 2024-05-23 19:33 UTC); CHG-37372 (deployment, auth-svc 5.16.9 -> 5.17.0, argocd, 2024-05-23 20:34 UTC).\", \"Derived: earliest metric anomaly onset 2024-05-23 20:00 UTC (mean execution time (SELECT grants by session_key) on auth-db-01).\"]}",
+      "metadata": {
+        "scenario": "retry_storm_0034",
+        "source_kind": "derived_from_es_results",
+        "heuristic": true
+      }
+    },
+    {
+      "artifact_id": "retry_storm_0034-10",
+      "artifact_type": "query_coverage",
+      "subtype": "evidence_gaps",
+      "source": "evidence_gaps",
+      "content": "{\"description\": \"Queries that returned nothing or failed; use these to state what is NOT established.\", \"facts\": [\"No matching results for: tls certificates / expired certificates. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / expiring within 7 days. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / self signed. (Absence in this query is not proof of absence elsewhere.)\"]}",
+      "metadata": {
+        "scenario": "retry_storm_0034",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    }
+  ]
+}

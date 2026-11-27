@@ -1,0 +1,98 @@
+{
+  "source": "synthetic generator ground truth (ops expansion)",
+  "confidence": "synthetic ground truth",
+  "qa": [
+    {
+      "id": 1,
+      "question": "What is the identifier of the change that caused the incident?",
+      "answer": "AWX-59254",
+      "atoms": [
+        {
+          "text": "AWX-59254",
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "question": "Which account or automation identity executed the triggering change?",
+      "answer": "awx-svc",
+      "atoms": [
+        {
+          "text": "awx-svc",
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "question": "Which network device dropped the database heartbeat and replication traffic?",
+      "answer": "core-b1",
+      "atoms": [
+        {
+          "text": "core-b1",
+          "kind": "hostname"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "question": "What is the IP address of the node that was promoted?",
+      "answer": "172.28.156.143",
+      "atoms": [
+        {
+          "text": "172.28.156.143",
+          "kind": "ip"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "question": "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+      "answer": "2024-01-25 03:00 UTC",
+      "atoms": [
+        {
+          "text": "2024-01-25 03:00 UTC",
+          "kind": "time"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "question": "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+      "answer": "automation error",
+      "atoms": [
+        {
+          "text": "automation error",
+          "kind": "label"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "question": "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+      "answer": "integrity",
+      "atoms": [
+        {
+          "text": "integrity",
+          "kind": "cia"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "question": "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+      "answer": "reconciliation-job, downstream symptom",
+      "atoms": [
+        {
+          "text": "reconciliation-job",
+          "kind": "other"
+        },
+        {
+          "text": "downstream symptom",
+          "kind": "label"
+        }
+      ]
+    }
+  ]
+}

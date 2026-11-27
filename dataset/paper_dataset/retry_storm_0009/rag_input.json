@@ -1,0 +1,156 @@
+{
+  "metadata": {
+    "incident_id": "INC-20250129",
+    "scenario": "retry_storm_0009",
+    "title": "Infrastructure reliability incident investigation",
+    "source": "synthetic/ops-incident-expansion (modeled on neu-nds2/llm-sec-incident-analysis)",
+    "query_window_start": "2025-01-29T00:00:00",
+    "query_window_end": "2025-01-31T23:59:59",
+    "evidence_types": [
+      "change_records",
+      "derived_findings",
+      "infrastructure_events",
+      "monitoring_alerts",
+      "query_coverage",
+      "resource_metrics",
+      "service_logs"
+    ],
+    "artifact_scope_note": "Evidence is aggregated query output (not raw log lines or metric samples); it contains no chat/communication records."
+  },
+  "incident_description": "Reliability incident investigation of a production environment. Evidence consists of Elasticsearch aggregation results over application and proxy logs, Kubernetes, cloud-provider and host system events, Prometheus Alertmanager alerts, change-management / CI-CD audit records and metric anomaly detection. No root cause, impact or trigger is stated; these must be established from the supplied artifacts. Environment context: Organization: Riverant Ride (ride-hailing); Platform: Google Cloud europe-west1 (zones europe-west1-b/europe-west1-c/europe-west1-d); network range 10.119.0.0/16; Kubernetes cluster rivera-prod-europe (GKE); Identity/token service identity-svc is called synchronously by every API request and is backed by PostgreSQL identity-db-01; deployments may bundle database migrations; Change management: production changes carry CHG- identifiers.",
+  "investigation_questions": [
+    "Which service or component is the origin of the failure?",
+    "What client-side behaviour amplified the load on the failing service?",
+    "Which database index removal caused the slowdown?",
+    "Which database migration file was part of the triggering change?",
+    "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+    "Did the failure stay isolated to one component or cascade across services? Answer 'isolated failure' or 'cascading failure'.",
+    "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+    "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+    "Which change happened shortly before the incident began but did not cause it? Provide its identifier.",
+    "Which change restored normal service? Provide its change identifier."
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "retry_storm_0009-01",
+      "artifact_type": "service_logs",
+      "subtype": "error_logs",
+      "source": "error_logs",
+      "content": "{\"description\": \"Application and proxy error logs: HTTP/gRPC status codes, failing requests (caller -> callee:port : operation), error messages and the services emitting them.\", \"facts\": [\"error events: 111725 matching events\", \"error events > status codes: 504 \\u2014 88404 events\", \"error events > status codes: 500 \\u2014 23321 events\", \"failing requests: rider-app-bff -> identity-svc:8443 : POST /introspect (gateway auth) \\u2014 49258 events\", \"failing requests: identity-svc -> identity-db-01:5432 : SELECT tokens by subject_id \\u2014 23321 events\", \"failing requests: safety-svc -> identity-svc:8443 : POST /introspect \\u2014 20237 events\", \"failing requests: trips-api -> identity-svc:8443 : POST /introspect \\u2014 18724 events\", \"failing requests: driver-profile-api -> driver-db:5432 : query \\u2014 185 events\", \"error messages: identity-svc call failed: context deadline exceeded (attempt 3/3, backoff 0ms) \\u2014 88219 events\", \"error messages: ERROR: canceling statement due to statement timeout \\u2014 23321 events\", \"error messages: upstream request timeout \\u2014 185 events\", \"emitting services: rider-app-bff \\u2014 49258 events\", \"emitting services: identity-svc \\u2014 23321 events\", \"emitting services: safety-svc \\u2014 20237 events\", \"emitting services: trips-api \\u2014 18724 events\", \"emitting services: driver-profile-api \\u2014 185 events\"]}",
+      "metadata": {
+        "scenario": "retry_storm_0009",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "retry_storm_0009-02",
+      "artifact_type": "service_logs",
+      "subtype": "error_volume_by_service",
+      "source": "error_volume_by_service",
+      "content": "{\"description\": \"Services ranked by number of error events, with each service's most-failed downstream dependencies.\", \"facts\": [\"services: rider-app-bff \\u2014 49258 events; failing dependencies=1; top dependencies: identity-svc (49258)\", \"services: identity-svc \\u2014 23321 events; failing dependencies=1; top dependencies: identity-db-01 (23321)\", \"services: safety-svc \\u2014 20237 events; failing dependencies=1; top dependencies: identity-svc (20237)\", \"services: trips-api \\u2014 18724 events; failing dependencies=1; top dependencies: identity-svc (18724)\", \"services: driver-profile-api \\u2014 185 events; failing dependencies=1; top dependencies: driver-db (185)\"]}",
+      "metadata": {
+        "scenario": "retry_storm_0009",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "retry_storm_0009-03",
+      "artifact_type": "change_records",
+      "subtype": "change_log",
+      "source": "change_log",
+      "content": "{\"description\": \"Deployments, configuration pushes, infrastructure and automation runs from the change-management and CI/CD audit log: change ID, type, target, actor, time (UTC), status and recorded diff/summary.\", \"facts\": [\"changes: CHG-41423 | deployment | eta-svc 1.3.8 -> 1.3.9 | actor: release-bot | 2025-01-29 10:14 UTC | status: succeeded | minor bug fixes \\u2014 1 events\", \"changes: CHG-41460 | deployment | identity-svc 5.9.8 -> 5.10.0 | actor: release-bot | 2025-01-29 10:44 UTC | status: succeeded | bundled migration 20250129_1044_drop_legacy_indexes.sql (DROP INDEX idx_tokens_legacy; DROP INDEX idx_tokens_subject_id) \\u2014 1 events\", \"changes: CHG-41477 | config_push | retry policy for identity-svc callers | actor: s.brandt | 2025-01-29 13:30 UTC | status: succeeded | retries 3 -> 0 (temporary) \\u2014 1 events\", \"changes: CHG-41483 | db_migration | identity-db-01 | actor: s.brandt | 2025-01-29 14:52 UTC | status: succeeded | CREATE INDEX CONCURRENTLY idx_tokens_subject_id ON tokens(subject_id) \\u2014 1 events\", \"changes: CHG-41510 | deployment | driver-profile-api 8.11.5 -> 8.11.6 | actor: release-bot | 2025-01-30 00:12 UTC | status: succeeded | copy and UI text changes \\u2014 1 events\", \"change types: deployment \\u2014 3 events\", \"change types: config_push \\u2014 1 events\", \"change types: db_migration \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "retry_storm_0009",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "retry_storm_0009-04",
+      "artifact_type": "change_records",
+      "subtype": "change_actors",
+      "source": "change_actors",
+      "content": "{\"description\": \"Accounts and automation identities that executed changes, with the hosts or targets they acted on.\", \"facts\": [\"actors: release-bot \\u2014 3 events; targets: rivera-prod-europe/identity-svc (1), identity-db-01 (1), rivera-prod-europe/eta-svc (1), rivera-prod-europe/driver-profile-api (1)\", \"actors: s.brandt \\u2014 2 events; targets: rivera-prod-europe/rider-app-bff (1), rivera-prod-europe/safety-svc (1), rivera-prod-europe/trips-api (1), identity-db-01 (1)\"]}",
+      "metadata": {
+        "scenario": "retry_storm_0009",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "retry_storm_0009-05",
+      "artifact_type": "infrastructure_events",
+      "subtype": "host_inventory",
+      "source": "host_inventory",
+      "content": "{\"description\": \"Host and node names seen in infrastructure events with their IP address, role and availability zone / rack.\", \"facts\": [\"hosts: gke-rivera-prod-eu-pool-a-45f4 \\u2014 285 events; ip: 10.119.65.144; role: k8s-worker; zone: europe-west1-c\", \"hosts: identity-db-01 \\u2014 260 events; ip: 10.119.169.9; role: postgres-primary; zone: europe-west1-b\"]}",
+      "metadata": {
+        "scenario": "retry_storm_0009",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "retry_storm_0009-06",
+      "artifact_type": "infrastructure_events",
+      "subtype": "platform_events",
+      "source": "platform_events",
+      "content": "{\"description\": \"Kubernetes events, cloud-provider health events and host system messages (kernel, hardware, daemons) with the objects or hosts they refer to.\", \"facts\": [\"system messages: postgres: LOG: duration: 3312.446 ms statement: SELECT * FROM tokens WHERE subject_id = $1 \\u2014 31245 events; top objects: identity-db-01 (1)\", \"event reasons: Pulled \\u2014 27 events; top objects: pod/eta-svc-87640aebd-qmnvz (3)\", \"event reasons: ScalingReplicaSet \\u2014 6 events; top objects: deployment/eta-svc (2)\", \"event reasons: Pulled \\u2014 23 events; top objects: pod/driver-profile-api-a1bf33276-pbh4m (1)\", \"event reasons: ScalingReplicaSet \\u2014 3 events; top objects: deployment/driver-profile-api (3)\"]}",
+      "metadata": {
+        "scenario": "retry_storm_0009",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "retry_storm_0009-07",
+      "artifact_type": "monitoring_alerts",
+      "subtype": "alertmanager_alerts",
+      "source": "alertmanager_alerts",
+      "content": "{\"description\": \"Prometheus Alertmanager alerts: alert names with severity, critical-alert instances, alert names and services, and an hourly timeline of warning and critical alerts (UTC).\", \"facts\": [\"alert names: Watchdog (info) \\u2014 72 events; service: alertmanager; firing continuously\", \"alert names: IdentitySvcLatencyP99High (warning) \\u2014 12 events; service: identity-svc; first seen in hour 2025-01-29 10:00 UTC; last seen in hour 2025-01-29 14:00 UTC\", \"alert names: PostgresConnectionsExhausted (critical) \\u2014 10 events; service: postgres; first seen in hour 2025-01-29 11:00 UTC; last seen in hour 2025-01-29 14:00 UTC\", \"alert names: RiderAppBffErrorBudgetBurn (critical) \\u2014 8 events; service: rider-app-bff; first seen in hour 2025-01-29 11:00 UTC; last seen in hour 2025-01-29 14:00 UTC\", \"alert names: CPUThrottlingHigh (warning) \\u2014 2 events; service: promotions-api; first seen in hour 2025-01-30 08:00 UTC; last seen in hour 2025-01-30 09:00 UTC\", \"alert names: KubeJobFailed (warning) \\u2014 2 events; service: batch; first seen in hour 2025-01-29 21:00 UTC; last seen in hour 2025-01-29 22:00 UTC\", \"critical alerts: 18 matching events\", \"critical alerts > critical instances: 10.119.169.9:9187 \\u2014 10 events\", \"critical alerts > critical instances: slo:rider-app-bff-availability \\u2014 8 events\", \"critical alerts > critical alert names: PostgresConnectionsExhausted \\u2014 10 events\", \"critical alerts > critical alert names: RiderAppBffErrorBudgetBurn \\u2014 8 events\", \"critical alerts > critical services: postgres \\u2014 10 events\", \"critical alerts > critical services: rider-app-bff \\u2014 8 events\", \"alert timeline: 2025-01-29 10:00 UTC \\u2014 2 events\", \"alert timeline: 2025-01-29 11:00 UTC \\u2014 6 events\", \"alert timeline: 2025-01-29 12:00 UTC \\u2014 11 events\", \"alert timeline: 2025-01-29 13:00 UTC \\u2014 7 events\", \"alert timeline: 2025-01-29 14:00 UTC \\u2014 4 events\", \"alert timeline: 2025-01-29 21:00 UTC \\u2014 1 events\", \"alert timeline: 2025-01-29 22:00 UTC \\u2014 1 events\", \"alert timeline: 2025-01-30 08:00 UTC \\u2014 1 events\", \"alert timeline: 2025-01-30 09:00 UTC \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "retry_storm_0009",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "retry_storm_0009-08",
+      "artifact_type": "resource_metrics",
+      "subtype": "metric_anomalies",
+      "source": "metric_anomalies",
+      "content": "{\"description\": \"Metric series that deviated from their 7-day baseline (hourly resolution): baseline, peak or trough value, anomaly onset and recovery (UTC).\", \"facts\": [\"metric anomalies: mean execution time (SELECT tokens by subject_id) on identity-db-01 \\u2014 baseline 0.4 ms; peak 2,641 ms; onset 2025-01-29 10:00 UTC; recovered 2025-01-29 15:00 UTC\", \"metric anomalies: identity-svc request rate on identity-svc \\u2014 baseline ~1270 req/s; peak 3x baseline; onset 2025-01-29 11:00 UTC; recovered 2025-01-29 15:00 UTC\", \"metric anomalies: node memory utilisation on 10.119.65.144 \\u2014 baseline 48%; peak 87%; onset 2025-01-29 08:00 UTC; recovered 2025-01-29 11:00 UTC\"]}",
+      "metadata": {
+        "scenario": "retry_storm_0009",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "retry_storm_0009-09",
+      "artifact_type": "derived_findings",
+      "subtype": "derived_summary",
+      "source": "derived_summary",
+      "content": "{\"description\": \"Deterministic summary computed from the query results above (error ranking, instance-to-host join, alert timeline, change correlation, earliest metric anomaly).\", \"facts\": [\"Derived: service rider-app-bff ranks #1 by error volume (49258 events, 1 failing dependencies). Most-failed dependency: identity-svc (49258 errors).\", \"Derived: most-alerted critical instance 10.119.169.9:9187 (10 critical alerts) maps to hostname identity-db-01; role postgres-primary; zone europe-west1-b.\", \"Derived: warning/critical alerts span 2025-01-29 10:00 UTC to 2025-01-30 09:00 UTC; earliest alert hour 2025-01-29 10:00 UTC (2 alerts).\", \"Derived: changes recorded from 6 hours before the earliest alert hour to its end: CHG-41423 (deployment, eta-svc 1.3.8 -> 1.3.9, release-bot, 2025-01-29 10:14 UTC); CHG-41460 (deployment, identity-svc 5.9.8 -> 5.10.0, release-bot, 2025-01-29 10:44 UTC).\", \"Derived: earliest metric anomaly onset 2025-01-29 08:00 UTC (node memory utilisation on 10.119.65.144).\"]}",
+      "metadata": {
+        "scenario": "retry_storm_0009",
+        "source_kind": "derived_from_es_results",
+        "heuristic": true
+      }
+    },
+    {
+      "artifact_id": "retry_storm_0009-10",
+      "artifact_type": "query_coverage",
+      "subtype": "evidence_gaps",
+      "source": "evidence_gaps",
+      "content": "{\"description\": \"Queries that returned nothing or failed; use these to state what is NOT established.\", \"facts\": [\"No matching results for: tls certificates / expired certificates. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / expiring within 7 days. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / self signed. (Absence in this query is not proof of absence elsewhere.)\"]}",
+      "metadata": {
+        "scenario": "retry_storm_0009",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    }
+  ]
+}

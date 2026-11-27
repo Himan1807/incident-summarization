@@ -1,0 +1,76 @@
+{
+  "source": "synthetic generator ground truth (ops expansion)",
+  "confidence": "synthetic ground truth",
+  "qa": [
+    {
+      "id": 1,
+      "question": "When did the certificate expire? Provide YYYY-MM-DD HH:MM UTC.",
+      "answer": "2026-10-19 16:32 UTC",
+      "atoms": [
+        {
+          "text": "2026-10-19 16:32",
+          "kind": "time"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "question": "During what hour did the service outage begin? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+      "answer": "2026-10-19 16:00 UTC",
+      "atoms": [
+        {
+          "text": "2026-10-19 16:00 UTC",
+          "kind": "time"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "question": "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+      "answer": "certificate expiry",
+      "atoms": [
+        {
+          "text": "certificate expiry",
+          "kind": "label"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "question": "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+      "answer": "availability",
+      "atoms": [
+        {
+          "text": "availability",
+          "kind": "cia"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "question": "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+      "answer": "ingress-nginx, root cause",
+      "atoms": [
+        {
+          "text": "ingress-nginx",
+          "kind": "other"
+        },
+        {
+          "text": "root cause",
+          "kind": "label"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "question": "Which change restored normal service? Provide its change identifier.",
+      "answer": "RFC-30203",
+      "atoms": [
+        {
+          "text": "RFC-30203",
+          "kind": "other"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,153 @@
+{
+  "metadata": {
+    "incident_id": "INC-20230609",
+    "scenario": "edge_ratelimit_0028",
+    "title": "Infrastructure reliability incident investigation",
+    "source": "synthetic/ops-incident-expansion (modeled on neu-nds2/llm-sec-incident-analysis)",
+    "query_window_start": "2023-06-09T00:00:00",
+    "query_window_end": "2023-06-11T23:59:59",
+    "evidence_types": [
+      "change_records",
+      "derived_findings",
+      "infrastructure_events",
+      "monitoring_alerts",
+      "query_coverage",
+      "resource_metrics",
+      "service_logs"
+    ],
+    "artifact_scope_note": "Evidence is aggregated query output (not raw log lines or metric samples); it contains no chat/communication records."
+  },
+  "incident_description": "Reliability incident investigation of a production environment. Evidence consists of Elasticsearch aggregation results over application and proxy logs, Kubernetes, cloud-provider and host system events, Prometheus Alertmanager alerts, change-management / CI-CD audit records and metric anomaly detection. No root cause, impact or trigger is stated; these must be established from the supplied artifacts. Environment context: Organization: Stonefield Go (ride-hailing); Platform: on-premises data center DC-East, server range 172.19.0.0/16; Edge tier: api-gateway (Envoy) on dedicated instances; gateway configuration is distributed from a config repository by a sync service; Change management: production changes carry RFC- identifiers.",
+  "investigation_questions": [
+    "Which service or component is the origin of the failure?",
+    "What change, deployment or automation run triggered the incident? Provide its change identifier.",
+    "Which configuration file and parameter were modified by the triggering change?",
+    "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+    "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+    "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+    "Which change restored normal service? Provide its change identifier."
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "edge_ratelimit_0028-01",
+      "artifact_type": "service_logs",
+      "subtype": "error_logs",
+      "source": "error_logs",
+      "content": "{\"description\": \"Application and proxy error logs: HTTP/gRPC status codes, failing requests (caller -> callee:port : operation), error messages and the services emitting them.\", \"facts\": [\"error events: 115330 matching events\", \"error events > status codes: 429 \\u2014 115076 events\", \"error events > status codes: 500 \\u2014 254 events\", \"failing requests: api-gateway -> rider-app-bff:8080 : GET /v2/feed (429) \\u2014 40687 events\", \"failing requests: api-gateway -> eta-svc:8080 : POST /v1/eta (429) \\u2014 28389 events\", \"failing requests: api-gateway -> driver-profile-api:8080 : GET /v1/driver (429) \\u2014 25114 events\", \"failing requests: api-gateway -> dispatch-svc:8080 : POST /v1/dispatch (429) \\u2014 20886 events\", \"failing requests: pricing-svc -> pricing-db:5432 : query \\u2014 254 events\", \"error messages: local_rate_limited \\u2014 115076 events\", \"error messages: redis: i/o timeout \\u2014 254 events\", \"emitting services: api-gateway \\u2014 115076 events\", \"emitting services: pricing-svc \\u2014 254 events\"]}",
+      "metadata": {
+        "scenario": "edge_ratelimit_0028",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "edge_ratelimit_0028-02",
+      "artifact_type": "service_logs",
+      "subtype": "error_volume_by_service",
+      "source": "error_volume_by_service",
+      "content": "{\"description\": \"Services ranked by number of error events, with each service's most-failed downstream dependencies.\", \"facts\": [\"services: api-gateway \\u2014 115076 events; failing dependencies=4; top dependencies: rider-app-bff (40687), eta-svc (28389), driver-profile-api (25114), dispatch-svc (20886)\", \"services: pricing-svc \\u2014 254 events; failing dependencies=1; top dependencies: pricing-db (254)\"]}",
+      "metadata": {
+        "scenario": "edge_ratelimit_0028",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "edge_ratelimit_0028-03",
+      "artifact_type": "change_records",
+      "subtype": "change_log",
+      "source": "change_log",
+      "content": "{\"description\": \"Deployments, configuration pushes, infrastructure and automation runs from the change-management and CI/CD audit log: change ID, type, target, actor, time (UTC), status and recorded diff/summary.\", \"facts\": [\"changes: RFC-70268 | deployment | trips-api 11.17.7 -> 11.17.8 | actor: gitlab-ci | 2023-06-09 19:47 UTC | status: completed | performance tuning of list endpoint \\u2014 1 events\", \"changes: RFC-70306 | config_push | api-gateway envoy-ratelimit.yaml | actor: a.iyer | 2023-06-09 21:50 UTC | status: completed | descriptors[0].rate_limit.requests_per_unit: 1000 -> 10; source commit 6f093f7 (branch perf-test-limits) \\u2014 1 events\", \"changes: RFC-70342 | config_push | api-gateway envoy-ratelimit.yaml | actor: f.rao | 2023-06-10 00:47 UTC | status: completed | revert RFC-70306: requests_per_unit 10 -> 1000 \\u2014 1 events\", \"changes: RFC-70346 | deployment | pricing-svc 11.10.0 -> 11.10.1 | actor: gitlab-ci | 2023-06-10 23:09 UTC | status: succeeded | minor bug fixes \\u2014 1 events\", \"change types: deployment \\u2014 2 events\", \"change types: config_push \\u2014 2 events\"]}",
+      "metadata": {
+        "scenario": "edge_ratelimit_0028",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "edge_ratelimit_0028-04",
+      "artifact_type": "change_records",
+      "subtype": "change_actors",
+      "source": "change_actors",
+      "content": "{\"description\": \"Accounts and automation identities that executed changes, with the hosts or targets they acted on.\", \"facts\": [\"actors: gitlab-ci \\u2014 2 events; targets: trips-api (1), pricing-svc (1)\", \"actors: a.iyer \\u2014 1 events; targets: envoy-edge-01 (1), envoy-edge-02 (1), envoy-edge-03 (1), envoy-edge-04 (1)\", \"actors: f.rao \\u2014 1 events; targets: envoy-edge-01 (1), envoy-edge-02 (1), envoy-edge-03 (1), envoy-edge-04 (1)\"]}",
+      "metadata": {
+        "scenario": "edge_ratelimit_0028",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "edge_ratelimit_0028-05",
+      "artifact_type": "infrastructure_events",
+      "subtype": "host_inventory",
+      "source": "host_inventory",
+      "content": "{\"description\": \"Host and node names seen in infrastructure events with their IP address, role and availability zone / rack.\", \"facts\": [\"hosts: envoy-edge-04 \\u2014 482 events; ip: 172.19.96.39; role: api-gateway (envoy); zone: rack M38\", \"hosts: envoy-edge-02 \\u2014 471 events; ip: 172.19.96.47; role: api-gateway (envoy); zone: rack M25\", \"hosts: envoy-edge-03 \\u2014 392 events; ip: 172.19.96.134; role: api-gateway (envoy); zone: rack M28\", \"hosts: envoy-edge-01 \\u2014 369 events; ip: 172.19.96.26; role: api-gateway (envoy); zone: rack M15\", \"hosts: payments-08 \\u2014 264 events; ip: 172.19.160.204; role: payments-svc host; zone: rack M38\", \"hosts: payments-02 \\u2014 232 events; ip: 172.19.160.161; role: payments-svc host; zone: rack M25\", \"hosts: payments-09 \\u2014 217 events; ip: 172.19.160.47; role: payments-svc host; zone: rack M38\"]}",
+      "metadata": {
+        "scenario": "edge_ratelimit_0028",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "edge_ratelimit_0028-06",
+      "artifact_type": "infrastructure_events",
+      "subtype": "platform_events",
+      "source": "platform_events",
+      "content": "{\"description\": \"Kubernetes events, cloud-provider health events and host system messages (kernel, hardware, daemons) with the objects or hosts they refer to.\", \"facts\": [\"system messages: envoy: lds: add/update listener 'ingress_https' (hot config reload) \\u2014 2 events; top objects: envoy-edge-01 (2)\", \"system messages: envoy: lds: add/update listener 'ingress_https' (hot config reload) \\u2014 2 events; top objects: envoy-edge-02 (2)\", \"system messages: envoy: lds: add/update listener 'ingress_https' (hot config reload) \\u2014 2 events; top objects: envoy-edge-03 (2)\", \"system messages: envoy: lds: add/update listener 'ingress_https' (hot config reload) \\u2014 2 events; top objects: envoy-edge-04 (2)\"]}",
+      "metadata": {
+        "scenario": "edge_ratelimit_0028",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "edge_ratelimit_0028-07",
+      "artifact_type": "monitoring_alerts",
+      "subtype": "alertmanager_alerts",
+      "source": "alertmanager_alerts",
+      "content": "{\"description\": \"Prometheus Alertmanager alerts: alert names with severity, critical-alert instances, alert names and services, and an hourly timeline of warning and critical alerts (UTC).\", \"facts\": [\"alert names: Watchdog (info) \\u2014 72 events; service: alertmanager; firing continuously\", \"alert names: EnvoyHighRateLimitedRequests (critical) \\u2014 18 events; service: api-gateway; first seen in hour 2023-06-09 22:00 UTC; last seen in hour 2023-06-10 00:00 UTC\", \"alert names: HighHTTP4xxRatio (warning) \\u2014 9 events; service: api-gateway; first seen in hour 2023-06-09 22:00 UTC; last seen in hour 2023-06-10 00:00 UTC\", \"alert names: SLOErrorBudgetBurnFast (critical) \\u2014 6 events; service: eta-svc; first seen in hour 2023-06-09 22:00 UTC; last seen in hour 2023-06-10 00:00 UTC\", \"alert names: KubeJobFailed (warning) \\u2014 2 events; service: batch; first seen in hour 2023-06-10 11:00 UTC; last seen in hour 2023-06-10 11:00 UTC\", \"critical alerts: 24 matching events\", \"critical alerts > critical instances: slo:eta-svc-availability \\u2014 6 events\", \"critical alerts > critical instances: envoy-edge-01:9901 \\u2014 5 events\", \"critical alerts > critical instances: envoy-edge-02:9901 \\u2014 5 events\", \"critical alerts > critical instances: envoy-edge-03:9901 \\u2014 4 events\", \"critical alerts > critical instances: envoy-edge-04:9901 \\u2014 4 events\", \"critical alerts > critical alert names: EnvoyHighRateLimitedRequests \\u2014 18 events\", \"critical alerts > critical alert names: SLOErrorBudgetBurnFast \\u2014 6 events\", \"critical alerts > critical services: api-gateway \\u2014 18 events\", \"critical alerts > critical services: eta-svc \\u2014 6 events\", \"alert timeline: 2023-06-09 22:00 UTC \\u2014 12 events\", \"alert timeline: 2023-06-09 23:00 UTC \\u2014 12 events\", \"alert timeline: 2023-06-10 00:00 UTC \\u2014 9 events\", \"alert timeline: 2023-06-10 11:00 UTC \\u2014 2 events\"]}",
+      "metadata": {
+        "scenario": "edge_ratelimit_0028",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "edge_ratelimit_0028-08",
+      "artifact_type": "resource_metrics",
+      "subtype": "metric_anomalies",
+      "source": "metric_anomalies",
+      "content": "{\"description\": \"Metric series that deviated from their 7-day baseline (hourly resolution): baseline, peak or trough value, anomaly onset and recovery (UTC).\", \"facts\": [\"metric anomalies: envoy_http_local_rate_limit_rate_limited (per second) on envoy-edge-01:9901 \\u2014 baseline 0/s; peak 387/s; onset 2023-06-09 22:00 UTC; recovered 2023-06-10 01:00 UTC\", \"metric anomalies: envoy_http_local_rate_limit_rate_limited (per second) on envoy-edge-02:9901 \\u2014 baseline 0/s; peak 324/s; onset 2023-06-09 22:00 UTC; recovered 2023-06-10 01:00 UTC\", \"metric anomalies: envoy_http_local_rate_limit_rate_limited (per second) on envoy-edge-03:9901 \\u2014 baseline 0/s; peak 246/s; onset 2023-06-09 22:00 UTC; recovered 2023-06-10 01:00 UTC\", \"metric anomalies: envoy_http_local_rate_limit_rate_limited (per second) on envoy-edge-04:9901 \\u2014 baseline 0/s; peak 135/s; onset 2023-06-09 22:00 UTC; recovered 2023-06-10 01:00 UTC\", \"metric anomalies: api-gateway 2xx responses (per second) on api-gateway \\u2014 baseline 2,316/s; trough 94/s; onset 2023-06-09 22:00 UTC; recovered 2023-06-10 01:00 UTC\"]}",
+      "metadata": {
+        "scenario": "edge_ratelimit_0028",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "edge_ratelimit_0028-09",
+      "artifact_type": "derived_findings",
+      "subtype": "derived_summary",
+      "source": "derived_summary",
+      "content": "{\"description\": \"Deterministic summary computed from the query results above (error ranking, instance-to-host join, alert timeline, change correlation, earliest metric anomaly).\", \"facts\": [\"Derived: service api-gateway ranks #1 by error volume (115076 events, 4 failing dependencies). Most-failed dependency: rider-app-bff (40687 errors).\", \"Derived: most-alerted critical instance slo:eta-svc-availability (6 critical alerts); no matching host-inventory entry.\", \"Derived: warning/critical alerts span 2023-06-09 22:00 UTC to 2023-06-10 11:00 UTC; earliest alert hour 2023-06-09 22:00 UTC (12 alerts).\", \"Derived: changes recorded from 6 hours before the earliest alert hour to its end: RFC-70268 (deployment, trips-api 11.17.7 -> 11.17.8, gitlab-ci, 2023-06-09 19:47 UTC); RFC-70306 (config_push, api-gateway envoy-ratelimit.yaml, a.iyer, 2023-06-09 21:50 UTC).\", \"Derived: earliest metric anomaly onset 2023-06-09 22:00 UTC (envoy_http_local_rate_limit_rate_limited (per second) on envoy-edge-01:9901).\"]}",
+      "metadata": {
+        "scenario": "edge_ratelimit_0028",
+        "source_kind": "derived_from_es_results",
+        "heuristic": true
+      }
+    },
+    {
+      "artifact_id": "edge_ratelimit_0028-10",
+      "artifact_type": "query_coverage",
+      "subtype": "evidence_gaps",
+      "source": "evidence_gaps",
+      "content": "{\"description\": \"Queries that returned nothing or failed; use these to state what is NOT established.\", \"facts\": [\"No matching results for: tls certificates / expired certificates. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / expiring within 7 days. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / self signed. (Absence in this query is not proof of absence elsewhere.)\"]}",
+      "metadata": {
+        "scenario": "edge_ratelimit_0028",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    }
+  ]
+}

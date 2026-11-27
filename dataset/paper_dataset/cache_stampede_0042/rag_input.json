@@ -1,0 +1,155 @@
+{
+  "metadata": {
+    "incident_id": "INC-20260808",
+    "scenario": "cache_stampede_0042",
+    "title": "Infrastructure reliability incident investigation",
+    "source": "synthetic/ops-incident-expansion (modeled on neu-nds2/llm-sec-incident-analysis)",
+    "query_window_start": "2026-08-08T00:00:00",
+    "query_window_end": "2026-08-10T23:59:59",
+    "evidence_types": [
+      "change_records",
+      "derived_findings",
+      "infrastructure_events",
+      "monitoring_alerts",
+      "query_coverage",
+      "resource_metrics",
+      "service_logs"
+    ],
+    "artifact_scope_note": "Evidence is aggregated query output (not raw log lines or metric samples); it contains no chat/communication records."
+  },
+  "incident_description": "Reliability incident investigation of a production environment. Evidence consists of Elasticsearch aggregation results over application and proxy logs, Kubernetes, cloud-provider and host system events, Prometheus Alertmanager alerts, change-management / CI-CD audit records and metric anomaly detection. No root cause, impact or trigger is stated; these must be established from the supplied artifacts. Environment context: Organization: Nimant Academy (online learning); Platform: on-premises data center DC-South, server range 10.171.0.0/16; Caching tier: self-managed Redis (cache-redis-02, maxmemory 8gb, allkeys-lru) in front of the quiz-engine PostgreSQL database quiz-db-01; Change management: production changes carry RFC- identifiers.",
+  "investigation_questions": [
+    "What is the hostname of the host or node where the failure originated?",
+    "What is the IP address of the host or node where the failure originated?",
+    "Which database host became overloaded as a consequence of the initial failure?",
+    "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+    "Did the failure stay isolated to one component or cascade across services? Answer 'isolated failure' or 'cascading failure'.",
+    "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+    "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+    "Which change is a red herring: recorded shortly before onset but unrelated to the failure? Give its identifier.",
+    "Which change restored normal service? Provide its change identifier."
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "cache_stampede_0042-01",
+      "artifact_type": "service_logs",
+      "subtype": "error_logs",
+      "source": "error_logs",
+      "content": "{\"description\": \"Application and proxy error logs: HTTP/gRPC status codes, failing requests (caller -> callee:port : operation), error messages and the services emitting them.\", \"facts\": [\"error events: 55905 matching events\", \"error events > status codes: 504 \\u2014 32260 events\", \"error events > status codes: 500 \\u2014 18036 events\", \"error events > status codes: 503 \\u2014 5462 events\", \"error events > status codes: 429 \\u2014 147 events\", \"failing requests: learner-web -> quiz-engine:8080 : GET /v1/quiz \\u2014 32260 events\", \"failing requests: quiz-engine -> quiz-db-01:5432 : SELECT (cache miss fallback) \\u2014 18036 events\", \"failing requests: progress-api -> quiz-engine:8080 : GET /v1/quiz/{id} \\u2014 5462 events\", \"failing requests: auth-svc -> auth-db:5432 : query \\u2014 147 events\", \"error messages: upstream quiz-engine: 504 Gateway Timeout \\u2014 32260 events\", \"error messages: pq: sorry, too many clients already \\u2014 18036 events\", \"error messages: quiz-engine: context deadline exceeded \\u2014 5462 events\", \"error messages: HTTP 429 Too Many Requests from upstream \\u2014 147 events\", \"emitting services: learner-web \\u2014 32260 events\", \"emitting services: quiz-engine \\u2014 18036 events\", \"emitting services: progress-api \\u2014 5462 events\", \"emitting services: auth-svc \\u2014 147 events\"]}",
+      "metadata": {
+        "scenario": "cache_stampede_0042",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "cache_stampede_0042-02",
+      "artifact_type": "service_logs",
+      "subtype": "error_volume_by_service",
+      "source": "error_volume_by_service",
+      "content": "{\"description\": \"Services ranked by number of error events, with each service's most-failed downstream dependencies.\", \"facts\": [\"services: learner-web \\u2014 32260 events; failing dependencies=1; top dependencies: quiz-engine (32260)\", \"services: quiz-engine \\u2014 18036 events; failing dependencies=1; top dependencies: quiz-db-01 (18036)\", \"services: progress-api \\u2014 5462 events; failing dependencies=1; top dependencies: quiz-engine (5462)\", \"services: auth-svc \\u2014 147 events; failing dependencies=1; top dependencies: auth-db (147)\"]}",
+      "metadata": {
+        "scenario": "cache_stampede_0042",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "cache_stampede_0042-03",
+      "artifact_type": "change_records",
+      "subtype": "change_log",
+      "source": "change_log",
+      "content": "{\"description\": \"Deployments, configuration pushes, infrastructure and automation runs from the change-management and CI/CD audit log: change ID, type, target, actor, time (UTC), status and recorded diff/summary.\", \"facts\": [\"changes: RFC-70448 | batch_job | quiz-engine cache warm-up / metadata backfill | actor: argo-workflows | 2026-08-08 10:11 UTC | status: completed | backfill wrote 19k new cache keys \\u2014 1 events\", \"changes: RFC-70458 | deployment | forum-svc 0.4.10 -> 0.4.11 | actor: ansible-deploy | 2026-08-08 13:26 UTC | status: Synced/Healthy | performance tuning of list endpoint \\u2014 1 events\", \"changes: RFC-70493 | config_push | cache-redis-02 redis.conf | actor: i.singh | 2026-08-08 18:31 UTC | status: completed | CONFIG SET maxmemory 8gb -> 16gb; CONFIG REWRITE \\u2014 1 events\", \"changes: RFC-70522 | deployment | enrolment-api 7.8.9 -> 7.9.0 | actor: ansible-deploy | 2026-08-09 04:24 UTC | status: completed | dependency bump \\u2014 1 events\", \"changes: RFC-70550 | deployment | auth-svc 3.27.3 -> 3.28.0 | actor: ansible-deploy | 2026-08-09 06:51 UTC | status: succeeded | logging improvements \\u2014 1 events\", \"change types: deployment \\u2014 3 events\", \"change types: batch_job \\u2014 1 events\", \"change types: config_push \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "cache_stampede_0042",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "cache_stampede_0042-04",
+      "artifact_type": "change_records",
+      "subtype": "change_actors",
+      "source": "change_actors",
+      "content": "{\"description\": \"Accounts and automation identities that executed changes, with the hosts or targets they acted on.\", \"facts\": [\"actors: ansible-deploy \\u2014 3 events; targets: forum-svc (1), auth-svc (1), enrolment-api (1)\", \"actors: argo-workflows \\u2014 1 events; targets: quiz-engine (1)\", \"actors: i.singh \\u2014 1 events; targets: cache-redis-02 (1)\"]}",
+      "metadata": {
+        "scenario": "cache_stampede_0042",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "cache_stampede_0042-05",
+      "artifact_type": "infrastructure_events",
+      "subtype": "host_inventory",
+      "source": "host_inventory",
+      "content": "{\"description\": \"Host and node names seen in infrastructure events with their IP address, role and availability zone / rack.\", \"facts\": [\"hosts: cache-redis-02 \\u2014 400 events; ip: 10.171.20.7; role: redis-cache; zone: rack C35\", \"hosts: enrolment-04 \\u2014 271 events; ip: 10.171.181.182; role: enrolment-api host; zone: rack C31\", \"hosts: enrolment-08 \\u2014 220 events; ip: 10.171.181.133; role: enrolment-api host; zone: rack C31\", \"hosts: quiz-db-01 \\u2014 133 events; ip: 10.171.161.58; role: postgres-primary; zone: rack C33\"]}",
+      "metadata": {
+        "scenario": "cache_stampede_0042",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "cache_stampede_0042-06",
+      "artifact_type": "infrastructure_events",
+      "subtype": "platform_events",
+      "source": "platform_events",
+      "content": "{\"description\": \"Kubernetes events, cloud-provider health events and host system messages (kernel, hardware, daemons) with the objects or hosts they refer to.\", \"facts\": [\"system messages: postgres: FATAL: sorry, too many clients already \\u2014 2918 events; top objects: quiz-db-01 (1)\"]}",
+      "metadata": {
+        "scenario": "cache_stampede_0042",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "cache_stampede_0042-07",
+      "artifact_type": "monitoring_alerts",
+      "subtype": "alertmanager_alerts",
+      "source": "alertmanager_alerts",
+      "content": "{\"description\": \"Prometheus Alertmanager alerts: alert names with severity, critical-alert instances, alert names and services, and an hourly timeline of warning and critical alerts (UTC).\", \"facts\": [\"alert names: Watchdog (info) \\u2014 72 events; service: alertmanager; firing continuously\", \"alert names: PostgresTooManyConnections (critical) \\u2014 10 events; service: postgres; first seen in hour 2026-08-08 16:00 UTC; last seen in hour 2026-08-08 18:00 UTC\", \"alert names: RedisCacheHitRatioLow (critical) \\u2014 8 events; service: redis; first seen in hour 2026-08-08 16:00 UTC; last seen in hour 2026-08-08 18:00 UTC\", \"alert names: RedisMemoryHigh (warning) \\u2014 8 events; service: redis; first seen in hour 2026-08-08 14:00 UTC; last seen in hour 2026-08-08 18:00 UTC\", \"alert names: LearnerWeb5xxHigh (critical) \\u2014 7 events; service: learner-web; first seen in hour 2026-08-08 17:00 UTC; last seen in hour 2026-08-08 18:00 UTC\", \"alert names: KubeJobFailed (warning) \\u2014 5 events; service: batch; first seen in hour 2026-08-08 15:00 UTC; last seen in hour 2026-08-08 17:00 UTC\", \"alert names: CPUThrottlingHigh (warning) \\u2014 3 events; service: enrolment-api; first seen in hour 2026-08-09 02:00 UTC; last seen in hour 2026-08-09 03:00 UTC\", \"alert names: QuizEngineErrorRateHigh (critical) \\u2014 3 events; service: quiz-engine; first seen in hour 2026-08-08 17:00 UTC; last seen in hour 2026-08-08 18:00 UTC\", \"critical alerts: 28 matching events\", \"critical alerts > critical instances: 10.171.161.58:9187 \\u2014 10 events\", \"critical alerts > critical instances: 10.171.20.7:9121 \\u2014 8 events\", \"critical alerts > critical instances: learner-web \\u2014 7 events\", \"critical alerts > critical instances: quiz-engine \\u2014 3 events\", \"critical alerts > critical alert names: PostgresTooManyConnections \\u2014 10 events\", \"critical alerts > critical alert names: RedisCacheHitRatioLow \\u2014 8 events\", \"critical alerts > critical alert names: LearnerWeb5xxHigh \\u2014 7 events\", \"critical alerts > critical alert names: QuizEngineErrorRateHigh \\u2014 3 events\", \"critical alerts > critical services: postgres \\u2014 10 events\", \"critical alerts > critical services: redis \\u2014 8 events\", \"critical alerts > critical services: learner-web \\u2014 7 events\", \"critical alerts > critical services: quiz-engine \\u2014 3 events\", \"alert timeline: 2026-08-08 14:00 UTC \\u2014 3 events\", \"alert timeline: 2026-08-08 15:00 UTC \\u2014 3 events\", \"alert timeline: 2026-08-08 16:00 UTC \\u2014 10 events\", \"alert timeline: 2026-08-08 17:00 UTC \\u2014 13 events\", \"alert timeline: 2026-08-08 18:00 UTC \\u2014 12 events\", \"alert timeline: 2026-08-09 02:00 UTC \\u2014 2 events\", \"alert timeline: 2026-08-09 03:00 UTC \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "cache_stampede_0042",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "cache_stampede_0042-08",
+      "artifact_type": "resource_metrics",
+      "subtype": "metric_anomalies",
+      "source": "metric_anomalies",
+      "content": "{\"description\": \"Metric series that deviated from their 7-day baseline (hourly resolution): baseline, peak or trough value, anomaly onset and recovery (UTC).\", \"facts\": [\"metric anomalies: redis_memory_used_bytes / redis_memory_max_bytes on cache-redis-02 \\u2014 baseline 72%; peak 100%; onset 2026-08-08 14:00 UTC; recovered 2026-08-08 19:00 UTC\", \"metric anomalies: redis_evicted_keys_total rate on cache-redis-02 \\u2014 baseline 0/s; peak 1,883/s; onset 2026-08-08 16:00 UTC; recovered 2026-08-08 19:00 UTC\", \"metric anomalies: redis keyspace hit ratio on cache-redis-02 \\u2014 baseline 96%; trough 18%; onset 2026-08-08 16:00 UTC; recovered 2026-08-08 19:00 UTC\", \"metric anomalies: node_cpu utilisation on quiz-db-01 \\u2014 baseline 24%; peak 100%; onset 2026-08-08 16:00 UTC; recovered 2026-08-08 19:00 UTC\"]}",
+      "metadata": {
+        "scenario": "cache_stampede_0042",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "cache_stampede_0042-09",
+      "artifact_type": "derived_findings",
+      "subtype": "derived_summary",
+      "source": "derived_summary",
+      "content": "{\"description\": \"Deterministic summary computed from the query results above (error ranking, instance-to-host join, alert timeline, change correlation, earliest metric anomaly).\", \"facts\": [\"Derived: service learner-web ranks #1 by error volume (32260 events, 1 failing dependencies). Most-failed dependency: quiz-engine (32260 errors).\", \"Derived: most-alerted critical instance 10.171.161.58:9187 (10 critical alerts) maps to hostname quiz-db-01; role postgres-primary; zone rack C33.\", \"Derived: warning/critical alerts span 2026-08-08 14:00 UTC to 2026-08-09 03:00 UTC; earliest alert hour 2026-08-08 14:00 UTC (3 alerts).\", \"Derived: changes recorded from 6 hours before the earliest alert hour to its end: RFC-70448 (batch_job, quiz-engine cache warm-up / metadata backfill, argo-workflows, 2026-08-08 10:11 UTC); RFC-70458 (deployment, forum-svc 0.4.10 -> 0.4.11, ansible-deploy, 2026-08-08 13:26 UTC).\", \"Derived: earliest metric anomaly onset 2026-08-08 14:00 UTC (redis_memory_used_bytes / redis_memory_max_bytes on cache-redis-02).\"]}",
+      "metadata": {
+        "scenario": "cache_stampede_0042",
+        "source_kind": "derived_from_es_results",
+        "heuristic": true
+      }
+    },
+    {
+      "artifact_id": "cache_stampede_0042-10",
+      "artifact_type": "query_coverage",
+      "subtype": "evidence_gaps",
+      "source": "evidence_gaps",
+      "content": "{\"description\": \"Queries that returned nothing or failed; use these to state what is NOT established.\", \"facts\": [\"No matching results for: tls certificates / expired certificates. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / expiring within 7 days. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / self signed. (Absence in this query is not proof of absence elsewhere.)\"]}",
+      "metadata": {
+        "scenario": "cache_stampede_0042",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    }
+  ]
+}

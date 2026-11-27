@@ -1,0 +1,127 @@
+{
+  "metadata": {
+    "incident_id": "INC-20210329",
+    "scenario": "apr21isc",
+    "title": "Network security incident investigation",
+    "source": "neu-nds2/llm-sec-incident-analysis",
+    "query_window_start": "2021-03-29T00:00:00",
+    "query_window_end": "2021-03-30T23:59:59",
+    "evidence_types": [
+      "authentication",
+      "derived_findings",
+      "ids_alerts",
+      "network_summary",
+      "query_coverage"
+    ],
+    "artifact_scope_note": "Evidence is aggregated query output (not raw packets); it contains no chat/communication records."
+  },
+  "incident_description": "Network security investigation of a monitored LAN. Evidence consists of Elasticsearch aggregation results over Zeek and Suricata logs (IDS alerts, Kerberos, HTTP downloads, TLS certificates, domains and external-destination activity). No root cause, impact or C2 attribution is stated; these must be established from the supplied artifacts. Network context: LAN segment range: 192.168.5.0/24 (192.168.5.0 through 192.168.5.255); Domain: clockwater.net; Domain Controller: 192.168.5.5 - Clockwater-DC; LAN segment gateway: 192.168.5.1; LAN segment broadcast address: 192.168.5.255.",
+  "investigation_questions": [
+    "What was the IP address of the infected Windows computer?",
+    "What was the host name of the infected Windows computer?",
+    "What is the Windows human user account name (not machine accounts ending in $) of the potentially infected machine in the LAN?",
+    "During what hour did the first signs of infection activity appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "What malware family do the IDS alerts identify?",
+    "What are the suspicious external IP addresses contacted, which might be involved in command-and-control (C2) communication?",
+    "What are the likely suspicious domains for initial infection or C2?",
+    "Were any suspicious certificates observed in the encrypted network traffic? If so, identify the domain or IP in the certificate."
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "apr21isc-01",
+      "artifact_type": "network_summary",
+      "subtype": "file_downloads",
+      "source": "file_downloads",
+      "content": "{\"description\": \"HTTP file downloads and file transfers: download domains/IPs, requests (client -> server:port : URI), file types and download sources.\", \"facts\": [\"download domains: onedrive.live.com — 1071 events\", \"download domains: store-images.s-microsoft.com — 12 events\", \"download domains: checkip.amazonaws.com — 7 events\", \"download domains: ts-ocsp.ws.symantec.com — 3 events\", \"download domains: veso2.xyz — 3 events\", \"download domains: ocsp.verisign.com — 2 events\", \"download domains: 217.12.218.46 — 1 events\", \"download domains: admin.yougleeindia.in — 1 events\", \"download domains: api.ip.sb — 1 events\", \"download domains: ctldl.windowsupdate.com — 1 events\", \"download domains: s.symcd.com — 1 events\", \"download domains: s2.symcb.com — 1 events\", \"download domains: sv.symcd.com — 1 events\", \"http requests: no_http_uri — 2126 events\", \"http requests: 192.168.5.125 -> 217.12.218.46:80 : /preload?manifest=wac — 1856 events\", \"http requests: 192.168.5.125 -> 217.12.218.46:80 : /sa — 143 events\", \"http requests: 192.168.5.125 -> 107.21.162.206:80 : / — 12 events\", \"http requests: 192.168.5.125 -> 34.193.115.2:80 : / — 4 events\", \"http requests: 192.168.5.125 -> 52.204.109.97:80 : / — 4 events\", \"http requests: 192.168.5.125 -> 3.224.94.38:80 : / — 3 events\", \"http requests: 192.168.5.125 -> 52.20.197.7:80 : / — 3 events\", \"http requests: 192.168.5.125 -> 172.67.75.172:80 : /ip — 2 events\", \"http requests: 192.168.5.125 -> 176.111.174.53:80 : /campo/r/r1 — 2 events\", \"file transfers: 1944 matching events\", \"file transfers > transfer details: file_transfer — 961 events\", \"file transfers > transfer details: 192.168.5.125 -> 104.21.74.174:80 : fuid: F9pkCk47eaobtnKKJ — 1 events\", \"file transfers > transfer details: 192.168.5.125 -> 104.21.74.174:80 : fuid: Fm7vSh3PCW5dN5oqZb — 1 events\", \"file transfers > transfer details: 192.168.5.125 -> 107.21.162.206:80 : fuid: FEp36W2cRZVgCa5hB6 — 1 events\", \"file transfers > transfer details: 192.168.5.125 -> 107.21.162.206:80 : fuid: FYscFL3F9zWamVdQkb — 1 events\", \"file transfers > transfer details: 192.168.5.125 -> 107.21.162.206:80 : fuid: FoWR1C3JdihoDp4RXf — 1 events\", \"file transfers > transfer details: 192.168.5.125 -> 13.107.42.23:443 : fuid: F6ZpeN2J0roTJeKwrf — 1 events\", \"file transfers > transfer details: 192.168.5.125 -> 13.107.42.23:443 : fuid: Fd7rhBiagE29O22Ta — 1 events\", \"file transfers > transfer details: 192.168.5.125 -> 13.107.42.23:443 : fuid: FeRbvb2Sh63zJEufub — 1 events\", \"file transfers > transfer details: 192.168.5.125 -> 168.62.200.169:443 : fuid: FDESeU16jOwEDIKEP3 — 1 events\", \"file types: other — 4174 events\", \"file types: exe — 5 events\", \"download sources: 192.168.5.125 — 4179 events\"]}",
+      "metadata": {
+        "scenario": "apr21isc",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "apr21isc-02",
+      "artifact_type": "authentication",
+      "subtype": "kerberos_clients",
+      "source": "kerberos_clients",
+      "content": "{\"description\": \"Kerberos client account names (user accounts) and the source IPs they authenticated from.\", \"facts\": [\"client accounts: laptop-x9naq2eu$ — 32 events; source ips: 192.168.5.125 (32)\", \"client accounts: wilmer.coughlin — 3 events; source ips: 192.168.5.125 (3)\"]}",
+      "metadata": {
+        "scenario": "apr21isc",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "apr21isc-03",
+      "artifact_type": "authentication",
+      "subtype": "kerberos_full_services",
+      "source": "kerberos_full_services",
+      "content": "{\"description\": \"Kerberos services requested (including host and machine account names) per source IP.\", \"facts\": [\"full services: krb_tcp — 35 events; source ips: 192.168.5.125 (35)\", \"full services: krbtgt/CLOCKWATER.NET — 24 events; source ips: 192.168.5.125 (24)\", \"full services: krbtgt/clockwater.net — 8 events; source ips: 192.168.5.125 (8)\", \"full services: HOST/Clockwater-DC.clockwater.net — 1 events; source ips: 192.168.5.125 (1)\", \"full services: cifs/Clockwater-DC.clockwater.net — 1 events; source ips: 192.168.5.125 (1)\", \"full services: ldap/Clockwater-DC.clockwater.net — 1 events; source ips: 192.168.5.125 (1)\"]}",
+      "metadata": {
+        "scenario": "apr21isc",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "apr21isc-04",
+      "artifact_type": "ids_alerts",
+      "subtype": "suricata_alerts",
+      "source": "suricata_alerts",
+      "content": "{\"description\": \"Suricata IDS alerts: signatures, high-severity alert destinations and sources, and an hourly alert timeline (UTC).\", \"facts\": [\"alert signatures: ET MALWARE Observed Malicious SSL Cert (BazaLoader CnC) — 1 events\", \"alert signatures: ET MALWARE Observed Malicious SSL Cert (Bazar Backdoor) — 1 events\", \"high severity alerts: 2 matching events\", \"high severity alerts > high severity  destinations: 192.168.5.125 — 2 events\", \"high severity alerts > high severity signatures: ET MALWARE Observed Malicious SSL Cert (BazaLoader CnC) — 1 events\", \"high severity alerts > high severity signatures: ET MALWARE Observed Malicious SSL Cert (Bazar Backdoor) — 1 events\", \"high severity alerts > high severity sources: 54.184.119.29 — 2 events\", \"alert timeline: 2021-03-29 22:00 UTC — 2 events\"]}",
+      "metadata": {
+        "scenario": "apr21isc",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "apr21isc-05",
+      "artifact_type": "network_summary",
+      "subtype": "suspicious_certificates",
+      "source": "suspicious_certificates",
+      "content": "{\"description\": \"TLS certificates that are self-signed, IP-based or short-lived.\", \"facts\": [\"self signed analysis: 2 matching events\", \"self signed analysis > self signed details: self_signed: CN=forenzik.kz,OU=KZ System,O=NN Fern,L=Astana,ST= — 2 events\", \"short validity certs: normal_validity — 2 events\"]}",
+      "metadata": {
+        "scenario": "apr21isc",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "apr21isc-06",
+      "artifact_type": "network_summary",
+      "subtype": "suspicious_domains",
+      "source": "suspicious_domains",
+      "content": "{\"description\": \"Unusual domains with their source and destination IPs, and direct-IP HTTP connections.\", \"facts\": [\"domains: gtmers.xyz — 9 events; top source ips: 192.168.5.125 (9); top destination ips: 8.209.100.246 (9)\", \"domains: fonts.gstatic.com — 4 events; top source ips: 192.168.5.125 (4); top destination ips: 142.250.138.94 (4)\", \"domains: img-prod-cms-rt-microsoft-com.akamaized.net — 1 events; top source ips: 192.168.5.125 (1); top destination ips: 23.47.52.180 (1)\"]}",
+      "metadata": {
+        "scenario": "apr21isc",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "apr21isc-07",
+      "artifact_type": "derived_findings",
+      "subtype": "derived_summary",
+      "source": "derived_summary",
+      "content": "{\"description\": \"Deterministic summary computed from the query results above (client ranking, IP-to-hostname/account join, alert timeline).\", \"facts\": [\"Derived: Suricata alerts span 2021-03-29 22:00 UTC to 2021-03-29 22:00 UTC; earliest alert hour 2021-03-29 22:00 UTC (2 alerts).\", \"Derived: destinations of high-severity alerts: 192.168.5.125 (2).\"]}",
+      "metadata": {
+        "scenario": "apr21isc",
+        "source_kind": "derived_from_es_results",
+        "heuristic": true
+      }
+    },
+    {
+      "artifact_id": "apr21isc-08",
+      "artifact_type": "query_coverage",
+      "subtype": "evidence_gaps",
+      "source": "evidence_gaps",
+      "content": "{\"description\": \"Queries that returned nothing or failed; use these to state what is NOT established.\", \"facts\": [\"No matching results for: high activity external dest / source clients. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: kerberos hostnames / hostnames. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: suspicious certificates / ip based certificates. (Absence in this query is not proof of absence elsewhere.)\"]}",
+      "metadata": {
+        "scenario": "apr21isc",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    }
+  ]
+}

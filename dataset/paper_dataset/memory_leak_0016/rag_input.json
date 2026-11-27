@@ -1,0 +1,155 @@
+{
+  "metadata": {
+    "incident_id": "INC-20250213",
+    "scenario": "memory_leak_0016",
+    "title": "Infrastructure reliability incident investigation",
+    "source": "synthetic/ops-incident-expansion (modeled on neu-nds2/llm-sec-incident-analysis)",
+    "query_window_start": "2025-02-13T00:00:00",
+    "query_window_end": "2025-02-15T23:59:59",
+    "evidence_types": [
+      "change_records",
+      "derived_findings",
+      "infrastructure_events",
+      "monitoring_alerts",
+      "query_coverage",
+      "resource_metrics",
+      "service_logs"
+    ],
+    "artifact_scope_note": "Evidence is aggregated query output (not raw log lines or metric samples); it contains no chat/communication records."
+  },
+  "incident_description": "Reliability incident investigation of a production environment. Evidence consists of Elasticsearch aggregation results over application and proxy logs, Kubernetes, cloud-provider and host system events, Prometheus Alertmanager alerts, change-management / CI-CD audit records and metric anomaly detection. No root cause, impact or trigger is stated; these must be established from the supplied artifacts. Environment context: Organization: Ardpath Education (online learning); Platform: AWS eu-west-1 (zones eu-west-1a/eu-west-1b/eu-west-1c); network range 10.23.0.0/16; Kubernetes cluster ardpat-prod-euwest (EKS); enrolment-api pods run with 2 GiB memory limits; deployments are canary releases with automated analysis; Change management: production changes carry CHG- identifiers.",
+  "investigation_questions": [
+    "Which service or component is the origin of the failure?",
+    "What change, deployment or automation run triggered the incident? Provide its change identifier.",
+    "Which account or automation identity executed the triggering change?",
+    "Which version of the service introduced the defect?",
+    "Which change occurred shortly before the first OOM kill but is unrelated? Provide its identifier.",
+    "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+    "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+    "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+    "Which change restored normal service? Provide its change identifier."
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "memory_leak_0016-01",
+      "artifact_type": "service_logs",
+      "subtype": "error_logs",
+      "source": "error_logs",
+      "content": "{\"description\": \"Application and proxy error logs: HTTP/gRPC status codes, failing requests (caller -> callee:port : operation), error messages and the services emitting them.\", \"facts\": [\"error events: 13487 matching events\", \"error events > status codes: 503 \\u2014 11882 events\", \"error events > status codes: 499 \\u2014 1496 events\", \"error events > status codes: 504 \\u2014 109 events\", \"failing requests: learner-web -> enrolment-api:8080 : GET /v1/enrolment \\u2014 9996 events\", \"failing requests: forum-svc -> enrolment-api:8080 : POST /v1/enrolment/batch \\u2014 1886 events\", \"failing requests: enrolment-api -> clients : in-flight requests \\u2014 1496 events\", \"failing requests: auth-svc -> auth-db:5432 : query \\u2014 109 events\", \"error messages: upstream enrolment-api: 503 no healthy upstream \\u2014 9996 events\", \"error messages: enrolment-api: 503 Service Unavailable \\u2014 1886 events\", \"error messages: context canceled (shutdown in progress) \\u2014 1496 events\", \"error messages: upstream request timeout \\u2014 109 events\", \"emitting services: learner-web \\u2014 9996 events\", \"emitting services: forum-svc \\u2014 1886 events\", \"emitting services: enrolment-api \\u2014 1496 events\", \"emitting services: auth-svc \\u2014 109 events\"]}",
+      "metadata": {
+        "scenario": "memory_leak_0016",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "memory_leak_0016-02",
+      "artifact_type": "service_logs",
+      "subtype": "error_volume_by_service",
+      "source": "error_volume_by_service",
+      "content": "{\"description\": \"Services ranked by number of error events, with each service's most-failed downstream dependencies.\", \"facts\": [\"services: learner-web \\u2014 9996 events; failing dependencies=1; top dependencies: enrolment-api (9996)\", \"services: forum-svc \\u2014 1886 events; failing dependencies=1; top dependencies: enrolment-api (1886)\", \"services: enrolment-api \\u2014 1496 events; failing dependencies=1; top dependencies: clients (1496)\", \"services: auth-svc \\u2014 109 events; failing dependencies=1; top dependencies: auth-db (109)\"]}",
+      "metadata": {
+        "scenario": "memory_leak_0016",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "memory_leak_0016-03",
+      "artifact_type": "change_records",
+      "subtype": "change_log",
+      "source": "change_log",
+      "content": "{\"description\": \"Deployments, configuration pushes, infrastructure and automation runs from the change-management and CI/CD audit log: change ID, type, target, actor, time (UTC), status and recorded diff/summary.\", \"facts\": [\"changes: CHG-58186 | deployment | course-api 14.6.5 -> 14.7.0 | actor: spinnaker | 2025-02-13 13:42 UTC | status: completed | dependency bump \\u2014 1 events\", \"changes: CHG-58204 | deployment | enrolment-api 11.2.3 -> 11.3.0 | actor: spinnaker | 2025-02-14 09:06 UTC | status: Healthy | canary 10% -> 50% -> 100% (analysis passed: error rate, p99 latency); new in-process pricing cache \\u2014 1 events\", \"changes: CHG-58239 | node_rotation | node pool AMI/image update | actor: karpenter | 2025-02-14 15:29 UTC | status: completed | node image drift replacement \\u2014 1 events\", \"changes: CHG-58259 | rollback | enrolment-api 11.3.0 -> 11.2.3 | actor: p.ali | 2025-02-14 19:18 UTC | status: Healthy | rollout undo \\u2014 1 events\", \"changes: CHG-58296 | deployment | auth-svc 12.25.5 -> 12.26.0 | actor: spinnaker | 2025-02-15 21:01 UTC | status: Synced/Healthy | performance tuning of list endpoint \\u2014 1 events\", \"change types: deployment \\u2014 3 events\", \"change types: node_rotation \\u2014 1 events\", \"change types: rollback \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "memory_leak_0016",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "memory_leak_0016-04",
+      "artifact_type": "change_records",
+      "subtype": "change_actors",
+      "source": "change_actors",
+      "content": "{\"description\": \"Accounts and automation identities that executed changes, with the hosts or targets they acted on.\", \"facts\": [\"actors: spinnaker \\u2014 3 events; targets: ardpat-prod-euwest/enrolment-api (1), ardpat-prod-euwest/course-api (1), ardpat-prod-euwest/auth-svc (1)\", \"actors: karpenter \\u2014 1 events; targets: ip-10-23-186-120 (1), ip-10-23-9-214 (1), ip-10-23-186-96 (1)\", \"actors: p.ali \\u2014 1 events; targets: ardpat-prod-euwest/enrolment-api (1)\"]}",
+      "metadata": {
+        "scenario": "memory_leak_0016",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "memory_leak_0016-05",
+      "artifact_type": "infrastructure_events",
+      "subtype": "host_inventory",
+      "source": "host_inventory",
+      "content": "{\"description\": \"Host and node names seen in infrastructure events with their IP address, role and availability zone / rack.\", \"facts\": [\"hosts: ip-10-23-9-18 \\u2014 168 events; ip: 10.23.9.18; role: k8s-worker; zone: eu-west-1a\", \"hosts: ip-10-23-9-214 \\u2014 157 events; ip: 10.23.9.214; role: k8s-worker; zone: eu-west-1a\", \"hosts: ip-10-23-186-120 \\u2014 104 events; ip: 10.23.186.120; role: k8s-worker; zone: eu-west-1b\", \"hosts: ip-10-23-186-96 \\u2014 103 events; ip: 10.23.186.96; role: k8s-worker; zone: eu-west-1b\", \"hosts: ip-10-23-186-73 \\u2014 81 events; ip: 10.23.186.73; role: k8s-worker; zone: eu-west-1b\"]}",
+      "metadata": {
+        "scenario": "memory_leak_0016",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "memory_leak_0016-06",
+      "artifact_type": "infrastructure_events",
+      "subtype": "platform_events",
+      "source": "platform_events",
+      "content": "{\"description\": \"Kubernetes events, cloud-provider health events and host system messages (kernel, hardware, daemons) with the objects or hosts they refer to.\", \"facts\": [\"event reasons: OOMKilling \\u2014 52 events; top objects: pod/enrolment-api-c3d1435a8-nt8sh (26)\", \"system messages: kernel: Memory cgroup out of memory: Killed process (enrolment-api) anon-rss:2096000kB \\u2014 52 events; top objects: ip-10-23-186-120 (1), ip-10-23-9-214 (1), ip-10-23-186-96 (1)\", \"event reasons: Pulled \\u2014 15 events; top objects: pod/course-api-a16884f30-qxdhs (2)\", \"event reasons: ScalingReplicaSet \\u2014 2 events; top objects: deployment/course-api (2)\", \"event reasons: Pulled \\u2014 26 events; top objects: pod/auth-svc-b74b09c7a-zx9pw (3)\", \"event reasons: ScalingReplicaSet \\u2014 6 events; top objects: deployment/auth-svc (1)\"]}",
+      "metadata": {
+        "scenario": "memory_leak_0016",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "memory_leak_0016-07",
+      "artifact_type": "monitoring_alerts",
+      "subtype": "alertmanager_alerts",
+      "source": "alertmanager_alerts",
+      "content": "{\"description\": \"Prometheus Alertmanager alerts: alert names with severity, critical-alert instances, alert names and services, and an hourly timeline of warning and critical alerts (UTC).\", \"facts\": [\"alert names: Watchdog (info) \\u2014 72 events; service: alertmanager; firing continuously\", \"alert names: ContainerMemoryNearLimit (warning) \\u2014 15 events; service: enrolment-api; first seen in hour 2025-02-14 14:00 UTC; last seen in hour 2025-02-14 19:00 UTC\", \"alert names: LearnerWebAvailabilityLow (critical) \\u2014 9 events; service: learner-web; first seen in hour 2025-02-14 16:00 UTC; last seen in hour 2025-02-14 19:00 UTC\", \"alert names: KubePodCrashLooping (critical) \\u2014 8 events; service: enrolment-api; first seen in hour 2025-02-14 16:00 UTC; last seen in hour 2025-02-14 19:00 UTC\", \"alert names: TargetDown (warning) \\u2014 3 events; service: quiz-engine; first seen in hour 2025-02-14 05:00 UTC; last seen in hour 2025-02-14 06:00 UTC\", \"alert names: KubeJobFailed (warning) \\u2014 1 events; service: batch; first seen in hour 2025-02-15 05:00 UTC; last seen in hour 2025-02-15 05:00 UTC\", \"critical alerts: 17 matching events\", \"critical alerts > critical instances: slo:learner-web-availability \\u2014 9 events\", \"critical alerts > critical instances: enrolment-api \\u2014 8 events\", \"critical alerts > critical alert names: LearnerWebAvailabilityLow \\u2014 9 events\", \"critical alerts > critical alert names: KubePodCrashLooping \\u2014 8 events\", \"critical alerts > critical services: learner-web \\u2014 9 events\", \"critical alerts > critical services: enrolment-api \\u2014 8 events\", \"alert timeline: 2025-02-14 05:00 UTC \\u2014 2 events\", \"alert timeline: 2025-02-14 06:00 UTC \\u2014 1 events\", \"alert timeline: 2025-02-14 14:00 UTC \\u2014 3 events\", \"alert timeline: 2025-02-14 15:00 UTC \\u2014 3 events\", \"alert timeline: 2025-02-14 16:00 UTC \\u2014 4 events\", \"alert timeline: 2025-02-14 17:00 UTC \\u2014 9 events\", \"alert timeline: 2025-02-14 18:00 UTC \\u2014 8 events\", \"alert timeline: 2025-02-14 19:00 UTC \\u2014 5 events\", \"alert timeline: 2025-02-15 05:00 UTC \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "memory_leak_0016",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "memory_leak_0016-08",
+      "artifact_type": "resource_metrics",
+      "subtype": "metric_anomalies",
+      "source": "metric_anomalies",
+      "content": "{\"description\": \"Metric series that deviated from their 7-day baseline (hourly resolution): baseline, peak or trough value, anomaly onset and recovery (UTC).\", \"facts\": [\"metric anomalies: container memory working set (avg per enrolment-api pod) on enrolment-api \\u2014 baseline 1.2 GiB (flat); peak 2.0 GiB (limit); onset 2025-02-14 09:00 UTC; recovered 2025-02-14 20:00 UTC\", \"metric anomalies: container restarts per hour on enrolment-api \\u2014 baseline 0/h; peak 18/h; onset 2025-02-14 16:00 UTC; recovered 2025-02-14 20:00 UTC\"]}",
+      "metadata": {
+        "scenario": "memory_leak_0016",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "memory_leak_0016-09",
+      "artifact_type": "derived_findings",
+      "subtype": "derived_summary",
+      "source": "derived_summary",
+      "content": "{\"description\": \"Deterministic summary computed from the query results above (error ranking, instance-to-host join, alert timeline, change correlation, earliest metric anomaly).\", \"facts\": [\"Derived: service learner-web ranks #1 by error volume (9996 events, 1 failing dependencies). Most-failed dependency: enrolment-api (9996 errors).\", \"Derived: most-alerted critical instance slo:learner-web-availability (9 critical alerts); no matching host-inventory entry.\", \"Derived: warning/critical alerts span 2025-02-14 05:00 UTC to 2025-02-15 05:00 UTC; earliest alert hour 2025-02-14 05:00 UTC (2 alerts).\", \"Derived: no changes recorded from 6 hours before the earliest alert hour to its end.\", \"Derived: earliest metric anomaly onset 2025-02-14 09:00 UTC (container memory working set (avg per enrolment-api pod) on enrolment-api).\"]}",
+      "metadata": {
+        "scenario": "memory_leak_0016",
+        "source_kind": "derived_from_es_results",
+        "heuristic": true
+      }
+    },
+    {
+      "artifact_id": "memory_leak_0016-10",
+      "artifact_type": "query_coverage",
+      "subtype": "evidence_gaps",
+      "source": "evidence_gaps",
+      "content": "{\"description\": \"Queries that returned nothing or failed; use these to state what is NOT established.\", \"facts\": [\"No matching results for: tls certificates / expired certificates. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / expiring within 7 days. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / self signed. (Absence in this query is not proof of absence elsewhere.)\"]}",
+      "metadata": {
+        "scenario": "memory_leak_0016",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    }
+  ]
+}

@@ -1,0 +1,151 @@
+{
+  "metadata": {
+    "incident_id": "INC-20230203",
+    "scenario": "qakbot",
+    "title": "Network security incident investigation",
+    "source": "neu-nds2/llm-sec-incident-analysis",
+    "query_window_start": "2023-02-03T00:00:00",
+    "query_window_end": "2023-02-04T23:59:59",
+    "evidence_types": [
+      "authentication",
+      "derived_findings",
+      "ids_alerts",
+      "network_summary",
+      "query_coverage"
+    ],
+    "artifact_scope_note": "Evidence is aggregated query output (not raw packets); it contains no chat/communication records."
+  },
+  "incident_description": "Network security investigation of a monitored LAN. Evidence consists of Elasticsearch aggregation results over Zeek and Suricata logs (IDS alerts, Kerberos, HTTP downloads, TLS certificates, domains and external-destination activity). No root cause, impact or C2 attribution is stated; these must be established from the supplied artifacts. Network context: LAN segment range: 10.0.0.0/24 (10.0.0.0 through 10.0.0.255); Domain: work4us.org; Domain Controller IP address: 10.0.0.6; Domain Controller host name: WORK4US-DC; LAN segment gateway: 10.0.0.1; LAN segment broadcast address: 10.0.0.255.",
+  "investigation_questions": [
+    "What is the IP address of the potentially infected internal host in the LAN?",
+    "What is the hostname of the potentially infected machine in the LAN?",
+    "What is the Windows human user account name (not machine accounts ending in $) of the potentially infected machine in the LAN?",
+    "During what hour did the first signs of infection activity appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "What is the URL used for the initial malware download?",
+    "What are the suspicious external IP addresses contacted, which might be involved in command-and-control (C2) communication?",
+    "What specific spoofed domain was used in a self-signed certificate during this infection?",
+    "According to the connection volume statistics, what single external IP address received the most connections from the infected hosts? Is it a C2 server or a legitimate service?"
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "qakbot-01",
+      "artifact_type": "network_summary",
+      "subtype": "file_downloads",
+      "source": "file_downloads",
+      "content": "{\"description\": \"HTTP file downloads and file transfers: download domains/IPs, requests (client -> server:port : URI), file types and download sources.\", \"facts\": [\"download domains: 128.254.207.55 — 1 events\", \"download domains: cacerts.digicert.com — 1 events\", \"http requests: no_http_uri — 808 events\", \"http requests: 10.0.0.149 -> 128.254.207.55:80 : /86607.dat — 2 events\", \"http requests: 10.0.0.149 -> 192.229.211.108:80 : /DigiCertTLSRSASHA2562020CA1-1.crt — 1 events\", \"file transfers: 39 matching events\", \"file transfers > transfer details: file_transfer — 2 events\", \"file transfers > transfer details: 10.0.0.149 -> 102.156.32.143:443 : fuid: FqPnVU3bQggnrL7tXg — 1 events\", \"file transfers > transfer details: 10.0.0.149 -> 104.208.16.89:443 : fuid: FlI50x23MLhHuAO9o1 — 1 events\", \"file transfers > transfer details: 10.0.0.149 -> 128.254.207.55:80 : fuid: FcP6lP1ihIumwPgiFb — 1 events\", \"file transfers > transfer details: 10.0.0.149 -> 13.107.237.57:443 : fuid: Ft1sAb28nmiasL6AUd — 1 events\", \"file transfers > transfer details: 10.0.0.149 -> 13.107.42.16:443 : fuid: Ffj4qy4nEei2wfVkdc — 1 events\", \"file transfers > transfer details: 10.0.0.149 -> 13.69.239.74:443 : fuid: F5MUCA4iGj72ktLt41 — 1 events\", \"file transfers > transfer details: 10.0.0.149 -> 13.69.239.74:443 : fuid: FcgRev3BHKpJB9APMl — 1 events\", \"file transfers > transfer details: 10.0.0.149 -> 13.89.179.10:443 : fuid: FdA7rK1PfXltNfOGfd — 1 events\", \"file transfers > transfer details: 10.0.0.149 -> 13.91.16.69:443 : fuid: FuEOMu4Y92Lo1NZIV9 — 1 events\", \"file types: other — 810 events\", \"file types: exe — 1 events\", \"download sources: 10.0.0.149 — 811 events\"]}",
+      "metadata": {
+        "scenario": "qakbot",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "qakbot-02",
+      "artifact_type": "network_summary",
+      "subtype": "high_activity_external_dest",
+      "source": "high_activity_external_dest",
+      "content": "{\"description\": \"Internal clients ranked by number of connections to external destinations, with each client's most-contacted destinations.\", \"facts\": [\"source clients: 10.0.0.149 — 811 events; external destinations=98; top destinations: 208.187.122.74 (237), 13.107.42.14 (28), 209.131.162.45 (24), 204.79.197.239 (19), 72.163.4.185 (18); 485 further events in other values\"]}",
+      "metadata": {
+        "scenario": "qakbot",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "qakbot-03",
+      "artifact_type": "authentication",
+      "subtype": "kerberos_clients",
+      "source": "kerberos_clients",
+      "content": "{\"description\": \"Kerberos client account names (user accounts) and the source IPs they authenticated from.\", \"facts\": [\"client accounts: DESKTOP-E7FHJS4$ — 10 events; source ips: 10.0.0.149 (10)\", \"client accounts: damon.bauer — 7 events; source ips: 10.0.0.149 (7)\", \"client accounts: desktop-e7fhjs4$ — 6 events; source ips: 10.0.0.149 (6)\"]}",
+      "metadata": {
+        "scenario": "qakbot",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "qakbot-04",
+      "artifact_type": "authentication",
+      "subtype": "kerberos_full_services",
+      "source": "kerberos_full_services",
+      "content": "{\"description\": \"Kerberos services requested (including host and machine account names) per source IP.\", \"facts\": [\"full services: krb_tcp — 23 events; source ips: 10.0.0.149 (23)\", \"full services: krbtgt/WORK4US.ORG — 10 events; source ips: 10.0.0.149 (10)\", \"full services: cifs/WORK4US-DC.work4us.org — 2 events; source ips: 10.0.0.149 (2)\", \"full services: krbtgt/work4us.org — 2 events; source ips: 10.0.0.149 (2)\", \"full services: ldap/work4us-dc.work4us.org/work4us.org — 2 events; source ips: 10.0.0.149 (2)\", \"full services: DESKTOP-E7FHJS4$ — 1 events; source ips: 10.0.0.149 (1)\", \"full services: LDAP/WORK4US-DC.work4us.org/work4us.org — 1 events; source ips: 10.0.0.149 (1)\", \"full services: cifs/WORK4US-DC — 1 events; source ips: 10.0.0.149 (1)\", \"full services: cifs/WORK4US-DC.work4us.org/work4us.org — 1 events; source ips: 10.0.0.149 (1)\", \"full services: desktop-e7fhjs4$ — 1 events; source ips: 10.0.0.149 (1)\", \"full services: host/desktop-e7fhjs4.work4us.org — 1 events; source ips: 10.0.0.149 (1)\", \"full services: krbtgt/WORK4US — 1 events; source ips: 10.0.0.149 (1)\"]}",
+      "metadata": {
+        "scenario": "qakbot",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "qakbot-05",
+      "artifact_type": "authentication",
+      "subtype": "kerberos_hostnames",
+      "source": "kerberos_hostnames",
+      "content": "{\"description\": \"Host names seen in Kerberos traffic with their source IPs.\", \"facts\": [\"hostnames: desktop-e7fhjs4 — 1 events; source ips: 10.0.0.149 (1)\"]}",
+      "metadata": {
+        "scenario": "qakbot",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "qakbot-06",
+      "artifact_type": "ids_alerts",
+      "subtype": "suricata_alerts",
+      "source": "suricata_alerts",
+      "content": "{\"description\": \"Suricata IDS alerts: signatures, high-severity alert destinations and sources, and an hourly alert timeline (UTC).\", \"facts\": [\"alert signatures: ET JA3 Hash - [Abuse.ch] Possible Dridex — 87 events\", \"alert signatures: ET INFO SMB2 NT Create AndX Request For a DLL File - Possible Lateral Movement — 9 events\", \"alert signatures: GPL NETBIOS SMB IPC$ unicode share access — 7 events\", \"alert signatures: ET INFO SMB Executable File Transfer — 6 events\", \"alert signatures: ET MALWARE BackConnect CnC Activity (Set Sleep Timer) — 5 events\", \"alert signatures: ET HUNTING SUSPICIOUS Dotted Quad Host MZ Response — 1 events\", \"alert signatures: ET HUNTING curl User-Agent to Dotted Quad — 1 events\", \"alert signatures: ET INFO DNS Query for Suspicious .ml Domain — 1 events\", \"alert signatures: ET INFO EXE - Served Attached HTTP — 1 events\", \"alert signatures: ET INFO EXE IsDebuggerPresent (Used in Malware Anti-Debugging) — 1 events\", \"alert signatures: ET INFO NTLM Session Setup Request - Auth — 1 events\", \"alert signatures: ET INFO NTLM Session Setup Request - Negotiate — 1 events\", \"alert signatures: ET INFO NTLMv1 Session Setup Response - Challenge — 1 events\", \"alert signatures: ET INFO Observed DNS Query to .biz TLD — 1 events\", \"alert signatures: ET INFO PE EXE or DLL Windows file download HTTP — 1 events\", \"alert signatures: ET INFO Suspicious Domain (*.ml) in TLS SNI — 1 events\", \"alert signatures: ET MALWARE BackConnect CnC Activity (Start VNC) M1 — 1 events\", \"alert signatures: ET MALWARE W32.DarkVNC Variant Checkin — 1 events\", \"alert signatures: ET RPC DCERPC SVCCTL - Remote Service Control Manager Access — 1 events\", \"high severity alerts: 27 matching events\", \"high severity alerts > high severity  destinations: 10.0.0.6 — 17 events\", \"high severity alerts > high severity  destinations: 10.0.0.149 — 8 events\", \"high severity alerts > high severity  destinations: 78.31.67.7 — 1 events\", \"high severity alerts > high severity  destinations: 128.254.207.55 — 1 events\", \"high severity alerts > high severity signatures: ET INFO SMB2 NT Create AndX Request For a DLL File - Possible Lateral Movement — 9 events\", \"high severity alerts > high severity signatures: ET INFO SMB Executable File Transfer — 6 events\", \"high severity alerts > high severity signatures: ET MALWARE BackConnect CnC Activity (Set Sleep Timer) — 5 events\", \"high severity alerts > high severity signatures: ET HUNTING SUSPICIOUS Dotted Quad Host MZ Response — 1 events\", \"high severity alerts > high severity signatures: ET HUNTING curl User-Agent to Dotted Quad — 1 events\", \"high severity alerts > high severity signatures: ET INFO Observed DNS Query to .biz TLD — 1 events\", \"high severity alerts > high severity signatures: ET INFO PE EXE or DLL Windows file download HTTP — 1 events\", \"high severity alerts > high severity signatures: ET MALWARE BackConnect CnC Activity (Start VNC) M1 — 1 events\", \"high severity alerts > high severity signatures: ET MALWARE W32.DarkVNC Variant Checkin — 1 events\", \"high severity alerts > high severity signatures: ET RPC DCERPC SVCCTL - Remote Service Control Manager Access — 1 events\", \"high severity alerts > high severity sources: 10.0.0.149 — 19 events\", \"high severity alerts > high severity sources: 78.31.67.7 — 6 events\", \"high severity alerts > high severity sources: 128.254.207.55 — 2 events\", \"alert timeline: 2023-02-03 17:00 UTC — 38 events\", \"alert timeline: 2023-02-03 18:00 UTC — 23 events\", \"alert timeline: 2023-02-03 19:00 UTC — 67 events\"]}",
+      "metadata": {
+        "scenario": "qakbot",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "qakbot-07",
+      "artifact_type": "network_summary",
+      "subtype": "suspicious_certificates",
+      "source": "suspicious_certificates",
+      "content": "{\"description\": \"TLS certificates that are self-signed, IP-based or short-lived.\", \"facts\": [\"self signed analysis: 1 matching events\", \"self signed analysis > self signed details: self_signed: CN=vipsauna.com,O=vipsauna.com,L=Los Angeles,ST=CA — 1 events\", \"short validity certs: normal_validity — 1 events\", \"short validity certs: short_validity_84d: CN=*.google.com — 1 events\", \"short validity certs: short_validity_84d: CN=www.google.com — 1 events\"]}",
+      "metadata": {
+        "scenario": "qakbot",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "qakbot-08",
+      "artifact_type": "network_summary",
+      "subtype": "suspicious_domains",
+      "source": "suspicious_domains",
+      "content": "{\"description\": \"Unusual domains with their source and destination IPs, and direct-IP HTTP connections.\", \"facts\": [\"domains: cisco.com — 9 events; top source ips: 10.0.0.149 (9); top destination ips: 72.163.4.185 (9)\", \"domains: www.cisco.com — 9 events; top source ips: 10.0.0.149 (9); top destination ips: 23.64.146.226 (4), 96.6.184.69 (3), 184.51.39.62 (2)\", \"domains: verisign.com — 8 events; top source ips: 10.0.0.149 (8); top destination ips: 209.131.162.45 (8)\", \"domains: www.verisign.com — 8 events; top source ips: 10.0.0.149 (8); top destination ips: 69.58.187.40 (4), 209.131.162.45 (4)\", \"domains: oracle.com — 6 events; top source ips: 10.0.0.149 (6); top destination ips: 138.1.33.162 (6)\", \"domains: www.oracle.com — 6 events; top source ips: 10.0.0.149 (6); top destination ips: 104.93.55.25 (3), 72.247.204.96 (2), 23.2.51.218 (1)\", \"domains: irs.gov — 5 events; top source ips: 10.0.0.149 (5); top destination ips: 152.216.7.110 (5)\", \"domains: broadcom.com — 4 events; top source ips: 10.0.0.149 (4); top destination ips: 52.13.171.212 (4)\", \"domains: www.broadcom.com — 4 events; top source ips: 10.0.0.149 (4); top destination ips: 172.64.155.106 (4)\", \"domains: www.irs.gov — 4 events; top source ips: 10.0.0.149 (4); top destination ips: 23.214.54.85 (3), 23.210.67.195 (1)\", \"domains: ferlintiozzo.com — 2 events; top source ips: 10.0.0.149 (2); top destination ips: 185.2.4.16 (2)\", \"domains: toshak.com — 2 events; top source ips: 10.0.0.149 (2); top destination ips: 88.135.68.140 (2)\", \"domains: www.xfinity.com — 2 events; top source ips: 10.0.0.149 (2); top destination ips: 184.86.169.24 (2)\", \"domains: xfinity.com — 2 events; top source ips: 10.0.0.149 (2); top destination ips: 68.87.41.40 (2)\", \"domains: afdxtest.z01.azurefd.net — 1 events; top source ips: 10.0.0.149 (1); top destination ips: 13.107.237.57 (1)\", \"domains: www.openssl.org — 1 events; top source ips: 10.0.0.149 (1); top destination ips: 184.28.39.150 (1)\"]}",
+      "metadata": {
+        "scenario": "qakbot",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "qakbot-09",
+      "artifact_type": "derived_findings",
+      "subtype": "derived_summary",
+      "source": "derived_summary",
+      "content": "{\"description\": \"Deterministic summary computed from the query results above (client ranking, IP-to-hostname/account join, alert timeline).\", \"facts\": [\"Derived: internal client 10.0.0.149 ranks #1 by external connections (811 events, 98 distinct external destinations). Most-contacted external IP: 208.187.122.74 (237 connections).\", \"Derived: Kerberos identity of 10.0.0.149: hostname(s) desktop-e7fhjs4; human user account(s) damon.bauer.\", \"Derived: Suricata alerts span 2023-02-03 17:00 UTC to 2023-02-03 19:00 UTC; earliest alert hour 2023-02-03 17:00 UTC (38 alerts).\", \"Derived: destinations of high-severity alerts: 10.0.0.6 (17), 10.0.0.149 (8), 78.31.67.7 (1), 128.254.207.55 (1).\"]}",
+      "metadata": {
+        "scenario": "qakbot",
+        "source_kind": "derived_from_es_results",
+        "heuristic": true
+      }
+    },
+    {
+      "artifact_id": "qakbot-10",
+      "artifact_type": "query_coverage",
+      "subtype": "evidence_gaps",
+      "source": "evidence_gaps",
+      "content": "{\"description\": \"Queries that returned nothing or failed; use these to state what is NOT established.\", \"facts\": [\"No matching results for: suspicious certificates / ip based certificates. (Absence in this query is not proof of absence elsewhere.)\"]}",
+      "metadata": {
+        "scenario": "qakbot",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    }
+  ]
+}

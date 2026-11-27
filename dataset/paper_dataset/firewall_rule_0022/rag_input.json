@@ -1,0 +1,155 @@
+{
+  "metadata": {
+    "incident_id": "INC-20230208",
+    "scenario": "firewall_rule_0022",
+    "title": "Infrastructure reliability incident investigation",
+    "source": "synthetic/ops-incident-expansion (modeled on neu-nds2/llm-sec-incident-analysis)",
+    "query_window_start": "2023-02-08T00:00:00",
+    "query_window_end": "2023-02-10T23:59:59",
+    "evidence_types": [
+      "change_records",
+      "derived_findings",
+      "infrastructure_events",
+      "monitoring_alerts",
+      "query_coverage",
+      "resource_metrics",
+      "service_logs"
+    ],
+    "artifact_scope_note": "Evidence is aggregated query output (not raw log lines or metric samples); it contains no chat/communication records."
+  },
+  "incident_description": "Reliability incident investigation of a production environment. Evidence consists of Elasticsearch aggregation results over application and proxy logs, Kubernetes, cloud-provider and host system events, Prometheus Alertmanager alerts, change-management / CI-CD audit records and metric anomaly detection. No root cause, impact or trigger is stated; these must be established from the supplied artifacts. Environment context: Organization: Haldline Media (news and media publishing); Platform: Microsoft Azure northeurope (zones northeurope-1/northeurope-2/northeurope-3); network range 10.69.0.0/16; Database: mysql server comment-db-01 reachable from the application network only through NSG comment-db-01-nsg rule Allow-App-3306; Change management: production changes carry CR- identifiers.",
+  "investigation_questions": [
+    "What change, deployment or automation run triggered the incident? Provide its change identifier.",
+    "Which account or automation identity executed the triggering change?",
+    "Which database host became unreachable?",
+    "Which network control object was modified?",
+    "Which port was blocked by the change?",
+    "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+    "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+    "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+    "Which change restored normal service? Provide its change identifier."
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "firewall_rule_0022-01",
+      "artifact_type": "service_logs",
+      "subtype": "error_logs",
+      "source": "error_logs",
+      "content": "{\"description\": \"Application and proxy error logs: HTTP/gRPC status codes, failing requests (caller -> callee:port : operation), error messages and the services emitting them.\", \"facts\": [\"error events: 75443 matching events\", \"error events > status codes: 503 \\u2014 46357 events\", \"error events > status codes: n/a (connect timeout) \\u2014 28985 events\", \"error events > status codes: 499 \\u2014 101 events\", \"failing requests: web-frontend -> comment-svc:8080 : GET /v1/comment \\u2014 46357 events\", \"failing requests: comment-svc -> comment-db-01:3306 : connect \\u2014 28985 events\", \"failing requests: content-api -> content-db:5432 : query \\u2014 101 events\", \"error messages: comment-svc: 503 Service Unavailable \\u2014 46357 events\", \"error messages: dial tcp 10.69.11.100:3306: i/o timeout \\u2014 28985 events\", \"error messages: context canceled \\u2014 101 events\", \"emitting services: web-frontend \\u2014 46357 events\", \"emitting services: comment-svc \\u2014 28985 events\", \"emitting services: content-api \\u2014 101 events\"]}",
+      "metadata": {
+        "scenario": "firewall_rule_0022",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "firewall_rule_0022-02",
+      "artifact_type": "service_logs",
+      "subtype": "error_volume_by_service",
+      "source": "error_volume_by_service",
+      "content": "{\"description\": \"Services ranked by number of error events, with each service's most-failed downstream dependencies.\", \"facts\": [\"services: web-frontend \\u2014 46357 events; failing dependencies=1; top dependencies: comment-svc (46357)\", \"services: comment-svc \\u2014 28985 events; failing dependencies=1; top dependencies: comment-db-01 (28985)\", \"services: content-api \\u2014 101 events; failing dependencies=1; top dependencies: content-db (101)\"]}",
+      "metadata": {
+        "scenario": "firewall_rule_0022",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "firewall_rule_0022-03",
+      "artifact_type": "change_records",
+      "subtype": "change_log",
+      "source": "change_log",
+      "content": "{\"description\": \"Deployments, configuration pushes, infrastructure and automation runs from the change-management and CI/CD audit log: change ID, type, target, actor, time (UTC), status and recorded diff/summary.\", \"facts\": [\"changes: CR-61851 | deployment | image-resizer 7.12.0 -> 7.12.1 | actor: github-actions | 2023-02-08 21:43 UTC | status: Synced/Healthy | minor bug fixes \\u2014 1 events\", \"changes: CR-61861 | network_change | NSG comment-db-01-nsg rule Allow-App-3306 | actor: e.rao | 2023-02-08 23:00 UTC | status: completed | cleanup of unused rules: removed ingress tcp/3306 from 10.69.0.0/16 \\u2014 1 events\", \"changes: CR-61887 | network_change | NSG comment-db-01-nsg rule Allow-App-3306 | actor: i.okafor | 2023-02-09 00:25 UTC | status: completed | restore ingress tcp/3306 from 10.69.0.0/16 \\u2014 1 events\", \"changes: CR-61917 | deployment | media-api 13.27.5 -> 13.27.6 | actor: github-actions | 2023-02-09 18:09 UTC | status: Synced/Healthy | dependency bump \\u2014 1 events\", \"changes: CR-61944 | deployment | content-api 12.2.0 -> 12.2.1 | actor: github-actions | 2023-02-10 01:01 UTC | status: completed | logging improvements \\u2014 1 events\", \"change types: deployment \\u2014 3 events\", \"change types: network_change \\u2014 2 events\"]}",
+      "metadata": {
+        "scenario": "firewall_rule_0022",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "firewall_rule_0022-04",
+      "artifact_type": "change_records",
+      "subtype": "change_actors",
+      "source": "change_actors",
+      "content": "{\"description\": \"Accounts and automation identities that executed changes, with the hosts or targets they acted on.\", \"facts\": [\"actors: github-actions \\u2014 3 events; targets: image-resizer (1), content-api (1), media-api (1)\", \"actors: e.rao \\u2014 1 events; targets: comment-db-01 (1)\", \"actors: i.okafor \\u2014 1 events; targets: comment-db-01 (1)\"]}",
+      "metadata": {
+        "scenario": "firewall_rule_0022",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "firewall_rule_0022-05",
+      "artifact_type": "infrastructure_events",
+      "subtype": "host_inventory",
+      "source": "host_inventory",
+      "content": "{\"description\": \"Host and node names seen in infrastructure events with their IP address, role and availability zone / rack.\", \"facts\": [\"hosts: media-09 \\u2014 256 events; ip: 10.69.178.35; role: media-api host; zone: northeurope-2\", \"hosts: comment-db-01 \\u2014 103 events; ip: 10.69.11.100; role: mysql-primary; zone: northeurope-2\", \"hosts: media-01 \\u2014 28 events; ip: 10.69.178.120; role: media-api host; zone: northeurope-2\"]}",
+      "metadata": {
+        "scenario": "firewall_rule_0022",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "firewall_rule_0022-06",
+      "artifact_type": "infrastructure_events",
+      "subtype": "platform_events",
+      "source": "platform_events",
+      "content": "{\"description\": \"Kubernetes events, cloud-provider health events and host system messages (kernel, hardware, daemons) with the objects or hosts they refer to.\", \"facts\": [\"flow logs: REJECT tcp 10.69.0.0/16 -> 10.69.11.100:3306 \\u2014 28920 events; top objects: comment-db-01 (1)\"]}",
+      "metadata": {
+        "scenario": "firewall_rule_0022",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "firewall_rule_0022-07",
+      "artifact_type": "monitoring_alerts",
+      "subtype": "alertmanager_alerts",
+      "source": "alertmanager_alerts",
+      "content": "{\"description\": \"Prometheus Alertmanager alerts: alert names with severity, critical-alert instances, alert names and services, and an hourly timeline of warning and critical alerts (UTC).\", \"facts\": [\"alert names: Watchdog (info) \\u2014 72 events; service: alertmanager; firing continuously\", \"alert names: CommentSvcUnavailable (critical) \\u2014 6 events; service: comment-svc; first seen in hour 2023-02-08 23:00 UTC; last seen in hour 2023-02-09 00:00 UTC\", \"alert names: MysqlConnectionsDropped (critical) \\u2014 4 events; service: mysql; first seen in hour 2023-02-08 23:00 UTC; last seen in hour 2023-02-09 00:00 UTC\", \"alert names: NodeFilesystemSpaceFillingUp (warning) \\u2014 4 events; service: node; first seen in hour 2023-02-08 20:00 UTC; last seen in hour 2023-02-08 22:00 UTC\", \"critical alerts: 10 matching events\", \"critical alerts > critical instances: comment-svc \\u2014 6 events\", \"critical alerts > critical instances: 10.69.11.100:9104 \\u2014 4 events\", \"critical alerts > critical alert names: CommentSvcUnavailable \\u2014 6 events\", \"critical alerts > critical alert names: MysqlConnectionsDropped \\u2014 4 events\", \"critical alerts > critical services: comment-svc \\u2014 6 events\", \"critical alerts > critical services: mysql \\u2014 4 events\", \"alert timeline: 2023-02-08 20:00 UTC \\u2014 1 events\", \"alert timeline: 2023-02-08 21:00 UTC \\u2014 1 events\", \"alert timeline: 2023-02-08 22:00 UTC \\u2014 2 events\", \"alert timeline: 2023-02-08 23:00 UTC \\u2014 6 events\", \"alert timeline: 2023-02-09 00:00 UTC \\u2014 4 events\"]}",
+      "metadata": {
+        "scenario": "firewall_rule_0022",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "firewall_rule_0022-08",
+      "artifact_type": "resource_metrics",
+      "subtype": "metric_anomalies",
+      "source": "metric_anomalies",
+      "content": "{\"description\": \"Metric series that deviated from their 7-day baseline (hourly resolution): baseline, peak or trough value, anomaly onset and recovery (UTC).\", \"facts\": [\"metric anomalies: mysql client connections on comment-db-01 \\u2014 baseline ~72; trough 0; onset 2023-02-08 23:00 UTC; recovered 2023-02-09 01:00 UTC\"]}",
+      "metadata": {
+        "scenario": "firewall_rule_0022",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "firewall_rule_0022-09",
+      "artifact_type": "derived_findings",
+      "subtype": "derived_summary",
+      "source": "derived_summary",
+      "content": "{\"description\": \"Deterministic summary computed from the query results above (error ranking, instance-to-host join, alert timeline, change correlation, earliest metric anomaly).\", \"facts\": [\"Derived: service web-frontend ranks #1 by error volume (46357 events, 1 failing dependencies). Most-failed dependency: comment-svc (46357 errors).\", \"Derived: most-alerted critical instance comment-svc (6 critical alerts); no matching host-inventory entry.\", \"Derived: warning/critical alerts span 2023-02-08 20:00 UTC to 2023-02-09 00:00 UTC; earliest alert hour 2023-02-08 20:00 UTC (1 alerts).\", \"Derived: no changes recorded from 6 hours before the earliest alert hour to its end.\", \"Derived: earliest metric anomaly onset 2023-02-08 23:00 UTC (mysql client connections on comment-db-01).\"]}",
+      "metadata": {
+        "scenario": "firewall_rule_0022",
+        "source_kind": "derived_from_es_results",
+        "heuristic": true
+      }
+    },
+    {
+      "artifact_id": "firewall_rule_0022-10",
+      "artifact_type": "query_coverage",
+      "subtype": "evidence_gaps",
+      "source": "evidence_gaps",
+      "content": "{\"description\": \"Queries that returned nothing or failed; use these to state what is NOT established.\", \"facts\": [\"No matching results for: tls certificates / expired certificates. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / expiring within 7 days. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / self signed. (Absence in this query is not proof of absence elsewhere.)\"]}",
+      "metadata": {
+        "scenario": "firewall_rule_0022",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    }
+  ]
+}

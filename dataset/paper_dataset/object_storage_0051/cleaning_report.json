@@ -1,0 +1,14 @@
+{
+  "scenario": "object_storage_0051",
+  "cleaning": [],
+  "skipped": [],
+  "gaps": [
+    "platform_events"
+  ],
+  "artifacts": 10,
+  "facts": 56,
+  "empty_aggregations": 2,
+  "questions": 5,
+  "answers": 5,
+  "atoms": 6
+}

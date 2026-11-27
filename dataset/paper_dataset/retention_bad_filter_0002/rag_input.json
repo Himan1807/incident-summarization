@@ -1,0 +1,166 @@
+{
+  "metadata": {
+    "incident_id": "INC-20250603",
+    "scenario": "retention_bad_filter_0002",
+    "title": "Infrastructure reliability incident investigation",
+    "source": "synthetic/ops-incident-expansion (modeled on neu-nds2/llm-sec-incident-analysis)",
+    "query_window_start": "2025-06-03T00:00:00",
+    "query_window_end": "2025-06-05T23:59:59",
+    "evidence_types": [
+      "change_records",
+      "derived_findings",
+      "infrastructure_events",
+      "monitoring_alerts",
+      "network_summary",
+      "query_coverage",
+      "resource_metrics",
+      "service_logs"
+    ],
+    "artifact_scope_note": "Evidence is aggregated query output (not raw log lines or metric samples); it contains no chat/communication records."
+  },
+  "incident_description": "Reliability incident investigation of a production environment. Evidence consists of Elasticsearch aggregation results over application and proxy logs, Kubernetes, cloud-provider and host system events, Prometheus Alertmanager alerts, change-management / CI-CD audit records and metric anomaly detection. No root cause, impact or trigger is stated; these must be established from the supplied artifacts. Environment context: Organization: Stoneidian Credit Union (digital banking); Platform: on-premises data center DC-South, server range 10.129.0.0/16; Database: accounts-db-01 holds accounts records; Automation: data-retention workflows scheduled by Dagster and executed under service accounts (runs recorded with RUN- identifiers); Change management: production changes carry CHG- identifiers.",
+  "investigation_questions": [
+    "What change, deployment or automation run triggered the incident? Provide its change identifier.",
+    "Which file contained the faulty filter?",
+    "Which code change introduced the faulty eligibility filter? Provide its change identifier.",
+    "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+    "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+    "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+    "Which change restored normal service? Provide its change identifier."
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "retention_bad_filter_0002-01",
+      "artifact_type": "service_logs",
+      "subtype": "error_logs",
+      "source": "error_logs",
+      "content": "{\"description\": \"Application and proxy error logs: HTTP/gRPC status codes, failing requests (caller -> callee:port : operation), error messages and the services emitting them.\", \"facts\": [\"error events: 70339 matching events\", \"error events > status codes: 401 \\u2014 35921 events\", \"error events > status codes: 550 \\u2014 32115 events\", \"error events > status codes: 422 \\u2014 2124 events\", \"error events > status codes: 500 \\u2014 179 events\", \"failing requests: identity-svc -> accounts-db-01:5432 : SELECT accounts by email \\u2014 35921 events\", \"failing requests: notification-worker -> mail-relay:587 : SMTP SEND \\u2014 32115 events\", \"failing requests: statements-api -> accounts-db-01:5432 : SELECT accounts profile \\u2014 2124 events\", \"failing requests: mobile-bff -> mobile-db:5432 : query \\u2014 179 events\", \"error messages: login failed: no account found for supplied email \\u2014 35921 events\", \"error messages: 550 5.1.1 recipient address rejected: anon+*@invalid.stoneidian \\u2014 32115 events\", \"error messages: profile lookup returned anonymized record \\u2014 2124 events\", \"error messages: deadlock detected \\u2014 179 events\", \"emitting services: identity-svc \\u2014 35921 events\", \"emitting services: notification-worker \\u2014 32115 events\", \"emitting services: statements-api \\u2014 2124 events\", \"emitting services: mobile-bff \\u2014 179 events\"]}",
+      "metadata": {
+        "scenario": "retention_bad_filter_0002",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "retention_bad_filter_0002-02",
+      "artifact_type": "service_logs",
+      "subtype": "error_volume_by_service",
+      "source": "error_volume_by_service",
+      "content": "{\"description\": \"Services ranked by number of error events, with each service's most-failed downstream dependencies.\", \"facts\": [\"services: identity-svc \\u2014 35921 events; failing dependencies=1; top dependencies: accounts-db-01 (35921)\", \"services: notification-worker \\u2014 32115 events; failing dependencies=1; top dependencies: mail-relay (32115)\", \"services: statements-api \\u2014 2124 events; failing dependencies=1; top dependencies: accounts-db-01 (2124)\", \"services: mobile-bff \\u2014 179 events; failing dependencies=1; top dependencies: mobile-db (179)\"]}",
+      "metadata": {
+        "scenario": "retention_bad_filter_0002",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "retention_bad_filter_0002-03",
+      "artifact_type": "change_records",
+      "subtype": "change_log",
+      "source": "change_log",
+      "content": "{\"description\": \"Deployments, configuration pushes, infrastructure and automation runs from the change-management and CI/CD audit log: change ID, type, target, actor, time (UTC), status and recorded diff/summary.\", \"facts\": [\"changes: CHG-27202 | code_change | workflows/retention/gdpr_retention.py | actor: dagster-deployer | 2025-06-04 02:19 UTC | status: deployed | merged by w.singh; refactor eligibility filter: WHERE last_active_at < :cutoff -> WHERE last_active_at > :cutoff \\u2014 1 events\", \"changes: RUN-94142 | workflow_run | gdpr_retention (scheduled) | actor: svc-dataops | 2025-06-04 06:03 UTC | status: success | rows updated: accounts 155,646 \\u2014 1 events\", \"changes: CHG-27229 | workflow_admin | gdpr_retention | actor: y.murphy | 2025-06-04 10:57 UTC | status: completed | workflow paused \\u2014 1 events\", \"changes: CHG-27255 | db_restore | accounts-db-01 table accounts | actor: y.murphy | 2025-06-04 14:46 UTC | status: completed | point-in-time restore to 2025-06-04 05:58 into accounts_restore; affected columns merged back \\u2014 1 events\", \"changes: CHG-27295 | deployment | mobile-bff 10.25.10 -> 10.25.11 | actor: jenkins | 2025-06-04 21:53 UTC | status: Synced/Healthy | copy and UI text changes \\u2014 1 events\", \"changes: CHG-27317 | deployment | cards-api 1.23.10 -> 1.24.0 | actor: jenkins | 2025-06-05 08:02 UTC | status: succeeded | performance tuning of list endpoint \\u2014 1 events\", \"change types: deployment \\u2014 2 events\", \"change types: code_change \\u2014 1 events\", \"change types: workflow_run \\u2014 1 events\", \"change types: workflow_admin \\u2014 1 events\", \"change types: db_restore \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "retention_bad_filter_0002",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "retention_bad_filter_0002-04",
+      "artifact_type": "change_records",
+      "subtype": "change_actors",
+      "source": "change_actors",
+      "content": "{\"description\": \"Accounts and automation identities that executed changes, with the hosts or targets they acted on.\", \"facts\": [\"actors: jenkins \\u2014 2 events; targets: cards-api (1), mobile-bff (1)\", \"actors: y.murphy \\u2014 2 events; targets: ops-scheduler-01 (1), accounts-db-01 (1)\", \"actors: dagster-deployer \\u2014 1 events; targets: ops-scheduler-01 (1)\", \"actors: svc-dataops \\u2014 1 events; targets: accounts-db-01 (1)\"]}",
+      "metadata": {
+        "scenario": "retention_bad_filter_0002",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "retention_bad_filter_0002-05",
+      "artifact_type": "infrastructure_events",
+      "subtype": "host_inventory",
+      "source": "host_inventory",
+      "content": "{\"description\": \"Host and node names seen in infrastructure events with their IP address, role and availability zone / rack.\", \"facts\": [\"hosts: accounts-db-01 \\u2014 269 events; ip: 10.129.151.168; role: postgres-primary (accounts); zone: rack M11\", \"hosts: ledger-07 \\u2014 143 events; ip: 10.129.104.47; role: ledger-api host; zone: rack M36\", \"hosts: ledger-01 \\u2014 134 events; ip: 10.129.104.82; role: ledger-api host; zone: rack M09\", \"hosts: ops-scheduler-01 \\u2014 39 events; ip: 10.129.165.129; role: workflow scheduler worker; zone: rack M36\"]}",
+      "metadata": {
+        "scenario": "retention_bad_filter_0002",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "retention_bad_filter_0002-06",
+      "artifact_type": "infrastructure_events",
+      "subtype": "platform_events",
+      "source": "platform_events",
+      "content": "{\"description\": \"Kubernetes events, cloud-provider health events and host system messages (kernel, hardware, daemons) with the objects or hosts they refer to.\", \"facts\": [\"database logs: LOG: duration: 1523762.7 ms statement: UPDATE accounts SET email = 'anon+' || md5(email) || '@invalid.stoneidian', full_name = 'anonymized' WHERE last_active_at > $1 \\u2014 1 events; top objects: accounts-db-01 (1)\", \"workflow task logs: gdpr_retention.anonymize: Marking task as SUCCESS (rows=155646) \\u2014 1 events; top objects: ops-scheduler-01 (1)\"]}",
+      "metadata": {
+        "scenario": "retention_bad_filter_0002",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "retention_bad_filter_0002-07",
+      "artifact_type": "monitoring_alerts",
+      "subtype": "alertmanager_alerts",
+      "source": "alertmanager_alerts",
+      "content": "{\"description\": \"Prometheus Alertmanager alerts: alert names with severity, critical-alert instances, alert names and services, and an hourly timeline of warning and critical alerts (UTC).\", \"facts\": [\"alert names: Watchdog (info) \\u2014 72 events; service: alertmanager; firing continuously\", \"alert names: EmailBounceRateHigh (critical) \\u2014 14 events; service: notification-worker; first seen in hour 2025-06-04 10:00 UTC; last seen in hour 2025-06-04 14:00 UTC\", \"alert names: LoginFailureRateHigh (critical) \\u2014 8 events; service: identity-svc; first seen in hour 2025-06-04 10:00 UTC; last seen in hour 2025-06-04 14:00 UTC\", \"alert names: KubeJobFailed (warning) \\u2014 2 events; service: batch; first seen in hour 2025-06-04 21:00 UTC; last seen in hour 2025-06-04 22:00 UTC\", \"alert names: PostgresHighRowUpdates (warning) \\u2014 1 events; service: postgres; first seen in hour 2025-06-04 06:00 UTC; last seen in hour 2025-06-04 06:00 UTC\", \"critical alerts: 22 matching events\", \"critical alerts > critical instances: notification-worker \\u2014 14 events\", \"critical alerts > critical instances: identity-svc \\u2014 8 events\", \"critical alerts > critical alert names: EmailBounceRateHigh \\u2014 14 events\", \"critical alerts > critical alert names: LoginFailureRateHigh \\u2014 8 events\", \"critical alerts > critical services: notification-worker \\u2014 14 events\", \"critical alerts > critical services: identity-svc \\u2014 8 events\", \"alert timeline: 2025-06-04 06:00 UTC \\u2014 1 events\", \"alert timeline: 2025-06-04 10:00 UTC \\u2014 7 events\", \"alert timeline: 2025-06-04 11:00 UTC \\u2014 3 events\", \"alert timeline: 2025-06-04 12:00 UTC \\u2014 4 events\", \"alert timeline: 2025-06-04 13:00 UTC \\u2014 3 events\", \"alert timeline: 2025-06-04 14:00 UTC \\u2014 5 events\", \"alert timeline: 2025-06-04 21:00 UTC \\u2014 1 events\", \"alert timeline: 2025-06-04 22:00 UTC \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "retention_bad_filter_0002",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "retention_bad_filter_0002-08",
+      "artifact_type": "resource_metrics",
+      "subtype": "metric_anomalies",
+      "source": "metric_anomalies",
+      "content": "{\"description\": \"Metric series that deviated from their 7-day baseline (hourly resolution): baseline, peak or trough value, anomaly onset and recovery (UTC).\", \"facts\": [\"metric anomalies: rows updated per second (accounts) on accounts-db-01 \\u2014 baseline ~40/s; peak 2,307/s; onset 2025-06-04 06:00 UTC; recovered 2025-06-04 07:00 UTC\", \"metric anomalies: login success ratio on identity-svc \\u2014 baseline 95%; trough 28%; onset 2025-06-04 10:00 UTC; recovered 2025-06-04 15:00 UTC\", \"metric anomalies: node memory utilisation on 10.129.104.82 \\u2014 baseline 32%; peak 97%; onset 2025-06-04 00:00 UTC; recovered 2025-06-04 03:00 UTC\"]}",
+      "metadata": {
+        "scenario": "retention_bad_filter_0002",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "retention_bad_filter_0002-09",
+      "artifact_type": "network_summary",
+      "subtype": "tls_certificates",
+      "source": "tls_certificates",
+      "content": "{\"description\": \"TLS certificates observed in edge and service-to-service traffic that are expired, expire within 7 days, or are self-signed.\", \"facts\": [\"expiring within 7 days: 25 matching events\", \"expiring within 7 days > certificate details: CN=ledger-api.stoneidian.internal | issuer: CN=R11,O=Let's Encrypt | not_after: 2025-06-06 23:59:00 UTC | seen on: ledger-api:8443 \\u2014 25 events\"]}",
+      "metadata": {
+        "scenario": "retention_bad_filter_0002",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "retention_bad_filter_0002-10",
+      "artifact_type": "derived_findings",
+      "subtype": "derived_summary",
+      "source": "derived_summary",
+      "content": "{\"description\": \"Deterministic summary computed from the query results above (error ranking, instance-to-host join, alert timeline, change correlation, earliest metric anomaly).\", \"facts\": [\"Derived: service identity-svc ranks #1 by error volume (35921 events, 1 failing dependencies). Most-failed dependency: accounts-db-01 (35921 errors).\", \"Derived: most-alerted critical instance notification-worker (14 critical alerts); no matching host-inventory entry.\", \"Derived: warning/critical alerts span 2025-06-04 06:00 UTC to 2025-06-04 22:00 UTC; earliest alert hour 2025-06-04 06:00 UTC (1 alerts).\", \"Derived: changes recorded from 6 hours before the earliest alert hour to its end: CHG-27202 (code_change, workflows/retention/gdpr_retention.py, dagster-deployer, 2025-06-04 02:19 UTC); RUN-94142 (workflow_run, gdpr_retention (scheduled), svc-dataops, 2025-06-04 06:03 UTC).\", \"Derived: earliest metric anomaly onset 2025-06-04 00:00 UTC (node memory utilisation on 10.129.104.82).\"]}",
+      "metadata": {
+        "scenario": "retention_bad_filter_0002",
+        "source_kind": "derived_from_es_results",
+        "heuristic": true
+      }
+    },
+    {
+      "artifact_id": "retention_bad_filter_0002-11",
+      "artifact_type": "query_coverage",
+      "subtype": "evidence_gaps",
+      "source": "evidence_gaps",
+      "content": "{\"description\": \"Queries that returned nothing or failed; use these to state what is NOT established.\", \"facts\": [\"No matching results for: tls certificates / expired certificates. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / self signed. (Absence in this query is not proof of absence elsewhere.)\"]}",
+      "metadata": {
+        "scenario": "retention_bad_filter_0002",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    }
+  ]
+}

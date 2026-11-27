@@ -1,0 +1,87 @@
+{
+  "source": "synthetic generator ground truth (ops expansion)",
+  "confidence": "synthetic ground truth",
+  "qa": [
+    {
+      "id": 1,
+      "question": "Give the IP address of the machine where the failure originated.",
+      "answer": "10.169.45.11",
+      "atoms": [
+        {
+          "text": "10.169.45.11",
+          "kind": "ip"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "question": "Which storage volume attached to the failing host was degraded?",
+      "answer": "vol-029837311f4a44d47",
+      "atoms": [
+        {
+          "text": "vol-029837311f4a44d47",
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "question": "Which availability zone was affected by the cloud provider event?",
+      "answer": "ap-northeast-1d",
+      "atoms": [
+        {
+          "text": "ap-northeast-1d",
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "question": "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+      "answer": "2022-03-31 05:00 UTC",
+      "atoms": [
+        {
+          "text": "2022-03-31 05:00 UTC",
+          "kind": "time"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "question": "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+      "answer": "cloud provider failure",
+      "atoms": [
+        {
+          "text": "cloud provider failure",
+          "kind": "label"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "question": "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+      "answer": "availability",
+      "atoms": [
+        {
+          "text": "availability",
+          "kind": "cia"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "question": "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+      "answer": "booking-web, downstream symptom",
+      "atoms": [
+        {
+          "text": "booking-web",
+          "kind": "other"
+        },
+        {
+          "text": "downstream symptom",
+          "kind": "label"
+        }
+      ]
+    }
+  ]
+}

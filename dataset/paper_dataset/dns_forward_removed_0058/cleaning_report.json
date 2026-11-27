@@ -1,0 +1,12 @@
+{
+  "scenario": "dns_forward_removed_0058",
+  "cleaning": [],
+  "skipped": [],
+  "gaps": [],
+  "artifacts": 11,
+  "facts": 74,
+  "empty_aggregations": 2,
+  "questions": 9,
+  "answers": 9,
+  "atoms": 12
+}

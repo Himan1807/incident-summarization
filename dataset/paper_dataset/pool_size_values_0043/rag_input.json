@@ -1,0 +1,168 @@
+{
+  "metadata": {
+    "incident_id": "INC-20231208",
+    "scenario": "pool_size_values_0043",
+    "title": "Infrastructure reliability incident investigation",
+    "source": "synthetic/ops-incident-expansion (modeled on neu-nds2/llm-sec-incident-analysis)",
+    "query_window_start": "2023-12-08T00:00:00",
+    "query_window_end": "2023-12-10T23:59:59",
+    "evidence_types": [
+      "change_records",
+      "derived_findings",
+      "infrastructure_events",
+      "monitoring_alerts",
+      "network_summary",
+      "query_coverage",
+      "resource_metrics",
+      "service_logs"
+    ],
+    "artifact_scope_note": "Evidence is aggregated query output (not raw log lines or metric samples); it contains no chat/communication records."
+  },
+  "incident_description": "Reliability incident investigation of a production environment. Evidence consists of Elasticsearch aggregation results over application and proxy logs, Kubernetes, cloud-provider and host system events, Prometheus Alertmanager alerts, change-management / CI-CD audit records and metric anomaly detection. No root cause, impact or trigger is stated; these must be established from the supplied artifacts. Environment context: Organization: Brightwave Logistics (freight and logistics); Platform: Microsoft Azure northeurope (zones northeurope-1/northeurope-2/northeurope-3); network range 10.162.0.0/16; Kubernetes cluster bright-prod-northe (AKS); Database: mysql instance dock-db-01 for dock-scheduler; Deployments: Helm releases rolled out by a CI release bot after human approval; Change management: production changes carry CR- identifiers.",
+  "investigation_questions": [
+    "Which service or component is the origin of the failure?",
+    "What is the identifier of the change that caused the incident?",
+    "Which account or automation identity executed the triggering change?",
+    "Which configuration parameter was changed by the triggering change, and which values file was it taken from?",
+    "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+    "Did the failure stay isolated to one component or cascade across services? Answer 'isolated failure' or 'cascading failure'.",
+    "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+    "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+    "Which change restored normal service? Provide its change identifier."
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "pool_size_values_0043-01",
+      "artifact_type": "service_logs",
+      "subtype": "error_logs",
+      "source": "error_logs",
+      "content": "{\"description\": \"Application and proxy error logs: HTTP/gRPC status codes, failing requests (caller -> callee:port : operation), error messages and the services emitting them.\", \"facts\": [\"error events: 47216 matching events\", \"error events > status codes: 504 \\u2014 36637 events\", \"error events > status codes: n/a (client-side pool timeout) \\u2014 10323 events\", \"error events > status codes: 499 \\u2014 256 events\", \"failing requests: portal-bff -> dock-scheduler:8080 : POST /v1/dock \\u2014 26417 events\", \"failing requests: dock-scheduler -> dock-db-01:3306 : connection acquire \\u2014 10323 events\", \"failing requests: booking-api -> dock-scheduler:8080 : GET /v1/dock/{id} \\u2014 10220 events\", \"failing requests: route-planner -> route-db:5432 : query \\u2014 256 events\", \"error messages: dock-scheduler: 504 Gateway Timeout \\u2014 26417 events\", \"error messages: HikariPool-1 - Connection is not available, request timed out after 30000ms (total=5, active=5, idle=0) \\u2014 10323 events\", \"error messages: dock-scheduler: context deadline exceeded \\u2014 10220 events\", \"error messages: context canceled \\u2014 256 events\", \"emitting services: portal-bff \\u2014 26417 events\", \"emitting services: dock-scheduler \\u2014 10323 events\", \"emitting services: booking-api \\u2014 10220 events\", \"emitting services: route-planner \\u2014 256 events\"]}",
+      "metadata": {
+        "scenario": "pool_size_values_0043",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "pool_size_values_0043-02",
+      "artifact_type": "service_logs",
+      "subtype": "error_volume_by_service",
+      "source": "error_volume_by_service",
+      "content": "{\"description\": \"Services ranked by number of error events, with each service's most-failed downstream dependencies.\", \"facts\": [\"services: portal-bff \\u2014 26417 events; failing dependencies=1; top dependencies: dock-scheduler (26417)\", \"services: dock-scheduler \\u2014 10323 events; failing dependencies=1; top dependencies: dock-db-01 (10323)\", \"services: booking-api \\u2014 10220 events; failing dependencies=1; top dependencies: dock-scheduler (10220)\", \"services: route-planner \\u2014 256 events; failing dependencies=1; top dependencies: route-db (256)\"]}",
+      "metadata": {
+        "scenario": "pool_size_values_0043",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "pool_size_values_0043-03",
+      "artifact_type": "change_records",
+      "subtype": "change_log",
+      "source": "change_log",
+      "content": "{\"description\": \"Deployments, configuration pushes, infrastructure and automation runs from the change-management and CI/CD audit log: change ID, type, target, actor, time (UTC), status and recorded diff/summary.\", \"facts\": [\"changes: CR-27094 | deployment | tracking-api 14.4.7 -> 14.4.8 | actor: azure-pipelines | 2023-12-08 03:46 UTC | status: completed | feature flag cleanup \\u2014 1 events\", \"changes: CR-27120 | helm_upgrade | dock-scheduler chart (revision 63) | actor: release-bot | 2023-12-09 12:13 UTC | status: completed | approved_by: h.larsen; values: database.pool.maximumPoolSize 200 -> 5; values file: values-staging.yaml \\u2014 1 events\", \"changes: CR-27123 | deployment | rate-engine 11.25.4 -> 11.25.5 | actor: azure-pipelines | 2023-12-09 12:51 UTC | status: succeeded | logging improvements \\u2014 1 events\", \"changes: CR-27148 | helm_rollback | dock-scheduler to previous revision | actor: h.larsen | 2023-12-09 16:22 UTC | status: completed | helm rollback dock-scheduler \\u2014 1 events\", \"changes: CR-27176 | deployment | route-planner 7.29.1 -> 7.29.2 | actor: azure-pipelines | 2023-12-10 12:25 UTC | status: succeeded | dependency bump \\u2014 1 events\", \"change types: deployment \\u2014 3 events\", \"change types: helm_upgrade \\u2014 1 events\", \"change types: helm_rollback \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "pool_size_values_0043",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "pool_size_values_0043-04",
+      "artifact_type": "change_records",
+      "subtype": "change_actors",
+      "source": "change_actors",
+      "content": "{\"description\": \"Accounts and automation identities that executed changes, with the hosts or targets they acted on.\", \"facts\": [\"actors: azure-pipelines \\u2014 3 events; targets: bright-prod-northe/rate-engine (1), bright-prod-northe/route-planner (1), bright-prod-northe/tracking-api (1)\", \"actors: h.larsen \\u2014 1 events; targets: bright-prod-northe/dock-scheduler (1)\", \"actors: release-bot \\u2014 1 events; targets: bright-prod-northe/dock-scheduler (1)\"]}",
+      "metadata": {
+        "scenario": "pool_size_values_0043",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "pool_size_values_0043-05",
+      "artifact_type": "infrastructure_events",
+      "subtype": "host_inventory",
+      "source": "host_inventory",
+      "content": "{\"description\": \"Host and node names seen in infrastructure events with their IP address, role and availability zone / rack.\", \"facts\": [\"hosts: aks-nodepool1-29756374-vmss000004 \\u2014 271 events; ip: 10.162.185.143; role: k8s-worker; zone: northeurope-2\", \"hosts: aks-nodepool1-86658072-vmss000005 \\u2014 233 events; ip: 10.162.117.249; role: k8s-worker; zone: northeurope-1\", \"hosts: dock-db-01 \\u2014 175 events; ip: 10.162.28.5; role: mysql-primary; zone: northeurope-3\"]}",
+      "metadata": {
+        "scenario": "pool_size_values_0043",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "pool_size_values_0043-06",
+      "artifact_type": "infrastructure_events",
+      "subtype": "platform_events",
+      "source": "platform_events",
+      "content": "{\"description\": \"Kubernetes events, cloud-provider health events and host system messages (kernel, hardware, daemons) with the objects or hosts they refer to.\", \"facts\": [\"event reasons: Unhealthy \\u2014 238 events; top objects: pod/dock-scheduler-c9064b6fa-xp4xj (39), pod/dock-scheduler-93dc0ed2f-jxgxj (27)\", \"event reasons: Pulled \\u2014 8 events; top objects: pod/rate-engine-52277f8c2-vjspz (2)\", \"event reasons: ScalingReplicaSet \\u2014 4 events; top objects: deployment/rate-engine (2)\", \"event reasons: Pulled \\u2014 11 events; top objects: pod/route-planner-773980cb6-6tz22 (1)\", \"event reasons: ScalingReplicaSet \\u2014 5 events; top objects: deployment/route-planner (1)\", \"event reasons: Pulled \\u2014 28 events; top objects: pod/tracking-api-e2f33bde4-xvspz (3)\", \"event reasons: ScalingReplicaSet \\u2014 2 events; top objects: deployment/tracking-api (2)\"]}",
+      "metadata": {
+        "scenario": "pool_size_values_0043",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "pool_size_values_0043-07",
+      "artifact_type": "monitoring_alerts",
+      "subtype": "alertmanager_alerts",
+      "source": "alertmanager_alerts",
+      "content": "{\"description\": \"Prometheus Alertmanager alerts: alert names with severity, critical-alert instances, alert names and services, and an hourly timeline of warning and critical alerts (UTC).\", \"facts\": [\"alert names: Watchdog (info) \\u2014 72 events; service: alertmanager; firing continuously\", \"alert names: PortalBff5xxHigh (critical) \\u2014 11 events; service: portal-bff; first seen in hour 2023-12-09 13:00 UTC; last seen in hour 2023-12-09 16:00 UTC\", \"alert names: ConnectionPoolPendingHigh (critical) \\u2014 10 events; service: dock-scheduler; first seen in hour 2023-12-09 14:00 UTC; last seen in hour 2023-12-09 16:00 UTC\", \"alert names: NodeFilesystemSpaceFillingUp (warning) \\u2014 1 events; service: node; first seen in hour 2023-12-10 05:00 UTC; last seen in hour 2023-12-10 05:00 UTC\", \"critical alerts: 21 matching events\", \"critical alerts > critical instances: portal-bff \\u2014 11 events\", \"critical alerts > critical instances: dock-scheduler \\u2014 10 events\", \"critical alerts > critical alert names: PortalBff5xxHigh \\u2014 11 events\", \"critical alerts > critical alert names: ConnectionPoolPendingHigh \\u2014 10 events\", \"critical alerts > critical services: portal-bff \\u2014 11 events\", \"critical alerts > critical services: dock-scheduler \\u2014 10 events\", \"alert timeline: 2023-12-09 13:00 UTC \\u2014 2 events\", \"alert timeline: 2023-12-09 14:00 UTC \\u2014 9 events\", \"alert timeline: 2023-12-09 15:00 UTC \\u2014 4 events\", \"alert timeline: 2023-12-09 16:00 UTC \\u2014 6 events\", \"alert timeline: 2023-12-10 05:00 UTC \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "pool_size_values_0043",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "pool_size_values_0043-08",
+      "artifact_type": "resource_metrics",
+      "subtype": "metric_anomalies",
+      "source": "metric_anomalies",
+      "content": "{\"description\": \"Metric series that deviated from their 7-day baseline (hourly resolution): baseline, peak or trough value, anomaly onset and recovery (UTC).\", \"facts\": [\"metric anomalies: db pool pending requests (maximumPoolSize) on dock-scheduler \\u2014 baseline 0; peak 353; onset 2023-12-09 13:00 UTC; recovered 2023-12-09 17:00 UTC\", \"metric anomalies: mysql active connections on dock-db-01 \\u2014 baseline ~160; trough 9; onset 2023-12-09 13:00 UTC; recovered 2023-12-09 17:00 UTC\", \"metric anomalies: mysql CPU utilisation on dock-db-01 \\u2014 baseline 30%; trough 19%; onset 2023-12-09 13:00 UTC; recovered 2023-12-09 17:00 UTC\"]}",
+      "metadata": {
+        "scenario": "pool_size_values_0043",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "pool_size_values_0043-09",
+      "artifact_type": "network_summary",
+      "subtype": "tls_certificates",
+      "source": "tls_certificates",
+      "content": "{\"description\": \"TLS certificates observed in edge and service-to-service traffic that are expired, expire within 7 days, or are self-signed.\", \"facts\": [\"expiring within 7 days: 17 matching events\", \"expiring within 7 days > certificate details: CN=tracking-api.brightwave.internal | issuer: CN=R11,O=Let's Encrypt | not_after: 2023-12-11 23:59:00 UTC | seen on: tracking-api:8443 \\u2014 17 events\"]}",
+      "metadata": {
+        "scenario": "pool_size_values_0043",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "pool_size_values_0043-10",
+      "artifact_type": "derived_findings",
+      "subtype": "derived_summary",
+      "source": "derived_summary",
+      "content": "{\"description\": \"Deterministic summary computed from the query results above (error ranking, instance-to-host join, alert timeline, change correlation, earliest metric anomaly).\", \"facts\": [\"Derived: service portal-bff ranks #1 by error volume (26417 events, 1 failing dependencies). Most-failed dependency: dock-scheduler (26417 errors).\", \"Derived: most-alerted critical instance portal-bff (11 critical alerts); no matching host-inventory entry.\", \"Derived: warning/critical alerts span 2023-12-09 13:00 UTC to 2023-12-10 05:00 UTC; earliest alert hour 2023-12-09 13:00 UTC (2 alerts).\", \"Derived: changes recorded from 6 hours before the earliest alert hour to its end: CR-27120 (helm_upgrade, dock-scheduler chart (revision 63), release-bot, 2023-12-09 12:13 UTC); CR-27123 (deployment, rate-engine 11.25.4 -> 11.25.5, azure-pipelines, 2023-12-09 12:51 UTC).\", \"Derived: earliest metric anomaly onset 2023-12-09 13:00 UTC (db pool pending requests (maximumPoolSize) on dock-scheduler).\"]}",
+      "metadata": {
+        "scenario": "pool_size_values_0043",
+        "source_kind": "derived_from_es_results",
+        "heuristic": true
+      }
+    },
+    {
+      "artifact_id": "pool_size_values_0043-11",
+      "artifact_type": "query_coverage",
+      "subtype": "evidence_gaps",
+      "source": "evidence_gaps",
+      "content": "{\"description\": \"Queries that returned nothing or failed; use these to state what is NOT established.\", \"facts\": [\"No matching results for: tls certificates / expired certificates. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / self signed. (Absence in this query is not proof of absence elsewhere.)\"]}",
+      "metadata": {
+        "scenario": "pool_size_values_0043",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    }
+  ]
+}

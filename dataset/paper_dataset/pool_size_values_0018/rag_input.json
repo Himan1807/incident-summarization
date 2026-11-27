@@ -1,0 +1,157 @@
+{
+  "metadata": {
+    "incident_id": "INC-20220201",
+    "scenario": "pool_size_values_0018",
+    "title": "Infrastructure reliability incident investigation",
+    "source": "synthetic/ops-incident-expansion (modeled on neu-nds2/llm-sec-incident-analysis)",
+    "query_window_start": "2022-02-01T00:00:00",
+    "query_window_end": "2022-02-03T23:59:59",
+    "evidence_types": [
+      "change_records",
+      "derived_findings",
+      "infrastructure_events",
+      "monitoring_alerts",
+      "query_coverage",
+      "resource_metrics",
+      "service_logs"
+    ],
+    "artifact_scope_note": "Evidence is aggregated query output (not raw log lines or metric samples); it contains no chat/communication records."
+  },
+  "incident_description": "Reliability incident investigation of a production environment. Evidence consists of Elasticsearch aggregation results over application and proxy logs, Kubernetes, cloud-provider and host system events, Prometheus Alertmanager alerts, change-management / CI-CD audit records and metric anomaly detection. No root cause, impact or trigger is stated; these must be established from the supplied artifacts. Environment context: Organization: Verdix Retail (online retail); Platform: Google Cloud asia-southeast1 (zones asia-southeast1-a/asia-southeast1-b/asia-southeast1-c); network range 10.176.0.0/16; Kubernetes cluster verdix-prod-asiaso (GKE); Database: mysql instance payments-db-01 for payments-api; Deployments: Helm releases rolled out by a CI release bot after human approval; Change management: production changes carry CHG- identifiers.",
+  "investigation_questions": [
+    "Which service or component is the origin of the failure?",
+    "What change, deployment or automation run triggered the incident? Provide its change identifier.",
+    "Which account or automation identity executed the triggering change?",
+    "Was the database server itself overloaded? Answer yes or no.",
+    "Which configuration parameter was changed by the triggering change, and which values file was it taken from?",
+    "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+    "Did the failure stay isolated to one component or cascade across services? Answer 'isolated failure' or 'cascading failure'.",
+    "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+    "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+    "Which change happened shortly before the incident began but did not cause it? Provide its identifier.",
+    "Which change restored normal service? Provide its change identifier."
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "pool_size_values_0018-01",
+      "artifact_type": "service_logs",
+      "subtype": "error_logs",
+      "source": "error_logs",
+      "content": "{\"description\": \"Application and proxy error logs: HTTP/gRPC status codes, failing requests (caller -> callee:port : operation), error messages and the services emitting them.\", \"facts\": [\"error events: 66635 matching events\", \"error events > status codes: 504 \\u2014 48218 events\", \"error events > status codes: n/a (client-side pool timeout) \\u2014 18417 events\", \"failing requests: web-bff -> payments-api:8080 : POST /v1/payments \\u2014 42191 events\", \"failing requests: payments-api -> payments-db-01:3306 : connection acquire \\u2014 18417 events\", \"failing requests: catalog-api -> payments-api:8080 : GET /v1/payments/{id} \\u2014 5887 events\", \"failing requests: search-api -> search-db:5432 : query \\u2014 140 events\", \"error messages: payments-api: 504 Gateway Timeout \\u2014 42191 events\", \"error messages: sql: connection pool wait timeout (max_open=20, in_use=20) \\u2014 18417 events\", \"error messages: payments-api: context deadline exceeded \\u2014 5887 events\", \"error messages: upstream request timeout \\u2014 140 events\", \"emitting services: web-bff \\u2014 42191 events\", \"emitting services: payments-api \\u2014 18417 events\", \"emitting services: catalog-api \\u2014 5887 events\", \"emitting services: search-api \\u2014 140 events\"]}",
+      "metadata": {
+        "scenario": "pool_size_values_0018",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "pool_size_values_0018-02",
+      "artifact_type": "service_logs",
+      "subtype": "error_volume_by_service",
+      "source": "error_volume_by_service",
+      "content": "{\"description\": \"Services ranked by number of error events, with each service's most-failed downstream dependencies.\", \"facts\": [\"services: web-bff \\u2014 42191 events; failing dependencies=1; top dependencies: payments-api (42191)\", \"services: payments-api \\u2014 18417 events; failing dependencies=1; top dependencies: payments-db-01 (18417)\", \"services: catalog-api \\u2014 5887 events; failing dependencies=1; top dependencies: payments-api (5887)\", \"services: search-api \\u2014 140 events; failing dependencies=1; top dependencies: search-db (140)\"]}",
+      "metadata": {
+        "scenario": "pool_size_values_0018",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "pool_size_values_0018-03",
+      "artifact_type": "change_records",
+      "subtype": "change_log",
+      "source": "change_log",
+      "content": "{\"description\": \"Deployments, configuration pushes, infrastructure and automation runs from the change-management and CI/CD audit log: change ID, type, target, actor, time (UTC), status and recorded diff/summary.\", \"facts\": [\"changes: CHG-17303 | deployment | search-api 3.20.4 -> 3.20.5 | actor: argocd | 2022-02-01 10:29 UTC | status: succeeded | new optional API field \\u2014 1 events\", \"changes: CHG-17327 | helm_upgrade | payments-api chart (revision 67) | actor: release-bot | 2022-02-02 10:56 UTC | status: completed | approved_by: a.fischer; values: database.pool.maxOpenConns 300 -> 20; values file: values-staging.yaml \\u2014 1 events\", \"changes: CHG-17330 | deployment | promo-svc 14.8.8 -> 14.9.0 | actor: argocd | 2022-02-02 12:02 UTC | status: Synced/Healthy | feature flag cleanup \\u2014 1 events\", \"changes: CHG-17344 | helm_rollback | payments-api to previous revision | actor: a.fischer | 2022-02-02 16:23 UTC | status: completed | helm rollback payments-api \\u2014 1 events\", \"changes: CHG-17347 | deployment | cart-service 4.6.7 -> 4.6.8 | actor: argocd | 2022-02-03 07:20 UTC | status: succeeded | minor bug fixes \\u2014 1 events\", \"change types: deployment \\u2014 3 events\", \"change types: helm_upgrade \\u2014 1 events\", \"change types: helm_rollback \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "pool_size_values_0018",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "pool_size_values_0018-04",
+      "artifact_type": "change_records",
+      "subtype": "change_actors",
+      "source": "change_actors",
+      "content": "{\"description\": \"Accounts and automation identities that executed changes, with the hosts or targets they acted on.\", \"facts\": [\"actors: argocd \\u2014 3 events; targets: verdix-prod-asiaso/promo-svc (1), verdix-prod-asiaso/search-api (1), verdix-prod-asiaso/cart-service (1)\", \"actors: a.fischer \\u2014 1 events; targets: verdix-prod-asiaso/payments-api (1)\", \"actors: release-bot \\u2014 1 events; targets: verdix-prod-asiaso/payments-api (1)\"]}",
+      "metadata": {
+        "scenario": "pool_size_values_0018",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "pool_size_values_0018-05",
+      "artifact_type": "infrastructure_events",
+      "subtype": "host_inventory",
+      "source": "host_inventory",
+      "content": "{\"description\": \"Host and node names seen in infrastructure events with their IP address, role and availability zone / rack.\", \"facts\": [\"hosts: gke-verdix-prod-as-pool-c-e4ba \\u2014 284 events; ip: 10.176.210.151; role: k8s-worker; zone: asia-southeast1-c\", \"hosts: payments-db-01 \\u2014 193 events; ip: 10.176.187.59; role: mysql-primary; zone: asia-southeast1-c\", \"hosts: gke-verdix-prod-as-pool-b-d8b3 \\u2014 136 events; ip: 10.176.84.30; role: k8s-worker; zone: asia-southeast1-b\"]}",
+      "metadata": {
+        "scenario": "pool_size_values_0018",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "pool_size_values_0018-06",
+      "artifact_type": "infrastructure_events",
+      "subtype": "platform_events",
+      "source": "platform_events",
+      "content": "{\"description\": \"Kubernetes events, cloud-provider health events and host system messages (kernel, hardware, daemons) with the objects or hosts they refer to.\", \"facts\": [\"event reasons: Unhealthy \\u2014 115 events; top objects: pod/payments-api-10f835dda-wxcdk (52), pod/payments-api-4ffed027c-gjpp6 (28)\", \"event reasons: Pulled \\u2014 25 events; top objects: pod/promo-svc-f38dcec0e-w497w (3)\", \"event reasons: ScalingReplicaSet \\u2014 2 events; top objects: deployment/promo-svc (2)\", \"event reasons: Pulled \\u2014 15 events; top objects: pod/search-api-e506b29c6-csf5x (3)\", \"event reasons: ScalingReplicaSet \\u2014 6 events; top objects: deployment/search-api (1)\", \"event reasons: Pulled \\u2014 8 events; top objects: pod/cart-service-30b30d80e-hz8vs (3)\", \"event reasons: ScalingReplicaSet \\u2014 5 events; top objects: deployment/cart-service (1)\"]}",
+      "metadata": {
+        "scenario": "pool_size_values_0018",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "pool_size_values_0018-07",
+      "artifact_type": "monitoring_alerts",
+      "subtype": "alertmanager_alerts",
+      "source": "alertmanager_alerts",
+      "content": "{\"description\": \"Prometheus Alertmanager alerts: alert names with severity, critical-alert instances, alert names and services, and an hourly timeline of warning and critical alerts (UTC).\", \"facts\": [\"alert names: Watchdog (info) \\u2014 72 events; service: alertmanager; firing continuously\", \"alert names: ConnectionPoolPendingHigh (critical) \\u2014 10 events; service: payments-api; first seen in hour 2022-02-02 14:00 UTC; last seen in hour 2022-02-02 16:00 UTC\", \"alert names: WebBff5xxHigh (critical) \\u2014 7 events; service: web-bff; first seen in hour 2022-02-02 14:00 UTC; last seen in hour 2022-02-02 16:00 UTC\", \"alert names: NodeFilesystemSpaceFillingUp (warning) \\u2014 4 events; service: node; first seen in hour 2022-02-03 08:00 UTC; last seen in hour 2022-02-03 09:00 UTC\", \"alert names: CPUThrottlingHigh (warning) \\u2014 2 events; service: cart-service; first seen in hour 2022-02-03 11:00 UTC; last seen in hour 2022-02-03 11:00 UTC\", \"critical alerts: 17 matching events\", \"critical alerts > critical instances: payments-api \\u2014 10 events\", \"critical alerts > critical instances: web-bff \\u2014 7 events\", \"critical alerts > critical alert names: ConnectionPoolPendingHigh \\u2014 10 events\", \"critical alerts > critical alert names: WebBff5xxHigh \\u2014 7 events\", \"critical alerts > critical services: payments-api \\u2014 10 events\", \"critical alerts > critical services: web-bff \\u2014 7 events\", \"alert timeline: 2022-02-02 14:00 UTC \\u2014 3 events\", \"alert timeline: 2022-02-02 15:00 UTC \\u2014 7 events\", \"alert timeline: 2022-02-02 16:00 UTC \\u2014 7 events\", \"alert timeline: 2022-02-03 08:00 UTC \\u2014 2 events\", \"alert timeline: 2022-02-03 09:00 UTC \\u2014 2 events\", \"alert timeline: 2022-02-03 11:00 UTC \\u2014 2 events\"]}",
+      "metadata": {
+        "scenario": "pool_size_values_0018",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "pool_size_values_0018-08",
+      "artifact_type": "resource_metrics",
+      "subtype": "metric_anomalies",
+      "source": "metric_anomalies",
+      "content": "{\"description\": \"Metric series that deviated from their 7-day baseline (hourly resolution): baseline, peak or trough value, anomaly onset and recovery (UTC).\", \"facts\": [\"metric anomalies: db pool pending requests (maxOpenConns) on payments-api \\u2014 baseline 0; peak 89; onset 2022-02-02 13:00 UTC; recovered 2022-02-02 17:00 UTC\", \"metric anomalies: mysql active connections on payments-db-01 \\u2014 baseline ~240; trough 24; onset 2022-02-02 13:00 UTC; recovered 2022-02-02 17:00 UTC\", \"metric anomalies: mysql CPU utilisation on payments-db-01 \\u2014 baseline 39%; trough 12%; onset 2022-02-02 13:00 UTC; recovered 2022-02-02 17:00 UTC\", \"metric anomalies: node_network_receive_bytes rate on 10.176.84.30 \\u2014 baseline 72 MB/s; peak 652 MB/s; onset 2022-02-03 03:00 UTC; recovered 2022-02-03 06:00 UTC\"]}",
+      "metadata": {
+        "scenario": "pool_size_values_0018",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "pool_size_values_0018-09",
+      "artifact_type": "derived_findings",
+      "subtype": "derived_summary",
+      "source": "derived_summary",
+      "content": "{\"description\": \"Deterministic summary computed from the query results above (error ranking, instance-to-host join, alert timeline, change correlation, earliest metric anomaly).\", \"facts\": [\"Derived: service web-bff ranks #1 by error volume (42191 events, 1 failing dependencies). Most-failed dependency: payments-api (42191 errors).\", \"Derived: most-alerted critical instance payments-api (10 critical alerts); no matching host-inventory entry.\", \"Derived: warning/critical alerts span 2022-02-02 14:00 UTC to 2022-02-03 11:00 UTC; earliest alert hour 2022-02-02 14:00 UTC (3 alerts).\", \"Derived: changes recorded from 6 hours before the earliest alert hour to its end: CHG-17327 (helm_upgrade, payments-api chart (revision 67), release-bot, 2022-02-02 10:56 UTC); CHG-17330 (deployment, promo-svc 14.8.8 -> 14.9.0, argocd, 2022-02-02 12:02 UTC).\", \"Derived: earliest metric anomaly onset 2022-02-02 13:00 UTC (db pool pending requests (maxOpenConns) on payments-api).\"]}",
+      "metadata": {
+        "scenario": "pool_size_values_0018",
+        "source_kind": "derived_from_es_results",
+        "heuristic": true
+      }
+    },
+    {
+      "artifact_id": "pool_size_values_0018-10",
+      "artifact_type": "query_coverage",
+      "subtype": "evidence_gaps",
+      "source": "evidence_gaps",
+      "content": "{\"description\": \"Queries that returned nothing or failed; use these to state what is NOT established.\", \"facts\": [\"No matching results for: tls certificates / expired certificates. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / expiring within 7 days. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / self signed. (Absence in this query is not proof of absence elsewhere.)\"]}",
+      "metadata": {
+        "scenario": "pool_size_values_0018",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    }
+  ]
+}

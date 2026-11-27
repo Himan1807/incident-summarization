@@ -1,0 +1,16 @@
+{
+  "scenario": "edge_ratelimit_0048",
+  "cleaning": [],
+  "skipped": [
+    "tls_certificates: all aggregations empty"
+  ],
+  "gaps": [
+    "platform_events"
+  ],
+  "artifacts": 9,
+  "facts": 63,
+  "empty_aggregations": 3,
+  "questions": 9,
+  "answers": 9,
+  "atoms": 11
+}

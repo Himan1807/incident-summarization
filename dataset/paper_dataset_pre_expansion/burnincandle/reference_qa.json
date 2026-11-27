@@ -1,0 +1,127 @@
+{
+  "source": "answers.txt (paper dataset)",
+  "confidence": "paper ground truth",
+  "qa": [
+    {
+      "id": 1,
+      "question": "What is the IP address of the potentially infected internal host in the LAN?",
+      "answer": "10.0.19.14",
+      "atoms": [
+        {
+          "text": "10.0.19.14",
+          "kind": "ip"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "question": "What is the hostname of the potentially infected machine in the LAN?",
+      "answer": "DESKTOP-5QS3D5D",
+      "atoms": [
+        {
+          "text": "DESKTOP-5QS3D5D",
+          "kind": "hostname"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "question": "What is the Windows human user account name (not machine accounts ending in $) of the potentially infected machine in the LAN?",
+      "answer": "patrick.zimmerman",
+      "atoms": [
+        {
+          "text": "patrick.zimmerman",
+          "kind": "domain_or_file"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "question": "What external domains or IP addresses are associated with the initial infection and malware delivery?",
+      "answer": "oceriesfornot.top, antnosience.com, suncoastpinball.com, otectagain.top, seaskysafe.com, dilimoretast.com, filebin.net, situla.bitbit.net",
+      "atoms": [
+        {
+          "text": "oceriesfornot.top",
+          "kind": "domain_or_file"
+        },
+        {
+          "text": "antnosience.com",
+          "kind": "domain_or_file"
+        },
+        {
+          "text": "suncoastpinball.com",
+          "kind": "domain_or_file"
+        },
+        {
+          "text": "otectagain.top",
+          "kind": "domain_or_file"
+        },
+        {
+          "text": "seaskysafe.com",
+          "kind": "domain_or_file"
+        },
+        {
+          "text": "dilimoretast.com",
+          "kind": "domain_or_file"
+        },
+        {
+          "text": "filebin.net",
+          "kind": "domain_or_file"
+        },
+        {
+          "text": "situla.bitbit.net",
+          "kind": "domain_or_file"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "question": "What are the suspicious external IP addresses contacted, which might be involved in command-and-control (C2) communication?",
+      "answer": "188.166.154.118, 157.245.142.66, 160.153.32.99, 91.193.16.181",
+      "atoms": [
+        {
+          "text": "188.166.154.118",
+          "kind": "ip"
+        },
+        {
+          "text": "157.245.142.66",
+          "kind": "ip"
+        },
+        {
+          "text": "160.153.32.99",
+          "kind": "ip"
+        },
+        {
+          "text": "91.193.16.181",
+          "kind": "ip"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "question": "During what hour did the first signs of infection activity appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+      "answer": "2022-03-21 20:00 UTC",
+      "atoms": [
+        {
+          "text": "2022-03-21 20:00 UTC",
+          "kind": "time"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "question": "According to the connection volume statistics, what single external IP address received the most connections from the infected hosts? Is it a C2 server or a legitimate service?",
+      "answer": "157.245.142.66, C2 server",
+      "atoms": [
+        {
+          "text": "157.245.142.66",
+          "kind": "ip"
+        },
+        {
+          "text": "C2 server",
+          "kind": "label"
+        }
+      ]
+    }
+  ]
+}

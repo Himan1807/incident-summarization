@@ -1,0 +1,14 @@
+{
+  "scenario": "external_api_0032",
+  "cleaning": [],
+  "skipped": [
+    "tls_certificates: all aggregations empty"
+  ],
+  "gaps": [],
+  "artifacts": 10,
+  "facts": 60,
+  "empty_aggregations": 3,
+  "questions": 6,
+  "answers": 6,
+  "atoms": 7
+}

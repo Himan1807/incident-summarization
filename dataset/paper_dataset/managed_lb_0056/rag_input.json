@@ -1,0 +1,166 @@
+{
+  "metadata": {
+    "incident_id": "INC-20250205",
+    "scenario": "managed_lb_0056",
+    "title": "Infrastructure reliability incident investigation",
+    "source": "synthetic/ops-incident-expansion (modeled on neu-nds2/llm-sec-incident-analysis)",
+    "query_window_start": "2025-02-05T00:00:00",
+    "query_window_end": "2025-02-07T23:59:59",
+    "evidence_types": [
+      "change_records",
+      "derived_findings",
+      "infrastructure_events",
+      "monitoring_alerts",
+      "network_summary",
+      "query_coverage",
+      "resource_metrics",
+      "service_logs"
+    ],
+    "artifact_scope_note": "Evidence is aggregated query output (not raw log lines or metric samples); it contains no chat/communication records."
+  },
+  "incident_description": "Reliability incident investigation of a production environment. Evidence consists of Elasticsearch aggregation results over application and proxy logs, Kubernetes, cloud-provider and host system events, Prometheus Alertmanager alerts, change-management / CI-CD audit records and metric anomaly detection. No root cause, impact or trigger is stated; these must be established from the supplied artifacts. Environment context: Organization: Sablebrook Education (online learning); Platform: Microsoft Azure eastus (zones eastus-1/eastus-2/eastus-3); network range 10.28.0.0/16; Kubernetes cluster sableb-prod-eastus (AKS); Edge: provider-managed load balancer (edge-lb) in front of learner-web backends; a standby load balancer exists in a secondary region; Change management: production changes carry CHG- identifiers.",
+  "investigation_questions": [
+    "Which service or component is the origin of the failure?",
+    "What is the cloud provider's incident or tracking identifier?",
+    "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+    "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+    "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+    "Which change is a red herring: recorded shortly before onset but unrelated to the failure? Give its identifier.",
+    "Which change restored normal service? Provide its change identifier."
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "managed_lb_0056-01",
+      "artifact_type": "service_logs",
+      "subtype": "error_logs",
+      "source": "error_logs",
+      "content": "{\"description\": \"Application and proxy error logs: HTTP/gRPC status codes, failing requests (caller -> callee:port : operation), error messages and the services emitting them.\", \"facts\": [\"error events: 68979 matching events\", \"error events > status codes: 502 \\u2014 68696 events\", \"error events > status codes: 500 \\u2014 262 events\", \"error events > status codes: 429 \\u2014 21 events\", \"failing requests: edge-lb -> learner-web:8080 : GET /* (httpStatus=502) \\u2014 68696 events\", \"failing requests: learner-web -> template loader : render \\u2014 262 events\", \"failing requests: forum-svc -> forum-db:5432 : query \\u2014 21 events\", \"error messages: httpStatus=502 serverStatus=- (Application Gateway: ERRORINFO_UPSTREAM_CONNECT_FAILED) \\u2014 68696 events\", \"error messages: TemplateNotFound: partials/footer_v1.html \\u2014 262 events\", \"error messages: HTTP 429 Too Many Requests from upstream \\u2014 21 events\", \"emitting services: edge-lb \\u2014 68696 events\", \"emitting services: learner-web \\u2014 262 events\", \"emitting services: forum-svc \\u2014 21 events\"]}",
+      "metadata": {
+        "scenario": "managed_lb_0056",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "managed_lb_0056-02",
+      "artifact_type": "service_logs",
+      "subtype": "error_volume_by_service",
+      "source": "error_volume_by_service",
+      "content": "{\"description\": \"Services ranked by number of error events, with each service's most-failed downstream dependencies.\", \"facts\": [\"services: edge-lb \\u2014 68696 events; failing dependencies=1; top dependencies: learner-web (68696)\", \"services: learner-web \\u2014 262 events; failing dependencies=1; top dependencies: template loader (262)\", \"services: forum-svc \\u2014 21 events; failing dependencies=1; top dependencies: forum-db (21)\"]}",
+      "metadata": {
+        "scenario": "managed_lb_0056",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "managed_lb_0056-03",
+      "artifact_type": "change_records",
+      "subtype": "change_log",
+      "source": "change_log",
+      "content": "{\"description\": \"Deployments, configuration pushes, infrastructure and automation runs from the change-management and CI/CD audit log: change ID, type, target, actor, time (UTC), status and recorded diff/summary.\", \"facts\": [\"changes: CHG-31554 | deployment | forum-svc 4.2.9 -> 4.3.0 | actor: github-actions | 2025-02-05 08:52 UTC | status: Synced/Healthy | minor bug fixes \\u2014 1 events\", \"changes: CHG-31560 | deployment | video-api 12.13.5 -> 12.13.6 | actor: github-actions | 2025-02-06 03:33 UTC | status: completed | performance tuning of list endpoint \\u2014 1 events\", \"changes: CHG-31592 | deployment | learner-web content release | actor: github-actions | 2025-02-06 22:57 UTC | status: completed | template partials/footer_v1.html removed \\u2014 1 events\", \"changes: CHG-31628 | traffic_steering | DNS learner-web.sablebrook.com | actor: c.berg | 2025-02-07 01:05 UTC | status: completed | fail over to standby load balancer in secondary region \\u2014 1 events\", \"changes: CHG-31637 | deployment | auth-svc 9.12.3 -> 9.13.0 | actor: github-actions | 2025-02-07 16:20 UTC | status: succeeded | new optional API field \\u2014 1 events\", \"change types: deployment \\u2014 4 events\", \"change types: traffic_steering \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "managed_lb_0056",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "managed_lb_0056-04",
+      "artifact_type": "change_records",
+      "subtype": "change_actors",
+      "source": "change_actors",
+      "content": "{\"description\": \"Accounts and automation identities that executed changes, with the hosts or targets they acted on.\", \"facts\": [\"actors: github-actions \\u2014 4 events; targets: sableb-prod-eastus/learner-web (1), sableb-prod-eastus/auth-svc (1), sableb-prod-eastus/forum-svc (1), sableb-prod-eastus/video-api (1)\", \"actors: c.berg \\u2014 1 events; targets: edge-lb (1)\"]}",
+      "metadata": {
+        "scenario": "managed_lb_0056",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "managed_lb_0056-05",
+      "artifact_type": "infrastructure_events",
+      "subtype": "host_inventory",
+      "source": "host_inventory",
+      "content": "{\"description\": \"Host and node names seen in infrastructure events with their IP address, role and availability zone / rack.\", \"facts\": [\"hosts: aks-nodepool1-76462389-vmss000001 \\u2014 1168 events; ip: 10.28.161.72; role: learner-web backend; zone: eastus-3\", \"hosts: aks-nodepool1-74848595-vmss000003 \\u2014 1102 events; ip: 10.28.194.151; role: learner-web backend; zone: eastus-1\", \"hosts: aks-nodepool1-27308739-vmss000000 \\u2014 1087 events; ip: 10.28.150.201; role: learner-web backend; zone: eastus-2\", \"hosts: aks-nodepool1-94588951-vmss000019 \\u2014 1052 events; ip: 10.28.194.150; role: learner-web backend; zone: eastus-1\", \"hosts: aks-nodepool1-60411735-vmss000038 \\u2014 178 events; ip: 10.28.150.193; role: k8s-worker; zone: eastus-2\", \"hosts: aks-nodepool1-18127635-vmss000009 \\u2014 149 events; ip: 10.28.161.183; role: k8s-worker; zone: eastus-3\"]}",
+      "metadata": {
+        "scenario": "managed_lb_0056",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "managed_lb_0056-06",
+      "artifact_type": "infrastructure_events",
+      "subtype": "platform_events",
+      "source": "platform_events",
+      "content": "{\"description\": \"Kubernetes events, cloud-provider health events and host system messages (kernel, hardware, daemons) with the objects or hosts they refer to.\", \"facts\": [\"cloud health events: Azure Service Health: Application Gateway - eastus - intermittent 502 errors (tracking ID J3Q4-H7X); start 2025-02-06 23:24 UTC \\u2014 2 events; top objects: project sablebrook-prod (2)\", \"load balancer health checks: backend health: HEALTHY \\u2014 4090 events; top objects: aks-nodepool1-76462389-vmss000001 (1206), aks-nodepool1-94588951-vmss000019 (1138), aks-nodepool1-27308739-vmss000000 (965), aks-nodepool1-74848595-vmss000003 (781)\", \"event reasons: Pulled \\u2014 8 events; top objects: pod/auth-svc-d311ef0cf-dmcm8 (1)\", \"event reasons: ScalingReplicaSet \\u2014 5 events; top objects: deployment/auth-svc (2)\", \"event reasons: Pulled \\u2014 16 events; top objects: pod/forum-svc-7005d6d3a-lxt6t (3)\", \"event reasons: ScalingReplicaSet \\u2014 6 events; top objects: deployment/forum-svc (3)\", \"event reasons: Pulled \\u2014 17 events; top objects: pod/video-api-8de940cc8-6qj65 (1)\", \"event reasons: ScalingReplicaSet \\u2014 4 events; top objects: deployment/video-api (2)\"]}",
+      "metadata": {
+        "scenario": "managed_lb_0056",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "managed_lb_0056-07",
+      "artifact_type": "monitoring_alerts",
+      "subtype": "alertmanager_alerts",
+      "source": "alertmanager_alerts",
+      "content": "{\"description\": \"Prometheus Alertmanager alerts: alert names with severity, critical-alert instances, alert names and services, and an hourly timeline of warning and critical alerts (UTC).\", \"facts\": [\"alert names: Watchdog (info) \\u2014 72 events; service: alertmanager; firing continuously\", \"alert names: LBHigh5xxRatio (critical) \\u2014 13 events; service: edge-lb; first seen in hour 2025-02-06 23:00 UTC; last seen in hour 2025-02-07 01:00 UTC\", \"alert names: UptimeCheckFailed (critical) \\u2014 8 events; service: edge-lb; first seen in hour 2025-02-06 23:00 UTC; last seen in hour 2025-02-07 01:00 UTC\", \"alert names: NodeFilesystemSpaceFillingUp (warning) \\u2014 4 events; service: node; first seen in hour 2025-02-06 18:00 UTC; last seen in hour 2025-02-06 19:00 UTC\", \"critical alerts: 21 matching events\", \"critical alerts > critical instances: edge-lb \\u2014 13 events\", \"critical alerts > critical instances: uptime-check learner-web-home \\u2014 8 events\", \"critical alerts > critical alert names: LBHigh5xxRatio \\u2014 13 events\", \"critical alerts > critical alert names: UptimeCheckFailed \\u2014 8 events\", \"critical alerts > critical services: edge-lb \\u2014 21 events\", \"alert timeline: 2025-02-06 18:00 UTC \\u2014 2 events\", \"alert timeline: 2025-02-06 19:00 UTC \\u2014 2 events\", \"alert timeline: 2025-02-06 23:00 UTC \\u2014 7 events\", \"alert timeline: 2025-02-07 00:00 UTC \\u2014 9 events\", \"alert timeline: 2025-02-07 01:00 UTC \\u2014 5 events\"]}",
+      "metadata": {
+        "scenario": "managed_lb_0056",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "managed_lb_0056-08",
+      "artifact_type": "resource_metrics",
+      "subtype": "metric_anomalies",
+      "source": "metric_anomalies",
+      "content": "{\"description\": \"Metric series that deviated from their 7-day baseline (hourly resolution): baseline, peak or trough value, anomaly onset and recovery (UTC).\", \"facts\": [\"metric anomalies: load balancer 5xx responses per minute on edge-lb \\u2014 baseline ~5/min; peak 1,293/min; onset 2025-02-06 23:00 UTC; recovered 2025-02-07 02:00 UTC\"]}",
+      "metadata": {
+        "scenario": "managed_lb_0056",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "managed_lb_0056-09",
+      "artifact_type": "network_summary",
+      "subtype": "tls_certificates",
+      "source": "tls_certificates",
+      "content": "{\"description\": \"TLS certificates observed in edge and service-to-service traffic that are expired, expire within 7 days, or are self-signed.\", \"facts\": [\"expiring within 7 days: 41 matching events\", \"expiring within 7 days > certificate details: CN=video-api.sablebrook.internal | issuer: CN=sablebrook-internal-ca | not_after: 2025-02-11 23:59:00 UTC | seen on: video-api:8443 \\u2014 41 events\"]}",
+      "metadata": {
+        "scenario": "managed_lb_0056",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "managed_lb_0056-10",
+      "artifact_type": "derived_findings",
+      "subtype": "derived_summary",
+      "source": "derived_summary",
+      "content": "{\"description\": \"Deterministic summary computed from the query results above (error ranking, instance-to-host join, alert timeline, change correlation, earliest metric anomaly).\", \"facts\": [\"Derived: service edge-lb ranks #1 by error volume (68696 events, 1 failing dependencies). Most-failed dependency: learner-web (68696 errors).\", \"Derived: most-alerted critical instance edge-lb (13 critical alerts); no matching host-inventory entry.\", \"Derived: warning/critical alerts span 2025-02-06 18:00 UTC to 2025-02-07 01:00 UTC; earliest alert hour 2025-02-06 18:00 UTC (2 alerts).\", \"Derived: no changes recorded from 6 hours before the earliest alert hour to its end.\", \"Derived: earliest metric anomaly onset 2025-02-06 23:00 UTC (load balancer 5xx responses per minute on edge-lb).\"]}",
+      "metadata": {
+        "scenario": "managed_lb_0056",
+        "source_kind": "derived_from_es_results",
+        "heuristic": true
+      }
+    },
+    {
+      "artifact_id": "managed_lb_0056-11",
+      "artifact_type": "query_coverage",
+      "subtype": "evidence_gaps",
+      "source": "evidence_gaps",
+      "content": "{\"description\": \"Queries that returned nothing or failed; use these to state what is NOT established.\", \"facts\": [\"No matching results for: tls certificates / expired certificates. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / self signed. (Absence in this query is not proof of absence elsewhere.)\"]}",
+      "metadata": {
+        "scenario": "managed_lb_0056",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    }
+  ]
+}

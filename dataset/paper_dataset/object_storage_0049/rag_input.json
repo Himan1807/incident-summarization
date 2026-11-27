@@ -1,0 +1,166 @@
+{
+  "metadata": {
+    "incident_id": "INC-20260102",
+    "scenario": "object_storage_0049",
+    "title": "Infrastructure reliability incident investigation",
+    "source": "synthetic/ops-incident-expansion (modeled on neu-nds2/llm-sec-incident-analysis)",
+    "query_window_start": "2026-01-02T00:00:00",
+    "query_window_end": "2026-01-04T23:59:59",
+    "evidence_types": [
+      "change_records",
+      "derived_findings",
+      "infrastructure_events",
+      "monitoring_alerts",
+      "network_summary",
+      "query_coverage",
+      "resource_metrics",
+      "service_logs"
+    ],
+    "artifact_scope_note": "Evidence is aggregated query output (not raw log lines or metric samples); it contains no chat/communication records."
+  },
+  "incident_description": "Reliability incident investigation of a production environment. Evidence consists of Elasticsearch aggregation results over application and proxy logs, Kubernetes, cloud-provider and host system events, Prometheus Alertmanager alerts, change-management / CI-CD audit records and metric anomaly detection. No root cause, impact or trigger is stated; these must be established from the supplied artifacts. Environment context: Organization: Ardstack Bank (digital banking); Platform: Microsoft Azure eastus (zones eastus-1/eastus-2/eastus-3); network range 10.127.0.0/16; Kubernetes cluster ardsta-prod-eastus (AKS); Object storage: provider-managed bucket/account for user content, accessed directly by backend services; Change management: production changes carry RFC- identifiers.",
+  "investigation_questions": [
+    "Did rolling back the service deployed shortly before the incident restore normal service? Answer yes or no.",
+    "What is the cloud provider's incident or tracking identifier?",
+    "Which external storage endpoint returned the errors?",
+    "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+    "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+    "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+    "Which change happened shortly before the incident began but did not cause it? Provide its identifier."
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "object_storage_0049-01",
+      "artifact_type": "service_logs",
+      "subtype": "error_logs",
+      "source": "error_logs",
+      "content": "{\"description\": \"Application and proxy error logs: HTTP/gRPC status codes, failing requests (caller -> callee:port : operation), error messages and the services emitting them.\", \"facts\": [\"error events: 112202 matching events\", \"error events > status codes: 503 \\u2014 112160 events\", \"error events > status codes: 500 \\u2014 42 events\", \"failing requests: thumbnail-worker -> ardstackuploads07.blob.core.windows.net:443 : PUT objects \\u2014 62667 events\", \"failing requests: document-store-api -> ardstackuploads07.blob.core.windows.net:443 : GET/PUT objects \\u2014 29375 events\", \"failing requests: backup-agent -> ardstackuploads07.blob.core.windows.net:443 : GET objects \\u2014 20118 events\", \"failing requests: transfers-api -> transfers-db:5432 : query \\u2014 42 events\", \"error messages: RequestFailedException: Status: 503 (The server is busy.) ErrorCode: ServerBusy \\u2014 112160 events\", \"error messages: pq: could not serialize access due to concurrent update \\u2014 42 events\", \"emitting services: thumbnail-worker \\u2014 62667 events\", \"emitting services: document-store-api \\u2014 29375 events\", \"emitting services: backup-agent \\u2014 20118 events\", \"emitting services: transfers-api \\u2014 42 events\"]}",
+      "metadata": {
+        "scenario": "object_storage_0049",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "object_storage_0049-02",
+      "artifact_type": "service_logs",
+      "subtype": "error_volume_by_service",
+      "source": "error_volume_by_service",
+      "content": "{\"description\": \"Services ranked by number of error events, with each service's most-failed downstream dependencies.\", \"facts\": [\"services: thumbnail-worker \\u2014 62667 events; failing dependencies=1; top dependencies: ardstackuploads07.blob.core.windows.net (62667)\", \"services: document-store-api \\u2014 29375 events; failing dependencies=1; top dependencies: ardstackuploads07.blob.core.windows.net (29375)\", \"services: backup-agent \\u2014 20118 events; failing dependencies=1; top dependencies: ardstackuploads07.blob.core.windows.net (20118)\", \"services: transfers-api \\u2014 42 events; failing dependencies=1; top dependencies: transfers-db (42)\"]}",
+      "metadata": {
+        "scenario": "object_storage_0049",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "object_storage_0049-03",
+      "artifact_type": "change_records",
+      "subtype": "change_log",
+      "source": "change_log",
+      "content": "{\"description\": \"Deployments, configuration pushes, infrastructure and automation runs from the change-management and CI/CD audit log: change ID, type, target, actor, time (UTC), status and recorded diff/summary.\", \"facts\": [\"changes: RFC-64443 | deployment | ledger-api 5.8.12 -> 5.8.13 | actor: github-actions | 2026-01-02 00:50 UTC | status: succeeded | minor bug fixes \\u2014 1 events\", \"changes: RFC-64476 | deployment | thumbnail-worker 5.23.2 -> 5.24.0 | actor: github-actions | 2026-01-02 08:08 UTC | status: succeeded | new upload chunk size \\u2014 1 events\", \"changes: RFC-64495 | rollback | thumbnail-worker 5.24.0 -> 5.23.2 | actor: t.novak | 2026-01-02 11:46 UTC | status: succeeded | precautionary rollback \\u2014 1 events\", \"changes: RFC-64525 | deployment | fx-rates-svc 4.15.5 -> 4.15.6 | actor: github-actions | 2026-01-03 05:17 UTC | status: Synced/Healthy | new optional API field \\u2014 1 events\", \"changes: RFC-64564 | deployment | transfers-api 2.26.0 -> 2.27.0 | actor: github-actions | 2026-01-04 14:19 UTC | status: Synced/Healthy | logging improvements \\u2014 1 events\", \"change types: deployment \\u2014 4 events\", \"change types: rollback \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "object_storage_0049",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "object_storage_0049-04",
+      "artifact_type": "change_records",
+      "subtype": "change_actors",
+      "source": "change_actors",
+      "content": "{\"description\": \"Accounts and automation identities that executed changes, with the hosts or targets they acted on.\", \"facts\": [\"actors: github-actions \\u2014 4 events; targets: ardsta-prod-eastus/thumbnail-worker (1), ardsta-prod-eastus/fx-rates-svc (1), ardsta-prod-eastus/transfers-api (1), ardsta-prod-eastus/ledger-api (1)\", \"actors: t.novak \\u2014 1 events; targets: ardsta-prod-eastus/thumbnail-worker (1)\"]}",
+      "metadata": {
+        "scenario": "object_storage_0049",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "object_storage_0049-05",
+      "artifact_type": "infrastructure_events",
+      "subtype": "host_inventory",
+      "source": "host_inventory",
+      "content": "{\"description\": \"Host and node names seen in infrastructure events with their IP address, role and availability zone / rack.\", \"facts\": [\"hosts: aks-nodepool1-20609102-vmss000027 \\u2014 300 events; ip: 10.127.169.39; role: k8s-worker; zone: eastus-1\", \"hosts: aks-nodepool1-67215956-vmss000034 \\u2014 296 events; ip: 10.127.112.105; role: k8s-worker; zone: eastus-2\"]}",
+      "metadata": {
+        "scenario": "object_storage_0049",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "object_storage_0049-06",
+      "artifact_type": "infrastructure_events",
+      "subtype": "platform_events",
+      "source": "platform_events",
+      "content": "{\"description\": \"Kubernetes events, cloud-provider health events and host system messages (kernel, hardware, daemons) with the objects or hosts they refer to.\", \"facts\": [\"cloud health events: Azure Service Health: Storage - eastus - service degradation (tracking ID A8T2-D4Y); impact start 2026-01-02 10:07 UTC, mitigated 2026-01-02 14:16 UTC \\u2014 2 events; top objects: account ardstack-prod (2)\", \"event reasons: Pulled \\u2014 20 events; top objects: pod/fx-rates-svc-a94677d7c-l622b (1)\", \"event reasons: ScalingReplicaSet \\u2014 5 events; top objects: deployment/fx-rates-svc (2)\", \"event reasons: Pulled \\u2014 8 events; top objects: pod/transfers-api-a4962b393-kd24z (3)\", \"event reasons: ScalingReplicaSet \\u2014 2 events; top objects: deployment/transfers-api (2)\", \"event reasons: Pulled \\u2014 11 events; top objects: pod/ledger-api-5bee8ed6f-z5xbq (2)\", \"event reasons: ScalingReplicaSet \\u2014 5 events; top objects: deployment/ledger-api (1)\"]}",
+      "metadata": {
+        "scenario": "object_storage_0049",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "object_storage_0049-07",
+      "artifact_type": "monitoring_alerts",
+      "subtype": "alertmanager_alerts",
+      "source": "alertmanager_alerts",
+      "content": "{\"description\": \"Prometheus Alertmanager alerts: alert names with severity, critical-alert instances, alert names and services, and an hourly timeline of warning and critical alerts (UTC).\", \"facts\": [\"alert names: Watchdog (info) \\u2014 72 events; service: alertmanager; firing continuously\", \"alert names: ObjectStorageErrorRateHigh (critical) \\u2014 25 events; service: storage; first seen in hour 2026-01-02 10:00 UTC; last seen in hour 2026-01-02 14:00 UTC\", \"alert names: ThumbnailWorkerFailureRateHigh (critical) \\u2014 18 events; service: thumbnail-worker; first seen in hour 2026-01-02 10:00 UTC; last seen in hour 2026-01-02 14:00 UTC\", \"alert names: CPUThrottlingHigh (warning) \\u2014 5 events; service: ledger-api; first seen in hour 2026-01-02 23:00 UTC; last seen in hour 2026-01-03 01:00 UTC\", \"alert names: NodeFilesystemSpaceFillingUp (warning) \\u2014 3 events; service: node; first seen in hour 2026-01-02 06:00 UTC; last seen in hour 2026-01-02 08:00 UTC\", \"critical alerts: 43 matching events\", \"critical alerts > critical instances: ardstackuploads07.blob.core.windows.net \\u2014 25 events\", \"critical alerts > critical instances: thumbnail-worker \\u2014 18 events\", \"critical alerts > critical alert names: ObjectStorageErrorRateHigh \\u2014 25 events\", \"critical alerts > critical alert names: ThumbnailWorkerFailureRateHigh \\u2014 18 events\", \"critical alerts > critical services: storage \\u2014 25 events\", \"critical alerts > critical services: thumbnail-worker \\u2014 18 events\", \"alert timeline: 2026-01-02 06:00 UTC \\u2014 1 events\", \"alert timeline: 2026-01-02 07:00 UTC \\u2014 1 events\", \"alert timeline: 2026-01-02 08:00 UTC \\u2014 1 events\", \"alert timeline: 2026-01-02 10:00 UTC \\u2014 8 events\", \"alert timeline: 2026-01-02 11:00 UTC \\u2014 9 events\", \"alert timeline: 2026-01-02 12:00 UTC \\u2014 9 events\", \"alert timeline: 2026-01-02 13:00 UTC \\u2014 7 events\", \"alert timeline: 2026-01-02 14:00 UTC \\u2014 10 events\", \"alert timeline: 2026-01-02 23:00 UTC \\u2014 2 events\", \"alert timeline: 2026-01-03 00:00 UTC \\u2014 1 events\", \"alert timeline: 2026-01-03 01:00 UTC \\u2014 2 events\"]}",
+      "metadata": {
+        "scenario": "object_storage_0049",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "object_storage_0049-08",
+      "artifact_type": "resource_metrics",
+      "subtype": "metric_anomalies",
+      "source": "metric_anomalies",
+      "content": "{\"description\": \"Metric series that deviated from their 7-day baseline (hourly resolution): baseline, peak or trough value, anomaly onset and recovery (UTC).\", \"facts\": [\"metric anomalies: object storage 5xx responses per minute on ardstackuploads07.blob.core.windows.net \\u2014 baseline ~1/min; peak 6,348/min; onset 2026-01-02 10:00 UTC; recovered 2026-01-02 15:00 UTC\"]}",
+      "metadata": {
+        "scenario": "object_storage_0049",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "object_storage_0049-09",
+      "artifact_type": "network_summary",
+      "subtype": "tls_certificates",
+      "source": "tls_certificates",
+      "content": "{\"description\": \"TLS certificates observed in edge and service-to-service traffic that are expired, expire within 7 days, or are self-signed.\", \"facts\": [\"expiring within 7 days: 7 matching events\", \"expiring within 7 days > certificate details: CN=ledger-api.ardstack.internal | issuer: CN=R10,O=Let's Encrypt | not_after: 2026-01-05 23:59:00 UTC | seen on: ledger-api:8443 \\u2014 7 events\"]}",
+      "metadata": {
+        "scenario": "object_storage_0049",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "object_storage_0049-10",
+      "artifact_type": "derived_findings",
+      "subtype": "derived_summary",
+      "source": "derived_summary",
+      "content": "{\"description\": \"Deterministic summary computed from the query results above (error ranking, instance-to-host join, alert timeline, change correlation, earliest metric anomaly).\", \"facts\": [\"Derived: service thumbnail-worker ranks #1 by error volume (62667 events, 1 failing dependencies). Most-failed dependency: ardstackuploads07.blob.core.windows.net (62667 errors).\", \"Derived: most-alerted critical instance ardstackuploads07.blob.core.windows.net (25 critical alerts); no matching host-inventory entry.\", \"Derived: warning/critical alerts span 2026-01-02 06:00 UTC to 2026-01-03 01:00 UTC; earliest alert hour 2026-01-02 06:00 UTC (1 alerts).\", \"Derived: changes recorded from 6 hours before the earliest alert hour to its end: RFC-64443 (deployment, ledger-api 5.8.12 -> 5.8.13, github-actions, 2026-01-02 00:50 UTC).\", \"Derived: earliest metric anomaly onset 2026-01-02 10:00 UTC (object storage 5xx responses per minute on ardstackuploads07.blob.core.windows.net).\"]}",
+      "metadata": {
+        "scenario": "object_storage_0049",
+        "source_kind": "derived_from_es_results",
+        "heuristic": true
+      }
+    },
+    {
+      "artifact_id": "object_storage_0049-11",
+      "artifact_type": "query_coverage",
+      "subtype": "evidence_gaps",
+      "source": "evidence_gaps",
+      "content": "{\"description\": \"Queries that returned nothing or failed; use these to state what is NOT established.\", \"facts\": [\"No matching results for: tls certificates / expired certificates. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / self signed. (Absence in this query is not proof of absence elsewhere.)\"]}",
+      "metadata": {
+        "scenario": "object_storage_0049",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    }
+  ]
+}

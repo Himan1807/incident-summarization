@@ -1,0 +1,120 @@
+{
+  "source": "synthetic generator ground truth (ops expansion)",
+  "confidence": "synthetic ground truth",
+  "qa": [
+    {
+      "id": 1,
+      "question": "Which component returned the failing responses to clients?",
+      "answer": "docs-lb (Google Cloud global external HTTP(S) load balancer, url-map docs-prod)",
+      "atoms": [
+        {
+          "text": "docs-lb",
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "question": "What load balancer status detail was logged for most failed requests?",
+      "answer": "failed_to_pick_backend",
+      "atoms": [
+        {
+          "text": "failed_to_pick_backend",
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "question": "Were the backend instances unhealthy during the incident? Answer yes or no.",
+      "answer": "no (health checks reported HEALTHY throughout)",
+      "atoms": [
+        {
+          "text": "no",
+          "kind": "label"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "question": "What is the cloud provider's incident number?",
+      "answer": "21008",
+      "atoms": [
+        {
+          "text": "21008",
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "question": "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+      "answer": "2021-08-03 13:00 UTC",
+      "atoms": [
+        {
+          "text": "2021-08-03 13:00 UTC",
+          "kind": "time"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "question": "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+      "answer": "cloud provider failure",
+      "atoms": [
+        {
+          "text": "cloud provider failure",
+          "kind": "label"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "question": "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+      "answer": "availability",
+      "atoms": [
+        {
+          "text": "availability",
+          "kind": "cia"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "question": "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+      "answer": "docs-lb, root cause",
+      "atoms": [
+        {
+          "text": "docs-lb",
+          "kind": "other"
+        },
+        {
+          "text": "root cause",
+          "kind": "label"
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "question": "Which change is a red herring that explains only the application 500 errors? Provide its change identifier.",
+      "answer": "CHG-1442",
+      "atoms": [
+        {
+          "text": "CHG-1442",
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "question": "Which change restored normal service? Provide its change identifier.",
+      "answer": "CHG-1447 (EU traffic shifted to us-central1 backends)",
+      "atoms": [
+        {
+          "text": "CHG-1447",
+          "kind": "other"
+        }
+      ]
+    }
+  ]
+}

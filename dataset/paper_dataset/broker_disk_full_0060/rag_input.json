@@ -1,0 +1,168 @@
+{
+  "metadata": {
+    "incident_id": "INC-20251122",
+    "scenario": "broker_disk_full_0060",
+    "title": "Infrastructure reliability incident investigation",
+    "source": "synthetic/ops-incident-expansion (modeled on neu-nds2/llm-sec-incident-analysis)",
+    "query_window_start": "2025-11-22T00:00:00",
+    "query_window_end": "2025-11-24T23:59:59",
+    "evidence_types": [
+      "change_records",
+      "derived_findings",
+      "infrastructure_events",
+      "monitoring_alerts",
+      "network_summary",
+      "query_coverage",
+      "resource_metrics",
+      "service_logs"
+    ],
+    "artifact_scope_note": "Evidence is aggregated query output (not raw log lines or metric samples); it contains no chat/communication records."
+  },
+  "incident_description": "Reliability incident investigation of a production environment. Evidence consists of Elasticsearch aggregation results over application and proxy logs, Kubernetes, cloud-provider and host system events, Prometheus Alertmanager alerts, change-management / CI-CD audit records and metric anomaly detection. No root cause, impact or trigger is stated; these must be established from the supplied artifacts. Environment context: Organization: Verdix Interactive (online gaming); Platform: AWS us-east-1 (zones us-east-1a/us-east-1b/us-east-1c/us-east-1d/us-east-1f); network range 10.233.0.0/16; Kubernetes cluster verdix-prod-useast (EKS); Streaming: Kafka cluster of three brokers (single log directory each); topic profile-events uses replication factor 2 and min.insync.replicas 2; producer profile-api, consumer rewards-svc; Change management: production changes carry CR- identifiers.",
+  "investigation_questions": [
+    "What is the hostname of the machine where the incident started?",
+    "What is the IP address of the host or node where the incident started?",
+    "Which filesystem path ran out of space?",
+    "Which topic partition first reported the storage exception?",
+    "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+    "Did the failure stay isolated to one component or cascade across services? Answer 'isolated failure' or 'cascading failure'.",
+    "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+    "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+    "Which change restored normal service? Provide its change identifier."
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "broker_disk_full_0060-01",
+      "artifact_type": "service_logs",
+      "subtype": "error_logs",
+      "source": "error_logs",
+      "content": "{\"description\": \"Application and proxy error logs: HTTP/gRPC status codes, failing requests (caller -> callee:port : operation), error messages and the services emitting them.\", \"facts\": [\"error events: 63489 matching events\", \"error events > status codes: n/a (kafka client error) \\u2014 61854 events\", \"error events > status codes: 500 \\u2014 1413 events\", \"error events > status codes: 499 \\u2014 221 events\", \"error events > status codes: n/a (broker log) \\u2014 1 events\", \"failing requests: profile-api -> kafka (topic profile-events):9092 : Produce acks=all \\u2014 57994 events\", \"failing requests: rewards-svc -> kafka (topic profile-events):9092 : OffsetCommit \\u2014 3860 events\", \"failing requests: matchmaking-svc -> rewards-store:5432 : read aggregates \\u2014 1413 events\", \"failing requests: store-api -> store-db:5432 : query \\u2014 221 events\", \"failing requests: kafka -> /kafka-logs log dir : append \\u2014 1 events\", \"error messages: NotEnoughReplicasException: Messages are rejected since there are fewer in-sync replicas than required. \\u2014 51901 events\", \"error messages: TimeoutException: Expiring 455 record(s) for profile-events-7 \\u2014 6093 events\", \"error messages: CommitFailedException: offset commit failed (rebalance in progress) \\u2014 3860 events\", \"error messages: stale data: processing watermark behind \\u2014 1413 events\", \"error messages: context canceled \\u2014 221 events\", \"error messages: ERROR Error while appending records to profile-events-7 in dir /kafka-logs (kafka.server.LogDirFailureChannel) java.io.IOException: No space left on device \\u2014 1 events\", \"emitting services: profile-api \\u2014 57994 events\", \"emitting services: rewards-svc \\u2014 3860 events\", \"emitting services: matchmaking-svc \\u2014 1413 events\", \"emitting services: store-api \\u2014 221 events\", \"emitting services: kafka \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "broker_disk_full_0060",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "broker_disk_full_0060-02",
+      "artifact_type": "service_logs",
+      "subtype": "error_volume_by_service",
+      "source": "error_volume_by_service",
+      "content": "{\"description\": \"Services ranked by number of error events, with each service's most-failed downstream dependencies.\", \"facts\": [\"services: profile-api \\u2014 57994 events; failing dependencies=1; top dependencies: kafka (topic profile-events) (57994)\", \"services: rewards-svc \\u2014 3860 events; failing dependencies=1; top dependencies: kafka (topic profile-events) (3860)\", \"services: matchmaking-svc \\u2014 1413 events; failing dependencies=1; top dependencies: rewards-store (1413)\", \"services: store-api \\u2014 221 events; failing dependencies=1; top dependencies: store-db (221)\", \"services: kafka \\u2014 1 events; failing dependencies=1; top dependencies: /kafka-logs log dir (1)\"]}",
+      "metadata": {
+        "scenario": "broker_disk_full_0060",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "broker_disk_full_0060-03",
+      "artifact_type": "change_records",
+      "subtype": "change_log",
+      "source": "change_log",
+      "content": "{\"description\": \"Deployments, configuration pushes, infrastructure and automation runs from the change-management and CI/CD audit log: change ID, type, target, actor, time (UTC), status and recorded diff/summary.\", \"facts\": [\"changes: CR-41050 | deployment | store-api 4.20.0 -> 4.21.0 | actor: spinnaker | 2025-11-22 10:24 UTC | status: completed | dependency bump \\u2014 1 events\", \"changes: CR-41063 | deployment | chat-svc 8.12.2 -> 8.12.3 | actor: spinnaker | 2025-11-23 19:59 UTC | status: succeeded | new optional API field \\u2014 1 events\", \"changes: CR-41090 | config_push | topic profile-events | actor: f.lindgren | 2025-11-23 21:53 UTC | status: completed | retention.ms 604800000 -> 259200000 (7d -> 3d) \\u2014 1 events\", \"changes: CR-41120 | service_restart | kafka on kafka-b1 | actor: f.lindgren | 2025-11-23 22:08 UTC | status: completed | restart after log segment cleanup freed space \\u2014 1 events\", \"change types: deployment \\u2014 2 events\", \"change types: config_push \\u2014 1 events\", \"change types: service_restart \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "broker_disk_full_0060",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "broker_disk_full_0060-04",
+      "artifact_type": "change_records",
+      "subtype": "change_actors",
+      "source": "change_actors",
+      "content": "{\"description\": \"Accounts and automation identities that executed changes, with the hosts or targets they acted on.\", \"facts\": [\"actors: f.lindgren \\u2014 2 events; targets: kafka-b1 (2), kafka-b2 (1), kafka-b3 (1)\", \"actors: spinnaker \\u2014 2 events; targets: verdix-prod-useast/chat-svc (1), verdix-prod-useast/store-api (1)\"]}",
+      "metadata": {
+        "scenario": "broker_disk_full_0060",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "broker_disk_full_0060-05",
+      "artifact_type": "infrastructure_events",
+      "subtype": "host_inventory",
+      "source": "host_inventory",
+      "content": "{\"description\": \"Host and node names seen in infrastructure events with their IP address, role and availability zone / rack.\", \"facts\": [\"hosts: kafka-b1 \\u2014 605 events; ip: 10.233.115.97; role: kafka-broker (id 1); zone: us-east-1a\", \"hosts: ip-10-233-211-15 \\u2014 189 events; ip: 10.233.211.15; role: k8s-worker; zone: us-east-1d\", \"hosts: kafka-b3 \\u2014 169 events; ip: 10.233.115.34; role: kafka-broker (id 3); zone: us-east-1c\", \"hosts: kafka-b2 \\u2014 143 events; ip: 10.233.115.62; role: kafka-broker (id 2); zone: us-east-1b\", \"hosts: ip-10-233-211-125 \\u2014 132 events; ip: 10.233.211.125; role: k8s-worker; zone: us-east-1d\"]}",
+      "metadata": {
+        "scenario": "broker_disk_full_0060",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "broker_disk_full_0060-06",
+      "artifact_type": "infrastructure_events",
+      "subtype": "platform_events",
+      "source": "platform_events",
+      "content": "{\"description\": \"Kubernetes events, cloud-provider health events and host system messages (kernel, hardware, daemons) with the objects or hosts they refer to.\", \"facts\": [\"system messages: kafka: INFO Shrinking ISR (broker removed from in-sync replicas) \\u2014 120 events; top objects: kafka-b3 (42), kafka-b2 (38)\", \"system messages: systemd: kafka.service: Main process exited, code=exited, status=1/FAILURE \\u2014 1 events; top objects: kafka-b1 (1)\", \"event reasons: Pulled \\u2014 30 events; top objects: pod/chat-svc-d9ffbdde3-nn6gc (2)\", \"event reasons: ScalingReplicaSet \\u2014 3 events; top objects: deployment/chat-svc (2)\", \"event reasons: Pulled \\u2014 6 events; top objects: pod/store-api-5730641ac-zgfq2 (1)\", \"event reasons: ScalingReplicaSet \\u2014 4 events; top objects: deployment/store-api (2)\"]}",
+      "metadata": {
+        "scenario": "broker_disk_full_0060",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "broker_disk_full_0060-07",
+      "artifact_type": "monitoring_alerts",
+      "subtype": "alertmanager_alerts",
+      "source": "alertmanager_alerts",
+      "content": "{\"description\": \"Prometheus Alertmanager alerts: alert names with severity, critical-alert instances, alert names and services, and an hourly timeline of warning and critical alerts (UTC).\", \"facts\": [\"alert names: Watchdog (info) \\u2014 72 events; service: alertmanager; firing continuously\", \"alert names: KafkaConsumerLagHigh (warning) \\u2014 10 events; service: rewards-svc; first seen in hour 2025-11-23 20:00 UTC; last seen in hour 2025-11-23 23:00 UTC\", \"alert names: KafkaBrokerDown (critical) \\u2014 9 events; service: kafka; first seen in hour 2025-11-23 20:00 UTC; last seen in hour 2025-11-23 22:00 UTC\", \"alert names: ProfileApiProduceErrors (critical) \\u2014 8 events; service: profile-api; first seen in hour 2025-11-23 20:00 UTC; last seen in hour 2025-11-23 22:00 UTC\", \"alert names: KafkaUnderReplicatedPartitions (critical) \\u2014 7 events; service: kafka; first seen in hour 2025-11-23 20:00 UTC; last seen in hour 2025-11-23 22:00 UTC\", \"alert names: NodeFilesystemAlmostFull (warning) \\u2014 4 events; service: node; first seen in hour 2025-11-23 18:00 UTC; last seen in hour 2025-11-23 21:00 UTC\", \"alert names: TargetDown (warning) \\u2014 2 events; service: game-gateway; first seen in hour 2025-11-23 13:00 UTC; last seen in hour 2025-11-23 13:00 UTC\", \"critical alerts: 24 matching events\", \"critical alerts > critical instances: kafka-b1:9308 \\u2014 9 events\", \"critical alerts > critical instances: profile-api \\u2014 8 events\", \"critical alerts > critical instances: kafka-b2:9308 \\u2014 4 events\", \"critical alerts > critical instances: kafka-b3:9308 \\u2014 3 events\", \"critical alerts > critical alert names: KafkaBrokerDown \\u2014 9 events\", \"critical alerts > critical alert names: ProfileApiProduceErrors \\u2014 8 events\", \"critical alerts > critical alert names: KafkaUnderReplicatedPartitions \\u2014 7 events\", \"critical alerts > critical services: kafka \\u2014 16 events\", \"critical alerts > critical services: profile-api \\u2014 8 events\", \"alert timeline: 2025-11-23 13:00 UTC \\u2014 2 events\", \"alert timeline: 2025-11-23 18:00 UTC \\u2014 1 events\", \"alert timeline: 2025-11-23 19:00 UTC \\u2014 1 events\", \"alert timeline: 2025-11-23 20:00 UTC \\u2014 8 events\", \"alert timeline: 2025-11-23 21:00 UTC \\u2014 13 events\", \"alert timeline: 2025-11-23 22:00 UTC \\u2014 11 events\", \"alert timeline: 2025-11-23 23:00 UTC \\u2014 4 events\"]}",
+      "metadata": {
+        "scenario": "broker_disk_full_0060",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "broker_disk_full_0060-08",
+      "artifact_type": "resource_metrics",
+      "subtype": "metric_anomalies",
+      "source": "metric_anomalies",
+      "content": "{\"description\": \"Metric series that deviated from their 7-day baseline (hourly resolution): baseline, peak or trough value, anomaly onset and recovery (UTC).\", \"facts\": [\"metric anomalies: node_filesystem_avail_bytes (/kafka-logs) on kafka-b1 \\u2014 baseline ~1189 GB free; trough 0 B; onset 2025-11-23 18:00 UTC; recovered 2025-11-23 23:00 UTC\"]}",
+      "metadata": {
+        "scenario": "broker_disk_full_0060",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "broker_disk_full_0060-09",
+      "artifact_type": "network_summary",
+      "subtype": "tls_certificates",
+      "source": "tls_certificates",
+      "content": "{\"description\": \"TLS certificates observed in edge and service-to-service traffic that are expired, expire within 7 days, or are self-signed.\", \"facts\": [\"expiring within 7 days: 50 matching events\", \"expiring within 7 days > certificate details: CN=game-gateway.verdix.internal | issuer: CN=R10,O=Let's Encrypt | not_after: 2025-11-28 23:59:00 UTC | seen on: game-gateway:8443 \\u2014 50 events\"]}",
+      "metadata": {
+        "scenario": "broker_disk_full_0060",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "broker_disk_full_0060-10",
+      "artifact_type": "derived_findings",
+      "subtype": "derived_summary",
+      "source": "derived_summary",
+      "content": "{\"description\": \"Deterministic summary computed from the query results above (error ranking, instance-to-host join, alert timeline, change correlation, earliest metric anomaly).\", \"facts\": [\"Derived: service profile-api ranks #1 by error volume (57994 events, 1 failing dependencies). Most-failed dependency: kafka (topic profile-events) (57994 errors).\", \"Derived: most-alerted critical instance kafka-b1:9308 (9 critical alerts) maps to ip 10.233.115.97; role kafka-broker (id 1); zone us-east-1a.\", \"Derived: warning/critical alerts span 2025-11-23 13:00 UTC to 2025-11-23 23:00 UTC; earliest alert hour 2025-11-23 13:00 UTC (2 alerts).\", \"Derived: no changes recorded from 6 hours before the earliest alert hour to its end.\", \"Derived: earliest metric anomaly onset 2025-11-23 18:00 UTC (node_filesystem_avail_bytes (/kafka-logs) on kafka-b1).\"]}",
+      "metadata": {
+        "scenario": "broker_disk_full_0060",
+        "source_kind": "derived_from_es_results",
+        "heuristic": true
+      }
+    },
+    {
+      "artifact_id": "broker_disk_full_0060-11",
+      "artifact_type": "query_coverage",
+      "subtype": "evidence_gaps",
+      "source": "evidence_gaps",
+      "content": "{\"description\": \"Queries that returned nothing or failed; use these to state what is NOT established.\", \"facts\": [\"No matching results for: tls certificates / expired certificates. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / self signed. (Absence in this query is not proof of absence elsewhere.)\"]}",
+      "metadata": {
+        "scenario": "broker_disk_full_0060",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    }
+  ]
+}

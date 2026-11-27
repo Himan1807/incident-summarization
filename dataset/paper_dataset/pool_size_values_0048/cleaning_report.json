@@ -1,0 +1,14 @@
+{
+  "scenario": "pool_size_values_0048",
+  "cleaning": [],
+  "skipped": [],
+  "gaps": [
+    "change_actors"
+  ],
+  "artifacts": 10,
+  "facts": 68,
+  "empty_aggregations": 2,
+  "questions": 10,
+  "answers": 10,
+  "atoms": 12
+}

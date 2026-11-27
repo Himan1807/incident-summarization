@@ -1,0 +1,114 @@
+{
+  "source": "answers.txt (paper dataset)",
+  "confidence": "paper ground truth",
+  "qa": [
+    {
+      "id": 1,
+      "question": "What is the IP address of the potentially infected internal host in the LAN?",
+      "answer": "10.0.0.149",
+      "atoms": [
+        {
+          "text": "10.0.0.149",
+          "kind": "ip"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "question": "What is the hostname of the potentially infected machine in the LAN?",
+      "answer": "DESKTOP-E7FHJS4",
+      "atoms": [
+        {
+          "text": "DESKTOP-E7FHJS4",
+          "kind": "hostname"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "question": "What is the Windows human user account name (not machine accounts ending in $) of the potentially infected machine in the LAN?",
+      "answer": "damon.bauer",
+      "atoms": [
+        {
+          "text": "damon.bauer",
+          "kind": "domain_or_file"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "question": "During what hour did the first signs of infection activity appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+      "answer": "2023-02-03 17:00 UTC",
+      "atoms": [
+        {
+          "text": "2023-02-03 17:00 UTC",
+          "kind": "time"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "question": "What is the URL used for the initial malware download?",
+      "answer": "http://128.254.207.55/86607.dat",
+      "atoms": [
+        {
+          "text": "http://128.254.207.55/86607.dat",
+          "kind": "url"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "question": "What are the suspicious external IP addresses contacted, which might be involved in command-and-control (C2) communication?",
+      "answer": "102.156.32.143, 208.187.122.74, 5.75.205.43, 23.111.114.52, 78.31.67.7",
+      "atoms": [
+        {
+          "text": "102.156.32.143",
+          "kind": "ip"
+        },
+        {
+          "text": "208.187.122.74",
+          "kind": "ip"
+        },
+        {
+          "text": "5.75.205.43",
+          "kind": "ip"
+        },
+        {
+          "text": "23.111.114.52",
+          "kind": "ip"
+        },
+        {
+          "text": "78.31.67.7",
+          "kind": "ip"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "question": "What specific spoofed domain was used in a self-signed certificate during this infection?",
+      "answer": "vipsauna.com",
+      "atoms": [
+        {
+          "text": "vipsauna.com",
+          "kind": "domain_or_file"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "question": "According to the connection volume statistics, what single external IP address received the most connections from the infected hosts? Is it a C2 server or a legitimate service?",
+      "answer": "208.187.122.74, C2 server",
+      "atoms": [
+        {
+          "text": "208.187.122.74",
+          "kind": "ip"
+        },
+        {
+          "text": "C2 server",
+          "kind": "label"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,154 @@
+{
+  "metadata": {
+    "incident_id": "INC-20220402",
+    "scenario": "dst_double_run_0042",
+    "title": "Infrastructure reliability incident investigation",
+    "source": "synthetic/ops-incident-expansion (modeled on neu-nds2/llm-sec-incident-analysis)",
+    "query_window_start": "2022-04-02T00:00:00",
+    "query_window_end": "2022-04-04T23:59:59",
+    "evidence_types": [
+      "change_records",
+      "derived_findings",
+      "infrastructure_events",
+      "monitoring_alerts",
+      "query_coverage",
+      "resource_metrics",
+      "service_logs"
+    ],
+    "artifact_scope_note": "Evidence is aggregated query output (not raw log lines or metric samples); it contains no chat/communication records."
+  },
+  "incident_description": "Reliability incident investigation of a production environment. Evidence consists of Elasticsearch aggregation results over application and proxy logs, Kubernetes, cloud-provider and host system events, Prometheus Alertmanager alerts, change-management / CI-CD audit records and metric anomaly detection. No root cause, impact or trigger is stated; these must be established from the supplied artifacts. Environment context: Organization: Harborfield Software (collaboration SaaS); Platform: on-premises data center DC-East, server range 172.19.0.0/16; Billing: a daily charge job 'subscription-renewals' is triggered by the in-house scheduler 'chronos-lite', which computes run times from local wall-clock time (Australia/Sydney); charges go through payment-gw to an external card processor; job executions are recorded by job name; Change management: production changes carry CHG- identifiers.",
+  "investigation_questions": [
+    "What change, deployment or automation run triggered the incident? Provide its change identifier.",
+    "Which account or automation identity executed the triggering change?",
+    "Which job execution was the legitimate run?",
+    "What scheduling condition caused the job to run twice for the same local billing date?",
+    "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+    "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+    "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+    "Which change happened shortly before the incident began but did not cause it? Provide its identifier."
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "dst_double_run_0042-01",
+      "artifact_type": "service_logs",
+      "subtype": "error_logs",
+      "source": "error_logs",
+      "content": "{\"description\": \"Application and proxy error logs: HTTP/gRPC status codes, failing requests (caller -> callee:port : operation), error messages and the services emitting them.\", \"facts\": [\"error events: 8012 matching events\", \"error events > status codes: n/a (reconciliation finding) \\u2014 7099 events\", \"error events > status codes: 402 \\u2014 572 events\", \"error events > status codes: 500 \\u2014 245 events\", \"error events > status codes: n/a (business event) \\u2014 96 events\", \"failing requests: ledger-reconciler -> billing-db:5432 : reconcile payments vs invoices \\u2014 7099 events\", \"failing requests: payment-gw -> api.paysecure-gw.com:443 : POST /v3/charges \\u2014 572 events\", \"failing requests: workspace-api -> workspace-db:5432 : query \\u2014 245 events\", \"failing requests: support-portal -> disputes-api:8080 : POST /v1/disputes \\u2014 96 events\", \"error messages: ledger imbalance: payments exceed invoiced amount for billing_date 2022-04-03 \\u2014 7099 events\", \"error messages: charge declined: insufficient_funds \\u2014 572 events\", \"error messages: deadlock detected \\u2014 245 events\", \"error messages: dispute created: duplicate charge \\u2014 96 events\", \"emitting services: ledger-reconciler \\u2014 7099 events\", \"emitting services: payment-gw \\u2014 572 events\", \"emitting services: workspace-api \\u2014 245 events\", \"emitting services: support-portal \\u2014 96 events\"]}",
+      "metadata": {
+        "scenario": "dst_double_run_0042",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "dst_double_run_0042-02",
+      "artifact_type": "service_logs",
+      "subtype": "error_volume_by_service",
+      "source": "error_volume_by_service",
+      "content": "{\"description\": \"Services ranked by number of error events, with each service's most-failed downstream dependencies.\", \"facts\": [\"services: ledger-reconciler \\u2014 7099 events; failing dependencies=1; top dependencies: billing-db (7099)\", \"services: payment-gw \\u2014 572 events; failing dependencies=1; top dependencies: api.paysecure-gw.com (572)\", \"services: workspace-api \\u2014 245 events; failing dependencies=1; top dependencies: workspace-db (245)\", \"services: support-portal \\u2014 96 events; failing dependencies=1; top dependencies: disputes-api (96)\"]}",
+      "metadata": {
+        "scenario": "dst_double_run_0042",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "dst_double_run_0042-03",
+      "artifact_type": "change_records",
+      "subtype": "change_log",
+      "source": "change_log",
+      "content": "{\"description\": \"Deployments, configuration pushes, infrastructure and automation runs from the change-management and CI/CD audit log: change ID, type, target, actor, time (UTC), status and recorded diff/summary.\", \"facts\": [\"changes: CHG-73891 | deployment | audit-log-svc 13.0.8 -> 13.0.9 | actor: ansible-deploy | 2022-04-02 15:01 UTC | status: succeeded | feature flag cleanup \\u2014 1 events\", \"changes: subscription-renewals-24949502 | scheduled_run | job subscription-renewals (daily 02:15 Australia/Sydney) | actor: chronos-lite-scheduler | 2022-04-02 15:15 UTC | status: Complete | billing_date 2022-04-03 (local); charged 7,671 accounts; total 403,917.79 \\u2014 1 events\", \"changes: subscription-renewals-24949562 | scheduled_run | job subscription-renewals (daily 02:15 Australia/Sydney) | actor: chronos-lite-scheduler | 2022-04-02 16:15 UTC | status: Complete | billing_date 2022-04-03 (local); charged 7,671 accounts (572 declined) \\u2014 1 events\", \"changes: CHG-73905 | scheduler_admin | job subscription-renewals | actor: y.kovacs | 2022-04-02 22:33 UTC | status: applied | job suspended \\u2014 1 events\", \"changes: CHG-73909 | batch_refund | payment-gw | actor: y.kovacs | 2022-04-03 01:19 UTC | status: completed | refunded 7,099 duplicate charges from subscription-renewals-24949562 \\u2014 1 events\", \"changes: CHG-73931 | deployment | workspace-api 10.17.5 -> 10.18.0 | actor: ansible-deploy | 2022-04-03 08:47 UTC | status: completed | copy and UI text changes \\u2014 1 events\", \"changes: CHG-73952 | deployment | export-worker 12.3.6 -> 12.4.0 | actor: ansible-deploy | 2022-04-04 01:16 UTC | status: succeeded | minor bug fixes \\u2014 1 events\", \"changes: CHG-73961 | deployment | docs-api 2.7.9 -> 2.8.0 | actor: ansible-deploy | 2022-04-04 03:39 UTC | status: completed | minor bug fixes \\u2014 1 events\", \"change types: deployment \\u2014 4 events\", \"change types: scheduled_run \\u2014 2 events\", \"change types: scheduler_admin \\u2014 1 events\", \"change types: batch_refund \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "dst_double_run_0042",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "dst_double_run_0042-04",
+      "artifact_type": "change_records",
+      "subtype": "change_actors",
+      "source": "change_actors",
+      "content": "{\"description\": \"Accounts and automation identities that executed changes, with the hosts or targets they acted on.\", \"facts\": [\"actors: ansible-deploy \\u2014 4 events; targets: audit-log-svc (1), workspace-api (1), export-worker (1), docs-api (1)\", \"actors: chronos-lite-scheduler \\u2014 2 events; targets: payment-gw (2)\", \"actors: y.kovacs \\u2014 2 events; targets: chronos-lite (1), payment-gw (1)\"]}",
+      "metadata": {
+        "scenario": "dst_double_run_0042",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "dst_double_run_0042-05",
+      "artifact_type": "infrastructure_events",
+      "subtype": "host_inventory",
+      "source": "host_inventory",
+      "content": "{\"description\": \"Host and node names seen in infrastructure events with their IP address, role and availability zone / rack.\", \"facts\": [\"hosts: export-01 \\u2014 217 events; ip: 172.19.72.106; role: export-worker host; zone: rack D33\", \"hosts: export-06 \\u2014 93 events; ip: 172.19.72.88; role: export-worker host; zone: rack D24\"]}",
+      "metadata": {
+        "scenario": "dst_double_run_0042",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "dst_double_run_0042-06",
+      "artifact_type": "infrastructure_events",
+      "subtype": "platform_events",
+      "source": "platform_events",
+      "content": "{\"description\": \"Kubernetes events, cloud-provider health events and host system messages (kernel, hardware, daemons) with the objects or hosts they refer to.\", \"facts\": [\"job logs: subscription-renewals: charge run complete (billing_date=2022-04-03) \\u2014 2 events; top objects: subscription-renewals-24949502 (1), subscription-renewals-24949562 (1)\"]}",
+      "metadata": {
+        "scenario": "dst_double_run_0042",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "dst_double_run_0042-07",
+      "artifact_type": "monitoring_alerts",
+      "subtype": "alertmanager_alerts",
+      "source": "alertmanager_alerts",
+      "content": "{\"description\": \"Prometheus Alertmanager alerts: alert names with severity, critical-alert instances, alert names and services, and an hourly timeline of warning and critical alerts (UTC).\", \"facts\": [\"alert names: Watchdog (info) \\u2014 72 events; service: alertmanager; firing continuously\", \"alert names: LedgerImbalanceDetected (critical) \\u2014 12 events; service: ledger-reconciler; first seen in hour 2022-04-02 17:00 UTC; last seen in hour 2022-04-02 21:00 UTC\", \"alert names: CardDeclineRateHigh (warning) \\u2014 6 events; service: payment-gw; first seen in hour 2022-04-02 16:00 UTC; last seen in hour 2022-04-02 17:00 UTC\", \"alert names: KubeJobFailed (warning) \\u2014 3 events; service: batch; first seen in hour 2022-04-03 05:00 UTC; last seen in hour 2022-04-03 06:00 UTC\", \"critical alerts: 12 matching events\", \"critical alerts > critical instances: ledger-reconciler \\u2014 12 events\", \"critical alerts > critical alert names: LedgerImbalanceDetected \\u2014 12 events\", \"critical alerts > critical services: ledger-reconciler \\u2014 12 events\", \"alert timeline: 2022-04-02 16:00 UTC \\u2014 2 events\", \"alert timeline: 2022-04-02 17:00 UTC \\u2014 7 events\", \"alert timeline: 2022-04-02 18:00 UTC \\u2014 2 events\", \"alert timeline: 2022-04-02 19:00 UTC \\u2014 2 events\", \"alert timeline: 2022-04-02 20:00 UTC \\u2014 1 events\", \"alert timeline: 2022-04-02 21:00 UTC \\u2014 4 events\", \"alert timeline: 2022-04-03 05:00 UTC \\u2014 1 events\", \"alert timeline: 2022-04-03 06:00 UTC \\u2014 2 events\"]}",
+      "metadata": {
+        "scenario": "dst_double_run_0042",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "dst_double_run_0042-08",
+      "artifact_type": "resource_metrics",
+      "subtype": "metric_anomalies",
+      "source": "metric_anomalies",
+      "content": "{\"description\": \"Metric series that deviated from their 7-day baseline (hourly resolution): baseline, peak or trough value, anomaly onset and recovery (UTC).\", \"facts\": [\"metric anomalies: charges submitted per hour on payment-gw \\u2014 baseline ~7.7k once per day; peak 7.7k in two consecutive hours; onset 2022-04-02 16:00 UTC; recovered 2022-04-02 17:00 UTC\", \"metric anomalies: node_cpu utilisation on 172.19.72.106 \\u2014 baseline 35%; peak 90%; onset 2022-04-03 05:00 UTC; recovered 2022-04-03 07:00 UTC\"]}",
+      "metadata": {
+        "scenario": "dst_double_run_0042",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "dst_double_run_0042-09",
+      "artifact_type": "derived_findings",
+      "subtype": "derived_summary",
+      "source": "derived_summary",
+      "content": "{\"description\": \"Deterministic summary computed from the query results above (error ranking, instance-to-host join, alert timeline, change correlation, earliest metric anomaly).\", \"facts\": [\"Derived: service ledger-reconciler ranks #1 by error volume (7099 events, 1 failing dependencies). Most-failed dependency: billing-db (7099 errors).\", \"Derived: most-alerted critical instance ledger-reconciler (12 critical alerts); no matching host-inventory entry.\", \"Derived: warning/critical alerts span 2022-04-02 16:00 UTC to 2022-04-03 06:00 UTC; earliest alert hour 2022-04-02 16:00 UTC (2 alerts).\", \"Derived: changes recorded from 6 hours before the earliest alert hour to its end: CHG-73891 (deployment, audit-log-svc 13.0.8 -> 13.0.9, ansible-deploy, 2022-04-02 15:01 UTC); subscription-renewals-24949502 (scheduled_run, job subscription-renewals (daily 02:15 Australia/Sydney), chronos-lite-scheduler, 2022-04-02 15:15 UTC); subscription-renewals-24949562 (scheduled_run, job subscription-renewals (daily 02:15 Australia/Sydney), chronos-lite-scheduler, 2022-04-02 16:15 UTC).\", \"Derived: earliest metric anomaly onset 2022-04-02 16:00 UTC (charges submitted per hour on payment-gw).\"]}",
+      "metadata": {
+        "scenario": "dst_double_run_0042",
+        "source_kind": "derived_from_es_results",
+        "heuristic": true
+      }
+    },
+    {
+      "artifact_id": "dst_double_run_0042-10",
+      "artifact_type": "query_coverage",
+      "subtype": "evidence_gaps",
+      "source": "evidence_gaps",
+      "content": "{\"description\": \"Queries that returned nothing or failed; use these to state what is NOT established.\", \"facts\": [\"No matching results for: tls certificates / expired certificates. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / expiring within 7 days. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / self signed. (Absence in this query is not proof of absence elsewhere.)\"]}",
+      "metadata": {
+        "scenario": "dst_double_run_0042",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    }
+  ]
+}

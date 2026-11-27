@@ -1,0 +1,110 @@
+{
+  "source": "answers.txt (paper dataset)",
+  "confidence": "paper ground truth",
+  "qa": [
+    {
+      "id": 1,
+      "question": "What is the IP address of the potentially infected internal host in the LAN?",
+      "answer": "10.1.17.215",
+      "atoms": [
+        {
+          "text": "10.1.17.215",
+          "kind": "ip"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "question": "What is the hostname of the potentially infected machine in the LAN?",
+      "answer": "DESKTOP-L8C5GSJ",
+      "atoms": [
+        {
+          "text": "DESKTOP-L8C5GSJ",
+          "kind": "hostname"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "question": "What is the Windows human user account name (not machine accounts ending in $) of the potentially infected machine in the LAN?",
+      "answer": "shutchenson",
+      "atoms": [
+        {
+          "text": "shutchenson",
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "question": "What are the likely fake or suspicious domains / URLs for initial infection?",
+      "answer": "authenticatoor.org",
+      "atoms": [
+        {
+          "text": "authenticatoor.org",
+          "kind": "domain_or_file"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "question": "What are the suspicious external IP addresses contacted, which might be involved in command-and-control (C2) communication?",
+      "answer": "5.252.153.241, 45.125.66.32, 45.125.66.252",
+      "atoms": [
+        {
+          "text": "5.252.153.241",
+          "kind": "ip"
+        },
+        {
+          "text": "45.125.66.32",
+          "kind": "ip"
+        },
+        {
+          "text": "45.125.66.252",
+          "kind": "ip"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "question": "During what hour did the first signs of infection activity appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+      "answer": "2025-01-22 19:00 UTC",
+      "atoms": [
+        {
+          "text": "2025-01-22 19:00 UTC",
+          "kind": "time"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "question": "Were any suspicious certificates observed in the encrypted network traffic? If so, identify the domain or IP in the certificate.",
+      "answer": "45.125.66.252, 45.125.66.32",
+      "atoms": [
+        {
+          "text": "45.125.66.252",
+          "kind": "ip"
+        },
+        {
+          "text": "45.125.66.32",
+          "kind": "ip"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "question": "According to the connection volume statistics, what single external IP address received the most connections from the infected hosts? Is it a C2 server or a legitimate service?",
+      "answer": "5.252.153.241, C2 server",
+      "atoms": [
+        {
+          "text": "5.252.153.241",
+          "kind": "ip"
+        },
+        {
+          "text": "C2 server",
+          "kind": "label"
+        }
+      ]
+    }
+  ]
+}

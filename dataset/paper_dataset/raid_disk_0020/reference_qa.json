@@ -1,0 +1,98 @@
+{
+  "source": "synthetic generator ground truth (ops expansion)",
+  "confidence": "synthetic ground truth",
+  "qa": [
+    {
+      "id": 1,
+      "question": "What is the hostname of the machine where the incident started?",
+      "answer": "pg-replica-02",
+      "atoms": [
+        {
+          "text": "pg-replica-02",
+          "kind": "hostname"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "question": "Give the IP address of the machine where the failure originated.",
+      "answer": "10.42.212.33",
+      "atoms": [
+        {
+          "text": "10.42.212.33",
+          "kind": "ip"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "question": "What is the serial number of the physical disk that failed first?",
+      "answer": "SS8G9BJ9",
+      "atoms": [
+        {
+          "text": "SS8G9BJ9",
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "question": "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+      "answer": "2023-09-05 15:00 UTC",
+      "atoms": [
+        {
+          "text": "2023-09-05 15:00 UTC",
+          "kind": "time"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "question": "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+      "answer": "hardware failure",
+      "atoms": [
+        {
+          "text": "hardware failure",
+          "kind": "label"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "question": "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+      "answer": "availability",
+      "atoms": [
+        {
+          "text": "availability",
+          "kind": "cia"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "question": "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+      "answer": "statements-api, downstream symptom",
+      "atoms": [
+        {
+          "text": "statements-api",
+          "kind": "other"
+        },
+        {
+          "text": "downstream symptom",
+          "kind": "label"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "question": "Which change restored normal service? Provide its change identifier.",
+      "answer": "CR-86760",
+      "atoms": [
+        {
+          "text": "CR-86760",
+          "kind": "other"
+        }
+      ]
+    }
+  ]
+}

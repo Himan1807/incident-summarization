@@ -1,0 +1,154 @@
+{
+  "metadata": {
+    "incident_id": "INC-20260212",
+    "scenario": "managed_lb_0046",
+    "title": "Infrastructure reliability incident investigation",
+    "source": "synthetic/ops-incident-expansion (modeled on neu-nds2/llm-sec-incident-analysis)",
+    "query_window_start": "2026-02-12T00:00:00",
+    "query_window_end": "2026-02-14T23:59:59",
+    "evidence_types": [
+      "change_records",
+      "derived_findings",
+      "infrastructure_events",
+      "monitoring_alerts",
+      "query_coverage",
+      "resource_metrics",
+      "service_logs"
+    ],
+    "artifact_scope_note": "Evidence is aggregated query output (not raw log lines or metric samples); it contains no chat/communication records."
+  },
+  "incident_description": "Reliability incident investigation of a production environment. Evidence consists of Elasticsearch aggregation results over application and proxy logs, Kubernetes, cloud-provider and host system events, Prometheus Alertmanager alerts, change-management / CI-CD audit records and metric anomaly detection. No root cause, impact or trigger is stated; these must be established from the supplied artifacts. Environment context: Organization: Orbfold Cloud (collaboration SaaS); Platform: Microsoft Azure centralindia (zones centralindia-1/centralindia-2/centralindia-3); network range 10.129.0.0/16; Kubernetes cluster orbfol-prod-centra (AKS); Edge: provider-managed load balancer (edge-lb) in front of app-frontend backends; a standby load balancer exists in a secondary region; Change management: production changes carry RFC- identifiers.",
+  "investigation_questions": [
+    "Which service or component is the origin of the failure?",
+    "Were the backend instances unhealthy during the incident? Answer yes or no.",
+    "What is the cloud provider's incident or tracking identifier?",
+    "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+    "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+    "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+    "Which change happened shortly before the incident began but did not cause it? Provide its identifier.",
+    "Which change restored normal service? Provide its change identifier."
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "managed_lb_0046-01",
+      "artifact_type": "service_logs",
+      "subtype": "error_logs",
+      "source": "error_logs",
+      "content": "{\"description\": \"Application and proxy error logs: HTTP/gRPC status codes, failing requests (caller -> callee:port : operation), error messages and the services emitting them.\", \"facts\": [\"error events: 41745 matching events\", \"error events > status codes: 502 \\u2014 41492 events\", \"error events > status codes: 500 \\u2014 253 events\", \"failing requests: edge-lb -> app-frontend:8080 : GET /* (httpStatus=502) \\u2014 41492 events\", \"failing requests: audit-log-svc -> audit-db:5432 : query \\u2014 253 events\", \"error messages: httpStatus=502 serverStatus=- (Application Gateway: ERRORINFO_UPSTREAM_CONNECT_FAILED) \\u2014 41492 events\", \"error messages: deadlock detected \\u2014 253 events\", \"emitting services: edge-lb \\u2014 41492 events\", \"emitting services: audit-log-svc \\u2014 253 events\"]}",
+      "metadata": {
+        "scenario": "managed_lb_0046",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "managed_lb_0046-02",
+      "artifact_type": "service_logs",
+      "subtype": "error_volume_by_service",
+      "source": "error_volume_by_service",
+      "content": "{\"description\": \"Services ranked by number of error events, with each service's most-failed downstream dependencies.\", \"facts\": [\"services: edge-lb \\u2014 41492 events; failing dependencies=1; top dependencies: app-frontend (41492)\", \"services: audit-log-svc \\u2014 253 events; failing dependencies=1; top dependencies: audit-db (253)\"]}",
+      "metadata": {
+        "scenario": "managed_lb_0046",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "managed_lb_0046-03",
+      "artifact_type": "change_records",
+      "subtype": "change_log",
+      "source": "change_log",
+      "content": "{\"description\": \"Deployments, configuration pushes, infrastructure and automation runs from the change-management and CI/CD audit log: change ID, type, target, actor, time (UTC), status and recorded diff/summary.\", \"facts\": [\"changes: RFC-48374 | deployment | search-api 0.17.2 -> 0.18.0 | actor: github-actions | 2026-02-12 22:48 UTC | status: completed | new optional API field \\u2014 1 events\", \"changes: RFC-48394 | traffic_steering | DNS app-frontend.orbfold.com | actor: o.osei | 2026-02-13 03:43 UTC | status: completed | fail over to standby load balancer in secondary region \\u2014 1 events\", \"changes: RFC-48406 | deployment | audit-log-svc 10.27.2 -> 10.27.3 | actor: github-actions | 2026-02-13 11:15 UTC | status: Synced/Healthy | dependency bump \\u2014 1 events\", \"changes: RFC-48414 | deployment | webhooks-svc 1.0.2 -> 1.0.3 | actor: github-actions | 2026-02-14 00:21 UTC | status: completed | feature flag cleanup \\u2014 1 events\", \"changes: RFC-48417 | deployment | billing-api 5.27.0 -> 5.27.1 | actor: github-actions | 2026-02-14 04:52 UTC | status: succeeded | logging improvements \\u2014 1 events\", \"change types: deployment \\u2014 4 events\", \"change types: traffic_steering \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "managed_lb_0046",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "managed_lb_0046-04",
+      "artifact_type": "change_records",
+      "subtype": "change_actors",
+      "source": "change_actors",
+      "content": "{\"description\": \"Accounts and automation identities that executed changes, with the hosts or targets they acted on.\", \"facts\": [\"actors: github-actions \\u2014 4 events; targets: orbfol-prod-centra/search-api (1), orbfol-prod-centra/audit-log-svc (1), orbfol-prod-centra/billing-api (1), orbfol-prod-centra/webhooks-svc (1)\", \"actors: o.osei \\u2014 1 events; targets: edge-lb (1)\"]}",
+      "metadata": {
+        "scenario": "managed_lb_0046",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "managed_lb_0046-05",
+      "artifact_type": "infrastructure_events",
+      "subtype": "host_inventory",
+      "source": "host_inventory",
+      "content": "{\"description\": \"Host and node names seen in infrastructure events with their IP address, role and availability zone / rack.\", \"facts\": [\"hosts: aks-nodepool1-64653809-vmss000032 \\u2014 892 events; ip: 10.129.147.204; role: app-frontend backend; zone: centralindia-1\", \"hosts: aks-nodepool1-73610390-vmss000007 \\u2014 671 events; ip: 10.129.3.16; role: app-frontend backend; zone: centralindia-2\", \"hosts: aks-nodepool1-20693197-vmss000029 \\u2014 155 events; ip: 10.129.3.132; role: k8s-worker; zone: centralindia-2\", \"hosts: aks-nodepool1-49450652-vmss000006 \\u2014 112 events; ip: 10.129.147.33; role: k8s-worker; zone: centralindia-1\", \"hosts: aks-nodepool1-11641215-vmss000030 \\u2014 45 events; ip: 10.129.31.78; role: k8s-worker; zone: centralindia-3\"]}",
+      "metadata": {
+        "scenario": "managed_lb_0046",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "managed_lb_0046-06",
+      "artifact_type": "infrastructure_events",
+      "subtype": "platform_events",
+      "source": "platform_events",
+      "content": "{\"description\": \"Kubernetes events, cloud-provider health events and host system messages (kernel, hardware, daemons) with the objects or hosts they refer to.\", \"facts\": [\"cloud health events: Azure Service Health: Application Gateway - centralindia - intermittent 502 errors (tracking ID D5T9-H8X); start 2026-02-13 02:23 UTC \\u2014 2 events; top objects: project orbfold-prod (2)\", \"load balancer health checks: backend health: HEALTHY \\u2014 5487 events; top objects: aks-nodepool1-64653809-vmss000032 (1205), aks-nodepool1-73610390-vmss000007 (842)\", \"event reasons: Pulled \\u2014 7 events; top objects: pod/search-api-ca7749eab-4z86p (1)\", \"event reasons: ScalingReplicaSet \\u2014 6 events; top objects: deployment/search-api (2)\", \"event reasons: Pulled \\u2014 11 events; top objects: pod/audit-log-svc-b8323d16c-qtph2 (2)\", \"event reasons: ScalingReplicaSet \\u2014 5 events; top objects: deployment/audit-log-svc (3)\", \"event reasons: Pulled \\u2014 14 events; top objects: pod/billing-api-ff2060190-qc4z5 (2)\", \"event reasons: ScalingReplicaSet \\u2014 4 events; top objects: deployment/billing-api (1)\", \"event reasons: Pulled \\u2014 6 events; top objects: pod/webhooks-svc-9fcd93e3e-rgtf4 (1)\", \"event reasons: ScalingReplicaSet \\u2014 3 events; top objects: deployment/webhooks-svc (3)\"]}",
+      "metadata": {
+        "scenario": "managed_lb_0046",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "managed_lb_0046-07",
+      "artifact_type": "monitoring_alerts",
+      "subtype": "alertmanager_alerts",
+      "source": "alertmanager_alerts",
+      "content": "{\"description\": \"Prometheus Alertmanager alerts: alert names with severity, critical-alert instances, alert names and services, and an hourly timeline of warning and critical alerts (UTC).\", \"facts\": [\"alert names: Watchdog (info) \\u2014 72 events; service: alertmanager; firing continuously\", \"alert names: LBHigh5xxRatio (critical) \\u2014 8 events; service: edge-lb; first seen in hour 2026-02-13 02:00 UTC; last seen in hour 2026-02-13 03:00 UTC\", \"alert names: UptimeCheckFailed (critical) \\u2014 6 events; service: edge-lb; first seen in hour 2026-02-13 02:00 UTC; last seen in hour 2026-02-13 03:00 UTC\", \"alert names: KubeJobFailed (warning) \\u2014 2 events; service: batch; first seen in hour 2026-02-13 13:00 UTC; last seen in hour 2026-02-13 14:00 UTC\", \"alert names: KubeCPUOvercommit (warning) \\u2014 1 events; service: cluster; first seen in hour 2026-02-12 18:00 UTC; last seen in hour 2026-02-12 18:00 UTC\", \"critical alerts: 14 matching events\", \"critical alerts > critical instances: edge-lb \\u2014 8 events\", \"critical alerts > critical instances: uptime-check app-frontend-home \\u2014 6 events\", \"critical alerts > critical alert names: LBHigh5xxRatio \\u2014 8 events\", \"critical alerts > critical alert names: UptimeCheckFailed \\u2014 6 events\", \"critical alerts > critical services: edge-lb \\u2014 14 events\", \"alert timeline: 2026-02-12 18:00 UTC \\u2014 1 events\", \"alert timeline: 2026-02-13 02:00 UTC \\u2014 6 events\", \"alert timeline: 2026-02-13 03:00 UTC \\u2014 8 events\", \"alert timeline: 2026-02-13 13:00 UTC \\u2014 1 events\", \"alert timeline: 2026-02-13 14:00 UTC \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "managed_lb_0046",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "managed_lb_0046-08",
+      "artifact_type": "resource_metrics",
+      "subtype": "metric_anomalies",
+      "source": "metric_anomalies",
+      "content": "{\"description\": \"Metric series that deviated from their 7-day baseline (hourly resolution): baseline, peak or trough value, anomaly onset and recovery (UTC).\", \"facts\": [\"metric anomalies: load balancer 5xx responses per minute on edge-lb \\u2014 baseline ~3/min; peak 1,790/min; onset 2026-02-13 02:00 UTC; recovered 2026-02-13 04:00 UTC\"]}",
+      "metadata": {
+        "scenario": "managed_lb_0046",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "managed_lb_0046-09",
+      "artifact_type": "derived_findings",
+      "subtype": "derived_summary",
+      "source": "derived_summary",
+      "content": "{\"description\": \"Deterministic summary computed from the query results above (error ranking, instance-to-host join, alert timeline, change correlation, earliest metric anomaly).\", \"facts\": [\"Derived: service edge-lb ranks #1 by error volume (41492 events, 1 failing dependencies). Most-failed dependency: app-frontend (41492 errors).\", \"Derived: most-alerted critical instance edge-lb (8 critical alerts); no matching host-inventory entry.\", \"Derived: warning/critical alerts span 2026-02-12 18:00 UTC to 2026-02-13 14:00 UTC; earliest alert hour 2026-02-12 18:00 UTC (1 alerts).\", \"Derived: no changes recorded from 6 hours before the earliest alert hour to its end.\", \"Derived: earliest metric anomaly onset 2026-02-13 02:00 UTC (load balancer 5xx responses per minute on edge-lb).\"]}",
+      "metadata": {
+        "scenario": "managed_lb_0046",
+        "source_kind": "derived_from_es_results",
+        "heuristic": true
+      }
+    },
+    {
+      "artifact_id": "managed_lb_0046-10",
+      "artifact_type": "query_coverage",
+      "subtype": "evidence_gaps",
+      "source": "evidence_gaps",
+      "content": "{\"description\": \"Queries that returned nothing or failed; use these to state what is NOT established.\", \"facts\": [\"No matching results for: tls certificates / expired certificates. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / expiring within 7 days. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / self signed. (Absence in this query is not proof of absence elsewhere.)\"]}",
+      "metadata": {
+        "scenario": "managed_lb_0046",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    }
+  ]
+}

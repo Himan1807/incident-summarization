@@ -1,0 +1,155 @@
+{
+  "metadata": {
+    "incident_id": "INC-20221026",
+    "scenario": "node_overdrain_0008",
+    "title": "Infrastructure reliability incident investigation",
+    "source": "synthetic/ops-incident-expansion (modeled on neu-nds2/llm-sec-incident-analysis)",
+    "query_window_start": "2022-10-26T00:00:00",
+    "query_window_end": "2022-10-28T23:59:59",
+    "evidence_types": [
+      "change_records",
+      "derived_findings",
+      "infrastructure_events",
+      "monitoring_alerts",
+      "query_coverage",
+      "resource_metrics",
+      "service_logs"
+    ],
+    "artifact_scope_note": "Evidence is aggregated query output (not raw log lines or metric samples); it contains no chat/communication records."
+  },
+  "incident_description": "Reliability incident investigation of a production environment. Evidence consists of Elasticsearch aggregation results over application and proxy logs, Kubernetes, cloud-provider and host system events, Prometheus Alertmanager alerts, change-management / CI-CD audit records and metric anomaly detection. No root cause, impact or trigger is stated; these must be established from the supplied artifacts. Environment context: Organization: Ironen Academy (online learning); Platform: Microsoft Azure eastus2 (zones eastus2-1/eastus2-2/eastus2-3); network range 10.74.0.0/16; Kubernetes cluster ironen-prod-eastus (AKS); Automation: an in-house node-recycler controller rotates worker nodes (cordon, drain, terminate, replace) in batches bounded by maxUnavailable (20% of 13 nodes); runs are recorded with RECYCLE- identifiers; Change management: production changes carry CHG- identifiers.",
+  "investigation_questions": [
+    "Which service or component is the origin of the failure?",
+    "Which change or automation run triggered the incident? Give its identifier.",
+    "Who (account or automation identity) executed the change that caused the incident?",
+    "How many worker nodes were cordoned and drained at the same time?",
+    "Which deployment introduced the faulty batch-size logic? Provide its change identifier.",
+    "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+    "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+    "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+    "What change brought the service back to normal? Give its identifier."
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "node_overdrain_0008-01",
+      "artifact_type": "service_logs",
+      "subtype": "error_logs",
+      "source": "error_logs",
+      "content": "{\"description\": \"Application and proxy error logs: HTTP/gRPC status codes, failing requests (caller -> callee:port : operation), error messages and the services emitting them.\", \"facts\": [\"error events: 62437 matching events\", \"error events > status codes: 503 \\u2014 55180 events\", \"error events > status codes: n/a (connection refused) \\u2014 7133 events\", \"error events > status codes: 499 \\u2014 124 events\", \"failing requests: learner-web -> auth-svc:8080 : POST /v1/auth \\u2014 40028 events\", \"failing requests: learner-web -> certificate-svc:8080 : GET /v1/certificate \\u2014 15152 events\", \"failing requests: auth-svc -> auth-cache:6379 : GET \\u2014 7133 events\", \"failing requests: video-api -> video-db:5432 : query \\u2014 124 events\", \"error messages: upstream auth-svc: 503 no healthy upstream \\u2014 40028 events\", \"error messages: upstream certificate-svc: 503 no healthy upstream \\u2014 15152 events\", \"error messages: dial tcp auth-cache:6379: connect: connection refused \\u2014 7133 events\", \"error messages: context canceled \\u2014 124 events\", \"emitting services: learner-web \\u2014 55180 events\", \"emitting services: auth-svc \\u2014 7133 events\", \"emitting services: video-api \\u2014 124 events\"]}",
+      "metadata": {
+        "scenario": "node_overdrain_0008",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "node_overdrain_0008-02",
+      "artifact_type": "service_logs",
+      "subtype": "error_volume_by_service",
+      "source": "error_volume_by_service",
+      "content": "{\"description\": \"Services ranked by number of error events, with each service's most-failed downstream dependencies.\", \"facts\": [\"services: learner-web \\u2014 55180 events; failing dependencies=2; top dependencies: auth-svc (40028), certificate-svc (15152)\", \"services: auth-svc \\u2014 7133 events; failing dependencies=1; top dependencies: auth-cache (7133)\", \"services: video-api \\u2014 124 events; failing dependencies=1; top dependencies: video-db (124)\"]}",
+      "metadata": {
+        "scenario": "node_overdrain_0008",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "node_overdrain_0008-03",
+      "artifact_type": "change_records",
+      "subtype": "change_log",
+      "source": "change_log",
+      "content": "{\"description\": \"Deployments, configuration pushes, infrastructure and automation runs from the change-management and CI/CD audit log: change ID, type, target, actor, time (UTC), status and recorded diff/summary.\", \"facts\": [\"changes: CHG-21390 | deployment | node-recycler 12.33.9 -> 12.34.0 | actor: argocd | 2022-10-26 05:42 UTC | status: Synced/Healthy | new batch sizing logic (percentage support for maxUnavailable) \\u2014 1 events\", \"changes: RECYCLE-4795 | node_rotation | general-purpose node group | actor: node-recycler | 2022-10-26 10:31 UTC | status: aborted | eligible nodes 10; computed batch size 20 from maxUnavailable=20%; cordoned and drained 10 nodes concurrently \\u2014 1 events\", \"changes: CHG-21424 | scale_down | deployment node-recycler | actor: k.kim | 2022-10-26 11:54 UTC | status: completed | replicas 1 -> 0 \\u2014 1 events\", \"changes: CHG-21452 | nodegroup_scale | general-purpose node group | actor: k.kim | 2022-10-26 12:04 UTC | status: completed | desired 13 -> 19; uncordon remaining nodes \\u2014 1 events\", \"changes: CHG-21484 | deployment | quiz-engine 8.26.11 -> 8.26.12 | actor: argocd | 2022-10-26 21:55 UTC | status: completed | copy and UI text changes \\u2014 1 events\", \"changes: CHG-21522 | deployment | enrolment-api 4.29.10 -> 4.30.0 | actor: argocd | 2022-10-27 00:33 UTC | status: Synced/Healthy | feature flag cleanup \\u2014 1 events\", \"changes: CHG-21538 | deployment | video-api 6.18.7 -> 6.18.8 | actor: argocd | 2022-10-28 06:18 UTC | status: Synced/Healthy | new optional API field \\u2014 1 events\", \"changes: CHG-21554 | deployment | course-api 2.0.4 -> 2.1.0 | actor: argocd | 2022-10-28 13:45 UTC | status: Synced/Healthy | feature flag cleanup \\u2014 1 events\", \"change types: deployment \\u2014 5 events\", \"change types: node_rotation \\u2014 1 events\", \"change types: scale_down \\u2014 1 events\", \"change types: nodegroup_scale \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "node_overdrain_0008",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "node_overdrain_0008-04",
+      "artifact_type": "change_records",
+      "subtype": "change_actors",
+      "source": "change_actors",
+      "content": "{\"description\": \"Accounts and automation identities that executed changes, with the hosts or targets they acted on.\", \"facts\": [\"actors: argocd \\u2014 5 events; targets: ironen-prod-eastus/node-recycler (1), ironen-prod-eastus/quiz-engine (1), ironen-prod-eastus/video-api (1), ironen-prod-eastus/enrolment-api (1), ironen-prod-eastus/course-api (1)\", \"actors: k.kim \\u2014 2 events; targets: ironen-prod-eastus/node-recycler (1), node group (1)\", \"actors: node-recycler \\u2014 1 events; targets: aks-nodepool1-94631384-vmss000039 (1), aks-nodepool1-46765627-vmss000013 (1), aks-nodepool1-24010625-vmss000030 (1), aks-nodepool1-44188513-vmss000029 (1), aks-nodepool1-77688943-vmss000038 (1), aks-nodepool1-61305290-vmss000023 (1), aks-nodepool1-81101720-vmss000003 (1), aks-nodepool1-59019617-vmss000024 (1), aks-nodepool1-85252974-vmss000007 (1), aks-nodepool1-82345292-vmss000040 (1)\"]}",
+      "metadata": {
+        "scenario": "node_overdrain_0008",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "node_overdrain_0008-05",
+      "artifact_type": "infrastructure_events",
+      "subtype": "host_inventory",
+      "source": "host_inventory",
+      "content": "{\"description\": \"Host and node names seen in infrastructure events with their IP address, role and availability zone / rack.\", \"facts\": [\"hosts: aks-nodepool1-41875919-vmss000024 \\u2014 158 events; ip: 10.74.149.204; role: k8s-worker; zone: eastus2-1\", \"hosts: aks-nodepool1-44188513-vmss000029 \\u2014 106 events; ip: 10.74.149.222; role: k8s-worker; zone: eastus2-1\", \"hosts: aks-nodepool1-46765627-vmss000013 \\u2014 92 events; ip: 10.74.111.210; role: k8s-worker; zone: eastus2-2\", \"hosts: aks-nodepool1-94631384-vmss000039 \\u2014 82 events; ip: 10.74.149.214; role: k8s-worker; zone: eastus2-1\", \"hosts: aks-nodepool1-24010625-vmss000030 \\u2014 80 events; ip: 10.74.159.77; role: k8s-worker; zone: eastus2-3\", \"hosts: aks-nodepool1-77688943-vmss000038 \\u2014 75 events; ip: 10.74.111.68; role: k8s-worker; zone: eastus2-2\"]}",
+      "metadata": {
+        "scenario": "node_overdrain_0008",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "node_overdrain_0008-06",
+      "artifact_type": "infrastructure_events",
+      "subtype": "platform_events",
+      "source": "platform_events",
+      "content": "{\"description\": \"Kubernetes events, cloud-provider health events and host system messages (kernel, hardware, daemons) with the objects or hosts they refer to.\", \"facts\": [\"event reasons: NodeNotSchedulable \\u2014 10 events; top objects: aks-nodepool1-94631384-vmss000039 (1), aks-nodepool1-46765627-vmss000013 (1), aks-nodepool1-24010625-vmss000030 (1), aks-nodepool1-44188513-vmss000029 (1), aks-nodepool1-77688943-vmss000038 (1)\", \"event reasons: FailedScheduling \\u2014 4799 events; top objects: pod/auth-svc-bf0ad7f88-448wk (886), pod/certificate-svc-5d3c3913b-vfpdb (179)\", \"controller logs: node-recycler: batch size 20 computed from maxUnavailable=20% (eligible=10); starting batch \\u2014 1 events; top objects: pod/node-recycler-3383356fc-vjx6s (1)\", \"event reasons: Pulled \\u2014 7 events; top objects: pod/quiz-engine-3be81b5cc-2qpfr (3)\", \"event reasons: ScalingReplicaSet \\u2014 3 events; top objects: deployment/quiz-engine (1)\", \"event reasons: Pulled \\u2014 16 events; top objects: pod/video-api-ef3911647-5rckc (2)\", \"event reasons: ScalingReplicaSet \\u2014 6 events; top objects: deployment/video-api (1)\", \"event reasons: Pulled \\u2014 6 events; top objects: pod/enrolment-api-0be09f370-mrp65 (3)\", \"event reasons: ScalingReplicaSet \\u2014 6 events; top objects: deployment/enrolment-api (3)\", \"event reasons: Pulled \\u2014 18 events; top objects: pod/course-api-cf7c4fee2-dvjm8 (2)\", \"event reasons: ScalingReplicaSet \\u2014 6 events; top objects: deployment/course-api (3)\"]}",
+      "metadata": {
+        "scenario": "node_overdrain_0008",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "node_overdrain_0008-07",
+      "artifact_type": "monitoring_alerts",
+      "subtype": "alertmanager_alerts",
+      "source": "alertmanager_alerts",
+      "content": "{\"description\": \"Prometheus Alertmanager alerts: alert names with severity, critical-alert instances, alert names and services, and an hourly timeline of warning and critical alerts (UTC).\", \"facts\": [\"alert names: Watchdog (info) \\u2014 72 events; service: alertmanager; firing continuously\", \"alert names: KubeNodeUnschedulable (warning) \\u2014 30 events; service: kubernetes; first seen in hour 2022-10-26 10:00 UTC; last seen in hour 2022-10-26 12:00 UTC\", \"alert names: KubeNodesCapacityLow (critical) \\u2014 8 events; service: kubernetes; first seen in hour 2022-10-26 10:00 UTC; last seen in hour 2022-10-26 12:00 UTC\", \"alert names: KubePodPending (critical) \\u2014 8 events; service: auth-svc; first seen in hour 2022-10-26 10:00 UTC; last seen in hour 2022-10-26 12:00 UTC\", \"alert names: LearnerWebErrorRateHigh (critical) \\u2014 8 events; service: learner-web; first seen in hour 2022-10-26 10:00 UTC; last seen in hour 2022-10-26 12:00 UTC\", \"alert names: KubeJobFailed (warning) \\u2014 4 events; service: batch; first seen in hour 2022-10-26 21:00 UTC; last seen in hour 2022-10-26 23:00 UTC\", \"critical alerts: 24 matching events\", \"critical alerts > critical instances: auth-svc \\u2014 8 events\", \"critical alerts > critical instances: ironen-prod-eastus \\u2014 8 events\", \"critical alerts > critical instances: learner-web \\u2014 8 events\", \"critical alerts > critical alert names: KubeNodesCapacityLow \\u2014 8 events\", \"critical alerts > critical alert names: KubePodPending \\u2014 8 events\", \"critical alerts > critical alert names: LearnerWebErrorRateHigh \\u2014 8 events\", \"critical alerts > critical services: auth-svc \\u2014 8 events\", \"critical alerts > critical services: kubernetes \\u2014 8 events\", \"critical alerts > critical services: learner-web \\u2014 8 events\", \"alert timeline: 2022-10-26 10:00 UTC \\u2014 17 events\", \"alert timeline: 2022-10-26 11:00 UTC \\u2014 16 events\", \"alert timeline: 2022-10-26 12:00 UTC \\u2014 21 events\", \"alert timeline: 2022-10-26 21:00 UTC \\u2014 1 events\", \"alert timeline: 2022-10-26 22:00 UTC \\u2014 2 events\", \"alert timeline: 2022-10-26 23:00 UTC \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "node_overdrain_0008",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "node_overdrain_0008-08",
+      "artifact_type": "resource_metrics",
+      "subtype": "metric_anomalies",
+      "source": "metric_anomalies",
+      "content": "{\"description\": \"Metric series that deviated from their 7-day baseline (hourly resolution): baseline, peak or trough value, anomaly onset and recovery (UTC).\", \"facts\": [\"metric anomalies: unschedulable nodes on ironen-prod-eastus \\u2014 baseline 0; peak 10; onset 2022-10-26 10:00 UTC; recovered 2022-10-26 13:00 UTC\"]}",
+      "metadata": {
+        "scenario": "node_overdrain_0008",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "node_overdrain_0008-09",
+      "artifact_type": "derived_findings",
+      "subtype": "derived_summary",
+      "source": "derived_summary",
+      "content": "{\"description\": \"Deterministic summary computed from the query results above (error ranking, instance-to-host join, alert timeline, change correlation, earliest metric anomaly).\", \"facts\": [\"Derived: service learner-web ranks #1 by error volume (55180 events, 2 failing dependencies). Most-failed dependency: auth-svc (40028 errors).\", \"Derived: most-alerted critical instance auth-svc (8 critical alerts); no matching host-inventory entry.\", \"Derived: warning/critical alerts span 2022-10-26 10:00 UTC to 2022-10-26 23:00 UTC; earliest alert hour 2022-10-26 10:00 UTC (17 alerts).\", \"Derived: changes recorded from 6 hours before the earliest alert hour to its end: CHG-21390 (deployment, node-recycler 12.33.9 -> 12.34.0, argocd, 2022-10-26 05:42 UTC); RECYCLE-4795 (node_rotation, general-purpose node group, node-recycler, 2022-10-26 10:31 UTC).\", \"Derived: earliest metric anomaly onset 2022-10-26 10:00 UTC (unschedulable nodes on ironen-prod-eastus).\"]}",
+      "metadata": {
+        "scenario": "node_overdrain_0008",
+        "source_kind": "derived_from_es_results",
+        "heuristic": true
+      }
+    },
+    {
+      "artifact_id": "node_overdrain_0008-10",
+      "artifact_type": "query_coverage",
+      "subtype": "evidence_gaps",
+      "source": "evidence_gaps",
+      "content": "{\"description\": \"Queries that returned nothing or failed; use these to state what is NOT established.\", \"facts\": [\"No matching results for: tls certificates / expired certificates. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / expiring within 7 days. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / self signed. (Absence in this query is not proof of absence elsewhere.)\"]}",
+      "metadata": {
+        "scenario": "node_overdrain_0008",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    }
+  ]
+}

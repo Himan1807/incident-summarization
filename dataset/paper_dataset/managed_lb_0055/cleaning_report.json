@@ -1,0 +1,14 @@
+{
+  "scenario": "managed_lb_0055",
+  "cleaning": [],
+  "skipped": [
+    "tls_certificates: all aggregations empty"
+  ],
+  "gaps": [],
+  "artifacts": 10,
+  "facts": 58,
+  "empty_aggregations": 3,
+  "questions": 8,
+  "answers": 8,
+  "atoms": 9
+}

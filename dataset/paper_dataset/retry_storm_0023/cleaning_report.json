@@ -1,0 +1,14 @@
+{
+  "scenario": "retry_storm_0023",
+  "cleaning": [
+    "first-signs answer 2026-04-03 22:00 UTC differs from the earliest alert-timeline hour 2026-04-03 18:00 UTC (earlier metric onset or an unrelated earlier alert)"
+  ],
+  "skipped": [],
+  "gaps": [],
+  "artifacts": 11,
+  "facts": 68,
+  "empty_aggregations": 2,
+  "questions": 12,
+  "answers": 12,
+  "atoms": 13
+}

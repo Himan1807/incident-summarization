@@ -1,0 +1,168 @@
+{
+  "metadata": {
+    "incident_id": "INC-20210112",
+    "scenario": "firewall_rule_0006",
+    "title": "Infrastructure reliability incident investigation",
+    "source": "synthetic/ops-incident-expansion (modeled on neu-nds2/llm-sec-incident-analysis)",
+    "query_window_start": "2021-01-12T00:00:00",
+    "query_window_end": "2021-01-14T23:59:59",
+    "evidence_types": [
+      "change_records",
+      "derived_findings",
+      "infrastructure_events",
+      "monitoring_alerts",
+      "network_summary",
+      "query_coverage",
+      "resource_metrics",
+      "service_logs"
+    ],
+    "artifact_scope_note": "Evidence is aggregated query output (not raw log lines or metric samples); it contains no chat/communication records."
+  },
+  "incident_description": "Reliability incident investigation of a production environment. Evidence consists of Elasticsearch aggregation results over application and proxy logs, Kubernetes, cloud-provider and host system events, Prometheus Alertmanager alerts, change-management / CI-CD audit records and metric anomaly detection. No root cause, impact or trigger is stated; these must be established from the supplied artifacts. Environment context: Organization: Lakecrest Cargo (freight and logistics); Platform: Microsoft Azure eastus (zones eastus-1/eastus-2/eastus-3); network range 10.146.0.0/16; Kubernetes cluster lakecr-prod-eastus (AKS); Database: mysql server shipment-db-01 reachable from the application network only through NSG shipment-db-01-nsg rule Allow-App-3306; Change management: production changes carry CHG- identifiers.",
+  "investigation_questions": [
+    "What change, deployment or automation run triggered the incident? Provide its change identifier.",
+    "Which account or automation identity executed the triggering change?",
+    "Which database host became unreachable?",
+    "Which network control object was modified?",
+    "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+    "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+    "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+    "Which change happened shortly before the incident began but did not cause it? Provide its identifier.",
+    "Which change restored normal service? Provide its change identifier."
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "firewall_rule_0006-01",
+      "artifact_type": "service_logs",
+      "subtype": "error_logs",
+      "source": "error_logs",
+      "content": "{\"description\": \"Application and proxy error logs: HTTP/gRPC status codes, failing requests (caller -> callee:port : operation), error messages and the services emitting them.\", \"facts\": [\"error events: 39613 matching events\", \"error events > status codes: 503 \\u2014 24343 events\", \"error events > status codes: n/a (connect timeout) \\u2014 15058 events\", \"error events > status codes: 502 \\u2014 212 events\", \"failing requests: portal-bff -> shipment-api:8080 : GET /v1/shipment \\u2014 24343 events\", \"failing requests: shipment-api -> shipment-db-01:3306 : connect \\u2014 15058 events\", \"failing requests: route-planner -> route-db:5432 : query \\u2014 212 events\", \"error messages: shipment-api: 503 Service Unavailable \\u2014 24343 events\", \"error messages: dial tcp 10.146.70.250:3306: i/o timeout \\u2014 15058 events\", \"error messages: connection reset by peer \\u2014 212 events\", \"emitting services: portal-bff \\u2014 24343 events\", \"emitting services: shipment-api \\u2014 15058 events\", \"emitting services: route-planner \\u2014 212 events\"]}",
+      "metadata": {
+        "scenario": "firewall_rule_0006",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "firewall_rule_0006-02",
+      "artifact_type": "service_logs",
+      "subtype": "error_volume_by_service",
+      "source": "error_volume_by_service",
+      "content": "{\"description\": \"Services ranked by number of error events, with each service's most-failed downstream dependencies.\", \"facts\": [\"services: portal-bff \\u2014 24343 events; failing dependencies=1; top dependencies: shipment-api (24343)\", \"services: shipment-api \\u2014 15058 events; failing dependencies=1; top dependencies: shipment-db-01 (15058)\", \"services: route-planner \\u2014 212 events; failing dependencies=1; top dependencies: route-db (212)\"]}",
+      "metadata": {
+        "scenario": "firewall_rule_0006",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "firewall_rule_0006-03",
+      "artifact_type": "change_records",
+      "subtype": "change_log",
+      "source": "change_log",
+      "content": "{\"description\": \"Deployments, configuration pushes, infrastructure and automation runs from the change-management and CI/CD audit log: change ID, type, target, actor, time (UTC), status and recorded diff/summary.\", \"facts\": [\"changes: CHG-10547 | deployment | tracking-api 6.30.4 -> 6.31.0 | actor: azure-pipelines | 2021-01-12 14:31 UTC | status: succeeded | feature flag cleanup \\u2014 1 events\", \"changes: CHG-10577 | deployment | customs-svc 2.17.6 -> 2.17.7 | actor: azure-pipelines | 2021-01-12 16:42 UTC | status: Synced/Healthy | logging improvements \\u2014 1 events\", \"changes: CHG-10584 | deployment | dock-scheduler 4.9.5 -> 4.9.6 | actor: azure-pipelines | 2021-01-13 00:35 UTC | status: succeeded | copy and UI text changes \\u2014 1 events\", \"changes: CHG-10603 | network_change | NSG shipment-db-01-nsg rule Allow-App-3306 | actor: r.garcia | 2021-01-13 04:34 UTC | status: completed | cleanup of unused rules: removed ingress tcp/3306 from 10.146.0.0/16 \\u2014 1 events\", \"changes: CHG-10608 | network_change | NSG shipment-db-01-nsg rule Allow-App-3306 | actor: d.weber | 2021-01-13 05:56 UTC | status: completed | restore ingress tcp/3306 from 10.146.0.0/16 \\u2014 1 events\", \"changes: CHG-10618 | deployment | route-planner 9.2.4 -> 9.3.0 | actor: azure-pipelines | 2021-01-14 08:15 UTC | status: completed | performance tuning of list endpoint \\u2014 1 events\", \"change types: deployment \\u2014 4 events\", \"change types: network_change \\u2014 2 events\"]}",
+      "metadata": {
+        "scenario": "firewall_rule_0006",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "firewall_rule_0006-04",
+      "artifact_type": "change_records",
+      "subtype": "change_actors",
+      "source": "change_actors",
+      "content": "{\"description\": \"Accounts and automation identities that executed changes, with the hosts or targets they acted on.\", \"facts\": [\"actors: azure-pipelines \\u2014 4 events; targets: lakecr-prod-eastus/dock-scheduler (1), lakecr-prod-eastus/route-planner (1), lakecr-prod-eastus/tracking-api (1), lakecr-prod-eastus/customs-svc (1)\", \"actors: d.weber \\u2014 1 events; targets: shipment-db-01 (1)\", \"actors: r.garcia \\u2014 1 events; targets: shipment-db-01 (1)\"]}",
+      "metadata": {
+        "scenario": "firewall_rule_0006",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "firewall_rule_0006-05",
+      "artifact_type": "infrastructure_events",
+      "subtype": "host_inventory",
+      "source": "host_inventory",
+      "content": "{\"description\": \"Host and node names seen in infrastructure events with their IP address, role and availability zone / rack.\", \"facts\": [\"hosts: aks-nodepool1-39690476-vmss000038 \\u2014 261 events; ip: 10.146.74.21; role: k8s-worker; zone: eastus-3\", \"hosts: shipment-db-01 \\u2014 59 events; ip: 10.146.70.250; role: mysql-primary; zone: eastus-1\"]}",
+      "metadata": {
+        "scenario": "firewall_rule_0006",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "firewall_rule_0006-06",
+      "artifact_type": "infrastructure_events",
+      "subtype": "platform_events",
+      "source": "platform_events",
+      "content": "{\"description\": \"Kubernetes events, cloud-provider health events and host system messages (kernel, hardware, daemons) with the objects or hosts they refer to.\", \"facts\": [\"flow logs: REJECT tcp 10.146.0.0/16 -> 10.146.70.250:3306 \\u2014 69345 events; top objects: shipment-db-01 (1)\", \"event reasons: Pulled \\u2014 17 events; top objects: pod/dock-scheduler-ead85f71a-dxnpl (3)\", \"event reasons: ScalingReplicaSet \\u2014 3 events; top objects: deployment/dock-scheduler (3)\", \"event reasons: Pulled \\u2014 30 events; top objects: pod/route-planner-4443e37f3-5kz2l (3)\", \"event reasons: ScalingReplicaSet \\u2014 4 events; top objects: deployment/route-planner (3)\", \"event reasons: Pulled \\u2014 8 events; top objects: pod/tracking-api-e03881e15-k6k2g (2)\", \"event reasons: ScalingReplicaSet \\u2014 6 events; top objects: deployment/tracking-api (3)\", \"event reasons: Pulled \\u2014 17 events; top objects: pod/customs-svc-46b078ff9-ssrm9 (3)\", \"event reasons: ScalingReplicaSet \\u2014 6 events; top objects: deployment/customs-svc (3)\"]}",
+      "metadata": {
+        "scenario": "firewall_rule_0006",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "firewall_rule_0006-07",
+      "artifact_type": "monitoring_alerts",
+      "subtype": "alertmanager_alerts",
+      "source": "alertmanager_alerts",
+      "content": "{\"description\": \"Prometheus Alertmanager alerts: alert names with severity, critical-alert instances, alert names and services, and an hourly timeline of warning and critical alerts (UTC).\", \"facts\": [\"alert names: Watchdog (info) \\u2014 72 events; service: alertmanager; firing continuously\", \"alert names: MysqlConnectionsDropped (critical) \\u2014 8 events; service: mysql; first seen in hour 2021-01-13 04:00 UTC; last seen in hour 2021-01-13 05:00 UTC\", \"alert names: ShipmentApiUnavailable (critical) \\u2014 8 events; service: shipment-api; first seen in hour 2021-01-13 04:00 UTC; last seen in hour 2021-01-13 05:00 UTC\", \"alert names: KubeCPUOvercommit (warning) \\u2014 3 events; service: cluster; first seen in hour 2021-01-13 22:00 UTC; last seen in hour 2021-01-13 23:00 UTC\", \"critical alerts: 16 matching events\", \"critical alerts > critical instances: 10.146.70.250:9104 \\u2014 8 events\", \"critical alerts > critical instances: shipment-api \\u2014 8 events\", \"critical alerts > critical alert names: MysqlConnectionsDropped \\u2014 8 events\", \"critical alerts > critical alert names: ShipmentApiUnavailable \\u2014 8 events\", \"critical alerts > critical services: mysql \\u2014 8 events\", \"critical alerts > critical services: shipment-api \\u2014 8 events\", \"alert timeline: 2021-01-13 04:00 UTC \\u2014 8 events\", \"alert timeline: 2021-01-13 05:00 UTC \\u2014 8 events\", \"alert timeline: 2021-01-13 22:00 UTC \\u2014 1 events\", \"alert timeline: 2021-01-13 23:00 UTC \\u2014 2 events\"]}",
+      "metadata": {
+        "scenario": "firewall_rule_0006",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "firewall_rule_0006-08",
+      "artifact_type": "resource_metrics",
+      "subtype": "metric_anomalies",
+      "source": "metric_anomalies",
+      "content": "{\"description\": \"Metric series that deviated from their 7-day baseline (hourly resolution): baseline, peak or trough value, anomaly onset and recovery (UTC).\", \"facts\": [\"metric anomalies: mysql client connections on shipment-db-01 \\u2014 baseline ~142; trough 0; onset 2021-01-13 04:00 UTC; recovered 2021-01-13 06:00 UTC\"]}",
+      "metadata": {
+        "scenario": "firewall_rule_0006",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "firewall_rule_0006-09",
+      "artifact_type": "network_summary",
+      "subtype": "tls_certificates",
+      "source": "tls_certificates",
+      "content": "{\"description\": \"TLS certificates observed in edge and service-to-service traffic that are expired, expire within 7 days, or are self-signed.\", \"facts\": [\"expiring within 7 days: 16 matching events\", \"expiring within 7 days > certificate details: CN=tracking-api.lakecrest.internal | issuer: CN=R11,O=Let's Encrypt | not_after: 2021-01-15 23:59:00 UTC | seen on: tracking-api:8443 \\u2014 16 events\"]}",
+      "metadata": {
+        "scenario": "firewall_rule_0006",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "firewall_rule_0006-10",
+      "artifact_type": "derived_findings",
+      "subtype": "derived_summary",
+      "source": "derived_summary",
+      "content": "{\"description\": \"Deterministic summary computed from the query results above (error ranking, instance-to-host join, alert timeline, change correlation, earliest metric anomaly).\", \"facts\": [\"Derived: service portal-bff ranks #1 by error volume (24343 events, 1 failing dependencies). Most-failed dependency: shipment-api (24343 errors).\", \"Derived: most-alerted critical instance 10.146.70.250:9104 (8 critical alerts) maps to hostname shipment-db-01; role mysql-primary; zone eastus-1.\", \"Derived: warning/critical alerts span 2021-01-13 04:00 UTC to 2021-01-13 23:00 UTC; earliest alert hour 2021-01-13 04:00 UTC (8 alerts).\", \"Derived: changes recorded from 6 hours before the earliest alert hour to its end: CHG-10584 (deployment, dock-scheduler 4.9.5 -> 4.9.6, azure-pipelines, 2021-01-13 00:35 UTC); CHG-10603 (network_change, NSG shipment-db-01-nsg rule Allow-App-3306, r.garcia, 2021-01-13 04:34 UTC).\", \"Derived: earliest metric anomaly onset 2021-01-13 04:00 UTC (mysql client connections on shipment-db-01).\"]}",
+      "metadata": {
+        "scenario": "firewall_rule_0006",
+        "source_kind": "derived_from_es_results",
+        "heuristic": true
+      }
+    },
+    {
+      "artifact_id": "firewall_rule_0006-11",
+      "artifact_type": "query_coverage",
+      "subtype": "evidence_gaps",
+      "source": "evidence_gaps",
+      "content": "{\"description\": \"Queries that returned nothing or failed; use these to state what is NOT established.\", \"facts\": [\"No matching results for: tls certificates / expired certificates. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / self signed. (Absence in this query is not proof of absence elsewhere.)\"]}",
+      "metadata": {
+        "scenario": "firewall_rule_0006",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    }
+  ]
+}

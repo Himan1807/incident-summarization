@@ -1,0 +1,155 @@
+{
+  "metadata": {
+    "incident_id": "INC-20210327",
+    "scenario": "pool_size_values_0017",
+    "title": "Infrastructure reliability incident investigation",
+    "source": "synthetic/ops-incident-expansion (modeled on neu-nds2/llm-sec-incident-analysis)",
+    "query_window_start": "2021-03-27T00:00:00",
+    "query_window_end": "2021-03-29T23:59:59",
+    "evidence_types": [
+      "change_records",
+      "derived_findings",
+      "infrastructure_events",
+      "monitoring_alerts",
+      "query_coverage",
+      "resource_metrics",
+      "service_logs"
+    ],
+    "artifact_scope_note": "Evidence is aggregated query output (not raw log lines or metric samples); it contains no chat/communication records."
+  },
+  "incident_description": "Reliability incident investigation of a production environment. Evidence consists of Elasticsearch aggregation results over application and proxy logs, Kubernetes, cloud-provider and host system events, Prometheus Alertmanager alerts, change-management / CI-CD audit records and metric anomaly detection. No root cause, impact or trigger is stated; these must be established from the supplied artifacts. Environment context: Organization: Asterstack Bank (digital banking); Platform: Microsoft Azure northeurope (zones northeurope-1/northeurope-2/northeurope-3); network range 10.40.0.0/16; Kubernetes cluster asters-prod-northe (AKS); Database: postgres instance kyc-db-01 for kyc-svc; Deployments: Helm releases rolled out by a CI release bot after human approval; Change management: production changes carry RFC- identifiers.",
+  "investigation_questions": [
+    "Which service or component is the origin of the failure?",
+    "What change, deployment or automation run triggered the incident? Provide its change identifier.",
+    "Which account or automation identity executed the triggering change?",
+    "Which configuration parameter was changed by the triggering change, and which values file was it taken from?",
+    "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+    "Did the failure stay isolated to one component or cascade across services? Answer 'isolated failure' or 'cascading failure'.",
+    "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+    "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+    "Which change restored normal service? Provide its change identifier."
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "pool_size_values_0017-01",
+      "artifact_type": "service_logs",
+      "subtype": "error_logs",
+      "source": "error_logs",
+      "content": "{\"description\": \"Application and proxy error logs: HTTP/gRPC status codes, failing requests (caller -> callee:port : operation), error messages and the services emitting them.\", \"facts\": [\"error events: 56858 matching events\", \"error events > status codes: 504 \\u2014 35248 events\", \"error events > status codes: n/a (client-side pool timeout) \\u2014 21569 events\", \"error events > status codes: 429 \\u2014 41 events\", \"failing requests: mobile-bff -> kyc-svc:8080 : POST /v1/kyc \\u2014 29944 events\", \"failing requests: kyc-svc -> kyc-db-01:5432 : connection acquire \\u2014 21569 events\", \"failing requests: cards-api -> kyc-svc:8080 : GET /v1/kyc/{id} \\u2014 5304 events\", \"failing requests: fx-rates-svc -> fx-db:5432 : query \\u2014 41 events\", \"error messages: kyc-svc: 504 Gateway Timeout \\u2014 29944 events\", \"error messages: sql: connection pool wait timeout (max_open=10, in_use=10) \\u2014 21569 events\", \"error messages: kyc-svc: context deadline exceeded \\u2014 5304 events\", \"error messages: HTTP 429 Too Many Requests from upstream \\u2014 41 events\", \"emitting services: mobile-bff \\u2014 29944 events\", \"emitting services: kyc-svc \\u2014 21569 events\", \"emitting services: cards-api \\u2014 5304 events\", \"emitting services: fx-rates-svc \\u2014 41 events\"]}",
+      "metadata": {
+        "scenario": "pool_size_values_0017",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "pool_size_values_0017-02",
+      "artifact_type": "service_logs",
+      "subtype": "error_volume_by_service",
+      "source": "error_volume_by_service",
+      "content": "{\"description\": \"Services ranked by number of error events, with each service's most-failed downstream dependencies.\", \"facts\": [\"services: mobile-bff \\u2014 29944 events; failing dependencies=1; top dependencies: kyc-svc (29944)\", \"services: kyc-svc \\u2014 21569 events; failing dependencies=1; top dependencies: kyc-db-01 (21569)\", \"services: cards-api \\u2014 5304 events; failing dependencies=1; top dependencies: kyc-svc (5304)\", \"services: fx-rates-svc \\u2014 41 events; failing dependencies=1; top dependencies: fx-db (41)\"]}",
+      "metadata": {
+        "scenario": "pool_size_values_0017",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "pool_size_values_0017-03",
+      "artifact_type": "change_records",
+      "subtype": "change_log",
+      "source": "change_log",
+      "content": "{\"description\": \"Deployments, configuration pushes, infrastructure and automation runs from the change-management and CI/CD audit log: change ID, type, target, actor, time (UTC), status and recorded diff/summary.\", \"facts\": [\"changes: RFC-63323 | helm_upgrade | kyc-svc chart (revision 64) | actor: release-bot | 2021-03-27 23:35 UTC | status: completed | approved_by: b.okoye; values: database.pool.maxOpenConns 300 -> 10; values file: values-staging.yaml \\u2014 1 events\", \"changes: RFC-63333 | deployment | statements-api 8.20.0 -> 8.20.1 | actor: azure-pipelines | 2021-03-28 00:21 UTC | status: completed | dependency bump \\u2014 1 events\", \"changes: RFC-63355 | helm_rollback | kyc-svc to previous revision | actor: b.okoye | 2021-03-28 04:56 UTC | status: completed | helm rollback kyc-svc \\u2014 1 events\", \"changes: RFC-63391 | deployment | fx-rates-svc 3.20.3 -> 3.21.0 | actor: azure-pipelines | 2021-03-28 18:06 UTC | status: Synced/Healthy | logging improvements \\u2014 1 events\", \"changes: RFC-63421 | deployment | limits-svc 10.8.8 -> 10.8.9 | actor: azure-pipelines | 2021-03-29 09:30 UTC | status: succeeded | dependency bump \\u2014 1 events\", \"change types: deployment \\u2014 3 events\", \"change types: helm_upgrade \\u2014 1 events\", \"change types: helm_rollback \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "pool_size_values_0017",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "pool_size_values_0017-04",
+      "artifact_type": "change_records",
+      "subtype": "change_actors",
+      "source": "change_actors",
+      "content": "{\"description\": \"Accounts and automation identities that executed changes, with the hosts or targets they acted on.\", \"facts\": [\"actors: azure-pipelines \\u2014 3 events; targets: asters-prod-northe/statements-api (1), asters-prod-northe/fx-rates-svc (1), asters-prod-northe/limits-svc (1)\", \"actors: b.okoye \\u2014 1 events; targets: asters-prod-northe/kyc-svc (1)\", \"actors: release-bot \\u2014 1 events; targets: asters-prod-northe/kyc-svc (1)\"]}",
+      "metadata": {
+        "scenario": "pool_size_values_0017",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "pool_size_values_0017-05",
+      "artifact_type": "infrastructure_events",
+      "subtype": "host_inventory",
+      "source": "host_inventory",
+      "content": "{\"description\": \"Host and node names seen in infrastructure events with their IP address, role and availability zone / rack.\", \"facts\": [\"hosts: kyc-db-01 \\u2014 175 events; ip: 10.40.77.149; role: postgres-primary; zone: northeurope-2\", \"hosts: aks-nodepool1-38306111-vmss000005 \\u2014 154 events; ip: 10.40.173.245; role: k8s-worker; zone: northeurope-1\", \"hosts: aks-nodepool1-39189275-vmss000034 \\u2014 146 events; ip: 10.40.149.163; role: k8s-worker; zone: northeurope-2\", \"hosts: aks-nodepool1-30657971-vmss000040 \\u2014 68 events; ip: 10.40.173.78; role: k8s-worker; zone: northeurope-1\"]}",
+      "metadata": {
+        "scenario": "pool_size_values_0017",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "pool_size_values_0017-06",
+      "artifact_type": "infrastructure_events",
+      "subtype": "platform_events",
+      "source": "platform_events",
+      "content": "{\"description\": \"Kubernetes events, cloud-provider health events and host system messages (kernel, hardware, daemons) with the objects or hosts they refer to.\", \"facts\": [\"event reasons: Unhealthy \\u2014 226 events; top objects: pod/kyc-svc-866431dbb-k54gr (60), pod/kyc-svc-296ce4c27-kbpx6 (24)\", \"event reasons: Pulled \\u2014 3 events; top objects: pod/statements-api-3b176640a-bpqzz (2)\", \"event reasons: ScalingReplicaSet \\u2014 2 events; top objects: deployment/statements-api (2)\", \"event reasons: Pulled \\u2014 15 events; top objects: pod/fx-rates-svc-7eef7a188-42tz9 (2)\", \"event reasons: ScalingReplicaSet \\u2014 6 events; top objects: deployment/fx-rates-svc (1)\", \"event reasons: Pulled \\u2014 29 events; top objects: pod/limits-svc-3576895e8-6kcmc (3)\", \"event reasons: ScalingReplicaSet \\u2014 2 events; top objects: deployment/limits-svc (2)\"]}",
+      "metadata": {
+        "scenario": "pool_size_values_0017",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "pool_size_values_0017-07",
+      "artifact_type": "monitoring_alerts",
+      "subtype": "alertmanager_alerts",
+      "source": "alertmanager_alerts",
+      "content": "{\"description\": \"Prometheus Alertmanager alerts: alert names with severity, critical-alert instances, alert names and services, and an hourly timeline of warning and critical alerts (UTC).\", \"facts\": [\"alert names: Watchdog (info) \\u2014 72 events; service: alertmanager; firing continuously\", \"alert names: ConnectionPoolPendingHigh (critical) \\u2014 10 events; service: kyc-svc; first seen in hour 2021-03-28 02:00 UTC; last seen in hour 2021-03-28 04:00 UTC\", \"alert names: MobileBff5xxHigh (critical) \\u2014 6 events; service: mobile-bff; first seen in hour 2021-03-28 02:00 UTC; last seen in hour 2021-03-28 04:00 UTC\", \"alert names: TargetDown (warning) \\u2014 4 events; service: limits-svc; first seen in hour 2021-03-28 22:00 UTC; last seen in hour 2021-03-28 23:00 UTC\", \"critical alerts: 16 matching events\", \"critical alerts > critical instances: kyc-svc \\u2014 10 events\", \"critical alerts > critical instances: mobile-bff \\u2014 6 events\", \"critical alerts > critical alert names: ConnectionPoolPendingHigh \\u2014 10 events\", \"critical alerts > critical alert names: MobileBff5xxHigh \\u2014 6 events\", \"critical alerts > critical services: kyc-svc \\u2014 10 events\", \"critical alerts > critical services: mobile-bff \\u2014 6 events\", \"alert timeline: 2021-03-28 02:00 UTC \\u2014 8 events\", \"alert timeline: 2021-03-28 03:00 UTC \\u2014 4 events\", \"alert timeline: 2021-03-28 04:00 UTC \\u2014 4 events\", \"alert timeline: 2021-03-28 22:00 UTC \\u2014 2 events\", \"alert timeline: 2021-03-28 23:00 UTC \\u2014 2 events\"]}",
+      "metadata": {
+        "scenario": "pool_size_values_0017",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "pool_size_values_0017-08",
+      "artifact_type": "resource_metrics",
+      "subtype": "metric_anomalies",
+      "source": "metric_anomalies",
+      "content": "{\"description\": \"Metric series that deviated from their 7-day baseline (hourly resolution): baseline, peak or trough value, anomaly onset and recovery (UTC).\", \"facts\": [\"metric anomalies: db pool pending requests (maxOpenConns) on kyc-svc \\u2014 baseline 0; peak 174; onset 2021-03-28 02:00 UTC; recovered 2021-03-28 05:00 UTC\", \"metric anomalies: postgres active connections on kyc-db-01 \\u2014 baseline ~240; trough 14; onset 2021-03-28 02:00 UTC; recovered 2021-03-28 05:00 UTC\", \"metric anomalies: postgres CPU utilisation on kyc-db-01 \\u2014 baseline 35%; trough 16%; onset 2021-03-28 02:00 UTC; recovered 2021-03-28 05:00 UTC\"]}",
+      "metadata": {
+        "scenario": "pool_size_values_0017",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "pool_size_values_0017-09",
+      "artifact_type": "derived_findings",
+      "subtype": "derived_summary",
+      "source": "derived_summary",
+      "content": "{\"description\": \"Deterministic summary computed from the query results above (error ranking, instance-to-host join, alert timeline, change correlation, earliest metric anomaly).\", \"facts\": [\"Derived: service mobile-bff ranks #1 by error volume (29944 events, 1 failing dependencies). Most-failed dependency: kyc-svc (29944 errors).\", \"Derived: most-alerted critical instance kyc-svc (10 critical alerts); no matching host-inventory entry.\", \"Derived: warning/critical alerts span 2021-03-28 02:00 UTC to 2021-03-28 23:00 UTC; earliest alert hour 2021-03-28 02:00 UTC (8 alerts).\", \"Derived: changes recorded from 6 hours before the earliest alert hour to its end: RFC-63323 (helm_upgrade, kyc-svc chart (revision 64), release-bot, 2021-03-27 23:35 UTC); RFC-63333 (deployment, statements-api 8.20.0 -> 8.20.1, azure-pipelines, 2021-03-28 00:21 UTC).\", \"Derived: earliest metric anomaly onset 2021-03-28 02:00 UTC (db pool pending requests (maxOpenConns) on kyc-svc).\"]}",
+      "metadata": {
+        "scenario": "pool_size_values_0017",
+        "source_kind": "derived_from_es_results",
+        "heuristic": true
+      }
+    },
+    {
+      "artifact_id": "pool_size_values_0017-10",
+      "artifact_type": "query_coverage",
+      "subtype": "evidence_gaps",
+      "source": "evidence_gaps",
+      "content": "{\"description\": \"Queries that returned nothing or failed; use these to state what is NOT established.\", \"facts\": [\"No matching results for: tls certificates / expired certificates. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / expiring within 7 days. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / self signed. (Absence in this query is not proof of absence elsewhere.)\"]}",
+      "metadata": {
+        "scenario": "pool_size_values_0017",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    }
+  ]
+}

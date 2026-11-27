@@ -1,0 +1,153 @@
+{
+  "metadata": {
+    "incident_id": "INC-20230809",
+    "scenario": "firewall_rule_0003",
+    "title": "Infrastructure reliability incident investigation",
+    "source": "synthetic/ops-incident-expansion (modeled on neu-nds2/llm-sec-incident-analysis)",
+    "query_window_start": "2023-08-09T00:00:00",
+    "query_window_end": "2023-08-11T23:59:59",
+    "evidence_types": [
+      "change_records",
+      "derived_findings",
+      "infrastructure_events",
+      "monitoring_alerts",
+      "query_coverage",
+      "resource_metrics",
+      "service_logs"
+    ],
+    "artifact_scope_note": "Evidence is aggregated query output (not raw log lines or metric samples); it contains no chat/communication records."
+  },
+  "incident_description": "Reliability incident investigation of a production environment. Evidence consists of Elasticsearch aggregation results over application and proxy logs, Kubernetes, cloud-provider and host system events, Prometheus Alertmanager alerts, change-management / CI-CD audit records and metric anomaly detection. No root cause, impact or trigger is stated; these must be established from the supplied artifacts. Environment context: Organization: Haldgate Media (news and media publishing); Platform: Google Cloud asia-southeast1 (zones asia-southeast1-a/asia-southeast1-b/asia-southeast1-c); network range 10.165.0.0/16; Kubernetes cluster haldga-prod-asiaso (GKE); Database: mysql server newsletter-db-01 reachable from the application network only through firewall rule allow-newsletter-to-db; Change management: production changes carry CHG- identifiers.",
+  "investigation_questions": [
+    "What change, deployment or automation run triggered the incident? Provide its change identifier.",
+    "Which account or automation identity executed the triggering change?",
+    "Which network control object was modified?",
+    "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+    "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+    "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+    "Which change restored normal service? Provide its change identifier."
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "firewall_rule_0003-01",
+      "artifact_type": "service_logs",
+      "subtype": "error_logs",
+      "source": "error_logs",
+      "content": "{\"description\": \"Application and proxy error logs: HTTP/gRPC status codes, failing requests (caller -> callee:port : operation), error messages and the services emitting them.\", \"facts\": [\"error events: 38337 matching events\", \"error events > status codes: 503 \\u2014 20516 events\", \"error events > status codes: n/a (connect timeout) \\u2014 17790 events\", \"error events > status codes: 500 \\u2014 31 events\", \"failing requests: web-frontend -> newsletter-svc:8080 : GET /v1/newsletter \\u2014 20516 events\", \"failing requests: newsletter-svc -> newsletter-db-01:3306 : connect \\u2014 17790 events\", \"failing requests: media-api -> media-db:5432 : query \\u2014 31 events\", \"error messages: newsletter-svc: 503 Service Unavailable \\u2014 20516 events\", \"error messages: dial tcp 10.165.78.168:3306: i/o timeout \\u2014 17790 events\", \"error messages: pq: could not serialize access due to concurrent update \\u2014 31 events\", \"emitting services: web-frontend \\u2014 20516 events\", \"emitting services: newsletter-svc \\u2014 17790 events\", \"emitting services: media-api \\u2014 31 events\"]}",
+      "metadata": {
+        "scenario": "firewall_rule_0003",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "firewall_rule_0003-02",
+      "artifact_type": "service_logs",
+      "subtype": "error_volume_by_service",
+      "source": "error_volume_by_service",
+      "content": "{\"description\": \"Services ranked by number of error events, with each service's most-failed downstream dependencies.\", \"facts\": [\"services: web-frontend \\u2014 20516 events; failing dependencies=1; top dependencies: newsletter-svc (20516)\", \"services: newsletter-svc \\u2014 17790 events; failing dependencies=1; top dependencies: newsletter-db-01 (17790)\", \"services: media-api \\u2014 31 events; failing dependencies=1; top dependencies: media-db (31)\"]}",
+      "metadata": {
+        "scenario": "firewall_rule_0003",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "firewall_rule_0003-03",
+      "artifact_type": "change_records",
+      "subtype": "change_log",
+      "source": "change_log",
+      "content": "{\"description\": \"Deployments, configuration pushes, infrastructure and automation runs from the change-management and CI/CD audit log: change ID, type, target, actor, time (UTC), status and recorded diff/summary.\", \"facts\": [\"changes: CHG-5729 | deployment | media-api 0.0.12 -> 0.0.13 | actor: argocd | 2023-08-09 05:54 UTC | status: completed | feature flag cleanup \\u2014 1 events\", \"changes: CHG-5758 | deployment | image-resizer 12.13.3 -> 12.13.4 | actor: argocd | 2023-08-09 11:30 UTC | status: succeeded | new optional API field \\u2014 1 events\", \"changes: CHG-5791 | network_change | firewall rule allow-newsletter-to-db | actor: v.dubois | 2023-08-10 00:48 UTC | status: completed | cleanup of unused rules: removed ingress tcp/3306 from 10.165.0.0/16 \\u2014 1 events\", \"changes: CHG-5830 | network_change | firewall rule allow-newsletter-to-db | actor: n.osei | 2023-08-10 03:51 UTC | status: completed | restore ingress tcp/3306 from 10.165.0.0/16 \\u2014 1 events\", \"changes: CHG-5861 | deployment | comment-svc 6.15.12 -> 6.15.13 | actor: argocd | 2023-08-10 17:20 UTC | status: Synced/Healthy | new optional API field \\u2014 1 events\", \"change types: deployment \\u2014 3 events\", \"change types: network_change \\u2014 2 events\"]}",
+      "metadata": {
+        "scenario": "firewall_rule_0003",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "firewall_rule_0003-04",
+      "artifact_type": "change_records",
+      "subtype": "change_actors",
+      "source": "change_actors",
+      "content": "{\"description\": \"Accounts and automation identities that executed changes, with the hosts or targets they acted on.\", \"facts\": [\"actors: argocd \\u2014 3 events; targets: haldga-prod-asiaso/image-resizer (1), haldga-prod-asiaso/media-api (1), haldga-prod-asiaso/comment-svc (1)\", \"actors: n.osei \\u2014 1 events; targets: newsletter-db-01 (1)\", \"actors: v.dubois \\u2014 1 events; targets: newsletter-db-01 (1)\"]}",
+      "metadata": {
+        "scenario": "firewall_rule_0003",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "firewall_rule_0003-05",
+      "artifact_type": "infrastructure_events",
+      "subtype": "host_inventory",
+      "source": "host_inventory",
+      "content": "{\"description\": \"Host and node names seen in infrastructure events with their IP address, role and availability zone / rack.\", \"facts\": [\"hosts: gke-haldga-prod-as-pool-c-6ec4 \\u2014 193 events; ip: 10.165.146.195; role: k8s-worker; zone: asia-southeast1-b\", \"hosts: newsletter-db-01 \\u2014 128 events; ip: 10.165.78.168; role: mysql-primary; zone: asia-southeast1-a\"]}",
+      "metadata": {
+        "scenario": "firewall_rule_0003",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "firewall_rule_0003-06",
+      "artifact_type": "infrastructure_events",
+      "subtype": "platform_events",
+      "source": "platform_events",
+      "content": "{\"description\": \"Kubernetes events, cloud-provider health events and host system messages (kernel, hardware, daemons) with the objects or hosts they refer to.\", \"facts\": [\"flow logs: REJECT tcp 10.165.0.0/16 -> 10.165.78.168:3306 \\u2014 77733 events; top objects: newsletter-db-01 (1)\", \"event reasons: Pulled \\u2014 10 events; top objects: pod/image-resizer-8bbcc10eb-7sz5m (2)\", \"event reasons: ScalingReplicaSet \\u2014 5 events; top objects: deployment/image-resizer (1)\", \"event reasons: Pulled \\u2014 19 events; top objects: pod/media-api-f0ddeca29-thm6p (1)\", \"event reasons: ScalingReplicaSet \\u2014 3 events; top objects: deployment/media-api (3)\", \"event reasons: Pulled \\u2014 11 events; top objects: pod/comment-svc-8f8270ec6-7g5bq (2)\", \"event reasons: ScalingReplicaSet \\u2014 5 events; top objects: deployment/comment-svc (2)\"]}",
+      "metadata": {
+        "scenario": "firewall_rule_0003",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "firewall_rule_0003-07",
+      "artifact_type": "monitoring_alerts",
+      "subtype": "alertmanager_alerts",
+      "source": "alertmanager_alerts",
+      "content": "{\"description\": \"Prometheus Alertmanager alerts: alert names with severity, critical-alert instances, alert names and services, and an hourly timeline of warning and critical alerts (UTC).\", \"facts\": [\"alert names: Watchdog (info) \\u2014 72 events; service: alertmanager; firing continuously\", \"alert names: MysqlConnectionsDropped (critical) \\u2014 11 events; service: mysql; first seen in hour 2023-08-10 00:00 UTC; last seen in hour 2023-08-10 03:00 UTC\", \"alert names: NewsletterSvcUnavailable (critical) \\u2014 5 events; service: newsletter-svc; first seen in hour 2023-08-10 01:00 UTC; last seen in hour 2023-08-10 03:00 UTC\", \"alert names: CPUThrottlingHigh (warning) \\u2014 1 events; service: comment-svc; first seen in hour 2023-08-10 18:00 UTC; last seen in hour 2023-08-10 18:00 UTC\", \"critical alerts: 16 matching events\", \"critical alerts > critical instances: 10.165.78.168:9104 \\u2014 11 events\", \"critical alerts > critical instances: newsletter-svc \\u2014 5 events\", \"critical alerts > critical alert names: MysqlConnectionsDropped \\u2014 11 events\", \"critical alerts > critical alert names: NewsletterSvcUnavailable \\u2014 5 events\", \"critical alerts > critical services: mysql \\u2014 11 events\", \"critical alerts > critical services: newsletter-svc \\u2014 5 events\", \"alert timeline: 2023-08-10 00:00 UTC \\u2014 2 events\", \"alert timeline: 2023-08-10 01:00 UTC \\u2014 5 events\", \"alert timeline: 2023-08-10 02:00 UTC \\u2014 4 events\", \"alert timeline: 2023-08-10 03:00 UTC \\u2014 5 events\", \"alert timeline: 2023-08-10 18:00 UTC \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "firewall_rule_0003",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "firewall_rule_0003-08",
+      "artifact_type": "resource_metrics",
+      "subtype": "metric_anomalies",
+      "source": "metric_anomalies",
+      "content": "{\"description\": \"Metric series that deviated from their 7-day baseline (hourly resolution): baseline, peak or trough value, anomaly onset and recovery (UTC).\", \"facts\": [\"metric anomalies: mysql client connections on newsletter-db-01 \\u2014 baseline ~147; trough 0; onset 2023-08-10 00:00 UTC; recovered 2023-08-10 04:00 UTC\"]}",
+      "metadata": {
+        "scenario": "firewall_rule_0003",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "firewall_rule_0003-09",
+      "artifact_type": "derived_findings",
+      "subtype": "derived_summary",
+      "source": "derived_summary",
+      "content": "{\"description\": \"Deterministic summary computed from the query results above (error ranking, instance-to-host join, alert timeline, change correlation, earliest metric anomaly).\", \"facts\": [\"Derived: service web-frontend ranks #1 by error volume (20516 events, 1 failing dependencies). Most-failed dependency: newsletter-svc (20516 errors).\", \"Derived: most-alerted critical instance 10.165.78.168:9104 (11 critical alerts) maps to hostname newsletter-db-01; role mysql-primary; zone asia-southeast1-a.\", \"Derived: warning/critical alerts span 2023-08-10 00:00 UTC to 2023-08-10 18:00 UTC; earliest alert hour 2023-08-10 00:00 UTC (2 alerts).\", \"Derived: changes recorded from 6 hours before the earliest alert hour to its end: CHG-5791 (network_change, firewall rule allow-newsletter-to-db, v.dubois, 2023-08-10 00:48 UTC).\", \"Derived: earliest metric anomaly onset 2023-08-10 00:00 UTC (mysql client connections on newsletter-db-01).\"]}",
+      "metadata": {
+        "scenario": "firewall_rule_0003",
+        "source_kind": "derived_from_es_results",
+        "heuristic": true
+      }
+    },
+    {
+      "artifact_id": "firewall_rule_0003-10",
+      "artifact_type": "query_coverage",
+      "subtype": "evidence_gaps",
+      "source": "evidence_gaps",
+      "content": "{\"description\": \"Queries that returned nothing or failed; use these to state what is NOT established.\", \"facts\": [\"No matching results for: tls certificates / expired certificates. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / expiring within 7 days. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / self signed. (Absence in this query is not proof of absence elsewhere.)\"]}",
+      "metadata": {
+        "scenario": "firewall_rule_0003",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    }
+  ]
+}

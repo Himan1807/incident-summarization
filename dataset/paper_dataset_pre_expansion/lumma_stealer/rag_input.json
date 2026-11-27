@@ -1,0 +1,138 @@
+{
+  "metadata": {
+    "incident_id": "INC-20260126",
+    "scenario": "lumma_stealer",
+    "title": "Network security incident investigation",
+    "source": "neu-nds2/llm-sec-incident-analysis",
+    "query_window_start": "2026-01-26T00:00:00",
+    "query_window_end": "2026-01-28T23:59:59",
+    "evidence_types": [
+      "authentication",
+      "derived_findings",
+      "ids_alerts",
+      "network_summary",
+      "query_coverage"
+    ],
+    "artifact_scope_note": "Evidence is aggregated query output (not raw packets); it contains no chat/communication records."
+  },
+  "incident_description": "Network security investigation of a monitored LAN. Evidence consists of Elasticsearch aggregation results over Zeek and Suricata logs (IDS alerts, Kerberos, HTTP downloads, TLS certificates, domains and external-destination activity). No root cause, impact or C2 attribution is stated; these must be established from the supplied artifacts. Network context: LAN segment range: 10.1.21.0/24 (10.1.21.0 through 10.1.21.255); Domain: win11office.com; AD environment name: WIN11OFFICE; Active Directory (AD) domain controller: 10.1.21.2 - WIN-LU4L24X3UB7; LAN segment gateway: 10.1.21.1; LAN segment broadcast address: 10.1.21.255.",
+  "investigation_questions": [
+    "What is the IP address of the infected Windows client?",
+    "What is the host name of the infected Windows client?",
+    "What is the Windows human user account name (not machine accounts ending in $) of the potentially infected machine in the LAN?",
+    "What domain and IP address triggered the alert for Lumma Stealer?",
+    "Which of the three CIA components does the attacker target primarily: availability, integrity, or confidentiality?",
+    "During what hour did the first signs of infection activity appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "According to the connection volume statistics, what single external IP address received the most connections from the infected hosts? Is it a C2 server or a legitimate service?"
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "lumma_stealer-01",
+      "artifact_type": "network_summary",
+      "subtype": "file_downloads",
+      "source": "file_downloads",
+      "content": "{\"description\": \"HTTP file downloads and file transfers: download domains/IPs, requests (client -> server:port : URI), file types and download sources.\", \"facts\": [\"file transfers: 31 matching events\", \"file transfers > transfer details: file_transfer — 8 events\", \"file transfers > transfer details: 10.1.21.58 -> 104.208.16.95:443 : fuid: FUwNUi3lIgrBDgnrnb — 1 events\", \"file transfers > transfer details: 10.1.21.58 -> 142.250.115.113:80 : file: json.txt — 1 events\", \"file transfers > transfer details: 10.1.21.58 -> 150.171.22.17:443 : fuid: FaDmmHcV5jyduC2qe — 1 events\", \"file transfers > transfer details: 10.1.21.58 -> 150.171.27.11:443 : fuid: F9LinC1gk6l6ZiHI1h — 1 events\", \"file transfers > transfer details: 10.1.21.58 -> 150.171.27.11:443 : fuid: Fa4J9G18c76oy9mB16 — 1 events\", \"file transfers > transfer details: 10.1.21.58 -> 150.171.28.11:443 : fuid: F0DEDZ1CYQObrx5XH4 — 1 events\", \"file transfers > transfer details: 10.1.21.58 -> 150.171.28.11:443 : fuid: FS8Yw11fhIRcqzQsli — 1 events\", \"file transfers > transfer details: 10.1.21.58 -> 150.171.28.11:443 : fuid: FSmyqk3GaR9bUCOzsd — 1 events\", \"file transfers > transfer details: 10.1.21.58 -> 150.171.28.11:443 : fuid: FdBQ701Q4fZhyadCW5 — 1 events\", \"download sources: 10.1.21.58 — 312 events\", \"http requests: no_http_uri — 296 events\", \"http requests: 10.1.21.58 -> 153.92.1.49:80 : /api/set_agent?id=3BF67EC05320C5729578BE4C0ADF174C&token=842e2802df0f0a06b4ed51f12f4387e761523b&description=&agent=Chrome — 4 events\", \"http requests: 10.1.21.58 -> 153.92.1.49:80 : /favicon.ico — 4 events\", \"http requests: 10.1.21.58 -> 153.92.1.49:80 : /api/set_agent?id=3BF67EC05320C5729578BE4C0ADF174C&token=842e2802df0f0a06b4ed51f12f4387e761523b&description=&agent=Edge — 3 events\", \"http requests: 10.1.21.58 -> 23.55.178.249:80 : /connecttest.txt — 2 events\", \"http requests: 10.1.21.58 -> 142.250.115.113:80 : /time/1/current?cup2key=9:-bEODYwkjylnH87UvVXBQ8jMCHRrFlwn5hpPDFQopQE&cup2hreq=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 — 1 events\", \"http requests: 10.1.21.58 -> 153.92.1.49:80 : /api/set_agent?id=3BF67EC05320C5729578BE4C0ADF174C&token=842e2802df0f0a06b4ed51f12f4387e761523b&description=&agent=Chrome&act=log — 1 events\", \"http requests: 10.1.21.58 -> 153.92.1.49:80 : /api/set_agent?id=3BF67EC05320C5729578BE4C0ADF174C&token=842e2802df0f0a06b4ed51f12f4387e761523b&description=&agent=Edge&act=log — 1 events\", \"download domains: whitepepper.su — 6 events\", \"download domains: clients2.google.com — 1 events\", \"download domains: www.msftconnecttest.com — 1 events\", \"file types: other — 312 events\"]}",
+      "metadata": {
+        "scenario": "lumma_stealer",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "lumma_stealer-02",
+      "artifact_type": "network_summary",
+      "subtype": "high_activity_external_dest",
+      "source": "high_activity_external_dest",
+      "content": "{\"description\": \"Internal clients ranked by number of connections to external destinations, with each client's most-contacted destinations.\", \"facts\": [\"source clients: 10.1.21.58 — 312 events; external destinations=57; top destinations: 153.92.1.49 (91), 142.251.116.95 (34), 150.171.28.11 (14), 52.109.0.142 (10), 23.222.241.141 (6); 157 further events in other values\"]}",
+      "metadata": {
+        "scenario": "lumma_stealer",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "lumma_stealer-03",
+      "artifact_type": "authentication",
+      "subtype": "kerberos_clients",
+      "source": "kerberos_clients",
+      "content": "{\"description\": \"Kerberos client account names (user accounts) and the source IPs they authenticated from.\", \"facts\": [\"client accounts: gwyatt — 8 events; source ips: 10.1.21.58 (8)\"]}",
+      "metadata": {
+        "scenario": "lumma_stealer",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "lumma_stealer-04",
+      "artifact_type": "authentication",
+      "subtype": "kerberos_full_services",
+      "source": "kerberos_full_services",
+      "content": "{\"description\": \"Kerberos services requested (including host and machine account names) per source IP.\", \"facts\": [\"full services: krb_tcp — 8 events; source ips: 10.1.21.58 (8)\", \"full services: krbtgt/WIN11OFFICE.COM — 2 events; source ips: 10.1.21.58 (2)\", \"full services: LDAP/WIN-LU4L24X3UB7.win11office.com/win11office.com — 1 events; source ips: 10.1.21.58 (1)\", \"full services: cifs/WIN-LU4L24X3UB7 — 1 events; source ips: 10.1.21.58 (1)\", \"full services: cifs/WIN-LU4L24X3UB7.win11office.com — 1 events; source ips: 10.1.21.58 (1)\", \"full services: host/desktop-es9f3ml.win11office.com — 1 events; source ips: 10.1.21.58 (1)\", \"full services: krbtgt/WIN11OFFICE — 1 events; source ips: 10.1.21.58 (1)\", \"full services: ldap/win-lu4l24x3ub7.win11office.com — 1 events; source ips: 10.1.21.58 (1)\"]}",
+      "metadata": {
+        "scenario": "lumma_stealer",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "lumma_stealer-05",
+      "artifact_type": "authentication",
+      "subtype": "kerberos_hostnames",
+      "source": "kerberos_hostnames",
+      "content": "{\"description\": \"Host names seen in Kerberos traffic with their source IPs.\", \"facts\": [\"hostnames: desktop-es9f3ml — 1 events; source ips: 10.1.21.58 (1)\"]}",
+      "metadata": {
+        "scenario": "lumma_stealer",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "lumma_stealer-06",
+      "artifact_type": "ids_alerts",
+      "subtype": "suricata_alerts",
+      "source": "suricata_alerts",
+      "content": "{\"description\": \"Suricata IDS alerts: signatures, high-severity alert destinations and sources, and an hourly alert timeline (UTC).\", \"facts\": [\"alert signatures: ET JA3 Hash - Possible SoftEther Windows Client SSTP Traffic — 18 events\", \"alert signatures: ET MALWARE Observed Win32/Lumma Stealer Related Domain (whitepepper .su) in TLS SNI — 16 events\", \"alert signatures: ET DNS Query for .su TLD (Soviet Union) Often Malware Related — 10 events\", \"alert signatures: ET MALWARE Win32/Lumma Stealer Related CnC Domain in DNS Lookup (whitepepper .su) — 10 events\", \"alert signatures: ET INFO HTTP Request to .su TLD (Soviet Union) Often Malware Related — 6 events\", \"alert signatures: ET DNS Query for .cc TLD — 4 events\", \"alert signatures: ET MALWARE Win32/Lumma Stealer Related CnC Domain in DNS Lookup (whooptm .cyou) — 2 events\", \"alert signatures: ET DROP Spamhaus DROP Listed Traffic Inbound group 10 — 1 events\", \"alert signatures: ET INFO Microsoft Connection Test — 1 events\", \"alert signatures: ET MALWARE Lumma Stealer Victim Fingerprinting Activity — 1 events\", \"alert signatures: ET MALWARE Observed Win32/Lumma Stealer Related Domain (whooptm .cyou) in TLS SNI — 1 events\", \"high severity alerts: 51 matching events\", \"high severity alerts > high severity  destinations: 10.1.21.2 — 26 events\", \"high severity alerts > high severity  destinations: 153.92.1.49 — 23 events\", \"high severity alerts > high severity  destinations: 10.1.21.58 — 1 events\", \"high severity alerts > high severity  destinations: 62.72.32.156 — 1 events\", \"high severity alerts > high severity signatures: ET MALWARE Observed Win32/Lumma Stealer Related Domain (whitepepper .su) in TLS SNI — 16 events\", \"high severity alerts > high severity signatures: ET DNS Query for .su TLD (Soviet Union) Often Malware Related — 10 events\", \"high severity alerts > high severity signatures: ET MALWARE Win32/Lumma Stealer Related CnC Domain in DNS Lookup (whitepepper .su) — 10 events\", \"high severity alerts > high severity signatures: ET INFO HTTP Request to .su TLD (Soviet Union) Often Malware Related — 6 events\", \"high severity alerts > high severity signatures: ET DNS Query for .cc TLD — 4 events\", \"high severity alerts > high severity signatures: ET MALWARE Win32/Lumma Stealer Related CnC Domain in DNS Lookup (whooptm .cyou) — 2 events\", \"high severity alerts > high severity signatures: ET DROP Spamhaus DROP Listed Traffic Inbound group 10 — 1 events\", \"high severity alerts > high severity signatures: ET MALWARE Lumma Stealer Victim Fingerprinting Activity — 1 events\", \"high severity alerts > high severity signatures: ET MALWARE Observed Win32/Lumma Stealer Related Domain (whooptm .cyou) in TLS SNI — 1 events\", \"high severity alerts > high severity sources: 10.1.21.58 — 50 events\", \"high severity alerts > high severity sources: 80.97.160.24 — 1 events\", \"alert timeline: 2026-01-27 23:00 UTC — 70 events\"]}",
+      "metadata": {
+        "scenario": "lumma_stealer",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "lumma_stealer-07",
+      "artifact_type": "network_summary",
+      "subtype": "suspicious_domains",
+      "source": "suspicious_domains",
+      "content": "{\"description\": \"Unusual domains with their source and destination IPs, and direct-IP HTTP connections.\", \"facts\": [\"domains: whitepepper.su — 16 events; top source ips: 10.1.21.58 (16); top destination ips: 153.92.1.49 (16)\", \"domains: assets.adobedtm.com — 2 events; top source ips: 10.1.21.58 (2); top destination ips: 184.29.31.84 (2)\", \"domains: cdnjs.cloudflare.com — 2 events; top source ips: 10.1.21.58 (2); top destination ips: 104.17.25.14 (2)\", \"domains: cloudflare-ech.com — 2 events; top source ips: 10.1.21.58 (2); top destination ips: 104.21.22.231 (1), 104.21.46.67 (1)\", \"domains: communicationfirewall-security.cc — 2 events; top source ips: 10.1.21.58 (2); top destination ips: 104.21.9.36 (2)\", \"domains: img-s-msn-com.akamaized.net — 2 events; top source ips: 10.1.21.58 (2); top destination ips: 23.55.178.217 (2)\", \"domains: holiday-forever.cc — 1 events; top source ips: 10.1.21.58 (1); top destination ips: 80.97.160.24 (1)\", \"domains: media.megafilehub4.lat — 1 events; top source ips: 10.1.21.58 (1); top destination ips: 104.21.48.156 (1)\", \"domains: ssl.gstatic.com — 1 events; top source ips: 10.1.21.58 (1); top destination ips: 172.217.72.94 (1)\", \"domains: static.cloudflareinsights.com — 1 events; top source ips: 10.1.21.58 (1); top destination ips: 104.16.79.73 (1)\", \"domains: whooptm.cyou — 1 events; top source ips: 10.1.21.58 (1); top destination ips: 62.72.32.156 (1)\", \"domains: www.gstatic.com — 1 events; top source ips: 10.1.21.58 (1); top destination ips: 142.251.116.94 (1)\"]}",
+      "metadata": {
+        "scenario": "lumma_stealer",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "lumma_stealer-08",
+      "artifact_type": "derived_findings",
+      "subtype": "derived_summary",
+      "source": "derived_summary",
+      "content": "{\"description\": \"Deterministic summary computed from the query results above (client ranking, IP-to-hostname/account join, alert timeline).\", \"facts\": [\"Derived: internal client 10.1.21.58 ranks #1 by external connections (312 events, 57 distinct external destinations). Most-contacted external IP: 153.92.1.49 (91 connections).\", \"Derived: Kerberos identity of 10.1.21.58: hostname(s) desktop-es9f3ml; human user account(s) gwyatt.\", \"Derived: Suricata alerts span 2026-01-27 23:00 UTC to 2026-01-27 23:00 UTC; earliest alert hour 2026-01-27 23:00 UTC (70 alerts).\", \"Derived: destinations of high-severity alerts: 10.1.21.2 (26), 153.92.1.49 (23), 10.1.21.58 (1), 62.72.32.156 (1).\"]}",
+      "metadata": {
+        "scenario": "lumma_stealer",
+        "source_kind": "derived_from_es_results",
+        "heuristic": true
+      }
+    },
+    {
+      "artifact_id": "lumma_stealer-09",
+      "artifact_type": "query_coverage",
+      "subtype": "evidence_gaps",
+      "source": "evidence_gaps",
+      "content": "{\"description\": \"Queries that returned nothing or failed; use these to state what is NOT established.\", \"facts\": [\"No matching results for: suspicious certificates / self signed analysis. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: suspicious certificates / ip based certificates. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: suspicious certificates / short validity certs. (Absence in this query is not proof of absence elsewhere.)\"]}",
+      "metadata": {
+        "scenario": "lumma_stealer",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    }
+  ]
+}

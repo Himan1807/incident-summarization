@@ -1,0 +1,87 @@
+{
+  "source": "synthetic generator ground truth (ops expansion)",
+  "confidence": "synthetic ground truth",
+  "qa": [
+    {
+      "id": 1,
+      "question": "What is the hostname of the machine where the incident started?",
+      "answer": "maple-node-60",
+      "atoms": [
+        {
+          "text": "maple-node-60",
+          "kind": "hostname"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "question": "What is the IP address of the host or node where the failure originated?",
+      "answer": "10.55.204.74",
+      "atoms": [
+        {
+          "text": "10.55.204.74",
+          "kind": "ip"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "question": "Which Kubernetes node condition was reported for the failing node?",
+      "answer": "NotReady",
+      "atoms": [
+        {
+          "text": "NotReady",
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "question": "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+      "answer": "2022-11-13 15:00 UTC",
+      "atoms": [
+        {
+          "text": "2022-11-13 15:00 UTC",
+          "kind": "time"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "question": "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+      "answer": "hardware failure",
+      "atoms": [
+        {
+          "text": "hardware failure",
+          "kind": "label"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "question": "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+      "answer": "availability",
+      "atoms": [
+        {
+          "text": "availability",
+          "kind": "cia"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "question": "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+      "answer": "batch-scheduler, downstream symptom",
+      "atoms": [
+        {
+          "text": "batch-scheduler",
+          "kind": "other"
+        },
+        {
+          "text": "downstream symptom",
+          "kind": "label"
+        }
+      ]
+    }
+  ]
+}

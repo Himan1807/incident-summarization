@@ -1,0 +1,153 @@
+{
+  "metadata": {
+    "incident_id": "INC-20210627",
+    "scenario": "fan_thermal_0031",
+    "title": "Infrastructure reliability incident investigation",
+    "source": "synthetic/ops-incident-expansion (modeled on neu-nds2/llm-sec-incident-analysis)",
+    "query_window_start": "2021-06-27T00:00:00",
+    "query_window_end": "2021-06-29T23:59:59",
+    "evidence_types": [
+      "change_records",
+      "derived_findings",
+      "infrastructure_events",
+      "monitoring_alerts",
+      "query_coverage",
+      "resource_metrics",
+      "service_logs"
+    ],
+    "artifact_scope_note": "Evidence is aggregated query output (not raw log lines or metric samples); it contains no chat/communication records."
+  },
+  "incident_description": "Reliability incident investigation of a production environment. Evidence consists of Elasticsearch aggregation results over application and proxy logs, Kubernetes, cloud-provider and host system events, Prometheus Alertmanager alerts, change-management / CI-CD audit records and metric anomaly detection. No root cause, impact or trigger is stated; these must be established from the supplied artifacts. Environment context: Organization: Sablefold Go (ride-hailing); Platform: on-premises data center DC-B, server range 172.28.0.0/16; Kubernetes cluster sablef-prod (kubeadm); Application tier: promotions-api runs on dedicated rack servers behind a load balancer; IPMI sensor data and SEL are collected; Change management: production changes carry CHG- identifiers.",
+  "investigation_questions": [
+    "What is the hostname of the host or node where the failure originated?",
+    "What is the IP address of the host or node where the failure originated?",
+    "Which hardware component failed first?",
+    "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+    "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+    "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+    "What change brought the service back to normal? Give its identifier."
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "fan_thermal_0031-01",
+      "artifact_type": "service_logs",
+      "subtype": "error_logs",
+      "source": "error_logs",
+      "content": "{\"description\": \"Application and proxy error logs: HTTP/gRPC status codes, failing requests (caller -> callee:port : operation), error messages and the services emitting them.\", \"facts\": [\"error events: 22019 matching events\", \"error events > status codes: 504 \\u2014 16927 events\", \"error events > status codes: 503 \\u2014 5056 events\", \"error events > status codes: 500 \\u2014 36 events\", \"failing requests: rider-app-bff -> promotions-api:8080 : GET /v1/promotions \\u2014 16927 events\", \"failing requests: promotions-api -> worker threads : request handling \\u2014 5056 events\", \"failing requests: eta-svc -> eta-db:5432 : query \\u2014 36 events\", \"error messages: upstream promotions-api: 504 Gateway Timeout \\u2014 16927 events\", \"error messages: request processing exceeded 10s deadline \\u2014 5056 events\", \"error messages: deadlock detected \\u2014 36 events\", \"emitting services: rider-app-bff \\u2014 16927 events\", \"emitting services: promotions-api \\u2014 5056 events\", \"emitting services: eta-svc \\u2014 36 events\"]}",
+      "metadata": {
+        "scenario": "fan_thermal_0031",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "fan_thermal_0031-02",
+      "artifact_type": "service_logs",
+      "subtype": "error_volume_by_service",
+      "source": "error_volume_by_service",
+      "content": "{\"description\": \"Services ranked by number of error events, with each service's most-failed downstream dependencies.\", \"facts\": [\"services: rider-app-bff \\u2014 16927 events; failing dependencies=1; top dependencies: promotions-api (16927)\", \"services: promotions-api \\u2014 5056 events; failing dependencies=1; top dependencies: worker threads (5056)\", \"services: eta-svc \\u2014 36 events; failing dependencies=1; top dependencies: eta-db (36)\"]}",
+      "metadata": {
+        "scenario": "fan_thermal_0031",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "fan_thermal_0031-03",
+      "artifact_type": "change_records",
+      "subtype": "change_log",
+      "source": "change_log",
+      "content": "{\"description\": \"Deployments, configuration pushes, infrastructure and automation runs from the change-management and CI/CD audit log: change ID, type, target, actor, time (UTC), status and recorded diff/summary.\", \"facts\": [\"changes: CHG-74378 | deployment | trips-api 1.27.3 -> 1.28.0 | actor: ansible-deploy | 2021-06-27 23:17 UTC | status: completed | new optional API field \\u2014 1 events\", \"changes: CHG-74382 | load_balancer_drain | promotions-app-01 in promotions-api pool | actor: r.obrien | 2021-06-28 03:06 UTC | status: completed | drain promotions-app-01 from load balancer pool \\u2014 1 events\", \"changes: DC-8115 | hardware_replacement | promotions-app-01 Fan2 | actor: dcops-p.garcia | 2021-06-28 05:06 UTC | status: completed | replaced Fan2 \\u2014 1 events\", \"changes: CHG-74385 | deployment | payments-svc 1.9.5 -> 1.10.0 | actor: ansible-deploy | 2021-06-28 11:32 UTC | status: completed | performance tuning of list endpoint \\u2014 1 events\", \"changes: CHG-74412 | deployment | eta-svc 9.28.6 -> 9.29.0 | actor: ansible-deploy | 2021-06-28 17:51 UTC | status: completed | logging improvements \\u2014 1 events\", \"changes: CHG-74445 | deployment | driver-profile-api 1.23.9 -> 1.23.10 | actor: ansible-deploy | 2021-06-29 12:23 UTC | status: Synced/Healthy | copy and UI text changes \\u2014 1 events\", \"change types: deployment \\u2014 4 events\", \"change types: load_balancer_drain \\u2014 1 events\", \"change types: hardware_replacement \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "fan_thermal_0031",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "fan_thermal_0031-04",
+      "artifact_type": "change_records",
+      "subtype": "change_actors",
+      "source": "change_actors",
+      "content": "{\"description\": \"Accounts and automation identities that executed changes, with the hosts or targets they acted on.\", \"facts\": [\"actors: ansible-deploy \\u2014 4 events; targets: sablef-prod/trips-api (1), sablef-prod/eta-svc (1), sablef-prod/payments-svc (1), sablef-prod/driver-profile-api (1)\", \"actors: dcops-p.garcia \\u2014 1 events; targets: promotions-app-01 (1)\", \"actors: r.obrien \\u2014 1 events; targets: promotions-app-01 (1)\"]}",
+      "metadata": {
+        "scenario": "fan_thermal_0031",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "fan_thermal_0031-05",
+      "artifact_type": "infrastructure_events",
+      "subtype": "host_inventory",
+      "source": "host_inventory",
+      "content": "{\"description\": \"Host and node names seen in infrastructure events with their IP address, role and availability zone / rack.\", \"facts\": [\"hosts: promotions-app-01 \\u2014 524 events; ip: 172.28.103.193; role: promotions-api host; zone: rack K01\", \"hosts: sable-node-44 \\u2014 181 events; ip: 172.28.213.114; role: k8s-worker; zone: rack K24\", \"hosts: sable-node-59 \\u2014 169 events; ip: 172.28.55.140; role: k8s-worker; zone: rack K01\", \"hosts: sable-node-39 \\u2014 158 events; ip: 172.28.120.247; role: k8s-worker; zone: rack K17\"]}",
+      "metadata": {
+        "scenario": "fan_thermal_0031",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "fan_thermal_0031-06",
+      "artifact_type": "infrastructure_events",
+      "subtype": "platform_events",
+      "source": "platform_events",
+      "content": "{\"description\": \"Kubernetes events, cloud-provider health events and host system messages (kernel, hardware, daemons) with the objects or hosts they refer to.\", \"facts\": [\"hardware events (ipmi sel): Fan2 | Lower Critical going low | 0 RPM \\u2014 1 events; top objects: promotions-app-01 (1)\", \"hardware events (ipmi sel): CPU1 Temp | Upper Critical going high | 97 degrees C \\u2014 2 events; top objects: promotions-app-01 (1)\", \"system messages: kernel: mce: CPU19: Core temperature above threshold, cpu clock throttled (total events = 7827) \\u2014 118 events; top objects: promotions-app-01 (1)\", \"system messages: kernel: mce: CPU29: Package temperature above threshold, cpu clock throttled \\u2014 136 events; top objects: promotions-app-01 (1)\", \"event reasons: Pulled \\u2014 6 events; top objects: pod/trips-api-b98703a42-29b6h (3)\", \"event reasons: ScalingReplicaSet \\u2014 4 events; top objects: deployment/trips-api (3)\", \"event reasons: Pulled \\u2014 10 events; top objects: pod/eta-svc-2f47e12d5-fmskw (2)\", \"event reasons: ScalingReplicaSet \\u2014 5 events; top objects: deployment/eta-svc (2)\", \"event reasons: Pulled \\u2014 10 events; top objects: pod/payments-svc-82409cb1b-9gjtp (3)\", \"event reasons: ScalingReplicaSet \\u2014 5 events; top objects: deployment/payments-svc (2)\", \"event reasons: Pulled \\u2014 19 events; top objects: pod/driver-profile-api-96c47e6e5-9ngwp (3)\", \"event reasons: ScalingReplicaSet \\u2014 5 events; top objects: deployment/driver-profile-api (2)\"]}",
+      "metadata": {
+        "scenario": "fan_thermal_0031",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "fan_thermal_0031-07",
+      "artifact_type": "monitoring_alerts",
+      "subtype": "alertmanager_alerts",
+      "source": "alertmanager_alerts",
+      "content": "{\"description\": \"Prometheus Alertmanager alerts: alert names with severity, critical-alert instances, alert names and services, and an hourly timeline of warning and critical alerts (UTC).\", \"facts\": [\"alert names: Watchdog (info) \\u2014 72 events; service: alertmanager; firing continuously\", \"alert names: IPMIFanFailure (warning) \\u2014 12 events; service: hardware; first seen in hour 2021-06-27 23:00 UTC; last seen in hour 2021-06-28 03:00 UTC\", \"alert names: NodeCPUThrottled (critical) \\u2014 10 events; service: node; first seen in hour 2021-06-28 01:00 UTC; last seen in hour 2021-06-28 03:00 UTC\", \"alert names: KubeCPUOvercommit (warning) \\u2014 6 events; service: cluster; first seen in hour 2021-06-28 18:00 UTC; last seen in hour 2021-06-28 20:00 UTC\", \"alert names: PromotionsApiLatencyHigh (critical) \\u2014 6 events; service: promotions-api; first seen in hour 2021-06-28 01:00 UTC; last seen in hour 2021-06-28 03:00 UTC\", \"critical alerts: 16 matching events\", \"critical alerts > critical instances: 172.28.103.193:9100 \\u2014 10 events\", \"critical alerts > critical instances: promotions-api \\u2014 6 events\", \"critical alerts > critical alert names: NodeCPUThrottled \\u2014 10 events\", \"critical alerts > critical alert names: PromotionsApiLatencyHigh \\u2014 6 events\", \"critical alerts > critical services: node \\u2014 10 events\", \"critical alerts > critical services: promotions-api \\u2014 6 events\", \"alert timeline: 2021-06-27 23:00 UTC \\u2014 2 events\", \"alert timeline: 2021-06-28 00:00 UTC \\u2014 3 events\", \"alert timeline: 2021-06-28 01:00 UTC \\u2014 7 events\", \"alert timeline: 2021-06-28 02:00 UTC \\u2014 10 events\", \"alert timeline: 2021-06-28 03:00 UTC \\u2014 6 events\", \"alert timeline: 2021-06-28 18:00 UTC \\u2014 2 events\", \"alert timeline: 2021-06-28 19:00 UTC \\u2014 2 events\", \"alert timeline: 2021-06-28 20:00 UTC \\u2014 2 events\"]}",
+      "metadata": {
+        "scenario": "fan_thermal_0031",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "fan_thermal_0031-08",
+      "artifact_type": "resource_metrics",
+      "subtype": "metric_anomalies",
+      "source": "metric_anomalies",
+      "content": "{\"description\": \"Metric series that deviated from their 7-day baseline (hourly resolution): baseline, peak or trough value, anomaly onset and recovery (UTC).\", \"facts\": [\"metric anomalies: ipmi fan speed (Fan2) on promotions-app-01 \\u2014 baseline 7,165 RPM; trough 0 RPM; onset 2021-06-27 23:00 UTC; recovered 2021-06-28 04:00 UTC\", \"metric anomalies: ipmi temperature (CPU1) on promotions-app-01 \\u2014 baseline 50 C; peak 96 C; onset 2021-06-28 00:00 UTC; recovered 2021-06-28 04:00 UTC\", \"metric anomalies: node_cpu utilisation on 172.28.213.114 \\u2014 baseline 36%; peak 80%; onset 2021-06-28 15:00 UTC; recovered 2021-06-28 17:00 UTC\"]}",
+      "metadata": {
+        "scenario": "fan_thermal_0031",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "fan_thermal_0031-09",
+      "artifact_type": "derived_findings",
+      "subtype": "derived_summary",
+      "source": "derived_summary",
+      "content": "{\"description\": \"Deterministic summary computed from the query results above (error ranking, instance-to-host join, alert timeline, change correlation, earliest metric anomaly).\", \"facts\": [\"Derived: service rider-app-bff ranks #1 by error volume (16927 events, 1 failing dependencies). Most-failed dependency: promotions-api (16927 errors).\", \"Derived: most-alerted critical instance 172.28.103.193:9100 (10 critical alerts) maps to hostname promotions-app-01; role promotions-api host; zone rack K01.\", \"Derived: warning/critical alerts span 2021-06-27 23:00 UTC to 2021-06-28 20:00 UTC; earliest alert hour 2021-06-27 23:00 UTC (2 alerts).\", \"Derived: changes recorded from 6 hours before the earliest alert hour to its end: CHG-74378 (deployment, trips-api 1.27.3 -> 1.28.0, ansible-deploy, 2021-06-27 23:17 UTC).\", \"Derived: earliest metric anomaly onset 2021-06-27 23:00 UTC (ipmi fan speed (Fan2) on promotions-app-01).\"]}",
+      "metadata": {
+        "scenario": "fan_thermal_0031",
+        "source_kind": "derived_from_es_results",
+        "heuristic": true
+      }
+    },
+    {
+      "artifact_id": "fan_thermal_0031-10",
+      "artifact_type": "query_coverage",
+      "subtype": "evidence_gaps",
+      "source": "evidence_gaps",
+      "content": "{\"description\": \"Queries that returned nothing or failed; use these to state what is NOT established.\", \"facts\": [\"No matching results for: tls certificates / expired certificates. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / expiring within 7 days. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / self signed. (Absence in this query is not proof of absence elsewhere.)\"]}",
+      "metadata": {
+        "scenario": "fan_thermal_0031",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    }
+  ]
+}

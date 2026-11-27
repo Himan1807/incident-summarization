@@ -1,0 +1,153 @@
+{
+  "metadata": {
+    "incident_id": "INC-20250420",
+    "scenario": "cert_expiry_0002",
+    "title": "Infrastructure reliability incident investigation",
+    "source": "synthetic/ops-incident-expansion (modeled on neu-nds2/llm-sec-incident-analysis)",
+    "query_window_start": "2025-04-20T00:00:00",
+    "query_window_end": "2025-04-22T23:59:59",
+    "evidence_types": [
+      "change_records",
+      "derived_findings",
+      "infrastructure_events",
+      "monitoring_alerts",
+      "network_summary",
+      "resource_metrics",
+      "service_logs"
+    ],
+    "artifact_scope_note": "Evidence is aggregated query output (not raw log lines or metric samples); it contains no chat/communication records."
+  },
+  "incident_description": "Reliability incident investigation of a production environment. Evidence consists of Elasticsearch aggregation results over application and proxy logs, Kubernetes, cloud-provider and host system events, Prometheus Alertmanager alerts, change-management / CI-CD audit records and metric anomaly detection. No root cause, impact or trigger is stated; these must be established from the supplied artifacts. Environment context: Organization: Oakpine Logistics (freight and logistics); Platform: Google Cloud us-east4 (zones us-east4-a/us-east4-b/us-east4-c); network range 10.97.0.0/16; Kubernetes cluster oakpin-prod-useast (GKE); Public API api.oakpine.com is served by ingress-nginx with a Let's Encrypt certificate managed by cert-manager (ACME DNS-01); Change management: production changes carry CHG- identifiers.",
+  "investigation_questions": [
+    "Which certificate expired?",
+    "Which change fixed the cause of the renewal failure? Provide its change identifier.",
+    "When did the certificate expire? Provide YYYY-MM-DD HH:MM UTC.",
+    "During what hour did the service outage begin? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+    "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+    "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+    "Which change restored normal service? Provide its change identifier."
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "cert_expiry_0002-01",
+      "artifact_type": "service_logs",
+      "subtype": "error_logs",
+      "source": "error_logs",
+      "content": "{\"description\": \"Application and proxy error logs: HTTP/gRPC status codes, failing requests (caller -> callee:port : operation), error messages and the services emitting them.\", \"facts\": [\"error events: 102390 matching events\", \"error events > status codes: n/a (TLS handshake failure) \\u2014 86632 events\", \"error events > status codes: n/a (TLS verification failure) \\u2014 15687 events\", \"error events > status codes: 500 \\u2014 64 events\", \"error events > status codes: n/a (controller log) \\u2014 7 events\", \"failing requests: ingress-nginx -> clients : TLS handshake \\u2014 86632 events\", \"failing requests: rate-engine -> api.oakpine.com:443 : webhook callbacks \\u2014 15687 events\", \"failing requests: booking-api -> booking-db:5432 : query \\u2014 64 events\", \"failing requests: cert-manager -> dns-provider-api:443 : POST zones/records (DNS-01 TXT) \\u2014 7 events\", \"error messages: SSL_do_handshake() failed: certificate expired (client alert 45) \\u2014 86632 events\", \"error messages: x509: certificate has expired or is not yet valid \\u2014 15687 events\", \"error messages: deadlock detected \\u2014 64 events\", \"error messages: error presenting challenge: 401 Unauthorized: invalid token \\u2014 7 events\", \"emitting services: ingress-nginx \\u2014 86632 events\", \"emitting services: rate-engine \\u2014 15687 events\", \"emitting services: booking-api \\u2014 64 events\", \"emitting services: cert-manager \\u2014 7 events\"]}",
+      "metadata": {
+        "scenario": "cert_expiry_0002",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "cert_expiry_0002-02",
+      "artifact_type": "service_logs",
+      "subtype": "error_volume_by_service",
+      "source": "error_volume_by_service",
+      "content": "{\"description\": \"Services ranked by number of error events, with each service's most-failed downstream dependencies.\", \"facts\": [\"services: ingress-nginx \\u2014 86632 events; failing dependencies=1; top dependencies: clients (86632)\", \"services: rate-engine \\u2014 15687 events; failing dependencies=1; top dependencies: api.oakpine.com (15687)\", \"services: booking-api \\u2014 64 events; failing dependencies=1; top dependencies: booking-db (64)\", \"services: cert-manager \\u2014 7 events; failing dependencies=1; top dependencies: dns-provider-api (7)\"]}",
+      "metadata": {
+        "scenario": "cert_expiry_0002",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "cert_expiry_0002-03",
+      "artifact_type": "change_records",
+      "subtype": "change_log",
+      "source": "change_log",
+      "content": "{\"description\": \"Deployments, configuration pushes, infrastructure and automation runs from the change-management and CI/CD audit log: change ID, type, target, actor, time (UTC), status and recorded diff/summary.\", \"facts\": [\"changes: CHG-79224 | deployment | booking-api 10.20.5 -> 10.20.6 | actor: cloudbuild-deployer | 2025-04-20 17:01 UTC | status: Synced/Healthy | copy and UI text changes \\u2014 1 events\", \"changes: CHG-79236 | deployment | customs-svc 4.18.2 -> 4.19.0 | actor: cloudbuild-deployer | 2025-04-21 02:16 UTC | status: succeeded | copy and UI text changes \\u2014 1 events\", \"changes: CHG-79265 | secret_rotation | secret cert-manager/dns-api-token | actor: j.brandt | 2025-04-21 06:30 UTC | status: applied | new DNS provider API token \\u2014 1 events\", \"changes: CHG-79300 | certificate_renewal | certificate ingress/api-oakpine-com | actor: j.brandt | 2025-04-21 07:08 UTC | status: Ready | ACME order completed; ingress reloaded \\u2014 1 events\", \"changes: CHG-79332 | deployment | tracking-api 10.22.0 -> 10.23.0 | actor: cloudbuild-deployer | 2025-04-22 17:34 UTC | status: succeeded | dependency bump \\u2014 1 events\", \"change types: deployment \\u2014 3 events\", \"change types: secret_rotation \\u2014 1 events\", \"change types: certificate_renewal \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "cert_expiry_0002",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "cert_expiry_0002-04",
+      "artifact_type": "change_records",
+      "subtype": "change_actors",
+      "source": "change_actors",
+      "content": "{\"description\": \"Accounts and automation identities that executed changes, with the hosts or targets they acted on.\", \"facts\": [\"actors: cloudbuild-deployer \\u2014 3 events; targets: oakpin-prod-useast/customs-svc (1), oakpin-prod-useast/booking-api (1), oakpin-prod-useast/tracking-api (1)\", \"actors: j.brandt \\u2014 2 events; targets: cert-manager (1), ingress-nginx (1)\"]}",
+      "metadata": {
+        "scenario": "cert_expiry_0002",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "cert_expiry_0002-05",
+      "artifact_type": "infrastructure_events",
+      "subtype": "host_inventory",
+      "source": "host_inventory",
+      "content": "{\"description\": \"Host and node names seen in infrastructure events with their IP address, role and availability zone / rack.\", \"facts\": [\"hosts: gke-oakpin-prod-us-pool-c-6287 \\u2014 51 events; ip: 10.97.146.230; role: k8s-worker; zone: us-east4-b\"]}",
+      "metadata": {
+        "scenario": "cert_expiry_0002",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "cert_expiry_0002-06",
+      "artifact_type": "infrastructure_events",
+      "subtype": "platform_events",
+      "source": "platform_events",
+      "content": "{\"description\": \"Kubernetes events, cloud-provider health events and host system messages (kernel, hardware, daemons) with the objects or hosts they refer to.\", \"facts\": [\"event reasons: Failed (Challenge) \\u2014 8 events; top objects: challenge/api-oakpine-com-9ab36 (1)\", \"event reasons: Pulled \\u2014 4 events; top objects: pod/customs-svc-eaa6654ad-msn7n (2)\", \"event reasons: ScalingReplicaSet \\u2014 3 events; top objects: deployment/customs-svc (2)\", \"event reasons: Pulled \\u2014 4 events; top objects: pod/booking-api-cfd5b52b7-x6rpb (3)\", \"event reasons: ScalingReplicaSet \\u2014 2 events; top objects: deployment/booking-api (2)\", \"event reasons: Pulled \\u2014 29 events; top objects: pod/tracking-api-6c40b12f8-bg89f (1)\", \"event reasons: ScalingReplicaSet \\u2014 5 events; top objects: deployment/tracking-api (1)\"]}",
+      "metadata": {
+        "scenario": "cert_expiry_0002",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "cert_expiry_0002-07",
+      "artifact_type": "monitoring_alerts",
+      "subtype": "alertmanager_alerts",
+      "source": "alertmanager_alerts",
+      "content": "{\"description\": \"Prometheus Alertmanager alerts: alert names with severity, critical-alert instances, alert names and services, and an hourly timeline of warning and critical alerts (UTC).\", \"facts\": [\"alert names: Watchdog (info) \\u2014 72 events; service: alertmanager; firing continuously\", \"alert names: CertManagerCertNotReady (warning) \\u2014 32 events; service: cert-manager; first seen in hour 2025-04-20 00:00 UTC; last seen in hour 2025-04-21 07:00 UTC\", \"alert names: RateEngineErrorRateHigh (critical) \\u2014 9 events; service: rate-engine; first seen in hour 2025-04-21 05:00 UTC; last seen in hour 2025-04-21 07:00 UTC\", \"alert names: TLSHandshakeErrors (critical) \\u2014 6 events; service: ingress-nginx; first seen in hour 2025-04-21 05:00 UTC; last seen in hour 2025-04-21 07:00 UTC\", \"alert names: NodeFilesystemSpaceFillingUp (warning) \\u2014 3 events; service: node; first seen in hour 2025-04-20 22:00 UTC; last seen in hour 2025-04-20 23:00 UTC\", \"alert names: KubeCPUOvercommit (warning) \\u2014 1 events; service: cluster; first seen in hour 2025-04-21 02:00 UTC; last seen in hour 2025-04-21 02:00 UTC\", \"critical alerts: 15 matching events\", \"critical alerts > critical instances: rate-engine \\u2014 9 events\", \"critical alerts > critical instances: ingress-nginx \\u2014 6 events\", \"critical alerts > critical alert names: RateEngineErrorRateHigh \\u2014 9 events\", \"critical alerts > critical alert names: TLSHandshakeErrors \\u2014 6 events\", \"critical alerts > critical services: rate-engine \\u2014 9 events\", \"critical alerts > critical services: ingress-nginx \\u2014 6 events\", \"alert timeline: 2025-04-20 00:00 UTC \\u2014 1 events\", \"alert timeline: 2025-04-20 01:00 UTC \\u2014 1 events\", \"alert timeline: 2025-04-20 02:00 UTC \\u2014 1 events\", \"alert timeline: 2025-04-20 03:00 UTC \\u2014 1 events\", \"alert timeline: 2025-04-20 04:00 UTC \\u2014 1 events\", \"alert timeline: 2025-04-20 05:00 UTC \\u2014 1 events\", \"alert timeline: 2025-04-20 06:00 UTC \\u2014 1 events\", \"alert timeline: 2025-04-20 07:00 UTC \\u2014 1 events\", \"alert timeline: 2025-04-20 08:00 UTC \\u2014 1 events\", \"alert timeline: 2025-04-20 09:00 UTC \\u2014 1 events\", \"alert timeline: 2025-04-20 10:00 UTC \\u2014 1 events\", \"alert timeline: 2025-04-20 11:00 UTC \\u2014 1 events\", \"alert timeline: 2025-04-20 12:00 UTC \\u2014 1 events\", \"alert timeline: 2025-04-20 13:00 UTC \\u2014 1 events\", \"alert timeline: 2025-04-20 14:00 UTC \\u2014 1 events\", \"alert timeline: 2025-04-20 15:00 UTC \\u2014 1 events\", \"alert timeline: 2025-04-20 16:00 UTC \\u2014 1 events\", \"alert timeline: 2025-04-20 17:00 UTC \\u2014 1 events\", \"alert timeline: 2025-04-20 18:00 UTC \\u2014 1 events\", \"alert timeline: 2025-04-20 19:00 UTC \\u2014 1 events\", \"alert timeline: 2025-04-20 20:00 UTC \\u2014 1 events\", \"alert timeline: 2025-04-20 21:00 UTC \\u2014 1 events\", \"alert timeline: 2025-04-20 22:00 UTC \\u2014 2 events\", \"alert timeline: 2025-04-20 23:00 UTC \\u2014 3 events\", \"alert timeline: 2025-04-21 00:00 UTC \\u2014 1 events\", \"alert timeline: 2025-04-21 01:00 UTC \\u2014 1 events\", \"alert timeline: 2025-04-21 02:00 UTC \\u2014 2 events\", \"alert timeline: 2025-04-21 03:00 UTC \\u2014 1 events\", \"alert timeline: 2025-04-21 04:00 UTC \\u2014 1 events\", \"alert timeline: 2025-04-21 05:00 UTC \\u2014 6 events\", \"alert timeline: 2025-04-21 06:00 UTC \\u2014 5 events\", \"alert timeline: 2025-04-21 07:00 UTC \\u2014 7 events\"]}",
+      "metadata": {
+        "scenario": "cert_expiry_0002",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "cert_expiry_0002-08",
+      "artifact_type": "resource_metrics",
+      "subtype": "metric_anomalies",
+      "source": "metric_anomalies",
+      "content": "{\"description\": \"Metric series that deviated from their 7-day baseline (hourly resolution): baseline, peak or trough value, anomaly onset and recovery (UTC).\", \"facts\": [\"metric anomalies: TLS handshake failures per second on ingress-nginx \\u2014 baseline ~0/s; peak 343/s; onset 2025-04-21 05:00 UTC; recovered 2025-04-21 08:00 UTC\"]}",
+      "metadata": {
+        "scenario": "cert_expiry_0002",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "cert_expiry_0002-09",
+      "artifact_type": "network_summary",
+      "subtype": "tls_certificates",
+      "source": "tls_certificates",
+      "content": "{\"description\": \"TLS certificates observed in edge and service-to-service traffic that are expired, expire within 7 days, or are self-signed.\", \"facts\": [\"expired certificates: 1251 matching events\", \"expired certificates > certificate details: CN=api.oakpine.com | issuer: CN=R11,O=Let's Encrypt | not_after: 2025-04-21 05:50:00 UTC | seen on: ingress-nginx (api.oakpine.com:443) \\u2014 1251 events\", \"expiring within 7 days: 3584 matching events\", \"expiring within 7 days > certificate details: CN=api.oakpine.com | issuer: CN=R11,O=Let's Encrypt | not_after: 2025-04-21 05:50:00 UTC | seen on: ingress-nginx (api.oakpine.com:443) \\u2014 3584 events\", \"self signed: 13 matching events\", \"self signed > certificate details: CN=localhost | issuer: CN=localhost | not_after: 2034-01-01 00:00:00 UTC | seen on: legacy-device-6:8443 \\u2014 13 events\"]}",
+      "metadata": {
+        "scenario": "cert_expiry_0002",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "cert_expiry_0002-10",
+      "artifact_type": "derived_findings",
+      "subtype": "derived_summary",
+      "source": "derived_summary",
+      "content": "{\"description\": \"Deterministic summary computed from the query results above (error ranking, instance-to-host join, alert timeline, change correlation, earliest metric anomaly).\", \"facts\": [\"Derived: service ingress-nginx ranks #1 by error volume (86632 events, 1 failing dependencies). Most-failed dependency: clients (86632 errors).\", \"Derived: most-alerted critical instance rate-engine (9 critical alerts); no matching host-inventory entry.\", \"Derived: warning/critical alerts span 2025-04-20 00:00 UTC to 2025-04-21 07:00 UTC; earliest alert hour 2025-04-20 00:00 UTC (1 alerts).\", \"Derived: no changes recorded from 6 hours before the earliest alert hour to its end.\", \"Derived: earliest metric anomaly onset 2025-04-21 05:00 UTC (TLS handshake failures per second on ingress-nginx).\"]}",
+      "metadata": {
+        "scenario": "cert_expiry_0002",
+        "source_kind": "derived_from_es_results",
+        "heuristic": true
+      }
+    }
+  ]
+}

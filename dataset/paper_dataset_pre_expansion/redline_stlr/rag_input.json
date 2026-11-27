@@ -1,0 +1,139 @@
+{
+  "metadata": {
+    "incident_id": "INC-20230710",
+    "scenario": "redline_stlr",
+    "title": "Network security incident investigation",
+    "source": "neu-nds2/llm-sec-incident-analysis",
+    "query_window_start": "2023-07-10T00:00:00",
+    "query_window_end": "2023-07-11T23:59:59",
+    "evidence_types": [
+      "authentication",
+      "derived_findings",
+      "ids_alerts",
+      "network_summary",
+      "query_coverage"
+    ],
+    "artifact_scope_note": "Evidence is aggregated query output (not raw packets); it contains no chat/communication records."
+  },
+  "incident_description": "Network security investigation of a monitored LAN. Evidence consists of Elasticsearch aggregation results over Zeek and Suricata logs (IDS alerts, Kerberos, HTTP downloads, TLS certificates, domains and external-destination activity). No root cause, impact or C2 attribution is stated; these must be established from the supplied artifacts. Network context: LAN segment range: 10.7.10.0/24 (10.7.10.1 through 10.7.10.255); Domain: coolweathercoat.com; Domain controller IP address: 10.7.10.9; Domain controller hostname: WIN-S3WT6LGQFVX; LAN segment gateway: 10.7.10.1; LAN segment broadcast address: 10.7.10.255.",
+  "investigation_questions": [
+    "What is the IP address of the potentially infected internal host in the LAN?",
+    "What is the hostname of the potentially infected machine in the LAN?",
+    "What is the Windows human user account name (not machine accounts ending in $) of the potentially infected machine in the LAN?",
+    "What are the likely fake or suspicious domains / URLs for initial infection?",
+    "What are the suspicious external IP addresses contacted, which might be involved in command-and-control (C2) communication?",
+    "Which of the three CIA components does the attacker target primarily: availability, integrity, or confidentiality?",
+    "During what hour did the first signs of infection activity appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "According to the connection volume statistics, what single external IP address received the most connections from the infected hosts? Is it a C2 server or a legitimate service?"
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "redline_stlr-01",
+      "artifact_type": "network_summary",
+      "subtype": "file_downloads",
+      "source": "file_downloads",
+      "content": "{\"description\": \"HTTP file downloads and file transfers: download domains/IPs, requests (client -> server:port : URI), file types and download sources.\", \"facts\": [\"file transfers: 10 matching events\", \"file transfers > transfer details: file_transfer — 3 events\", \"file transfers > transfer details: 10.7.10.47 -> 13.107.21.200:443 : fuid: FRHMTH2cDhvYsVZt86 — 1 events\", \"file transfers > transfer details: 10.7.10.47 -> 195.161.114.3:80 : fuid: FHuY9W2Rb2X336jwT5 — 1 events\", \"file transfers > transfer details: 10.7.10.47 -> 195.161.114.3:80 : fuid: FfaeHV2N39f9ws9Ui — 1 events\", \"file transfers > transfer details: 10.7.10.47 -> 20.42.65.88:443 : fuid: Fsp3YN3nMVyuIp9sDk — 1 events\", \"file transfers > transfer details: 10.7.10.47 -> 204.79.197.200:443 : fuid: FPRwDt3bWAo6siQc7j — 1 events\", \"file transfers > transfer details: 10.7.10.47 -> 204.79.197.203:443 : fuid: FPQK3hfd9HvSkrIl1 — 1 events\", \"file transfers > transfer details: 10.7.10.47 -> 92.118.151.9:80 : fuid: FaY0uO3uabhmTxqaQc — 1 events\", \"download sources: 10.7.10.47 — 55 events\", \"http requests: no_http_uri — 49 events\", \"http requests: 10.7.10.47 -> 195.161.114.3:80 : /?status=start&av=Windows%20Defender — 3 events\", \"http requests: 10.7.10.47 -> 195.161.114.3:80 : /?status=install — 1 events\", \"http requests: 10.7.10.47 -> 195.161.114.3:80 : /?status=start&av=Windows Defender — 1 events\", \"http requests: 10.7.10.47 -> 92.118.151.9:80 : /data/czx.jpg — 1 events\", \"download domains: 623start.site — 2 events\", \"download domains: guiatelefonos.com — 1 events\", \"file types: other — 55 events\"]}",
+      "metadata": {
+        "scenario": "redline_stlr",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "redline_stlr-02",
+      "artifact_type": "network_summary",
+      "subtype": "high_activity_external_dest",
+      "source": "high_activity_external_dest",
+      "content": "{\"description\": \"Internal clients ranked by number of connections to external destinations, with each client's most-contacted destinations.\", \"facts\": [\"source clients: 10.7.10.47 — 55 events; external destinations=20; top destinations: 195.161.114.3 (8), 92.118.151.9 (5), 204.79.197.200 (5), 13.107.21.200 (3), 20.42.65.88 (3); 31 further events in other values\"]}",
+      "metadata": {
+        "scenario": "redline_stlr",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "redline_stlr-03",
+      "artifact_type": "authentication",
+      "subtype": "kerberos_clients",
+      "source": "kerberos_clients",
+      "content": "{\"description\": \"Kerberos client account names (user accounts) and the source IPs they authenticated from.\", \"facts\": [\"client accounts: DESKTOP-9PEA63H$ — 12 events; source ips: 10.7.10.47 (12)\", \"client accounts: desktop-9pea63h$ — 8 events; source ips: 10.7.10.47 (8)\", \"client accounts: rwalters — 6 events; source ips: 10.7.10.47 (6)\"]}",
+      "metadata": {
+        "scenario": "redline_stlr",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "redline_stlr-04",
+      "artifact_type": "authentication",
+      "subtype": "kerberos_full_services",
+      "source": "kerberos_full_services",
+      "content": "{\"description\": \"Kerberos services requested (including host and machine account names) per source IP.\", \"facts\": [\"full services: krb_tcp — 26 events; source ips: 10.7.10.47 (26)\", \"full services: krbtgt/COOLWEATHERCOAT.COM — 13 events; source ips: 10.7.10.47 (13)\", \"full services: LDAP/WIN-S3WT6LGQFVX.coolweathercoat.com/coolweathercoat.com — 2 events; source ips: 10.7.10.47 (2)\", \"full services: krbtgt/coolweathercoat.com — 2 events; source ips: 10.7.10.47 (2)\", \"full services: ldap/win-s3wt6lgqfvx.coolweathercoat.com/coolweathercoat.com — 2 events; source ips: 10.7.10.47 (2)\", \"full services: DESKTOP-9PEA63H$ — 1 events; source ips: 10.7.10.47 (1)\", \"full services: LDAP/WIN-S3WT6LGQFVX.coolweathercoat.com — 1 events; source ips: 10.7.10.47 (1)\", \"full services: cifs/WIN-S3WT6LGQFVX.coolweathercoat.com — 1 events; source ips: 10.7.10.47 (1)\", \"full services: cifs/WIN-S3WT6LGQFVX.coolweathercoat.com/coolweathercoat.com — 1 events; source ips: 10.7.10.47 (1)\", \"full services: desktop-9pea63h$ — 1 events; source ips: 10.7.10.47 (1)\", \"full services: host/desktop-9pea63h.coolweathercoat.com — 1 events; source ips: 10.7.10.47 (1)\", \"full services: krbtgt/COOLWEATHERCOAT — 1 events; source ips: 10.7.10.47 (1)\"]}",
+      "metadata": {
+        "scenario": "redline_stlr",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "redline_stlr-05",
+      "artifact_type": "authentication",
+      "subtype": "kerberos_hostnames",
+      "source": "kerberos_hostnames",
+      "content": "{\"description\": \"Host names seen in Kerberos traffic with their source IPs.\", \"facts\": [\"hostnames: desktop-9pea63h — 1 events; source ips: 10.7.10.47 (1)\"]}",
+      "metadata": {
+        "scenario": "redline_stlr",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "redline_stlr-06",
+      "artifact_type": "ids_alerts",
+      "subtype": "suricata_alerts",
+      "source": "suricata_alerts",
+      "content": "{\"description\": \"Suricata IDS alerts: signatures, high-severity alert destinations and sources, and an hourly alert timeline (UTC).\", \"facts\": [\"alert signatures: ET INFO Windows Powershell User-Agent Usage — 2 events\", \"alert signatures: ET MALWARE Redline Stealer/MetaStealer Family TCP CnC Activity - MSValue (Outbound) — 2 events\", \"alert signatures: ET INFO Microsoft net.tcp Connection Initialization Activity — 1 events\", \"alert signatures: ET MALWARE NUMOZYLOD CnC Checkin M2 — 1 events\", \"alert signatures: ET MALWARE [ANY.RUN] RedLine Stealer/MetaStealer Family Related (MC-NMF Authorization) — 1 events\", \"high severity alerts: 5 matching events\", \"high severity alerts > high severity  destinations: 194.26.135.119 — 4 events\", \"high severity alerts > high severity  destinations: 195.161.114.3 — 1 events\", \"high severity alerts > high severity signatures: ET MALWARE Redline Stealer/MetaStealer Family TCP CnC Activity - MSValue (Outbound) — 2 events\", \"high severity alerts > high severity signatures: ET INFO Microsoft net.tcp Connection Initialization Activity — 1 events\", \"high severity alerts > high severity signatures: ET MALWARE NUMOZYLOD CnC Checkin M2 — 1 events\", \"high severity alerts > high severity signatures: ET MALWARE [ANY.RUN] RedLine Stealer/MetaStealer Family Related (MC-NMF Authorization) — 1 events\", \"high severity alerts > high severity sources: 10.7.10.47 — 5 events\", \"alert timeline: 2023-07-10 22:00 UTC — 7 events\"]}",
+      "metadata": {
+        "scenario": "redline_stlr",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "redline_stlr-07",
+      "artifact_type": "network_summary",
+      "subtype": "suspicious_domains",
+      "source": "suspicious_domains",
+      "content": "{\"description\": \"Unusual domains with their source and destination IPs, and direct-IP HTTP connections.\", \"facts\": [\"domains: a6d04e539d712e4ef920661af4825316.clo.footprintdns.com — 1 events; top source ips: 10.7.10.47 (1); top destination ips: 13.107.6.163 (1)\", \"domains: guiatelefonos.com — 1 events; top source ips: 10.7.10.47 (1); top destination ips: 92.118.151.9 (1)\", \"domains: static-ecst.licdn.com — 1 events; top source ips: 10.7.10.47 (1); top destination ips: 152.199.24.163 (1)\"]}",
+      "metadata": {
+        "scenario": "redline_stlr",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "redline_stlr-08",
+      "artifact_type": "derived_findings",
+      "subtype": "derived_summary",
+      "source": "derived_summary",
+      "content": "{\"description\": \"Deterministic summary computed from the query results above (client ranking, IP-to-hostname/account join, alert timeline).\", \"facts\": [\"Derived: internal client 10.7.10.47 ranks #1 by external connections (55 events, 20 distinct external destinations). Most-contacted external IP: 195.161.114.3 (8 connections).\", \"Derived: Kerberos identity of 10.7.10.47: hostname(s) desktop-9pea63h; human user account(s) rwalters.\", \"Derived: Suricata alerts span 2023-07-10 22:00 UTC to 2023-07-10 22:00 UTC; earliest alert hour 2023-07-10 22:00 UTC (7 alerts).\", \"Derived: destinations of high-severity alerts: 194.26.135.119 (4), 195.161.114.3 (1).\"]}",
+      "metadata": {
+        "scenario": "redline_stlr",
+        "source_kind": "derived_from_es_results",
+        "heuristic": true
+      }
+    },
+    {
+      "artifact_id": "redline_stlr-09",
+      "artifact_type": "query_coverage",
+      "subtype": "evidence_gaps",
+      "source": "evidence_gaps",
+      "content": "{\"description\": \"Queries that returned nothing or failed; use these to state what is NOT established.\", \"facts\": [\"No matching results for: suspicious certificates / self signed analysis. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: suspicious certificates / short validity certs. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: suspicious certificates / ip based certificates. (Absence in this query is not proof of absence elsewhere.)\"]}",
+      "metadata": {
+        "scenario": "redline_stlr",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    }
+  ]
+}

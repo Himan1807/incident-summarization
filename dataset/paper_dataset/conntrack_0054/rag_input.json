@@ -1,0 +1,167 @@
+{
+  "metadata": {
+    "incident_id": "INC-20230726",
+    "scenario": "conntrack_0054",
+    "title": "Infrastructure reliability incident investigation",
+    "source": "synthetic/ops-incident-expansion (modeled on neu-nds2/llm-sec-incident-analysis)",
+    "query_window_start": "2023-07-26T00:00:00",
+    "query_window_end": "2023-07-28T23:59:59",
+    "evidence_types": [
+      "change_records",
+      "derived_findings",
+      "infrastructure_events",
+      "monitoring_alerts",
+      "network_summary",
+      "query_coverage",
+      "resource_metrics",
+      "service_logs"
+    ],
+    "artifact_scope_note": "Evidence is aggregated query output (not raw log lines or metric samples); it contains no chat/communication records."
+  },
+  "incident_description": "Reliability incident investigation of a production environment. Evidence consists of Elasticsearch aggregation results over application and proxy logs, Kubernetes, cloud-provider and host system events, Prometheus Alertmanager alerts, change-management / CI-CD audit records and metric anomaly detection. No root cause, impact or trigger is stated; these must be established from the supplied artifacts. Environment context: Organization: Brightfield Shop (online retail); Platform: Microsoft Azure eastus2 (zones eastus2-1/eastus2-2/eastus2-3); network range 10.93.0.0/16; Kubernetes cluster bright-prod-eastus (AKS); Egress: two Linux NAT gateways (natgw-01, natgw-02) in active/active ECMP carry all outbound traffic to external APIs; Change management: production changes carry CHG- identifiers.",
+  "investigation_questions": [
+    "What is the hostname of the machine where the incident started?",
+    "What is the IP address of the host or node where the incident started?",
+    "Which kernel table was exhausted?",
+    "Which kernel parameter limited that table on the failing host?",
+    "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+    "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+    "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+    "Which change restored normal service? Provide its change identifier."
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "conntrack_0054-01",
+      "artifact_type": "service_logs",
+      "subtype": "error_logs",
+      "source": "error_logs",
+      "content": "{\"description\": \"Application and proxy error logs: HTTP/gRPC status codes, failing requests (caller -> callee:port : operation), error messages and the services emitting them.\", \"facts\": [\"error events: 47275 matching events\", \"error events > status codes: 504 \\u2014 25918 events\", \"error events > status codes: n/a (connect timeout) \\u2014 21323 events\", \"error events > status codes: 429 \\u2014 34 events\", \"failing requests: web-bff -> payments-svc:8080 : POST /v1/payments \\u2014 25918 events\", \"failing requests: payments-svc -> api.paysecure-gw.com:443 : POST /v3/authorizations \\u2014 12841 events\", \"failing requests: geo-svc -> geo.maptile.dev:443 : GET /v1/geocode \\u2014 8482 events\", \"failing requests: search-api -> search-db:5432 : query \\u2014 34 events\", \"error messages: payments-svc: 504 Gateway Timeout \\u2014 25918 events\", \"error messages: connect timeout to api.paysecure-gw.com \\u2014 12841 events\", \"error messages: connect timeout to geo.maptile.dev \\u2014 8482 events\", \"error messages: HTTP 429 Too Many Requests from upstream \\u2014 34 events\", \"emitting services: web-bff \\u2014 25918 events\", \"emitting services: payments-svc \\u2014 12841 events\", \"emitting services: geo-svc \\u2014 8482 events\", \"emitting services: search-api \\u2014 34 events\"]}",
+      "metadata": {
+        "scenario": "conntrack_0054",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "conntrack_0054-02",
+      "artifact_type": "service_logs",
+      "subtype": "error_volume_by_service",
+      "source": "error_volume_by_service",
+      "content": "{\"description\": \"Services ranked by number of error events, with each service's most-failed downstream dependencies.\", \"facts\": [\"services: web-bff \\u2014 25918 events; failing dependencies=1; top dependencies: payments-svc (25918)\", \"services: payments-svc \\u2014 12841 events; failing dependencies=1; top dependencies: api.paysecure-gw.com (12841)\", \"services: geo-svc \\u2014 8482 events; failing dependencies=1; top dependencies: geo.maptile.dev (8482)\", \"services: search-api \\u2014 34 events; failing dependencies=1; top dependencies: search-db (34)\"]}",
+      "metadata": {
+        "scenario": "conntrack_0054",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "conntrack_0054-03",
+      "artifact_type": "change_records",
+      "subtype": "change_log",
+      "source": "change_log",
+      "content": "{\"description\": \"Deployments, configuration pushes, infrastructure and automation runs from the change-management and CI/CD audit log: change ID, type, target, actor, time (UTC), status and recorded diff/summary.\", \"facts\": [\"changes: CHG-69279 | deployment | inventory-svc 1.10.1 -> 1.10.2 | actor: azure-pipelines | 2023-07-26 23:11 UTC | status: completed | copy and UI text changes \\u2014 1 events\", \"changes: CHG-69295 | sysctl_change | natgw-02 | actor: r.kovacs | 2023-07-27 05:35 UTC | status: completed | net.netfilter.nf_conntrack_max 65536 -> 1048576 (matches natgw-01) \\u2014 1 events\", \"changes: CHG-69331 | deployment | search-api 9.25.8 -> 9.26.0 | actor: azure-pipelines | 2023-07-28 05:40 UTC | status: completed | logging improvements \\u2014 1 events\", \"change types: deployment \\u2014 2 events\", \"change types: sysctl_change \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "conntrack_0054",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "conntrack_0054-04",
+      "artifact_type": "change_records",
+      "subtype": "change_actors",
+      "source": "change_actors",
+      "content": "{\"description\": \"Accounts and automation identities that executed changes, with the hosts or targets they acted on.\", \"facts\": [\"actors: azure-pipelines \\u2014 2 events; targets: bright-prod-eastus/inventory-svc (1), bright-prod-eastus/search-api (1)\", \"actors: r.kovacs \\u2014 1 events; targets: natgw-02 (1)\"]}",
+      "metadata": {
+        "scenario": "conntrack_0054",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "conntrack_0054-05",
+      "artifact_type": "infrastructure_events",
+      "subtype": "host_inventory",
+      "source": "host_inventory",
+      "content": "{\"description\": \"Host and node names seen in infrastructure events with their IP address, role and availability zone / rack.\", \"facts\": [\"hosts: natgw-02 \\u2014 33634 events; ip: 10.93.56.26; role: nat-egress-gateway; zone: eastus2-2\", \"hosts: natgw-01 \\u2014 390 events; ip: 10.93.56.201; role: nat-egress-gateway; zone: eastus2-1\", \"hosts: aks-nodepool1-72851949-vmss000018 \\u2014 182 events; ip: 10.93.145.71; role: k8s-worker; zone: eastus2-3\"]}",
+      "metadata": {
+        "scenario": "conntrack_0054",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "conntrack_0054-06",
+      "artifact_type": "infrastructure_events",
+      "subtype": "platform_events",
+      "source": "platform_events",
+      "content": "{\"description\": \"Kubernetes events, cloud-provider health events and host system messages (kernel, hardware, daemons) with the objects or hosts they refer to.\", \"facts\": [\"system messages: kernel: nf_conntrack: nf_conntrack: table full, dropping packet \\u2014 27202 events; top objects: natgw-02 (27202)\", \"system messages: sysctl: net.netfilter.nf_conntrack_max = 65536 \\u2014 1 events; top objects: natgw-02 (1)\", \"system messages: sysctl: net.netfilter.nf_conntrack_max = 1048576 \\u2014 1 events; top objects: natgw-01 (1)\", \"event reasons: Pulled \\u2014 25 events; top objects: pod/inventory-svc-fb50d2bf1-96q4d (1)\", \"event reasons: ScalingReplicaSet \\u2014 2 events; top objects: deployment/inventory-svc (2)\", \"event reasons: Pulled \\u2014 5 events; top objects: pod/search-api-7256bbadc-gp6sr (3)\", \"event reasons: ScalingReplicaSet \\u2014 5 events; top objects: deployment/search-api (2)\"]}",
+      "metadata": {
+        "scenario": "conntrack_0054",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "conntrack_0054-07",
+      "artifact_type": "monitoring_alerts",
+      "subtype": "alertmanager_alerts",
+      "source": "alertmanager_alerts",
+      "content": "{\"description\": \"Prometheus Alertmanager alerts: alert names with severity, critical-alert instances, alert names and services, and an hourly timeline of warning and critical alerts (UTC).\", \"facts\": [\"alert names: Watchdog (info) \\u2014 72 events; service: alertmanager; firing continuously\", \"alert names: ConntrackTableNearlyFull (warning) \\u2014 11 events; service: node; first seen in hour 2023-07-27 01:00 UTC; last seen in hour 2023-07-27 05:00 UTC\", \"alert names: ExternalAPITimeouts (critical) \\u2014 7 events; service: payments-svc; first seen in hour 2023-07-27 03:00 UTC; last seen in hour 2023-07-27 05:00 UTC\", \"alert names: ConntrackTableFull (critical) \\u2014 6 events; service: node; first seen in hour 2023-07-27 03:00 UTC; last seen in hour 2023-07-27 05:00 UTC\", \"alert names: KubeJobFailed (warning) \\u2014 3 events; service: batch; first seen in hour 2023-07-27 19:00 UTC; last seen in hour 2023-07-27 20:00 UTC\", \"critical alerts: 13 matching events\", \"critical alerts > critical instances: payments-svc \\u2014 7 events\", \"critical alerts > critical instances: 10.93.56.26:9100 \\u2014 6 events\", \"critical alerts > critical alert names: ExternalAPITimeouts \\u2014 7 events\", \"critical alerts > critical alert names: ConntrackTableFull \\u2014 6 events\", \"critical alerts > critical services: payments-svc \\u2014 7 events\", \"critical alerts > critical services: node \\u2014 6 events\", \"alert timeline: 2023-07-27 01:00 UTC \\u2014 2 events\", \"alert timeline: 2023-07-27 02:00 UTC \\u2014 1 events\", \"alert timeline: 2023-07-27 03:00 UTC \\u2014 10 events\", \"alert timeline: 2023-07-27 04:00 UTC \\u2014 5 events\", \"alert timeline: 2023-07-27 05:00 UTC \\u2014 6 events\", \"alert timeline: 2023-07-27 19:00 UTC \\u2014 1 events\", \"alert timeline: 2023-07-27 20:00 UTC \\u2014 2 events\"]}",
+      "metadata": {
+        "scenario": "conntrack_0054",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "conntrack_0054-08",
+      "artifact_type": "resource_metrics",
+      "subtype": "metric_anomalies",
+      "source": "metric_anomalies",
+      "content": "{\"description\": \"Metric series that deviated from their 7-day baseline (hourly resolution): baseline, peak or trough value, anomaly onset and recovery (UTC).\", \"facts\": [\"metric anomalies: node_nf_conntrack_entries / node_nf_conntrack_entries_limit on natgw-02 \\u2014 baseline 38%; peak 100%; onset 2023-07-27 01:00 UTC; recovered 2023-07-27 06:00 UTC\", \"metric anomalies: web-bff requests per second on web-bff \\u2014 baseline ~2,224/s; peak 3.5x baseline; onset 2023-07-27 01:00 UTC; recovered 2023-07-27 06:00 UTC\"]}",
+      "metadata": {
+        "scenario": "conntrack_0054",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "conntrack_0054-09",
+      "artifact_type": "network_summary",
+      "subtype": "tls_certificates",
+      "source": "tls_certificates",
+      "content": "{\"description\": \"TLS certificates observed in edge and service-to-service traffic that are expired, expire within 7 days, or are self-signed.\", \"facts\": [\"expiring within 7 days: 30 matching events\", \"expiring within 7 days > certificate details: CN=catalog-api.brightfield.internal | issuer: CN=R10,O=Let's Encrypt | not_after: 2023-08-01 23:59:00 UTC | seen on: catalog-api:8443 \\u2014 30 events\"]}",
+      "metadata": {
+        "scenario": "conntrack_0054",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "conntrack_0054-10",
+      "artifact_type": "derived_findings",
+      "subtype": "derived_summary",
+      "source": "derived_summary",
+      "content": "{\"description\": \"Deterministic summary computed from the query results above (error ranking, instance-to-host join, alert timeline, change correlation, earliest metric anomaly).\", \"facts\": [\"Derived: service web-bff ranks #1 by error volume (25918 events, 1 failing dependencies). Most-failed dependency: payments-svc (25918 errors).\", \"Derived: most-alerted critical instance payments-svc (7 critical alerts); no matching host-inventory entry.\", \"Derived: warning/critical alerts span 2023-07-27 01:00 UTC to 2023-07-27 20:00 UTC; earliest alert hour 2023-07-27 01:00 UTC (2 alerts).\", \"Derived: changes recorded from 6 hours before the earliest alert hour to its end: CHG-69279 (deployment, inventory-svc 1.10.1 -> 1.10.2, azure-pipelines, 2023-07-26 23:11 UTC).\", \"Derived: earliest metric anomaly onset 2023-07-27 01:00 UTC (node_nf_conntrack_entries / node_nf_conntrack_entries_limit on natgw-02).\"]}",
+      "metadata": {
+        "scenario": "conntrack_0054",
+        "source_kind": "derived_from_es_results",
+        "heuristic": true
+      }
+    },
+    {
+      "artifact_id": "conntrack_0054-11",
+      "artifact_type": "query_coverage",
+      "subtype": "evidence_gaps",
+      "source": "evidence_gaps",
+      "content": "{\"description\": \"Queries that returned nothing or failed; use these to state what is NOT established.\", \"facts\": [\"No matching results for: tls certificates / expired certificates. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / self signed. (Absence in this query is not proof of absence elsewhere.)\"]}",
+      "metadata": {
+        "scenario": "conntrack_0054",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    }
+  ]
+}

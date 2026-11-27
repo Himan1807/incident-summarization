@@ -1,0 +1,16 @@
+{
+  "scenario": "crashloop_release_0048",
+  "cleaning": [
+    "first-signs answer 2025-07-07 23:00 UTC differs from the earliest alert-timeline hour 2025-07-07 16:00 UTC (earlier metric onset or an unrelated earlier alert)"
+  ],
+  "skipped": [
+    "tls_certificates: all aggregations empty"
+  ],
+  "gaps": [],
+  "artifacts": 10,
+  "facts": 61,
+  "empty_aggregations": 3,
+  "questions": 10,
+  "answers": 10,
+  "atoms": 11
+}

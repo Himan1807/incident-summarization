@@ -1,0 +1,14 @@
+{
+  "scenario": "object_storage_0020",
+  "cleaning": [],
+  "skipped": [
+    "tls_certificates: all aggregations empty"
+  ],
+  "gaps": [],
+  "artifacts": 10,
+  "facts": 55,
+  "empty_aggregations": 3,
+  "questions": 8,
+  "answers": 8,
+  "atoms": 9
+}

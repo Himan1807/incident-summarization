@@ -1,0 +1,12 @@
+{
+  "scenario": "terraform_apply_0018",
+  "cleaning": [],
+  "skipped": [],
+  "gaps": [],
+  "artifacts": 11,
+  "facts": 65,
+  "empty_aggregations": 2,
+  "questions": 8,
+  "answers": 8,
+  "atoms": 9
+}

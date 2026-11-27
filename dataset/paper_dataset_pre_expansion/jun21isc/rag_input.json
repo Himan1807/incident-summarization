@@ -1,0 +1,151 @@
+{
+  "metadata": {
+    "incident_id": "INC-20210616",
+    "scenario": "jun21isc",
+    "title": "Network security incident investigation",
+    "source": "neu-nds2/llm-sec-incident-analysis",
+    "query_window_start": "2021-06-16T00:00:00",
+    "query_window_end": "2021-06-16T23:59:59",
+    "evidence_types": [
+      "authentication",
+      "derived_findings",
+      "ids_alerts",
+      "network_summary",
+      "query_coverage"
+    ],
+    "artifact_scope_note": "Evidence is aggregated query output (not raw packets); it contains no chat/communication records."
+  },
+  "incident_description": "Network security investigation of a monitored LAN. Evidence consists of Elasticsearch aggregation results over Zeek and Suricata logs (IDS alerts, Kerberos, HTTP downloads, TLS certificates, domains and external-destination activity). No root cause, impact or C2 attribution is stated; these must be established from the supplied artifacts. Network context: LAN segment range: 10.6.15.0/24 (10.6.15.0 through 10.6.15.255); Domain: saltmobsters.com; Domain Controller: 10.6.15.5 - Saltmobsters-DC; LAN segment gateway: 10.6.15.1; LAN segment broadcast address: 10.6.15.255.",
+  "investigation_questions": [
+    "What are the IP addresses of the potentially infected internal hosts in the LAN?",
+    "What are the hostnames of the potentially infected machines in the LAN?",
+    "What are the Windows human user account names (not machine accounts ending in $) of the potentially infected machines in the LAN?",
+    "What external domains or IP addresses are associated with the initial infection and malware delivery?",
+    "What are the suspicious external IP addresses contacted, which might be involved in command-and-control (C2) communication?",
+    "During what hour did the first signs of infection activity appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "Were any suspicious certificates observed in the encrypted network traffic? If so, identify the domain or IP in the certificate.",
+    "According to the connection volume statistics, what single external IP address received the most connections from the infected hosts? Is it a C2 server or a legitimate service?"
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "jun21isc-01",
+      "artifact_type": "network_summary",
+      "subtype": "file_downloads",
+      "source": "file_downloads",
+      "content": "{\"description\": \"HTTP file downloads and file transfers: download domains/IPs, requests (client -> server:port : URI), file types and download sources.\", \"facts\": [\"download domains: 65.60.35.141:443 — 13991 events\", \"download domains: 65.60.35.141 — 155 events\", \"download domains: hadevatjulps.com — 78 events\", \"download domains: download.windowsupdate.com — 48 events\", \"download domains: ctldl.windowsupdate.com — 12 events\", \"download domains: au.download.windowsupdate.com — 6 events\", \"download domains: 2.au.download.windowsupdate.com — 4 events\", \"download domains: 9.au.download.windowsupdate.com — 3 events\", \"download domains: srand04rf.ru — 3 events\", \"download domains: ststephenskisugu.church — 3 events\", \"download domains: api.ipify.org — 2 events\", \"download domains: ocsp.digicert.com — 2 events\", \"download domains: solarwindsonline.com — 2 events\", \"download domains: 162.244.83.95 — 1 events\", \"download domains: 162.244.83.95:443 — 1 events\", \"download domains: feedproxy.google.com — 1 events\", \"http requests: 10.6.15.119 -> 65.60.35.141:443 : /g.pixel — 27966 events\", \"http requests: no_http_uri — 15725 events\", \"http requests: 10.6.15.119 -> 65.60.35.141:80 : /pixel — 310 events\", \"http requests: 10.6.15.119 -> 194.226.60.15:80 : /8/forum.php — 78 events\", \"http requests: 10.6.15.119 -> 65.60.35.141:443 : /submit.php?id=1095398584 — 9 events\", \"http requests: 10.6.15.119 -> 160.153.133.188:80 : /ordinate.php?utm_source=feedburner&utm_medium=feed&utm_campaign=Feed:+omzcfo+(signorecouncelling) — 2 events\", \"http requests: 10.6.15.119 -> 23.47.48.106:80 : /d/msdownload/update/software/defu/2021/06/am_delta_patch_1.341.842.0_b30bc3965ce1c0d3bc9d533a03b827bee90b37d2.exe — 2 events\", \"http requests: 10.6.15.119 -> 50.19.92.227:80 : / — 2 events\", \"http requests: 10.6.15.119 -> 54.225.78.40:80 : /?format=xml — 2 events\", \"http requests: 10.6.15.187 -> 205.185.216.10:80 : /c/msdownload/update/software/defu/2021/06/am_delta_patch_1.341.846.0_64568a48100a64111aefee77d2dbd189a20c751e.exe — 2 events\", \"file transfers: 565 matching events\", \"file transfers > transfer details: file_transfer — 165 events\", \"file transfers > transfer details: 10.6.15.187 -> 205.185.216.10:80 : fuid: FUAigz2JKWeDg6Hcy8 — 2 events\", \"file transfers > transfer details: 10.6.15.93 -> 23.47.48.92:80 : fuid: FFc5Zz1xGfILQYwwh8 — 2 events\", \"file transfers > transfer details: 10.6.15.119 -> 104.254.148.133:443 : fuid: F1j6E820PalCWnLF6b — 1 events\", \"file transfers > transfer details: 10.6.15.119 -> 104.94.66.155:443 : fuid: Fp8lrgERvdzNxJbs7 — 1 events\", \"file transfers > transfer details: 10.6.15.119 -> 104.97.192.38:443 : fuid: FDA2PR3ta488A0MbLl — 1 events\", \"file transfers > transfer details: 10.6.15.119 -> 13.107.246.57:443 : fuid: FNRajD2RLClcLCAObk — 1 events\", \"file transfers > transfer details: 10.6.15.119 -> 13.107.42.14:443 : fuid: Fz9Hvr1UFWg0qovPWg — 1 events\", \"file transfers > transfer details: 10.6.15.119 -> 13.107.42.23:443 : fuid: FCRcSf4NyjltQT6s93 — 1 events\", \"file transfers > transfer details: 10.6.15.119 -> 13.107.42.23:443 : fuid: FTtYq43mcyPfXAdBYc — 1 events\", \"file types: other — 44151 events\", \"file types: exe — 25 events\", \"file types: archive — 2 events\", \"download sources: 10.6.15.119 — 43437 events\", \"download sources: 10.6.15.93 — 376 events\", \"download sources: 10.6.15.187 — 365 events\"]}",
+      "metadata": {
+        "scenario": "jun21isc",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "jun21isc-02",
+      "artifact_type": "network_summary",
+      "subtype": "high_activity_external_dest",
+      "source": "high_activity_external_dest",
+      "content": "{\"description\": \"Internal clients ranked by number of connections to external destinations, with each client's most-contacted destinations.\", \"facts\": [\"source clients: 10.6.15.119 — 43437 events; external destinations=124; top destinations: 65.60.35.141 (42522), 194.226.60.15 (390), 72.21.81.200 (30), 52.185.211.133 (23), 204.79.197.200 (16); 456 further events in other values\", \"source clients: 10.6.15.93 — 376 events; external destinations=65; top destinations: 23.47.49.179 (61), 52.185.211.133 (30), 13.107.42.23 (21), 52.242.211.89 (18), 52.183.220.149 (13); 233 further events in other values\", \"source clients: 10.6.15.187 — 365 events; external destinations=75; top destinations: 52.183.220.149 (18), 52.242.211.89 (17), 52.185.211.133 (15), 23.207.19.11 (14), 23.47.49.156 (13); 288 further events in other values\"]}",
+      "metadata": {
+        "scenario": "jun21isc",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "jun21isc-03",
+      "artifact_type": "authentication",
+      "subtype": "kerberos_clients",
+      "source": "kerberos_clients",
+      "content": "{\"description\": \"Kerberos client account names (user accounts) and the source IPs they authenticated from.\", \"facts\": [\"client accounts: tommy.vega — 13 events; source ips: 10.6.15.119 (13)\", \"client accounts: DEKSTOP-A1CTJVY$ — 10 events; source ips: 10.6.15.93 (10)\", \"client accounts: DESKTOP-NIEE9LP$ — 10 events; source ips: 10.6.15.119 (10)\", \"client accounts: DESKTOP-YS6FZ2G$ — 10 events; source ips: 10.6.15.187 (10)\", \"client accounts: horace.maddox — 6 events; source ips: 10.6.15.187 (6)\", \"client accounts: raquel.anderson — 6 events; source ips: 10.6.15.93 (6)\", \"client accounts: dekstop-a1ctjvy$ — 4 events; source ips: 10.6.15.93 (4)\", \"client accounts: desktop-niee9lp$ — 4 events; source ips: 10.6.15.119 (4)\", \"client accounts: desktop-ys6fz2g$ — 4 events; source ips: 10.6.15.187 (4)\"]}",
+      "metadata": {
+        "scenario": "jun21isc",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "jun21isc-04",
+      "artifact_type": "authentication",
+      "subtype": "kerberos_full_services",
+      "source": "kerberos_full_services",
+      "content": "{\"description\": \"Kerberos services requested (including host and machine account names) per source IP.\", \"facts\": [\"full services: krb_tcp — 71 events; source ips: 10.6.15.119 (29), 10.6.15.93 (21), 10.6.15.187 (21)\", \"full services: krbtgt/SALTMOBSTERS.COM — 29 events; source ips: 10.6.15.119 (11), 10.6.15.93 (9), 10.6.15.187 (9)\", \"full services: LDAP/Saltmobsters-DC.saltmobsters.com/saltmobsters.com — 7 events; source ips: 10.6.15.119 (3), 10.6.15.93 (2), 10.6.15.187 (2)\", \"full services: cifs/SALTMOBSTERS.COM — 4 events; source ips: 10.6.15.119 (2), 10.6.15.93 (1), 10.6.15.187 (1)\", \"full services: cifs/Saltmobsters-DC — 4 events; source ips: 10.6.15.119 (2), 10.6.15.93 (1), 10.6.15.187 (1)\", \"full services: cifs/Saltmobsters-DC.saltmobsters.com — 4 events; source ips: 10.6.15.119 (2), 10.6.15.93 (1), 10.6.15.187 (1)\", \"full services: krbtgt/SALTMOBSTERS — 4 events; source ips: 10.6.15.119 (2), 10.6.15.93 (1), 10.6.15.187 (1)\", \"full services: cifs/Saltmobsters-DC.saltmobsters.com/saltmobsters.com — 3 events; source ips: 10.6.15.93 (1), 10.6.15.119 (1), 10.6.15.187 (1)\", \"full services: krbtgt/saltmobsters.com — 3 events; source ips: 10.6.15.93 (1), 10.6.15.119 (1), 10.6.15.187 (1)\", \"full services: ldap/saltmobsters-dc.saltmobsters.com/saltmobsters.com — 3 events; source ips: 10.6.15.93 (1), 10.6.15.119 (1), 10.6.15.187 (1)\", \"full services: host/desktop-niee9lp.saltmobsters.com — 2 events; source ips: 10.6.15.119 (2)\", \"full services: DEKSTOP-A1CTJVY$ — 1 events; source ips: 10.6.15.93 (1)\", \"full services: DESKTOP-NIEE9LP$ — 1 events; source ips: 10.6.15.119 (1)\", \"full services: DESKTOP-YS6FZ2G$ — 1 events; source ips: 10.6.15.187 (1)\", \"full services: dekstop-a1ctjvy$ — 1 events; source ips: 10.6.15.93 (1)\", \"full services: desktop-niee9lp$ — 1 events; source ips: 10.6.15.119 (1)\", \"full services: desktop-ys6fz2g$ — 1 events; source ips: 10.6.15.187 (1)\", \"full services: host/dekstop-a1ctjvy.saltmobsters.com — 1 events; source ips: 10.6.15.93 (1)\", \"full services: host/desktop-ys6fz2g.saltmobsters.com — 1 events; source ips: 10.6.15.187 (1)\"]}",
+      "metadata": {
+        "scenario": "jun21isc",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "jun21isc-05",
+      "artifact_type": "authentication",
+      "subtype": "kerberos_hostnames",
+      "source": "kerberos_hostnames",
+      "content": "{\"description\": \"Host names seen in Kerberos traffic with their source IPs.\", \"facts\": [\"hostnames: desktop-niee9lp — 2 events; source ips: 10.6.15.119 (2)\", \"hostnames: dekstop-a1ctjvy — 1 events; source ips: 10.6.15.93 (1)\", \"hostnames: desktop-ys6fz2g — 1 events; source ips: 10.6.15.187 (1)\"]}",
+      "metadata": {
+        "scenario": "jun21isc",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "jun21isc-06",
+      "artifact_type": "ids_alerts",
+      "subtype": "suricata_alerts",
+      "source": "suricata_alerts",
+      "content": "{\"description\": \"Suricata IDS alerts: signatures, high-severity alert destinations and sources, and an hourly alert timeline (UTC).\", \"facts\": [\"alert signatures: ET MALWARE Cobalt Strike Beacon Observed — 14137 events\", \"alert signatures: ET MALWARE Tordal/Hancitor/Chanitor Checkin — 78 events\", \"alert signatures: ET JA3 Hash - [Abuse.ch] Possible Dridex — 25 events\", \"alert signatures: ET HUNTING GENERIC SUSPICIOUS POST to Dotted Quad with Fake Browser 1 — 9 events\", \"alert signatures: ET INFO HTTP traffic on port 443 (POST) — 9 events\", \"alert signatures: ET INFO NTLM Session Setup Request - Auth — 5 events\", \"alert signatures: ET INFO NTLM Session Setup Request - Negotiate — 5 events\", \"alert signatures: ET INFO NTLMv1 Session Setup Response - Challenge — 5 events\", \"alert signatures: ET INFO External IP Lookup Domain (ipify .org) in DNS Lookup — 2 events\", \"alert signatures: ET MALWARE Win32/Ficker Stealer Activity M3 — 2 events\", \"alert signatures: ET INFO External IP Lookup (ipify .org) — 1 events\", \"alert signatures: ET INFO External IP Lookup api.ipify.org — 1 events\", \"alert signatures: ET INFO Packed Executable Download — 1 events\", \"alert signatures: ET MALWARE AgentTesla Exfil Via SMTP — 1 events\", \"high severity alerts: 14238 matching events\", \"high severity alerts > high severity  destinations: 65.60.35.141 — 14155 events\", \"high severity alerts > high severity  destinations: 194.226.60.15 — 78 events\", \"high severity alerts > high severity  destinations: 185.66.15.228 — 2 events\", \"high severity alerts > high severity  destinations: 50.19.92.227 — 1 events\", \"high severity alerts > high severity  destinations: 54.225.78.40 — 1 events\", \"high severity alerts > high severity signatures: ET MALWARE Cobalt Strike Beacon Observed — 14137 events\", \"high severity alerts > high severity signatures: ET MALWARE Tordal/Hancitor/Chanitor Checkin — 78 events\", \"high severity alerts > high severity signatures: ET HUNTING GENERIC SUSPICIOUS POST to Dotted Quad with Fake Browser 1 — 9 events\", \"high severity alerts > high severity signatures: ET INFO HTTP traffic on port 443 (POST) — 9 events\", \"high severity alerts > high severity signatures: ET MALWARE Win32/Ficker Stealer Activity M3 — 2 events\", \"high severity alerts > high severity signatures: ET INFO External IP Lookup (ipify .org) — 1 events\", \"high severity alerts > high severity signatures: ET INFO External IP Lookup api.ipify.org — 1 events\", \"high severity alerts > high severity signatures: ET MALWARE AgentTesla Exfil Via SMTP — 1 events\", \"high severity alerts > high severity sources: 10.6.15.119 — 14237 events\", \"high severity alerts > high severity sources: 10.6.15.93 — 1 events\", \"alert timeline: 2021-06-16 14:00 UTC — 1699 events\", \"alert timeline: 2021-06-16 15:00 UTC — 5715 events\", \"alert timeline: 2021-06-16 16:00 UTC — 5624 events\", \"alert timeline: 2021-06-16 17:00 UTC — 1243 events\"]}",
+      "metadata": {
+        "scenario": "jun21isc",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "jun21isc-07",
+      "artifact_type": "network_summary",
+      "subtype": "suspicious_certificates",
+      "source": "suspicious_certificates",
+      "content": "{\"description\": \"TLS certificates that are self-signed, IP-based or short-lived.\", \"facts\": [\"self signed analysis: 1 matching events\", \"self signed analysis > self signed details: self_signed: CN=zqyefcetkqg.biz,O=Acipnee Bku Nibza Zidvi LLC., — 1 events\", \"short validity certs: short_validity_84d: CN=upload.video.google.com,O=G — 2 events\", \"short validity certs: normal_validity — 1 events\", \"short validity certs: short_validity_84d: CN=*.google.com,O=Google LLC,L — 1 events\"]}",
+      "metadata": {
+        "scenario": "jun21isc",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "jun21isc-08",
+      "artifact_type": "network_summary",
+      "subtype": "suspicious_domains",
+      "source": "suspicious_domains",
+      "content": "{\"description\": \"Unusual domains with their source and destination IPs, and direct-IP HTTP connections.\", \"facts\": [\"domains: s.adroll.com — 3 events; top source ips: 10.6.15.119 (3); top destination ips: 23.221.22.73 (3)\", \"domains: www.google-analytics.com — 3 events; top source ips: 10.6.15.119 (3); top destination ips: 172.217.14.174 (3)\", \"domains: d.adroll.mgr.consensu.org — 2 events; top source ips: 10.6.15.119 (2); top destination ips: 3.93.105.71 (2)\", \"domains: d.la2-c2-iad.salesforceliveagent.com — 2 events; top source ips: 10.6.15.119 (2); top destination ips: 13.108.233.254 (2)\", \"domains: ow1.res.office365.com — 2 events; top source ips: 10.6.15.93 (1), 10.6.15.187 (1); top destination ips: 173.223.108.63 (2)\", \"domains: sdk.inbenta.io — 2 events; top source ips: 10.6.15.119 (2); top destination ips: 13.249.75.112 (2)\", \"domains: segments.company-target.com — 2 events; top source ips: 10.6.15.119 (2); top destination ips: 13.249.75.39 (2)\", \"domains: service.force.com — 2 events; top source ips: 10.6.15.119 (2); top destination ips: 13.110.32.36 (2)\", \"domains: t.co — 2 events; top source ips: 10.6.15.119 (2); top destination ips: 104.244.42.133 (2)\", \"domains: 6042533.global.siteimproveanalytics.io — 1 events; top source ips: 10.6.15.119 (1); top destination ips: 3.211.208.250 (1)\", \"domains: a275532918.cdn.optimizely.com — 1 events; top source ips: 10.6.15.119 (1); top destination ips: 23.4.48.124 (1)\", \"domains: api.company-target.com — 1 events; top source ips: 10.6.15.119 (1); top destination ips: 13.225.51.77 (1)\", \"domains: bam-cell.nr-data.net — 1 events; top source ips: 10.6.15.119 (1); top destination ips: 162.247.243.146 (1)\", \"domains: beacon.krxd.net — 1 events; top source ips: 10.6.15.119 (1); top destination ips: 52.25.42.84 (1)\", \"domains: cdn.mxpnl.com — 1 events; top source ips: 10.6.15.119 (1); top destination ips: 130.211.5.208 (1)\", \"domains: cdn.optimizely.com — 1 events; top source ips: 10.6.15.119 (1); top destination ips: 173.223.156.159 (1)\", \"domains: cdn3.optimizely.com — 1 events; top source ips: 10.6.15.119 (1); top destination ips: 104.94.66.155 (1)\", \"domains: corazonarquitectura.com — 1 events; top source ips: 10.6.15.187 (1); top destination ips: 192.185.88.195 (1)\", \"domains: edge.fullstory.com — 1 events; top source ips: 10.6.15.119 (1); top destination ips: 35.201.112.186 (1)\", \"domains: ib.adnxs.com — 1 events; top source ips: 10.6.15.119 (1); top destination ips: 104.254.148.133 (1)\", \"domains: id.rlcdn.com — 1 events; top source ips: 10.6.15.119 (1); top destination ips: 35.190.60.146 (1)\", \"domains: jaipurbynite.com — 1 events; top source ips: 10.6.15.187 (1); top destination ips: 104.244.121.13 (1)\", \"domains: js-agent.newrelic.com — 1 events; top source ips: 10.6.15.119 (1); top destination ips: 151.101.2.110 (1)\", \"domains: khangland.pro — 1 events; top source ips: 10.6.15.187 (1); top destination ips: 103.28.39.29 (1)\", \"domains: logx.optimizely.com — 1 events; top source ips: 10.6.15.119 (1); top destination ips: 52.44.89.131 (1)\", \"domains: match.prod.bidr.io — 1 events; top source ips: 10.6.15.119 (1); top destination ips: 34.192.222.167 (1)\", \"domains: norsecompassgroup.com — 1 events; top source ips: 10.6.15.187 (1); top destination ips: 192.185.112.212 (1)\", \"domains: p.adsymptotic.com — 1 events; top source ips: 10.6.15.119 (1); top destination ips: 104.18.99.194 (1)\", \"domains: pippio.com — 1 events; top source ips: 10.6.15.119 (1); top destination ips: 107.178.254.65 (1)\", \"domains: pixel.advertising.com — 1 events; top source ips: 10.6.15.119 (1); top destination ips: 3.225.67.81 (1)\", \"domains: q.quora.com — 1 events; top source ips: 10.6.15.119 (1); top destination ips: 52.71.230.189 (1)\", \"domains: rs.fullstory.com — 1 events; top source ips: 10.6.15.119 (1); top destination ips: 35.186.194.58 (1)\", \"domains: scripts.demandbase.com — 1 events; top source ips: 10.6.15.119 (1); top destination ips: 13.225.51.72 (1)\", \"domains: siteimproveanalytics.com — 1 events; top source ips: 10.6.15.119 (1); top destination ips: 172.67.196.121 (1)\", \"domains: sync.outbrain.com — 1 events; top source ips: 10.6.15.119 (1); top destination ips: 50.31.142.95 (1)\", \"domains: usermatch.krxd.net — 1 events; top source ips: 10.6.15.119 (1); top destination ips: 3.210.3.115 (1)\", \"domains: vjs.zencdn.net — 1 events; top source ips: 10.6.15.119 (1); top destination ips: 151.101.2.217 (1)\", \"domains: www.sfdcstatic.com — 1 events; top source ips: 10.6.15.119 (1); top destination ips: 23.222.241.54 (1)\"]}",
+      "metadata": {
+        "scenario": "jun21isc",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "jun21isc-09",
+      "artifact_type": "derived_findings",
+      "subtype": "derived_summary",
+      "source": "derived_summary",
+      "content": "{\"description\": \"Deterministic summary computed from the query results above (client ranking, IP-to-hostname/account join, alert timeline).\", \"facts\": [\"Derived: internal client 10.6.15.119 ranks #1 by external connections (43437 events, 124 distinct external destinations). Most-contacted external IP: 65.60.35.141 (42522 connections).\", \"Derived: Kerberos identity of 10.6.15.119: hostname(s) desktop-niee9lp; human user account(s) tommy.vega.\", \"Derived: internal client 10.6.15.93 ranks #2 by external connections (376 events, 65 distinct external destinations). Most-contacted external IP: 23.47.49.179 (61 connections).\", \"Derived: Kerberos identity of 10.6.15.93: hostname(s) dekstop-a1ctjvy; human user account(s) raquel.anderson.\", \"Derived: internal client 10.6.15.187 ranks #3 by external connections (365 events, 75 distinct external destinations). Most-contacted external IP: 52.183.220.149 (18 connections).\", \"Derived: Kerberos identity of 10.6.15.187: hostname(s) desktop-ys6fz2g; human user account(s) horace.maddox.\", \"Derived: Suricata alerts span 2021-06-16 14:00 UTC to 2021-06-16 17:00 UTC; earliest alert hour 2021-06-16 14:00 UTC (1699 alerts).\", \"Derived: destinations of high-severity alerts: 65.60.35.141 (14155), 194.226.60.15 (78), 185.66.15.228 (2), 50.19.92.227 (1), 54.225.78.40 (1).\"]}",
+      "metadata": {
+        "scenario": "jun21isc",
+        "source_kind": "derived_from_es_results",
+        "heuristic": true
+      }
+    },
+    {
+      "artifact_id": "jun21isc-10",
+      "artifact_type": "query_coverage",
+      "subtype": "evidence_gaps",
+      "source": "evidence_gaps",
+      "content": "{\"description\": \"Queries that returned nothing or failed; use these to state what is NOT established.\", \"facts\": [\"No matching results for: suspicious certificates / ip based certificates. (Absence in this query is not proof of absence elsewhere.)\"]}",
+      "metadata": {
+        "scenario": "jun21isc",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    }
+  ]
+}

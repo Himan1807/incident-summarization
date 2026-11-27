@@ -1,0 +1,167 @@
+{
+  "metadata": {
+    "incident_id": "INC-20230405",
+    "scenario": "ecc_memory_0006",
+    "title": "Infrastructure reliability incident investigation",
+    "source": "synthetic/ops-incident-expansion (modeled on neu-nds2/llm-sec-incident-analysis)",
+    "query_window_start": "2023-04-05T00:00:00",
+    "query_window_end": "2023-04-07T23:59:59",
+    "evidence_types": [
+      "change_records",
+      "derived_findings",
+      "infrastructure_events",
+      "monitoring_alerts",
+      "network_summary",
+      "query_coverage",
+      "resource_metrics",
+      "service_logs"
+    ],
+    "artifact_scope_note": "Evidence is aggregated query output (not raw log lines or metric samples); it contains no chat/communication records."
+  },
+  "incident_description": "Reliability incident investigation of a production environment. Evidence consists of Elasticsearch aggregation results over application and proxy logs, Kubernetes, cloud-provider and host system events, Prometheus Alertmanager alerts, change-management / CI-CD audit records and metric anomaly detection. No root cause, impact or trigger is stated; these must be established from the supplied artifacts. Environment context: Organization: Amberora Travel (travel booking); Platform: on-premises data center DC-West, server range 172.25.0.0/16; Kubernetes cluster ambero-prod (kubeadm); Bare-metal Kubernetes workers; IPMI SEL and EDAC kernel messages are forwarded to Elasticsearch; data-center work uses DC- identifiers; Change management: production changes carry CR- identifiers.",
+  "investigation_questions": [
+    "Which host or node did the failure originate on? Give its hostname.",
+    "What is the IP address of the host or node where the failure originated?",
+    "Which memory module (DIMM slot) did the hardware event log identify?",
+    "Which Kubernetes node condition was reported for the failing node?",
+    "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+    "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+    "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+    "Which change restored normal service? Provide its change identifier."
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "ecc_memory_0006-01",
+      "artifact_type": "service_logs",
+      "subtype": "error_logs",
+      "source": "error_logs",
+      "content": "{\"description\": \"Application and proxy error logs: HTTP/gRPC status codes, failing requests (caller -> callee:port : operation), error messages and the services emitting them.\", \"facts\": [\"error events: 11923 matching events\", \"error events > status codes: n/a (job failure) \\u2014 8487 events\", \"error events > status codes: 500 \\u2014 3436 events\", \"failing requests: batch-scheduler -> workers on amber-node-10 : task execution \\u2014 8487 events\", \"failing requests: query-engine -> worker@172.25.109.129:8080 : task status update \\u2014 2934 events\", \"failing requests: reporting-portal -> query-engine:8080 : POST /v1/statement \\u2014 328 events\", \"failing requests: itinerary-api -> itinerary-db:5432 : query \\u2014 174 events\", \"error messages: ExecutorLostFailure (executor exited unrelated to the running tasks) Reason: node amber-node-10 NotReady \\u2014 8487 events\", \"error messages: Encountered too many errors talking to a worker node (172.25.109.129:8080) \\u2014 2934 events\", \"error messages: query-engine: 500 Internal Server Error \\u2014 328 events\", \"error messages: redis: i/o timeout \\u2014 174 events\", \"emitting services: batch-scheduler \\u2014 8487 events\", \"emitting services: query-engine \\u2014 2934 events\", \"emitting services: reporting-portal \\u2014 328 events\", \"emitting services: itinerary-api \\u2014 174 events\"]}",
+      "metadata": {
+        "scenario": "ecc_memory_0006",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "ecc_memory_0006-02",
+      "artifact_type": "service_logs",
+      "subtype": "error_volume_by_service",
+      "source": "error_volume_by_service",
+      "content": "{\"description\": \"Services ranked by number of error events, with each service's most-failed downstream dependencies.\", \"facts\": [\"services: batch-scheduler \\u2014 8487 events; failing dependencies=1; top dependencies: workers on amber-node-10 (8487)\", \"services: query-engine \\u2014 2934 events; failing dependencies=1; top dependencies: worker@172.25.109.129 (2934)\", \"services: reporting-portal \\u2014 328 events; failing dependencies=1; top dependencies: query-engine (328)\", \"services: itinerary-api \\u2014 174 events; failing dependencies=1; top dependencies: itinerary-db (174)\"]}",
+      "metadata": {
+        "scenario": "ecc_memory_0006",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "ecc_memory_0006-03",
+      "artifact_type": "change_records",
+      "subtype": "change_log",
+      "source": "change_log",
+      "content": "{\"description\": \"Deployments, configuration pushes, infrastructure and automation runs from the change-management and CI/CD audit log: change ID, type, target, actor, time (UTC), status and recorded diff/summary.\", \"facts\": [\"changes: CR-15982 | deployment | checkin-api 3.24.11 -> 3.24.12 | actor: ansible-deploy | 2023-04-05 19:25 UTC | status: completed | feature flag cleanup \\u2014 1 events\", \"changes: CR-16002 | deployment | booking-web 14.25.8 -> 14.25.9 | actor: ansible-deploy | 2023-04-06 03:33 UTC | status: completed | performance tuning of list endpoint \\u2014 1 events\", \"changes: CR-16011 | kubectl_cordon_drain | node amber-node-10 | actor: y.fischer | 2023-04-06 10:21 UTC | status: completed | cordon and drain; handed to DC operations \\u2014 1 events\", \"changes: DC-7283 | hardware_replacement | amber-node-10 memory module | actor: dcops-r.okafor | 2023-04-06 13:39 UTC | status: completed | replaced DIMM A2; memtest passed \\u2014 1 events\", \"changes: CR-16025 | deployment | fares-svc 3.17.6 -> 3.17.7 | actor: ansible-deploy | 2023-04-07 05:44 UTC | status: Synced/Healthy | logging improvements \\u2014 1 events\", \"changes: CR-16055 | deployment | itinerary-api 14.30.7 -> 14.30.8 | actor: ansible-deploy | 2023-04-07 12:35 UTC | status: succeeded | minor bug fixes \\u2014 1 events\", \"change types: deployment \\u2014 4 events\", \"change types: kubectl_cordon_drain \\u2014 1 events\", \"change types: hardware_replacement \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "ecc_memory_0006",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "ecc_memory_0006-04",
+      "artifact_type": "change_records",
+      "subtype": "change_actors",
+      "source": "change_actors",
+      "content": "{\"description\": \"Accounts and automation identities that executed changes, with the hosts or targets they acted on.\", \"facts\": [\"actors: ansible-deploy \\u2014 4 events; targets: ambero-prod/booking-web (1), ambero-prod/itinerary-api (1), ambero-prod/checkin-api (1), ambero-prod/fares-svc (1)\", \"actors: dcops-r.okafor \\u2014 1 events; targets: amber-node-10 (1)\", \"actors: y.fischer \\u2014 1 events; targets: amber-node-10 (1)\"]}",
+      "metadata": {
+        "scenario": "ecc_memory_0006",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "ecc_memory_0006-05",
+      "artifact_type": "infrastructure_events",
+      "subtype": "host_inventory",
+      "source": "host_inventory",
+      "content": "{\"description\": \"Host and node names seen in infrastructure events with their IP address, role and availability zone / rack.\", \"facts\": [\"hosts: amber-node-10 \\u2014 595 events; ip: 172.25.109.129; role: k8s-worker; zone: rack D14\", \"hosts: amber-node-40 \\u2014 218 events; ip: 172.25.42.86; role: k8s-worker; zone: rack D16\", \"hosts: amber-node-44 \\u2014 29 events; ip: 172.25.51.212; role: k8s-worker; zone: rack D13\"]}",
+      "metadata": {
+        "scenario": "ecc_memory_0006",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "ecc_memory_0006-06",
+      "artifact_type": "infrastructure_events",
+      "subtype": "platform_events",
+      "source": "platform_events",
+      "content": "{\"description\": \"Kubernetes events, cloud-provider health events and host system messages (kernel, hardware, daemons) with the objects or hosts they refer to.\", \"facts\": [\"hardware events (ipmi sel): Memory #0x2d | Correctable ECC | DIMM A2 \\u2014 190 events; top objects: amber-node-10 (190)\", \"hardware events (ipmi sel): Memory #0x48 | Uncorrectable ECC | DIMM A2 \\u2014 2 events; top objects: amber-node-10 (2)\", \"system messages: kernel: EDAC MC1: 1 CE memory read error on CPU_SrcID#1_MC#0_Chan#2_DIMM#0 \\u2014 190 events; top objects: amber-node-10 (190)\", \"system messages: kernel: Kernel panic - not syncing: Fatal machine check \\u2014 2 events; top objects: amber-node-10 (2)\", \"event reasons: NodeNotReady \\u2014 2 events; top objects: node/amber-node-10 (2)\", \"event reasons: TaintManagerEviction \\u2014 236 events; top objects: pods on amber-node-10 (1)\", \"event reasons: Pulled \\u2014 10 events; top objects: pod/booking-web-3130e88e7-grklh (2)\", \"event reasons: ScalingReplicaSet \\u2014 3 events; top objects: deployment/booking-web (2)\", \"event reasons: Pulled \\u2014 7 events; top objects: pod/itinerary-api-da5073e8e-kx74n (2)\", \"event reasons: ScalingReplicaSet \\u2014 4 events; top objects: deployment/itinerary-api (2)\", \"event reasons: Pulled \\u2014 11 events; top objects: pod/checkin-api-12e19e642-7s4bt (3)\", \"event reasons: ScalingReplicaSet \\u2014 2 events; top objects: deployment/checkin-api (2)\", \"event reasons: Pulled \\u2014 23 events; top objects: pod/fares-svc-2fb700549-pvxw8 (3)\", \"event reasons: ScalingReplicaSet \\u2014 2 events; top objects: deployment/fares-svc (2)\"]}",
+      "metadata": {
+        "scenario": "ecc_memory_0006",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "ecc_memory_0006-07",
+      "artifact_type": "monitoring_alerts",
+      "subtype": "alertmanager_alerts",
+      "source": "alertmanager_alerts",
+      "content": "{\"description\": \"Prometheus Alertmanager alerts: alert names with severity, critical-alert instances, alert names and services, and an hourly timeline of warning and critical alerts (UTC).\", \"facts\": [\"alert names: Watchdog (info) \\u2014 72 events; service: alertmanager; firing continuously\", \"alert names: NodeMemoryECCCorrectableErrors (warning) \\u2014 25 events; service: node; first seen in hour 2023-04-06 00:00 UTC; last seen in hour 2023-04-06 10:00 UTC\", \"alert names: BatchSchedulerJobFailures (critical) \\u2014 14 events; service: batch-scheduler; first seen in hour 2023-04-06 06:00 UTC; last seen in hour 2023-04-06 11:00 UTC\", \"alert names: KubeNodeNotReady (critical) \\u2014 14 events; service: kubernetes; first seen in hour 2023-04-06 06:00 UTC; last seen in hour 2023-04-06 10:00 UTC\", \"alert names: KubeJobFailed (warning) \\u2014 4 events; service: batch; first seen in hour 2023-04-07 03:00 UTC; last seen in hour 2023-04-07 04:00 UTC\", \"alert names: TargetDown (warning) \\u2014 3 events; service: checkin-api; first seen in hour 2023-04-06 17:00 UTC; last seen in hour 2023-04-06 18:00 UTC\", \"critical alerts: 28 matching events\", \"critical alerts > critical instances: amber-node-10 \\u2014 14 events\", \"critical alerts > critical instances: batch-scheduler \\u2014 14 events\", \"critical alerts > critical alert names: BatchSchedulerJobFailures \\u2014 14 events\", \"critical alerts > critical alert names: KubeNodeNotReady \\u2014 14 events\", \"critical alerts > critical services: batch-scheduler \\u2014 14 events\", \"critical alerts > critical services: kubernetes \\u2014 14 events\", \"alert timeline: 2023-04-06 00:00 UTC \\u2014 4 events\", \"alert timeline: 2023-04-06 01:00 UTC \\u2014 2 events\", \"alert timeline: 2023-04-06 02:00 UTC \\u2014 2 events\", \"alert timeline: 2023-04-06 03:00 UTC \\u2014 4 events\", \"alert timeline: 2023-04-06 04:00 UTC \\u2014 2 events\", \"alert timeline: 2023-04-06 05:00 UTC \\u2014 2 events\", \"alert timeline: 2023-04-06 06:00 UTC \\u2014 9 events\", \"alert timeline: 2023-04-06 07:00 UTC \\u2014 4 events\", \"alert timeline: 2023-04-06 08:00 UTC \\u2014 7 events\", \"alert timeline: 2023-04-06 09:00 UTC \\u2014 7 events\", \"alert timeline: 2023-04-06 10:00 UTC \\u2014 9 events\", \"alert timeline: 2023-04-06 11:00 UTC \\u2014 1 events\", \"alert timeline: 2023-04-06 17:00 UTC \\u2014 1 events\", \"alert timeline: 2023-04-06 18:00 UTC \\u2014 2 events\", \"alert timeline: 2023-04-07 03:00 UTC \\u2014 2 events\", \"alert timeline: 2023-04-07 04:00 UTC \\u2014 2 events\"]}",
+      "metadata": {
+        "scenario": "ecc_memory_0006",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "ecc_memory_0006-08",
+      "artifact_type": "resource_metrics",
+      "subtype": "metric_anomalies",
+      "source": "metric_anomalies",
+      "content": "{\"description\": \"Metric series that deviated from their 7-day baseline (hourly resolution): baseline, peak or trough value, anomaly onset and recovery (UTC).\", \"facts\": [\"metric anomalies: node_edac_correctable_errors_total rate on amber-node-10 \\u2014 baseline 0/h; peak 34/h; onset 2023-04-06 00:00 UTC; recovered 2023-04-06 11:00 UTC\"]}",
+      "metadata": {
+        "scenario": "ecc_memory_0006",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "ecc_memory_0006-09",
+      "artifact_type": "network_summary",
+      "subtype": "tls_certificates",
+      "source": "tls_certificates",
+      "content": "{\"description\": \"TLS certificates observed in edge and service-to-service traffic that are expired, expire within 7 days, or are self-signed.\", \"facts\": [\"expiring within 7 days: 19 matching events\", \"expiring within 7 days > certificate details: CN=checkin-api.amberora.internal | issuer: CN=amberora-internal-ca | not_after: 2023-04-10 23:59:00 UTC | seen on: checkin-api:8443 \\u2014 19 events\"]}",
+      "metadata": {
+        "scenario": "ecc_memory_0006",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "ecc_memory_0006-10",
+      "artifact_type": "derived_findings",
+      "subtype": "derived_summary",
+      "source": "derived_summary",
+      "content": "{\"description\": \"Deterministic summary computed from the query results above (error ranking, instance-to-host join, alert timeline, change correlation, earliest metric anomaly).\", \"facts\": [\"Derived: service batch-scheduler ranks #1 by error volume (8487 events, 1 failing dependencies). Most-failed dependency: workers on amber-node-10 (8487 errors).\", \"Derived: most-alerted critical instance amber-node-10 (14 critical alerts) maps to ip 172.25.109.129; role k8s-worker; zone rack D14.\", \"Derived: warning/critical alerts span 2023-04-06 00:00 UTC to 2023-04-07 04:00 UTC; earliest alert hour 2023-04-06 00:00 UTC (4 alerts).\", \"Derived: changes recorded from 6 hours before the earliest alert hour to its end: CR-15982 (deployment, checkin-api 3.24.11 -> 3.24.12, ansible-deploy, 2023-04-05 19:25 UTC).\", \"Derived: earliest metric anomaly onset 2023-04-06 00:00 UTC (node_edac_correctable_errors_total rate on amber-node-10).\"]}",
+      "metadata": {
+        "scenario": "ecc_memory_0006",
+        "source_kind": "derived_from_es_results",
+        "heuristic": true
+      }
+    },
+    {
+      "artifact_id": "ecc_memory_0006-11",
+      "artifact_type": "query_coverage",
+      "subtype": "evidence_gaps",
+      "source": "evidence_gaps",
+      "content": "{\"description\": \"Queries that returned nothing or failed; use these to state what is NOT established.\", \"facts\": [\"No matching results for: tls certificates / expired certificates. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / self signed. (Absence in this query is not proof of absence elsewhere.)\"]}",
+      "metadata": {
+        "scenario": "ecc_memory_0006",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    }
+  ]
+}

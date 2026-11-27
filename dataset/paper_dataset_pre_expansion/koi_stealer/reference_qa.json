@@ -1,0 +1,98 @@
+{
+  "source": "answers.txt (paper dataset)",
+  "confidence": "paper ground truth",
+  "qa": [
+    {
+      "id": 1,
+      "question": "What is the IP address of the potentially infected internal host in the LAN?",
+      "answer": "172.17.0.99",
+      "atoms": [
+        {
+          "text": "172.17.0.99",
+          "kind": "ip"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "question": "What is the hostname of the potentially infected machine in the LAN?",
+      "answer": "DESKTOP-RNVO9AT",
+      "atoms": [
+        {
+          "text": "DESKTOP-RNVO9AT",
+          "kind": "hostname"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "question": "What is the Windows human user account name (not machine accounts ending in $) of the potentially infected machine in the LAN?",
+      "answer": "afletcher",
+      "atoms": [
+        {
+          "text": "afletcher",
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "question": "What are the likely fake or suspicious domains / URLs for initial infection?",
+      "answer": "www.bellantonicioccolato.it (likely compromised site associated with Koi Loader/Koi Stealer)",
+      "atoms": [
+        {
+          "text": "www.bellantonicioccolato.it",
+          "kind": "domain_or_file"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "question": "What are the suspicious external IP addresses contacted, which might be involved in command-and-control (C2) communication?",
+      "answer": "79.124.78.197",
+      "atoms": [
+        {
+          "text": "79.124.78.197",
+          "kind": "ip"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "question": "Which of the three CIA components does the attacker target primarily: availability, integrity, or confidentiality?",
+      "answer": "confidentiality",
+      "atoms": [
+        {
+          "text": "confidentiality",
+          "kind": "cia"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "question": "During what hour did the first signs of infection activity appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+      "answer": "2024-09-04 17:00 UTC",
+      "atoms": [
+        {
+          "text": "2024-09-04 17:00 UTC",
+          "kind": "time"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "question": "According to the connection volume statistics, what single external IP address received the most connections from the infected hosts? Is it a C2 server or a legitimate service?",
+      "answer": "79.124.78.197, C2 server",
+      "atoms": [
+        {
+          "text": "79.124.78.197",
+          "kind": "ip"
+        },
+        {
+          "text": "C2 server",
+          "kind": "label"
+        }
+      ]
+    }
+  ]
+}

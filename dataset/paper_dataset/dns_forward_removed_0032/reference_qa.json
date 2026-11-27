@@ -1,0 +1,128 @@
+{
+  "source": "synthetic generator ground truth (ops expansion)",
+  "confidence": "synthetic ground truth",
+  "qa": [
+    {
+      "id": 1,
+      "question": "Which service or component is the origin of the failure?",
+      "answer": "CoreDNS (ConfigMap kube-system/coredns)",
+      "atoms": [
+        {
+          "text": "coredns",
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "question": "What is the identifier of the change that caused the incident?",
+      "answer": "AUD-27f981",
+      "atoms": [
+        {
+          "text": "AUD-27f981",
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "question": "Which account or automation identity executed the triggering change?",
+      "answer": "r.abara",
+      "atoms": [
+        {
+          "text": "r.abara",
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "question": "What is the IP address of the cluster DNS service that the failing lookups were sent to?",
+      "answer": "10.100.0.10",
+      "atoms": [
+        {
+          "text": "10.100.0.10",
+          "kind": "ip"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "question": "Which external domains failed to resolve from inside the cluster?",
+      "answer": "geo.maptile.dev, kyc.verifyline.com, smtp.sendwave.io",
+      "atoms": [
+        {
+          "text": "geo.maptile.dev",
+          "kind": "domain_or_file"
+        },
+        {
+          "text": "kyc.verifyline.com",
+          "kind": "domain_or_file"
+        },
+        {
+          "text": "smtp.sendwave.io",
+          "kind": "domain_or_file"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "question": "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+      "answer": "2022-01-06 03:00 UTC",
+      "atoms": [
+        {
+          "text": "2022-01-06 03:00 UTC",
+          "kind": "time"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "question": "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+      "answer": "configuration change",
+      "atoms": [
+        {
+          "text": "configuration change",
+          "kind": "label"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "question": "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+      "answer": "availability",
+      "atoms": [
+        {
+          "text": "availability",
+          "kind": "cia"
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "question": "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+      "answer": "geo-svc, downstream symptom",
+      "atoms": [
+        {
+          "text": "geo-svc",
+          "kind": "other"
+        },
+        {
+          "text": "downstream symptom",
+          "kind": "label"
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "question": "Which change restored normal service? Provide its change identifier.",
+      "answer": "AUD-e8f4fd",
+      "atoms": [
+        {
+          "text": "AUD-e8f4fd",
+          "kind": "other"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "scenario": "pool_size_values_0039",
+  "cleaning": [],
+  "skipped": [],
+  "gaps": [],
+  "artifacts": 11,
+  "facts": 78,
+  "empty_aggregations": 2,
+  "questions": 11,
+  "answers": 11,
+  "atoms": 13
+}

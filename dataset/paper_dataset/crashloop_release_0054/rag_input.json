@@ -1,0 +1,154 @@
+{
+  "metadata": {
+    "incident_id": "INC-20251225",
+    "scenario": "crashloop_release_0054",
+    "title": "Infrastructure reliability incident investigation",
+    "source": "synthetic/ops-incident-expansion (modeled on neu-nds2/llm-sec-incident-analysis)",
+    "query_window_start": "2025-12-25T00:00:00",
+    "query_window_end": "2025-12-27T23:59:59",
+    "evidence_types": [
+      "change_records",
+      "derived_findings",
+      "infrastructure_events",
+      "monitoring_alerts",
+      "query_coverage",
+      "resource_metrics",
+      "service_logs"
+    ],
+    "artifact_scope_note": "Evidence is aggregated query output (not raw log lines or metric samples); it contains no chat/communication records."
+  },
+  "incident_description": "Reliability incident investigation of a production environment. Evidence consists of Elasticsearch aggregation results over application and proxy logs, Kubernetes, cloud-provider and host system events, Prometheus Alertmanager alerts, change-management / CI-CD audit records and metric anomaly detection. No root cause, impact or trigger is stated; these must be established from the supplied artifacts. Environment context: Organization: Atlasix Travel (travel booking); Platform: Microsoft Azure northeurope (zones northeurope-1/northeurope-2/northeurope-3); network range 10.205.0.0/16; Kubernetes cluster atlasi-prod-northe (AKS); reservations-api is deployed with RollingUpdate (maxUnavailable 25%) and must run at full replica count during peak traffic; Change management: production changes carry RFC- identifiers.",
+  "investigation_questions": [
+    "Which component is the source of the failure?",
+    "What change, deployment or automation run triggered the incident? Provide its change identifier.",
+    "Which version of the service introduced the defect?",
+    "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+    "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+    "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+    "Which change happened shortly before the incident began but did not cause it? Provide its identifier.",
+    "Which change restored normal service? Provide its change identifier."
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "crashloop_release_0054-01",
+      "artifact_type": "service_logs",
+      "subtype": "error_logs",
+      "source": "error_logs",
+      "content": "{\"description\": \"Application and proxy error logs: HTTP/gRPC status codes, failing requests (caller -> callee:port : operation), error messages and the services emitting them.\", \"facts\": [\"error events: 13950 matching events\", \"error events > status codes: 503 \\u2014 13613 events\", \"error events > status codes: 429 \\u2014 190 events\", \"error events > status codes: n/a (crash) \\u2014 147 events\", \"failing requests: booking-web -> reservations-api:8080 : POST /v1/reservations \\u2014 13613 events\", \"failing requests: search-api -> search-db:5432 : query \\u2014 190 events\", \"failing requests: reservations-api -> startup : container start \\u2014 147 events\", \"error messages: upstream reservations-api: 503 upstream overflow \\u2014 13613 events\", \"error messages: HTTP 429 Too Many Requests from upstream \\u2014 190 events\", \"error messages: panic: runtime error: invalid memory address or nil pointer dereference [config: PAYMENT_WEBHOOK_SECRET is empty] \\u2014 147 events\", \"emitting services: booking-web \\u2014 13613 events\", \"emitting services: search-api \\u2014 190 events\", \"emitting services: reservations-api \\u2014 147 events\"]}",
+      "metadata": {
+        "scenario": "crashloop_release_0054",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "crashloop_release_0054-02",
+      "artifact_type": "service_logs",
+      "subtype": "error_volume_by_service",
+      "source": "error_volume_by_service",
+      "content": "{\"description\": \"Services ranked by number of error events, with each service's most-failed downstream dependencies.\", \"facts\": [\"services: booking-web \\u2014 13613 events; failing dependencies=1; top dependencies: reservations-api (13613)\", \"services: search-api \\u2014 190 events; failing dependencies=1; top dependencies: search-db (190)\", \"services: reservations-api \\u2014 147 events; failing dependencies=1; top dependencies: startup (147)\"]}",
+      "metadata": {
+        "scenario": "crashloop_release_0054",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "crashloop_release_0054-03",
+      "artifact_type": "change_records",
+      "subtype": "change_log",
+      "source": "change_log",
+      "content": "{\"description\": \"Deployments, configuration pushes, infrastructure and automation runs from the change-management and CI/CD audit log: change ID, type, target, actor, time (UTC), status and recorded diff/summary.\", \"facts\": [\"changes: RFC-14873 | deployment | loyalty-api 12.27.9 -> 12.27.10 | actor: azure-pipelines | 2025-12-25 18:17 UTC | status: Synced/Healthy | performance tuning of list endpoint \\u2014 1 events\", \"changes: RFC-14897 | deployment | reservations-api 2.14.5 -> 2.15.0 | actor: azure-pipelines | 2025-12-25 21:08 UTC | status: Progressing (stalled) | RollingUpdate maxUnavailable 25%; new required environment variable PAYMENT_WEBHOOK_SECRET (not set in production values) \\u2014 1 events\", \"changes: RFC-14922 | rollback | reservations-api 2.15.0 -> 2.14.5 | actor: e.haddad | 2025-12-25 22:37 UTC | status: completed | kubectl rollout undo \\u2014 1 events\", \"changes: RFC-14950 | deployment | search-api 11.17.11 -> 11.18.0 | actor: azure-pipelines | 2025-12-26 21:59 UTC | status: Synced/Healthy | logging improvements \\u2014 1 events\", \"change types: deployment \\u2014 3 events\", \"change types: rollback \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "crashloop_release_0054",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "crashloop_release_0054-04",
+      "artifact_type": "change_records",
+      "subtype": "change_actors",
+      "source": "change_actors",
+      "content": "{\"description\": \"Accounts and automation identities that executed changes, with the hosts or targets they acted on.\", \"facts\": [\"actors: azure-pipelines \\u2014 3 events; targets: atlasi-prod-northe/reservations-api (1), atlasi-prod-northe/loyalty-api (1), atlasi-prod-northe/search-api (1)\", \"actors: e.haddad \\u2014 1 events; targets: atlasi-prod-northe/reservations-api (1)\"]}",
+      "metadata": {
+        "scenario": "crashloop_release_0054",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "crashloop_release_0054-05",
+      "artifact_type": "infrastructure_events",
+      "subtype": "host_inventory",
+      "source": "host_inventory",
+      "content": "{\"description\": \"Host and node names seen in infrastructure events with their IP address, role and availability zone / rack.\", \"facts\": [\"hosts: aks-nodepool1-61946993-vmss000009 \\u2014 234 events; ip: 10.205.40.189; role: k8s-worker; zone: northeurope-3\", \"hosts: aks-nodepool1-49762637-vmss000024 \\u2014 79 events; ip: 10.205.137.98; role: k8s-worker; zone: northeurope-2\"]}",
+      "metadata": {
+        "scenario": "crashloop_release_0054",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "crashloop_release_0054-06",
+      "artifact_type": "infrastructure_events",
+      "subtype": "platform_events",
+      "source": "platform_events",
+      "content": "{\"description\": \"Kubernetes events, cloud-provider health events and host system messages (kernel, hardware, daemons) with the objects or hosts they refer to.\", \"facts\": [\"event reasons: BackOff \\u2014 147 events; top objects: pod/reservations-api-07787d100-zqt5v (49), pod/reservations-api-aa21bd93c-tkhw8 (49)\", \"container logs: panic: runtime error: invalid memory address or nil pointer dereference [config: PAYMENT_WEBHOOK_SECRET is empty] \\u2014 147 events; top objects: reservations-api (147)\", \"event reasons: Pulled \\u2014 19 events; top objects: pod/loyalty-api-2a7f77906-wpxbh (1)\", \"event reasons: ScalingReplicaSet \\u2014 3 events; top objects: deployment/loyalty-api (3)\", \"event reasons: Pulled \\u2014 12 events; top objects: pod/search-api-2415ff114-8zh5h (3)\", \"event reasons: ScalingReplicaSet \\u2014 5 events; top objects: deployment/search-api (3)\"]}",
+      "metadata": {
+        "scenario": "crashloop_release_0054",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "crashloop_release_0054-07",
+      "artifact_type": "monitoring_alerts",
+      "subtype": "alertmanager_alerts",
+      "source": "alertmanager_alerts",
+      "content": "{\"description\": \"Prometheus Alertmanager alerts: alert names with severity, critical-alert instances, alert names and services, and an hourly timeline of warning and critical alerts (UTC).\", \"facts\": [\"alert names: Watchdog (info) \\u2014 72 events; service: alertmanager; firing continuously\", \"alert names: KubeDeploymentReplicasMismatch (warning) \\u2014 8 events; service: reservations-api; first seen in hour 2025-12-25 21:00 UTC; last seen in hour 2025-12-25 22:00 UTC\", \"alert names: KubePodCrashLooping (critical) \\u2014 8 events; service: reservations-api; first seen in hour 2025-12-25 21:00 UTC; last seen in hour 2025-12-25 22:00 UTC\", \"alert names: BookingWebErrorRateHigh (critical) \\u2014 5 events; service: booking-web; first seen in hour 2025-12-25 21:00 UTC; last seen in hour 2025-12-25 22:00 UTC\", \"alert names: TargetDown (warning) \\u2014 3 events; service: fares-svc; first seen in hour 2025-12-26 17:00 UTC; last seen in hour 2025-12-26 18:00 UTC\", \"critical alerts: 13 matching events\", \"critical alerts > critical instances: reservations-api \\u2014 8 events\", \"critical alerts > critical instances: booking-web \\u2014 5 events\", \"critical alerts > critical alert names: KubePodCrashLooping \\u2014 8 events\", \"critical alerts > critical alert names: BookingWebErrorRateHigh \\u2014 5 events\", \"critical alerts > critical services: reservations-api \\u2014 8 events\", \"critical alerts > critical services: booking-web \\u2014 5 events\", \"alert timeline: 2025-12-25 21:00 UTC \\u2014 10 events\", \"alert timeline: 2025-12-25 22:00 UTC \\u2014 11 events\", \"alert timeline: 2025-12-26 17:00 UTC \\u2014 2 events\", \"alert timeline: 2025-12-26 18:00 UTC \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "crashloop_release_0054",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "crashloop_release_0054-08",
+      "artifact_type": "resource_metrics",
+      "subtype": "metric_anomalies",
+      "source": "metric_anomalies",
+      "content": "{\"description\": \"Metric series that deviated from their 7-day baseline (hourly resolution): baseline, peak or trough value, anomaly onset and recovery (UTC).\", \"facts\": [\"metric anomalies: reservations-api available replicas on reservations-api \\u2014 baseline 16; trough 12; onset 2025-12-25 21:00 UTC; recovered 2025-12-25 23:00 UTC\", \"metric anomalies: reservations-api CPU per pod on reservations-api \\u2014 baseline 42%; peak 95%; onset 2025-12-25 21:00 UTC; recovered 2025-12-25 23:00 UTC\"]}",
+      "metadata": {
+        "scenario": "crashloop_release_0054",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "crashloop_release_0054-09",
+      "artifact_type": "derived_findings",
+      "subtype": "derived_summary",
+      "source": "derived_summary",
+      "content": "{\"description\": \"Deterministic summary computed from the query results above (error ranking, instance-to-host join, alert timeline, change correlation, earliest metric anomaly).\", \"facts\": [\"Derived: service booking-web ranks #1 by error volume (13613 events, 1 failing dependencies). Most-failed dependency: reservations-api (13613 errors).\", \"Derived: most-alerted critical instance reservations-api (8 critical alerts); no matching host-inventory entry.\", \"Derived: warning/critical alerts span 2025-12-25 21:00 UTC to 2025-12-26 18:00 UTC; earliest alert hour 2025-12-25 21:00 UTC (10 alerts).\", \"Derived: changes recorded from 6 hours before the earliest alert hour to its end: RFC-14873 (deployment, loyalty-api 12.27.9 -> 12.27.10, azure-pipelines, 2025-12-25 18:17 UTC); RFC-14897 (deployment, reservations-api 2.14.5 -> 2.15.0, azure-pipelines, 2025-12-25 21:08 UTC).\", \"Derived: earliest metric anomaly onset 2025-12-25 21:00 UTC (reservations-api available replicas on reservations-api).\"]}",
+      "metadata": {
+        "scenario": "crashloop_release_0054",
+        "source_kind": "derived_from_es_results",
+        "heuristic": true
+      }
+    },
+    {
+      "artifact_id": "crashloop_release_0054-10",
+      "artifact_type": "query_coverage",
+      "subtype": "evidence_gaps",
+      "source": "evidence_gaps",
+      "content": "{\"description\": \"Queries that returned nothing or failed; use these to state what is NOT established.\", \"facts\": [\"No matching results for: tls certificates / expired certificates. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / expiring within 7 days. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / self signed. (Absence in this query is not proof of absence elsewhere.)\"]}",
+      "metadata": {
+        "scenario": "crashloop_release_0054",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    }
+  ]
+}

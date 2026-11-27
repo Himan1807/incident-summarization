@@ -1,0 +1,153 @@
+{
+  "metadata": {
+    "incident_id": "INC-20250415",
+    "scenario": "object_storage_0020",
+    "title": "Infrastructure reliability incident investigation",
+    "source": "synthetic/ops-incident-expansion (modeled on neu-nds2/llm-sec-incident-analysis)",
+    "query_window_start": "2025-04-15T00:00:00",
+    "query_window_end": "2025-04-17T23:59:59",
+    "evidence_types": [
+      "change_records",
+      "derived_findings",
+      "infrastructure_events",
+      "monitoring_alerts",
+      "query_coverage",
+      "resource_metrics",
+      "service_logs"
+    ],
+    "artifact_scope_note": "Evidence is aggregated query output (not raw log lines or metric samples); it contains no chat/communication records."
+  },
+  "incident_description": "Reliability incident investigation of a production environment. Evidence consists of Elasticsearch aggregation results over application and proxy logs, Kubernetes, cloud-provider and host system events, Prometheus Alertmanager alerts, change-management / CI-CD audit records and metric anomaly detection. No root cause, impact or trigger is stated; these must be established from the supplied artifacts. Environment context: Organization: Tidalpine Logistics (freight and logistics); Platform: Google Cloud us-central1 (zones us-central1-a/us-central1-b/us-central1-c/us-central1-f); network range 10.201.0.0/16; Kubernetes cluster tidalp-prod-uscent (GKE); Object storage: provider-managed bucket/account for user content, accessed directly by backend services; Change management: production changes carry CHG- identifiers.",
+  "investigation_questions": [
+    "What is the cloud provider's incident or tracking identifier?",
+    "Which external storage endpoint returned the errors?",
+    "Did rolling back the service deployed shortly before the incident restore normal service? Answer yes or no.",
+    "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+    "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+    "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+    "Which change happened shortly before the incident began but did not cause it? Provide its identifier."
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "object_storage_0020-01",
+      "artifact_type": "service_logs",
+      "subtype": "error_logs",
+      "source": "error_logs",
+      "content": "{\"description\": \"Application and proxy error logs: HTTP/gRPC status codes, failing requests (caller -> callee:port : operation), error messages and the services emitting them.\", \"facts\": [\"error events: 96025 matching events\", \"error events > status codes: 503 \\u2014 95962 events\", \"error events > status codes: 429 \\u2014 63 events\", \"failing requests: asset-origin -> storage.googleapis.com:443 : GET objects \\u2014 52931 events\", \"failing requests: backup-agent -> storage.googleapis.com:443 : GET objects \\u2014 43031 events\", \"failing requests: tracking-api -> tracking-db:5432 : query \\u2014 63 events\", \"error messages: googleapi: Error 503: We encountered an internal error. Please try again., backendError (bucket tidalpine-exports-03) \\u2014 95962 events\", \"error messages: HTTP 429 Too Many Requests from upstream \\u2014 63 events\", \"emitting services: asset-origin \\u2014 52931 events\", \"emitting services: backup-agent \\u2014 43031 events\", \"emitting services: tracking-api \\u2014 63 events\"]}",
+      "metadata": {
+        "scenario": "object_storage_0020",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "object_storage_0020-02",
+      "artifact_type": "service_logs",
+      "subtype": "error_volume_by_service",
+      "source": "error_volume_by_service",
+      "content": "{\"description\": \"Services ranked by number of error events, with each service's most-failed downstream dependencies.\", \"facts\": [\"services: asset-origin \\u2014 52931 events; failing dependencies=1; top dependencies: storage.googleapis.com (52931)\", \"services: backup-agent \\u2014 43031 events; failing dependencies=1; top dependencies: storage.googleapis.com (43031)\", \"services: tracking-api \\u2014 63 events; failing dependencies=1; top dependencies: tracking-db (63)\"]}",
+      "metadata": {
+        "scenario": "object_storage_0020",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "object_storage_0020-03",
+      "artifact_type": "change_records",
+      "subtype": "change_log",
+      "source": "change_log",
+      "content": "{\"description\": \"Deployments, configuration pushes, infrastructure and automation runs from the change-management and CI/CD audit log: change ID, type, target, actor, time (UTC), status and recorded diff/summary.\", \"facts\": [\"changes: CHG-53181 | deployment | tracking-api 8.12.7 -> 8.12.8 | actor: github-actions | 2025-04-15 09:17 UTC | status: Synced/Healthy | copy and UI text changes \\u2014 1 events\", \"changes: CHG-53196 | deployment | customs-svc 7.17.7 -> 7.17.8 | actor: github-actions | 2025-04-16 06:30 UTC | status: succeeded | logging improvements \\u2014 1 events\", \"changes: CHG-53216 | deployment | asset-origin 9.32.7 -> 9.33.0 | actor: github-actions | 2025-04-16 19:59 UTC | status: succeeded | thumbnail format change \\u2014 1 events\", \"changes: CHG-53226 | rollback | asset-origin 9.33.0 -> 9.32.7 | actor: l.ali | 2025-04-16 21:40 UTC | status: succeeded | precautionary rollback \\u2014 1 events\", \"change types: deployment \\u2014 3 events\", \"change types: rollback \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "object_storage_0020",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "object_storage_0020-04",
+      "artifact_type": "change_records",
+      "subtype": "change_actors",
+      "source": "change_actors",
+      "content": "{\"description\": \"Accounts and automation identities that executed changes, with the hosts or targets they acted on.\", \"facts\": [\"actors: github-actions \\u2014 3 events; targets: tidalp-prod-uscent/asset-origin (1), tidalp-prod-uscent/customs-svc (1), tidalp-prod-uscent/tracking-api (1)\", \"actors: l.ali \\u2014 1 events; targets: tidalp-prod-uscent/asset-origin (1)\"]}",
+      "metadata": {
+        "scenario": "object_storage_0020",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "object_storage_0020-05",
+      "artifact_type": "infrastructure_events",
+      "subtype": "host_inventory",
+      "source": "host_inventory",
+      "content": "{\"description\": \"Host and node names seen in infrastructure events with their IP address, role and availability zone / rack.\", \"facts\": [\"hosts: gke-tidalp-prod-us-pool-c-fbf1 \\u2014 237 events; ip: 10.201.120.234; role: k8s-worker; zone: us-central1-b\", \"hosts: gke-tidalp-prod-us-pool-c-6c74 \\u2014 186 events; ip: 10.201.11.118; role: k8s-worker; zone: us-central1-a\", \"hosts: gke-tidalp-prod-us-pool-c-6e60 \\u2014 107 events; ip: 10.201.46.244; role: k8s-worker; zone: us-central1-c\"]}",
+      "metadata": {
+        "scenario": "object_storage_0020",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "object_storage_0020-06",
+      "artifact_type": "infrastructure_events",
+      "subtype": "platform_events",
+      "source": "platform_events",
+      "content": "{\"description\": \"Kubernetes events, cloud-provider health events and host system messages (kernel, hardware, daemons) with the objects or hosts they refer to.\", \"facts\": [\"cloud health events: Google Cloud incident 22302: Cloud Storage - elevated error rates in us-central1; impact start 2025-04-16 20:33 UTC, mitigated 2025-04-16 23:22 UTC \\u2014 2 events; top objects: account tidalpine-prod (2)\", \"event reasons: Pulled \\u2014 10 events; top objects: pod/customs-svc-b35270604-hpdqf (3)\", \"event reasons: ScalingReplicaSet \\u2014 2 events; top objects: deployment/customs-svc (1)\", \"event reasons: Pulled \\u2014 5 events; top objects: pod/tracking-api-7a9402801-7c5hb (3)\", \"event reasons: ScalingReplicaSet \\u2014 6 events; top objects: deployment/tracking-api (2)\"]}",
+      "metadata": {
+        "scenario": "object_storage_0020",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "object_storage_0020-07",
+      "artifact_type": "monitoring_alerts",
+      "subtype": "alertmanager_alerts",
+      "source": "alertmanager_alerts",
+      "content": "{\"description\": \"Prometheus Alertmanager alerts: alert names with severity, critical-alert instances, alert names and services, and an hourly timeline of warning and critical alerts (UTC).\", \"facts\": [\"alert names: Watchdog (info) \\u2014 72 events; service: alertmanager; firing continuously\", \"alert names: ObjectStorageErrorRateHigh (critical) \\u2014 15 events; service: storage; first seen in hour 2025-04-16 20:00 UTC; last seen in hour 2025-04-16 23:00 UTC\", \"alert names: AssetOriginFailureRateHigh (critical) \\u2014 10 events; service: asset-origin; first seen in hour 2025-04-16 20:00 UTC; last seen in hour 2025-04-16 23:00 UTC\", \"alert names: KubeCPUOvercommit (warning) \\u2014 2 events; service: cluster; first seen in hour 2025-04-17 09:00 UTC; last seen in hour 2025-04-17 09:00 UTC\", \"critical alerts: 25 matching events\", \"critical alerts > critical instances: storage.googleapis.com \\u2014 15 events\", \"critical alerts > critical instances: asset-origin \\u2014 10 events\", \"critical alerts > critical alert names: ObjectStorageErrorRateHigh \\u2014 15 events\", \"critical alerts > critical alert names: AssetOriginFailureRateHigh \\u2014 10 events\", \"critical alerts > critical services: storage \\u2014 15 events\", \"critical alerts > critical services: asset-origin \\u2014 10 events\", \"alert timeline: 2025-04-16 20:00 UTC \\u2014 7 events\", \"alert timeline: 2025-04-16 21:00 UTC \\u2014 5 events\", \"alert timeline: 2025-04-16 22:00 UTC \\u2014 6 events\", \"alert timeline: 2025-04-16 23:00 UTC \\u2014 7 events\", \"alert timeline: 2025-04-17 09:00 UTC \\u2014 2 events\"]}",
+      "metadata": {
+        "scenario": "object_storage_0020",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "object_storage_0020-08",
+      "artifact_type": "resource_metrics",
+      "subtype": "metric_anomalies",
+      "source": "metric_anomalies",
+      "content": "{\"description\": \"Metric series that deviated from their 7-day baseline (hourly resolution): baseline, peak or trough value, anomaly onset and recovery (UTC).\", \"facts\": [\"metric anomalies: object storage 5xx responses per minute on storage.googleapis.com \\u2014 baseline ~2/min; peak 48,222/min; onset 2025-04-16 20:00 UTC; recovered 2025-04-17 00:00 UTC\"]}",
+      "metadata": {
+        "scenario": "object_storage_0020",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "object_storage_0020-09",
+      "artifact_type": "derived_findings",
+      "subtype": "derived_summary",
+      "source": "derived_summary",
+      "content": "{\"description\": \"Deterministic summary computed from the query results above (error ranking, instance-to-host join, alert timeline, change correlation, earliest metric anomaly).\", \"facts\": [\"Derived: service asset-origin ranks #1 by error volume (52931 events, 1 failing dependencies). Most-failed dependency: storage.googleapis.com (52931 errors).\", \"Derived: most-alerted critical instance storage.googleapis.com (15 critical alerts); no matching host-inventory entry.\", \"Derived: warning/critical alerts span 2025-04-16 20:00 UTC to 2025-04-17 09:00 UTC; earliest alert hour 2025-04-16 20:00 UTC (7 alerts).\", \"Derived: changes recorded from 6 hours before the earliest alert hour to its end: CHG-53216 (deployment, asset-origin 9.32.7 -> 9.33.0, github-actions, 2025-04-16 19:59 UTC).\", \"Derived: earliest metric anomaly onset 2025-04-16 20:00 UTC (object storage 5xx responses per minute on storage.googleapis.com).\"]}",
+      "metadata": {
+        "scenario": "object_storage_0020",
+        "source_kind": "derived_from_es_results",
+        "heuristic": true
+      }
+    },
+    {
+      "artifact_id": "object_storage_0020-10",
+      "artifact_type": "query_coverage",
+      "subtype": "evidence_gaps",
+      "source": "evidence_gaps",
+      "content": "{\"description\": \"Queries that returned nothing or failed; use these to state what is NOT established.\", \"facts\": [\"No matching results for: tls certificates / expired certificates. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / expiring within 7 days. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / self signed. (Absence in this query is not proof of absence elsewhere.)\"]}",
+      "metadata": {
+        "scenario": "object_storage_0020",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    }
+  ]
+}

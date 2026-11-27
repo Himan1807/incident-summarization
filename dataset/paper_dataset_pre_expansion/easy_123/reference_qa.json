@@ -1,0 +1,76 @@
+{
+  "source": "answers.txt (paper dataset)",
+  "confidence": "paper ground truth",
+  "qa": [
+    {
+      "id": 1,
+      "question": "What is the IP address of the infected Windows client?",
+      "answer": "10.2.28.88",
+      "atoms": [
+        {
+          "text": "10.2.28.88",
+          "kind": "ip"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "question": "What is the host name of the infected Windows client?",
+      "answer": "DESKTOP-TEYQ2NR",
+      "atoms": [
+        {
+          "text": "DESKTOP-TEYQ2NR",
+          "kind": "hostname"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "question": "What is the Windows human user account name (not machine accounts ending in $) of the potentially infected machine in the LAN?",
+      "answer": "brolf",
+      "atoms": [
+        {
+          "text": "brolf",
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "question": "What are the suspicious external IP addresses contacted, which might be involved in command-and-control (C2) communication?",
+      "answer": "45.131.214.85",
+      "atoms": [
+        {
+          "text": "45.131.214.85",
+          "kind": "ip"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "question": "During what hour did the first signs of infection activity appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+      "answer": "2026-02-28 19:00 UTC",
+      "atoms": [
+        {
+          "text": "2026-02-28 19:00 UTC",
+          "kind": "time"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "question": "According to the connection volume statistics, what single external IP address received the most connections from the infected hosts? Is it a C2 server or a legitimate service?",
+      "answer": "45.131.214.85, C2 server",
+      "atoms": [
+        {
+          "text": "45.131.214.85",
+          "kind": "ip"
+        },
+        {
+          "text": "C2 server",
+          "kind": "label"
+        }
+      ]
+    }
+  ]
+}

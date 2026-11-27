@@ -1,0 +1,153 @@
+{
+  "metadata": {
+    "incident_id": "INC-20250514",
+    "scenario": "pool_size_values_0040",
+    "title": "Infrastructure reliability incident investigation",
+    "source": "synthetic/ops-incident-expansion (modeled on neu-nds2/llm-sec-incident-analysis)",
+    "query_window_start": "2025-05-14T00:00:00",
+    "query_window_end": "2025-05-16T23:59:59",
+    "evidence_types": [
+      "change_records",
+      "derived_findings",
+      "infrastructure_events",
+      "monitoring_alerts",
+      "query_coverage",
+      "resource_metrics",
+      "service_logs"
+    ],
+    "artifact_scope_note": "Evidence is aggregated query output (not raw log lines or metric samples); it contains no chat/communication records."
+  },
+  "incident_description": "Reliability incident investigation of a production environment. Evidence consists of Elasticsearch aggregation results over application and proxy logs, Kubernetes, cloud-provider and host system events, Prometheus Alertmanager alerts, change-management / CI-CD audit records and metric anomaly detection. No root cause, impact or trigger is stated; these must be established from the supplied artifacts. Environment context: Organization: Zephyreron Learning (online learning); Platform: on-premises data center DC-North, server range 10.113.0.0/16; Kubernetes cluster zephyr-prod (kubeadm); Database: mysql instance certificate-db-01 for certificate-svc; Deployments: Helm releases rolled out by a CI release bot after human approval; Change management: production changes carry CHG- identifiers.",
+  "investigation_questions": [
+    "Which service or infrastructure component did the incident originate in?",
+    "Was the database server itself overloaded? Answer yes or no.",
+    "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+    "Did the failure stay isolated to one component or cascade across services? Answer 'isolated failure' or 'cascading failure'.",
+    "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+    "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+    "What change brought the service back to normal? Give its identifier."
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "pool_size_values_0040-01",
+      "artifact_type": "service_logs",
+      "subtype": "error_logs",
+      "source": "error_logs",
+      "content": "{\"description\": \"Application and proxy error logs: HTTP/gRPC status codes, failing requests (caller -> callee:port : operation), error messages and the services emitting them.\", \"facts\": [\"error events: 66340 matching events\", \"error events > status codes: 504 \\u2014 49232 events\", \"error events > status codes: n/a (client-side pool timeout) \\u2014 17048 events\", \"error events > status codes: 499 \\u2014 60 events\", \"failing requests: learner-web -> certificate-svc:8080 : POST /v1/certificate \\u2014 34830 events\", \"failing requests: certificate-svc -> certificate-db-01:3306 : connection acquire \\u2014 17048 events\", \"failing requests: quiz-engine -> certificate-svc:8080 : GET /v1/certificate/{id} \\u2014 14402 events\", \"failing requests: auth-svc -> auth-db:5432 : query \\u2014 60 events\", \"error messages: certificate-svc: 504 Gateway Timeout \\u2014 34830 events\", \"error messages: HikariPool-1 - Connection is not available, request timed out after 30000ms (total=10, active=10, idle=0) \\u2014 17048 events\", \"error messages: certificate-svc: context deadline exceeded \\u2014 14402 events\", \"error messages: context canceled \\u2014 60 events\", \"emitting services: learner-web \\u2014 34830 events\", \"emitting services: certificate-svc \\u2014 17048 events\", \"emitting services: quiz-engine \\u2014 14402 events\", \"emitting services: auth-svc \\u2014 60 events\"]}",
+      "metadata": {
+        "scenario": "pool_size_values_0040",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "pool_size_values_0040-02",
+      "artifact_type": "service_logs",
+      "subtype": "error_volume_by_service",
+      "source": "error_volume_by_service",
+      "content": "{\"description\": \"Services ranked by number of error events, with each service's most-failed downstream dependencies.\", \"facts\": [\"services: learner-web \\u2014 34830 events; failing dependencies=1; top dependencies: certificate-svc (34830)\", \"services: certificate-svc \\u2014 17048 events; failing dependencies=1; top dependencies: certificate-db-01 (17048)\", \"services: quiz-engine \\u2014 14402 events; failing dependencies=1; top dependencies: certificate-svc (14402)\", \"services: auth-svc \\u2014 60 events; failing dependencies=1; top dependencies: auth-db (60)\"]}",
+      "metadata": {
+        "scenario": "pool_size_values_0040",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "pool_size_values_0040-03",
+      "artifact_type": "change_records",
+      "subtype": "change_log",
+      "source": "change_log",
+      "content": "{\"description\": \"Deployments, configuration pushes, infrastructure and automation runs from the change-management and CI/CD audit log: change ID, type, target, actor, time (UTC), status and recorded diff/summary.\", \"facts\": [\"changes: CHG-16029 | helm_upgrade | certificate-svc chart (revision 89) | actor: release-bot | 2025-05-14 18:01 UTC | status: completed | approved_by: h.okafor; values: database.pool.maximumPoolSize 300 -> 10; values file: values-dev.yaml \\u2014 1 events\", \"changes: CHG-16045 | helm_rollback | certificate-svc to previous revision | actor: h.okafor | 2025-05-14 20:53 UTC | status: completed | helm rollback certificate-svc \\u2014 1 events\", \"changes: CHG-16054 | deployment | forum-svc 5.19.1 -> 5.19.2 | actor: argocd | 2025-05-15 07:28 UTC | status: completed | dependency bump \\u2014 1 events\", \"changes: CHG-16067 | deployment | auth-svc 13.25.10 -> 13.26.0 | actor: argocd | 2025-05-16 20:54 UTC | status: completed | performance tuning of list endpoint \\u2014 1 events\", \"change types: deployment \\u2014 2 events\", \"change types: helm_upgrade \\u2014 1 events\", \"change types: helm_rollback \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "pool_size_values_0040",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "pool_size_values_0040-04",
+      "artifact_type": "change_records",
+      "subtype": "change_actors",
+      "source": "change_actors",
+      "content": "{\"description\": \"Accounts and automation identities that executed changes, with the hosts or targets they acted on.\", \"facts\": [\"actors: argocd \\u2014 2 events; targets: zephyr-prod/forum-svc (1), zephyr-prod/auth-svc (1)\", \"actors: h.okafor \\u2014 1 events; targets: zephyr-prod/certificate-svc (1)\", \"actors: release-bot \\u2014 1 events; targets: zephyr-prod/certificate-svc (1)\"]}",
+      "metadata": {
+        "scenario": "pool_size_values_0040",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "pool_size_values_0040-05",
+      "artifact_type": "infrastructure_events",
+      "subtype": "host_inventory",
+      "source": "host_inventory",
+      "content": "{\"description\": \"Host and node names seen in infrastructure events with their IP address, role and availability zone / rack.\", \"facts\": [\"hosts: zephy-node-42 \\u2014 145 events; ip: 10.113.184.208; role: k8s-worker; zone: rack R30\", \"hosts: certificate-db-01 \\u2014 92 events; ip: 10.113.96.32; role: mysql-primary; zone: rack R26\"]}",
+      "metadata": {
+        "scenario": "pool_size_values_0040",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "pool_size_values_0040-06",
+      "artifact_type": "infrastructure_events",
+      "subtype": "platform_events",
+      "source": "platform_events",
+      "content": "{\"description\": \"Kubernetes events, cloud-provider health events and host system messages (kernel, hardware, daemons) with the objects or hosts they refer to.\", \"facts\": [\"event reasons: Unhealthy \\u2014 293 events; top objects: pod/certificate-svc-fe9a357d0-4d6v7 (25), pod/certificate-svc-835e6b6a0-f2m7s (23)\", \"event reasons: Pulled \\u2014 12 events; top objects: pod/forum-svc-ff4968122-tnh5r (1)\", \"event reasons: ScalingReplicaSet \\u2014 3 events; top objects: deployment/forum-svc (1)\", \"event reasons: Pulled \\u2014 29 events; top objects: pod/auth-svc-3fedd1e15-cwxrz (2)\", \"event reasons: ScalingReplicaSet \\u2014 5 events; top objects: deployment/auth-svc (2)\"]}",
+      "metadata": {
+        "scenario": "pool_size_values_0040",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "pool_size_values_0040-07",
+      "artifact_type": "monitoring_alerts",
+      "subtype": "alertmanager_alerts",
+      "source": "alertmanager_alerts",
+      "content": "{\"description\": \"Prometheus Alertmanager alerts: alert names with severity, critical-alert instances, alert names and services, and an hourly timeline of warning and critical alerts (UTC).\", \"facts\": [\"alert names: Watchdog (info) \\u2014 72 events; service: alertmanager; firing continuously\", \"alert names: ConnectionPoolPendingHigh (critical) \\u2014 7 events; service: certificate-svc; first seen in hour 2025-05-14 19:00 UTC; last seen in hour 2025-05-14 20:00 UTC\", \"alert names: LearnerWeb5xxHigh (critical) \\u2014 6 events; service: learner-web; first seen in hour 2025-05-14 19:00 UTC; last seen in hour 2025-05-14 20:00 UTC\", \"alert names: KubeJobFailed (warning) \\u2014 4 events; service: batch; first seen in hour 2025-05-15 05:00 UTC; last seen in hour 2025-05-15 07:00 UTC\", \"critical alerts: 13 matching events\", \"critical alerts > critical instances: certificate-svc \\u2014 7 events\", \"critical alerts > critical instances: learner-web \\u2014 6 events\", \"critical alerts > critical alert names: ConnectionPoolPendingHigh \\u2014 7 events\", \"critical alerts > critical alert names: LearnerWeb5xxHigh \\u2014 6 events\", \"critical alerts > critical services: certificate-svc \\u2014 7 events\", \"critical alerts > critical services: learner-web \\u2014 6 events\", \"alert timeline: 2025-05-14 19:00 UTC \\u2014 7 events\", \"alert timeline: 2025-05-14 20:00 UTC \\u2014 6 events\", \"alert timeline: 2025-05-15 05:00 UTC \\u2014 2 events\", \"alert timeline: 2025-05-15 06:00 UTC \\u2014 1 events\", \"alert timeline: 2025-05-15 07:00 UTC \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "pool_size_values_0040",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "pool_size_values_0040-08",
+      "artifact_type": "resource_metrics",
+      "subtype": "metric_anomalies",
+      "source": "metric_anomalies",
+      "content": "{\"description\": \"Metric series that deviated from their 7-day baseline (hourly resolution): baseline, peak or trough value, anomaly onset and recovery (UTC).\", \"facts\": [\"metric anomalies: db pool pending requests (maximumPoolSize) on certificate-svc \\u2014 baseline 0; peak 196; onset 2025-05-14 18:00 UTC; recovered 2025-05-14 21:00 UTC\", \"metric anomalies: mysql active connections on certificate-db-01 \\u2014 baseline ~240; trough 14; onset 2025-05-14 18:00 UTC; recovered 2025-05-14 21:00 UTC\", \"metric anomalies: mysql CPU utilisation on certificate-db-01 \\u2014 baseline 39%; trough 15%; onset 2025-05-14 18:00 UTC; recovered 2025-05-14 21:00 UTC\", \"metric anomalies: node memory utilisation on 10.113.184.208 \\u2014 baseline 35%; peak 89%; onset 2025-05-14 12:00 UTC; recovered 2025-05-14 14:00 UTC\"]}",
+      "metadata": {
+        "scenario": "pool_size_values_0040",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "pool_size_values_0040-09",
+      "artifact_type": "derived_findings",
+      "subtype": "derived_summary",
+      "source": "derived_summary",
+      "content": "{\"description\": \"Deterministic summary computed from the query results above (error ranking, instance-to-host join, alert timeline, change correlation, earliest metric anomaly).\", \"facts\": [\"Derived: service learner-web ranks #1 by error volume (34830 events, 1 failing dependencies). Most-failed dependency: certificate-svc (34830 errors).\", \"Derived: most-alerted critical instance certificate-svc (7 critical alerts); no matching host-inventory entry.\", \"Derived: warning/critical alerts span 2025-05-14 19:00 UTC to 2025-05-15 07:00 UTC; earliest alert hour 2025-05-14 19:00 UTC (7 alerts).\", \"Derived: changes recorded from 6 hours before the earliest alert hour to its end: CHG-16029 (helm_upgrade, certificate-svc chart (revision 89), release-bot, 2025-05-14 18:01 UTC).\", \"Derived: earliest metric anomaly onset 2025-05-14 12:00 UTC (node memory utilisation on 10.113.184.208).\"]}",
+      "metadata": {
+        "scenario": "pool_size_values_0040",
+        "source_kind": "derived_from_es_results",
+        "heuristic": true
+      }
+    },
+    {
+      "artifact_id": "pool_size_values_0040-10",
+      "artifact_type": "query_coverage",
+      "subtype": "evidence_gaps",
+      "source": "evidence_gaps",
+      "content": "{\"description\": \"Queries that returned nothing or failed; use these to state what is NOT established.\", \"facts\": [\"No matching results for: tls certificates / expired certificates. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / expiring within 7 days. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / self signed. (Absence in this query is not proof of absence elsewhere.)\"]}",
+      "metadata": {
+        "scenario": "pool_size_values_0040",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    }
+  ]
+}

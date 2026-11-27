@@ -1,0 +1,152 @@
+{
+  "metadata": {
+    "incident_id": "INC-20250619",
+    "scenario": "cache_stampede_0043",
+    "title": "Infrastructure reliability incident investigation",
+    "source": "synthetic/ops-incident-expansion (modeled on neu-nds2/llm-sec-incident-analysis)",
+    "query_window_start": "2025-06-19T00:00:00",
+    "query_window_end": "2025-06-21T23:59:59",
+    "evidence_types": [
+      "change_records",
+      "derived_findings",
+      "infrastructure_events",
+      "monitoring_alerts",
+      "query_coverage",
+      "resource_metrics",
+      "service_logs"
+    ],
+    "artifact_scope_note": "Evidence is aggregated query output (not raw log lines or metric samples); it contains no chat/communication records."
+  },
+  "incident_description": "Reliability incident investigation of a production environment. Evidence consists of Elasticsearch aggregation results over application and proxy logs, Kubernetes, cloud-provider and host system events, Prometheus Alertmanager alerts, change-management / CI-CD audit records and metric anomaly detection. No root cause, impact or trigger is stated; these must be established from the supplied artifacts. Environment context: Organization: Silverhollow Cargo (freight and logistics); Platform: AWS us-west-2 (zones us-west-2a/us-west-2b/us-west-2c/us-west-2d); network range 10.149.0.0/16; Kubernetes cluster silver-prod-uswest (EKS); Caching tier: self-managed Redis (cache-redis-03, maxmemory 12gb, allkeys-lru) in front of the label-svc PostgreSQL database label-db-01; Change management: production changes carry CHG- identifiers.",
+  "investigation_questions": [
+    "What is the hostname of the host or node where the failure originated?",
+    "Which database host became overloaded as a consequence of the initial failure?",
+    "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+    "Did the failure stay isolated to one component or cascade across services? Answer 'isolated failure' or 'cascading failure'.",
+    "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+    "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?"
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "cache_stampede_0043-01",
+      "artifact_type": "service_logs",
+      "subtype": "error_logs",
+      "source": "error_logs",
+      "content": "{\"description\": \"Application and proxy error logs: HTTP/gRPC status codes, failing requests (caller -> callee:port : operation), error messages and the services emitting them.\", \"facts\": [\"error events: 47261 matching events\", \"error events > status codes: 504 \\u2014 25075 events\", \"error events > status codes: 500 \\u2014 18488 events\", \"error events > status codes: 503 \\u2014 3698 events\", \"failing requests: portal-bff -> label-svc:8080 : GET /v1/label \\u2014 25075 events\", \"failing requests: label-svc -> label-db-01:5432 : SELECT (cache miss fallback) \\u2014 18362 events\", \"failing requests: dock-scheduler -> label-svc:8080 : GET /v1/label/{id} \\u2014 3698 events\", \"failing requests: shipment-api -> shipment-db:5432 : query \\u2014 126 events\", \"error messages: upstream label-svc: 504 Gateway Timeout \\u2014 25075 events\", \"error messages: pq: sorry, too many clients already \\u2014 18362 events\", \"error messages: label-svc: context deadline exceeded \\u2014 3698 events\", \"error messages: pq: could not serialize access due to concurrent update \\u2014 126 events\", \"emitting services: portal-bff \\u2014 25075 events\", \"emitting services: label-svc \\u2014 18362 events\", \"emitting services: dock-scheduler \\u2014 3698 events\", \"emitting services: shipment-api \\u2014 126 events\"]}",
+      "metadata": {
+        "scenario": "cache_stampede_0043",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "cache_stampede_0043-02",
+      "artifact_type": "service_logs",
+      "subtype": "error_volume_by_service",
+      "source": "error_volume_by_service",
+      "content": "{\"description\": \"Services ranked by number of error events, with each service's most-failed downstream dependencies.\", \"facts\": [\"services: portal-bff \\u2014 25075 events; failing dependencies=1; top dependencies: label-svc (25075)\", \"services: label-svc \\u2014 18362 events; failing dependencies=1; top dependencies: label-db-01 (18362)\", \"services: dock-scheduler \\u2014 3698 events; failing dependencies=1; top dependencies: label-svc (3698)\", \"services: shipment-api \\u2014 126 events; failing dependencies=1; top dependencies: shipment-db (126)\"]}",
+      "metadata": {
+        "scenario": "cache_stampede_0043",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "cache_stampede_0043-03",
+      "artifact_type": "change_records",
+      "subtype": "change_log",
+      "source": "change_log",
+      "content": "{\"description\": \"Deployments, configuration pushes, infrastructure and automation runs from the change-management and CI/CD audit log: change ID, type, target, actor, time (UTC), status and recorded diff/summary.\", \"facts\": [\"changes: CHG-82754 | batch_job | label-svc cache warm-up / metadata backfill | actor: airflow | 2025-06-19 17:42 UTC | status: completed | backfill wrote 77k new cache keys \\u2014 1 events\", \"changes: CHG-82783 | deployment | booking-api 0.5.4 -> 0.5.5 | actor: ci-deployer | 2025-06-19 17:45 UTC | status: Synced/Healthy | dependency bump \\u2014 1 events\", \"changes: CHG-82790 | config_push | cache-redis-03 redis.conf | actor: f.jensen | 2025-06-19 23:44 UTC | status: completed | CONFIG SET maxmemory 12gb -> 24gb; CONFIG REWRITE \\u2014 1 events\", \"changes: CHG-82796 | deployment | shipment-api 8.7.6 -> 8.7.7 | actor: ci-deployer | 2025-06-20 21:46 UTC | status: Synced/Healthy | new optional API field \\u2014 1 events\", \"change types: deployment \\u2014 2 events\", \"change types: batch_job \\u2014 1 events\", \"change types: config_push \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "cache_stampede_0043",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "cache_stampede_0043-04",
+      "artifact_type": "change_records",
+      "subtype": "change_actors",
+      "source": "change_actors",
+      "content": "{\"description\": \"Accounts and automation identities that executed changes, with the hosts or targets they acted on.\", \"facts\": [\"actors: ci-deployer \\u2014 2 events; targets: silver-prod-uswest/booking-api (1), silver-prod-uswest/shipment-api (1)\", \"actors: airflow \\u2014 1 events; targets: silver-prod-uswest/label-svc (1)\", \"actors: f.jensen \\u2014 1 events; targets: cache-redis-03 (1)\"]}",
+      "metadata": {
+        "scenario": "cache_stampede_0043",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "cache_stampede_0043-05",
+      "artifact_type": "infrastructure_events",
+      "subtype": "host_inventory",
+      "source": "host_inventory",
+      "content": "{\"description\": \"Host and node names seen in infrastructure events with their IP address, role and availability zone / rack.\", \"facts\": [\"hosts: cache-redis-03 \\u2014 350 events; ip: 10.149.91.5; role: redis-cache; zone: us-west-2c\", \"hosts: ip-10-149-50-238 \\u2014 205 events; ip: 10.149.50.238; role: k8s-worker; zone: us-west-2b\", \"hosts: label-db-01 \\u2014 202 events; ip: 10.149.227.50; role: postgres-primary; zone: us-west-2d\"]}",
+      "metadata": {
+        "scenario": "cache_stampede_0043",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "cache_stampede_0043-06",
+      "artifact_type": "infrastructure_events",
+      "subtype": "platform_events",
+      "source": "platform_events",
+      "content": "{\"description\": \"Kubernetes events, cloud-provider health events and host system messages (kernel, hardware, daemons) with the objects or hosts they refer to.\", \"facts\": [\"system messages: postgres: FATAL: sorry, too many clients already \\u2014 5365 events; top objects: label-db-01 (1)\", \"event reasons: SuccessfulRescale \\u2014 4 events; top objects: hpa/label-svc (4)\", \"event reasons: Pulled \\u2014 20 events; top objects: pod/booking-api-627731acf-lzjb7 (1)\", \"event reasons: ScalingReplicaSet \\u2014 2 events; top objects: deployment/booking-api (1)\", \"event reasons: Pulled \\u2014 17 events; top objects: pod/shipment-api-aba5ae363-kphl9 (3)\", \"event reasons: ScalingReplicaSet \\u2014 4 events; top objects: deployment/shipment-api (2)\"]}",
+      "metadata": {
+        "scenario": "cache_stampede_0043",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "cache_stampede_0043-07",
+      "artifact_type": "monitoring_alerts",
+      "subtype": "alertmanager_alerts",
+      "source": "alertmanager_alerts",
+      "content": "{\"description\": \"Prometheus Alertmanager alerts: alert names with severity, critical-alert instances, alert names and services, and an hourly timeline of warning and critical alerts (UTC).\", \"facts\": [\"alert names: Watchdog (info) \\u2014 72 events; service: alertmanager; firing continuously\", \"alert names: PortalBff5xxHigh (critical) \\u2014 7 events; service: portal-bff; first seen in hour 2025-06-19 22:00 UTC; last seen in hour 2025-06-19 23:00 UTC\", \"alert names: RedisMemoryHigh (warning) \\u2014 7 events; service: redis; first seen in hour 2025-06-19 20:00 UTC; last seen in hour 2025-06-19 23:00 UTC\", \"alert names: PostgresTooManyConnections (critical) \\u2014 5 events; service: postgres; first seen in hour 2025-06-19 22:00 UTC; last seen in hour 2025-06-19 23:00 UTC\", \"alert names: RedisCacheHitRatioLow (critical) \\u2014 5 events; service: redis; first seen in hour 2025-06-19 22:00 UTC; last seen in hour 2025-06-19 23:00 UTC\", \"alert names: KubeCPUOvercommit (warning) \\u2014 4 events; service: cluster; first seen in hour 2025-06-19 20:00 UTC; last seen in hour 2025-06-19 21:00 UTC\", \"alert names: LabelSvcErrorRateHigh (critical) \\u2014 4 events; service: label-svc; first seen in hour 2025-06-19 22:00 UTC; last seen in hour 2025-06-19 23:00 UTC\", \"critical alerts: 21 matching events\", \"critical alerts > critical instances: portal-bff \\u2014 7 events\", \"critical alerts > critical instances: 10.149.227.50:9187 \\u2014 5 events\", \"critical alerts > critical instances: 10.149.91.5:9121 \\u2014 5 events\", \"critical alerts > critical instances: label-svc \\u2014 4 events\", \"critical alerts > critical alert names: PortalBff5xxHigh \\u2014 7 events\", \"critical alerts > critical alert names: PostgresTooManyConnections \\u2014 5 events\", \"critical alerts > critical alert names: RedisCacheHitRatioLow \\u2014 5 events\", \"critical alerts > critical alert names: LabelSvcErrorRateHigh \\u2014 4 events\", \"critical alerts > critical services: portal-bff \\u2014 7 events\", \"critical alerts > critical services: postgres \\u2014 5 events\", \"critical alerts > critical services: redis \\u2014 5 events\", \"critical alerts > critical services: label-svc \\u2014 4 events\", \"alert timeline: 2025-06-19 20:00 UTC \\u2014 3 events\", \"alert timeline: 2025-06-19 21:00 UTC \\u2014 4 events\", \"alert timeline: 2025-06-19 22:00 UTC \\u2014 9 events\", \"alert timeline: 2025-06-19 23:00 UTC \\u2014 16 events\"]}",
+      "metadata": {
+        "scenario": "cache_stampede_0043",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "cache_stampede_0043-08",
+      "artifact_type": "resource_metrics",
+      "subtype": "metric_anomalies",
+      "source": "metric_anomalies",
+      "content": "{\"description\": \"Metric series that deviated from their 7-day baseline (hourly resolution): baseline, peak or trough value, anomaly onset and recovery (UTC).\", \"facts\": [\"metric anomalies: redis_memory_used_bytes / redis_memory_max_bytes on cache-redis-03 \\u2014 baseline 64%; peak 100%; onset 2025-06-19 20:00 UTC; recovered 2025-06-20 00:00 UTC\", \"metric anomalies: redis_evicted_keys_total rate on cache-redis-03 \\u2014 baseline 0/s; peak 3,119/s; onset 2025-06-19 22:00 UTC; recovered 2025-06-20 00:00 UTC\", \"metric anomalies: redis keyspace hit ratio on cache-redis-03 \\u2014 baseline 95%; trough 29%; onset 2025-06-19 22:00 UTC; recovered 2025-06-20 00:00 UTC\", \"metric anomalies: node_cpu utilisation on label-db-01 \\u2014 baseline 36%; peak 100%; onset 2025-06-19 22:00 UTC; recovered 2025-06-20 00:00 UTC\", \"metric anomalies: node memory utilisation on 10.149.50.238 \\u2014 baseline 37%; peak 93%; onset 2025-06-20 19:00 UTC; recovered 2025-06-20 21:00 UTC\"]}",
+      "metadata": {
+        "scenario": "cache_stampede_0043",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "cache_stampede_0043-09",
+      "artifact_type": "derived_findings",
+      "subtype": "derived_summary",
+      "source": "derived_summary",
+      "content": "{\"description\": \"Deterministic summary computed from the query results above (error ranking, instance-to-host join, alert timeline, change correlation, earliest metric anomaly).\", \"facts\": [\"Derived: service portal-bff ranks #1 by error volume (25075 events, 1 failing dependencies). Most-failed dependency: label-svc (25075 errors).\", \"Derived: most-alerted critical instance portal-bff (7 critical alerts); no matching host-inventory entry.\", \"Derived: warning/critical alerts span 2025-06-19 20:00 UTC to 2025-06-19 23:00 UTC; earliest alert hour 2025-06-19 20:00 UTC (3 alerts).\", \"Derived: changes recorded from 6 hours before the earliest alert hour to its end: CHG-82754 (batch_job, label-svc cache warm-up / metadata backfill, airflow, 2025-06-19 17:42 UTC); CHG-82783 (deployment, booking-api 0.5.4 -> 0.5.5, ci-deployer, 2025-06-19 17:45 UTC).\", \"Derived: earliest metric anomaly onset 2025-06-19 20:00 UTC (redis_memory_used_bytes / redis_memory_max_bytes on cache-redis-03).\"]}",
+      "metadata": {
+        "scenario": "cache_stampede_0043",
+        "source_kind": "derived_from_es_results",
+        "heuristic": true
+      }
+    },
+    {
+      "artifact_id": "cache_stampede_0043-10",
+      "artifact_type": "query_coverage",
+      "subtype": "evidence_gaps",
+      "source": "evidence_gaps",
+      "content": "{\"description\": \"Queries that returned nothing or failed; use these to state what is NOT established.\", \"facts\": [\"No matching results for: tls certificates / expired certificates. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / expiring within 7 days. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / self signed. (Absence in this query is not proof of absence elsewhere.)\"]}",
+      "metadata": {
+        "scenario": "cache_stampede_0043",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    }
+  ]
+}

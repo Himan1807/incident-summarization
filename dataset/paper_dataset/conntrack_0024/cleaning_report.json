@@ -1,0 +1,14 @@
+{
+  "scenario": "conntrack_0024",
+  "cleaning": [],
+  "skipped": [
+    "tls_certificates: all aggregations empty"
+  ],
+  "gaps": [],
+  "artifacts": 10,
+  "facts": 69,
+  "empty_aggregations": 3,
+  "questions": 9,
+  "answers": 9,
+  "atoms": 10
+}

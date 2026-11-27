@@ -1,0 +1,14 @@
+{
+  "scenario": "cache_stampede_0043",
+  "cleaning": [],
+  "skipped": [
+    "tls_certificates: all aggregations empty"
+  ],
+  "gaps": [],
+  "artifacts": 10,
+  "facts": 76,
+  "empty_aggregations": 3,
+  "questions": 7,
+  "answers": 7,
+  "atoms": 8
+}

@@ -1,0 +1,109 @@
+{
+  "source": "synthetic generator ground truth (ops expansion)",
+  "confidence": "synthetic ground truth",
+  "qa": [
+    {
+      "id": 1,
+      "question": "Which service or component is the origin of the failure?",
+      "answer": "node-recycler controller",
+      "atoms": [
+        {
+          "text": "node-recycler",
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "question": "What change, deployment or automation run triggered the incident? Provide its change identifier.",
+      "answer": "RECYCLE-6891",
+      "atoms": [
+        {
+          "text": "RECYCLE-6891",
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "question": "Which deployment introduced the faulty batch-size logic? Provide its change identifier.",
+      "answer": "CHG-8698",
+      "atoms": [
+        {
+          "text": "CHG-8698",
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "question": "How many worker nodes were cordoned and drained at the same time?",
+      "answer": "18",
+      "atoms": [
+        {
+          "text": "drained 18 nodes",
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "question": "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+      "answer": "2022-03-14 11:00 UTC",
+      "atoms": [
+        {
+          "text": "2022-03-14 11:00 UTC",
+          "kind": "time"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "question": "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+      "answer": "automation error",
+      "atoms": [
+        {
+          "text": "automation error",
+          "kind": "label"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "question": "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+      "answer": "availability",
+      "atoms": [
+        {
+          "text": "availability",
+          "kind": "cia"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "question": "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+      "answer": "mobile-bff, downstream symptom",
+      "atoms": [
+        {
+          "text": "mobile-bff",
+          "kind": "other"
+        },
+        {
+          "text": "downstream symptom",
+          "kind": "label"
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "question": "Which change happened shortly before the incident began but did not cause it? Provide its identifier.",
+      "answer": "CHG-8671",
+      "atoms": [
+        {
+          "text": "CHG-8671",
+          "kind": "other"
+        }
+      ]
+    }
+  ]
+}

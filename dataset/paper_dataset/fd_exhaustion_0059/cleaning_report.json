@@ -1,0 +1,14 @@
+{
+  "scenario": "fd_exhaustion_0059",
+  "cleaning": [],
+  "skipped": [
+    "tls_certificates: all aggregations empty"
+  ],
+  "gaps": [],
+  "artifacts": 10,
+  "facts": 69,
+  "empty_aggregations": 3,
+  "questions": 6,
+  "answers": 6,
+  "atoms": 7
+}

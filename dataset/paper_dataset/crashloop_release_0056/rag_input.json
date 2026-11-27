@@ -1,0 +1,155 @@
+{
+  "metadata": {
+    "incident_id": "INC-20230411",
+    "scenario": "crashloop_release_0056",
+    "title": "Infrastructure reliability incident investigation",
+    "source": "synthetic/ops-incident-expansion (modeled on neu-nds2/llm-sec-incident-analysis)",
+    "query_window_start": "2023-04-11T00:00:00",
+    "query_window_end": "2023-04-13T23:59:59",
+    "evidence_types": [
+      "change_records",
+      "derived_findings",
+      "infrastructure_events",
+      "monitoring_alerts",
+      "query_coverage",
+      "resource_metrics",
+      "service_logs"
+    ],
+    "artifact_scope_note": "Evidence is aggregated query output (not raw log lines or metric samples); it contains no chat/communication records."
+  },
+  "incident_description": "Reliability incident investigation of a production environment. Evidence consists of Elasticsearch aggregation results over application and proxy logs, Kubernetes, cloud-provider and host system events, Prometheus Alertmanager alerts, change-management / CI-CD audit records and metric anomaly detection. No root cause, impact or trigger is stated; these must be established from the supplied artifacts. Environment context: Organization: Harborari Shop (online retail); Platform: AWS ap-northeast-1 (zones ap-northeast-1a/ap-northeast-1c/ap-northeast-1d); network range 10.245.0.0/16; Kubernetes cluster harbor-prod-apnort (EKS); cart-service is deployed with RollingUpdate (maxUnavailable 25%) and must run at full replica count during peak traffic; Change management: production changes carry CHG- identifiers.",
+  "investigation_questions": [
+    "Which service or component is the origin of the failure?",
+    "What change, deployment or automation run triggered the incident? Provide its change identifier.",
+    "Which account or automation identity executed the triggering change?",
+    "Which version of the service introduced the defect?",
+    "Which configuration key did the new version fail on at startup?",
+    "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+    "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+    "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+    "Which change happened shortly before the incident began but did not cause it? Provide its identifier."
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "crashloop_release_0056-01",
+      "artifact_type": "service_logs",
+      "subtype": "error_logs",
+      "source": "error_logs",
+      "content": "{\"description\": \"Application and proxy error logs: HTTP/gRPC status codes, failing requests (caller -> callee:port : operation), error messages and the services emitting them.\", \"facts\": [\"error events: 18723 matching events\", \"error events > status codes: 503 \\u2014 18537 events\", \"error events > status codes: n/a (crash) \\u2014 162 events\", \"error events > status codes: 504 \\u2014 24 events\", \"failing requests: web-bff -> cart-service:8080 : POST /v1/cart \\u2014 18537 events\", \"failing requests: cart-service -> startup : container start \\u2014 162 events\", \"failing requests: payments-api -> payments-db:5432 : query \\u2014 24 events\", \"error messages: upstream cart-service: 503 upstream overflow \\u2014 18537 events\", \"error messages: panic: runtime error: invalid memory address or nil pointer dereference [config: CACHE_ENDPOINT is empty] \\u2014 162 events\", \"error messages: upstream request timeout \\u2014 24 events\", \"emitting services: web-bff \\u2014 18537 events\", \"emitting services: cart-service \\u2014 162 events\", \"emitting services: payments-api \\u2014 24 events\"]}",
+      "metadata": {
+        "scenario": "crashloop_release_0056",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "crashloop_release_0056-02",
+      "artifact_type": "service_logs",
+      "subtype": "error_volume_by_service",
+      "source": "error_volume_by_service",
+      "content": "{\"description\": \"Services ranked by number of error events, with each service's most-failed downstream dependencies.\", \"facts\": [\"services: web-bff \\u2014 18537 events; failing dependencies=1; top dependencies: cart-service (18537)\", \"services: cart-service \\u2014 162 events; failing dependencies=1; top dependencies: startup (162)\", \"services: payments-api \\u2014 24 events; failing dependencies=1; top dependencies: payments-db (24)\"]}",
+      "metadata": {
+        "scenario": "crashloop_release_0056",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "crashloop_release_0056-03",
+      "artifact_type": "change_records",
+      "subtype": "change_log",
+      "source": "change_log",
+      "content": "{\"description\": \"Deployments, configuration pushes, infrastructure and automation runs from the change-management and CI/CD audit log: change ID, type, target, actor, time (UTC), status and recorded diff/summary.\", \"facts\": [\"changes: CHG-50117 | deployment | payments-api 6.23.8 -> 6.24.0 | actor: ci-deployer | 2023-04-11 04:42 UTC | status: completed | performance tuning of list endpoint \\u2014 1 events\", \"changes: CHG-50157 | deployment | inventory-svc 1.2.2 -> 1.2.3 | actor: ci-deployer | 2023-04-11 14:36 UTC | status: Synced/Healthy | performance tuning of list endpoint \\u2014 1 events\", \"changes: CHG-50189 | deployment | cart-service 4.26.7 -> 4.27.0 | actor: ci-deployer | 2023-04-11 16:19 UTC | status: Progressing (stalled) | RollingUpdate maxUnavailable 25%; new required environment variable CACHE_ENDPOINT (not set in production values) \\u2014 1 events\", \"changes: CHG-50227 | rollback | cart-service 4.27.0 -> 4.26.7 | actor: t.murphy | 2023-04-11 17:31 UTC | status: completed | kubectl rollout undo \\u2014 1 events\", \"change types: deployment \\u2014 3 events\", \"change types: rollback \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "crashloop_release_0056",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "crashloop_release_0056-04",
+      "artifact_type": "change_records",
+      "subtype": "change_actors",
+      "source": "change_actors",
+      "content": "{\"description\": \"Accounts and automation identities that executed changes, with the hosts or targets they acted on.\", \"facts\": [\"actors: ci-deployer \\u2014 3 events; targets: harbor-prod-apnort/cart-service (1), harbor-prod-apnort/inventory-svc (1), harbor-prod-apnort/payments-api (1)\", \"actors: t.murphy \\u2014 1 events; targets: harbor-prod-apnort/cart-service (1)\"]}",
+      "metadata": {
+        "scenario": "crashloop_release_0056",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "crashloop_release_0056-05",
+      "artifact_type": "infrastructure_events",
+      "subtype": "host_inventory",
+      "source": "host_inventory",
+      "content": "{\"description\": \"Host and node names seen in infrastructure events with their IP address, role and availability zone / rack.\", \"facts\": [\"hosts: ip-10-245-204-222 \\u2014 280 events; ip: 10.245.204.222; role: k8s-worker; zone: ap-northeast-1c\"]}",
+      "metadata": {
+        "scenario": "crashloop_release_0056",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "crashloop_release_0056-06",
+      "artifact_type": "infrastructure_events",
+      "subtype": "platform_events",
+      "source": "platform_events",
+      "content": "{\"description\": \"Kubernetes events, cloud-provider health events and host system messages (kernel, hardware, daemons) with the objects or hosts they refer to.\", \"facts\": [\"event reasons: BackOff \\u2014 162 events; top objects: pod/cart-service-0a330537e-zdv4m (54), pod/cart-service-aabaeef1c-6tq4z (54)\", \"container logs: panic: runtime error: invalid memory address or nil pointer dereference [config: CACHE_ENDPOINT is empty] \\u2014 162 events; top objects: cart-service (162)\", \"event reasons: Pulled \\u2014 30 events; top objects: pod/inventory-svc-add02144b-bnrc5 (2)\", \"event reasons: ScalingReplicaSet \\u2014 6 events; top objects: deployment/inventory-svc (2)\", \"event reasons: Pulled \\u2014 26 events; top objects: pod/payments-api-91c68352d-hjwg4 (2)\", \"event reasons: ScalingReplicaSet \\u2014 6 events; top objects: deployment/payments-api (1)\"]}",
+      "metadata": {
+        "scenario": "crashloop_release_0056",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "crashloop_release_0056-07",
+      "artifact_type": "monitoring_alerts",
+      "subtype": "alertmanager_alerts",
+      "source": "alertmanager_alerts",
+      "content": "{\"description\": \"Prometheus Alertmanager alerts: alert names with severity, critical-alert instances, alert names and services, and an hourly timeline of warning and critical alerts (UTC).\", \"facts\": [\"alert names: Watchdog (info) \\u2014 72 events; service: alertmanager; firing continuously\", \"alert names: KubeDeploymentReplicasMismatch (warning) \\u2014 6 events; service: cart-service; first seen in hour 2023-04-11 16:00 UTC; last seen in hour 2023-04-11 17:00 UTC\", \"alert names: KubePodCrashLooping (critical) \\u2014 6 events; service: cart-service; first seen in hour 2023-04-11 16:00 UTC; last seen in hour 2023-04-11 17:00 UTC\", \"alert names: WebBffErrorRateHigh (critical) \\u2014 4 events; service: web-bff; first seen in hour 2023-04-11 16:00 UTC; last seen in hour 2023-04-11 17:00 UTC\", \"alert names: KubeCPUOvercommit (warning) \\u2014 3 events; service: cluster; first seen in hour 2023-04-11 11:00 UTC; last seen in hour 2023-04-11 12:00 UTC\", \"critical alerts: 10 matching events\", \"critical alerts > critical instances: cart-service \\u2014 6 events\", \"critical alerts > critical instances: web-bff \\u2014 4 events\", \"critical alerts > critical alert names: KubePodCrashLooping \\u2014 6 events\", \"critical alerts > critical alert names: WebBffErrorRateHigh \\u2014 4 events\", \"critical alerts > critical services: cart-service \\u2014 6 events\", \"critical alerts > critical services: web-bff \\u2014 4 events\", \"alert timeline: 2023-04-11 11:00 UTC \\u2014 1 events\", \"alert timeline: 2023-04-11 12:00 UTC \\u2014 2 events\", \"alert timeline: 2023-04-11 16:00 UTC \\u2014 7 events\", \"alert timeline: 2023-04-11 17:00 UTC \\u2014 9 events\"]}",
+      "metadata": {
+        "scenario": "crashloop_release_0056",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "crashloop_release_0056-08",
+      "artifact_type": "resource_metrics",
+      "subtype": "metric_anomalies",
+      "source": "metric_anomalies",
+      "content": "{\"description\": \"Metric series that deviated from their 7-day baseline (hourly resolution): baseline, peak or trough value, anomaly onset and recovery (UTC).\", \"facts\": [\"metric anomalies: cart-service available replicas on cart-service \\u2014 baseline 8; trough 6; onset 2023-04-11 16:00 UTC; recovered 2023-04-11 18:00 UTC\", \"metric anomalies: cart-service CPU per pod on cart-service \\u2014 baseline 47%; peak 96%; onset 2023-04-11 16:00 UTC; recovered 2023-04-11 18:00 UTC\"]}",
+      "metadata": {
+        "scenario": "crashloop_release_0056",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "crashloop_release_0056-09",
+      "artifact_type": "derived_findings",
+      "subtype": "derived_summary",
+      "source": "derived_summary",
+      "content": "{\"description\": \"Deterministic summary computed from the query results above (error ranking, instance-to-host join, alert timeline, change correlation, earliest metric anomaly).\", \"facts\": [\"Derived: service web-bff ranks #1 by error volume (18537 events, 1 failing dependencies). Most-failed dependency: cart-service (18537 errors).\", \"Derived: most-alerted critical instance cart-service (6 critical alerts); no matching host-inventory entry.\", \"Derived: warning/critical alerts span 2023-04-11 11:00 UTC to 2023-04-11 17:00 UTC; earliest alert hour 2023-04-11 11:00 UTC (1 alerts).\", \"Derived: no changes recorded from 6 hours before the earliest alert hour to its end.\", \"Derived: earliest metric anomaly onset 2023-04-11 16:00 UTC (cart-service available replicas on cart-service).\"]}",
+      "metadata": {
+        "scenario": "crashloop_release_0056",
+        "source_kind": "derived_from_es_results",
+        "heuristic": true
+      }
+    },
+    {
+      "artifact_id": "crashloop_release_0056-10",
+      "artifact_type": "query_coverage",
+      "subtype": "evidence_gaps",
+      "source": "evidence_gaps",
+      "content": "{\"description\": \"Queries that returned nothing or failed; use these to state what is NOT established.\", \"facts\": [\"No matching results for: tls certificates / expired certificates. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / expiring within 7 days. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / self signed. (Absence in this query is not proof of absence elsewhere.)\"]}",
+      "metadata": {
+        "scenario": "crashloop_release_0056",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    }
+  ]
+}

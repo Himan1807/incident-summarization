@@ -1,0 +1,120 @@
+{
+  "source": "synthetic generator ground truth (ops expansion)",
+  "confidence": "synthetic ground truth",
+  "qa": [
+    {
+      "id": 1,
+      "question": "Which host or node did the failure originate on? Give its hostname.",
+      "answer": "kafka-b1",
+      "atoms": [
+        {
+          "text": "kafka-b1",
+          "kind": "hostname"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "question": "Which filesystem path ran out of space?",
+      "answer": "/data/kafka",
+      "atoms": [
+        {
+          "text": "/data/kafka",
+          "kind": "domain_or_file"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "question": "Which topic partition first reported the storage exception?",
+      "answer": "search-events-3",
+      "atoms": [
+        {
+          "text": "search-events-3",
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "question": "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+      "answer": "2023-12-11 02:00 UTC",
+      "atoms": [
+        {
+          "text": "2023-12-11 02:00 UTC",
+          "kind": "time"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "question": "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+      "answer": "capacity exhaustion",
+      "atoms": [
+        {
+          "text": "capacity exhaustion",
+          "kind": "label"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "question": "Did the failure stay isolated to one component or cascade across services? Answer 'isolated failure' or 'cascading failure'.",
+      "answer": "cascading failure",
+      "atoms": [
+        {
+          "text": "cascading failure",
+          "kind": "label"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "question": "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+      "answer": "availability",
+      "atoms": [
+        {
+          "text": "availability",
+          "kind": "cia"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "question": "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+      "answer": "search-api, downstream symptom",
+      "atoms": [
+        {
+          "text": "search-api",
+          "kind": "other"
+        },
+        {
+          "text": "downstream symptom",
+          "kind": "label"
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "question": "Which change happened shortly before the incident began but did not cause it? Provide its identifier.",
+      "answer": "CR-78060",
+      "atoms": [
+        {
+          "text": "CR-78060",
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "question": "Which change restored normal service? Provide its change identifier.",
+      "answer": "CR-78073",
+      "atoms": [
+        {
+          "text": "CR-78073",
+          "kind": "other"
+        }
+      ]
+    }
+  ]
+}

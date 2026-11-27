@@ -1,0 +1,120 @@
+{
+  "source": "synthetic generator ground truth (ops expansion)",
+  "confidence": "synthetic ground truth",
+  "qa": [
+    {
+      "id": 1,
+      "question": "Which change or automation run triggered the incident? Give its identifier.",
+      "answer": "CR-64825",
+      "atoms": [
+        {
+          "text": "CR-64825",
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "question": "Which account or automation identity executed the triggering change?",
+      "answer": "atlantis",
+      "atoms": [
+        {
+          "text": "atlantis",
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "question": "Which database host became unreachable?",
+      "answer": "identity-db-01",
+      "atoms": [
+        {
+          "text": "identity-db-01",
+          "kind": "hostname"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "question": "What is the IP address of the database host that became unreachable?",
+      "answer": "10.17.163.153",
+      "atoms": [
+        {
+          "text": "10.17.163.153",
+          "kind": "ip"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "question": "Which port was blocked by the change?",
+      "answer": "tcp/5432",
+      "atoms": [
+        {
+          "text": "5432",
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "question": "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+      "answer": "2023-09-18 03:00 UTC",
+      "atoms": [
+        {
+          "text": "2023-09-18 03:00 UTC",
+          "kind": "time"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "question": "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+      "answer": "automation error",
+      "atoms": [
+        {
+          "text": "automation error",
+          "kind": "label"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "question": "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+      "answer": "availability",
+      "atoms": [
+        {
+          "text": "availability",
+          "kind": "cia"
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "question": "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+      "answer": "patient-portal, downstream symptom",
+      "atoms": [
+        {
+          "text": "patient-portal",
+          "kind": "other"
+        },
+        {
+          "text": "downstream symptom",
+          "kind": "label"
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "question": "Which change happened shortly before the incident began but did not cause it? Provide its identifier.",
+      "answer": "CR-64792",
+      "atoms": [
+        {
+          "text": "CR-64792",
+          "kind": "other"
+        }
+      ]
+    }
+  ]
+}

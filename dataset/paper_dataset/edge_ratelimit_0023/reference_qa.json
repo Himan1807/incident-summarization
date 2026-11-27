@@ -1,0 +1,102 @@
+{
+  "source": "synthetic generator ground truth (ops expansion)",
+  "confidence": "synthetic ground truth",
+  "qa": [
+    {
+      "id": 1,
+      "question": "Which service or component is the origin of the failure?",
+      "answer": "api-gateway (Envoy edge tier)",
+      "atoms": [
+        {
+          "text": "api-gateway",
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "question": "What change, deployment or automation run triggered the incident? Provide its change identifier.",
+      "answer": "CR-53336",
+      "atoms": [
+        {
+          "text": "CR-53336",
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "question": "Which configuration file and parameter were modified by the triggering change?",
+      "answer": "envoy-ratelimit.yaml, requests_per_unit (5000 -> 5)",
+      "atoms": [
+        {
+          "text": "envoy-ratelimit.yaml",
+          "kind": "domain_or_file"
+        },
+        {
+          "text": "requests_per_unit",
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "question": "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+      "answer": "2025-12-18 06:00 UTC",
+      "atoms": [
+        {
+          "text": "2025-12-18 06:00 UTC",
+          "kind": "time"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "question": "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+      "answer": "configuration change",
+      "atoms": [
+        {
+          "text": "configuration change",
+          "kind": "label"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "question": "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+      "answer": "availability",
+      "atoms": [
+        {
+          "text": "availability",
+          "kind": "cia"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "question": "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+      "answer": "api-gateway, root cause",
+      "atoms": [
+        {
+          "text": "api-gateway",
+          "kind": "other"
+        },
+        {
+          "text": "root cause",
+          "kind": "label"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "question": "Which change restored normal service? Provide its change identifier.",
+      "answer": "CR-53371",
+      "atoms": [
+        {
+          "text": "CR-53371",
+          "kind": "other"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "scenario": "node_overdrain_0049",
+  "cleaning": [],
+  "skipped": [],
+  "gaps": [
+    "tls_certificates"
+  ],
+  "artifacts": 10,
+  "facts": 84,
+  "empty_aggregations": 0,
+  "questions": 10,
+  "answers": 10,
+  "atoms": 11
+}

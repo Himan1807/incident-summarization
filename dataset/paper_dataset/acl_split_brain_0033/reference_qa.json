@@ -1,0 +1,120 @@
+{
+  "source": "synthetic generator ground truth (ops expansion)",
+  "confidence": "synthetic ground truth",
+  "qa": [
+    {
+      "id": 1,
+      "question": "What change, deployment or automation run triggered the incident? Provide its change identifier.",
+      "answer": "AWX-17604",
+      "atoms": [
+        {
+          "text": "AWX-17604",
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "question": "Which account or automation identity executed the triggering change?",
+      "answer": "awx-svc",
+      "atoms": [
+        {
+          "text": "awx-svc",
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "question": "Which network device dropped the database heartbeat and replication traffic?",
+      "answer": "core-b1",
+      "atoms": [
+        {
+          "text": "core-b1",
+          "kind": "hostname"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "question": "Which database node was promoted, creating a second writable primary?",
+      "answer": "db-b",
+      "atoms": [
+        {
+          "text": "db-b",
+          "kind": "hostname"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "question": "What is the IP address of the node that was promoted?",
+      "answer": "172.16.28.76",
+      "atoms": [
+        {
+          "text": "172.16.28.76",
+          "kind": "ip"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "question": "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+      "answer": "2021-06-25 10:00 UTC",
+      "atoms": [
+        {
+          "text": "2021-06-25 10:00 UTC",
+          "kind": "time"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "question": "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+      "answer": "automation error",
+      "atoms": [
+        {
+          "text": "automation error",
+          "kind": "label"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "question": "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+      "answer": "integrity",
+      "atoms": [
+        {
+          "text": "integrity",
+          "kind": "cia"
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "question": "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+      "answer": "reconciliation-job, downstream symptom",
+      "atoms": [
+        {
+          "text": "reconciliation-job",
+          "kind": "other"
+        },
+        {
+          "text": "downstream symptom",
+          "kind": "label"
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "question": "Which change restored normal service? Provide its change identifier.",
+      "answer": "CR-7625",
+      "atoms": [
+        {
+          "text": "CR-7625",
+          "kind": "other"
+        }
+      ]
+    }
+  ]
+}

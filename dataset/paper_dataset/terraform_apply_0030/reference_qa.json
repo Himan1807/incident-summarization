@@ -1,0 +1,87 @@
+{
+  "source": "synthetic generator ground truth (ops expansion)",
+  "confidence": "synthetic ground truth",
+  "qa": [
+    {
+      "id": 1,
+      "question": "Which account or automation identity executed the triggering change?",
+      "answer": "atlantis",
+      "atoms": [
+        {
+          "text": "atlantis",
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "question": "Which network control object was modified?",
+      "answer": "firewall rule allow-pricing-to-db",
+      "atoms": [
+        {
+          "text": "firewall",
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "question": "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+      "answer": "2022-06-05 00:00 UTC",
+      "atoms": [
+        {
+          "text": "2022-06-05 00:00 UTC",
+          "kind": "time"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "question": "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+      "answer": "automation error",
+      "atoms": [
+        {
+          "text": "automation error",
+          "kind": "label"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "question": "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+      "answer": "availability",
+      "atoms": [
+        {
+          "text": "availability",
+          "kind": "cia"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "question": "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+      "answer": "rider-app-bff, downstream symptom",
+      "atoms": [
+        {
+          "text": "rider-app-bff",
+          "kind": "other"
+        },
+        {
+          "text": "downstream symptom",
+          "kind": "label"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "question": "Which change happened shortly before the incident began but did not cause it? Provide its identifier.",
+      "answer": "RFC-25460",
+      "atoms": [
+        {
+          "text": "RFC-25460",
+          "kind": "other"
+        }
+      ]
+    }
+  ]
+}

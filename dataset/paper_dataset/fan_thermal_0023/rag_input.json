@@ -1,0 +1,153 @@
+{
+  "metadata": {
+    "incident_id": "INC-20240118",
+    "scenario": "fan_thermal_0023",
+    "title": "Infrastructure reliability incident investigation",
+    "source": "synthetic/ops-incident-expansion (modeled on neu-nds2/llm-sec-incident-analysis)",
+    "query_window_start": "2024-01-18T00:00:00",
+    "query_window_end": "2024-01-20T23:59:59",
+    "evidence_types": [
+      "change_records",
+      "derived_findings",
+      "infrastructure_events",
+      "monitoring_alerts",
+      "query_coverage",
+      "resource_metrics",
+      "service_logs"
+    ],
+    "artifact_scope_note": "Evidence is aggregated query output (not raw log lines or metric samples); it contains no chat/communication records."
+  },
+  "incident_description": "Reliability incident investigation of a production environment. Evidence consists of Elasticsearch aggregation results over application and proxy logs, Kubernetes, cloud-provider and host system events, Prometheus Alertmanager alerts, change-management / CI-CD audit records and metric anomaly detection. No root cause, impact or trigger is stated; these must be established from the supplied artifacts. Environment context: Organization: Skylane Software (collaboration SaaS); Platform: on-premises data center DC-West, server range 172.18.0.0/16; Kubernetes cluster skylan-prod (kubeadm); Application tier: webhooks-svc runs on dedicated rack servers behind a load balancer; IPMI sensor data and SEL are collected; Change management: production changes carry CHG- identifiers.",
+  "investigation_questions": [
+    "Which host or node did the failure originate on? Give its hostname.",
+    "What is the IP address of the host or node where the incident started?",
+    "Which hardware component failed first?",
+    "What kernel-level effect slowed the host down?",
+    "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+    "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+    "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?"
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "fan_thermal_0023-01",
+      "artifact_type": "service_logs",
+      "subtype": "error_logs",
+      "source": "error_logs",
+      "content": "{\"description\": \"Application and proxy error logs: HTTP/gRPC status codes, failing requests (caller -> callee:port : operation), error messages and the services emitting them.\", \"facts\": [\"error events: 30896 matching events\", \"error events > status codes: 504 \\u2014 20039 events\", \"error events > status codes: 503 \\u2014 10653 events\", \"error events > status codes: 429 \\u2014 204 events\", \"failing requests: app-frontend -> webhooks-svc:8080 : GET /v1/webhooks \\u2014 20039 events\", \"failing requests: webhooks-svc -> worker threads : request handling \\u2014 10653 events\", \"failing requests: auth-api -> auth-db:5432 : query \\u2014 204 events\", \"error messages: upstream webhooks-svc: 504 Gateway Timeout \\u2014 20039 events\", \"error messages: request processing exceeded 10s deadline \\u2014 10653 events\", \"error messages: HTTP 429 Too Many Requests from upstream \\u2014 204 events\", \"emitting services: app-frontend \\u2014 20039 events\", \"emitting services: webhooks-svc \\u2014 10653 events\", \"emitting services: auth-api \\u2014 204 events\"]}",
+      "metadata": {
+        "scenario": "fan_thermal_0023",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "fan_thermal_0023-02",
+      "artifact_type": "service_logs",
+      "subtype": "error_volume_by_service",
+      "source": "error_volume_by_service",
+      "content": "{\"description\": \"Services ranked by number of error events, with each service's most-failed downstream dependencies.\", \"facts\": [\"services: app-frontend \\u2014 20039 events; failing dependencies=1; top dependencies: webhooks-svc (20039)\", \"services: webhooks-svc \\u2014 10653 events; failing dependencies=1; top dependencies: worker threads (10653)\", \"services: auth-api \\u2014 204 events; failing dependencies=1; top dependencies: auth-db (204)\"]}",
+      "metadata": {
+        "scenario": "fan_thermal_0023",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "fan_thermal_0023-03",
+      "artifact_type": "change_records",
+      "subtype": "change_log",
+      "source": "change_log",
+      "content": "{\"description\": \"Deployments, configuration pushes, infrastructure and automation runs from the change-management and CI/CD audit log: change ID, type, target, actor, time (UTC), status and recorded diff/summary.\", \"facts\": [\"changes: CHG-54037 | deployment | workspace-api 9.22.11 -> 9.23.0 | actor: gitlab-ci | 2024-01-18 07:14 UTC | status: Synced/Healthy | feature flag cleanup \\u2014 1 events\", \"changes: CHG-54073 | deployment | billing-api 12.15.4 -> 12.15.5 | actor: gitlab-ci | 2024-01-18 14:53 UTC | status: Synced/Healthy | logging improvements \\u2014 1 events\", \"changes: CHG-54109 | load_balancer_drain | webhooks-app-07 in webhooks-svc pool | actor: v.moreau | 2024-01-19 15:36 UTC | status: completed | drain webhooks-app-07 from load balancer pool \\u2014 1 events\", \"changes: DC-3817 | hardware_replacement | webhooks-app-07 Fan5 | actor: dcops-j.walsh | 2024-01-19 17:36 UTC | status: completed | replaced Fan5 \\u2014 1 events\", \"changes: CHG-54118 | deployment | auth-api 0.9.4 -> 0.10.0 | actor: gitlab-ci | 2024-01-20 15:19 UTC | status: completed | feature flag cleanup \\u2014 1 events\", \"change types: deployment \\u2014 3 events\", \"change types: load_balancer_drain \\u2014 1 events\", \"change types: hardware_replacement \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "fan_thermal_0023",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "fan_thermal_0023-04",
+      "artifact_type": "change_records",
+      "subtype": "change_actors",
+      "source": "change_actors",
+      "content": "{\"description\": \"Accounts and automation identities that executed changes, with the hosts or targets they acted on.\", \"facts\": [\"actors: gitlab-ci \\u2014 3 events; targets: skylan-prod/billing-api (1), skylan-prod/auth-api (1), skylan-prod/workspace-api (1)\", \"actors: dcops-j.walsh \\u2014 1 events; targets: webhooks-app-07 (1)\", \"actors: v.moreau \\u2014 1 events; targets: webhooks-app-07 (1)\"]}",
+      "metadata": {
+        "scenario": "fan_thermal_0023",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "fan_thermal_0023-05",
+      "artifact_type": "infrastructure_events",
+      "subtype": "host_inventory",
+      "source": "host_inventory",
+      "content": "{\"description\": \"Host and node names seen in infrastructure events with their IP address, role and availability zone / rack.\", \"facts\": [\"hosts: webhooks-app-07 \\u2014 344 events; ip: 172.18.42.203; role: webhooks-svc host; zone: rack K03\", \"hosts: skyla-node-50 \\u2014 223 events; ip: 172.18.203.41; role: k8s-worker; zone: rack K19\", \"hosts: skyla-node-10 \\u2014 172 events; ip: 172.18.76.136; role: k8s-worker; zone: rack K33\", \"hosts: skyla-node-42 \\u2014 153 events; ip: 172.18.203.193; role: k8s-worker; zone: rack K19\"]}",
+      "metadata": {
+        "scenario": "fan_thermal_0023",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "fan_thermal_0023-06",
+      "artifact_type": "infrastructure_events",
+      "subtype": "platform_events",
+      "source": "platform_events",
+      "content": "{\"description\": \"Kubernetes events, cloud-provider health events and host system messages (kernel, hardware, daemons) with the objects or hosts they refer to.\", \"facts\": [\"hardware events (ipmi sel): Fan5 | Lower Critical going low | 0 RPM \\u2014 1 events; top objects: webhooks-app-07 (1)\", \"hardware events (ipmi sel): CPU1 Temp | Upper Critical going high | 95 degrees C \\u2014 4 events; top objects: webhooks-app-07 (1)\", \"system messages: kernel: mce: CPU31: Core temperature above threshold, cpu clock throttled (total events = 4557) \\u2014 381 events; top objects: webhooks-app-07 (1)\", \"system messages: kernel: mce: CPU5: Package temperature above threshold, cpu clock throttled \\u2014 79 events; top objects: webhooks-app-07 (1)\", \"event reasons: Pulled \\u2014 10 events; top objects: pod/billing-api-51c5dbfd1-h6m2t (2)\", \"event reasons: ScalingReplicaSet \\u2014 3 events; top objects: deployment/billing-api (1)\", \"event reasons: Pulled \\u2014 3 events; top objects: pod/auth-api-ebe311cc8-lmp9k (2)\", \"event reasons: ScalingReplicaSet \\u2014 6 events; top objects: deployment/auth-api (3)\", \"event reasons: Pulled \\u2014 5 events; top objects: pod/workspace-api-15d1f28eb-d2fc4 (3)\", \"event reasons: ScalingReplicaSet \\u2014 3 events; top objects: deployment/workspace-api (1)\"]}",
+      "metadata": {
+        "scenario": "fan_thermal_0023",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "fan_thermal_0023-07",
+      "artifact_type": "monitoring_alerts",
+      "subtype": "alertmanager_alerts",
+      "source": "alertmanager_alerts",
+      "content": "{\"description\": \"Prometheus Alertmanager alerts: alert names with severity, critical-alert instances, alert names and services, and an hourly timeline of warning and critical alerts (UTC).\", \"facts\": [\"alert names: Watchdog (info) \\u2014 72 events; service: alertmanager; firing continuously\", \"alert names: IPMIFanFailure (warning) \\u2014 13 events; service: hardware; first seen in hour 2024-01-19 10:00 UTC; last seen in hour 2024-01-19 15:00 UTC\", \"alert names: WebhooksSvcLatencyHigh (critical) \\u2014 13 events; service: webhooks-svc; first seen in hour 2024-01-19 12:00 UTC; last seen in hour 2024-01-19 15:00 UTC\", \"alert names: NodeCPUThrottled (critical) \\u2014 11 events; service: node; first seen in hour 2024-01-19 12:00 UTC; last seen in hour 2024-01-19 15:00 UTC\", \"alert names: NodeFilesystemSpaceFillingUp (warning) \\u2014 2 events; service: node; first seen in hour 2024-01-19 08:00 UTC; last seen in hour 2024-01-19 08:00 UTC\", \"alert names: TargetDown (warning) \\u2014 2 events; service: workspace-api; first seen in hour 2024-01-20 06:00 UTC; last seen in hour 2024-01-20 06:00 UTC\", \"critical alerts: 24 matching events\", \"critical alerts > critical instances: webhooks-svc \\u2014 13 events\", \"critical alerts > critical instances: 172.18.42.203:9100 \\u2014 11 events\", \"critical alerts > critical alert names: WebhooksSvcLatencyHigh \\u2014 13 events\", \"critical alerts > critical alert names: NodeCPUThrottled \\u2014 11 events\", \"critical alerts > critical services: webhooks-svc \\u2014 13 events\", \"critical alerts > critical services: node \\u2014 11 events\", \"alert timeline: 2024-01-19 08:00 UTC \\u2014 2 events\", \"alert timeline: 2024-01-19 10:00 UTC \\u2014 2 events\", \"alert timeline: 2024-01-19 11:00 UTC \\u2014 2 events\", \"alert timeline: 2024-01-19 12:00 UTC \\u2014 10 events\", \"alert timeline: 2024-01-19 13:00 UTC \\u2014 8 events\", \"alert timeline: 2024-01-19 14:00 UTC \\u2014 8 events\", \"alert timeline: 2024-01-19 15:00 UTC \\u2014 7 events\", \"alert timeline: 2024-01-20 06:00 UTC \\u2014 2 events\"]}",
+      "metadata": {
+        "scenario": "fan_thermal_0023",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "fan_thermal_0023-08",
+      "artifact_type": "resource_metrics",
+      "subtype": "metric_anomalies",
+      "source": "metric_anomalies",
+      "content": "{\"description\": \"Metric series that deviated from their 7-day baseline (hourly resolution): baseline, peak or trough value, anomaly onset and recovery (UTC).\", \"facts\": [\"metric anomalies: ipmi fan speed (Fan5) on webhooks-app-07 \\u2014 baseline 6,034 RPM; trough 0 RPM; onset 2024-01-19 10:00 UTC; recovered 2024-01-19 16:00 UTC\", \"metric anomalies: ipmi temperature (CPU1) on webhooks-app-07 \\u2014 baseline 56 C; peak 99 C; onset 2024-01-19 10:00 UTC; recovered 2024-01-19 16:00 UTC\", \"metric anomalies: node_network_receive_bytes rate on 172.18.203.193 \\u2014 baseline 48 MB/s; peak 830 MB/s; onset 2024-01-19 05:00 UTC; recovered 2024-01-19 07:00 UTC\"]}",
+      "metadata": {
+        "scenario": "fan_thermal_0023",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "fan_thermal_0023-09",
+      "artifact_type": "derived_findings",
+      "subtype": "derived_summary",
+      "source": "derived_summary",
+      "content": "{\"description\": \"Deterministic summary computed from the query results above (error ranking, instance-to-host join, alert timeline, change correlation, earliest metric anomaly).\", \"facts\": [\"Derived: service app-frontend ranks #1 by error volume (20039 events, 1 failing dependencies). Most-failed dependency: webhooks-svc (20039 errors).\", \"Derived: most-alerted critical instance webhooks-svc (13 critical alerts); no matching host-inventory entry.\", \"Derived: warning/critical alerts span 2024-01-19 08:00 UTC to 2024-01-20 06:00 UTC; earliest alert hour 2024-01-19 08:00 UTC (2 alerts).\", \"Derived: no changes recorded from 6 hours before the earliest alert hour to its end.\", \"Derived: earliest metric anomaly onset 2024-01-19 05:00 UTC (node_network_receive_bytes rate on 172.18.203.193).\"]}",
+      "metadata": {
+        "scenario": "fan_thermal_0023",
+        "source_kind": "derived_from_es_results",
+        "heuristic": true
+      }
+    },
+    {
+      "artifact_id": "fan_thermal_0023-10",
+      "artifact_type": "query_coverage",
+      "subtype": "evidence_gaps",
+      "source": "evidence_gaps",
+      "content": "{\"description\": \"Queries that returned nothing or failed; use these to state what is NOT established.\", \"facts\": [\"No matching results for: tls certificates / expired certificates. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / expiring within 7 days. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / self signed. (Absence in this query is not proof of absence elsewhere.)\"]}",
+      "metadata": {
+        "scenario": "fan_thermal_0023",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    }
+  ]
+}

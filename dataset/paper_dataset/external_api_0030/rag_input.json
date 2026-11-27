@@ -1,0 +1,165 @@
+{
+  "metadata": {
+    "incident_id": "INC-20250131",
+    "scenario": "external_api_0030",
+    "title": "Infrastructure reliability incident investigation",
+    "source": "synthetic/ops-incident-expansion (modeled on neu-nds2/llm-sec-incident-analysis)",
+    "query_window_start": "2025-01-31T00:00:00",
+    "query_window_end": "2025-02-02T23:59:59",
+    "evidence_types": [
+      "change_records",
+      "derived_findings",
+      "infrastructure_events",
+      "monitoring_alerts",
+      "network_summary",
+      "query_coverage",
+      "resource_metrics",
+      "service_logs"
+    ],
+    "artifact_scope_note": "Evidence is aggregated query output (not raw log lines or metric samples); it contains no chat/communication records."
+  },
+  "incident_description": "Reliability incident investigation of a production environment. Evidence consists of Elasticsearch aggregation results over application and proxy logs, Kubernetes, cloud-provider and host system events, Prometheus Alertmanager alerts, change-management / CI-CD audit records and metric anomaly detection. No root cause, impact or trigger is stated; these must be established from the supplied artifacts. Environment context: Organization: Willowvid Education (online learning); Platform: AWS us-east-2 (zones us-east-2a/us-east-2b/us-east-2c); network range 10.193.0.0/16; Kubernetes cluster willow-prod-useast (EKS); External dependency: geo-svc calls a geocoding API (geo.maptile.dev) protected by a circuit breaker; external synthetic probes monitor public dependencies; Change management: production changes carry RFC- identifiers.",
+  "investigation_questions": [
+    "Was the failure caused by an internal change? Answer yes or no.",
+    "What external IP address did the failing endpoint resolve to?",
+    "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+    "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+    "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+    "What change brought the service back to normal? Give its identifier."
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "external_api_0030-01",
+      "artifact_type": "service_logs",
+      "subtype": "error_logs",
+      "source": "error_logs",
+      "content": "{\"description\": \"Application and proxy error logs: HTTP/gRPC status codes, failing requests (caller -> callee:port : operation), error messages and the services emitting them.\", \"facts\": [\"error events: 58543 matching events\", \"error events > status codes: 503 \\u2014 34399 events\", \"error events > status codes: 502 \\u2014 18332 events\", \"error events > status codes: 504 \\u2014 5595 events\", \"error events > status codes: 500 \\u2014 217 events\", \"failing requests: learner-web -> geo-svc:8080 : POST /v1/geo \\u2014 33265 events\", \"failing requests: geo-svc -> geo.maptile.dev (203.0.113.115):443 : GET /v1/geocode \\u2014 23927 events\", \"failing requests: progress-api -> geo-svc:8080 : async callback \\u2014 1134 events\", \"failing requests: certificate-svc -> certificate-db:5432 : query \\u2014 217 events\", \"error messages: geo-svc: 503 (circuit open) \\u2014 33265 events\", \"error messages: GET https://geo.maptile.dev/v1/geocode: 502 Bad Gateway \\u2014 18332 events\", \"error messages: read tcp 10.193.130.205:48872->203.0.113.115:443: i/o timeout \\u2014 5595 events\", \"error messages: geo-svc unavailable; job requeued \\u2014 1134 events\", \"error messages: pq: could not serialize access due to concurrent update \\u2014 217 events\", \"emitting services: learner-web \\u2014 33265 events\", \"emitting services: geo-svc \\u2014 23927 events\", \"emitting services: progress-api \\u2014 1134 events\", \"emitting services: certificate-svc \\u2014 217 events\"]}",
+      "metadata": {
+        "scenario": "external_api_0030",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "external_api_0030-02",
+      "artifact_type": "service_logs",
+      "subtype": "error_volume_by_service",
+      "source": "error_volume_by_service",
+      "content": "{\"description\": \"Services ranked by number of error events, with each service's most-failed downstream dependencies.\", \"facts\": [\"services: learner-web \\u2014 33265 events; failing dependencies=1; top dependencies: geo-svc (33265)\", \"services: geo-svc \\u2014 23927 events; failing dependencies=1; top dependencies: geo.maptile.dev (203.0.113.115) (23927)\", \"services: progress-api \\u2014 1134 events; failing dependencies=1; top dependencies: geo-svc (1134)\", \"services: certificate-svc \\u2014 217 events; failing dependencies=1; top dependencies: certificate-db (217)\"]}",
+      "metadata": {
+        "scenario": "external_api_0030",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "external_api_0030-03",
+      "artifact_type": "change_records",
+      "subtype": "change_log",
+      "source": "change_log",
+      "content": "{\"description\": \"Deployments, configuration pushes, infrastructure and automation runs from the change-management and CI/CD audit log: change ID, type, target, actor, time (UTC), status and recorded diff/summary.\", \"facts\": [\"changes: RFC-33245 | deployment | certificate-svc 14.28.9 -> 14.28.10 | actor: ci-deployer | 2025-01-31 04:27 UTC | status: succeeded | performance tuning of list endpoint \\u2014 1 events\", \"changes: RFC-33248 | deployment | video-api 6.14.12 -> 6.14.13 | actor: ci-deployer | 2025-01-31 11:44 UTC | status: completed | feature flag cleanup \\u2014 1 events\", \"changes: RFC-33255 | deployment | forum-svc 8.15.4 -> 8.15.5 | actor: ci-deployer | 2025-02-01 10:48 UTC | status: succeeded | logging improvements \\u2014 1 events\", \"changes: RFC-33290 | feature_flag | geo-svc fallback_provider | actor: p.nieminen | 2025-02-01 13:35 UTC | status: completed | route requests to secondary provider: off -> on \\u2014 1 events\", \"change types: deployment \\u2014 3 events\", \"change types: feature_flag \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "external_api_0030",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "external_api_0030-04",
+      "artifact_type": "change_records",
+      "subtype": "change_actors",
+      "source": "change_actors",
+      "content": "{\"description\": \"Accounts and automation identities that executed changes, with the hosts or targets they acted on.\", \"facts\": [\"actors: ci-deployer \\u2014 3 events; targets: willow-prod-useast/forum-svc (1), willow-prod-useast/certificate-svc (1), willow-prod-useast/video-api (1)\", \"actors: p.nieminen \\u2014 1 events; targets: willow-prod-useast/geo-svc (1)\"]}",
+      "metadata": {
+        "scenario": "external_api_0030",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "external_api_0030-05",
+      "artifact_type": "infrastructure_events",
+      "subtype": "host_inventory",
+      "source": "host_inventory",
+      "content": "{\"description\": \"Host and node names seen in infrastructure events with their IP address, role and availability zone / rack.\", \"facts\": [\"hosts: ip-10-193-158-81 \\u2014 279 events; ip: 10.193.158.81; role: k8s-worker; zone: us-east-2c\"]}",
+      "metadata": {
+        "scenario": "external_api_0030",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "external_api_0030-06",
+      "artifact_type": "infrastructure_events",
+      "subtype": "platform_events",
+      "source": "platform_events",
+      "content": "{\"description\": \"Kubernetes events, cloud-provider health events and host system messages (kernel, hardware, daemons) with the objects or hosts they refer to.\", \"facts\": [\"synthetic checks: https://geo.maptile.dev/health: HTTP 502 \\u2014 87 events; top objects: probe us-east (1), probe eu-west (1), probe ap-south (1)\", \"synthetic checks: https://www.willowvid.com/health: HTTP 200 \\u2014 1272 events; top objects: probe us-east (1), probe eu-west (1)\", \"event reasons: Pulled \\u2014 5 events; top objects: pod/forum-svc-6338b679f-2wzmd (2)\", \"event reasons: ScalingReplicaSet \\u2014 4 events; top objects: deployment/forum-svc (1)\", \"event reasons: Pulled \\u2014 23 events; top objects: pod/certificate-svc-3fc857891-49tdw (2)\", \"event reasons: ScalingReplicaSet \\u2014 4 events; top objects: deployment/certificate-svc (3)\", \"event reasons: Pulled \\u2014 24 events; top objects: pod/video-api-3ff6ea545-tx22q (1)\", \"event reasons: ScalingReplicaSet \\u2014 3 events; top objects: deployment/video-api (2)\"]}",
+      "metadata": {
+        "scenario": "external_api_0030",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "external_api_0030-07",
+      "artifact_type": "monitoring_alerts",
+      "subtype": "alertmanager_alerts",
+      "source": "alertmanager_alerts",
+      "content": "{\"description\": \"Prometheus Alertmanager alerts: alert names with severity, critical-alert instances, alert names and services, and an hourly timeline of warning and critical alerts (UTC).\", \"facts\": [\"alert names: Watchdog (info) \\u2014 72 events; service: alertmanager; firing continuously\", \"alert names: ExternalDependencyErrorRate (critical) \\u2014 5 events; service: geo-svc; first seen in hour 2025-02-01 12:00 UTC; last seen in hour 2025-02-01 13:00 UTC\", \"alert names: CPUThrottlingHigh (warning) \\u2014 4 events; service: video-api; first seen in hour 2025-02-02 13:00 UTC; last seen in hour 2025-02-02 15:00 UTC\", \"alert names: SyntheticCheckFailed (critical) \\u2014 3 events; service: external; first seen in hour 2025-02-01 12:00 UTC; last seen in hour 2025-02-01 13:00 UTC\", \"alert names: CircuitBreakerOpen (warning) \\u2014 2 events; service: geo-svc; first seen in hour 2025-02-01 12:00 UTC; last seen in hour 2025-02-01 13:00 UTC\", \"alert names: TargetDown (warning) \\u2014 2 events; service: video-api; first seen in hour 2025-02-01 06:00 UTC; last seen in hour 2025-02-01 06:00 UTC\", \"critical alerts: 8 matching events\", \"critical alerts > critical instances: geo.maptile.dev \\u2014 5 events\", \"critical alerts > critical instances: probe ap-south \\u2014 1 events\", \"critical alerts > critical instances: probe eu-west \\u2014 1 events\", \"critical alerts > critical instances: probe us-east \\u2014 1 events\", \"critical alerts > critical alert names: ExternalDependencyErrorRate \\u2014 5 events\", \"critical alerts > critical alert names: SyntheticCheckFailed \\u2014 3 events\", \"critical alerts > critical services: geo-svc \\u2014 5 events\", \"critical alerts > critical services: external \\u2014 3 events\", \"alert timeline: 2025-02-01 06:00 UTC \\u2014 2 events\", \"alert timeline: 2025-02-01 12:00 UTC \\u2014 5 events\", \"alert timeline: 2025-02-01 13:00 UTC \\u2014 5 events\", \"alert timeline: 2025-02-02 13:00 UTC \\u2014 2 events\", \"alert timeline: 2025-02-02 14:00 UTC \\u2014 1 events\", \"alert timeline: 2025-02-02 15:00 UTC \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "external_api_0030",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "external_api_0030-08",
+      "artifact_type": "resource_metrics",
+      "subtype": "metric_anomalies",
+      "source": "metric_anomalies",
+      "content": "{\"description\": \"Metric series that deviated from their 7-day baseline (hourly resolution): baseline, peak or trough value, anomaly onset and recovery (UTC).\", \"facts\": [\"metric anomalies: upstream error ratio (geo.maptile.dev) on geo-svc \\u2014 baseline 0.1%; peak 86%; onset 2025-02-01 12:00 UTC; recovered 2025-02-01 14:00 UTC\"]}",
+      "metadata": {
+        "scenario": "external_api_0030",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "external_api_0030-09",
+      "artifact_type": "network_summary",
+      "subtype": "tls_certificates",
+      "source": "tls_certificates",
+      "content": "{\"description\": \"TLS certificates observed in edge and service-to-service traffic that are expired, expire within 7 days, or are self-signed.\", \"facts\": [\"expiring within 7 days: 23 matching events\", \"expiring within 7 days > certificate details: CN=video-api.willowvid.internal | issuer: CN=R10,O=Let's Encrypt | not_after: 2025-02-06 23:59:00 UTC | seen on: video-api:8443 \\u2014 23 events\"]}",
+      "metadata": {
+        "scenario": "external_api_0030",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "external_api_0030-10",
+      "artifact_type": "derived_findings",
+      "subtype": "derived_summary",
+      "source": "derived_summary",
+      "content": "{\"description\": \"Deterministic summary computed from the query results above (error ranking, instance-to-host join, alert timeline, change correlation, earliest metric anomaly).\", \"facts\": [\"Derived: service learner-web ranks #1 by error volume (33265 events, 1 failing dependencies). Most-failed dependency: geo-svc (33265 errors).\", \"Derived: most-alerted critical instance geo.maptile.dev (5 critical alerts); no matching host-inventory entry.\", \"Derived: warning/critical alerts span 2025-02-01 06:00 UTC to 2025-02-02 15:00 UTC; earliest alert hour 2025-02-01 06:00 UTC (2 alerts).\", \"Derived: no changes recorded from 6 hours before the earliest alert hour to its end.\", \"Derived: earliest metric anomaly onset 2025-02-01 12:00 UTC (upstream error ratio (geo.maptile.dev) on geo-svc).\"]}",
+      "metadata": {
+        "scenario": "external_api_0030",
+        "source_kind": "derived_from_es_results",
+        "heuristic": true
+      }
+    },
+    {
+      "artifact_id": "external_api_0030-11",
+      "artifact_type": "query_coverage",
+      "subtype": "evidence_gaps",
+      "source": "evidence_gaps",
+      "content": "{\"description\": \"Queries that returned nothing or failed; use these to state what is NOT established.\", \"facts\": [\"No matching results for: tls certificates / expired certificates. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / self signed. (Absence in this query is not proof of absence elsewhere.)\"]}",
+      "metadata": {
+        "scenario": "external_api_0030",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    }
+  ]
+}

@@ -5,24 +5,24 @@
   "questions": [
     {
       "id": "U1",
-      "question": "Which Windows registry key did the malware modify to persist on the potentially infected host?",
-      "answerable": false,
-      "absent_type": "registry_key",
-      "why_absent": "no registry data in this incident's evidence"
-    },
-    {
-      "id": "U2",
       "question": "Which CVE identifier was exploited for the initial infection?",
       "answerable": false,
       "absent_type": "cve",
       "why_absent": "no CVE identifiers in this incident's evidence"
     },
     {
-      "id": "U3",
+      "id": "U2",
       "question": "What is the email address of the sender of the message that delivered the initial infection?",
       "answerable": false,
       "absent_type": "email",
       "why_absent": "no email addresses in this incident's evidence"
+    },
+    {
+      "id": "U3",
+      "question": "Which ticket number was assigned to this incident in the organisation's ticketing system?",
+      "answerable": false,
+      "absent_type": "ticket",
+      "why_absent": "no ticket identifiers in this incident's evidence"
     }
   ]
 }

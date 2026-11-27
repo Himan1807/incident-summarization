@@ -1,0 +1,12 @@
+{
+  "scenario": "retention_bad_filter_0037",
+  "cleaning": [],
+  "skipped": [],
+  "gaps": [],
+  "artifacts": 11,
+  "facts": 83,
+  "empty_aggregations": 2,
+  "questions": 7,
+  "answers": 7,
+  "atoms": 8
+}

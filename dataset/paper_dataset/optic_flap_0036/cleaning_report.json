@@ -1,0 +1,14 @@
+{
+  "scenario": "optic_flap_0036",
+  "cleaning": [],
+  "skipped": [
+    "tls_certificates: all aggregations empty"
+  ],
+  "gaps": [],
+  "artifacts": 10,
+  "facts": 76,
+  "empty_aggregations": 3,
+  "questions": 10,
+  "answers": 10,
+  "atoms": 11
+}

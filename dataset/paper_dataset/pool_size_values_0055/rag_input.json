@@ -1,0 +1,169 @@
+{
+  "metadata": {
+    "incident_id": "INC-20221211",
+    "scenario": "pool_size_values_0055",
+    "title": "Infrastructure reliability incident investigation",
+    "source": "synthetic/ops-incident-expansion (modeled on neu-nds2/llm-sec-incident-analysis)",
+    "query_window_start": "2022-12-11T00:00:00",
+    "query_window_end": "2022-12-13T23:59:59",
+    "evidence_types": [
+      "change_records",
+      "derived_findings",
+      "infrastructure_events",
+      "monitoring_alerts",
+      "network_summary",
+      "query_coverage",
+      "resource_metrics",
+      "service_logs"
+    ],
+    "artifact_scope_note": "Evidence is aggregated query output (not raw log lines or metric samples); it contains no chat/communication records."
+  },
+  "incident_description": "Reliability incident investigation of a production environment. Evidence consists of Elasticsearch aggregation results over application and proxy logs, Kubernetes, cloud-provider and host system events, Prometheus Alertmanager alerts, change-management / CI-CD audit records and metric anomaly detection. No root cause, impact or trigger is stated; these must be established from the supplied artifacts. Environment context: Organization: Asterline Logistics (freight and logistics); Platform: Google Cloud us-east4 (zones us-east4-a/us-east4-b/us-east4-c); network range 10.202.0.0/16; Kubernetes cluster asterl-prod-useast (GKE); Database: postgres instance route-db-01 for route-planner; Deployments: Helm releases rolled out by a CI release bot after human approval; Change management: production changes carry CHG- identifiers.",
+  "investigation_questions": [
+    "Which service or component is the origin of the failure?",
+    "What change, deployment or automation run triggered the incident? Provide its change identifier.",
+    "Which account or automation identity executed the triggering change?",
+    "Which configuration parameter was changed by the triggering change, and which values file was it taken from?",
+    "Was the database server itself overloaded? Answer yes or no.",
+    "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+    "Did the failure stay isolated to one component or cascade across services? Answer 'isolated failure' or 'cascading failure'.",
+    "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+    "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+    "Which change restored normal service? Provide its change identifier."
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "pool_size_values_0055-01",
+      "artifact_type": "service_logs",
+      "subtype": "error_logs",
+      "source": "error_logs",
+      "content": "{\"description\": \"Application and proxy error logs: HTTP/gRPC status codes, failing requests (caller -> callee:port : operation), error messages and the services emitting them.\", \"facts\": [\"error events: 53811 matching events\", \"error events > status codes: 504 \\u2014 41946 events\", \"error events > status codes: n/a (client-side pool timeout) \\u2014 11795 events\", \"error events > status codes: 499 \\u2014 70 events\", \"failing requests: portal-bff -> route-planner:8080 : POST /v1/route \\u2014 36322 events\", \"failing requests: route-planner -> route-db-01:5432 : connection acquire \\u2014 11795 events\", \"failing requests: rate-engine -> route-planner:8080 : GET /v1/route/{id} \\u2014 5624 events\", \"failing requests: shipment-api -> shipment-db:5432 : query \\u2014 70 events\", \"error messages: route-planner: 504 Gateway Timeout \\u2014 36322 events\", \"error messages: sql: connection pool wait timeout (max_open=5, in_use=5) \\u2014 11795 events\", \"error messages: route-planner: context deadline exceeded \\u2014 5624 events\", \"error messages: context canceled \\u2014 70 events\", \"emitting services: portal-bff \\u2014 36322 events\", \"emitting services: route-planner \\u2014 11795 events\", \"emitting services: rate-engine \\u2014 5624 events\", \"emitting services: shipment-api \\u2014 70 events\"]}",
+      "metadata": {
+        "scenario": "pool_size_values_0055",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "pool_size_values_0055-02",
+      "artifact_type": "service_logs",
+      "subtype": "error_volume_by_service",
+      "source": "error_volume_by_service",
+      "content": "{\"description\": \"Services ranked by number of error events, with each service's most-failed downstream dependencies.\", \"facts\": [\"services: portal-bff \\u2014 36322 events; failing dependencies=1; top dependencies: route-planner (36322)\", \"services: route-planner \\u2014 11795 events; failing dependencies=1; top dependencies: route-db-01 (11795)\", \"services: rate-engine \\u2014 5624 events; failing dependencies=1; top dependencies: route-planner (5624)\", \"services: shipment-api \\u2014 70 events; failing dependencies=1; top dependencies: shipment-db (70)\"]}",
+      "metadata": {
+        "scenario": "pool_size_values_0055",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "pool_size_values_0055-03",
+      "artifact_type": "change_records",
+      "subtype": "change_log",
+      "source": "change_log",
+      "content": "{\"description\": \"Deployments, configuration pushes, infrastructure and automation runs from the change-management and CI/CD audit log: change ID, type, target, actor, time (UTC), status and recorded diff/summary.\", \"facts\": [\"changes: CHG-83630 | deployment | shipment-api 0.7.9 -> 0.7.10 | actor: release-bot | 2022-12-11 11:47 UTC | status: Synced/Healthy | copy and UI text changes \\u2014 1 events\", \"changes: CHG-83652 | helm_upgrade | route-planner chart (revision 63) | actor: release-bot | 2022-12-11 20:59 UTC | status: completed | approved_by: a.popescu; values: database.pool.maxOpenConns 300 -> 5; values file: values-dev.yaml \\u2014 1 events\", \"changes: CHG-83657 | helm_rollback | route-planner to previous revision | actor: a.popescu | 2022-12-11 22:48 UTC | status: completed | helm rollback route-planner \\u2014 1 events\", \"changes: CHG-83690 | deployment | label-svc 0.23.7 -> 0.24.0 | actor: release-bot | 2022-12-13 01:21 UTC | status: Synced/Healthy | dependency bump \\u2014 1 events\", \"change types: deployment \\u2014 2 events\", \"change types: helm_upgrade \\u2014 1 events\", \"change types: helm_rollback \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "pool_size_values_0055",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "pool_size_values_0055-04",
+      "artifact_type": "change_records",
+      "subtype": "change_actors",
+      "source": "change_actors",
+      "content": "{\"description\": \"Accounts and automation identities that executed changes, with the hosts or targets they acted on.\", \"facts\": [\"actors: release-bot \\u2014 3 events; targets: asterl-prod-useast/route-planner (1), asterl-prod-useast/label-svc (1), asterl-prod-useast/shipment-api (1)\", \"actors: a.popescu \\u2014 1 events; targets: asterl-prod-useast/route-planner (1)\"]}",
+      "metadata": {
+        "scenario": "pool_size_values_0055",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "pool_size_values_0055-05",
+      "artifact_type": "infrastructure_events",
+      "subtype": "host_inventory",
+      "source": "host_inventory",
+      "content": "{\"description\": \"Host and node names seen in infrastructure events with their IP address, role and availability zone / rack.\", \"facts\": [\"hosts: gke-asterl-prod-us-pool-c-b39d \\u2014 163 events; ip: 10.202.44.238; role: k8s-worker; zone: us-east4-b\", \"hosts: gke-asterl-prod-us-pool-a-10f9 \\u2014 119 events; ip: 10.202.44.178; role: k8s-worker; zone: us-east4-b\", \"hosts: route-db-01 \\u2014 114 events; ip: 10.202.164.18; role: postgres-primary; zone: us-east4-c\"]}",
+      "metadata": {
+        "scenario": "pool_size_values_0055",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "pool_size_values_0055-06",
+      "artifact_type": "infrastructure_events",
+      "subtype": "platform_events",
+      "source": "platform_events",
+      "content": "{\"description\": \"Kubernetes events, cloud-provider health events and host system messages (kernel, hardware, daemons) with the objects or hosts they refer to.\", \"facts\": [\"event reasons: Unhealthy \\u2014 190 events; top objects: pod/route-planner-d7edba1ad-hc78q (55), pod/route-planner-edfe2f305-jwzf6 (29)\", \"event reasons: Pulled \\u2014 3 events; top objects: pod/label-svc-9fe429dd0-5fn7q (3)\", \"event reasons: ScalingReplicaSet \\u2014 5 events; top objects: deployment/label-svc (2)\", \"event reasons: Pulled \\u2014 11 events; top objects: pod/shipment-api-c5023e670-lxptd (1)\", \"event reasons: ScalingReplicaSet \\u2014 4 events; top objects: deployment/shipment-api (3)\"]}",
+      "metadata": {
+        "scenario": "pool_size_values_0055",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "pool_size_values_0055-07",
+      "artifact_type": "monitoring_alerts",
+      "subtype": "alertmanager_alerts",
+      "source": "alertmanager_alerts",
+      "content": "{\"description\": \"Prometheus Alertmanager alerts: alert names with severity, critical-alert instances, alert names and services, and an hourly timeline of warning and critical alerts (UTC).\", \"facts\": [\"alert names: Watchdog (info) \\u2014 72 events; service: alertmanager; firing continuously\", \"alert names: ConnectionPoolPendingHigh (critical) \\u2014 9 events; service: route-planner; first seen in hour 2022-12-11 21:00 UTC; last seen in hour 2022-12-11 22:00 UTC\", \"alert names: PortalBff5xxHigh (critical) \\u2014 6 events; service: portal-bff; first seen in hour 2022-12-11 21:00 UTC; last seen in hour 2022-12-11 22:00 UTC\", \"alert names: NodeFilesystemSpaceFillingUp (warning) \\u2014 4 events; service: node; first seen in hour 2022-12-12 12:00 UTC; last seen in hour 2022-12-12 14:00 UTC\", \"alert names: CPUThrottlingHigh (warning) \\u2014 3 events; service: dock-scheduler; first seen in hour 2022-12-11 16:00 UTC; last seen in hour 2022-12-11 17:00 UTC\", \"critical alerts: 15 matching events\", \"critical alerts > critical instances: route-planner \\u2014 9 events\", \"critical alerts > critical instances: portal-bff \\u2014 6 events\", \"critical alerts > critical alert names: ConnectionPoolPendingHigh \\u2014 9 events\", \"critical alerts > critical alert names: PortalBff5xxHigh \\u2014 6 events\", \"critical alerts > critical services: route-planner \\u2014 9 events\", \"critical alerts > critical services: portal-bff \\u2014 6 events\", \"alert timeline: 2022-12-11 16:00 UTC \\u2014 2 events\", \"alert timeline: 2022-12-11 17:00 UTC \\u2014 1 events\", \"alert timeline: 2022-12-11 21:00 UTC \\u2014 7 events\", \"alert timeline: 2022-12-11 22:00 UTC \\u2014 8 events\", \"alert timeline: 2022-12-12 12:00 UTC \\u2014 1 events\", \"alert timeline: 2022-12-12 13:00 UTC \\u2014 1 events\", \"alert timeline: 2022-12-12 14:00 UTC \\u2014 2 events\"]}",
+      "metadata": {
+        "scenario": "pool_size_values_0055",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "pool_size_values_0055-08",
+      "artifact_type": "resource_metrics",
+      "subtype": "metric_anomalies",
+      "source": "metric_anomalies",
+      "content": "{\"description\": \"Metric series that deviated from their 7-day baseline (hourly resolution): baseline, peak or trough value, anomaly onset and recovery (UTC).\", \"facts\": [\"metric anomalies: db pool pending requests (maxOpenConns) on route-planner \\u2014 baseline 0; peak 298; onset 2022-12-11 21:00 UTC; recovered 2022-12-11 23:00 UTC\", \"metric anomalies: postgres active connections on route-db-01 \\u2014 baseline ~240; trough 9; onset 2022-12-11 21:00 UTC; recovered 2022-12-11 23:00 UTC\", \"metric anomalies: postgres CPU utilisation on route-db-01 \\u2014 baseline 33%; trough 11%; onset 2022-12-11 21:00 UTC; recovered 2022-12-11 23:00 UTC\"]}",
+      "metadata": {
+        "scenario": "pool_size_values_0055",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "pool_size_values_0055-09",
+      "artifact_type": "network_summary",
+      "subtype": "tls_certificates",
+      "source": "tls_certificates",
+      "content": "{\"description\": \"TLS certificates observed in edge and service-to-service traffic that are expired, expire within 7 days, or are self-signed.\", \"facts\": [\"expiring within 7 days: 31 matching events\", \"expiring within 7 days > certificate details: CN=dock-scheduler.asterline.internal | issuer: CN=asterline-internal-ca | not_after: 2022-12-18 23:59:00 UTC | seen on: dock-scheduler:8443 \\u2014 31 events\"]}",
+      "metadata": {
+        "scenario": "pool_size_values_0055",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "pool_size_values_0055-10",
+      "artifact_type": "derived_findings",
+      "subtype": "derived_summary",
+      "source": "derived_summary",
+      "content": "{\"description\": \"Deterministic summary computed from the query results above (error ranking, instance-to-host join, alert timeline, change correlation, earliest metric anomaly).\", \"facts\": [\"Derived: service portal-bff ranks #1 by error volume (36322 events, 1 failing dependencies). Most-failed dependency: route-planner (36322 errors).\", \"Derived: most-alerted critical instance route-planner (9 critical alerts); no matching host-inventory entry.\", \"Derived: warning/critical alerts span 2022-12-11 16:00 UTC to 2022-12-12 14:00 UTC; earliest alert hour 2022-12-11 16:00 UTC (2 alerts).\", \"Derived: changes recorded from 6 hours before the earliest alert hour to its end: CHG-83630 (deployment, shipment-api 0.7.9 -> 0.7.10, release-bot, 2022-12-11 11:47 UTC).\", \"Derived: earliest metric anomaly onset 2022-12-11 21:00 UTC (db pool pending requests (maxOpenConns) on route-planner).\"]}",
+      "metadata": {
+        "scenario": "pool_size_values_0055",
+        "source_kind": "derived_from_es_results",
+        "heuristic": true
+      }
+    },
+    {
+      "artifact_id": "pool_size_values_0055-11",
+      "artifact_type": "query_coverage",
+      "subtype": "evidence_gaps",
+      "source": "evidence_gaps",
+      "content": "{\"description\": \"Queries that returned nothing or failed; use these to state what is NOT established.\", \"facts\": [\"No matching results for: tls certificates / expired certificates. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / self signed. (Absence in this query is not proof of absence elsewhere.)\"]}",
+      "metadata": {
+        "scenario": "pool_size_values_0055",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    }
+  ]
+}

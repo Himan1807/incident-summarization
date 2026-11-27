@@ -1,0 +1,18 @@
+{
+  "scenario": "acl_split_brain_0014",
+  "cleaning": [
+    "first-signs answer 2021-04-28 05:00 UTC differs from the earliest alert-timeline hour 2021-04-27 21:00 UTC (earlier metric onset or an unrelated earlier alert)"
+  ],
+  "skipped": [
+    "tls_certificates: all aggregations empty"
+  ],
+  "gaps": [
+    "change_actors"
+  ],
+  "artifacts": 9,
+  "facts": 76,
+  "empty_aggregations": 3,
+  "questions": 11,
+  "answers": 11,
+  "atoms": 12
+}

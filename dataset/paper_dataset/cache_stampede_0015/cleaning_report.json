@@ -1,0 +1,14 @@
+{
+  "scenario": "cache_stampede_0015",
+  "cleaning": [
+    "first-signs answer 2022-06-13 17:00 UTC differs from the earliest alert-timeline hour 2022-06-13 13:00 UTC (earlier metric onset or an unrelated earlier alert)"
+  ],
+  "skipped": [],
+  "gaps": [],
+  "artifacts": 11,
+  "facts": 82,
+  "empty_aggregations": 2,
+  "questions": 9,
+  "answers": 9,
+  "atoms": 10
+}

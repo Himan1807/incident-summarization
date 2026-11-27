@@ -1,0 +1,152 @@
+{
+  "metadata": {
+    "incident_id": "INC-20210701",
+    "scenario": "fan_thermal_0044",
+    "title": "Infrastructure reliability incident investigation",
+    "source": "synthetic/ops-incident-expansion (modeled on neu-nds2/llm-sec-incident-analysis)",
+    "query_window_start": "2021-07-01T00:00:00",
+    "query_window_end": "2021-07-03T23:59:59",
+    "evidence_types": [
+      "change_records",
+      "derived_findings",
+      "infrastructure_events",
+      "monitoring_alerts",
+      "query_coverage",
+      "resource_metrics",
+      "service_logs"
+    ],
+    "artifact_scope_note": "Evidence is aggregated query output (not raw log lines or metric samples); it contains no chat/communication records."
+  },
+  "incident_description": "Reliability incident investigation of a production environment. Evidence consists of Elasticsearch aggregation results over application and proxy logs, Kubernetes, cloud-provider and host system events, Prometheus Alertmanager alerts, change-management / CI-CD audit records and metric anomaly detection. No root cause, impact or trigger is stated; these must be established from the supplied artifacts. Environment context: Organization: Ironus Ride (ride-hailing); Platform: on-premises data center DC-West, server range 10.202.0.0/16; Kubernetes cluster ironus-prod (kubeadm); Application tier: driver-profile-api runs on dedicated rack servers behind a load balancer; IPMI sensor data and SEL are collected; Change management: production changes carry CHG- identifiers.",
+  "investigation_questions": [
+    "What is the IP address of the host or node where the failure originated?",
+    "What kernel-level effect slowed the host down?",
+    "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+    "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+    "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+    "Which change happened shortly before the incident began but did not cause it? Provide its identifier."
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "fan_thermal_0044-01",
+      "artifact_type": "service_logs",
+      "subtype": "error_logs",
+      "source": "error_logs",
+      "content": "{\"description\": \"Application and proxy error logs: HTTP/gRPC status codes, failing requests (caller -> callee:port : operation), error messages and the services emitting them.\", \"facts\": [\"error events: 18307 matching events\", \"error events > status codes: 504 \\u2014 12516 events\", \"error events > status codes: 503 \\u2014 5702 events\", \"error events > status codes: 429 \\u2014 89 events\", \"failing requests: rider-app-bff -> driver-profile-api:8080 : GET /v1/driver \\u2014 12516 events\", \"failing requests: driver-profile-api -> worker threads : request handling \\u2014 5702 events\", \"failing requests: payments-svc -> payments-db:5432 : query \\u2014 89 events\", \"error messages: upstream driver-profile-api: 504 Gateway Timeout \\u2014 12516 events\", \"error messages: request processing exceeded 10s deadline \\u2014 5702 events\", \"error messages: HTTP 429 Too Many Requests from upstream \\u2014 89 events\", \"emitting services: rider-app-bff \\u2014 12516 events\", \"emitting services: driver-profile-api \\u2014 5702 events\", \"emitting services: payments-svc \\u2014 89 events\"]}",
+      "metadata": {
+        "scenario": "fan_thermal_0044",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "fan_thermal_0044-02",
+      "artifact_type": "service_logs",
+      "subtype": "error_volume_by_service",
+      "source": "error_volume_by_service",
+      "content": "{\"description\": \"Services ranked by number of error events, with each service's most-failed downstream dependencies.\", \"facts\": [\"services: rider-app-bff \\u2014 12516 events; failing dependencies=1; top dependencies: driver-profile-api (12516)\", \"services: driver-profile-api \\u2014 5702 events; failing dependencies=1; top dependencies: worker threads (5702)\", \"services: payments-svc \\u2014 89 events; failing dependencies=1; top dependencies: payments-db (89)\"]}",
+      "metadata": {
+        "scenario": "fan_thermal_0044",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "fan_thermal_0044-03",
+      "artifact_type": "change_records",
+      "subtype": "change_log",
+      "source": "change_log",
+      "content": "{\"description\": \"Deployments, configuration pushes, infrastructure and automation runs from the change-management and CI/CD audit log: change ID, type, target, actor, time (UTC), status and recorded diff/summary.\", \"facts\": [\"changes: CHG-67369 | deployment | pricing-svc 4.4.0 -> 4.4.1 | actor: gitlab-ci | 2021-07-01 02:19 UTC | status: Synced/Healthy | logging improvements \\u2014 1 events\", \"changes: CHG-67374 | deployment | safety-svc 11.10.8 -> 11.11.0 | actor: gitlab-ci | 2021-07-02 12:21 UTC | status: completed | dependency bump \\u2014 1 events\", \"changes: CHG-67391 | load_balancer_drain | driver-app-09 in driver-profile-api pool | actor: b.popescu | 2021-07-02 17:38 UTC | status: completed | drain driver-app-09 from load balancer pool \\u2014 1 events\", \"changes: DC-9193 | hardware_replacement | driver-app-09 Fan2 | actor: dcops-j.hughes | 2021-07-02 19:38 UTC | status: completed | replaced Fan2 \\u2014 1 events\", \"changes: CHG-67396 | deployment | payments-svc 5.3.3 -> 5.3.4 | actor: gitlab-ci | 2021-07-03 05:29 UTC | status: completed | copy and UI text changes \\u2014 1 events\", \"change types: deployment \\u2014 3 events\", \"change types: load_balancer_drain \\u2014 1 events\", \"change types: hardware_replacement \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "fan_thermal_0044",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "fan_thermal_0044-04",
+      "artifact_type": "change_records",
+      "subtype": "change_actors",
+      "source": "change_actors",
+      "content": "{\"description\": \"Accounts and automation identities that executed changes, with the hosts or targets they acted on.\", \"facts\": [\"actors: gitlab-ci \\u2014 3 events; targets: ironus-prod/safety-svc (1), ironus-prod/payments-svc (1), ironus-prod/pricing-svc (1)\", \"actors: b.popescu \\u2014 1 events; targets: driver-app-09 (1)\", \"actors: dcops-j.hughes \\u2014 1 events; targets: driver-app-09 (1)\"]}",
+      "metadata": {
+        "scenario": "fan_thermal_0044",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "fan_thermal_0044-05",
+      "artifact_type": "infrastructure_events",
+      "subtype": "host_inventory",
+      "source": "host_inventory",
+      "content": "{\"description\": \"Host and node names seen in infrastructure events with their IP address, role and availability zone / rack.\", \"facts\": [\"hosts: driver-app-09 \\u2014 567 events; ip: 10.202.3.24; role: driver-profile-api host; zone: rack E34\", \"hosts: ironu-node-07 \\u2014 296 events; ip: 10.202.243.228; role: k8s-worker; zone: rack E22\", \"hosts: ironu-node-19 \\u2014 275 events; ip: 10.202.150.228; role: k8s-worker; zone: rack E30\"]}",
+      "metadata": {
+        "scenario": "fan_thermal_0044",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "fan_thermal_0044-06",
+      "artifact_type": "infrastructure_events",
+      "subtype": "platform_events",
+      "source": "platform_events",
+      "content": "{\"description\": \"Kubernetes events, cloud-provider health events and host system messages (kernel, hardware, daemons) with the objects or hosts they refer to.\", \"facts\": [\"hardware events (ipmi sel): Fan2 | Lower Critical going low | 0 RPM \\u2014 1 events; top objects: driver-app-09 (1)\", \"hardware events (ipmi sel): CPU0 Temp | Upper Critical going high | 95 degrees C \\u2014 3 events; top objects: driver-app-09 (1)\", \"system messages: kernel: mce: CPU29: Core temperature above threshold, cpu clock throttled (total events = 4439) \\u2014 398 events; top objects: driver-app-09 (1)\", \"system messages: kernel: mce: CPU9: Package temperature above threshold, cpu clock throttled \\u2014 34 events; top objects: driver-app-09 (1)\", \"event reasons: Pulled \\u2014 15 events; top objects: pod/safety-svc-78dfbfe81-mmvjp (1)\", \"event reasons: ScalingReplicaSet \\u2014 3 events; top objects: deployment/safety-svc (2)\", \"event reasons: Pulled \\u2014 15 events; top objects: pod/payments-svc-44b2f14cf-cpcxt (2)\", \"event reasons: ScalingReplicaSet \\u2014 6 events; top objects: deployment/payments-svc (2)\", \"event reasons: Pulled \\u2014 3 events; top objects: pod/pricing-svc-0ae494f51-c8dwz (2)\", \"event reasons: ScalingReplicaSet \\u2014 2 events; top objects: deployment/pricing-svc (1)\"]}",
+      "metadata": {
+        "scenario": "fan_thermal_0044",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "fan_thermal_0044-07",
+      "artifact_type": "monitoring_alerts",
+      "subtype": "alertmanager_alerts",
+      "source": "alertmanager_alerts",
+      "content": "{\"description\": \"Prometheus Alertmanager alerts: alert names with severity, critical-alert instances, alert names and services, and an hourly timeline of warning and critical alerts (UTC).\", \"facts\": [\"alert names: Watchdog (info) \\u2014 72 events; service: alertmanager; firing continuously\", \"alert names: IPMIFanFailure (warning) \\u2014 10 events; service: hardware; first seen in hour 2021-07-02 14:00 UTC; last seen in hour 2021-07-02 17:00 UTC\", \"alert names: NodeCPUThrottled (critical) \\u2014 10 events; service: node; first seen in hour 2021-07-02 15:00 UTC; last seen in hour 2021-07-02 17:00 UTC\", \"alert names: DriverProfileApiLatencyHigh (critical) \\u2014 7 events; service: driver-profile-api; first seen in hour 2021-07-02 15:00 UTC; last seen in hour 2021-07-02 17:00 UTC\", \"alert names: KubeCPUOvercommit (warning) \\u2014 2 events; service: cluster; first seen in hour 2021-07-02 08:00 UTC; last seen in hour 2021-07-02 08:00 UTC\", \"critical alerts: 17 matching events\", \"critical alerts > critical instances: 10.202.3.24:9100 \\u2014 10 events\", \"critical alerts > critical instances: driver-profile-api \\u2014 7 events\", \"critical alerts > critical alert names: NodeCPUThrottled \\u2014 10 events\", \"critical alerts > critical alert names: DriverProfileApiLatencyHigh \\u2014 7 events\", \"critical alerts > critical services: node \\u2014 10 events\", \"critical alerts > critical services: driver-profile-api \\u2014 7 events\", \"alert timeline: 2021-07-02 08:00 UTC \\u2014 2 events\", \"alert timeline: 2021-07-02 14:00 UTC \\u2014 2 events\", \"alert timeline: 2021-07-02 15:00 UTC \\u2014 7 events\", \"alert timeline: 2021-07-02 16:00 UTC \\u2014 11 events\", \"alert timeline: 2021-07-02 17:00 UTC \\u2014 7 events\"]}",
+      "metadata": {
+        "scenario": "fan_thermal_0044",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "fan_thermal_0044-08",
+      "artifact_type": "resource_metrics",
+      "subtype": "metric_anomalies",
+      "source": "metric_anomalies",
+      "content": "{\"description\": \"Metric series that deviated from their 7-day baseline (hourly resolution): baseline, peak or trough value, anomaly onset and recovery (UTC).\", \"facts\": [\"metric anomalies: ipmi fan speed (Fan2) on driver-app-09 \\u2014 baseline 7,411 RPM; trough 0 RPM; onset 2021-07-02 14:00 UTC; recovered 2021-07-02 18:00 UTC\", \"metric anomalies: ipmi temperature (CPU0) on driver-app-09 \\u2014 baseline 51 C; peak 98 C; onset 2021-07-02 14:00 UTC; recovered 2021-07-02 18:00 UTC\", \"metric anomalies: node_network_receive_bytes rate on 10.202.150.228 \\u2014 baseline 71 MB/s; peak 448 MB/s; onset 2021-07-02 07:00 UTC; recovered 2021-07-02 10:00 UTC\"]}",
+      "metadata": {
+        "scenario": "fan_thermal_0044",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "fan_thermal_0044-09",
+      "artifact_type": "derived_findings",
+      "subtype": "derived_summary",
+      "source": "derived_summary",
+      "content": "{\"description\": \"Deterministic summary computed from the query results above (error ranking, instance-to-host join, alert timeline, change correlation, earliest metric anomaly).\", \"facts\": [\"Derived: service rider-app-bff ranks #1 by error volume (12516 events, 1 failing dependencies). Most-failed dependency: driver-profile-api (12516 errors).\", \"Derived: most-alerted critical instance 10.202.3.24:9100 (10 critical alerts) maps to hostname driver-app-09; role driver-profile-api host; zone rack E34.\", \"Derived: warning/critical alerts span 2021-07-02 08:00 UTC to 2021-07-02 17:00 UTC; earliest alert hour 2021-07-02 08:00 UTC (2 alerts).\", \"Derived: no changes recorded from 6 hours before the earliest alert hour to its end.\", \"Derived: earliest metric anomaly onset 2021-07-02 07:00 UTC (node_network_receive_bytes rate on 10.202.150.228).\"]}",
+      "metadata": {
+        "scenario": "fan_thermal_0044",
+        "source_kind": "derived_from_es_results",
+        "heuristic": true
+      }
+    },
+    {
+      "artifact_id": "fan_thermal_0044-10",
+      "artifact_type": "query_coverage",
+      "subtype": "evidence_gaps",
+      "source": "evidence_gaps",
+      "content": "{\"description\": \"Queries that returned nothing or failed; use these to state what is NOT established.\", \"facts\": [\"No matching results for: tls certificates / expired certificates. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / expiring within 7 days. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / self signed. (Absence in this query is not proof of absence elsewhere.)\"]}",
+      "metadata": {
+        "scenario": "fan_thermal_0044",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    }
+  ]
+}

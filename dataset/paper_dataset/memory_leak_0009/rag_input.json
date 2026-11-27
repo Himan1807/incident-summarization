@@ -1,0 +1,154 @@
+{
+  "metadata": {
+    "incident_id": "INC-20220202",
+    "scenario": "memory_leak_0009",
+    "title": "Infrastructure reliability incident investigation",
+    "source": "synthetic/ops-incident-expansion (modeled on neu-nds2/llm-sec-incident-analysis)",
+    "query_window_start": "2022-02-02T00:00:00",
+    "query_window_end": "2022-02-04T23:59:59",
+    "evidence_types": [
+      "change_records",
+      "derived_findings",
+      "infrastructure_events",
+      "monitoring_alerts",
+      "query_coverage",
+      "resource_metrics",
+      "service_logs"
+    ],
+    "artifact_scope_note": "Evidence is aggregated query output (not raw log lines or metric samples); it contains no chat/communication records."
+  },
+  "incident_description": "Reliability incident investigation of a production environment. Evidence consists of Elasticsearch aggregation results over application and proxy logs, Kubernetes, cloud-provider and host system events, Prometheus Alertmanager alerts, change-management / CI-CD audit records and metric anomaly detection. No root cause, impact or trigger is stated; these must be established from the supplied artifacts. Environment context: Organization: Cedarworks Academy (online learning); Platform: Microsoft Azure southeastasia (zones southeastasia-1/southeastasia-2/southeastasia-3); network range 10.184.0.0/16; Kubernetes cluster cedarw-prod-southe (AKS); video-api pods run with 4 GiB memory limits; deployments are canary releases with automated analysis; Change management: production changes carry CHG- identifiers.",
+  "investigation_questions": [
+    "Which component is the source of the failure?",
+    "What change, deployment or automation run triggered the incident? Provide its change identifier.",
+    "Which change occurred shortly before the first OOM kill but is unrelated? Provide its identifier.",
+    "Which version of the service introduced the defect?",
+    "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+    "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+    "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+    "Which change restored normal service? Provide its change identifier."
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "memory_leak_0009-01",
+      "artifact_type": "service_logs",
+      "subtype": "error_logs",
+      "source": "error_logs",
+      "content": "{\"description\": \"Application and proxy error logs: HTTP/gRPC status codes, failing requests (caller -> callee:port : operation), error messages and the services emitting them.\", \"facts\": [\"error events: 14900 matching events\", \"error events > status codes: 503 \\u2014 14317 events\", \"error events > status codes: 499 \\u2014 583 events\", \"failing requests: learner-web -> video-api:8080 : GET /v1/video \\u2014 12962 events\", \"failing requests: certificate-svc -> video-api:8080 : POST /v1/video/batch \\u2014 1355 events\", \"failing requests: video-api -> clients : in-flight requests \\u2014 374 events\", \"failing requests: progress-api -> progress-db:5432 : query \\u2014 209 events\", \"error messages: upstream video-api: 503 no healthy upstream \\u2014 12962 events\", \"error messages: video-api: 503 Service Unavailable \\u2014 1355 events\", \"error messages: context canceled (shutdown in progress) \\u2014 374 events\", \"error messages: context canceled \\u2014 209 events\", \"emitting services: learner-web \\u2014 12962 events\", \"emitting services: certificate-svc \\u2014 1355 events\", \"emitting services: video-api \\u2014 374 events\", \"emitting services: progress-api \\u2014 209 events\"]}",
+      "metadata": {
+        "scenario": "memory_leak_0009",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "memory_leak_0009-02",
+      "artifact_type": "service_logs",
+      "subtype": "error_volume_by_service",
+      "source": "error_volume_by_service",
+      "content": "{\"description\": \"Services ranked by number of error events, with each service's most-failed downstream dependencies.\", \"facts\": [\"services: learner-web \\u2014 12962 events; failing dependencies=1; top dependencies: video-api (12962)\", \"services: certificate-svc \\u2014 1355 events; failing dependencies=1; top dependencies: video-api (1355)\", \"services: video-api \\u2014 374 events; failing dependencies=1; top dependencies: clients (374)\", \"services: progress-api \\u2014 209 events; failing dependencies=1; top dependencies: progress-db (209)\"]}",
+      "metadata": {
+        "scenario": "memory_leak_0009",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "memory_leak_0009-03",
+      "artifact_type": "change_records",
+      "subtype": "change_log",
+      "source": "change_log",
+      "content": "{\"description\": \"Deployments, configuration pushes, infrastructure and automation runs from the change-management and CI/CD audit log: change ID, type, target, actor, time (UTC), status and recorded diff/summary.\", \"facts\": [\"changes: CHG-86652 | deployment | progress-api 4.5.12 -> 4.5.13 | actor: argocd | 2022-02-02 19:34 UTC | status: Synced/Healthy | copy and UI text changes \\u2014 1 events\", \"changes: CHG-86690 | deployment | course-api 3.3.6 -> 3.4.0 | actor: argocd | 2022-02-02 23:41 UTC | status: Synced/Healthy | feature flag cleanup \\u2014 1 events\", \"changes: CHG-86694 | deployment | enrolment-api 12.27.6 -> 12.28.0 | actor: argocd | 2022-02-02 23:58 UTC | status: Synced/Healthy | performance tuning of list endpoint \\u2014 1 events\", \"changes: CHG-86731 | deployment | video-api 1.35.6 -> 1.36.0 | actor: argocd | 2022-02-03 11:28 UTC | status: Healthy | canary 10% -> 50% -> 100% (analysis passed: error rate, p99 latency); new in-process template cache \\u2014 1 events\", \"changes: CHG-86768 | node_rotation | node pool AMI/image update | actor: karpenter | 2022-02-03 18:31 UTC | status: completed | node image drift replacement \\u2014 1 events\", \"changes: CHG-86790 | deployment | quiz-engine 14.20.11 -> 14.20.12 | actor: argocd | 2022-02-03 21:08 UTC | status: completed | copy and UI text changes \\u2014 1 events\", \"changes: CHG-86801 | rollback | video-api 1.36.0 -> 1.35.6 | actor: i.kovacs | 2022-02-03 21:51 UTC | status: Healthy | rollout undo \\u2014 1 events\", \"change types: deployment \\u2014 5 events\", \"change types: node_rotation \\u2014 1 events\", \"change types: rollback \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "memory_leak_0009",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "memory_leak_0009-04",
+      "artifact_type": "change_records",
+      "subtype": "change_actors",
+      "source": "change_actors",
+      "content": "{\"description\": \"Accounts and automation identities that executed changes, with the hosts or targets they acted on.\", \"facts\": [\"actors: argocd \\u2014 5 events; targets: cedarw-prod-southe/video-api (1), cedarw-prod-southe/quiz-engine (1), cedarw-prod-southe/progress-api (1), cedarw-prod-southe/enrolment-api (1), cedarw-prod-southe/course-api (1)\", \"actors: i.kovacs \\u2014 1 events; targets: cedarw-prod-southe/video-api (1)\", \"actors: karpenter \\u2014 1 events; targets: aks-nodepool1-84143132-vmss000028 (1), aks-nodepool1-69476362-vmss000014 (1), aks-nodepool1-11080937-vmss000036 (1)\"]}",
+      "metadata": {
+        "scenario": "memory_leak_0009",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "memory_leak_0009-05",
+      "artifact_type": "infrastructure_events",
+      "subtype": "host_inventory",
+      "source": "host_inventory",
+      "content": "{\"description\": \"Host and node names seen in infrastructure events with their IP address, role and availability zone / rack.\", \"facts\": [\"hosts: aks-nodepool1-60147553-vmss000039 \\u2014 246 events; ip: 10.184.220.27; role: k8s-worker; zone: southeastasia-3\", \"hosts: aks-nodepool1-69476362-vmss000014 \\u2014 139 events; ip: 10.184.14.131; role: k8s-worker; zone: southeastasia-2\", \"hosts: aks-nodepool1-11080937-vmss000036 \\u2014 123 events; ip: 10.184.168.81; role: k8s-worker; zone: southeastasia-1\", \"hosts: aks-nodepool1-84143132-vmss000028 \\u2014 104 events; ip: 10.184.14.16; role: k8s-worker; zone: southeastasia-2\"]}",
+      "metadata": {
+        "scenario": "memory_leak_0009",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "memory_leak_0009-06",
+      "artifact_type": "infrastructure_events",
+      "subtype": "platform_events",
+      "source": "platform_events",
+      "content": "{\"description\": \"Kubernetes events, cloud-provider health events and host system messages (kernel, hardware, daemons) with the objects or hosts they refer to.\", \"facts\": [\"event reasons: OOMKilling \\u2014 32 events; top objects: pod/video-api-ef7d814b5-8cswz (16)\", \"system messages: kernel: Memory cgroup out of memory: Killed process (video-api) anon-rss:4192000kB \\u2014 32 events; top objects: aks-nodepool1-84143132-vmss000028 (1), aks-nodepool1-69476362-vmss000014 (1), aks-nodepool1-11080937-vmss000036 (1)\", \"event reasons: Pulled \\u2014 9 events; top objects: pod/quiz-engine-c2449829e-pb6pw (3)\", \"event reasons: ScalingReplicaSet \\u2014 5 events; top objects: deployment/quiz-engine (3)\", \"event reasons: Pulled \\u2014 25 events; top objects: pod/progress-api-c62f00204-cphqz (1)\", \"event reasons: ScalingReplicaSet \\u2014 2 events; top objects: deployment/progress-api (2)\", \"event reasons: Pulled \\u2014 5 events; top objects: pod/enrolment-api-3e7849644-5b2gj (1)\", \"event reasons: ScalingReplicaSet \\u2014 6 events; top objects: deployment/enrolment-api (2)\", \"event reasons: Pulled \\u2014 30 events; top objects: pod/course-api-bd7b8cbfd-hwvbf (2)\", \"event reasons: ScalingReplicaSet \\u2014 5 events; top objects: deployment/course-api (1)\"]}",
+      "metadata": {
+        "scenario": "memory_leak_0009",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "memory_leak_0009-07",
+      "artifact_type": "monitoring_alerts",
+      "subtype": "alertmanager_alerts",
+      "source": "alertmanager_alerts",
+      "content": "{\"description\": \"Prometheus Alertmanager alerts: alert names with severity, critical-alert instances, alert names and services, and an hourly timeline of warning and critical alerts (UTC).\", \"facts\": [\"alert names: Watchdog (info) \\u2014 72 events; service: alertmanager; firing continuously\", \"alert names: KubePodCrashLooping (critical) \\u2014 8 events; service: video-api; first seen in hour 2022-02-03 19:00 UTC; last seen in hour 2022-02-03 21:00 UTC\", \"alert names: ContainerMemoryNearLimit (warning) \\u2014 6 events; service: video-api; first seen in hour 2022-02-03 18:00 UTC; last seen in hour 2022-02-03 21:00 UTC\", \"alert names: LearnerWebAvailabilityLow (critical) \\u2014 5 events; service: learner-web; first seen in hour 2022-02-03 19:00 UTC; last seen in hour 2022-02-03 21:00 UTC\", \"alert names: KubeJobFailed (warning) \\u2014 3 events; service: batch; first seen in hour 2022-02-04 02:00 UTC; last seen in hour 2022-02-04 04:00 UTC\", \"alert names: CPUThrottlingHigh (warning) \\u2014 2 events; service: enrolment-api; first seen in hour 2022-02-03 21:00 UTC; last seen in hour 2022-02-03 22:00 UTC\", \"critical alerts: 13 matching events\", \"critical alerts > critical instances: video-api \\u2014 8 events\", \"critical alerts > critical instances: slo:learner-web-availability \\u2014 5 events\", \"critical alerts > critical alert names: KubePodCrashLooping \\u2014 8 events\", \"critical alerts > critical alert names: LearnerWebAvailabilityLow \\u2014 5 events\", \"critical alerts > critical services: video-api \\u2014 8 events\", \"critical alerts > critical services: learner-web \\u2014 5 events\", \"alert timeline: 2022-02-03 18:00 UTC \\u2014 1 events\", \"alert timeline: 2022-02-03 19:00 UTC \\u2014 7 events\", \"alert timeline: 2022-02-03 20:00 UTC \\u2014 5 events\", \"alert timeline: 2022-02-03 21:00 UTC \\u2014 7 events\", \"alert timeline: 2022-02-03 22:00 UTC \\u2014 1 events\", \"alert timeline: 2022-02-04 02:00 UTC \\u2014 1 events\", \"alert timeline: 2022-02-04 03:00 UTC \\u2014 1 events\", \"alert timeline: 2022-02-04 04:00 UTC \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "memory_leak_0009",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "memory_leak_0009-08",
+      "artifact_type": "resource_metrics",
+      "subtype": "metric_anomalies",
+      "source": "metric_anomalies",
+      "content": "{\"description\": \"Metric series that deviated from their 7-day baseline (hourly resolution): baseline, peak or trough value, anomaly onset and recovery (UTC).\", \"facts\": [\"metric anomalies: container memory working set (avg per video-api pod) on video-api \\u2014 baseline 1.2 GiB (flat); peak 4.0 GiB (limit); onset 2022-02-03 11:00 UTC; recovered 2022-02-03 22:00 UTC\", \"metric anomalies: container restarts per hour on video-api \\u2014 baseline 0/h; peak 18/h; onset 2022-02-03 19:00 UTC; recovered 2022-02-03 22:00 UTC\"]}",
+      "metadata": {
+        "scenario": "memory_leak_0009",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "memory_leak_0009-09",
+      "artifact_type": "derived_findings",
+      "subtype": "derived_summary",
+      "source": "derived_summary",
+      "content": "{\"description\": \"Deterministic summary computed from the query results above (error ranking, instance-to-host join, alert timeline, change correlation, earliest metric anomaly).\", \"facts\": [\"Derived: service learner-web ranks #1 by error volume (12962 events, 1 failing dependencies). Most-failed dependency: video-api (12962 errors).\", \"Derived: most-alerted critical instance video-api (8 critical alerts); no matching host-inventory entry.\", \"Derived: warning/critical alerts span 2022-02-03 18:00 UTC to 2022-02-04 04:00 UTC; earliest alert hour 2022-02-03 18:00 UTC (1 alerts).\", \"Derived: changes recorded from 6 hours before the earliest alert hour to its end: CHG-86768 (node_rotation, node pool AMI/image update, karpenter, 2022-02-03 18:31 UTC).\", \"Derived: earliest metric anomaly onset 2022-02-03 11:00 UTC (container memory working set (avg per video-api pod) on video-api).\"]}",
+      "metadata": {
+        "scenario": "memory_leak_0009",
+        "source_kind": "derived_from_es_results",
+        "heuristic": true
+      }
+    },
+    {
+      "artifact_id": "memory_leak_0009-10",
+      "artifact_type": "query_coverage",
+      "subtype": "evidence_gaps",
+      "source": "evidence_gaps",
+      "content": "{\"description\": \"Queries that returned nothing or failed; use these to state what is NOT established.\", \"facts\": [\"No matching results for: tls certificates / expired certificates. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / expiring within 7 days. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / self signed. (Absence in this query is not proof of absence elsewhere.)\"]}",
+      "metadata": {
+        "scenario": "memory_leak_0009",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    }
+  ]
+}

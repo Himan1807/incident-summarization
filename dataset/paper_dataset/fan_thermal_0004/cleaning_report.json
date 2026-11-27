@@ -1,0 +1,12 @@
+{
+  "scenario": "fan_thermal_0004",
+  "cleaning": [],
+  "skipped": [],
+  "gaps": [],
+  "artifacts": 11,
+  "facts": 70,
+  "empty_aggregations": 2,
+  "questions": 9,
+  "answers": 9,
+  "atoms": 10
+}

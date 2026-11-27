@@ -1,0 +1,14 @@
+{
+  "scenario": "conntrack_0015",
+  "cleaning": [],
+  "skipped": [],
+  "gaps": [
+    "metric_anomalies"
+  ],
+  "artifacts": 10,
+  "facts": 66,
+  "empty_aggregations": 2,
+  "questions": 9,
+  "answers": 9,
+  "atoms": 10
+}

@@ -1,0 +1,164 @@
+{
+  "metadata": {
+    "incident_id": "INC-20251217",
+    "scenario": "object_storage_0047",
+    "title": "Infrastructure reliability incident investigation",
+    "source": "synthetic/ops-incident-expansion (modeled on neu-nds2/llm-sec-incident-analysis)",
+    "query_window_start": "2025-12-17T00:00:00",
+    "query_window_end": "2025-12-19T23:59:59",
+    "evidence_types": [
+      "change_records",
+      "derived_findings",
+      "infrastructure_events",
+      "monitoring_alerts",
+      "network_summary",
+      "query_coverage",
+      "resource_metrics",
+      "service_logs"
+    ],
+    "artifact_scope_note": "Evidence is aggregated query output (not raw log lines or metric samples); it contains no chat/communication records."
+  },
+  "incident_description": "Reliability incident investigation of a production environment. Evidence consists of Elasticsearch aggregation results over application and proxy logs, Kubernetes, cloud-provider and host system events, Prometheus Alertmanager alerts, change-management / CI-CD audit records and metric anomaly detection. No root cause, impact or trigger is stated; these must be established from the supplied artifacts. Environment context: Organization: Stonelane Logistics (freight and logistics); Platform: AWS us-east-1 (zones us-east-1a/us-east-1b/us-east-1c/us-east-1d/us-east-1f); network range 10.91.0.0/16; Object storage: provider-managed bucket/account for user content, accessed directly by backend services; Change management: production changes carry CHG- identifiers.",
+  "investigation_questions": [
+    "Did rolling back the service deployed shortly before the incident restore normal service? Answer yes or no.",
+    "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+    "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+    "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+    "Which change happened shortly before the incident began but did not cause it? Provide its identifier."
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "object_storage_0047-01",
+      "artifact_type": "service_logs",
+      "subtype": "error_logs",
+      "source": "error_logs",
+      "content": "{\"description\": \"Application and proxy error logs: HTTP/gRPC status codes, failing requests (caller -> callee:port : operation), error messages and the services emitting them.\", \"facts\": [\"error events: 69750 matching events\", \"error events > status codes: 503 \\u2014 69500 events\", \"error events > status codes: 500 \\u2014 250 events\", \"failing requests: asset-origin -> stonelane-uploads-02.s3.us-east-1.amazonaws.com:443 : GET/PUT objects \\u2014 36414 events\", \"failing requests: media-uploader -> stonelane-uploads-02.s3.us-east-1.amazonaws.com:443 : PUT objects \\u2014 33086 events\", \"failing requests: portal-bff -> portal-db:5432 : query \\u2014 250 events\", \"error messages: 503 Slow Down (S3 SlowDown: Please reduce your request rate.) \\u2014 69500 events\", \"error messages: pq: could not serialize access due to concurrent update \\u2014 250 events\", \"emitting services: asset-origin \\u2014 36414 events\", \"emitting services: media-uploader \\u2014 33086 events\", \"emitting services: portal-bff \\u2014 250 events\"]}",
+      "metadata": {
+        "scenario": "object_storage_0047",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "object_storage_0047-02",
+      "artifact_type": "service_logs",
+      "subtype": "error_volume_by_service",
+      "source": "error_volume_by_service",
+      "content": "{\"description\": \"Services ranked by number of error events, with each service's most-failed downstream dependencies.\", \"facts\": [\"services: asset-origin \\u2014 36414 events; failing dependencies=1; top dependencies: stonelane-uploads-02.s3.us-east-1.amazonaws.com (36414)\", \"services: media-uploader \\u2014 33086 events; failing dependencies=1; top dependencies: stonelane-uploads-02.s3.us-east-1.amazonaws.com (33086)\", \"services: portal-bff \\u2014 250 events; failing dependencies=1; top dependencies: portal-db (250)\"]}",
+      "metadata": {
+        "scenario": "object_storage_0047",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "object_storage_0047-03",
+      "artifact_type": "change_records",
+      "subtype": "change_log",
+      "source": "change_log",
+      "content": "{\"description\": \"Deployments, configuration pushes, infrastructure and automation runs from the change-management and CI/CD audit log: change ID, type, target, actor, time (UTC), status and recorded diff/summary.\", \"facts\": [\"changes: CHG-15453 | deployment | asset-origin 7.5.9 -> 7.6.0 | actor: github-actions | 2025-12-18 14:47 UTC | status: succeeded | thumbnail format change \\u2014 1 events\", \"changes: CHG-15458 | rollback | asset-origin 7.6.0 -> 7.5.9 | actor: d.larsen | 2025-12-18 16:31 UTC | status: succeeded | precautionary rollback \\u2014 1 events\", \"changes: CHG-15478 | deployment | booking-api 7.30.1 -> 7.31.0 | actor: github-actions | 2025-12-19 01:04 UTC | status: succeeded | logging improvements \\u2014 1 events\", \"changes: CHG-15499 | deployment | portal-bff 10.16.3 -> 10.16.4 | actor: github-actions | 2025-12-19 02:47 UTC | status: completed | dependency bump \\u2014 1 events\", \"changes: CHG-15522 | deployment | rate-engine 13.12.2 -> 13.12.3 | actor: github-actions | 2025-12-19 04:40 UTC | status: completed | dependency bump \\u2014 1 events\", \"changes: CHG-15556 | deployment | tracking-api 11.3.11 -> 11.3.12 | actor: github-actions | 2025-12-19 11:30 UTC | status: completed | copy and UI text changes \\u2014 1 events\", \"change types: deployment \\u2014 5 events\", \"change types: rollback \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "object_storage_0047",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "object_storage_0047-04",
+      "artifact_type": "change_records",
+      "subtype": "change_actors",
+      "source": "change_actors",
+      "content": "{\"description\": \"Accounts and automation identities that executed changes, with the hosts or targets they acted on.\", \"facts\": [\"actors: github-actions \\u2014 5 events; targets: asset-origin (1), booking-api (1), portal-bff (1), tracking-api (1), rate-engine (1)\", \"actors: d.larsen \\u2014 1 events; targets: asset-origin (1)\"]}",
+      "metadata": {
+        "scenario": "object_storage_0047",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "object_storage_0047-05",
+      "artifact_type": "infrastructure_events",
+      "subtype": "host_inventory",
+      "source": "host_inventory",
+      "content": "{\"description\": \"Host and node names seen in infrastructure events with their IP address, role and availability zone / rack.\", \"facts\": [\"hosts: tracking-08 \\u2014 200 events; ip: 10.91.5.83; role: tracking-api host; zone: us-east-1f\", \"hosts: tracking-02 \\u2014 67 events; ip: 10.91.5.75; role: tracking-api host; zone: us-east-1a\"]}",
+      "metadata": {
+        "scenario": "object_storage_0047",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "object_storage_0047-06",
+      "artifact_type": "infrastructure_events",
+      "subtype": "platform_events",
+      "source": "platform_events",
+      "content": "{\"description\": \"Kubernetes events, cloud-provider health events and host system messages (kernel, hardware, daemons) with the objects or hosts they refer to.\", \"facts\": [\"cloud health events: AWS Health AWS_S3_OPERATIONAL_ISSUE (us-east-1): increased error rates; impact start 2025-12-18 15:31 UTC, mitigated 2025-12-18 17:58 UTC \\u2014 2 events; top objects: account stonelane-prod (2)\"]}",
+      "metadata": {
+        "scenario": "object_storage_0047",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "object_storage_0047-07",
+      "artifact_type": "monitoring_alerts",
+      "subtype": "alertmanager_alerts",
+      "source": "alertmanager_alerts",
+      "content": "{\"description\": \"Prometheus Alertmanager alerts: alert names with severity, critical-alert instances, alert names and services, and an hourly timeline of warning and critical alerts (UTC).\", \"facts\": [\"alert names: Watchdog (info) \\u2014 72 events; service: alertmanager; firing continuously\", \"alert names: ObjectStorageErrorRateHigh (critical) \\u2014 14 events; service: storage; first seen in hour 2025-12-18 15:00 UTC; last seen in hour 2025-12-18 17:00 UTC\", \"alert names: AssetOriginFailureRateHigh (critical) \\u2014 7 events; service: asset-origin; first seen in hour 2025-12-18 15:00 UTC; last seen in hour 2025-12-18 17:00 UTC\", \"alert names: TargetDown (warning) \\u2014 3 events; service: tracking-api; first seen in hour 2025-12-19 02:00 UTC; last seen in hour 2025-12-19 04:00 UTC\", \"critical alerts: 21 matching events\", \"critical alerts > critical instances: stonelane-uploads-02.s3.us-east-1.amazonaws.com \\u2014 14 events\", \"critical alerts > critical instances: asset-origin \\u2014 7 events\", \"critical alerts > critical alert names: ObjectStorageErrorRateHigh \\u2014 14 events\", \"critical alerts > critical alert names: AssetOriginFailureRateHigh \\u2014 7 events\", \"critical alerts > critical services: storage \\u2014 14 events\", \"critical alerts > critical services: asset-origin \\u2014 7 events\", \"alert timeline: 2025-12-18 15:00 UTC \\u2014 6 events\", \"alert timeline: 2025-12-18 16:00 UTC \\u2014 7 events\", \"alert timeline: 2025-12-18 17:00 UTC \\u2014 8 events\", \"alert timeline: 2025-12-19 02:00 UTC \\u2014 1 events\", \"alert timeline: 2025-12-19 03:00 UTC \\u2014 1 events\", \"alert timeline: 2025-12-19 04:00 UTC \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "object_storage_0047",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "object_storage_0047-08",
+      "artifact_type": "resource_metrics",
+      "subtype": "metric_anomalies",
+      "source": "metric_anomalies",
+      "content": "{\"description\": \"Metric series that deviated from their 7-day baseline (hourly resolution): baseline, peak or trough value, anomaly onset and recovery (UTC).\", \"facts\": [\"metric anomalies: object storage 5xx responses per minute on stonelane-uploads-02.s3.us-east-1.amazonaws.com \\u2014 baseline ~1/min; peak 47,462/min; onset 2025-12-18 15:00 UTC; recovered 2025-12-18 18:00 UTC\"]}",
+      "metadata": {
+        "scenario": "object_storage_0047",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "object_storage_0047-09",
+      "artifact_type": "network_summary",
+      "subtype": "tls_certificates",
+      "source": "tls_certificates",
+      "content": "{\"description\": \"TLS certificates observed in edge and service-to-service traffic that are expired, expire within 7 days, or are self-signed.\", \"facts\": [\"expiring within 7 days: 5 matching events\", \"expiring within 7 days > certificate details: CN=tracking-api.stonelane.internal | issuer: CN=R10,O=Let's Encrypt | not_after: 2025-12-22 23:59:00 UTC | seen on: tracking-api:8443 \\u2014 5 events\"]}",
+      "metadata": {
+        "scenario": "object_storage_0047",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "object_storage_0047-10",
+      "artifact_type": "derived_findings",
+      "subtype": "derived_summary",
+      "source": "derived_summary",
+      "content": "{\"description\": \"Deterministic summary computed from the query results above (error ranking, instance-to-host join, alert timeline, change correlation, earliest metric anomaly).\", \"facts\": [\"Derived: service asset-origin ranks #1 by error volume (36414 events, 1 failing dependencies). Most-failed dependency: stonelane-uploads-02.s3.us-east-1.amazonaws.com (36414 errors).\", \"Derived: most-alerted critical instance stonelane-uploads-02.s3.us-east-1.amazonaws.com (14 critical alerts); no matching host-inventory entry.\", \"Derived: warning/critical alerts span 2025-12-18 15:00 UTC to 2025-12-19 04:00 UTC; earliest alert hour 2025-12-18 15:00 UTC (6 alerts).\", \"Derived: changes recorded from 6 hours before the earliest alert hour to its end: CHG-15453 (deployment, asset-origin 7.5.9 -> 7.6.0, github-actions, 2025-12-18 14:47 UTC).\", \"Derived: earliest metric anomaly onset 2025-12-18 15:00 UTC (object storage 5xx responses per minute on stonelane-uploads-02.s3.us-east-1.amazonaws.com).\"]}",
+      "metadata": {
+        "scenario": "object_storage_0047",
+        "source_kind": "derived_from_es_results",
+        "heuristic": true
+      }
+    },
+    {
+      "artifact_id": "object_storage_0047-11",
+      "artifact_type": "query_coverage",
+      "subtype": "evidence_gaps",
+      "source": "evidence_gaps",
+      "content": "{\"description\": \"Queries that returned nothing or failed; use these to state what is NOT established.\", \"facts\": [\"No matching results for: tls certificates / expired certificates. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / self signed. (Absence in this query is not proof of absence elsewhere.)\"]}",
+      "metadata": {
+        "scenario": "object_storage_0047",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    }
+  ]
+}

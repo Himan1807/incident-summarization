@@ -1,0 +1,98 @@
+{
+  "source": "synthetic generator ground truth (ops expansion)",
+  "confidence": "synthetic ground truth",
+  "qa": [
+    {
+      "id": 1,
+      "question": "Which host or node did the failure originate on? Give its hostname.",
+      "answer": "tor-r15-a",
+      "atoms": [
+        {
+          "text": "tor-r15-a",
+          "kind": "hostname"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "question": "What is the IP address of the host or node where the failure originated?",
+      "answer": "10.105.121.43",
+      "atoms": [
+        {
+          "text": "10.105.121.43",
+          "kind": "ip"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "question": "Which change permanently fixed the fault? Provide its identifier.",
+      "answer": "NET-9988",
+      "atoms": [
+        {
+          "text": "NET-9988",
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "question": "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+      "answer": "2023-04-14 14:00 UTC",
+      "atoms": [
+        {
+          "text": "2023-04-14 14:00 UTC",
+          "kind": "time"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "question": "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+      "answer": "hardware failure",
+      "atoms": [
+        {
+          "text": "hardware failure",
+          "kind": "label"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "question": "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+      "answer": "availability",
+      "atoms": [
+        {
+          "text": "availability",
+          "kind": "cia"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "question": "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+      "answer": "vm-agent, downstream symptom",
+      "atoms": [
+        {
+          "text": "vm-agent",
+          "kind": "other"
+        },
+        {
+          "text": "downstream symptom",
+          "kind": "label"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "question": "Which change restored normal service? Provide its change identifier.",
+      "answer": "CHG-74153",
+      "atoms": [
+        {
+          "text": "CHG-74153",
+          "kind": "other"
+        }
+      ]
+    }
+  ]
+}

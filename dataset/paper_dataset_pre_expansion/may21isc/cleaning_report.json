@@ -1,0 +1,12 @@
+{
+  "scenario": "may21isc",
+  "cleaning": [],
+  "skipped": [],
+  "gaps": [],
+  "artifacts": 10,
+  "facts": 67,
+  "empty_aggregations": 2,
+  "questions": 7,
+  "answers": 7,
+  "atoms": 8
+}

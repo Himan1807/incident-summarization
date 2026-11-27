@@ -1,0 +1,154 @@
+{
+  "metadata": {
+    "incident_id": "INC-20220109",
+    "scenario": "optic_flap_0011",
+    "title": "Infrastructure reliability incident investigation",
+    "source": "synthetic/ops-incident-expansion (modeled on neu-nds2/llm-sec-incident-analysis)",
+    "query_window_start": "2022-01-09T00:00:00",
+    "query_window_end": "2022-01-11T23:59:59",
+    "evidence_types": [
+      "change_records",
+      "derived_findings",
+      "infrastructure_events",
+      "monitoring_alerts",
+      "query_coverage",
+      "resource_metrics",
+      "service_logs"
+    ],
+    "artifact_scope_note": "Evidence is aggregated query output (not raw log lines or metric samples); it contains no chat/communication records."
+  },
+  "incident_description": "Reliability incident investigation of a production environment. Evidence consists of Elasticsearch aggregation results over application and proxy logs, Kubernetes, cloud-provider and host system events, Prometheus Alertmanager alerts, change-management / CI-CD audit records and metric anomaly detection. No root cause, impact or trigger is stated; these must be established from the supplied artifacts. Environment context: Organization: Brightcrest Care (clinic and patient management SaaS); Platform: on-premises data center DC-B, server range 172.16.0.0/16; Kubernetes cluster bright-prod (kubeadm); Ceph cluster providing block storage to a KVM virtual machine platform; one top-of-rack switch pair per rack; network work uses NET- identifiers; Change management: production changes carry CHG- identifiers.",
+  "investigation_questions": [
+    "What is the hostname of the host or node where the failure originated?",
+    "What is the IP address of the host or node where the failure originated?",
+    "Which switch interface was flapping?",
+    "Which change permanently fixed the fault? Provide its identifier.",
+    "Which storage host was connected to the failing interface?",
+    "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+    "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+    "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?"
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "optic_flap_0011-01",
+      "artifact_type": "service_logs",
+      "subtype": "error_logs",
+      "source": "error_logs",
+      "content": "{\"description\": \"Application and proxy error logs: HTTP/gRPC status codes, failing requests (caller -> callee:port : operation), error messages and the services emitting them.\", \"facts\": [\"error events: 23936 matching events\", \"error events > status codes: n/a (storage I/O timeout) \\u2014 23931 events\", \"error events > status codes: 504 \\u2014 5 events\", \"failing requests: vm-agent -> ceph pool vms : rbd read/write \\u2014 19429 events\", \"failing requests: block-volume-api -> ceph pool volumes : rbd map / attach \\u2014 4502 events\", \"failing requests: messaging-svc -> messaging-db:5432 : query \\u2014 5 events\", \"error messages: guest I/O stall > 30s on rbd device \\u2014 19429 events\", \"error messages: rbd: request timed out (osd op timeout 30s) \\u2014 4502 events\", \"error messages: upstream request timeout \\u2014 5 events\", \"emitting services: vm-agent \\u2014 19429 events\", \"emitting services: block-volume-api \\u2014 4502 events\", \"emitting services: messaging-svc \\u2014 5 events\"]}",
+      "metadata": {
+        "scenario": "optic_flap_0011",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "optic_flap_0011-02",
+      "artifact_type": "service_logs",
+      "subtype": "error_volume_by_service",
+      "source": "error_volume_by_service",
+      "content": "{\"description\": \"Services ranked by number of error events, with each service's most-failed downstream dependencies.\", \"facts\": [\"services: vm-agent \\u2014 19429 events; failing dependencies=1; top dependencies: ceph pool vms (19429)\", \"services: block-volume-api \\u2014 4502 events; failing dependencies=1; top dependencies: ceph pool volumes (4502)\", \"services: messaging-svc \\u2014 5 events; failing dependencies=1; top dependencies: messaging-db (5)\"]}",
+      "metadata": {
+        "scenario": "optic_flap_0011",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "optic_flap_0011-03",
+      "artifact_type": "change_records",
+      "subtype": "change_log",
+      "source": "change_log",
+      "content": "{\"description\": \"Deployments, configuration pushes, infrastructure and automation runs from the change-management and CI/CD audit log: change ID, type, target, actor, time (UTC), status and recorded diff/summary.\", \"facts\": [\"changes: CHG-80648 | deployment | lab-results-api 2.17.6 -> 2.17.7 | actor: gitlab-ci | 2022-01-09 05:25 UTC | status: completed | copy and UI text changes \\u2014 1 events\", \"changes: CHG-80670 | deployment | billing-api 13.20.2 -> 13.21.0 | actor: gitlab-ci | 2022-01-09 05:57 UTC | status: completed | feature flag cleanup \\u2014 1 events\", \"changes: CHG-80675 | storage_admin | ceph OSDs on ceph-osd-19 | actor: h.ndlovu | 2022-01-10 11:47 UTC | status: completed | ceph osd set noout; mark OSDs on ceph-osd-19 out (isolate flapping host) \\u2014 1 events\", \"changes: NET-8153 | hardware_replacement | tor-r19-a Ethernet1/11 optic | actor: dcops-o.singh | 2022-01-10 12:48 UTC | status: completed | replaced QSFP28 transceiver; DOM rx power -2.1 dBm after swap \\u2014 1 events\", \"changes: CHG-80692 | deployment | messaging-svc 0.14.6 -> 0.15.0 | actor: gitlab-ci | 2022-01-11 06:00 UTC | status: completed | logging improvements \\u2014 1 events\", \"changes: CHG-80717 | deployment | scheduling-api 2.15.0 -> 2.15.1 | actor: gitlab-ci | 2022-01-11 09:19 UTC | status: Synced/Healthy | logging improvements \\u2014 1 events\", \"change types: deployment \\u2014 4 events\", \"change types: storage_admin \\u2014 1 events\", \"change types: hardware_replacement \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "optic_flap_0011",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "optic_flap_0011-04",
+      "artifact_type": "change_records",
+      "subtype": "change_actors",
+      "source": "change_actors",
+      "content": "{\"description\": \"Accounts and automation identities that executed changes, with the hosts or targets they acted on.\", \"facts\": [\"actors: gitlab-ci \\u2014 4 events; targets: bright-prod/lab-results-api (1), bright-prod/messaging-svc (1), bright-prod/billing-api (1), bright-prod/scheduling-api (1)\", \"actors: dcops-o.singh \\u2014 1 events; targets: tor-r19-a (1)\", \"actors: h.ndlovu \\u2014 1 events; targets: ceph-osd-19 (1)\"]}",
+      "metadata": {
+        "scenario": "optic_flap_0011",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "optic_flap_0011-05",
+      "artifact_type": "infrastructure_events",
+      "subtype": "host_inventory",
+      "source": "host_inventory",
+      "content": "{\"description\": \"Host and node names seen in infrastructure events with their IP address, role and availability zone / rack.\", \"facts\": [\"hosts: tor-r19-a \\u2014 442 events; ip: 172.16.212.234; role: tor-switch; zone: rack K02\", \"hosts: ceph-osd-19 \\u2014 303 events; ip: 172.16.112.204; role: ceph-osd; zone: rack K02\", \"hosts: brigh-node-31 \\u2014 294 events; ip: 172.16.100.71; role: k8s-worker; zone: rack K38\", \"hosts: brigh-node-30 \\u2014 205 events; ip: 172.16.126.238; role: k8s-worker; zone: rack K17\", \"hosts: ceph-mon-01 \\u2014 186 events; ip: 172.16.112.223; role: ceph-mon; zone: rack K14\"]}",
+      "metadata": {
+        "scenario": "optic_flap_0011",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "optic_flap_0011-06",
+      "artifact_type": "infrastructure_events",
+      "subtype": "platform_events",
+      "source": "platform_events",
+      "content": "{\"description\": \"Kubernetes events, cloud-provider health events and host system messages (kernel, hardware, daemons) with the objects or hosts they refer to.\", \"facts\": [\"network device logs: %ETHPORT-5-IF_DOWN_LINK_FAILURE: Interface Ethernet1/11 is down (Link failure) \\u2014 278 events; top objects: tor-r19-a (278)\", \"network device logs: %ETHPORT-5-IF_UP: Interface Ethernet1/11 is up \\u2014 278 events; top objects: tor-r19-a (278)\", \"network device logs: %ETHPORT-3-IF_SFP_ALARM: Interface Ethernet1/11, Alarm reported: Rx Power Low Alarm (-15.0 dBm) \\u2014 17 events; top objects: tor-r19-a (1)\", \"system messages: kernel: mlx5_core 0000:3b:00.0 ens1f0: Link down \\u2014 278 events; top objects: ceph-osd-19 (278)\", \"ceph cluster log: osd marked down (heartbeat_check: no reply) \\u2014 51 events; top objects: osd.188 (10)\", \"event reasons: Pulled \\u2014 23 events; top objects: pod/lab-results-api-f0d4d5eac-hk9vg (2)\", \"event reasons: ScalingReplicaSet \\u2014 5 events; top objects: deployment/lab-results-api (3)\", \"event reasons: Pulled \\u2014 29 events; top objects: pod/messaging-svc-57b8cf78f-p7l67 (1)\", \"event reasons: ScalingReplicaSet \\u2014 6 events; top objects: deployment/messaging-svc (1)\", \"event reasons: Pulled \\u2014 17 events; top objects: pod/billing-api-7d475d2d6-49q88 (1)\", \"event reasons: ScalingReplicaSet \\u2014 2 events; top objects: deployment/billing-api (2)\", \"event reasons: Pulled \\u2014 17 events; top objects: pod/scheduling-api-e623efaa6-g4tf5 (2)\", \"event reasons: ScalingReplicaSet \\u2014 4 events; top objects: deployment/scheduling-api (1)\"]}",
+      "metadata": {
+        "scenario": "optic_flap_0011",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "optic_flap_0011-07",
+      "artifact_type": "monitoring_alerts",
+      "subtype": "alertmanager_alerts",
+      "source": "alertmanager_alerts",
+      "content": "{\"description\": \"Prometheus Alertmanager alerts: alert names with severity, critical-alert instances, alert names and services, and an hourly timeline of warning and critical alerts (UTC).\", \"facts\": [\"alert names: Watchdog (info) \\u2014 72 events; service: alertmanager; firing continuously\", \"alert names: SfpRxPowerLow (warning) \\u2014 15 events; service: network; first seen in hour 2022-01-10 08:00 UTC; last seen in hour 2022-01-10 12:00 UTC\", \"alert names: SwitchInterfaceFlapping (critical) \\u2014 9 events; service: network; first seen in hour 2022-01-10 10:00 UTC; last seen in hour 2022-01-10 12:00 UTC\", \"alert names: CephOSDDown (critical) \\u2014 8 events; service: ceph; first seen in hour 2022-01-10 10:00 UTC; last seen in hour 2022-01-10 11:00 UTC\", \"alert names: TargetDown (warning) \\u2014 6 events; service: billing-api; first seen in hour 2022-01-11 04:00 UTC; last seen in hour 2022-01-11 06:00 UTC\", \"alert names: CephSlowOps (critical) \\u2014 5 events; service: ceph; first seen in hour 2022-01-10 10:00 UTC; last seen in hour 2022-01-10 11:00 UTC\", \"critical alerts: 22 matching events\", \"critical alerts > critical instances: ceph-mon-01:9283 \\u2014 13 events\", \"critical alerts > critical instances: tor-r19-a Ethernet1/11 \\u2014 9 events\", \"critical alerts > critical alert names: SwitchInterfaceFlapping \\u2014 9 events\", \"critical alerts > critical alert names: CephOSDDown \\u2014 8 events\", \"critical alerts > critical alert names: CephSlowOps \\u2014 5 events\", \"critical alerts > critical services: ceph \\u2014 13 events\", \"critical alerts > critical services: network \\u2014 9 events\", \"alert timeline: 2022-01-10 08:00 UTC \\u2014 4 events\", \"alert timeline: 2022-01-10 09:00 UTC \\u2014 3 events\", \"alert timeline: 2022-01-10 10:00 UTC \\u2014 14 events\", \"alert timeline: 2022-01-10 11:00 UTC \\u2014 10 events\", \"alert timeline: 2022-01-10 12:00 UTC \\u2014 6 events\", \"alert timeline: 2022-01-11 04:00 UTC \\u2014 2 events\", \"alert timeline: 2022-01-11 05:00 UTC \\u2014 2 events\", \"alert timeline: 2022-01-11 06:00 UTC \\u2014 2 events\"]}",
+      "metadata": {
+        "scenario": "optic_flap_0011",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "optic_flap_0011-08",
+      "artifact_type": "resource_metrics",
+      "subtype": "metric_anomalies",
+      "source": "metric_anomalies",
+      "content": "{\"description\": \"Metric series that deviated from their 7-day baseline (hourly resolution): baseline, peak or trough value, anomaly onset and recovery (UTC).\", \"facts\": [\"metric anomalies: interface rx optical power (Ethernet1/11) on tor-r19-a \\u2014 baseline -2.3 dBm; trough -15.0 dBm; onset 2022-01-10 08:00 UTC; recovered 2022-01-10 13:00 UTC\"]}",
+      "metadata": {
+        "scenario": "optic_flap_0011",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "optic_flap_0011-09",
+      "artifact_type": "derived_findings",
+      "subtype": "derived_summary",
+      "source": "derived_summary",
+      "content": "{\"description\": \"Deterministic summary computed from the query results above (error ranking, instance-to-host join, alert timeline, change correlation, earliest metric anomaly).\", \"facts\": [\"Derived: service vm-agent ranks #1 by error volume (19429 events, 1 failing dependencies). Most-failed dependency: ceph pool vms (19429 errors).\", \"Derived: most-alerted critical instance ceph-mon-01:9283 (13 critical alerts) maps to ip 172.16.112.223; role ceph-mon; zone rack K14.\", \"Derived: warning/critical alerts span 2022-01-10 08:00 UTC to 2022-01-11 06:00 UTC; earliest alert hour 2022-01-10 08:00 UTC (4 alerts).\", \"Derived: no changes recorded from 6 hours before the earliest alert hour to its end.\", \"Derived: earliest metric anomaly onset 2022-01-10 08:00 UTC (interface rx optical power (Ethernet1/11) on tor-r19-a).\"]}",
+      "metadata": {
+        "scenario": "optic_flap_0011",
+        "source_kind": "derived_from_es_results",
+        "heuristic": true
+      }
+    },
+    {
+      "artifact_id": "optic_flap_0011-10",
+      "artifact_type": "query_coverage",
+      "subtype": "evidence_gaps",
+      "source": "evidence_gaps",
+      "content": "{\"description\": \"Queries that returned nothing or failed; use these to state what is NOT established.\", \"facts\": [\"No matching results for: tls certificates / expired certificates. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / expiring within 7 days. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / self signed. (Absence in this query is not proof of absence elsewhere.)\"]}",
+      "metadata": {
+        "scenario": "optic_flap_0011",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    }
+  ]
+}

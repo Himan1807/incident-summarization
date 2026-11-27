@@ -1,0 +1,14 @@
+{
+  "scenario": "timeout_lowered_0013",
+  "cleaning": [],
+  "skipped": [],
+  "gaps": [
+    "host_inventory"
+  ],
+  "artifacts": 10,
+  "facts": 59,
+  "empty_aggregations": 2,
+  "questions": 10,
+  "answers": 10,
+  "atoms": 11
+}

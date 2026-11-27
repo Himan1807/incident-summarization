@@ -1,0 +1,154 @@
+{
+  "metadata": {
+    "incident_id": "INC-20250106",
+    "scenario": "memory_leak_0058",
+    "title": "Infrastructure reliability incident investigation",
+    "source": "synthetic/ops-incident-expansion (modeled on neu-nds2/llm-sec-incident-analysis)",
+    "query_window_start": "2025-01-06T00:00:00",
+    "query_window_end": "2025-01-08T23:59:59",
+    "evidence_types": [
+      "change_records",
+      "derived_findings",
+      "infrastructure_events",
+      "monitoring_alerts",
+      "query_coverage",
+      "resource_metrics",
+      "service_logs"
+    ],
+    "artifact_scope_note": "Evidence is aggregated query output (not raw log lines or metric samples); it contains no chat/communication records."
+  },
+  "incident_description": "Reliability incident investigation of a production environment. Evidence consists of Elasticsearch aggregation results over application and proxy logs, Kubernetes, cloud-provider and host system events, Prometheus Alertmanager alerts, change-management / CI-CD audit records and metric anomaly detection. No root cause, impact or trigger is stated; these must be established from the supplied artifacts. Environment context: Organization: Emberix Logistics (freight and logistics); Platform: AWS ap-south-1 (zones ap-south-1a/ap-south-1b/ap-south-1c); network range 10.25.0.0/16; Kubernetes cluster emberi-prod-apsout (EKS); shipment-api pods run with 4 GiB memory limits; deployments are canary releases with automated analysis; Change management: production changes carry CR- identifiers.",
+  "investigation_questions": [
+    "Which component is the source of the failure?",
+    "What change, deployment or automation run triggered the incident? Provide its change identifier.",
+    "Which version of the service introduced the defect?",
+    "Which change occurred shortly before the first OOM kill but is unrelated? Provide its identifier.",
+    "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+    "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+    "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+    "Which change restored normal service? Provide its change identifier."
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "memory_leak_0058-01",
+      "artifact_type": "service_logs",
+      "subtype": "error_logs",
+      "source": "error_logs",
+      "content": "{\"description\": \"Application and proxy error logs: HTTP/gRPC status codes, failing requests (caller -> callee:port : operation), error messages and the services emitting them.\", \"facts\": [\"error events: 22927 matching events\", \"error events > status codes: 503 \\u2014 22213 events\", \"error events > status codes: 499 \\u2014 599 events\", \"error events > status codes: 500 \\u2014 115 events\", \"failing requests: portal-bff -> shipment-api:8080 : GET /v1/shipment \\u2014 17603 events\", \"failing requests: tracking-api -> shipment-api:8080 : POST /v1/shipment/batch \\u2014 4610 events\", \"failing requests: shipment-api -> clients : in-flight requests \\u2014 599 events\", \"failing requests: route-planner -> route-db:5432 : query \\u2014 115 events\", \"error messages: upstream shipment-api: 503 no healthy upstream \\u2014 17603 events\", \"error messages: shipment-api: 503 Service Unavailable \\u2014 4610 events\", \"error messages: context canceled (shutdown in progress) \\u2014 599 events\", \"error messages: deadlock detected \\u2014 115 events\", \"emitting services: portal-bff \\u2014 17603 events\", \"emitting services: tracking-api \\u2014 4610 events\", \"emitting services: shipment-api \\u2014 599 events\", \"emitting services: route-planner \\u2014 115 events\"]}",
+      "metadata": {
+        "scenario": "memory_leak_0058",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "memory_leak_0058-02",
+      "artifact_type": "service_logs",
+      "subtype": "error_volume_by_service",
+      "source": "error_volume_by_service",
+      "content": "{\"description\": \"Services ranked by number of error events, with each service's most-failed downstream dependencies.\", \"facts\": [\"services: portal-bff \\u2014 17603 events; failing dependencies=1; top dependencies: shipment-api (17603)\", \"services: tracking-api \\u2014 4610 events; failing dependencies=1; top dependencies: shipment-api (4610)\", \"services: shipment-api \\u2014 599 events; failing dependencies=1; top dependencies: clients (599)\", \"services: route-planner \\u2014 115 events; failing dependencies=1; top dependencies: route-db (115)\"]}",
+      "metadata": {
+        "scenario": "memory_leak_0058",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "memory_leak_0058-03",
+      "artifact_type": "change_records",
+      "subtype": "change_log",
+      "source": "change_log",
+      "content": "{\"description\": \"Deployments, configuration pushes, infrastructure and automation runs from the change-management and CI/CD audit log: change ID, type, target, actor, time (UTC), status and recorded diff/summary.\", \"facts\": [\"changes: CR-67155 | deployment | label-svc 2.30.3 -> 2.30.4 | actor: github-actions | 2025-01-06 06:59 UTC | status: completed | dependency bump \\u2014 1 events\", \"changes: CR-67164 | deployment | route-planner 3.12.7 -> 3.12.8 | actor: github-actions | 2025-01-06 08:43 UTC | status: completed | logging improvements \\u2014 1 events\", \"changes: CR-67186 | deployment | shipment-api 10.1.3 -> 10.2.0 | actor: github-actions | 2025-01-06 19:42 UTC | status: Healthy | canary 10% -> 50% -> 100% (analysis passed: error rate, p99 latency); new in-process pricing cache \\u2014 1 events\", \"changes: CR-67202 | node_rotation | node pool AMI/image update | actor: cluster-autoscaler | 2025-01-07 04:44 UTC | status: completed | node image drift replacement \\u2014 1 events\", \"changes: CR-67207 | rollback | shipment-api 10.2.0 -> 10.1.3 | actor: c.mensah | 2025-01-07 06:44 UTC | status: Healthy | rollout undo \\u2014 1 events\", \"change types: deployment \\u2014 3 events\", \"change types: node_rotation \\u2014 1 events\", \"change types: rollback \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "memory_leak_0058",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "memory_leak_0058-04",
+      "artifact_type": "change_records",
+      "subtype": "change_actors",
+      "source": "change_actors",
+      "content": "{\"description\": \"Accounts and automation identities that executed changes, with the hosts or targets they acted on.\", \"facts\": [\"actors: github-actions \\u2014 3 events; targets: emberi-prod-apsout/shipment-api (1), emberi-prod-apsout/label-svc (1), emberi-prod-apsout/route-planner (1)\", \"actors: c.mensah \\u2014 1 events; targets: emberi-prod-apsout/shipment-api (1)\", \"actors: cluster-autoscaler \\u2014 1 events; targets: ip-10-25-37-225 (1), ip-10-25-37-98 (1), ip-10-25-241-66 (1)\"]}",
+      "metadata": {
+        "scenario": "memory_leak_0058",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "memory_leak_0058-05",
+      "artifact_type": "infrastructure_events",
+      "subtype": "host_inventory",
+      "source": "host_inventory",
+      "content": "{\"description\": \"Host and node names seen in infrastructure events with their IP address, role and availability zone / rack.\", \"facts\": [\"hosts: ip-10-25-37-98 \\u2014 133 events; ip: 10.25.37.98; role: k8s-worker; zone: ap-south-1c\", \"hosts: ip-10-25-37-225 \\u2014 96 events; ip: 10.25.37.225; role: k8s-worker; zone: ap-south-1c\", \"hosts: ip-10-25-241-66 \\u2014 89 events; ip: 10.25.241.66; role: k8s-worker; zone: ap-south-1b\", \"hosts: ip-10-25-241-30 \\u2014 21 events; ip: 10.25.241.30; role: k8s-worker; zone: ap-south-1b\"]}",
+      "metadata": {
+        "scenario": "memory_leak_0058",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "memory_leak_0058-06",
+      "artifact_type": "infrastructure_events",
+      "subtype": "platform_events",
+      "source": "platform_events",
+      "content": "{\"description\": \"Kubernetes events, cloud-provider health events and host system messages (kernel, hardware, daemons) with the objects or hosts they refer to.\", \"facts\": [\"event reasons: OOMKilling \\u2014 23 events; top objects: pod/shipment-api-a53f2a644-ccvhg (11)\", \"system messages: kernel: Memory cgroup out of memory: Killed process (shipment-api) anon-rss:4192000kB \\u2014 23 events; top objects: ip-10-25-37-225 (1), ip-10-25-37-98 (1), ip-10-25-241-66 (1)\", \"event reasons: Pulled \\u2014 5 events; top objects: pod/label-svc-2a9baf400-pjbfz (2)\", \"event reasons: ScalingReplicaSet \\u2014 3 events; top objects: deployment/label-svc (1)\", \"event reasons: Pulled \\u2014 17 events; top objects: pod/route-planner-cb35f7af4-h248k (2)\", \"event reasons: ScalingReplicaSet \\u2014 6 events; top objects: deployment/route-planner (2)\"]}",
+      "metadata": {
+        "scenario": "memory_leak_0058",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "memory_leak_0058-07",
+      "artifact_type": "monitoring_alerts",
+      "subtype": "alertmanager_alerts",
+      "source": "alertmanager_alerts",
+      "content": "{\"description\": \"Prometheus Alertmanager alerts: alert names with severity, critical-alert instances, alert names and services, and an hourly timeline of warning and critical alerts (UTC).\", \"facts\": [\"alert names: Watchdog (info) \\u2014 72 events; service: alertmanager; firing continuously\", \"alert names: ContainerMemoryNearLimit (warning) \\u2014 5 events; service: shipment-api; first seen in hour 2025-01-07 03:00 UTC; last seen in hour 2025-01-07 06:00 UTC\", \"alert names: KubePodCrashLooping (critical) \\u2014 5 events; service: shipment-api; first seen in hour 2025-01-07 05:00 UTC; last seen in hour 2025-01-07 06:00 UTC\", \"alert names: PortalBffAvailabilityLow (critical) \\u2014 5 events; service: portal-bff; first seen in hour 2025-01-07 05:00 UTC; last seen in hour 2025-01-07 06:00 UTC\", \"alert names: NodeFilesystemSpaceFillingUp (warning) \\u2014 1 events; service: node; first seen in hour 2025-01-07 13:00 UTC; last seen in hour 2025-01-07 13:00 UTC\", \"critical alerts: 10 matching events\", \"critical alerts > critical instances: shipment-api \\u2014 5 events\", \"critical alerts > critical instances: slo:portal-bff-availability \\u2014 5 events\", \"critical alerts > critical alert names: KubePodCrashLooping \\u2014 5 events\", \"critical alerts > critical alert names: PortalBffAvailabilityLow \\u2014 5 events\", \"critical alerts > critical services: portal-bff \\u2014 5 events\", \"critical alerts > critical services: shipment-api \\u2014 5 events\", \"alert timeline: 2025-01-07 03:00 UTC \\u2014 1 events\", \"alert timeline: 2025-01-07 04:00 UTC \\u2014 1 events\", \"alert timeline: 2025-01-07 05:00 UTC \\u2014 4 events\", \"alert timeline: 2025-01-07 06:00 UTC \\u2014 9 events\", \"alert timeline: 2025-01-07 13:00 UTC \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "memory_leak_0058",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "memory_leak_0058-08",
+      "artifact_type": "resource_metrics",
+      "subtype": "metric_anomalies",
+      "source": "metric_anomalies",
+      "content": "{\"description\": \"Metric series that deviated from their 7-day baseline (hourly resolution): baseline, peak or trough value, anomaly onset and recovery (UTC).\", \"facts\": [\"metric anomalies: container memory working set (avg per shipment-api pod) on shipment-api \\u2014 baseline 1.3 GiB (flat); peak 4.0 GiB (limit); onset 2025-01-06 19:00 UTC; recovered 2025-01-07 07:00 UTC\", \"metric anomalies: container restarts per hour on shipment-api \\u2014 baseline 0/h; peak 37/h; onset 2025-01-07 05:00 UTC; recovered 2025-01-07 07:00 UTC\"]}",
+      "metadata": {
+        "scenario": "memory_leak_0058",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "memory_leak_0058-09",
+      "artifact_type": "derived_findings",
+      "subtype": "derived_summary",
+      "source": "derived_summary",
+      "content": "{\"description\": \"Deterministic summary computed from the query results above (error ranking, instance-to-host join, alert timeline, change correlation, earliest metric anomaly).\", \"facts\": [\"Derived: service portal-bff ranks #1 by error volume (17603 events, 1 failing dependencies). Most-failed dependency: shipment-api (17603 errors).\", \"Derived: most-alerted critical instance shipment-api (5 critical alerts); no matching host-inventory entry.\", \"Derived: warning/critical alerts span 2025-01-07 03:00 UTC to 2025-01-07 13:00 UTC; earliest alert hour 2025-01-07 03:00 UTC (1 alerts).\", \"Derived: no changes recorded from 6 hours before the earliest alert hour to its end.\", \"Derived: earliest metric anomaly onset 2025-01-06 19:00 UTC (container memory working set (avg per shipment-api pod) on shipment-api).\"]}",
+      "metadata": {
+        "scenario": "memory_leak_0058",
+        "source_kind": "derived_from_es_results",
+        "heuristic": true
+      }
+    },
+    {
+      "artifact_id": "memory_leak_0058-10",
+      "artifact_type": "query_coverage",
+      "subtype": "evidence_gaps",
+      "source": "evidence_gaps",
+      "content": "{\"description\": \"Queries that returned nothing or failed; use these to state what is NOT established.\", \"facts\": [\"No matching results for: tls certificates / expired certificates. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / expiring within 7 days. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / self signed. (Absence in this query is not proof of absence elsewhere.)\"]}",
+      "metadata": {
+        "scenario": "memory_leak_0058",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    }
+  ]
+}

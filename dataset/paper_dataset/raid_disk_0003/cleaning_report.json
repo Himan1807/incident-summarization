@@ -1,0 +1,14 @@
+{
+  "scenario": "raid_disk_0003",
+  "cleaning": [],
+  "skipped": [],
+  "gaps": [
+    "tls_certificates"
+  ],
+  "artifacts": 10,
+  "facts": 84,
+  "empty_aggregations": 0,
+  "questions": 8,
+  "answers": 8,
+  "atoms": 9
+}

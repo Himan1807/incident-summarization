@@ -1,0 +1,155 @@
+{
+  "metadata": {
+    "incident_id": "INC-20251213",
+    "scenario": "zonal_disk_0058",
+    "title": "Infrastructure reliability incident investigation",
+    "source": "synthetic/ops-incident-expansion (modeled on neu-nds2/llm-sec-incident-analysis)",
+    "query_window_start": "2025-12-13T00:00:00",
+    "query_window_end": "2025-12-15T23:59:59",
+    "evidence_types": [
+      "change_records",
+      "derived_findings",
+      "infrastructure_events",
+      "monitoring_alerts",
+      "query_coverage",
+      "resource_metrics",
+      "service_logs"
+    ],
+    "artifact_scope_note": "Evidence is aggregated query output (not raw log lines or metric samples); it contains no chat/communication records."
+  },
+  "incident_description": "Reliability incident investigation of a production environment. Evidence consists of Elasticsearch aggregation results over application and proxy logs, Kubernetes, cloud-provider and host system events, Prometheus Alertmanager alerts, change-management / CI-CD audit records and metric anomaly detection. No root cause, impact or trigger is stated; these must be established from the supplied artifacts. Environment context: Organization: Atlasidian Assurance (insurance); Platform: Microsoft Azure northeurope (zones northeurope-1/northeurope-2/northeurope-3); network range 10.26.0.0/16; Kubernetes cluster atlasi-prod-northe (AKS); Database tier: self-managed postgres primary/replica on virtual machines with provider block storage, replica in another zone; Change management: production changes carry CHG- identifiers.",
+  "investigation_questions": [
+    "What is the hostname of the host or node where the failure originated?",
+    "What is the IP address of the host or node where the failure originated?",
+    "What is the cloud provider's incident or tracking identifier?",
+    "Which storage volume attached to the failing host was degraded?",
+    "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+    "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+    "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+    "Which change happened shortly before the incident began but did not cause it? Provide its identifier.",
+    "What change brought the service back to normal? Give its identifier."
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "zonal_disk_0058-01",
+      "artifact_type": "service_logs",
+      "subtype": "error_logs",
+      "source": "error_logs",
+      "content": "{\"description\": \"Application and proxy error logs: HTTP/gRPC status codes, failing requests (caller -> callee:port : operation), error messages and the services emitting them.\", \"facts\": [\"error events: 66115 matching events\", \"error events > status codes: 504 \\u2014 42513 events\", \"error events > status codes: 500 \\u2014 23602 events\", \"failing requests: agent-portal -> policy-api:8080 : GET /v1/policy/{id} \\u2014 42513 events\", \"failing requests: policy-api -> db-postgres-01:5432 : SELECT/UPDATE \\u2014 19291 events\", \"failing requests: underwriting-svc -> db-postgres-01:5432 : INSERT \\u2014 4200 events\", \"failing requests: fraud-scorer -> fraud-db:5432 : query \\u2014 111 events\", \"error messages: upstream policy-api: 504 Gateway Timeout \\u2014 42513 events\", \"error messages: pq: canceling statement due to statement timeout \\u2014 19291 events\", \"error messages: ERROR: canceling statement due to statement timeout \\u2014 4200 events\", \"error messages: redis: i/o timeout \\u2014 111 events\", \"emitting services: agent-portal \\u2014 42513 events\", \"emitting services: policy-api \\u2014 19291 events\", \"emitting services: underwriting-svc \\u2014 4200 events\", \"emitting services: fraud-scorer \\u2014 111 events\"]}",
+      "metadata": {
+        "scenario": "zonal_disk_0058",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "zonal_disk_0058-02",
+      "artifact_type": "service_logs",
+      "subtype": "error_volume_by_service",
+      "source": "error_volume_by_service",
+      "content": "{\"description\": \"Services ranked by number of error events, with each service's most-failed downstream dependencies.\", \"facts\": [\"services: agent-portal \\u2014 42513 events; failing dependencies=1; top dependencies: policy-api (42513)\", \"services: policy-api \\u2014 19291 events; failing dependencies=1; top dependencies: db-postgres-01 (19291)\", \"services: underwriting-svc \\u2014 4200 events; failing dependencies=1; top dependencies: db-postgres-01 (4200)\", \"services: fraud-scorer \\u2014 111 events; failing dependencies=1; top dependencies: fraud-db (111)\"]}",
+      "metadata": {
+        "scenario": "zonal_disk_0058",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "zonal_disk_0058-03",
+      "artifact_type": "change_records",
+      "subtype": "change_log",
+      "source": "change_log",
+      "content": "{\"description\": \"Deployments, configuration pushes, infrastructure and automation runs from the change-management and CI/CD audit log: change ID, type, target, actor, time (UTC), status and recorded diff/summary.\", \"facts\": [\"changes: CHG-86877 | deployment | quotes-svc 9.8.9 -> 9.9.0 | actor: github-actions | 2025-12-13 04:47 UTC | status: completed | minor bug fixes \\u2014 1 events\", \"changes: CHG-86881 | deployment | fraud-scorer 11.9.9 -> 11.10.0 | actor: github-actions | 2025-12-13 10:57 UTC | status: completed | logging improvements \\u2014 1 events\", \"changes: CHG-86887 | deployment | claims-api 10.28.4 -> 10.28.5 | actor: github-actions | 2025-12-13 17:43 UTC | status: succeeded | new optional API field \\u2014 1 events\", \"changes: CHG-86910 | manual_failover | postgres primary db-postgres-01 -> db-postgres-02 | actor: y.okoye | 2025-12-13 22:23 UTC | status: completed | promote replica db-postgres-02 (northeurope-2) \\u2014 1 events\", \"changes: CHG-86926 | deployment | documents-api 4.11.6 -> 4.11.7 | actor: github-actions | 2025-12-14 23:35 UTC | status: succeeded | minor bug fixes \\u2014 1 events\", \"change types: deployment \\u2014 4 events\", \"change types: manual_failover \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "zonal_disk_0058",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "zonal_disk_0058-04",
+      "artifact_type": "change_records",
+      "subtype": "change_actors",
+      "source": "change_actors",
+      "content": "{\"description\": \"Accounts and automation identities that executed changes, with the hosts or targets they acted on.\", \"facts\": [\"actors: github-actions \\u2014 4 events; targets: atlasi-prod-northe/claims-api (1), atlasi-prod-northe/fraud-scorer (1), atlasi-prod-northe/documents-api (1), atlasi-prod-northe/quotes-svc (1)\", \"actors: y.okoye \\u2014 1 events; targets: db-postgres-01 (1), db-postgres-02 (1)\"]}",
+      "metadata": {
+        "scenario": "zonal_disk_0058",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "zonal_disk_0058-05",
+      "artifact_type": "infrastructure_events",
+      "subtype": "host_inventory",
+      "source": "host_inventory",
+      "content": "{\"description\": \"Host and node names seen in infrastructure events with their IP address, role and availability zone / rack.\", \"facts\": [\"hosts: db-postgres-01 \\u2014 296 events; ip: 10.26.110.45; role: postgres-primary; zone: northeurope-3\", \"hosts: db-postgres-02 \\u2014 153 events; ip: 10.26.226.74; role: postgres-replica; zone: northeurope-2\", \"hosts: aks-nodepool1-13713957-vmss000002 \\u2014 89 events; ip: 10.26.150.242; role: k8s-worker; zone: northeurope-1\"]}",
+      "metadata": {
+        "scenario": "zonal_disk_0058",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "zonal_disk_0058-06",
+      "artifact_type": "infrastructure_events",
+      "subtype": "platform_events",
+      "source": "platform_events",
+      "content": "{\"description\": \"Kubernetes events, cloud-provider health events and host system messages (kernel, hardware, daemons) with the objects or hosts they refer to.\", \"facts\": [\"cloud health events: Azure Service Health: Managed Disks - degraded performance - northeurope-3 (tracking ID E6T9-B2X); impact start 2025-12-13 19:45 UTC \\u2014 2 events; top objects: db-postgres-01-data-disk (2)\", \"system messages: kernel: sd 1:0:0:0: [sdc] tag#372 timing out command, waited 180s \\u2014 101 events; top objects: db-postgres-01 (1)\", \"system messages: kernel: INFO: task postgres:2276 blocked for more than 120 seconds. \\u2014 16 events; top objects: db-postgres-01 (1)\", \"instance status checks: instance and system status checks passed \\u2014 1227 events; top objects: db-postgres-01 (1), db-postgres-02 (1)\", \"event reasons: Pulled \\u2014 18 events; top objects: pod/claims-api-669098aa7-hdp8n (1)\", \"event reasons: ScalingReplicaSet \\u2014 6 events; top objects: deployment/claims-api (3)\", \"event reasons: Pulled \\u2014 24 events; top objects: pod/fraud-scorer-515dce1e2-rg6wh (1)\", \"event reasons: ScalingReplicaSet \\u2014 5 events; top objects: deployment/fraud-scorer (2)\", \"event reasons: Pulled \\u2014 14 events; top objects: pod/documents-api-c1e6b4133-d25z9 (1)\", \"event reasons: ScalingReplicaSet \\u2014 6 events; top objects: deployment/documents-api (3)\", \"event reasons: Pulled \\u2014 23 events; top objects: pod/quotes-svc-152e4cf70-x7clb (3)\", \"event reasons: ScalingReplicaSet \\u2014 5 events; top objects: deployment/quotes-svc (3)\"]}",
+      "metadata": {
+        "scenario": "zonal_disk_0058",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "zonal_disk_0058-07",
+      "artifact_type": "monitoring_alerts",
+      "subtype": "alertmanager_alerts",
+      "source": "alertmanager_alerts",
+      "content": "{\"description\": \"Prometheus Alertmanager alerts: alert names with severity, critical-alert instances, alert names and services, and an hourly timeline of warning and critical alerts (UTC).\", \"facts\": [\"alert names: Watchdog (info) \\u2014 72 events; service: alertmanager; firing continuously\", \"alert names: HighDiskIOLatency (critical) \\u2014 15 events; service: node; first seen in hour 2025-12-13 20:00 UTC; last seen in hour 2025-12-13 22:00 UTC\", \"alert names: AgentPortal5xxRateHigh (critical) \\u2014 9 events; service: agent-portal; first seen in hour 2025-12-13 20:00 UTC; last seen in hour 2025-12-13 22:00 UTC\", \"alert names: PostgresSlowQueries (critical) \\u2014 6 events; service: postgres; first seen in hour 2025-12-13 20:00 UTC; last seen in hour 2025-12-13 22:00 UTC\", \"alert names: TargetDown (warning) \\u2014 5 events; service: documents-api; first seen in hour 2025-12-14 18:00 UTC; last seen in hour 2025-12-14 20:00 UTC\", \"alert names: CPUThrottlingHigh (warning) \\u2014 4 events; service: documents-api; first seen in hour 2025-12-13 14:00 UTC; last seen in hour 2025-12-13 15:00 UTC\", \"critical alerts: 30 matching events\", \"critical alerts > critical instances: 10.26.110.45:9100 \\u2014 15 events\", \"critical alerts > critical instances: agent-portal \\u2014 9 events\", \"critical alerts > critical instances: 10.26.110.45:9187 \\u2014 6 events\", \"critical alerts > critical alert names: HighDiskIOLatency \\u2014 15 events\", \"critical alerts > critical alert names: AgentPortal5xxRateHigh \\u2014 9 events\", \"critical alerts > critical alert names: PostgresSlowQueries \\u2014 6 events\", \"critical alerts > critical services: node \\u2014 15 events\", \"critical alerts > critical services: agent-portal \\u2014 9 events\", \"critical alerts > critical services: postgres \\u2014 6 events\", \"alert timeline: 2025-12-13 14:00 UTC \\u2014 2 events\", \"alert timeline: 2025-12-13 15:00 UTC \\u2014 2 events\", \"alert timeline: 2025-12-13 20:00 UTC \\u2014 8 events\", \"alert timeline: 2025-12-13 21:00 UTC \\u2014 10 events\", \"alert timeline: 2025-12-13 22:00 UTC \\u2014 12 events\", \"alert timeline: 2025-12-14 18:00 UTC \\u2014 2 events\", \"alert timeline: 2025-12-14 19:00 UTC \\u2014 2 events\", \"alert timeline: 2025-12-14 20:00 UTC \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "zonal_disk_0058",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "zonal_disk_0058-08",
+      "artifact_type": "resource_metrics",
+      "subtype": "metric_anomalies",
+      "source": "metric_anomalies",
+      "content": "{\"description\": \"Metric series that deviated from their 7-day baseline (hourly resolution): baseline, peak or trough value, anomaly onset and recovery (UTC).\", \"facts\": [\"metric anomalies: disk await (data volume) on db-postgres-01 \\u2014 baseline 0.6 ms; peak 2,755 ms; onset 2025-12-13 19:00 UTC; recovered 2025-12-13 23:00 UTC\", \"metric anomalies: replication lag on db-postgres-02 \\u2014 baseline 0 s; peak 564 s; onset 2025-12-13 19:00 UTC; recovered 2025-12-13 23:00 UTC\"]}",
+      "metadata": {
+        "scenario": "zonal_disk_0058",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "zonal_disk_0058-09",
+      "artifact_type": "derived_findings",
+      "subtype": "derived_summary",
+      "source": "derived_summary",
+      "content": "{\"description\": \"Deterministic summary computed from the query results above (error ranking, instance-to-host join, alert timeline, change correlation, earliest metric anomaly).\", \"facts\": [\"Derived: service agent-portal ranks #1 by error volume (42513 events, 1 failing dependencies). Most-failed dependency: policy-api (42513 errors).\", \"Derived: most-alerted critical instance 10.26.110.45:9100 (15 critical alerts) maps to hostname db-postgres-01; role postgres-primary; zone northeurope-3.\", \"Derived: warning/critical alerts span 2025-12-13 14:00 UTC to 2025-12-14 20:00 UTC; earliest alert hour 2025-12-13 14:00 UTC (2 alerts).\", \"Derived: changes recorded from 6 hours before the earliest alert hour to its end: CHG-86881 (deployment, fraud-scorer 11.9.9 -> 11.10.0, github-actions, 2025-12-13 10:57 UTC).\", \"Derived: earliest metric anomaly onset 2025-12-13 19:00 UTC (disk await (data volume) on db-postgres-01).\"]}",
+      "metadata": {
+        "scenario": "zonal_disk_0058",
+        "source_kind": "derived_from_es_results",
+        "heuristic": true
+      }
+    },
+    {
+      "artifact_id": "zonal_disk_0058-10",
+      "artifact_type": "query_coverage",
+      "subtype": "evidence_gaps",
+      "source": "evidence_gaps",
+      "content": "{\"description\": \"Queries that returned nothing or failed; use these to state what is NOT established.\", \"facts\": [\"Query 'tls certificates' returned no aggregation results (shards failed: 3 of 96). This evidence is UNAVAILABLE; it is not evidence that nothing exists.\"]}",
+      "metadata": {
+        "scenario": "zonal_disk_0058",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    }
+  ]
+}

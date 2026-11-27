@@ -1,0 +1,109 @@
+{
+  "source": "synthetic generator ground truth (ops expansion)",
+  "confidence": "synthetic ground truth",
+  "qa": [
+    {
+      "id": 1,
+      "question": "What change, deployment or automation run triggered the incident? Provide its change identifier.",
+      "answer": "CHG-21920",
+      "atoms": [
+        {
+          "text": "CHG-21920",
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "question": "Which network control object was modified?",
+      "answer": "security group sg-5be99d576217a96f7 (video-db-01)",
+      "atoms": [
+        {
+          "text": "sg-5be99d576217a96f7",
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "question": "Which database host became unreachable?",
+      "answer": "video-db-01",
+      "atoms": [
+        {
+          "text": "video-db-01",
+          "kind": "hostname"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "question": "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+      "answer": "2022-06-03 19:00 UTC",
+      "atoms": [
+        {
+          "text": "2022-06-03 19:00 UTC",
+          "kind": "time"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "question": "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+      "answer": "configuration change",
+      "atoms": [
+        {
+          "text": "configuration change",
+          "kind": "label"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "question": "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+      "answer": "availability",
+      "atoms": [
+        {
+          "text": "availability",
+          "kind": "cia"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "question": "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+      "answer": "learner-web, downstream symptom",
+      "atoms": [
+        {
+          "text": "learner-web",
+          "kind": "other"
+        },
+        {
+          "text": "downstream symptom",
+          "kind": "label"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "question": "Which change is a red herring: recorded shortly before onset but unrelated to the failure? Give its identifier.",
+      "answer": "CHG-21880",
+      "atoms": [
+        {
+          "text": "CHG-21880",
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "question": "Which change restored normal service? Provide its change identifier.",
+      "answer": "CHG-21943",
+      "atoms": [
+        {
+          "text": "CHG-21943",
+          "kind": "other"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,98 @@
+{
+  "source": "synthetic generator ground truth (ops expansion)",
+  "confidence": "synthetic ground truth",
+  "qa": [
+    {
+      "id": 1,
+      "question": "What change, deployment or automation run triggered the incident? Provide its change identifier.",
+      "answer": "AWX-25615",
+      "atoms": [
+        {
+          "text": "AWX-25615",
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "question": "What is the IP address of the node that was promoted?",
+      "answer": "10.19.178.62",
+      "atoms": [
+        {
+          "text": "10.19.178.62",
+          "kind": "ip"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "question": "Which network device dropped the database heartbeat and replication traffic?",
+      "answer": "core-b1",
+      "atoms": [
+        {
+          "text": "core-b1",
+          "kind": "hostname"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "question": "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+      "answer": "2026-08-20 03:00 UTC",
+      "atoms": [
+        {
+          "text": "2026-08-20 03:00 UTC",
+          "kind": "time"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "question": "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+      "answer": "automation error",
+      "atoms": [
+        {
+          "text": "automation error",
+          "kind": "label"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "question": "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+      "answer": "integrity",
+      "atoms": [
+        {
+          "text": "integrity",
+          "kind": "cia"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "question": "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+      "answer": "reconciliation-job, downstream symptom",
+      "atoms": [
+        {
+          "text": "reconciliation-job",
+          "kind": "other"
+        },
+        {
+          "text": "downstream symptom",
+          "kind": "label"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "question": "What change brought the service back to normal? Give its identifier.",
+      "answer": "CHG-59563",
+      "atoms": [
+        {
+          "text": "CHG-59563",
+          "kind": "other"
+        }
+      ]
+    }
+  ]
+}

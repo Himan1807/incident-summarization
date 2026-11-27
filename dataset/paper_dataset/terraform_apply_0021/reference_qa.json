@@ -1,0 +1,109 @@
+{
+  "source": "synthetic generator ground truth (ops expansion)",
+  "confidence": "synthetic ground truth",
+  "qa": [
+    {
+      "id": 1,
+      "question": "What change, deployment or automation run triggered the incident? Provide its change identifier.",
+      "answer": "CHG-61673",
+      "atoms": [
+        {
+          "text": "CHG-61673",
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "question": "Which port was blocked by the change?",
+      "answer": "tcp/5432",
+      "atoms": [
+        {
+          "text": "5432",
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "question": "Which database host became unreachable?",
+      "answer": "policy-db-01",
+      "atoms": [
+        {
+          "text": "policy-db-01",
+          "kind": "hostname"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "question": "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+      "answer": "2025-08-06 22:00 UTC",
+      "atoms": [
+        {
+          "text": "2025-08-06 22:00 UTC",
+          "kind": "time"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "question": "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+      "answer": "automation error",
+      "atoms": [
+        {
+          "text": "automation error",
+          "kind": "label"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "question": "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+      "answer": "availability",
+      "atoms": [
+        {
+          "text": "availability",
+          "kind": "cia"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "question": "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+      "answer": "agent-portal, downstream symptom",
+      "atoms": [
+        {
+          "text": "agent-portal",
+          "kind": "other"
+        },
+        {
+          "text": "downstream symptom",
+          "kind": "label"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "question": "Which change happened shortly before the incident began but did not cause it? Provide its identifier.",
+      "answer": "CHG-61644",
+      "atoms": [
+        {
+          "text": "CHG-61644",
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "question": "What change brought the service back to normal? Give its identifier.",
+      "answer": "CHG-61679",
+      "atoms": [
+        {
+          "text": "CHG-61679",
+          "kind": "other"
+        }
+      ]
+    }
+  ]
+}

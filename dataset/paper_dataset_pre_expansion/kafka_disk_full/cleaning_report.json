@@ -1,0 +1,14 @@
+{
+  "scenario": "kafka_disk_full",
+  "cleaning": [],
+  "skipped": [
+    "tls_certificates: all aggregations empty"
+  ],
+  "gaps": [],
+  "artifacts": 10,
+  "facts": 89,
+  "empty_aggregations": 3,
+  "questions": 9,
+  "answers": 9,
+  "atoms": 10
+}

@@ -1,0 +1,109 @@
+{
+  "source": "synthetic generator ground truth (ops expansion)",
+  "confidence": "synthetic ground truth",
+  "qa": [
+    {
+      "id": 1,
+      "question": "Which component is the source of the failure?",
+      "answer": "records-api",
+      "atoms": [
+        {
+          "text": "records-api",
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "question": "What change, deployment or automation run triggered the incident? Provide its change identifier.",
+      "answer": "CHG-49103",
+      "atoms": [
+        {
+          "text": "CHG-49103",
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "question": "Which account or automation identity executed the triggering change?",
+      "answer": "jenkins-deploy",
+      "atoms": [
+        {
+          "text": "jenkins-deploy",
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "question": "Which version of the service introduced the defect?",
+      "answer": "9.31.0",
+      "atoms": [
+        {
+          "text": "9.31.0",
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "question": "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+      "answer": "2026-02-07 01:00 UTC",
+      "atoms": [
+        {
+          "text": "2026-02-07 01:00 UTC",
+          "kind": "time"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "question": "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+      "answer": "software defect",
+      "atoms": [
+        {
+          "text": "software defect",
+          "kind": "label"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "question": "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+      "answer": "availability",
+      "atoms": [
+        {
+          "text": "availability",
+          "kind": "cia"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "question": "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+      "answer": "patient-portal, downstream symptom",
+      "atoms": [
+        {
+          "text": "patient-portal",
+          "kind": "other"
+        },
+        {
+          "text": "downstream symptom",
+          "kind": "label"
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "question": "Which change restored normal service? Provide its change identifier.",
+      "answer": "CHG-49117",
+      "atoms": [
+        {
+          "text": "CHG-49117",
+          "kind": "other"
+        }
+      ]
+    }
+  ]
+}

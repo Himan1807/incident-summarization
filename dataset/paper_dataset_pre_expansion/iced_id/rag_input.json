@@ -1,0 +1,139 @@
+{
+  "metadata": {
+    "incident_id": "INC-unknown",
+    "scenario": "iced_id",
+    "title": "Network security incident investigation",
+    "source": "neu-nds2/llm-sec-incident-analysis",
+    "query_window_start": null,
+    "query_window_end": null,
+    "evidence_types": [
+      "authentication",
+      "derived_findings",
+      "ids_alerts",
+      "network_summary",
+      "query_coverage"
+    ],
+    "artifact_scope_note": "Evidence is aggregated query output (not raw packets); it contains no chat/communication records."
+  },
+  "incident_description": "Network security investigation of a monitored LAN. Evidence consists of Elasticsearch aggregation results over Zeek and Suricata logs (IDS alerts, Kerberos, HTTP downloads, TLS certificates, domains and external-destination activity). No root cause, impact or C2 attribution is stated; these must be established from the supplied artifacts. Network context: LAN segment range: 10.4.19.0/24 (10.4.19.1 through 10.4.19.255); Domain: boogienights.live; Domain controller IP address: 10.4.19.19; Domain controller hostname: WIN-GP4JHCK2JMV; LAN segment gateway: 10.4.19.1; LAN segment broadcast address: 10.4.19.255.",
+  "investigation_questions": [
+    "What is the IP address of the potentially infected internal host in the LAN?",
+    "What is the hostname of the potentially infected machine in the LAN?",
+    "What is the Windows human user account name (not machine accounts ending in $) of the potentially infected machine in the LAN?",
+    "What are the likely fake or suspicious domains / URLs for initial infection?",
+    "What domain names AND external IP addresses are involved in command-and-control (C2) communication?",
+    "Which of the three CIA components does the attacker target primarily: availability, integrity, or confidentiality?",
+    "During what hour did the first signs of infection activity appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "According to the connection volume statistics, what single external IP address received the most connections from the infected hosts? Is it a C2 server or a legitimate service?"
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "iced_id-01",
+      "artifact_type": "network_summary",
+      "subtype": "file_downloads",
+      "source": "file_downloads",
+      "content": "{\"description\": \"HTTP file downloads and file transfers: download domains/IPs, requests (client -> server:port : URI), file types and download sources.\", \"facts\": [\"download domains: msedge.b.tlu.dl.delivery.mp.microsoft.com — 47 events\", \"download domains: ctldl.windowsupdate.com — 19 events\", \"download domains: dmd.metaservices.microsoft.com — 5 events\", \"download domains: go.microsoft.com — 5 events\", \"download domains: acroipm2.adobe.com — 4 events\", \"download domains: x1.c.lencr.org — 4 events\", \"download domains: 11.au.download.windowsupdate.com — 2 events\", \"download domains: store-images.s-microsoft.com — 2 events\", \"download domains: 80.77.25.175 — 1 events\", \"download domains: adl.windows.com — 1 events\", \"http requests: no_http_uri — 1267 events\", \"http requests: 10.4.19.136 -> 209.197.3.8:80 : /filestreamingservice/files/2132f61f-f790-4ae6-a355-8cf9a1533800?P1=1682016707&P2=404&P3=2&P4=bPmGMPdgNR86eaOhheHLplWDz2oULkUHk5GXOutBN9Vni2X4wR4KYGXEa29Eei02Ovi2ehAO0li/ToenRewipg== — 11 events\", \"http requests: 10.4.19.136 -> 23.218.232.178:80 : /filestreamingservice/files/c78f9967-7a8c-44b0-ad94-732b63c89638?P1=1682016707&P2=404&P3=2&P4=Jn3RneMfcL1l4h5itf0+XiXmrCmKvBJA0/czzgSgmyhRVLQc7o0mGmYkdhDiFN1sHja45XP5x5jIEs8pTaQ28Q== — 11 events\", \"http requests: 10.4.19.136 -> 23.218.232.178:80 : /filestreamingservice/files/f08b21db-8a96-416f-86dc-4301cb9925a1?P1=1682019049&P2=404&P3=2&P4=dPjdSzDYVq47FC0+zqUWWL3Q4oux7Brwx/PazDTq1ffiI/E6kS93ETT/uG3V3i8/7PoI0XbOYAhyuQpwYS24ag== — 10 events\", \"http requests: 10.4.19.138 -> 23.218.232.178:80 : /filestreamingservice/files/f08b21db-8a96-416f-86dc-4301cb9925a1?P1=1682020183&P2=404&P3=2&P4=PTBatu4SG0o2AMBfGJ5N+T3VeLSSbR97blFbgMhM8qmvlPv+4cqkEtu7g89BIzfgPL7u6d5Hr7TzkjQy8vB1Jg== — 10 events\", \"http requests: 10.4.19.136 -> 20.231.121.79:80 : /metadata.svc — 5 events\", \"http requests: 10.4.19.136 -> 23.36.63.240:80 : /fwlink/?LinkID=252669&clcid=0x409 — 4 events\", \"http requests: 10.4.19.138 -> 23.214.44.116:80 : / — 4 events\", \"http requests: 10.4.19.136 -> 192.153.57.233:80 : / — 3 events\", \"http requests: 10.4.19.136 -> 209.197.3.8:80 : /filestreamingservice/files/b22f5f18-f7ea-4290-929d-b13c03908334?P1=1682016707&P2=404&P3=2&P4=m8Pa+tI9vb17zDTiBh0mhF3mdLE8FezjFtavTuBrGO0CS37hIRfK+rSm/ZAwuaj+611u9Nam8/OJ+PRiD/H5rA== — 3 events\", \"file transfers: 253 matching events\", \"file transfers > transfer details: file_transfer — 30 events\", \"file transfers > transfer details: 10.4.19.136 -> 104.126.78.161:443 : fuid: FkJ41S2aV2mtdHFq8h — 1 events\", \"file transfers > transfer details: 10.4.19.136 -> 104.168.53.18:443 : fuid: FSCOa7uWpkNe7B9yf — 1 events\", \"file transfers > transfer details: 10.4.19.136 -> 104.168.53.18:443 : fuid: FlyAKu12CvH2ts2yd7 — 1 events\", \"file transfers > transfer details: 10.4.19.136 -> 104.208.16.88:443 : fuid: FClvI94V87n2EBvxX3 — 1 events\", \"file transfers > transfer details: 10.4.19.136 -> 104.208.16.88:443 : fuid: FdtVLl2YbXsIZoCPSh — 1 events\", \"file transfers > transfer details: 10.4.19.136 -> 104.208.16.89:443 : fuid: F2ymS14rmHif6Ur4ie — 1 events\", \"file transfers > transfer details: 10.4.19.136 -> 104.208.16.89:443 : fuid: FpNREO3vsheeV0MxPk — 1 events\", \"file transfers > transfer details: 10.4.19.136 -> 104.91.253.132:443 : fuid: FscKU88TKyIedW1E1 — 1 events\", \"file transfers > transfer details: 10.4.19.136 -> 104.92.18.109:80 : fuid: FZpVZw466Mt6wl1B38 — 1 events\", \"file types: other — 1359 events\", \"file types: exe — 3 events\", \"file types: archive — 1 events\", \"download sources: 10.4.19.136 — 841 events\", \"download sources: 10.4.19.138 — 522 events\"]}",
+      "metadata": {
+        "scenario": "iced_id",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "iced_id-02",
+      "artifact_type": "network_summary",
+      "subtype": "high_activity_external_dest",
+      "source": "high_activity_external_dest",
+      "content": "{\"description\": \"Internal clients ranked by number of connections to external destinations, with each client's most-contacted destinations.\", \"facts\": [\"source clients: 10.4.19.136 — 841 events; external destinations=105; top destinations: 217.199.121.56 (144), 204.79.197.203 (91), 51.104.167.186 (55), 23.218.232.178 (32), 20.231.121.79 (24); 495 further events in other values\", \"source clients: 10.4.19.138 — 522 events; external destinations=100; top destinations: 204.79.197.200 (42), 173.223.109.212 (30), 40.83.247.108 (19), 20.242.220.11 (15), 52.185.211.133 (13); 403 further events in other values\"]}",
+      "metadata": {
+        "scenario": "iced_id",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "iced_id-03",
+      "artifact_type": "authentication",
+      "subtype": "kerberos_clients",
+      "source": "kerberos_clients",
+      "content": "{\"description\": \"Kerberos client account names (user accounts) and the source IPs they authenticated from.\", \"facts\": [\"client accounts: DESKTOP-RETP4BU$ — 22 events; source ips: 10.4.19.138 (22)\", \"client accounts: irichardson — 14 events; source ips: 10.4.19.138 (14)\", \"client accounts: csilva — 12 events; source ips: 10.4.19.136 (12)\", \"client accounts: desktop-retp4bu$ — 12 events; source ips: 10.4.19.138 (12)\", \"client accounts: DESKTOP-JAL4D68$ — 3 events; source ips: 10.4.19.143 (3)\"]}",
+      "metadata": {
+        "scenario": "iced_id",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "iced_id-04",
+      "artifact_type": "authentication",
+      "subtype": "kerberos_full_services",
+      "source": "kerberos_full_services",
+      "content": "{\"description\": \"Kerberos services requested (including host and machine account names) per source IP.\", \"facts\": [\"full services: krb_tcp — 66 events; source ips: 10.4.19.138 (48), 10.4.19.136 (12), 10.4.19.143 (6)\", \"full services: no_service_found — 25 events; source ips: 10.4.19.138 (25)\", \"full services: krbtgt/BOOGIENIGHTS.LIVE — 24 events; source ips: 10.4.19.138 (20), 10.4.19.136 (4)\", \"full services: desktop-jal4d68$@BOOGIENIGHTS.LIVE — 6 events; source ips: 10.4.19.143 (6)\", \"full services: LDAP/WIN-GP4JHCK2JMV.boogienights.live/boogienights.live — 5 events; source ips: 10.4.19.138 (4), 10.4.19.136 (1)\", \"full services: cifs/WIN-GP4JHCK2JMV.boogienights.live — 5 events; source ips: 10.4.19.138 (4), 10.4.19.136 (1)\", \"full services: krbtgt/BOOGIENIGHTS — 5 events; source ips: 10.4.19.136 (3), 10.4.19.138 (2)\", \"full services: krbtgt/boogienights.live — 4 events; source ips: 10.4.19.138 (4)\", \"full services: cifs/WIN-GP4JHCK2JMV — 3 events; source ips: 10.4.19.138 (2), 10.4.19.136 (1)\", \"full services: DESKTOP-RETP4BU$ — 2 events; source ips: 10.4.19.138 (2)\", \"full services: LDAP/WIN-GP4JHCK2JMV.boogienights.live — 2 events; source ips: 10.4.19.138 (2)\", \"full services: cifs/WIN-GP4JHCK2JMV.boogienights.live/boogienights.live — 2 events; source ips: 10.4.19.138 (2)\", \"full services: desktop-retp4bu$ — 2 events; source ips: 10.4.19.138 (2)\", \"full services: host/desktop-retp4bu.boogienights.live — 2 events; source ips: 10.4.19.138 (2)\", \"full services: ldap/win-gp4jhck2jmv.boogienights.live/boogienights.live — 2 events; source ips: 10.4.19.138 (2)\", \"full services: host/desktop-sff9ljf.boogienights.live — 1 events; source ips: 10.4.19.136 (1)\", \"full services: ldap/WIN-GP4JHCK2JMV.boogienights.live — 1 events; source ips: 10.4.19.136 (1)\"]}",
+      "metadata": {
+        "scenario": "iced_id",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "iced_id-05",
+      "artifact_type": "authentication",
+      "subtype": "kerberos_hostnames",
+      "source": "kerberos_hostnames",
+      "content": "{\"description\": \"Host names seen in Kerberos traffic with their source IPs.\", \"facts\": [\"hostnames: desktop-retp4bu — 2 events; source ips: 10.4.19.138 (2)\", \"hostnames: desktop-sff9ljf — 1 events; source ips: 10.4.19.136 (1)\"]}",
+      "metadata": {
+        "scenario": "iced_id",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "iced_id-06",
+      "artifact_type": "ids_alerts",
+      "subtype": "suricata_alerts",
+      "source": "suricata_alerts",
+      "content": "{\"description\": \"Suricata IDS alerts: signatures, high-severity alert destinations and sources, and an hourly alert timeline (UTC).\", \"facts\": [\"alert signatures: GPL NETBIOS SMB IPC$ unicode share access — 11 events\", \"alert signatures: ET USER_AGENTS Microsoft Device Metadata Retrieval Client User-Agent — 10 events\", \"alert signatures: ET INFO OpenSSL Demo CA - Internet Widgits Pty (O) — 4 events\", \"alert signatures: ET INFO Windows OS Submitting USB Metadata to Microsoft — 2 events\", \"alert signatures: ET MALWARE IcedID CnC Domain in DNS Lookup (askamoshopsi .com) — 2 events\", \"alert signatures: ET MALWARE IcedID CnC Domain in DNS Lookup (skigimeetroc .com) — 2 events\", \"alert signatures: ET MALWARE Win32/IcedID Request Cookie — 1 events\", \"alert signatures: ET MALWARE Win32/IcedID Requesting Encoded Binary M4 — 1 events\", \"high severity alerts: 6 matching events\", \"high severity alerts > high severity  destinations: 10.4.19.19 — 4 events\", \"high severity alerts > high severity  destinations: 192.153.57.233 — 2 events\", \"high severity alerts > high severity signatures: ET MALWARE IcedID CnC Domain in DNS Lookup (askamoshopsi .com) — 2 events\", \"high severity alerts > high severity signatures: ET MALWARE IcedID CnC Domain in DNS Lookup (skigimeetroc .com) — 2 events\", \"high severity alerts > high severity signatures: ET MALWARE Win32/IcedID Request Cookie — 1 events\", \"high severity alerts > high severity signatures: ET MALWARE Win32/IcedID Requesting Encoded Binary M4 — 1 events\", \"high severity alerts > high severity sources: 10.4.19.136 — 6 events\", \"alert timeline: 2023-04-19 15:00 UTC — 19 events\", \"alert timeline: 2023-04-19 16:00 UTC — 3 events\", \"alert timeline: 2023-04-19 17:00 UTC — 10 events\", \"alert timeline: 2023-04-19 18:00 UTC — 0 events\", \"alert timeline: 2023-04-19 19:00 UTC — 0 events\", \"alert timeline: 2023-04-19 20:00 UTC — 1 events\"]}",
+      "metadata": {
+        "scenario": "iced_id",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "iced_id-07",
+      "artifact_type": "network_summary",
+      "subtype": "suspicious_domains",
+      "source": "suspicious_domains",
+      "content": "{\"description\": \"Unusual domains with their source and destination IPs, and direct-IP HTTP connections.\", \"facts\": [\"http raw ip requests: 1 matching events\", \"http raw ip requests > raw ip hosts: 80.77.25.175 — 1 events\", \"http raw ip requests > raw ip hosts 80.77.25.175 > uris: /main.php — 1 events; methods: GET (1)\", \"direct ip connections: 217.199.121.56 — 75 events\", \"direct ip connections: 204.79.197.203 — 57 events\", \"direct ip connections: 204.79.197.200 — 29 events\", \"direct ip connections: 40.83.247.108 — 29 events\", \"direct ip connections: 51.104.167.186 — 25 events\", \"direct ip connections: 173.223.109.212 — 16 events\", \"direct ip connections: 209.197.3.8 — 13 events\", \"direct ip connections: 20.231.121.79 — 12 events\", \"direct ip connections: 204.79.197.239 — 12 events\", \"direct ip connections: 20.54.25.4 — 11 events\", \"direct ip connections: 23.218.232.178 — 11 events\", \"direct ip connections: 20.242.220.11 — 10 events\", \"direct ip connections: 23.37.112.211 — 10 events\", \"direct ip connections: 51.104.162.168 — 10 events\", \"direct ip connections: 13.107.42.16 — 8 events\", \"direct ip connections: 13.89.179.8 — 8 events\", \"direct ip connections: 23.214.44.116 — 8 events\", \"direct ip connections: 23.36.63.240 — 8 events\", \"direct ip connections: 52.113.194.132 — 8 events\", \"direct ip connections: 13.89.179.10 — 7 events\", \"direct ip connections: 104.168.53.18 — 6 events\", \"direct ip connections: 104.95.51.242 — 6 events\", \"direct ip connections: 20.189.173.5 — 6 events\", \"direct ip connections: 20.191.46.109 — 6 events\", \"direct ip connections: 20.242.39.171 — 6 events\", \"direct ip connections: 52.185.211.133 — 6 events\", \"direct ip connections: 192.153.57.233 — 5 events\", \"direct ip connections: 20.189.173.15 — 5 events\", \"direct ip connections: 20.191.46.211 — 5 events\", \"direct ip connections: 20.54.24.231 — 5 events\", \"domains: skansnekssky.com — 69 events\", \"domains: ecn.dev.virtualearth.net — 7 events\", \"domains: askamoshopsi.com — 3 events\", \"domains: static-ecst.licdn.com — 3 events\", \"domains: da.xboxservices.com — 2 events\", \"domains: firebasestorage.googleapis.com — 2 events\", \"domains: img-s-msn-com.akamaized.net — 2 events\", \"domains: www.bingapis.com — 2 events\", \"domains: aefd.nelreports.net — 1 events\", \"domains: clients.config.office.net — 1 events\", \"domains: fp-afd.azurefd.us — 1 events\", \"domains: spakernakurs.com — 1 events\"]}",
+      "metadata": {
+        "scenario": "iced_id",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "iced_id-08",
+      "artifact_type": "derived_findings",
+      "subtype": "derived_summary",
+      "source": "derived_summary",
+      "content": "{\"description\": \"Deterministic summary computed from the query results above (client ranking, IP-to-hostname/account join, alert timeline).\", \"facts\": [\"Derived: internal client 10.4.19.136 ranks #1 by external connections (841 events, 105 distinct external destinations). Most-contacted external IP: 217.199.121.56 (144 connections).\", \"Derived: Kerberos identity of 10.4.19.136: hostname(s) desktop-sff9ljf; human user account(s) csilva.\", \"Derived: internal client 10.4.19.138 ranks #2 by external connections (522 events, 100 distinct external destinations). Most-contacted external IP: 204.79.197.200 (42 connections).\", \"Derived: Kerberos identity of 10.4.19.138: hostname(s) desktop-retp4bu; human user account(s) irichardson.\", \"Derived: Suricata alerts span 2023-04-19 15:00 UTC to 2023-04-19 20:00 UTC; earliest alert hour 2023-04-19 15:00 UTC (19 alerts).\", \"Derived: destinations of high-severity alerts: 10.4.19.19 (4), 192.153.57.233 (2).\"]}",
+      "metadata": {
+        "scenario": "iced_id",
+        "source_kind": "derived_from_es_results",
+        "heuristic": true
+      }
+    },
+    {
+      "artifact_id": "iced_id-09",
+      "artifact_type": "query_coverage",
+      "subtype": "evidence_gaps",
+      "source": "evidence_gaps",
+      "content": "{\"description\": \"Queries that returned nothing or failed; use these to state what is NOT established.\", \"facts\": [\"Query 'suspicious certificates' returned no aggregation results (shards failed: 1 of 92). This evidence is UNAVAILABLE; it is not evidence that nothing exists.\"]}",
+      "metadata": {
+        "scenario": "iced_id",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    }
+  ]
+}

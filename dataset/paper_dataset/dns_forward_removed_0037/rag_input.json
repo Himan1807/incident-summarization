@@ -1,0 +1,155 @@
+{
+  "metadata": {
+    "incident_id": "INC-20211021",
+    "scenario": "dns_forward_removed_0037",
+    "title": "Infrastructure reliability incident investigation",
+    "source": "synthetic/ops-incident-expansion (modeled on neu-nds2/llm-sec-incident-analysis)",
+    "query_window_start": "2021-10-21T00:00:00",
+    "query_window_end": "2021-10-23T23:59:59",
+    "evidence_types": [
+      "change_records",
+      "derived_findings",
+      "infrastructure_events",
+      "monitoring_alerts",
+      "query_coverage",
+      "resource_metrics",
+      "service_logs"
+    ],
+    "artifact_scope_note": "Evidence is aggregated query output (not raw log lines or metric samples); it contains no chat/communication records."
+  },
+  "incident_description": "Reliability incident investigation of a production environment. Evidence consists of Elasticsearch aggregation results over application and proxy logs, Kubernetes, cloud-provider and host system events, Prometheus Alertmanager alerts, change-management / CI-CD audit records and metric anomaly detection. No root cause, impact or trigger is stated; these must be established from the supplied artifacts. Environment context: Organization: Redwave News (news and media publishing); Platform: AWS us-east-1 (zones us-east-1a/us-east-1b/us-east-1c/us-east-1d/us-east-1f); network range 10.215.0.0/16; Kubernetes cluster redwav-prod-useast (EKS); Cluster add-ons: CoreDNS, ingress controller, Argo CD; services call external SaaS APIs; direct kubectl changes are recorded by the Kubernetes audit log with AUD- identifiers; Change management: production changes carry CHG- identifiers.",
+  "investigation_questions": [
+    "Which service or component is the origin of the failure?",
+    "What change, deployment or automation run triggered the incident? Provide its change identifier.",
+    "Which account or automation identity executed the triggering change?",
+    "Which external domains failed to resolve from inside the cluster?",
+    "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+    "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+    "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+    "Which change happened shortly before the incident began but did not cause it? Provide its identifier.",
+    "Which change restored normal service? Provide its change identifier."
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "dns_forward_removed_0037-01",
+      "artifact_type": "service_logs",
+      "subtype": "error_logs",
+      "source": "error_logs",
+      "content": "{\"description\": \"Application and proxy error logs: HTTP/gRPC status codes, failing requests (caller -> callee:port : operation), error messages and the services emitting them.\", \"facts\": [\"error events: 141857 matching events\", \"error events > status codes: n/a (client-side DNS resolution error) \\u2014 141729 events\", \"error events > status codes: 429 \\u2014 91 events\", \"error events > status codes: n/a (log-only) \\u2014 37 events\", \"failing requests: sms-notifier -> sms.relaycast.net:443 : POST /v1/messages \\u2014 53340 events\", \"failing requests: email-notifier -> smtp.sendwave.io:587 : SMTP AUTH \\u2014 45174 events\", \"failing requests: kyc-checker -> kyc.verifyline.com:443 : POST /v2/checks \\u2014 43215 events\", \"failing requests: search-api -> search-db:5432 : query \\u2014 91 events\", \"failing requests: coredns -> plugin chain : resolve \\u2014 37 events\", \"error messages: dial tcp: lookup sms.relaycast.net on 10.100.0.10:53: server misbehaving \\u2014 53340 events\", \"error messages: getaddrinfo EAI_AGAIN smtp.sendwave.io \\u2014 45174 events\", \"error messages: java.net.UnknownHostException: kyc.verifyline.com: Temporary failure in name resolution \\u2014 43215 events\", \"error messages: HTTP 429 Too Many Requests from upstream \\u2014 91 events\", \"error messages: [ERROR] plugin/errors: consolidated errors like '^.* no next plugin found$' occurred in last 5m \\u2014 37 events\", \"emitting services: sms-notifier \\u2014 53340 events\", \"emitting services: email-notifier \\u2014 45174 events\", \"emitting services: kyc-checker \\u2014 43215 events\", \"emitting services: search-api \\u2014 91 events\", \"emitting services: coredns \\u2014 37 events\"]}",
+      "metadata": {
+        "scenario": "dns_forward_removed_0037",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "dns_forward_removed_0037-02",
+      "artifact_type": "service_logs",
+      "subtype": "error_volume_by_service",
+      "source": "error_volume_by_service",
+      "content": "{\"description\": \"Services ranked by number of error events, with each service's most-failed downstream dependencies.\", \"facts\": [\"services: sms-notifier \\u2014 53340 events; failing dependencies=1; top dependencies: sms.relaycast.net (53340)\", \"services: email-notifier \\u2014 45174 events; failing dependencies=1; top dependencies: smtp.sendwave.io (45174)\", \"services: kyc-checker \\u2014 43215 events; failing dependencies=1; top dependencies: kyc.verifyline.com (43215)\", \"services: search-api \\u2014 91 events; failing dependencies=1; top dependencies: search-db (91)\", \"services: coredns \\u2014 37 events; failing dependencies=1; top dependencies: plugin chain (37)\"]}",
+      "metadata": {
+        "scenario": "dns_forward_removed_0037",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "dns_forward_removed_0037-03",
+      "artifact_type": "change_records",
+      "subtype": "change_log",
+      "source": "change_log",
+      "content": "{\"description\": \"Deployments, configuration pushes, infrastructure and automation runs from the change-management and CI/CD audit log: change ID, type, target, actor, time (UTC), status and recorded diff/summary.\", \"facts\": [\"changes: CHG-35166 | deployment | image-resizer 14.4.0 -> 14.4.1 | actor: argocd | 2021-10-21 22:27 UTC | status: completed | performance tuning of list endpoint \\u2014 1 events\", \"changes: AUD-35fefe | kubectl_edit | configmap kube-system/coredns | actor: e.tan | 2021-10-22 01:12 UTC | status: applied | Corefile .:53 block: removed 'forward . /etc/resolv.conf'; added 'hosts /etc/coredns/customdomains.db { fallthrough }' \\u2014 1 events\", \"changes: AUD-acd9b9 | kubectl_rollout_restart | deployment kube-system/coredns | actor: e.tan | 2021-10-22 01:14 UTC | status: applied | rollout restart \\u2014 1 events\", \"changes: AUD-57a857 | kubectl_apply | configmap kube-system/coredns | actor: p.rao | 2021-10-22 04:05 UTC | status: applied | Corefile restored from configmap revision 14 \\u2014 1 events\", \"changes: CHG-35181 | deployment | search-api 10.24.5 -> 10.24.6 | actor: argocd | 2021-10-22 20:37 UTC | status: completed | dependency bump \\u2014 1 events\", \"change types: deployment \\u2014 2 events\", \"change types: kubectl_edit \\u2014 1 events\", \"change types: kubectl_rollout_restart \\u2014 1 events\", \"change types: kubectl_apply \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "dns_forward_removed_0037",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "dns_forward_removed_0037-04",
+      "artifact_type": "change_records",
+      "subtype": "change_actors",
+      "source": "change_actors",
+      "content": "{\"description\": \"Accounts and automation identities that executed changes, with the hosts or targets they acted on.\", \"facts\": [\"actors: argocd \\u2014 2 events; targets: redwav-prod-useast/image-resizer (1), redwav-prod-useast/search-api (1)\", \"actors: e.tan \\u2014 2 events; targets: kube-system/coredns (2)\", \"actors: p.rao \\u2014 1 events; targets: kube-system/coredns (1)\"]}",
+      "metadata": {
+        "scenario": "dns_forward_removed_0037",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "dns_forward_removed_0037-05",
+      "artifact_type": "infrastructure_events",
+      "subtype": "host_inventory",
+      "source": "host_inventory",
+      "content": "{\"description\": \"Host and node names seen in infrastructure events with their IP address, role and availability zone / rack.\", \"facts\": [\"hosts: ip-10-215-171-10 \\u2014 294 events; ip: 10.215.171.10; role: k8s-worker; zone: us-east-1f\"]}",
+      "metadata": {
+        "scenario": "dns_forward_removed_0037",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "dns_forward_removed_0037-06",
+      "artifact_type": "infrastructure_events",
+      "subtype": "platform_events",
+      "source": "platform_events",
+      "content": "{\"description\": \"Kubernetes events, cloud-provider health events and host system messages (kernel, hardware, daemons) with the objects or hosts they refer to.\", \"facts\": [\"audit events: update configmaps kube-system/coredns \\u2014 2 events; top objects: e.tan (1), p.rao (1)\", \"event reasons: Unhealthy \\u2014 62 events; top objects: pod/sms-notifier-587d1df40-r8425 (52)\", \"event reasons: Pulled \\u2014 4 events; top objects: pod/image-resizer-5627b07e5-rs67k (3)\", \"event reasons: ScalingReplicaSet \\u2014 3 events; top objects: deployment/image-resizer (2)\", \"event reasons: Pulled \\u2014 14 events; top objects: pod/search-api-fd7f04602-hc75c (1)\", \"event reasons: ScalingReplicaSet \\u2014 3 events; top objects: deployment/search-api (1)\"]}",
+      "metadata": {
+        "scenario": "dns_forward_removed_0037",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "dns_forward_removed_0037-07",
+      "artifact_type": "monitoring_alerts",
+      "subtype": "alertmanager_alerts",
+      "source": "alertmanager_alerts",
+      "content": "{\"description\": \"Prometheus Alertmanager alerts: alert names with severity, critical-alert instances, alert names and services, and an hourly timeline of warning and critical alerts (UTC).\", \"facts\": [\"alert names: Watchdog (info) \\u2014 72 events; service: alertmanager; firing continuously\", \"alert names: CoreDNSErrorsHigh (critical) \\u2014 12 events; service: coredns; first seen in hour 2021-10-22 01:00 UTC; last seen in hour 2021-10-22 04:00 UTC\", \"alert names: SmsNotifierErrorRateHigh (critical) \\u2014 11 events; service: sms-notifier; first seen in hour 2021-10-22 01:00 UTC; last seen in hour 2021-10-22 04:00 UTC\", \"alert names: KubeCPUOvercommit (warning) \\u2014 4 events; service: cluster; first seen in hour 2021-10-22 21:00 UTC; last seen in hour 2021-10-22 23:00 UTC\", \"alert names: KubeJobFailed (warning) \\u2014 2 events; service: batch; first seen in hour 2021-10-21 23:00 UTC; last seen in hour 2021-10-22 00:00 UTC\", \"critical alerts: 23 matching events\", \"critical alerts > critical instances: sms-notifier \\u2014 11 events\", \"critical alerts > critical instances: 10.244.1.174:9153 \\u2014 6 events\", \"critical alerts > critical instances: 10.244.39.246:9153 \\u2014 6 events\", \"critical alerts > critical alert names: CoreDNSErrorsHigh \\u2014 12 events\", \"critical alerts > critical alert names: SmsNotifierErrorRateHigh \\u2014 11 events\", \"critical alerts > critical services: coredns \\u2014 12 events\", \"critical alerts > critical services: sms-notifier \\u2014 11 events\", \"alert timeline: 2021-10-21 23:00 UTC \\u2014 1 events\", \"alert timeline: 2021-10-22 00:00 UTC \\u2014 1 events\", \"alert timeline: 2021-10-22 01:00 UTC \\u2014 9 events\", \"alert timeline: 2021-10-22 02:00 UTC \\u2014 4 events\", \"alert timeline: 2021-10-22 03:00 UTC \\u2014 4 events\", \"alert timeline: 2021-10-22 04:00 UTC \\u2014 6 events\", \"alert timeline: 2021-10-22 21:00 UTC \\u2014 1 events\", \"alert timeline: 2021-10-22 22:00 UTC \\u2014 2 events\", \"alert timeline: 2021-10-22 23:00 UTC \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "dns_forward_removed_0037",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "dns_forward_removed_0037-08",
+      "artifact_type": "resource_metrics",
+      "subtype": "metric_anomalies",
+      "source": "metric_anomalies",
+      "content": "{\"description\": \"Metric series that deviated from their 7-day baseline (hourly resolution): baseline, peak or trough value, anomaly onset and recovery (UTC).\", \"facts\": [\"metric anomalies: coredns_dns_responses_total{rcode=\\\"SERVFAIL\\\"} rate on kube-system/coredns \\u2014 baseline 0.2/s; peak 813/s; onset 2021-10-22 01:00 UTC; recovered 2021-10-22 05:00 UTC\", \"metric anomalies: node_network_receive_bytes rate on 10.215.171.10 \\u2014 baseline 70 MB/s; peak 779 MB/s; onset 2021-10-21 21:00 UTC; recovered 2021-10-21 23:00 UTC\"]}",
+      "metadata": {
+        "scenario": "dns_forward_removed_0037",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "dns_forward_removed_0037-09",
+      "artifact_type": "derived_findings",
+      "subtype": "derived_summary",
+      "source": "derived_summary",
+      "content": "{\"description\": \"Deterministic summary computed from the query results above (error ranking, instance-to-host join, alert timeline, change correlation, earliest metric anomaly).\", \"facts\": [\"Derived: service sms-notifier ranks #1 by error volume (53340 events, 1 failing dependencies). Most-failed dependency: sms.relaycast.net (53340 errors).\", \"Derived: most-alerted critical instance sms-notifier (11 critical alerts); no matching host-inventory entry.\", \"Derived: warning/critical alerts span 2021-10-21 23:00 UTC to 2021-10-22 23:00 UTC; earliest alert hour 2021-10-21 23:00 UTC (1 alerts).\", \"Derived: changes recorded from 6 hours before the earliest alert hour to its end: CHG-35166 (deployment, image-resizer 14.4.0 -> 14.4.1, argocd, 2021-10-21 22:27 UTC).\", \"Derived: earliest metric anomaly onset 2021-10-21 21:00 UTC (node_network_receive_bytes rate on 10.215.171.10).\"]}",
+      "metadata": {
+        "scenario": "dns_forward_removed_0037",
+        "source_kind": "derived_from_es_results",
+        "heuristic": true
+      }
+    },
+    {
+      "artifact_id": "dns_forward_removed_0037-10",
+      "artifact_type": "query_coverage",
+      "subtype": "evidence_gaps",
+      "source": "evidence_gaps",
+      "content": "{\"description\": \"Queries that returned nothing or failed; use these to state what is NOT established.\", \"facts\": [\"No matching results for: tls certificates / expired certificates. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / expiring within 7 days. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / self signed. (Absence in this query is not proof of absence elsewhere.)\"]}",
+      "metadata": {
+        "scenario": "dns_forward_removed_0037",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    }
+  ]
+}

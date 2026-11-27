@@ -1,0 +1,153 @@
+{
+  "metadata": {
+    "incident_id": "INC-20221027",
+    "scenario": "terraform_apply_0035",
+    "title": "Infrastructure reliability incident investigation",
+    "source": "synthetic/ops-incident-expansion (modeled on neu-nds2/llm-sec-incident-analysis)",
+    "query_window_start": "2022-10-27T00:00:00",
+    "query_window_end": "2022-10-29T23:59:59",
+    "evidence_types": [
+      "change_records",
+      "derived_findings",
+      "infrastructure_events",
+      "monitoring_alerts",
+      "query_coverage",
+      "resource_metrics",
+      "service_logs"
+    ],
+    "artifact_scope_note": "Evidence is aggregated query output (not raw log lines or metric samples); it contains no chat/communication records."
+  },
+  "incident_description": "Reliability incident investigation of a production environment. Evidence consists of Elasticsearch aggregation results over application and proxy logs, Kubernetes, cloud-provider and host system events, Prometheus Alertmanager alerts, change-management / CI-CD audit records and metric anomaly detection. No root cause, impact or trigger is stated; these must be established from the supplied artifacts. Environment context: Organization: Corcrest Media (news and media publishing); Platform: AWS us-west-2 (zones us-west-2a/us-west-2b/us-west-2c/us-west-2d); network range 10.18.0.0/16; Kubernetes cluster corcre-prod-uswest (EKS); Database: mysql server recommendations-db-01 reachable from the application network only through security group sg-2e918f464b870d1ad; infrastructure is managed with Terraform applied from CI; Change management: production changes carry RFC- identifiers.",
+  "investigation_questions": [
+    "What change, deployment or automation run triggered the incident? Provide its change identifier.",
+    "Which network control object was modified?",
+    "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+    "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+    "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+    "Which change happened shortly before the incident began but did not cause it? Provide its identifier.",
+    "What change brought the service back to normal? Give its identifier."
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "terraform_apply_0035-01",
+      "artifact_type": "service_logs",
+      "subtype": "error_logs",
+      "source": "error_logs",
+      "content": "{\"description\": \"Application and proxy error logs: HTTP/gRPC status codes, failing requests (caller -> callee:port : operation), error messages and the services emitting them.\", \"facts\": [\"error events: 48399 matching events\", \"error events > status codes: 503 \\u2014 28330 events\", \"error events > status codes: n/a (connect timeout) \\u2014 19828 events\", \"error events > status codes: 502 \\u2014 241 events\", \"failing requests: web-frontend -> recommendations:8080 : GET /v1/recommendations \\u2014 28330 events\", \"failing requests: recommendations -> recommendations-db-01:3306 : connect \\u2014 19828 events\", \"failing requests: content-api -> content-db:5432 : query \\u2014 241 events\", \"error messages: recommendations: 503 Service Unavailable \\u2014 28330 events\", \"error messages: dial tcp 10.18.209.163:3306: i/o timeout \\u2014 19828 events\", \"error messages: connection reset by peer \\u2014 241 events\", \"emitting services: web-frontend \\u2014 28330 events\", \"emitting services: recommendations \\u2014 19828 events\", \"emitting services: content-api \\u2014 241 events\"]}",
+      "metadata": {
+        "scenario": "terraform_apply_0035",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "terraform_apply_0035-02",
+      "artifact_type": "service_logs",
+      "subtype": "error_volume_by_service",
+      "source": "error_volume_by_service",
+      "content": "{\"description\": \"Services ranked by number of error events, with each service's most-failed downstream dependencies.\", \"facts\": [\"services: web-frontend \\u2014 28330 events; failing dependencies=1; top dependencies: recommendations (28330)\", \"services: recommendations \\u2014 19828 events; failing dependencies=1; top dependencies: recommendations-db-01 (19828)\", \"services: content-api \\u2014 241 events; failing dependencies=1; top dependencies: content-db (241)\"]}",
+      "metadata": {
+        "scenario": "terraform_apply_0035",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "terraform_apply_0035-03",
+      "artifact_type": "change_records",
+      "subtype": "change_log",
+      "source": "change_log",
+      "content": "{\"description\": \"Deployments, configuration pushes, infrastructure and automation runs from the change-management and CI/CD audit log: change ID, type, target, actor, time (UTC), status and recorded diff/summary.\", \"facts\": [\"changes: RFC-48864 | deployment | media-api 1.6.0 -> 1.6.1 | actor: ci-deployer | 2022-10-27 07:27 UTC | status: Synced/Healthy | logging improvements \\u2014 1 events\", \"changes: RFC-48868 | deployment | comment-svc 1.17.5 -> 1.17.6 | actor: ci-deployer | 2022-10-27 19:44 UTC | status: succeeded | dependency bump \\u2014 1 events\", \"changes: RFC-48889 | terraform_apply | security group sg-2e918f464b870d1ad (recommendations-db-01) | actor: atlantis | 2022-10-27 23:19 UTC | status: completed | plan: 0 to add, 1 to change, 0 to destroy; ingress tcp/3306 from 10.18.0.0/16 removed from security group sg-2e918f464b870d1ad (recommendations-db-01) (apply from stale branch infra/tags-update) \\u2014 1 events\", \"changes: RFC-48900 | network_change | security group sg-2e918f464b870d1ad (recommendations-db-01) | actor: n.mitchell | 2022-10-28 02:17 UTC | status: completed | restore ingress tcp/3306 from 10.18.0.0/16 \\u2014 1 events\", \"changes: RFC-48905 | deployment | content-api 11.19.3 -> 11.19.4 | actor: ci-deployer | 2022-10-28 11:28 UTC | status: Synced/Healthy | new optional API field \\u2014 1 events\", \"changes: RFC-48921 | deployment | paywall-svc 12.10.5 -> 12.11.0 | actor: ci-deployer | 2022-10-29 14:22 UTC | status: completed | performance tuning of list endpoint \\u2014 1 events\", \"change types: deployment \\u2014 4 events\", \"change types: terraform_apply \\u2014 1 events\", \"change types: network_change \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "terraform_apply_0035",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "terraform_apply_0035-04",
+      "artifact_type": "change_records",
+      "subtype": "change_actors",
+      "source": "change_actors",
+      "content": "{\"description\": \"Accounts and automation identities that executed changes, with the hosts or targets they acted on.\", \"facts\": [\"actors: ci-deployer \\u2014 4 events; targets: corcre-prod-uswest/comment-svc (1), corcre-prod-uswest/content-api (1), corcre-prod-uswest/paywall-svc (1), corcre-prod-uswest/media-api (1)\", \"actors: atlantis \\u2014 1 events; targets: recommendations-db-01 (1)\", \"actors: n.mitchell \\u2014 1 events; targets: recommendations-db-01 (1)\"]}",
+      "metadata": {
+        "scenario": "terraform_apply_0035",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "terraform_apply_0035-05",
+      "artifact_type": "infrastructure_events",
+      "subtype": "host_inventory",
+      "source": "host_inventory",
+      "content": "{\"description\": \"Host and node names seen in infrastructure events with their IP address, role and availability zone / rack.\", \"facts\": [\"hosts: ip-10-18-214-224 \\u2014 223 events; ip: 10.18.214.224; role: k8s-worker; zone: us-west-2c\", \"hosts: recommendations-db-01 \\u2014 195 events; ip: 10.18.209.163; role: mysql-primary; zone: us-west-2d\", \"hosts: ip-10-18-73-243 \\u2014 51 events; ip: 10.18.73.243; role: k8s-worker; zone: us-west-2d\"]}",
+      "metadata": {
+        "scenario": "terraform_apply_0035",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "terraform_apply_0035-06",
+      "artifact_type": "infrastructure_events",
+      "subtype": "platform_events",
+      "source": "platform_events",
+      "content": "{\"description\": \"Kubernetes events, cloud-provider health events and host system messages (kernel, hardware, daemons) with the objects or hosts they refer to.\", \"facts\": [\"flow logs: REJECT tcp 10.18.0.0/16 -> 10.18.209.163:3306 \\u2014 76073 events; top objects: recommendations-db-01 (1)\", \"event reasons: Pulled \\u2014 9 events; top objects: pod/comment-svc-11fb428ae-l6qww (1)\", \"event reasons: ScalingReplicaSet \\u2014 3 events; top objects: deployment/comment-svc (3)\", \"event reasons: Pulled \\u2014 11 events; top objects: pod/content-api-f47b7959d-jjlft (3)\", \"event reasons: ScalingReplicaSet \\u2014 6 events; top objects: deployment/content-api (1)\", \"event reasons: Pulled \\u2014 24 events; top objects: pod/paywall-svc-002cdabbc-x9j7v (2)\", \"event reasons: ScalingReplicaSet \\u2014 5 events; top objects: deployment/paywall-svc (2)\", \"event reasons: Pulled \\u2014 14 events; top objects: pod/media-api-f6bf14a43-bvfqj (3)\", \"event reasons: ScalingReplicaSet \\u2014 4 events; top objects: deployment/media-api (3)\"]}",
+      "metadata": {
+        "scenario": "terraform_apply_0035",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "terraform_apply_0035-07",
+      "artifact_type": "monitoring_alerts",
+      "subtype": "alertmanager_alerts",
+      "source": "alertmanager_alerts",
+      "content": "{\"description\": \"Prometheus Alertmanager alerts: alert names with severity, critical-alert instances, alert names and services, and an hourly timeline of warning and critical alerts (UTC).\", \"facts\": [\"alert names: Watchdog (info) \\u2014 72 events; service: alertmanager; firing continuously\", \"alert names: RecommendationsUnavailable (critical) \\u2014 9 events; service: recommendations; first seen in hour 2022-10-27 23:00 UTC; last seen in hour 2022-10-28 02:00 UTC\", \"alert names: MysqlConnectionsDropped (critical) \\u2014 6 events; service: mysql; first seen in hour 2022-10-27 23:00 UTC; last seen in hour 2022-10-28 02:00 UTC\", \"alert names: CPUThrottlingHigh (warning) \\u2014 3 events; service: paywall-svc; first seen in hour 2022-10-28 23:00 UTC; last seen in hour 2022-10-29 01:00 UTC\", \"alert names: NodeFilesystemSpaceFillingUp (warning) \\u2014 3 events; service: node; first seen in hour 2022-10-27 17:00 UTC; last seen in hour 2022-10-27 19:00 UTC\", \"critical alerts: 15 matching events\", \"critical alerts > critical instances: recommendations \\u2014 9 events\", \"critical alerts > critical instances: 10.18.209.163:9104 \\u2014 6 events\", \"critical alerts > critical alert names: RecommendationsUnavailable \\u2014 9 events\", \"critical alerts > critical alert names: MysqlConnectionsDropped \\u2014 6 events\", \"critical alerts > critical services: recommendations \\u2014 9 events\", \"critical alerts > critical services: mysql \\u2014 6 events\", \"alert timeline: 2022-10-27 17:00 UTC \\u2014 1 events\", \"alert timeline: 2022-10-27 18:00 UTC \\u2014 1 events\", \"alert timeline: 2022-10-27 19:00 UTC \\u2014 1 events\", \"alert timeline: 2022-10-27 23:00 UTC \\u2014 3 events\", \"alert timeline: 2022-10-28 00:00 UTC \\u2014 4 events\", \"alert timeline: 2022-10-28 01:00 UTC \\u2014 5 events\", \"alert timeline: 2022-10-28 02:00 UTC \\u2014 3 events\", \"alert timeline: 2022-10-28 23:00 UTC \\u2014 1 events\", \"alert timeline: 2022-10-29 00:00 UTC \\u2014 1 events\", \"alert timeline: 2022-10-29 01:00 UTC \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "terraform_apply_0035",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "terraform_apply_0035-08",
+      "artifact_type": "resource_metrics",
+      "subtype": "metric_anomalies",
+      "source": "metric_anomalies",
+      "content": "{\"description\": \"Metric series that deviated from their 7-day baseline (hourly resolution): baseline, peak or trough value, anomaly onset and recovery (UTC).\", \"facts\": [\"metric anomalies: mysql client connections on recommendations-db-01 \\u2014 baseline ~106; trough 0; onset 2022-10-27 23:00 UTC; recovered 2022-10-28 03:00 UTC\"]}",
+      "metadata": {
+        "scenario": "terraform_apply_0035",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "terraform_apply_0035-09",
+      "artifact_type": "derived_findings",
+      "subtype": "derived_summary",
+      "source": "derived_summary",
+      "content": "{\"description\": \"Deterministic summary computed from the query results above (error ranking, instance-to-host join, alert timeline, change correlation, earliest metric anomaly).\", \"facts\": [\"Derived: service web-frontend ranks #1 by error volume (28330 events, 1 failing dependencies). Most-failed dependency: recommendations (28330 errors).\", \"Derived: most-alerted critical instance recommendations (9 critical alerts); no matching host-inventory entry.\", \"Derived: warning/critical alerts span 2022-10-27 17:00 UTC to 2022-10-29 01:00 UTC; earliest alert hour 2022-10-27 17:00 UTC (1 alerts).\", \"Derived: no changes recorded from 6 hours before the earliest alert hour to its end.\", \"Derived: earliest metric anomaly onset 2022-10-27 23:00 UTC (mysql client connections on recommendations-db-01).\"]}",
+      "metadata": {
+        "scenario": "terraform_apply_0035",
+        "source_kind": "derived_from_es_results",
+        "heuristic": true
+      }
+    },
+    {
+      "artifact_id": "terraform_apply_0035-10",
+      "artifact_type": "query_coverage",
+      "subtype": "evidence_gaps",
+      "source": "evidence_gaps",
+      "content": "{\"description\": \"Queries that returned nothing or failed; use these to state what is NOT established.\", \"facts\": [\"No matching results for: tls certificates / expired certificates. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / expiring within 7 days. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / self signed. (Absence in this query is not proof of absence elsewhere.)\"]}",
+      "metadata": {
+        "scenario": "terraform_apply_0035",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    }
+  ]
+}

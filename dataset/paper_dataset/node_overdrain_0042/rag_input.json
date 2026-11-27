@@ -1,0 +1,154 @@
+{
+  "metadata": {
+    "incident_id": "INC-20210515",
+    "scenario": "node_overdrain_0042",
+    "title": "Infrastructure reliability incident investigation",
+    "source": "synthetic/ops-incident-expansion (modeled on neu-nds2/llm-sec-incident-analysis)",
+    "query_window_start": "2021-05-15T00:00:00",
+    "query_window_end": "2021-05-17T23:59:59",
+    "evidence_types": [
+      "change_records",
+      "derived_findings",
+      "infrastructure_events",
+      "monitoring_alerts",
+      "query_coverage",
+      "resource_metrics",
+      "service_logs"
+    ],
+    "artifact_scope_note": "Evidence is aggregated query output (not raw log lines or metric samples); it contains no chat/communication records."
+  },
+  "incident_description": "Reliability incident investigation of a production environment. Evidence consists of Elasticsearch aggregation results over application and proxy logs, Kubernetes, cloud-provider and host system events, Prometheus Alertmanager alerts, change-management / CI-CD audit records and metric anomaly detection. No root cause, impact or trigger is stated; these must be established from the supplied artifacts. Environment context: Organization: Pineent Market (online retail); Platform: Google Cloud southamerica-east1 (zones southamerica-east1-a/southamerica-east1-b/southamerica-east1-c); network range 10.147.0.0/16; Kubernetes cluster pineen-prod-southa (GKE); Automation: an in-house node-recycler controller rotates worker nodes (cordon, drain, terminate, replace) in batches bounded by maxUnavailable (20% of 24 nodes); runs are recorded with RECYCLE- identifiers; Change management: production changes carry CHG- identifiers.",
+  "investigation_questions": [
+    "Which service or component is the origin of the failure?",
+    "Which change or automation run triggered the incident? Give its identifier.",
+    "Which deployment introduced the faulty batch-size logic? Provide its change identifier.",
+    "How many worker nodes were cordoned and drained at the same time?",
+    "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+    "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+    "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+    "Which change restored normal service? Provide its change identifier."
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "node_overdrain_0042-01",
+      "artifact_type": "service_logs",
+      "subtype": "error_logs",
+      "source": "error_logs",
+      "content": "{\"description\": \"Application and proxy error logs: HTTP/gRPC status codes, failing requests (caller -> callee:port : operation), error messages and the services emitting them.\", \"facts\": [\"error events: 75629 matching events\", \"error events > status codes: 503 \\u2014 74053 events\", \"error events > status codes: n/a (connection refused) \\u2014 1527 events\", \"error events > status codes: 504 \\u2014 49 events\", \"failing requests: web-bff -> cart-service:8080 : POST /v1/cart \\u2014 59993 events\", \"failing requests: web-bff -> payments-api:8080 : GET /v1/payments \\u2014 14060 events\", \"failing requests: cart-service -> cart-cache:6379 : GET \\u2014 1527 events\", \"failing requests: catalog-api -> catalog-db:5432 : query \\u2014 49 events\", \"error messages: upstream cart-service: 503 no healthy upstream \\u2014 59993 events\", \"error messages: upstream payments-api: 503 no healthy upstream \\u2014 14060 events\", \"error messages: dial tcp cart-cache:6379: connect: connection refused \\u2014 1527 events\", \"error messages: upstream request timeout \\u2014 49 events\", \"emitting services: web-bff \\u2014 74053 events\", \"emitting services: cart-service \\u2014 1527 events\", \"emitting services: catalog-api \\u2014 49 events\"]}",
+      "metadata": {
+        "scenario": "node_overdrain_0042",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "node_overdrain_0042-02",
+      "artifact_type": "service_logs",
+      "subtype": "error_volume_by_service",
+      "source": "error_volume_by_service",
+      "content": "{\"description\": \"Services ranked by number of error events, with each service's most-failed downstream dependencies.\", \"facts\": [\"services: web-bff \\u2014 74053 events; failing dependencies=2; top dependencies: cart-service (59993), payments-api (14060)\", \"services: cart-service \\u2014 1527 events; failing dependencies=1; top dependencies: cart-cache (1527)\", \"services: catalog-api \\u2014 49 events; failing dependencies=1; top dependencies: catalog-db (49)\"]}",
+      "metadata": {
+        "scenario": "node_overdrain_0042",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "node_overdrain_0042-03",
+      "artifact_type": "change_records",
+      "subtype": "change_log",
+      "source": "change_log",
+      "content": "{\"description\": \"Deployments, configuration pushes, infrastructure and automation runs from the change-management and CI/CD audit log: change ID, type, target, actor, time (UTC), status and recorded diff/summary.\", \"facts\": [\"changes: CHG-21664 | deployment | orders-api 12.15.11 -> 12.15.12 | actor: argocd | 2021-05-15 02:41 UTC | status: completed | new optional API field \\u2014 1 events\", \"changes: CHG-21697 | deployment | node-recycler 11.21.0 -> 11.22.0 | actor: argocd | 2021-05-16 06:11 UTC | status: Synced/Healthy | new batch sizing logic (percentage support for maxUnavailable) \\u2014 1 events\", \"changes: RECYCLE-7350 | node_rotation | general-purpose node group | actor: node-recycler | 2021-05-16 07:25 UTC | status: aborted | eligible nodes 23; computed batch size 20 from maxUnavailable=20%; cordoned and drained 23 nodes concurrently \\u2014 1 events\", \"changes: CHG-21707 | scale_down | deployment node-recycler | actor: c.das | 2021-05-16 08:22 UTC | status: completed | replicas 1 -> 0 \\u2014 1 events\", \"changes: CHG-21745 | nodegroup_scale | general-purpose node group | actor: c.das | 2021-05-16 08:32 UTC | status: completed | desired 24 -> 30; uncordon remaining nodes \\u2014 1 events\", \"changes: CHG-21763 | deployment | catalog-api 12.2.4 -> 12.2.5 | actor: argocd | 2021-05-17 01:46 UTC | status: completed | feature flag cleanup \\u2014 1 events\", \"change types: deployment \\u2014 3 events\", \"change types: node_rotation \\u2014 1 events\", \"change types: scale_down \\u2014 1 events\", \"change types: nodegroup_scale \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "node_overdrain_0042",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "node_overdrain_0042-04",
+      "artifact_type": "change_records",
+      "subtype": "change_actors",
+      "source": "change_actors",
+      "content": "{\"description\": \"Accounts and automation identities that executed changes, with the hosts or targets they acted on.\", \"facts\": [\"actors: argocd \\u2014 3 events; targets: pineen-prod-southa/node-recycler (1), pineen-prod-southa/orders-api (1), pineen-prod-southa/catalog-api (1)\", \"actors: c.das \\u2014 2 events; targets: pineen-prod-southa/node-recycler (1), node group (1)\", \"actors: node-recycler \\u2014 1 events; targets: gke-pineen-prod-so-pool-b-ec1d (1), gke-pineen-prod-so-pool-b-7dfa (1), gke-pineen-prod-so-pool-b-a0c9 (1), gke-pineen-prod-so-pool-c-422a (1), gke-pineen-prod-so-pool-c-5785 (1), gke-pineen-prod-so-pool-c-c4fa (1), gke-pineen-prod-so-pool-c-052d (1), gke-pineen-prod-so-pool-b-f166 (1), gke-pineen-prod-so-pool-c-dba5 (1), gke-pineen-prod-so-pool-b-b37c (1), gke-pineen-prod-so-pool-b-a0e7 (1), gke-pineen-prod-so-pool-c-60bc (1), gke-pineen-prod-so-pool-b-62a3 (1), gke-pineen-prod-so-pool-a-f2c6 (1), gke-pineen-prod-so-pool-a-544e (1), gke-pineen-prod-so-pool-a-8c4c (1), gke-pineen-prod-so-pool-c-c6e6 (1), gke-pineen-prod-so-pool-a-f57d (1), gke-pineen-prod-so-pool-c-be79 (1), gke-pineen-prod-so-pool-b-46cf (1), gke-pineen-prod-so-pool-c-a2db (1), gke-pineen-prod-so-pool-b-e163 (1), gke-pineen-prod-so-pool-c-6952 (1)\"]}",
+      "metadata": {
+        "scenario": "node_overdrain_0042",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "node_overdrain_0042-05",
+      "artifact_type": "infrastructure_events",
+      "subtype": "host_inventory",
+      "source": "host_inventory",
+      "content": "{\"description\": \"Host and node names seen in infrastructure events with their IP address, role and availability zone / rack.\", \"facts\": [\"hosts: gke-pineen-prod-so-pool-c-d2b8 \\u2014 257 events; ip: 10.147.220.171; role: k8s-worker; zone: southamerica-east1-c\", \"hosts: gke-pineen-prod-so-pool-c-dd08 \\u2014 125 events; ip: 10.147.220.183; role: k8s-worker; zone: southamerica-east1-c\", \"hosts: gke-pineen-prod-so-pool-a-b246 \\u2014 97 events; ip: 10.147.169.218; role: k8s-worker; zone: southamerica-east1-b\", \"hosts: gke-pineen-prod-so-pool-b-7dfa \\u2014 96 events; ip: 10.147.169.50; role: k8s-worker; zone: southamerica-east1-b\", \"hosts: gke-pineen-prod-so-pool-b-ec1d \\u2014 95 events; ip: 10.147.42.121; role: k8s-worker; zone: southamerica-east1-a\", \"hosts: gke-pineen-prod-so-pool-b-a0c9 \\u2014 76 events; ip: 10.147.220.97; role: k8s-worker; zone: southamerica-east1-c\"]}",
+      "metadata": {
+        "scenario": "node_overdrain_0042",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "node_overdrain_0042-06",
+      "artifact_type": "infrastructure_events",
+      "subtype": "platform_events",
+      "source": "platform_events",
+      "content": "{\"description\": \"Kubernetes events, cloud-provider health events and host system messages (kernel, hardware, daemons) with the objects or hosts they refer to.\", \"facts\": [\"event reasons: NodeNotSchedulable \\u2014 23 events; top objects: gke-pineen-prod-so-pool-b-ec1d (1), gke-pineen-prod-so-pool-b-7dfa (1), gke-pineen-prod-so-pool-b-a0c9 (1), gke-pineen-prod-so-pool-c-422a (1), gke-pineen-prod-so-pool-c-5785 (1)\", \"event reasons: FailedScheduling \\u2014 3306 events; top objects: pod/cart-service-56daa468a-ql6hj (810), pod/payments-api-fa9563e25-dpm8g (234)\", \"controller logs: node-recycler: batch size 20 computed from maxUnavailable=20% (eligible=23); starting batch \\u2014 1 events; top objects: pod/node-recycler-f2e8c837f-hjwmj (1)\", \"event reasons: Pulled \\u2014 8 events; top objects: pod/orders-api-48bb8ab7c-hkddf (1)\", \"event reasons: ScalingReplicaSet \\u2014 2 events; top objects: deployment/orders-api (1)\", \"event reasons: Pulled \\u2014 24 events; top objects: pod/catalog-api-37d1da8da-fk2wl (3)\", \"event reasons: ScalingReplicaSet \\u2014 4 events; top objects: deployment/catalog-api (2)\"]}",
+      "metadata": {
+        "scenario": "node_overdrain_0042",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "node_overdrain_0042-07",
+      "artifact_type": "monitoring_alerts",
+      "subtype": "alertmanager_alerts",
+      "source": "alertmanager_alerts",
+      "content": "{\"description\": \"Prometheus Alertmanager alerts: alert names with severity, critical-alert instances, alert names and services, and an hourly timeline of warning and critical alerts (UTC).\", \"facts\": [\"alert names: Watchdog (info) \\u2014 72 events; service: alertmanager; firing continuously\", \"alert names: KubeNodeUnschedulable (warning) \\u2014 69 events; service: kubernetes; first seen in hour 2021-05-16 07:00 UTC; last seen in hour 2021-05-16 09:00 UTC\", \"alert names: WebBffErrorRateHigh (critical) \\u2014 10 events; service: web-bff; first seen in hour 2021-05-16 07:00 UTC; last seen in hour 2021-05-16 09:00 UTC\", \"alert names: KubeNodesCapacityLow (critical) \\u2014 9 events; service: kubernetes; first seen in hour 2021-05-16 07:00 UTC; last seen in hour 2021-05-16 09:00 UTC\", \"alert names: KubePodPending (critical) \\u2014 8 events; service: cart-service; first seen in hour 2021-05-16 07:00 UTC; last seen in hour 2021-05-16 09:00 UTC\", \"alert names: CPUThrottlingHigh (warning) \\u2014 3 events; service: promo-svc; first seen in hour 2021-05-15 23:00 UTC; last seen in hour 2021-05-16 00:00 UTC\", \"alert names: KubeCPUOvercommit (warning) \\u2014 1 events; service: cluster; first seen in hour 2021-05-16 23:00 UTC; last seen in hour 2021-05-16 23:00 UTC\", \"critical alerts: 27 matching events\", \"critical alerts > critical instances: web-bff \\u2014 10 events\", \"critical alerts > critical instances: pineen-prod-southa \\u2014 9 events\", \"critical alerts > critical instances: cart-service \\u2014 8 events\", \"critical alerts > critical alert names: WebBffErrorRateHigh \\u2014 10 events\", \"critical alerts > critical alert names: KubeNodesCapacityLow \\u2014 9 events\", \"critical alerts > critical alert names: KubePodPending \\u2014 8 events\", \"critical alerts > critical services: web-bff \\u2014 10 events\", \"critical alerts > critical services: kubernetes \\u2014 9 events\", \"critical alerts > critical services: cart-service \\u2014 8 events\", \"alert timeline: 2021-05-15 23:00 UTC \\u2014 2 events\", \"alert timeline: 2021-05-16 00:00 UTC \\u2014 1 events\", \"alert timeline: 2021-05-16 07:00 UTC \\u2014 32 events\", \"alert timeline: 2021-05-16 08:00 UTC \\u2014 32 events\", \"alert timeline: 2021-05-16 09:00 UTC \\u2014 32 events\", \"alert timeline: 2021-05-16 23:00 UTC \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "node_overdrain_0042",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "node_overdrain_0042-08",
+      "artifact_type": "resource_metrics",
+      "subtype": "metric_anomalies",
+      "source": "metric_anomalies",
+      "content": "{\"description\": \"Metric series that deviated from their 7-day baseline (hourly resolution): baseline, peak or trough value, anomaly onset and recovery (UTC).\", \"facts\": [\"metric anomalies: unschedulable nodes on pineen-prod-southa \\u2014 baseline 0; peak 23; onset 2021-05-16 07:00 UTC; recovered 2021-05-16 10:00 UTC\"]}",
+      "metadata": {
+        "scenario": "node_overdrain_0042",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "node_overdrain_0042-09",
+      "artifact_type": "derived_findings",
+      "subtype": "derived_summary",
+      "source": "derived_summary",
+      "content": "{\"description\": \"Deterministic summary computed from the query results above (error ranking, instance-to-host join, alert timeline, change correlation, earliest metric anomaly).\", \"facts\": [\"Derived: service web-bff ranks #1 by error volume (74053 events, 2 failing dependencies). Most-failed dependency: cart-service (59993 errors).\", \"Derived: most-alerted critical instance web-bff (10 critical alerts); no matching host-inventory entry.\", \"Derived: warning/critical alerts span 2021-05-15 23:00 UTC to 2021-05-16 23:00 UTC; earliest alert hour 2021-05-15 23:00 UTC (2 alerts).\", \"Derived: no changes recorded from 6 hours before the earliest alert hour to its end.\", \"Derived: earliest metric anomaly onset 2021-05-16 07:00 UTC (unschedulable nodes on pineen-prod-southa).\"]}",
+      "metadata": {
+        "scenario": "node_overdrain_0042",
+        "source_kind": "derived_from_es_results",
+        "heuristic": true
+      }
+    },
+    {
+      "artifact_id": "node_overdrain_0042-10",
+      "artifact_type": "query_coverage",
+      "subtype": "evidence_gaps",
+      "source": "evidence_gaps",
+      "content": "{\"description\": \"Queries that returned nothing or failed; use these to state what is NOT established.\", \"facts\": [\"No matching results for: tls certificates / expired certificates. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / expiring within 7 days. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / self signed. (Absence in this query is not proof of absence elsewhere.)\"]}",
+      "metadata": {
+        "scenario": "node_overdrain_0042",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    }
+  ]
+}

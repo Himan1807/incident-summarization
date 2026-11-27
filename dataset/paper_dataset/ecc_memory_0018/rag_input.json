@@ -1,0 +1,152 @@
+{
+  "metadata": {
+    "incident_id": "INC-20230223",
+    "scenario": "ecc_memory_0018",
+    "title": "Infrastructure reliability incident investigation",
+    "source": "synthetic/ops-incident-expansion (modeled on neu-nds2/llm-sec-incident-analysis)",
+    "query_window_start": "2023-02-23T00:00:00",
+    "query_window_end": "2023-02-25T23:59:59",
+    "evidence_types": [
+      "change_records",
+      "derived_findings",
+      "infrastructure_events",
+      "monitoring_alerts",
+      "query_coverage",
+      "resource_metrics",
+      "service_logs"
+    ],
+    "artifact_scope_note": "Evidence is aggregated query output (not raw log lines or metric samples); it contains no chat/communication records."
+  },
+  "incident_description": "Reliability incident investigation of a production environment. Evidence consists of Elasticsearch aggregation results over application and proxy logs, Kubernetes, cloud-provider and host system events, Prometheus Alertmanager alerts, change-management / CI-CD audit records and metric anomaly detection. No root cause, impact or trigger is stated; these must be established from the supplied artifacts. Environment context: Organization: Pixcrest Telecom (mobile operator); Platform: on-premises data center DC-North, server range 172.29.0.0/16; Kubernetes cluster pixcre-prod (kubeadm); Bare-metal Kubernetes workers; IPMI SEL and EDAC kernel messages are forwarded to Elasticsearch; data-center work uses DC- identifiers; Change management: production changes carry RFC- identifiers.",
+  "investigation_questions": [
+    "What is the hostname of the host or node where the failure originated?",
+    "Which Kubernetes node condition was reported for the failing node?",
+    "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+    "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+    "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+    "Which change restored normal service? Provide its change identifier."
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "ecc_memory_0018-01",
+      "artifact_type": "service_logs",
+      "subtype": "error_logs",
+      "source": "error_logs",
+      "content": "{\"description\": \"Application and proxy error logs: HTTP/gRPC status codes, failing requests (caller -> callee:port : operation), error messages and the services emitting them.\", \"facts\": [\"error events: 5358 matching events\", \"error events > status codes: n/a (job failure) \\u2014 3337 events\", \"error events > status codes: 500 \\u2014 2021 events\", \"failing requests: batch-scheduler -> workers on pixcr-node-05 : task execution \\u2014 3337 events\", \"failing requests: query-engine -> worker@172.29.16.62:8080 : task status update \\u2014 1104 events\", \"failing requests: reporting-portal -> query-engine:8080 : POST /v1/statement \\u2014 797 events\", \"failing requests: sim-provisioning -> sim-db:5432 : query \\u2014 120 events\", \"error messages: ExecutorLostFailure (executor exited unrelated to the running tasks) Reason: node pixcr-node-05 NotReady \\u2014 3337 events\", \"error messages: Encountered too many errors talking to a worker node (172.29.16.62:8080) \\u2014 1104 events\", \"error messages: query-engine: 500 Internal Server Error \\u2014 797 events\", \"error messages: pq: could not serialize access due to concurrent update \\u2014 120 events\", \"emitting services: batch-scheduler \\u2014 3337 events\", \"emitting services: query-engine \\u2014 1104 events\", \"emitting services: reporting-portal \\u2014 797 events\", \"emitting services: sim-provisioning \\u2014 120 events\"]}",
+      "metadata": {
+        "scenario": "ecc_memory_0018",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "ecc_memory_0018-02",
+      "artifact_type": "service_logs",
+      "subtype": "error_volume_by_service",
+      "source": "error_volume_by_service",
+      "content": "{\"description\": \"Services ranked by number of error events, with each service's most-failed downstream dependencies.\", \"facts\": [\"services: batch-scheduler \\u2014 3337 events; failing dependencies=1; top dependencies: workers on pixcr-node-05 (3337)\", \"services: query-engine \\u2014 1104 events; failing dependencies=1; top dependencies: worker@172.29.16.62 (1104)\", \"services: reporting-portal \\u2014 797 events; failing dependencies=1; top dependencies: query-engine (797)\", \"services: sim-provisioning \\u2014 120 events; failing dependencies=1; top dependencies: sim-db (120)\"]}",
+      "metadata": {
+        "scenario": "ecc_memory_0018",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "ecc_memory_0018-03",
+      "artifact_type": "change_records",
+      "subtype": "change_log",
+      "source": "change_log",
+      "content": "{\"description\": \"Deployments, configuration pushes, infrastructure and automation runs from the change-management and CI/CD audit log: change ID, type, target, actor, time (UTC), status and recorded diff/summary.\", \"facts\": [\"changes: RFC-65707 | deployment | cdr-ingest 6.11.10 -> 6.11.11 | actor: argocd | 2023-02-23 05:06 UTC | status: completed | logging improvements \\u2014 1 events\", \"changes: RFC-65732 | deployment | plan-catalog 12.21.1 -> 12.21.2 | actor: argocd | 2023-02-24 21:20 UTC | status: Synced/Healthy | feature flag cleanup \\u2014 1 events\", \"changes: RFC-65762 | kubectl_cordon_drain | node pixcr-node-05 | actor: i.murphy | 2023-02-25 03:39 UTC | status: completed | cordon and drain; handed to DC operations \\u2014 1 events\", \"changes: DC-6241 | hardware_replacement | pixcr-node-05 memory module | actor: dcops-k.rossi | 2023-02-25 06:57 UTC | status: completed | replaced DIMM B3; memtest passed \\u2014 1 events\", \"changes: RFC-65768 | deployment | roaming-svc 11.19.10 -> 11.20.0 | actor: argocd | 2023-02-25 09:38 UTC | status: Synced/Healthy | performance tuning of list endpoint \\u2014 1 events\", \"changes: RFC-65781 | deployment | sim-provisioning 7.22.1 -> 7.23.0 | actor: argocd | 2023-02-25 17:35 UTC | status: completed | performance tuning of list endpoint \\u2014 1 events\", \"change types: deployment \\u2014 4 events\", \"change types: kubectl_cordon_drain \\u2014 1 events\", \"change types: hardware_replacement \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "ecc_memory_0018",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "ecc_memory_0018-04",
+      "artifact_type": "change_records",
+      "subtype": "change_actors",
+      "source": "change_actors",
+      "content": "{\"description\": \"Accounts and automation identities that executed changes, with the hosts or targets they acted on.\", \"facts\": [\"actors: argocd \\u2014 4 events; targets: pixcre-prod/plan-catalog (1), pixcre-prod/sim-provisioning (1), pixcre-prod/roaming-svc (1), pixcre-prod/cdr-ingest (1)\", \"actors: dcops-k.rossi \\u2014 1 events; targets: pixcr-node-05 (1)\", \"actors: i.murphy \\u2014 1 events; targets: pixcr-node-05 (1)\"]}",
+      "metadata": {
+        "scenario": "ecc_memory_0018",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "ecc_memory_0018-05",
+      "artifact_type": "infrastructure_events",
+      "subtype": "host_inventory",
+      "source": "host_inventory",
+      "content": "{\"description\": \"Host and node names seen in infrastructure events with their IP address, role and availability zone / rack.\", \"facts\": [\"hosts: pixcr-node-05 \\u2014 578 events; ip: 172.29.16.62; role: k8s-worker; zone: rack C33\", \"hosts: pixcr-node-01 \\u2014 106 events; ip: 172.29.103.5; role: k8s-worker; zone: rack C22\", \"hosts: pixcr-node-44 \\u2014 94 events; ip: 172.29.150.154; role: k8s-worker; zone: rack C13\"]}",
+      "metadata": {
+        "scenario": "ecc_memory_0018",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "ecc_memory_0018-06",
+      "artifact_type": "infrastructure_events",
+      "subtype": "platform_events",
+      "source": "platform_events",
+      "content": "{\"description\": \"Kubernetes events, cloud-provider health events and host system messages (kernel, hardware, daemons) with the objects or hosts they refer to.\", \"facts\": [\"hardware events (ipmi sel): Memory #0x41 | Correctable ECC | DIMM B3 \\u2014 208 events; top objects: pixcr-node-05 (208)\", \"hardware events (ipmi sel): Memory #0x11 | Uncorrectable ECC | DIMM B3 \\u2014 4 events; top objects: pixcr-node-05 (4)\", \"system messages: kernel: EDAC MC1: 1 CE memory read error on CPU_SrcID#1_MC#0_Chan#2_DIMM#0 \\u2014 208 events; top objects: pixcr-node-05 (208)\", \"system messages: kernel: Kernel panic - not syncing: Fatal machine check \\u2014 4 events; top objects: pixcr-node-05 (4)\", \"event reasons: NodeNotReady \\u2014 4 events; top objects: node/pixcr-node-05 (4)\", \"event reasons: TaintManagerEviction \\u2014 54 events; top objects: pods on pixcr-node-05 (1)\", \"event reasons: Pulled \\u2014 10 events; top objects: pod/plan-catalog-4441695c3-wm62w (1)\", \"event reasons: ScalingReplicaSet \\u2014 3 events; top objects: deployment/plan-catalog (3)\", \"event reasons: Pulled \\u2014 8 events; top objects: pod/sim-provisioning-7908d5fb2-2lpp9 (3)\", \"event reasons: ScalingReplicaSet \\u2014 3 events; top objects: deployment/sim-provisioning (1)\", \"event reasons: Pulled \\u2014 23 events; top objects: pod/roaming-svc-ad7e07e02-v7mp9 (2)\", \"event reasons: ScalingReplicaSet \\u2014 2 events; top objects: deployment/roaming-svc (1)\", \"event reasons: Pulled \\u2014 20 events; top objects: pod/cdr-ingest-5a6f78fcf-5mcgx (2)\", \"event reasons: ScalingReplicaSet \\u2014 4 events; top objects: deployment/cdr-ingest (3)\"]}",
+      "metadata": {
+        "scenario": "ecc_memory_0018",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "ecc_memory_0018-07",
+      "artifact_type": "monitoring_alerts",
+      "subtype": "alertmanager_alerts",
+      "source": "alertmanager_alerts",
+      "content": "{\"description\": \"Prometheus Alertmanager alerts: alert names with severity, critical-alert instances, alert names and services, and an hourly timeline of warning and critical alerts (UTC).\", \"facts\": [\"alert names: Watchdog (info) \\u2014 72 events; service: alertmanager; firing continuously\", \"alert names: NodeMemoryECCCorrectableErrors (warning) \\u2014 22 events; service: node; first seen in hour 2023-02-24 18:00 UTC; last seen in hour 2023-02-25 03:00 UTC\", \"alert names: KubeNodeNotReady (critical) \\u2014 16 events; service: kubernetes; first seen in hour 2023-02-24 23:00 UTC; last seen in hour 2023-02-25 03:00 UTC\", \"alert names: BatchSchedulerJobFailures (critical) \\u2014 10 events; service: batch-scheduler; first seen in hour 2023-02-24 23:00 UTC; last seen in hour 2023-02-25 04:00 UTC\", \"alert names: KubeCPUOvercommit (warning) \\u2014 3 events; service: cluster; first seen in hour 2023-02-24 20:00 UTC; last seen in hour 2023-02-24 21:00 UTC\", \"alert names: TargetDown (warning) \\u2014 3 events; service: roaming-svc; first seen in hour 2023-02-25 21:00 UTC; last seen in hour 2023-02-25 23:00 UTC\", \"critical alerts: 26 matching events\", \"critical alerts > critical instances: pixcr-node-05 \\u2014 16 events\", \"critical alerts > critical instances: batch-scheduler \\u2014 10 events\", \"critical alerts > critical alert names: KubeNodeNotReady \\u2014 16 events\", \"critical alerts > critical alert names: BatchSchedulerJobFailures \\u2014 10 events\", \"critical alerts > critical services: kubernetes \\u2014 16 events\", \"critical alerts > critical services: batch-scheduler \\u2014 10 events\", \"alert timeline: 2023-02-24 18:00 UTC \\u2014 4 events\", \"alert timeline: 2023-02-24 19:00 UTC \\u2014 4 events\", \"alert timeline: 2023-02-24 20:00 UTC \\u2014 3 events\", \"alert timeline: 2023-02-24 21:00 UTC \\u2014 3 events\", \"alert timeline: 2023-02-24 22:00 UTC \\u2014 1 events\", \"alert timeline: 2023-02-24 23:00 UTC \\u2014 9 events\", \"alert timeline: 2023-02-25 00:00 UTC \\u2014 8 events\", \"alert timeline: 2023-02-25 01:00 UTC \\u2014 6 events\", \"alert timeline: 2023-02-25 02:00 UTC \\u2014 5 events\", \"alert timeline: 2023-02-25 03:00 UTC \\u2014 7 events\", \"alert timeline: 2023-02-25 04:00 UTC \\u2014 1 events\", \"alert timeline: 2023-02-25 21:00 UTC \\u2014 1 events\", \"alert timeline: 2023-02-25 22:00 UTC \\u2014 1 events\", \"alert timeline: 2023-02-25 23:00 UTC \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "ecc_memory_0018",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "ecc_memory_0018-08",
+      "artifact_type": "resource_metrics",
+      "subtype": "metric_anomalies",
+      "source": "metric_anomalies",
+      "content": "{\"description\": \"Metric series that deviated from their 7-day baseline (hourly resolution): baseline, peak or trough value, anomaly onset and recovery (UTC).\", \"facts\": [\"metric anomalies: node_edac_correctable_errors_total rate on pixcr-node-05 \\u2014 baseline 0/h; peak 53/h; onset 2023-02-24 18:00 UTC; recovered 2023-02-25 04:00 UTC\", \"metric anomalies: node_cpu utilisation on 172.29.103.5 \\u2014 baseline 34%; peak 85%; onset 2023-02-25 14:00 UTC; recovered 2023-02-25 16:00 UTC\"]}",
+      "metadata": {
+        "scenario": "ecc_memory_0018",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "ecc_memory_0018-09",
+      "artifact_type": "derived_findings",
+      "subtype": "derived_summary",
+      "source": "derived_summary",
+      "content": "{\"description\": \"Deterministic summary computed from the query results above (error ranking, instance-to-host join, alert timeline, change correlation, earliest metric anomaly).\", \"facts\": [\"Derived: service batch-scheduler ranks #1 by error volume (3337 events, 1 failing dependencies). Most-failed dependency: workers on pixcr-node-05 (3337 errors).\", \"Derived: most-alerted critical instance pixcr-node-05 (16 critical alerts) maps to ip 172.29.16.62; role k8s-worker; zone rack C33.\", \"Derived: warning/critical alerts span 2023-02-24 18:00 UTC to 2023-02-25 23:00 UTC; earliest alert hour 2023-02-24 18:00 UTC (4 alerts).\", \"Derived: no changes recorded from 6 hours before the earliest alert hour to its end.\", \"Derived: earliest metric anomaly onset 2023-02-24 18:00 UTC (node_edac_correctable_errors_total rate on pixcr-node-05).\"]}",
+      "metadata": {
+        "scenario": "ecc_memory_0018",
+        "source_kind": "derived_from_es_results",
+        "heuristic": true
+      }
+    },
+    {
+      "artifact_id": "ecc_memory_0018-10",
+      "artifact_type": "query_coverage",
+      "subtype": "evidence_gaps",
+      "source": "evidence_gaps",
+      "content": "{\"description\": \"Queries that returned nothing or failed; use these to state what is NOT established.\", \"facts\": [\"No matching results for: tls certificates / expired certificates. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / expiring within 7 days. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / self signed. (Absence in this query is not proof of absence elsewhere.)\"]}",
+      "metadata": {
+        "scenario": "ecc_memory_0018",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    }
+  ]
+}

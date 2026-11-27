@@ -1,0 +1,154 @@
+{
+  "metadata": {
+    "incident_id": "INC-20230403",
+    "scenario": "terraform_apply_0026",
+    "title": "Infrastructure reliability incident investigation",
+    "source": "synthetic/ops-incident-expansion (modeled on neu-nds2/llm-sec-incident-analysis)",
+    "query_window_start": "2023-04-03T00:00:00",
+    "query_window_end": "2023-04-05T23:59:59",
+    "evidence_types": [
+      "change_records",
+      "derived_findings",
+      "infrastructure_events",
+      "monitoring_alerts",
+      "query_coverage",
+      "resource_metrics",
+      "service_logs"
+    ],
+    "artifact_scope_note": "Evidence is aggregated query output (not raw log lines or metric samples); it contains no chat/communication records."
+  },
+  "incident_description": "Reliability incident investigation of a production environment. Evidence consists of Elasticsearch aggregation results over application and proxy logs, Kubernetes, cloud-provider and host system events, Prometheus Alertmanager alerts, change-management / CI-CD audit records and metric anomaly detection. No root cause, impact or trigger is stated; these must be established from the supplied artifacts. Environment context: Organization: Pixidian Mobile (mobile operator); Platform: AWS ca-central-1 (zones ca-central-1a/ca-central-1b/ca-central-1d); network range 10.61.0.0/16; Kubernetes cluster pixidi-prod-cacent (EKS); Database: mysql server sim-db-01 reachable from the application network only through security group sg-52fe6449a3a0dae13; infrastructure is managed with Terraform applied from CI; Change management: production changes carry RFC- identifiers.",
+  "investigation_questions": [
+    "What change, deployment or automation run triggered the incident? Provide its change identifier.",
+    "Which user or automation account carried out the triggering change?",
+    "Which database host became unreachable?",
+    "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+    "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+    "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+    "Which change happened shortly before the incident began but did not cause it? Provide its identifier.",
+    "Which change restored normal service? Provide its change identifier."
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "terraform_apply_0026-01",
+      "artifact_type": "service_logs",
+      "subtype": "error_logs",
+      "source": "error_logs",
+      "content": "{\"description\": \"Application and proxy error logs: HTTP/gRPC status codes, failing requests (caller -> callee:port : operation), error messages and the services emitting them.\", \"facts\": [\"error events: 38237 matching events\", \"error events > status codes: 503 \\u2014 23596 events\", \"error events > status codes: n/a (connect timeout) \\u2014 14427 events\", \"error events > status codes: 500 \\u2014 214 events\", \"failing requests: selfcare-portal -> sim-provisioning:8080 : GET /v1/sim \\u2014 23596 events\", \"failing requests: sim-provisioning -> sim-db-01:3306 : connect \\u2014 14427 events\", \"failing requests: cdr-ingest -> cdr-db:5432 : query \\u2014 214 events\", \"error messages: sim-provisioning: 503 Service Unavailable \\u2014 23596 events\", \"error messages: SQLSTATE[HY000] [2002] Connection timed out (host 10.61.143.13:3306) \\u2014 14427 events\", \"error messages: deadlock detected \\u2014 214 events\", \"emitting services: selfcare-portal \\u2014 23596 events\", \"emitting services: sim-provisioning \\u2014 14427 events\", \"emitting services: cdr-ingest \\u2014 214 events\"]}",
+      "metadata": {
+        "scenario": "terraform_apply_0026",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "terraform_apply_0026-02",
+      "artifact_type": "service_logs",
+      "subtype": "error_volume_by_service",
+      "source": "error_volume_by_service",
+      "content": "{\"description\": \"Services ranked by number of error events, with each service's most-failed downstream dependencies.\", \"facts\": [\"services: selfcare-portal \\u2014 23596 events; failing dependencies=1; top dependencies: sim-provisioning (23596)\", \"services: sim-provisioning \\u2014 14427 events; failing dependencies=1; top dependencies: sim-db-01 (14427)\", \"services: cdr-ingest \\u2014 214 events; failing dependencies=1; top dependencies: cdr-db (214)\"]}",
+      "metadata": {
+        "scenario": "terraform_apply_0026",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "terraform_apply_0026-03",
+      "artifact_type": "change_records",
+      "subtype": "change_log",
+      "source": "change_log",
+      "content": "{\"description\": \"Deployments, configuration pushes, infrastructure and automation runs from the change-management and CI/CD audit log: change ID, type, target, actor, time (UTC), status and recorded diff/summary.\", \"facts\": [\"changes: RFC-83309 | deployment | cdr-ingest 3.8.12 -> 3.9.0 | actor: spinnaker | 2023-04-03 08:54 UTC | status: completed | feature flag cleanup \\u2014 1 events\", \"changes: RFC-83316 | deployment | number-porting-svc 11.23.3 -> 11.23.4 | actor: spinnaker | 2023-04-03 16:56 UTC | status: completed | dependency bump \\u2014 1 events\", \"changes: RFC-83347 | terraform_apply | security group sg-52fe6449a3a0dae13 (sim-db-01) | actor: terraform-ci | 2023-04-03 18:39 UTC | status: completed | plan: 0 to add, 1 to change, 0 to destroy; ingress tcp/3306 from 10.61.0.0/16 removed from security group sg-52fe6449a3a0dae13 (sim-db-01) (apply from stale branch infra/refactor-modules) \\u2014 1 events\", \"changes: RFC-83381 | network_change | security group sg-52fe6449a3a0dae13 (sim-db-01) | actor: a.singh | 2023-04-03 20:46 UTC | status: completed | restore ingress tcp/3306 from 10.61.0.0/16 \\u2014 1 events\", \"change types: deployment \\u2014 2 events\", \"change types: terraform_apply \\u2014 1 events\", \"change types: network_change \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "terraform_apply_0026",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "terraform_apply_0026-04",
+      "artifact_type": "change_records",
+      "subtype": "change_actors",
+      "source": "change_actors",
+      "content": "{\"description\": \"Accounts and automation identities that executed changes, with the hosts or targets they acted on.\", \"facts\": [\"actors: spinnaker \\u2014 2 events; targets: pixidi-prod-cacent/number-porting-svc (1), pixidi-prod-cacent/cdr-ingest (1)\", \"actors: a.singh \\u2014 1 events; targets: sim-db-01 (1)\", \"actors: terraform-ci \\u2014 1 events; targets: sim-db-01 (1)\"]}",
+      "metadata": {
+        "scenario": "terraform_apply_0026",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "terraform_apply_0026-05",
+      "artifact_type": "infrastructure_events",
+      "subtype": "host_inventory",
+      "source": "host_inventory",
+      "content": "{\"description\": \"Host and node names seen in infrastructure events with their IP address, role and availability zone / rack.\", \"facts\": [\"hosts: ip-10-61-110-191 \\u2014 262 events; ip: 10.61.110.191; role: k8s-worker; zone: ca-central-1d\", \"hosts: sim-db-01 \\u2014 114 events; ip: 10.61.143.13; role: mysql-primary; zone: ca-central-1d\", \"hosts: ip-10-61-110-138 \\u2014 84 events; ip: 10.61.110.138; role: k8s-worker; zone: ca-central-1d\"]}",
+      "metadata": {
+        "scenario": "terraform_apply_0026",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "terraform_apply_0026-06",
+      "artifact_type": "infrastructure_events",
+      "subtype": "platform_events",
+      "source": "platform_events",
+      "content": "{\"description\": \"Kubernetes events, cloud-provider health events and host system messages (kernel, hardware, daemons) with the objects or hosts they refer to.\", \"facts\": [\"flow logs: REJECT tcp 10.61.0.0/16 -> 10.61.143.13:3306 \\u2014 26950 events; top objects: sim-db-01 (1)\", \"event reasons: Pulled \\u2014 28 events; top objects: pod/number-porting-svc-311aeddf9-q9vqd (3)\", \"event reasons: ScalingReplicaSet \\u2014 3 events; top objects: deployment/number-porting-svc (2)\", \"event reasons: Pulled \\u2014 17 events; top objects: pod/cdr-ingest-75c15db6c-mvd2v (1)\", \"event reasons: ScalingReplicaSet \\u2014 4 events; top objects: deployment/cdr-ingest (3)\"]}",
+      "metadata": {
+        "scenario": "terraform_apply_0026",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "terraform_apply_0026-07",
+      "artifact_type": "monitoring_alerts",
+      "subtype": "alertmanager_alerts",
+      "source": "alertmanager_alerts",
+      "content": "{\"description\": \"Prometheus Alertmanager alerts: alert names with severity, critical-alert instances, alert names and services, and an hourly timeline of warning and critical alerts (UTC).\", \"facts\": [\"alert names: Watchdog (info) \\u2014 72 events; service: alertmanager; firing continuously\", \"alert names: SimProvisioningUnavailable (critical) \\u2014 9 events; service: sim-provisioning; first seen in hour 2023-04-03 18:00 UTC; last seen in hour 2023-04-03 20:00 UTC\", \"alert names: MysqlConnectionsDropped (critical) \\u2014 6 events; service: mysql; first seen in hour 2023-04-03 18:00 UTC; last seen in hour 2023-04-03 20:00 UTC\", \"alert names: KubeCPUOvercommit (warning) \\u2014 3 events; service: cluster; first seen in hour 2023-04-03 11:00 UTC; last seen in hour 2023-04-03 12:00 UTC\", \"alert names: NodeFilesystemSpaceFillingUp (warning) \\u2014 3 events; service: node; first seen in hour 2023-04-04 15:00 UTC; last seen in hour 2023-04-04 16:00 UTC\", \"critical alerts: 15 matching events\", \"critical alerts > critical instances: sim-provisioning \\u2014 9 events\", \"critical alerts > critical instances: 10.61.143.13:9104 \\u2014 6 events\", \"critical alerts > critical alert names: SimProvisioningUnavailable \\u2014 9 events\", \"critical alerts > critical alert names: MysqlConnectionsDropped \\u2014 6 events\", \"critical alerts > critical services: sim-provisioning \\u2014 9 events\", \"critical alerts > critical services: mysql \\u2014 6 events\", \"alert timeline: 2023-04-03 11:00 UTC \\u2014 2 events\", \"alert timeline: 2023-04-03 12:00 UTC \\u2014 1 events\", \"alert timeline: 2023-04-03 18:00 UTC \\u2014 6 events\", \"alert timeline: 2023-04-03 19:00 UTC \\u2014 4 events\", \"alert timeline: 2023-04-03 20:00 UTC \\u2014 5 events\", \"alert timeline: 2023-04-04 15:00 UTC \\u2014 1 events\", \"alert timeline: 2023-04-04 16:00 UTC \\u2014 2 events\"]}",
+      "metadata": {
+        "scenario": "terraform_apply_0026",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "terraform_apply_0026-08",
+      "artifact_type": "resource_metrics",
+      "subtype": "metric_anomalies",
+      "source": "metric_anomalies",
+      "content": "{\"description\": \"Metric series that deviated from their 7-day baseline (hourly resolution): baseline, peak or trough value, anomaly onset and recovery (UTC).\", \"facts\": [\"metric anomalies: mysql client connections on sim-db-01 \\u2014 baseline ~156; trough 0; onset 2023-04-03 18:00 UTC; recovered 2023-04-03 21:00 UTC\", \"metric anomalies: node memory utilisation on 10.61.110.191 \\u2014 baseline 53%; peak 85%; onset 2023-04-03 12:00 UTC; recovered 2023-04-03 14:00 UTC\"]}",
+      "metadata": {
+        "scenario": "terraform_apply_0026",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "terraform_apply_0026-09",
+      "artifact_type": "derived_findings",
+      "subtype": "derived_summary",
+      "source": "derived_summary",
+      "content": "{\"description\": \"Deterministic summary computed from the query results above (error ranking, instance-to-host join, alert timeline, change correlation, earliest metric anomaly).\", \"facts\": [\"Derived: service selfcare-portal ranks #1 by error volume (23596 events, 1 failing dependencies). Most-failed dependency: sim-provisioning (23596 errors).\", \"Derived: most-alerted critical instance sim-provisioning (9 critical alerts); no matching host-inventory entry.\", \"Derived: warning/critical alerts span 2023-04-03 11:00 UTC to 2023-04-04 16:00 UTC; earliest alert hour 2023-04-03 11:00 UTC (2 alerts).\", \"Derived: changes recorded from 6 hours before the earliest alert hour to its end: RFC-83309 (deployment, cdr-ingest 3.8.12 -> 3.9.0, spinnaker, 2023-04-03 08:54 UTC).\", \"Derived: earliest metric anomaly onset 2023-04-03 12:00 UTC (node memory utilisation on 10.61.110.191).\"]}",
+      "metadata": {
+        "scenario": "terraform_apply_0026",
+        "source_kind": "derived_from_es_results",
+        "heuristic": true
+      }
+    },
+    {
+      "artifact_id": "terraform_apply_0026-10",
+      "artifact_type": "query_coverage",
+      "subtype": "evidence_gaps",
+      "source": "evidence_gaps",
+      "content": "{\"description\": \"Queries that returned nothing or failed; use these to state what is NOT established.\", \"facts\": [\"No matching results for: tls certificates / expired certificates. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / expiring within 7 days. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / self signed. (Absence in this query is not proof of absence elsewhere.)\"]}",
+      "metadata": {
+        "scenario": "terraform_apply_0026",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    }
+  ]
+}

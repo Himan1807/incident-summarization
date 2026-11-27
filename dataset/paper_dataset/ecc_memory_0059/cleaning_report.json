@@ -1,0 +1,14 @@
+{
+  "scenario": "ecc_memory_0059",
+  "cleaning": [],
+  "skipped": [],
+  "gaps": [
+    "tls_certificates"
+  ],
+  "artifacts": 10,
+  "facts": 74,
+  "empty_aggregations": 0,
+  "questions": 9,
+  "answers": 9,
+  "atoms": 10
+}

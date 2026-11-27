@@ -1,0 +1,14 @@
+{
+  "scenario": "retry_storm_0042",
+  "cleaning": [],
+  "skipped": [
+    "tls_certificates: all aggregations empty"
+  ],
+  "gaps": [],
+  "artifacts": 10,
+  "facts": 71,
+  "empty_aggregations": 3,
+  "questions": 11,
+  "answers": 11,
+  "atoms": 12
+}

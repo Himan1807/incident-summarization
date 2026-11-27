@@ -1,0 +1,16 @@
+{
+  "scenario": "acl_split_brain_0055",
+  "cleaning": [],
+  "skipped": [
+    "tls_certificates: all aggregations empty"
+  ],
+  "gaps": [
+    "platform_events"
+  ],
+  "artifacts": 9,
+  "facts": 69,
+  "empty_aggregations": 3,
+  "questions": 9,
+  "answers": 9,
+  "atoms": 10
+}

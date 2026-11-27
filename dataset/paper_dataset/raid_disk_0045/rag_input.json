@@ -1,0 +1,153 @@
+{
+  "metadata": {
+    "incident_id": "INC-20250603",
+    "scenario": "raid_disk_0045",
+    "title": "Infrastructure reliability incident investigation",
+    "source": "synthetic/ops-incident-expansion (modeled on neu-nds2/llm-sec-incident-analysis)",
+    "query_window_start": "2025-06-03T00:00:00",
+    "query_window_end": "2025-06-05T23:59:59",
+    "evidence_types": [
+      "change_records",
+      "derived_findings",
+      "infrastructure_events",
+      "monitoring_alerts",
+      "query_coverage",
+      "resource_metrics",
+      "service_logs"
+    ],
+    "artifact_scope_note": "Evidence is aggregated query output (not raw log lines or metric samples); it contains no chat/communication records."
+  },
+  "incident_description": "Reliability incident investigation of a production environment. Evidence consists of Elasticsearch aggregation results over application and proxy logs, Kubernetes, cloud-provider and host system events, Prometheus Alertmanager alerts, change-management / CI-CD audit records and metric anomaly detection. No root cause, impact or trigger is stated; these must be established from the supplied artifacts. Environment context: Organization: Merfield Games (online gaming); Platform: on-premises data center DC-North, server range 10.62.0.0/16; Kubernetes cluster merfie-prod (kubeadm); Database: PostgreSQL primary with streaming replicas on rack servers with hardware RAID-10; read traffic goes through pgbouncer; data-center work uses DC- identifiers; Change management: production changes carry RFC- identifiers.",
+  "investigation_questions": [
+    "Which host or node did the failure originate on? Give its hostname.",
+    "For which block device did the kernel report I/O errors?",
+    "What is the serial number of the physical disk that failed first?",
+    "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+    "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+    "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+    "Which change restored normal service? Provide its change identifier."
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "raid_disk_0045-01",
+      "artifact_type": "service_logs",
+      "subtype": "error_logs",
+      "source": "error_logs",
+      "content": "{\"description\": \"Application and proxy error logs: HTTP/gRPC status codes, failing requests (caller -> callee:port : operation), error messages and the services emitting them.\", \"facts\": [\"error events: 30891 matching events\", \"error events > status codes: 500 \\u2014 17135 events\", \"error events > status codes: 504 \\u2014 13756 events\", \"failing requests: statements-api -> pgbouncer-01:6432 : SELECT (read-only pool) \\u2014 16806 events\", \"failing requests: game-gateway -> statements-api:8080 : GET /v1/statements/history \\u2014 13756 events\", \"failing requests: leaderboard-api -> leaderboard-db:5432 : query \\u2014 216 events\", \"failing requests: statements-api -> pg-replica-05:5432 : SELECT \\u2014 113 events\", \"error messages: ERROR: canceling statement due to statement timeout \\u2014 16806 events\", \"error messages: statements-api: 504 Gateway Timeout \\u2014 13756 events\", \"error messages: redis: i/o timeout \\u2014 216 events\", \"error messages: ERROR: could not read block 4607 in file \\\"base/16402/66298\\\": Input/output error \\u2014 113 events\", \"emitting services: statements-api \\u2014 16919 events\", \"emitting services: game-gateway \\u2014 13756 events\", \"emitting services: leaderboard-api \\u2014 216 events\"]}",
+      "metadata": {
+        "scenario": "raid_disk_0045",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "raid_disk_0045-02",
+      "artifact_type": "service_logs",
+      "subtype": "error_volume_by_service",
+      "source": "error_volume_by_service",
+      "content": "{\"description\": \"Services ranked by number of error events, with each service's most-failed downstream dependencies.\", \"facts\": [\"services: statements-api \\u2014 16919 events; failing dependencies=2; top dependencies: pgbouncer-01 (16806), pg-replica-05 (113)\", \"services: game-gateway \\u2014 13756 events; failing dependencies=1; top dependencies: statements-api (13756)\", \"services: leaderboard-api \\u2014 216 events; failing dependencies=1; top dependencies: leaderboard-db (216)\"]}",
+      "metadata": {
+        "scenario": "raid_disk_0045",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "raid_disk_0045-03",
+      "artifact_type": "change_records",
+      "subtype": "change_log",
+      "source": "change_log",
+      "content": "{\"description\": \"Deployments, configuration pushes, infrastructure and automation runs from the change-management and CI/CD audit log: change ID, type, target, actor, time (UTC), status and recorded diff/summary.\", \"facts\": [\"changes: RFC-45464 | deployment | leaderboard-api 14.17.12 -> 14.17.13 | actor: gitlab-ci | 2025-06-03 03:49 UTC | status: completed | minor bug fixes \\u2014 1 events\", \"changes: RFC-45478 | deployment | chat-svc 9.1.8 -> 9.2.0 | actor: gitlab-ci | 2025-06-03 14:20 UTC | status: completed | performance tuning of list endpoint \\u2014 1 events\", \"changes: RFC-45492 | config_push | pgbouncer-01 pool read-only | actor: n.demir | 2025-06-03 17:26 UTC | status: completed | remove pg-replica-05 from read-only backends \\u2014 1 events\", \"changes: DC-6215 | hardware_replacement | pg-replica-05 Physical Disk 0:1:7 | actor: dcops-i.haddad | 2025-06-03 19:26 UTC | status: completed | replaced failed drive; rebuild started \\u2014 1 events\", \"changes: RFC-45527 | deployment | store-api 2.22.10 -> 2.22.11 | actor: gitlab-ci | 2025-06-04 08:39 UTC | status: completed | new optional API field \\u2014 1 events\", \"changes: RFC-45533 | deployment | rewards-svc 2.26.8 -> 2.26.9 | actor: gitlab-ci | 2025-06-05 08:11 UTC | status: completed | minor bug fixes \\u2014 1 events\", \"change types: deployment \\u2014 4 events\", \"change types: config_push \\u2014 1 events\", \"change types: hardware_replacement \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "raid_disk_0045",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "raid_disk_0045-04",
+      "artifact_type": "change_records",
+      "subtype": "change_actors",
+      "source": "change_actors",
+      "content": "{\"description\": \"Accounts and automation identities that executed changes, with the hosts or targets they acted on.\", \"facts\": [\"actors: gitlab-ci \\u2014 4 events; targets: merfie-prod/chat-svc (1), merfie-prod/leaderboard-api (1), merfie-prod/rewards-svc (1), merfie-prod/store-api (1)\", \"actors: dcops-i.haddad \\u2014 1 events; targets: pg-replica-05 (1)\", \"actors: n.demir \\u2014 1 events; targets: pgbouncer-01 (1)\"]}",
+      "metadata": {
+        "scenario": "raid_disk_0045",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "raid_disk_0045-05",
+      "artifact_type": "infrastructure_events",
+      "subtype": "host_inventory",
+      "source": "host_inventory",
+      "content": "{\"description\": \"Host and node names seen in infrastructure events with their IP address, role and availability zone / rack.\", \"facts\": [\"hosts: pg-replica-05 \\u2014 425 events; ip: 10.62.72.204; role: postgres-replica; zone: rack R25\", \"hosts: merfi-node-13 \\u2014 131 events; ip: 10.62.136.249; role: k8s-worker; zone: rack R25\", \"hosts: pg-primary-01 \\u2014 121 events; ip: 10.62.72.53; role: postgres-primary; zone: rack R31\", \"hosts: pgbouncer-01 \\u2014 79 events; ip: 10.62.72.236; role: pgbouncer; zone: rack R31\", \"hosts: merfi-node-40 \\u2014 67 events; ip: 10.62.136.117; role: k8s-worker; zone: rack R25\"]}",
+      "metadata": {
+        "scenario": "raid_disk_0045",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "raid_disk_0045-06",
+      "artifact_type": "infrastructure_events",
+      "subtype": "platform_events",
+      "source": "platform_events",
+      "content": "{\"description\": \"Kubernetes events, cloud-provider health events and host system messages (kernel, hardware, daemons) with the objects or hosts they refer to.\", \"facts\": [\"hardware events (sel): Predictive failure reported for Physical Disk 0:1:7 (serial 10ZYW0C9) \\u2014 1 events; top objects: pg-replica-05 (1)\", \"hardware events (sel): Fault detected on Physical Disk 0:1:7 (serial 10ZYW0C9); state Failed \\u2014 1 events; top objects: pg-replica-05 (1)\", \"hardware events (sel): Virtual Disk 0 on RAID Controller in Slot 1 has become degraded \\u2014 1 events; top objects: pg-replica-05 (1)\", \"hardware events (sel): Media error count increased on Physical Disk 0:1:1 \\u2014 18 events; top objects: pg-replica-05 (1)\", \"system messages: kernel: blk_update_request: I/O error, dev sdb, sector 113712693 op 0x0:(READ) \\u2014 69 events; top objects: pg-replica-05 (1)\", \"event reasons: Pulled \\u2014 3 events; top objects: pod/chat-svc-b769a1414-m6bn8 (3)\", \"event reasons: ScalingReplicaSet \\u2014 5 events; top objects: deployment/chat-svc (1)\", \"event reasons: Pulled \\u2014 7 events; top objects: pod/leaderboard-api-ad9bcb0bd-br9m7 (3)\", \"event reasons: ScalingReplicaSet \\u2014 2 events; top objects: deployment/leaderboard-api (1)\", \"event reasons: Pulled \\u2014 26 events; top objects: pod/rewards-svc-59fc837a9-7kbxx (1)\", \"event reasons: ScalingReplicaSet \\u2014 5 events; top objects: deployment/rewards-svc (1)\", \"event reasons: Pulled \\u2014 25 events; top objects: pod/store-api-1f0dcb8f9-sclsg (3)\", \"event reasons: ScalingReplicaSet \\u2014 2 events; top objects: deployment/store-api (2)\"]}",
+      "metadata": {
+        "scenario": "raid_disk_0045",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "raid_disk_0045-07",
+      "artifact_type": "monitoring_alerts",
+      "subtype": "alertmanager_alerts",
+      "source": "alertmanager_alerts",
+      "content": "{\"description\": \"Prometheus Alertmanager alerts: alert names with severity, critical-alert instances, alert names and services, and an hourly timeline of warning and critical alerts (UTC).\", \"facts\": [\"alert names: Watchdog (info) \\u2014 72 events; service: alertmanager; firing continuously\", \"alert names: RaidPhysicalDiskPredictiveFailure (warning) \\u2014 13 events; service: node; first seen in hour 2025-06-03 12:00 UTC; last seen in hour 2025-06-03 15:00 UTC\", \"alert names: RaidVirtualDiskDegraded (critical) \\u2014 13 events; service: node; first seen in hour 2025-06-03 15:00 UTC; last seen in hour 2025-06-03 19:00 UTC\", \"alert names: PostgresReplicationLagHigh (critical) \\u2014 8 events; service: postgres; first seen in hour 2025-06-03 15:00 UTC; last seen in hour 2025-06-03 17:00 UTC\", \"alert names: HighDiskIOLatency (critical) \\u2014 5 events; service: node; first seen in hour 2025-06-03 15:00 UTC; last seen in hour 2025-06-03 17:00 UTC\", \"alert names: KubeJobFailed (warning) \\u2014 3 events; service: batch; first seen in hour 2025-06-03 11:00 UTC; last seen in hour 2025-06-03 12:00 UTC\", \"critical alerts: 26 matching events\", \"critical alerts > critical instances: 10.62.72.204:9100 \\u2014 18 events\", \"critical alerts > critical instances: 10.62.72.204:9187 \\u2014 8 events\", \"critical alerts > critical alert names: RaidVirtualDiskDegraded \\u2014 13 events\", \"critical alerts > critical alert names: PostgresReplicationLagHigh \\u2014 8 events\", \"critical alerts > critical alert names: HighDiskIOLatency \\u2014 5 events\", \"critical alerts > critical services: node \\u2014 18 events\", \"critical alerts > critical services: postgres \\u2014 8 events\", \"alert timeline: 2025-06-03 11:00 UTC \\u2014 2 events\", \"alert timeline: 2025-06-03 12:00 UTC \\u2014 4 events\", \"alert timeline: 2025-06-03 13:00 UTC \\u2014 2 events\", \"alert timeline: 2025-06-03 14:00 UTC \\u2014 4 events\", \"alert timeline: 2025-06-03 15:00 UTC \\u2014 10 events\", \"alert timeline: 2025-06-03 16:00 UTC \\u2014 7 events\", \"alert timeline: 2025-06-03 17:00 UTC \\u2014 6 events\", \"alert timeline: 2025-06-03 18:00 UTC \\u2014 4 events\", \"alert timeline: 2025-06-03 19:00 UTC \\u2014 3 events\"]}",
+      "metadata": {
+        "scenario": "raid_disk_0045",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "raid_disk_0045-08",
+      "artifact_type": "resource_metrics",
+      "subtype": "metric_anomalies",
+      "source": "metric_anomalies",
+      "content": "{\"description\": \"Metric series that deviated from their 7-day baseline (hourly resolution): baseline, peak or trough value, anomaly onset and recovery (UTC).\", \"facts\": [\"metric anomalies: smart Reallocated_Sector_Ct (slot 7) on pg-replica-05 \\u2014 baseline 0; peak 504; onset 2025-06-03 12:00 UTC; still anomalous at end of query window\", \"metric anomalies: disk await (sdb) on pg-replica-05 \\u2014 baseline 1.4 ms; peak 795 ms; onset 2025-06-03 15:00 UTC; recovered 2025-06-03 18:00 UTC\", \"metric anomalies: node memory utilisation on 10.62.136.117 \\u2014 baseline 44%; peak 92%; onset 2025-06-04 04:00 UTC; recovered 2025-06-04 07:00 UTC\"]}",
+      "metadata": {
+        "scenario": "raid_disk_0045",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "raid_disk_0045-09",
+      "artifact_type": "derived_findings",
+      "subtype": "derived_summary",
+      "source": "derived_summary",
+      "content": "{\"description\": \"Deterministic summary computed from the query results above (error ranking, instance-to-host join, alert timeline, change correlation, earliest metric anomaly).\", \"facts\": [\"Derived: service statements-api ranks #1 by error volume (16919 events, 2 failing dependencies). Most-failed dependency: pgbouncer-01 (16806 errors).\", \"Derived: most-alerted critical instance 10.62.72.204:9100 (18 critical alerts) maps to hostname pg-replica-05; role postgres-replica; zone rack R25.\", \"Derived: warning/critical alerts span 2025-06-03 11:00 UTC to 2025-06-03 19:00 UTC; earliest alert hour 2025-06-03 11:00 UTC (2 alerts).\", \"Derived: no changes recorded from 6 hours before the earliest alert hour to its end.\", \"Derived: earliest metric anomaly onset 2025-06-03 12:00 UTC (smart Reallocated_Sector_Ct (slot 7) on pg-replica-05).\"]}",
+      "metadata": {
+        "scenario": "raid_disk_0045",
+        "source_kind": "derived_from_es_results",
+        "heuristic": true
+      }
+    },
+    {
+      "artifact_id": "raid_disk_0045-10",
+      "artifact_type": "query_coverage",
+      "subtype": "evidence_gaps",
+      "source": "evidence_gaps",
+      "content": "{\"description\": \"Queries that returned nothing or failed; use these to state what is NOT established.\", \"facts\": [\"No matching results for: tls certificates / expired certificates. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / expiring within 7 days. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / self signed. (Absence in this query is not proof of absence elsewhere.)\"]}",
+      "metadata": {
+        "scenario": "raid_disk_0045",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    }
+  ]
+}

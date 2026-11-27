@@ -1,0 +1,154 @@
+{
+  "metadata": {
+    "incident_id": "INC-20230808",
+    "scenario": "dns_forward_removed_0031",
+    "title": "Infrastructure reliability incident investigation",
+    "source": "synthetic/ops-incident-expansion (modeled on neu-nds2/llm-sec-incident-analysis)",
+    "query_window_start": "2023-08-08T00:00:00",
+    "query_window_end": "2023-08-10T23:59:59",
+    "evidence_types": [
+      "change_records",
+      "derived_findings",
+      "infrastructure_events",
+      "monitoring_alerts",
+      "query_coverage",
+      "resource_metrics",
+      "service_logs"
+    ],
+    "artifact_scope_note": "Evidence is aggregated query output (not raw log lines or metric samples); it contains no chat/communication records."
+  },
+  "incident_description": "Reliability incident investigation of a production environment. Evidence consists of Elasticsearch aggregation results over application and proxy logs, Kubernetes, cloud-provider and host system events, Prometheus Alertmanager alerts, change-management / CI-CD audit records and metric anomaly detection. No root cause, impact or trigger is stated; these must be established from the supplied artifacts. Environment context: Organization: Caldpine Software (collaboration SaaS); Platform: Microsoft Azure southeastasia (zones southeastasia-1/southeastasia-2/southeastasia-3); network range 10.145.0.0/16; Kubernetes cluster caldpi-prod-southe (AKS); Cluster add-ons: CoreDNS, ingress controller, Argo CD; services call external SaaS APIs; direct kubectl changes are recorded by the Kubernetes audit log with AUD- identifiers; Change management: production changes carry CR- identifiers.",
+  "investigation_questions": [
+    "Which service or component is the origin of the failure?",
+    "Which change or automation run triggered the incident? Give its identifier.",
+    "Which user or automation account carried out the triggering change?",
+    "Which external domains failed to resolve from inside the cluster?",
+    "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+    "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+    "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+    "What change brought the service back to normal? Give its identifier."
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "dns_forward_removed_0031-01",
+      "artifact_type": "service_logs",
+      "subtype": "error_logs",
+      "source": "error_logs",
+      "content": "{\"description\": \"Application and proxy error logs: HTTP/gRPC status codes, failing requests (caller -> callee:port : operation), error messages and the services emitting them.\", \"facts\": [\"error events: 91550 matching events\", \"error events > status codes: n/a (client-side DNS resolution error) \\u2014 91333 events\", \"error events > status codes: 499 \\u2014 166 events\", \"error events > status codes: n/a (log-only) \\u2014 51 events\", \"failing requests: geo-svc -> geo.maptile.dev:443 : GET /v1/geocode \\u2014 48086 events\", \"failing requests: sms-notifier -> sms.relaycast.net:443 : POST /v1/messages \\u2014 43247 events\", \"failing requests: auth-api -> auth-db:5432 : query \\u2014 166 events\", \"failing requests: coredns -> plugin chain : resolve \\u2014 51 events\", \"error messages: dial tcp: lookup geo.maptile.dev on 10.0.0.10:53: server misbehaving \\u2014 48086 events\", \"error messages: java.net.UnknownHostException: sms.relaycast.net: Temporary failure in name resolution \\u2014 43247 events\", \"error messages: context canceled \\u2014 166 events\", \"error messages: [ERROR] plugin/errors: consolidated errors like '^.* no next plugin found$' occurred in last 5m \\u2014 51 events\", \"emitting services: geo-svc \\u2014 48086 events\", \"emitting services: sms-notifier \\u2014 43247 events\", \"emitting services: auth-api \\u2014 166 events\", \"emitting services: coredns \\u2014 51 events\"]}",
+      "metadata": {
+        "scenario": "dns_forward_removed_0031",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "dns_forward_removed_0031-02",
+      "artifact_type": "service_logs",
+      "subtype": "error_volume_by_service",
+      "source": "error_volume_by_service",
+      "content": "{\"description\": \"Services ranked by number of error events, with each service's most-failed downstream dependencies.\", \"facts\": [\"services: geo-svc \\u2014 48086 events; failing dependencies=1; top dependencies: geo.maptile.dev (48086)\", \"services: sms-notifier \\u2014 43247 events; failing dependencies=1; top dependencies: sms.relaycast.net (43247)\", \"services: auth-api \\u2014 166 events; failing dependencies=1; top dependencies: auth-db (166)\", \"services: coredns \\u2014 51 events; failing dependencies=1; top dependencies: plugin chain (51)\"]}",
+      "metadata": {
+        "scenario": "dns_forward_removed_0031",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "dns_forward_removed_0031-03",
+      "artifact_type": "change_records",
+      "subtype": "change_log",
+      "source": "change_log",
+      "content": "{\"description\": \"Deployments, configuration pushes, infrastructure and automation runs from the change-management and CI/CD audit log: change ID, type, target, actor, time (UTC), status and recorded diff/summary.\", \"facts\": [\"changes: CR-20417 | deployment | app-frontend 1.7.4 -> 1.8.0 | actor: argocd | 2023-08-08 11:53 UTC | status: completed | copy and UI text changes \\u2014 1 events\", \"changes: AUD-8de6da | kubectl_edit | configmap kube-system/coredns | actor: e.iyer | 2023-08-08 12:18 UTC | status: applied | Corefile .:53 block: removed 'forward . /etc/resolv.conf'; added 'hosts /etc/coredns/customdomains.db { fallthrough }' \\u2014 1 events\", \"changes: AUD-54639c | kubectl_rollout_restart | deployment kube-system/coredns | actor: e.iyer | 2023-08-08 12:20 UTC | status: applied | rollout restart \\u2014 1 events\", \"changes: AUD-414834 | kubectl_apply | configmap kube-system/coredns | actor: j.weber | 2023-08-08 15:32 UTC | status: applied | Corefile restored from configmap revision 22 \\u2014 1 events\", \"changes: CR-20439 | deployment | auth-api 7.20.7 -> 7.21.0 | actor: argocd | 2023-08-08 23:21 UTC | status: Synced/Healthy | feature flag cleanup \\u2014 1 events\", \"changes: CR-20448 | deployment | billing-api 0.6.10 -> 0.6.11 | actor: argocd | 2023-08-10 17:40 UTC | status: succeeded | dependency bump \\u2014 1 events\", \"change types: deployment \\u2014 3 events\", \"change types: kubectl_edit \\u2014 1 events\", \"change types: kubectl_rollout_restart \\u2014 1 events\", \"change types: kubectl_apply \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "dns_forward_removed_0031",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "dns_forward_removed_0031-04",
+      "artifact_type": "change_records",
+      "subtype": "change_actors",
+      "source": "change_actors",
+      "content": "{\"description\": \"Accounts and automation identities that executed changes, with the hosts or targets they acted on.\", \"facts\": [\"actors: argocd \\u2014 3 events; targets: caldpi-prod-southe/app-frontend (1), caldpi-prod-southe/auth-api (1), caldpi-prod-southe/billing-api (1)\", \"actors: e.iyer \\u2014 2 events; targets: kube-system/coredns (2)\", \"actors: j.weber \\u2014 1 events; targets: kube-system/coredns (1)\"]}",
+      "metadata": {
+        "scenario": "dns_forward_removed_0031",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "dns_forward_removed_0031-05",
+      "artifact_type": "infrastructure_events",
+      "subtype": "host_inventory",
+      "source": "host_inventory",
+      "content": "{\"description\": \"Host and node names seen in infrastructure events with their IP address, role and availability zone / rack.\", \"facts\": [\"hosts: aks-nodepool1-68557455-vmss000019 \\u2014 199 events; ip: 10.145.130.77; role: k8s-worker; zone: southeastasia-3\", \"hosts: aks-nodepool1-32544667-vmss000003 \\u2014 64 events; ip: 10.145.190.68; role: k8s-worker; zone: southeastasia-2\"]}",
+      "metadata": {
+        "scenario": "dns_forward_removed_0031",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "dns_forward_removed_0031-06",
+      "artifact_type": "infrastructure_events",
+      "subtype": "platform_events",
+      "source": "platform_events",
+      "content": "{\"description\": \"Kubernetes events, cloud-provider health events and host system messages (kernel, hardware, daemons) with the objects or hosts they refer to.\", \"facts\": [\"audit events: update configmaps kube-system/coredns \\u2014 2 events; top objects: e.iyer (1), j.weber (1)\", \"event reasons: Unhealthy \\u2014 73 events; top objects: pod/geo-svc-6377cc03a-7tvrm (23)\", \"event reasons: Pulled \\u2014 18 events; top objects: pod/app-frontend-f36219e1f-5cfg9 (3)\", \"event reasons: ScalingReplicaSet \\u2014 5 events; top objects: deployment/app-frontend (1)\", \"event reasons: Pulled \\u2014 13 events; top objects: pod/auth-api-257a07e34-nndxx (2)\", \"event reasons: ScalingReplicaSet \\u2014 5 events; top objects: deployment/auth-api (2)\", \"event reasons: Pulled \\u2014 28 events; top objects: pod/billing-api-112390165-xp4m9 (2)\", \"event reasons: ScalingReplicaSet \\u2014 2 events; top objects: deployment/billing-api (1)\"]}",
+      "metadata": {
+        "scenario": "dns_forward_removed_0031",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "dns_forward_removed_0031-07",
+      "artifact_type": "monitoring_alerts",
+      "subtype": "alertmanager_alerts",
+      "source": "alertmanager_alerts",
+      "content": "{\"description\": \"Prometheus Alertmanager alerts: alert names with severity, critical-alert instances, alert names and services, and an hourly timeline of warning and critical alerts (UTC).\", \"facts\": [\"alert names: Watchdog (info) \\u2014 72 events; service: alertmanager; firing continuously\", \"alert names: CoreDNSErrorsHigh (critical) \\u2014 14 events; service: coredns; first seen in hour 2023-08-08 12:00 UTC; last seen in hour 2023-08-08 15:00 UTC\", \"alert names: GeoSvcErrorRateHigh (critical) \\u2014 10 events; service: geo-svc; first seen in hour 2023-08-08 12:00 UTC; last seen in hour 2023-08-08 15:00 UTC\", \"alert names: KubeCPUOvercommit (warning) \\u2014 3 events; service: cluster; first seen in hour 2023-08-08 03:00 UTC; last seen in hour 2023-08-08 04:00 UTC\", \"critical alerts: 24 matching events\", \"critical alerts > critical instances: geo-svc \\u2014 10 events\", \"critical alerts > critical instances: 10.244.30.36:9153 \\u2014 7 events\", \"critical alerts > critical instances: 10.244.36.217:9153 \\u2014 7 events\", \"critical alerts > critical alert names: CoreDNSErrorsHigh \\u2014 14 events\", \"critical alerts > critical alert names: GeoSvcErrorRateHigh \\u2014 10 events\", \"critical alerts > critical services: coredns \\u2014 14 events\", \"critical alerts > critical services: geo-svc \\u2014 10 events\", \"alert timeline: 2023-08-08 03:00 UTC \\u2014 1 events\", \"alert timeline: 2023-08-08 04:00 UTC \\u2014 2 events\", \"alert timeline: 2023-08-08 12:00 UTC \\u2014 3 events\", \"alert timeline: 2023-08-08 13:00 UTC \\u2014 7 events\", \"alert timeline: 2023-08-08 14:00 UTC \\u2014 5 events\", \"alert timeline: 2023-08-08 15:00 UTC \\u2014 9 events\"]}",
+      "metadata": {
+        "scenario": "dns_forward_removed_0031",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "dns_forward_removed_0031-08",
+      "artifact_type": "resource_metrics",
+      "subtype": "metric_anomalies",
+      "source": "metric_anomalies",
+      "content": "{\"description\": \"Metric series that deviated from their 7-day baseline (hourly resolution): baseline, peak or trough value, anomaly onset and recovery (UTC).\", \"facts\": [\"metric anomalies: coredns_dns_responses_total{rcode=\\\"SERVFAIL\\\"} rate on kube-system/coredns \\u2014 baseline 0.2/s; peak 1035/s; onset 2023-08-08 12:00 UTC; recovered 2023-08-08 16:00 UTC\", \"metric anomalies: node_network_receive_bytes rate on 10.145.130.77 \\u2014 baseline 77 MB/s; peak 404 MB/s; onset 2023-08-09 05:00 UTC; recovered 2023-08-09 08:00 UTC\"]}",
+      "metadata": {
+        "scenario": "dns_forward_removed_0031",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "dns_forward_removed_0031-09",
+      "artifact_type": "derived_findings",
+      "subtype": "derived_summary",
+      "source": "derived_summary",
+      "content": "{\"description\": \"Deterministic summary computed from the query results above (error ranking, instance-to-host join, alert timeline, change correlation, earliest metric anomaly).\", \"facts\": [\"Derived: service geo-svc ranks #1 by error volume (48086 events, 1 failing dependencies). Most-failed dependency: geo.maptile.dev (48086 errors).\", \"Derived: most-alerted critical instance geo-svc (10 critical alerts); no matching host-inventory entry.\", \"Derived: warning/critical alerts span 2023-08-08 03:00 UTC to 2023-08-08 15:00 UTC; earliest alert hour 2023-08-08 03:00 UTC (1 alerts).\", \"Derived: no changes recorded from 6 hours before the earliest alert hour to its end.\", \"Derived: earliest metric anomaly onset 2023-08-08 12:00 UTC (coredns_dns_responses_total{rcode=\\\"SERVFAIL\\\"} rate on kube-system/coredns).\"]}",
+      "metadata": {
+        "scenario": "dns_forward_removed_0031",
+        "source_kind": "derived_from_es_results",
+        "heuristic": true
+      }
+    },
+    {
+      "artifact_id": "dns_forward_removed_0031-10",
+      "artifact_type": "query_coverage",
+      "subtype": "evidence_gaps",
+      "source": "evidence_gaps",
+      "content": "{\"description\": \"Queries that returned nothing or failed; use these to state what is NOT established.\", \"facts\": [\"No matching results for: tls certificates / expired certificates. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / expiring within 7 days. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / self signed. (Absence in this query is not proof of absence elsewhere.)\"]}",
+      "metadata": {
+        "scenario": "dns_forward_removed_0031",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    }
+  ]
+}

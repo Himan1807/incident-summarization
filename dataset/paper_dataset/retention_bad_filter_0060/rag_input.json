@@ -1,0 +1,155 @@
+{
+  "metadata": {
+    "incident_id": "INC-20241005",
+    "scenario": "retention_bad_filter_0060",
+    "title": "Infrastructure reliability incident investigation",
+    "source": "synthetic/ops-incident-expansion (modeled on neu-nds2/llm-sec-incident-analysis)",
+    "query_window_start": "2024-10-05T00:00:00",
+    "query_window_end": "2024-10-07T23:59:59",
+    "evidence_types": [
+      "change_records",
+      "derived_findings",
+      "infrastructure_events",
+      "monitoring_alerts",
+      "query_coverage",
+      "resource_metrics",
+      "service_logs"
+    ],
+    "artifact_scope_note": "Evidence is aggregated query output (not raw log lines or metric samples); it contains no chat/communication records."
+  },
+  "incident_description": "Reliability incident investigation of a production environment. Evidence consists of Elasticsearch aggregation results over application and proxy logs, Kubernetes, cloud-provider and host system events, Prometheus Alertmanager alerts, change-management / CI-CD audit records and metric anomaly detection. No root cause, impact or trigger is stated; these must be established from the supplied artifacts. Environment context: Organization: Verdlane Clinics (clinic and patient management SaaS); Platform: AWS us-east-2 (zones us-east-2a/us-east-2b/us-east-2c); network range 10.156.0.0/16; Database: patients-db-01 holds patients records; Automation: data-retention workflows scheduled by Argo Workflows and executed under service accounts (runs recorded with RUN- identifiers); Change management: production changes carry CHG- identifiers.",
+  "investigation_questions": [
+    "What change, deployment or automation run triggered the incident? Provide its change identifier.",
+    "Which code change introduced the faulty eligibility filter? Provide its change identifier.",
+    "Which database table was incorrectly modified?",
+    "Which file contained the faulty filter?",
+    "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+    "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+    "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+    "Which change happened shortly before the incident began but did not cause it? Provide its identifier.",
+    "Which change restored normal service? Provide its change identifier."
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "retention_bad_filter_0060-01",
+      "artifact_type": "service_logs",
+      "subtype": "error_logs",
+      "source": "error_logs",
+      "content": "{\"description\": \"Application and proxy error logs: HTTP/gRPC status codes, failing requests (caller -> callee:port : operation), error messages and the services emitting them.\", \"facts\": [\"error events: 73213 matching events\", \"error events > status codes: 401 \\u2014 37926 events\", \"error events > status codes: 550 \\u2014 31560 events\", \"error events > status codes: 422 \\u2014 3517 events\", \"error events > status codes: 429 \\u2014 210 events\", \"failing requests: identity-svc -> patients-db-01:5432 : SELECT patients by email \\u2014 37926 events\", \"failing requests: notification-worker -> mail-relay:587 : SMTP SEND \\u2014 31560 events\", \"failing requests: messaging-svc -> patients-db-01:5432 : SELECT patients profile \\u2014 3517 events\", \"failing requests: consent-svc -> consent-db:5432 : query \\u2014 210 events\", \"error messages: login failed: no account found for supplied email \\u2014 37926 events\", \"error messages: 550 5.1.1 recipient address rejected: anon+*@invalid.verdlane \\u2014 31560 events\", \"error messages: profile lookup returned anonymized record \\u2014 3517 events\", \"error messages: HTTP 429 Too Many Requests from upstream \\u2014 210 events\", \"emitting services: identity-svc \\u2014 37926 events\", \"emitting services: notification-worker \\u2014 31560 events\", \"emitting services: messaging-svc \\u2014 3517 events\", \"emitting services: consent-svc \\u2014 210 events\"]}",
+      "metadata": {
+        "scenario": "retention_bad_filter_0060",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "retention_bad_filter_0060-02",
+      "artifact_type": "service_logs",
+      "subtype": "error_volume_by_service",
+      "source": "error_volume_by_service",
+      "content": "{\"description\": \"Services ranked by number of error events, with each service's most-failed downstream dependencies.\", \"facts\": [\"services: identity-svc \\u2014 37926 events; failing dependencies=1; top dependencies: patients-db-01 (37926)\", \"services: notification-worker \\u2014 31560 events; failing dependencies=1; top dependencies: mail-relay (31560)\", \"services: messaging-svc \\u2014 3517 events; failing dependencies=1; top dependencies: patients-db-01 (3517)\", \"services: consent-svc \\u2014 210 events; failing dependencies=1; top dependencies: consent-db (210)\"]}",
+      "metadata": {
+        "scenario": "retention_bad_filter_0060",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "retention_bad_filter_0060-03",
+      "artifact_type": "change_records",
+      "subtype": "change_log",
+      "source": "change_log",
+      "content": "{\"description\": \"Deployments, configuration pushes, infrastructure and automation runs from the change-management and CI/CD audit log: change ID, type, target, actor, time (UTC), status and recorded diff/summary.\", \"facts\": [\"changes: CHG-17101 | deployment | consent-svc 10.7.12 -> 10.7.13 | actor: spinnaker | 2024-10-05 00:30 UTC | status: completed | dependency bump \\u2014 1 events\", \"changes: CHG-17131 | deployment | records-api 14.5.4 -> 14.5.5 | actor: spinnaker | 2024-10-05 09:17 UTC | status: Synced/Healthy | dependency bump \\u2014 1 events\", \"changes: CHG-17171 | code_change | workflows/retention/anonymize_inactive.py | actor: workflows-deployer | 2024-10-05 09:58 UTC | status: deployed | merged by a.cho; refactor eligibility filter: WHERE last_active_at < :cutoff -> WHERE last_active_at > :cutoff \\u2014 1 events\", \"changes: RUN-93344 | workflow_run | anonymize_inactive (scheduled) | actor: svc-dataops | 2024-10-05 11:45 UTC | status: success | rows updated: patients 92,333 \\u2014 1 events\", \"changes: CHG-17177 | workflow_admin | anonymize_inactive | actor: d.singh | 2024-10-05 14:39 UTC | status: completed | workflow paused \\u2014 1 events\", \"changes: CHG-17205 | db_restore | patients-db-01 table patients | actor: d.singh | 2024-10-05 17:02 UTC | status: completed | point-in-time restore to 2024-10-05 11:40 into patients_restore; affected columns merged back \\u2014 1 events\", \"changes: CHG-17230 | deployment | lab-results-api 7.29.3 -> 7.30.0 | actor: spinnaker | 2024-10-06 15:16 UTC | status: Synced/Healthy | feature flag cleanup \\u2014 1 events\", \"changes: CHG-17268 | deployment | pharmacy-api 12.30.10 -> 12.31.0 | actor: spinnaker | 2024-10-06 20:25 UTC | status: completed | performance tuning of list endpoint \\u2014 1 events\", \"change types: deployment \\u2014 4 events\", \"change types: code_change \\u2014 1 events\", \"change types: workflow_run \\u2014 1 events\", \"change types: workflow_admin \\u2014 1 events\", \"change types: db_restore \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "retention_bad_filter_0060",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "retention_bad_filter_0060-04",
+      "artifact_type": "change_records",
+      "subtype": "change_actors",
+      "source": "change_actors",
+      "content": "{\"description\": \"Accounts and automation identities that executed changes, with the hosts or targets they acted on.\", \"facts\": [\"actors: spinnaker \\u2014 4 events; targets: records-api (1), consent-svc (1), lab-results-api (1), pharmacy-api (1)\", \"actors: d.singh \\u2014 2 events; targets: ops-scheduler-01 (1), patients-db-01 (1)\", \"actors: svc-dataops \\u2014 1 events; targets: patients-db-01 (1)\", \"actors: workflows-deployer \\u2014 1 events; targets: ops-scheduler-01 (1)\"]}",
+      "metadata": {
+        "scenario": "retention_bad_filter_0060",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "retention_bad_filter_0060-05",
+      "artifact_type": "infrastructure_events",
+      "subtype": "host_inventory",
+      "source": "host_inventory",
+      "content": "{\"description\": \"Host and node names seen in infrastructure events with their IP address, role and availability zone / rack.\", \"facts\": [\"hosts: patients-db-01 \\u2014 289 events; ip: 10.156.8.209; role: postgres-primary (patients); zone: us-east-2b\", \"hosts: lab-01 \\u2014 236 events; ip: 10.156.105.56; role: lab-results-api host; zone: us-east-2a\", \"hosts: lab-04 \\u2014 94 events; ip: 10.156.105.220; role: lab-results-api host; zone: us-east-2a\", \"hosts: ops-scheduler-01 \\u2014 90 events; ip: 10.156.182.218; role: workflow scheduler worker; zone: us-east-2c\"]}",
+      "metadata": {
+        "scenario": "retention_bad_filter_0060",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "retention_bad_filter_0060-06",
+      "artifact_type": "infrastructure_events",
+      "subtype": "platform_events",
+      "source": "platform_events",
+      "content": "{\"description\": \"Kubernetes events, cloud-provider health events and host system messages (kernel, hardware, daemons) with the objects or hosts they refer to.\", \"facts\": [\"database logs: LOG: duration: 1212458.2 ms statement: UPDATE patients SET email = 'anon+' || md5(email) || '@invalid.verdlane', full_name = 'anonymized' WHERE last_active_at > $1 \\u2014 1 events; top objects: patients-db-01 (1)\", \"workflow task logs: anonymize_inactive.anonymize: Marking task as SUCCESS (rows=92333) \\u2014 1 events; top objects: ops-scheduler-01 (1)\"]}",
+      "metadata": {
+        "scenario": "retention_bad_filter_0060",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "retention_bad_filter_0060-07",
+      "artifact_type": "monitoring_alerts",
+      "subtype": "alertmanager_alerts",
+      "source": "alertmanager_alerts",
+      "content": "{\"description\": \"Prometheus Alertmanager alerts: alert names with severity, critical-alert instances, alert names and services, and an hourly timeline of warning and critical alerts (UTC).\", \"facts\": [\"alert names: Watchdog (info) \\u2014 72 events; service: alertmanager; firing continuously\", \"alert names: EmailBounceRateHigh (critical) \\u2014 10 events; service: notification-worker; first seen in hour 2024-10-05 14:00 UTC; last seen in hour 2024-10-05 17:00 UTC\", \"alert names: LoginFailureRateHigh (critical) \\u2014 10 events; service: identity-svc; first seen in hour 2024-10-05 14:00 UTC; last seen in hour 2024-10-05 17:00 UTC\", \"alert names: TargetDown (warning) \\u2014 5 events; service: lab-results-api; first seen in hour 2024-10-06 05:00 UTC; last seen in hour 2024-10-06 07:00 UTC\", \"alert names: PostgresHighRowUpdates (warning) \\u2014 4 events; service: postgres; first seen in hour 2024-10-05 11:00 UTC; last seen in hour 2024-10-05 12:00 UTC\", \"alert names: NodeFilesystemSpaceFillingUp (warning) \\u2014 3 events; service: node; first seen in hour 2024-10-05 09:00 UTC; last seen in hour 2024-10-05 10:00 UTC\", \"critical alerts: 20 matching events\", \"critical alerts > critical instances: identity-svc \\u2014 10 events\", \"critical alerts > critical instances: notification-worker \\u2014 10 events\", \"critical alerts > critical alert names: EmailBounceRateHigh \\u2014 10 events\", \"critical alerts > critical alert names: LoginFailureRateHigh \\u2014 10 events\", \"critical alerts > critical services: identity-svc \\u2014 10 events\", \"critical alerts > critical services: notification-worker \\u2014 10 events\", \"alert timeline: 2024-10-05 09:00 UTC \\u2014 2 events\", \"alert timeline: 2024-10-05 10:00 UTC \\u2014 1 events\", \"alert timeline: 2024-10-05 11:00 UTC \\u2014 3 events\", \"alert timeline: 2024-10-05 12:00 UTC \\u2014 1 events\", \"alert timeline: 2024-10-05 14:00 UTC \\u2014 8 events\", \"alert timeline: 2024-10-05 15:00 UTC \\u2014 5 events\", \"alert timeline: 2024-10-05 16:00 UTC \\u2014 4 events\", \"alert timeline: 2024-10-05 17:00 UTC \\u2014 3 events\", \"alert timeline: 2024-10-06 05:00 UTC \\u2014 2 events\", \"alert timeline: 2024-10-06 06:00 UTC \\u2014 1 events\", \"alert timeline: 2024-10-06 07:00 UTC \\u2014 2 events\"]}",
+      "metadata": {
+        "scenario": "retention_bad_filter_0060",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "retention_bad_filter_0060-08",
+      "artifact_type": "resource_metrics",
+      "subtype": "metric_anomalies",
+      "source": "metric_anomalies",
+      "content": "{\"description\": \"Metric series that deviated from their 7-day baseline (hourly resolution): baseline, peak or trough value, anomaly onset and recovery (UTC).\", \"facts\": [\"metric anomalies: rows updated per second (patients) on patients-db-01 \\u2014 baseline ~40/s; peak 11,933/s; onset 2024-10-05 11:00 UTC; recovered 2024-10-05 13:00 UTC\", \"metric anomalies: login success ratio on identity-svc \\u2014 baseline 94%; trough 43%; onset 2024-10-05 14:00 UTC; recovered 2024-10-05 18:00 UTC\"]}",
+      "metadata": {
+        "scenario": "retention_bad_filter_0060",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "retention_bad_filter_0060-09",
+      "artifact_type": "derived_findings",
+      "subtype": "derived_summary",
+      "source": "derived_summary",
+      "content": "{\"description\": \"Deterministic summary computed from the query results above (error ranking, instance-to-host join, alert timeline, change correlation, earliest metric anomaly).\", \"facts\": [\"Derived: service identity-svc ranks #1 by error volume (37926 events, 1 failing dependencies). Most-failed dependency: patients-db-01 (37926 errors).\", \"Derived: most-alerted critical instance identity-svc (10 critical alerts); no matching host-inventory entry.\", \"Derived: warning/critical alerts span 2024-10-05 09:00 UTC to 2024-10-06 07:00 UTC; earliest alert hour 2024-10-05 09:00 UTC (2 alerts).\", \"Derived: changes recorded from 6 hours before the earliest alert hour to its end: CHG-17131 (deployment, records-api 14.5.4 -> 14.5.5, spinnaker, 2024-10-05 09:17 UTC); CHG-17171 (code_change, workflows/retention/anonymize_inactive.py, workflows-deployer, 2024-10-05 09:58 UTC).\", \"Derived: earliest metric anomaly onset 2024-10-05 11:00 UTC (rows updated per second (patients) on patients-db-01).\"]}",
+      "metadata": {
+        "scenario": "retention_bad_filter_0060",
+        "source_kind": "derived_from_es_results",
+        "heuristic": true
+      }
+    },
+    {
+      "artifact_id": "retention_bad_filter_0060-10",
+      "artifact_type": "query_coverage",
+      "subtype": "evidence_gaps",
+      "source": "evidence_gaps",
+      "content": "{\"description\": \"Queries that returned nothing or failed; use these to state what is NOT established.\", \"facts\": [\"No matching results for: tls certificates / expired certificates. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / expiring within 7 days. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / self signed. (Absence in this query is not proof of absence elsewhere.)\"]}",
+      "metadata": {
+        "scenario": "retention_bad_filter_0060",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    }
+  ]
+}

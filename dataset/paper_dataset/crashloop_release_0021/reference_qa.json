@@ -1,0 +1,120 @@
+{
+  "source": "synthetic generator ground truth (ops expansion)",
+  "confidence": "synthetic ground truth",
+  "qa": [
+    {
+      "id": 1,
+      "question": "Which service or component is the origin of the failure?",
+      "answer": "label-svc",
+      "atoms": [
+        {
+          "text": "label-svc",
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "question": "What change, deployment or automation run triggered the incident? Provide its change identifier.",
+      "answer": "CHG-89429",
+      "atoms": [
+        {
+          "text": "CHG-89429",
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "question": "Which account or automation identity executed the triggering change?",
+      "answer": "jenkins",
+      "atoms": [
+        {
+          "text": "jenkins",
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "question": "Which version of the service introduced the defect?",
+      "answer": "4.32.0",
+      "atoms": [
+        {
+          "text": "4.32.0",
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "question": "Which configuration key did the new version fail on at startup?",
+      "answer": "PAYMENT_WEBHOOK_SECRET",
+      "atoms": [
+        {
+          "text": "PAYMENT_WEBHOOK_SECRET",
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "question": "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+      "answer": "2024-05-31 09:00 UTC",
+      "atoms": [
+        {
+          "text": "2024-05-31 09:00 UTC",
+          "kind": "time"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "question": "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+      "answer": "software defect",
+      "atoms": [
+        {
+          "text": "software defect",
+          "kind": "label"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "question": "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+      "answer": "availability",
+      "atoms": [
+        {
+          "text": "availability",
+          "kind": "cia"
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "question": "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+      "answer": "portal-bff, downstream symptom",
+      "atoms": [
+        {
+          "text": "portal-bff",
+          "kind": "other"
+        },
+        {
+          "text": "downstream symptom",
+          "kind": "label"
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "question": "Which change restored normal service? Provide its change identifier.",
+      "answer": "CHG-89440",
+      "atoms": [
+        {
+          "text": "CHG-89440",
+          "kind": "other"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,166 @@
+{
+  "metadata": {
+    "incident_id": "INC-20231017",
+    "scenario": "ecc_memory_0044",
+    "title": "Infrastructure reliability incident investigation",
+    "source": "synthetic/ops-incident-expansion (modeled on neu-nds2/llm-sec-incident-analysis)",
+    "query_window_start": "2023-10-17T00:00:00",
+    "query_window_end": "2023-10-19T23:59:59",
+    "evidence_types": [
+      "change_records",
+      "derived_findings",
+      "infrastructure_events",
+      "monitoring_alerts",
+      "network_summary",
+      "query_coverage",
+      "resource_metrics",
+      "service_logs"
+    ],
+    "artifact_scope_note": "Evidence is aggregated query output (not raw log lines or metric samples); it contains no chat/communication records."
+  },
+  "incident_description": "Reliability incident investigation of a production environment. Evidence consists of Elasticsearch aggregation results over application and proxy logs, Kubernetes, cloud-provider and host system events, Prometheus Alertmanager alerts, change-management / CI-CD audit records and metric anomaly detection. No root cause, impact or trigger is stated; these must be established from the supplied artifacts. Environment context: Organization: Harborwave Shop (online retail); Platform: on-premises data center DC-B, server range 10.171.0.0/16; Kubernetes cluster harbor-prod (kubeadm); Bare-metal Kubernetes workers; IPMI SEL and EDAC kernel messages are forwarded to Elasticsearch; data-center work uses DC- identifiers; Change management: production changes carry CHG- identifiers.",
+  "investigation_questions": [
+    "What is the hostname of the host or node where the failure originated?",
+    "What is the IP address of the host or node where the failure originated?",
+    "Which memory module (DIMM slot) did the hardware event log identify?",
+    "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+    "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+    "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+    "Which change restored normal service? Provide its change identifier."
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "ecc_memory_0044-01",
+      "artifact_type": "service_logs",
+      "subtype": "error_logs",
+      "source": "error_logs",
+      "content": "{\"description\": \"Application and proxy error logs: HTTP/gRPC status codes, failing requests (caller -> callee:port : operation), error messages and the services emitting them.\", \"facts\": [\"error events: 11922 matching events\", \"error events > status codes: n/a (job failure) \\u2014 8896 events\", \"error events > status codes: 500 \\u2014 2884 events\", \"error events > status codes: 504 \\u2014 142 events\", \"failing requests: batch-scheduler -> workers on harbo-node-06 : task execution \\u2014 8896 events\", \"failing requests: reporting-portal -> query-engine:8080 : POST /v1/statement \\u2014 1762 events\", \"failing requests: query-engine -> worker@10.171.80.230:8080 : task status update \\u2014 1122 events\", \"failing requests: payments-api -> payments-db:5432 : query \\u2014 142 events\", \"error messages: ExecutorLostFailure (executor exited unrelated to the running tasks) Reason: node harbo-node-06 NotReady \\u2014 8896 events\", \"error messages: query-engine: 500 Internal Server Error \\u2014 1762 events\", \"error messages: Encountered too many errors talking to a worker node (10.171.80.230:8080) \\u2014 1122 events\", \"error messages: upstream request timeout \\u2014 142 events\", \"emitting services: batch-scheduler \\u2014 8896 events\", \"emitting services: reporting-portal \\u2014 1762 events\", \"emitting services: query-engine \\u2014 1122 events\", \"emitting services: payments-api \\u2014 142 events\"]}",
+      "metadata": {
+        "scenario": "ecc_memory_0044",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "ecc_memory_0044-02",
+      "artifact_type": "service_logs",
+      "subtype": "error_volume_by_service",
+      "source": "error_volume_by_service",
+      "content": "{\"description\": \"Services ranked by number of error events, with each service's most-failed downstream dependencies.\", \"facts\": [\"services: batch-scheduler \\u2014 8896 events; failing dependencies=1; top dependencies: workers on harbo-node-06 (8896)\", \"services: reporting-portal \\u2014 1762 events; failing dependencies=1; top dependencies: query-engine (1762)\", \"services: query-engine \\u2014 1122 events; failing dependencies=1; top dependencies: worker@10.171.80.230 (1122)\", \"services: payments-api \\u2014 142 events; failing dependencies=1; top dependencies: payments-db (142)\"]}",
+      "metadata": {
+        "scenario": "ecc_memory_0044",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "ecc_memory_0044-03",
+      "artifact_type": "change_records",
+      "subtype": "change_log",
+      "source": "change_log",
+      "content": "{\"description\": \"Deployments, configuration pushes, infrastructure and automation runs from the change-management and CI/CD audit log: change ID, type, target, actor, time (UTC), status and recorded diff/summary.\", \"facts\": [\"changes: CHG-43964 | deployment | promo-svc 5.4.8 -> 5.5.0 | actor: gitlab-ci | 2023-10-17 23:58 UTC | status: succeeded | dependency bump \\u2014 1 events\", \"changes: CHG-43991 | kubectl_cordon_drain | node harbo-node-06 | actor: k.demir | 2023-10-18 04:15 UTC | status: completed | cordon and drain; handed to DC operations \\u2014 1 events\", \"changes: DC-7416 | hardware_replacement | harbo-node-06 memory module | actor: dcops-h.varga | 2023-10-18 07:33 UTC | status: completed | replaced DIMM C5; memtest passed \\u2014 1 events\", \"changes: CHG-44022 | deployment | cart-service 12.24.11 -> 12.24.12 | actor: gitlab-ci | 2023-10-18 20:53 UTC | status: succeeded | performance tuning of list endpoint \\u2014 1 events\", \"changes: CHG-44053 | deployment | payments-api 5.21.8 -> 5.22.0 | actor: gitlab-ci | 2023-10-19 05:33 UTC | status: Synced/Healthy | performance tuning of list endpoint \\u2014 1 events\", \"change types: deployment \\u2014 3 events\", \"change types: kubectl_cordon_drain \\u2014 1 events\", \"change types: hardware_replacement \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "ecc_memory_0044",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "ecc_memory_0044-04",
+      "artifact_type": "change_records",
+      "subtype": "change_actors",
+      "source": "change_actors",
+      "content": "{\"description\": \"Accounts and automation identities that executed changes, with the hosts or targets they acted on.\", \"facts\": [\"actors: gitlab-ci \\u2014 3 events; targets: harbor-prod/promo-svc (1), harbor-prod/payments-api (1), harbor-prod/cart-service (1)\", \"actors: dcops-h.varga \\u2014 1 events; targets: harbo-node-06 (1)\", \"actors: k.demir \\u2014 1 events; targets: harbo-node-06 (1)\"]}",
+      "metadata": {
+        "scenario": "ecc_memory_0044",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "ecc_memory_0044-05",
+      "artifact_type": "infrastructure_events",
+      "subtype": "host_inventory",
+      "source": "host_inventory",
+      "content": "{\"description\": \"Host and node names seen in infrastructure events with their IP address, role and availability zone / rack.\", \"facts\": [\"hosts: harbo-node-06 \\u2014 779 events; ip: 10.171.80.230; role: k8s-worker; zone: rack H09\", \"hosts: harbo-node-28 \\u2014 166 events; ip: 10.171.132.68; role: k8s-worker; zone: rack H24\", \"hosts: harbo-node-28-2 \\u2014 42 events; ip: 10.171.132.27; role: k8s-worker; zone: rack H24\"]}",
+      "metadata": {
+        "scenario": "ecc_memory_0044",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "ecc_memory_0044-06",
+      "artifact_type": "infrastructure_events",
+      "subtype": "platform_events",
+      "source": "platform_events",
+      "content": "{\"description\": \"Kubernetes events, cloud-provider health events and host system messages (kernel, hardware, daemons) with the objects or hosts they refer to.\", \"facts\": [\"hardware events (ipmi sel): Memory #0x47 | Correctable ECC | DIMM C5 \\u2014 271 events; top objects: harbo-node-06 (271)\", \"hardware events (ipmi sel): Memory #0x11 | Uncorrectable ECC | DIMM C5 \\u2014 4 events; top objects: harbo-node-06 (4)\", \"system messages: kernel: EDAC MC1: 1 CE memory read error on CPU_SrcID#1_MC#0_Chan#0_DIMM#0 \\u2014 271 events; top objects: harbo-node-06 (271)\", \"system messages: kernel: Kernel panic - not syncing: Fatal machine check \\u2014 4 events; top objects: harbo-node-06 (4)\", \"event reasons: NodeNotReady \\u2014 4 events; top objects: node/harbo-node-06 (4)\", \"event reasons: TaintManagerEviction \\u2014 245 events; top objects: pods on harbo-node-06 (1)\", \"event reasons: Pulled \\u2014 7 events; top objects: pod/promo-svc-9eb84bb26-p2jrb (1)\", \"event reasons: ScalingReplicaSet \\u2014 5 events; top objects: deployment/promo-svc (2)\", \"event reasons: Pulled \\u2014 22 events; top objects: pod/payments-api-f059909ec-sxr4w (3)\", \"event reasons: ScalingReplicaSet \\u2014 5 events; top objects: deployment/payments-api (3)\", \"event reasons: Pulled \\u2014 7 events; top objects: pod/cart-service-1c6a76679-vnznw (3)\", \"event reasons: ScalingReplicaSet \\u2014 4 events; top objects: deployment/cart-service (3)\"]}",
+      "metadata": {
+        "scenario": "ecc_memory_0044",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "ecc_memory_0044-07",
+      "artifact_type": "monitoring_alerts",
+      "subtype": "alertmanager_alerts",
+      "source": "alertmanager_alerts",
+      "content": "{\"description\": \"Prometheus Alertmanager alerts: alert names with severity, critical-alert instances, alert names and services, and an hourly timeline of warning and critical alerts (UTC).\", \"facts\": [\"alert names: Watchdog (info) \\u2014 72 events; service: alertmanager; firing continuously\", \"alert names: NodeMemoryECCCorrectableErrors (warning) \\u2014 18 events; service: node; first seen in hour 2023-10-17 22:00 UTC; last seen in hour 2023-10-18 04:00 UTC\", \"alert names: BatchSchedulerJobFailures (critical) \\u2014 12 events; service: batch-scheduler; first seen in hour 2023-10-18 02:00 UTC; last seen in hour 2023-10-18 05:00 UTC\", \"alert names: KubeNodeNotReady (critical) \\u2014 7 events; service: kubernetes; first seen in hour 2023-10-18 02:00 UTC; last seen in hour 2023-10-18 04:00 UTC\", \"alert names: TargetDown (warning) \\u2014 5 events; service: cart-service; first seen in hour 2023-10-17 17:00 UTC; last seen in hour 2023-10-17 19:00 UTC\", \"alert names: KubeCPUOvercommit (warning) \\u2014 4 events; service: cluster; first seen in hour 2023-10-17 20:00 UTC; last seen in hour 2023-10-17 22:00 UTC\", \"critical alerts: 19 matching events\", \"critical alerts > critical instances: batch-scheduler \\u2014 12 events\", \"critical alerts > critical instances: harbo-node-06 \\u2014 7 events\", \"critical alerts > critical alert names: BatchSchedulerJobFailures \\u2014 12 events\", \"critical alerts > critical alert names: KubeNodeNotReady \\u2014 7 events\", \"critical alerts > critical services: batch-scheduler \\u2014 12 events\", \"critical alerts > critical services: kubernetes \\u2014 7 events\", \"alert timeline: 2023-10-17 17:00 UTC \\u2014 2 events\", \"alert timeline: 2023-10-17 18:00 UTC \\u2014 1 events\", \"alert timeline: 2023-10-17 19:00 UTC \\u2014 2 events\", \"alert timeline: 2023-10-17 20:00 UTC \\u2014 1 events\", \"alert timeline: 2023-10-17 21:00 UTC \\u2014 2 events\", \"alert timeline: 2023-10-17 22:00 UTC \\u2014 2 events\", \"alert timeline: 2023-10-17 23:00 UTC \\u2014 2 events\", \"alert timeline: 2023-10-18 00:00 UTC \\u2014 3 events\", \"alert timeline: 2023-10-18 01:00 UTC \\u2014 3 events\", \"alert timeline: 2023-10-18 02:00 UTC \\u2014 6 events\", \"alert timeline: 2023-10-18 03:00 UTC \\u2014 9 events\", \"alert timeline: 2023-10-18 04:00 UTC \\u2014 9 events\", \"alert timeline: 2023-10-18 05:00 UTC \\u2014 4 events\"]}",
+      "metadata": {
+        "scenario": "ecc_memory_0044",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "ecc_memory_0044-08",
+      "artifact_type": "resource_metrics",
+      "subtype": "metric_anomalies",
+      "source": "metric_anomalies",
+      "content": "{\"description\": \"Metric series that deviated from their 7-day baseline (hourly resolution): baseline, peak or trough value, anomaly onset and recovery (UTC).\", \"facts\": [\"metric anomalies: node_edac_correctable_errors_total rate on harbo-node-06 \\u2014 baseline 0/h; peak 49/h; onset 2023-10-17 22:00 UTC; recovered 2023-10-18 05:00 UTC\", \"metric anomalies: node_cpu utilisation on 10.171.132.27 \\u2014 baseline 20%; peak 85%; onset 2023-10-18 21:00 UTC; recovered 2023-10-18 23:00 UTC\"]}",
+      "metadata": {
+        "scenario": "ecc_memory_0044",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "ecc_memory_0044-09",
+      "artifact_type": "network_summary",
+      "subtype": "tls_certificates",
+      "source": "tls_certificates",
+      "content": "{\"description\": \"TLS certificates observed in edge and service-to-service traffic that are expired, expire within 7 days, or are self-signed.\", \"facts\": [\"expiring within 7 days: 50 matching events\", \"expiring within 7 days > certificate details: CN=cart-service.harborwave.internal | issuer: CN=R11,O=Let's Encrypt | not_after: 2023-10-22 23:59:00 UTC | seen on: cart-service:8443 \\u2014 50 events\"]}",
+      "metadata": {
+        "scenario": "ecc_memory_0044",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "ecc_memory_0044-10",
+      "artifact_type": "derived_findings",
+      "subtype": "derived_summary",
+      "source": "derived_summary",
+      "content": "{\"description\": \"Deterministic summary computed from the query results above (error ranking, instance-to-host join, alert timeline, change correlation, earliest metric anomaly).\", \"facts\": [\"Derived: service batch-scheduler ranks #1 by error volume (8896 events, 1 failing dependencies). Most-failed dependency: workers on harbo-node-06 (8896 errors).\", \"Derived: most-alerted critical instance batch-scheduler (12 critical alerts); no matching host-inventory entry.\", \"Derived: warning/critical alerts span 2023-10-17 17:00 UTC to 2023-10-18 05:00 UTC; earliest alert hour 2023-10-17 17:00 UTC (2 alerts).\", \"Derived: no changes recorded from 6 hours before the earliest alert hour to its end.\", \"Derived: earliest metric anomaly onset 2023-10-17 22:00 UTC (node_edac_correctable_errors_total rate on harbo-node-06).\"]}",
+      "metadata": {
+        "scenario": "ecc_memory_0044",
+        "source_kind": "derived_from_es_results",
+        "heuristic": true
+      }
+    },
+    {
+      "artifact_id": "ecc_memory_0044-11",
+      "artifact_type": "query_coverage",
+      "subtype": "evidence_gaps",
+      "source": "evidence_gaps",
+      "content": "{\"description\": \"Queries that returned nothing or failed; use these to state what is NOT established.\", \"facts\": [\"No matching results for: tls certificates / expired certificates. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / self signed. (Absence in this query is not proof of absence elsewhere.)\"]}",
+      "metadata": {
+        "scenario": "ecc_memory_0044",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    }
+  ]
+}

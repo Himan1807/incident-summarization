@@ -1,0 +1,153 @@
+{
+  "metadata": {
+    "incident_id": "INC-20220807",
+    "scenario": "dns_forward_removed_0034",
+    "title": "Infrastructure reliability incident investigation",
+    "source": "synthetic/ops-incident-expansion (modeled on neu-nds2/llm-sec-incident-analysis)",
+    "query_window_start": "2022-08-07T00:00:00",
+    "query_window_end": "2022-08-09T23:59:59",
+    "evidence_types": [
+      "change_records",
+      "derived_findings",
+      "infrastructure_events",
+      "monitoring_alerts",
+      "query_coverage",
+      "resource_metrics",
+      "service_logs"
+    ],
+    "artifact_scope_note": "Evidence is aggregated query output (not raw log lines or metric samples); it contains no chat/communication records."
+  },
+  "incident_description": "Reliability incident investigation of a production environment. Evidence consists of Elasticsearch aggregation results over application and proxy logs, Kubernetes, cloud-provider and host system events, Prometheus Alertmanager alerts, change-management / CI-CD audit records and metric anomaly detection. No root cause, impact or trigger is stated; these must be established from the supplied artifacts. Environment context: Organization: Tidalhollow Cloud (collaboration SaaS); Platform: Microsoft Azure westeurope (zones westeurope-1/westeurope-2/westeurope-3); network range 10.66.0.0/16; Kubernetes cluster tidalh-prod-westeu (AKS); Cluster add-ons: CoreDNS, ingress controller, Argo CD; services call external SaaS APIs; direct kubectl changes are recorded by the Kubernetes audit log with AUD- identifiers; Change management: production changes carry RFC- identifiers.",
+  "investigation_questions": [
+    "Which service or component is the origin of the failure?",
+    "Which change or automation run triggered the incident? Give its identifier.",
+    "Which account or automation identity executed the triggering change?",
+    "What is the IP address of the cluster DNS service that the failing lookups were sent to?",
+    "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+    "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+    "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?"
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "dns_forward_removed_0034-01",
+      "artifact_type": "service_logs",
+      "subtype": "error_logs",
+      "source": "error_logs",
+      "content": "{\"description\": \"Application and proxy error logs: HTTP/gRPC status codes, failing requests (caller -> callee:port : operation), error messages and the services emitting them.\", \"facts\": [\"error events: 48097 matching events\", \"error events > status codes: n/a (client-side DNS resolution error) \\u2014 48021 events\", \"error events > status codes: 500 \\u2014 43 events\", \"error events > status codes: n/a (log-only) \\u2014 33 events\", \"failing requests: kyc-checker -> kyc.verifyline.com:443 : POST /v2/checks \\u2014 23097 events\", \"failing requests: push-notifier -> push.notifly.net:443 : POST /v1/send \\u2014 22120 events\", \"failing requests: fraud-checker -> api.fraudlens.ai:443 : POST /v1/score \\u2014 2804 events\", \"failing requests: app-frontend -> app-db:5432 : query \\u2014 43 events\", \"failing requests: coredns -> plugin chain : resolve \\u2014 33 events\", \"error messages: dial tcp: lookup kyc.verifyline.com on 10.0.0.10:53: server misbehaving \\u2014 23097 events\", \"error messages: getaddrinfo EAI_AGAIN push.notifly.net \\u2014 22120 events\", \"error messages: java.net.UnknownHostException: api.fraudlens.ai: Temporary failure in name resolution \\u2014 2804 events\", \"error messages: pq: could not serialize access due to concurrent update \\u2014 43 events\", \"error messages: [ERROR] plugin/errors: consolidated errors like '^.* no next plugin found$' occurred in last 5m \\u2014 33 events\", \"emitting services: kyc-checker \\u2014 23097 events\", \"emitting services: push-notifier \\u2014 22120 events\", \"emitting services: fraud-checker \\u2014 2804 events\", \"emitting services: app-frontend \\u2014 43 events\", \"emitting services: coredns \\u2014 33 events\"]}",
+      "metadata": {
+        "scenario": "dns_forward_removed_0034",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "dns_forward_removed_0034-02",
+      "artifact_type": "service_logs",
+      "subtype": "error_volume_by_service",
+      "source": "error_volume_by_service",
+      "content": "{\"description\": \"Services ranked by number of error events, with each service's most-failed downstream dependencies.\", \"facts\": [\"services: kyc-checker \\u2014 23097 events; failing dependencies=1; top dependencies: kyc.verifyline.com (23097)\", \"services: push-notifier \\u2014 22120 events; failing dependencies=1; top dependencies: push.notifly.net (22120)\", \"services: fraud-checker \\u2014 2804 events; failing dependencies=1; top dependencies: api.fraudlens.ai (2804)\", \"services: app-frontend \\u2014 43 events; failing dependencies=1; top dependencies: app-db (43)\", \"services: coredns \\u2014 33 events; failing dependencies=1; top dependencies: plugin chain (33)\"]}",
+      "metadata": {
+        "scenario": "dns_forward_removed_0034",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "dns_forward_removed_0034-03",
+      "artifact_type": "change_records",
+      "subtype": "change_log",
+      "source": "change_log",
+      "content": "{\"description\": \"Deployments, configuration pushes, infrastructure and automation runs from the change-management and CI/CD audit log: change ID, type, target, actor, time (UTC), status and recorded diff/summary.\", \"facts\": [\"changes: RFC-49080 | deployment | audit-log-svc 13.30.8 -> 13.31.0 | actor: azure-pipelines | 2022-08-07 10:13 UTC | status: Synced/Healthy | new optional API field \\u2014 1 events\", \"changes: AUD-218e40 | kubectl_edit | configmap kube-system/coredns | actor: e.lindqvist | 2022-08-07 12:07 UTC | status: applied | Corefile .:53 block: removed 'forward . /etc/resolv.conf'; added 'hosts /etc/coredns/customdomains.db { fallthrough }' \\u2014 1 events\", \"changes: AUD-50ba43 | kubectl_rollout_restart | deployment kube-system/coredns | actor: e.lindqvist | 2022-08-07 12:09 UTC | status: applied | rollout restart \\u2014 1 events\", \"changes: AUD-5bbdc1 | kubectl_apply | configmap kube-system/coredns | actor: c.lee | 2022-08-07 13:51 UTC | status: applied | Corefile restored from configmap revision 51 \\u2014 1 events\", \"changes: RFC-49108 | deployment | app-frontend 11.0.12 -> 11.0.13 | actor: azure-pipelines | 2022-08-09 07:00 UTC | status: succeeded | feature flag cleanup \\u2014 1 events\", \"change types: deployment \\u2014 2 events\", \"change types: kubectl_edit \\u2014 1 events\", \"change types: kubectl_rollout_restart \\u2014 1 events\", \"change types: kubectl_apply \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "dns_forward_removed_0034",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "dns_forward_removed_0034-04",
+      "artifact_type": "change_records",
+      "subtype": "change_actors",
+      "source": "change_actors",
+      "content": "{\"description\": \"Accounts and automation identities that executed changes, with the hosts or targets they acted on.\", \"facts\": [\"actors: azure-pipelines \\u2014 2 events; targets: tidalh-prod-westeu/audit-log-svc (1), tidalh-prod-westeu/app-frontend (1)\", \"actors: e.lindqvist \\u2014 2 events; targets: kube-system/coredns (2)\", \"actors: c.lee \\u2014 1 events; targets: kube-system/coredns (1)\"]}",
+      "metadata": {
+        "scenario": "dns_forward_removed_0034",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "dns_forward_removed_0034-05",
+      "artifact_type": "infrastructure_events",
+      "subtype": "host_inventory",
+      "source": "host_inventory",
+      "content": "{\"description\": \"Host and node names seen in infrastructure events with their IP address, role and availability zone / rack.\", \"facts\": [\"hosts: aks-nodepool1-59103227-vmss000029 \\u2014 122 events; ip: 10.66.46.67; role: k8s-worker; zone: westeurope-1\", \"hosts: aks-nodepool1-49733213-vmss000009 \\u2014 22 events; ip: 10.66.1.126; role: k8s-worker; zone: westeurope-3\"]}",
+      "metadata": {
+        "scenario": "dns_forward_removed_0034",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "dns_forward_removed_0034-06",
+      "artifact_type": "infrastructure_events",
+      "subtype": "platform_events",
+      "source": "platform_events",
+      "content": "{\"description\": \"Kubernetes events, cloud-provider health events and host system messages (kernel, hardware, daemons) with the objects or hosts they refer to.\", \"facts\": [\"audit events: update configmaps kube-system/coredns \\u2014 2 events; top objects: e.lindqvist (1), c.lee (1)\", \"event reasons: Unhealthy \\u2014 183 events; top objects: pod/kyc-checker-09220bb23-6x4dk (24)\", \"event reasons: Pulled \\u2014 23 events; top objects: pod/audit-log-svc-73426e699-zgfj5 (2)\", \"event reasons: ScalingReplicaSet \\u2014 3 events; top objects: deployment/audit-log-svc (2)\", \"event reasons: Pulled \\u2014 22 events; top objects: pod/app-frontend-a5049ea9e-cgsrj (1)\", \"event reasons: ScalingReplicaSet \\u2014 6 events; top objects: deployment/app-frontend (1)\"]}",
+      "metadata": {
+        "scenario": "dns_forward_removed_0034",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "dns_forward_removed_0034-07",
+      "artifact_type": "monitoring_alerts",
+      "subtype": "alertmanager_alerts",
+      "source": "alertmanager_alerts",
+      "content": "{\"description\": \"Prometheus Alertmanager alerts: alert names with severity, critical-alert instances, alert names and services, and an hourly timeline of warning and critical alerts (UTC).\", \"facts\": [\"alert names: Watchdog (info) \\u2014 72 events; service: alertmanager; firing continuously\", \"alert names: CoreDNSErrorsHigh (critical) \\u2014 10 events; service: coredns; first seen in hour 2022-08-07 12:00 UTC; last seen in hour 2022-08-07 13:00 UTC\", \"alert names: CPUThrottlingHigh (warning) \\u2014 5 events; service: docs-api; first seen in hour 2022-08-07 22:00 UTC; last seen in hour 2022-08-08 00:00 UTC\", \"alert names: KycCheckerErrorRateHigh (critical) \\u2014 2 events; service: kyc-checker; first seen in hour 2022-08-07 12:00 UTC; last seen in hour 2022-08-07 13:00 UTC\", \"critical alerts: 12 matching events\", \"critical alerts > critical instances: 10.244.20.231:9153 \\u2014 5 events\", \"critical alerts > critical instances: 10.244.33.149:9153 \\u2014 5 events\", \"critical alerts > critical instances: kyc-checker \\u2014 2 events\", \"critical alerts > critical alert names: CoreDNSErrorsHigh \\u2014 10 events\", \"critical alerts > critical alert names: KycCheckerErrorRateHigh \\u2014 2 events\", \"critical alerts > critical services: coredns \\u2014 10 events\", \"critical alerts > critical services: kyc-checker \\u2014 2 events\", \"alert timeline: 2022-08-07 12:00 UTC \\u2014 5 events\", \"alert timeline: 2022-08-07 13:00 UTC \\u2014 7 events\", \"alert timeline: 2022-08-07 22:00 UTC \\u2014 2 events\", \"alert timeline: 2022-08-07 23:00 UTC \\u2014 1 events\", \"alert timeline: 2022-08-08 00:00 UTC \\u2014 2 events\"]}",
+      "metadata": {
+        "scenario": "dns_forward_removed_0034",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "dns_forward_removed_0034-08",
+      "artifact_type": "resource_metrics",
+      "subtype": "metric_anomalies",
+      "source": "metric_anomalies",
+      "content": "{\"description\": \"Metric series that deviated from their 7-day baseline (hourly resolution): baseline, peak or trough value, anomaly onset and recovery (UTC).\", \"facts\": [\"metric anomalies: coredns_dns_responses_total{rcode=\\\"SERVFAIL\\\"} rate on kube-system/coredns \\u2014 baseline 0.2/s; peak 547/s; onset 2022-08-07 12:00 UTC; recovered 2022-08-07 14:00 UTC\", \"metric anomalies: node memory utilisation on 10.66.46.67 \\u2014 baseline 32%; peak 90%; onset 2022-08-07 04:00 UTC; recovered 2022-08-07 06:00 UTC\"]}",
+      "metadata": {
+        "scenario": "dns_forward_removed_0034",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "dns_forward_removed_0034-09",
+      "artifact_type": "derived_findings",
+      "subtype": "derived_summary",
+      "source": "derived_summary",
+      "content": "{\"description\": \"Deterministic summary computed from the query results above (error ranking, instance-to-host join, alert timeline, change correlation, earliest metric anomaly).\", \"facts\": [\"Derived: service kyc-checker ranks #1 by error volume (23097 events, 1 failing dependencies). Most-failed dependency: kyc.verifyline.com (23097 errors).\", \"Derived: most-alerted critical instance 10.244.20.231:9153 (5 critical alerts); no matching host-inventory entry.\", \"Derived: warning/critical alerts span 2022-08-07 12:00 UTC to 2022-08-08 00:00 UTC; earliest alert hour 2022-08-07 12:00 UTC (5 alerts).\", \"Derived: changes recorded from 6 hours before the earliest alert hour to its end: RFC-49080 (deployment, audit-log-svc 13.30.8 -> 13.31.0, azure-pipelines, 2022-08-07 10:13 UTC); AUD-218e40 (kubectl_edit, configmap kube-system/coredns, e.lindqvist, 2022-08-07 12:07 UTC); AUD-50ba43 (kubectl_rollout_restart, deployment kube-system/coredns, e.lindqvist, 2022-08-07 12:09 UTC).\", \"Derived: earliest metric anomaly onset 2022-08-07 04:00 UTC (node memory utilisation on 10.66.46.67).\"]}",
+      "metadata": {
+        "scenario": "dns_forward_removed_0034",
+        "source_kind": "derived_from_es_results",
+        "heuristic": true
+      }
+    },
+    {
+      "artifact_id": "dns_forward_removed_0034-10",
+      "artifact_type": "query_coverage",
+      "subtype": "evidence_gaps",
+      "source": "evidence_gaps",
+      "content": "{\"description\": \"Queries that returned nothing or failed; use these to state what is NOT established.\", \"facts\": [\"No matching results for: tls certificates / expired certificates. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / expiring within 7 days. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / self signed. (Absence in this query is not proof of absence elsewhere.)\"]}",
+      "metadata": {
+        "scenario": "dns_forward_removed_0034",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    }
+  ]
+}

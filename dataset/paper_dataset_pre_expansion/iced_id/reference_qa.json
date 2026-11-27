@@ -1,0 +1,110 @@
+{
+  "source": "answers.txt (paper dataset)",
+  "confidence": "paper ground truth",
+  "qa": [
+    {
+      "id": 1,
+      "question": "What is the IP address of the potentially infected internal host in the LAN?",
+      "answer": "10.4.19.136",
+      "atoms": [
+        {
+          "text": "10.4.19.136",
+          "kind": "ip"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "question": "What is the hostname of the potentially infected machine in the LAN?",
+      "answer": "DESKTOP-SFF9LJF",
+      "atoms": [
+        {
+          "text": "DESKTOP-SFF9LJF",
+          "kind": "hostname"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "question": "What is the Windows human user account name (not machine accounts ending in $) of the potentially infected machine in the LAN?",
+      "answer": "csilva",
+      "atoms": [
+        {
+          "text": "csilva",
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "question": "What are the likely fake or suspicious domains / URLs for initial infection?",
+      "answer": "80.77.25.175 (malicious redirect to Firebase Storage URL delivering ZIP archive containing IcedID installer)",
+      "atoms": [
+        {
+          "text": "80.77.25.175",
+          "kind": "ip"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "question": "What domain names AND external IP addresses are involved in command-and-control (C2) communication?",
+      "answer": "104.168.53.18, askamoshopsi.com, 217.199.121.56, skansnekssky.com",
+      "atoms": [
+        {
+          "text": "104.168.53.18",
+          "kind": "ip"
+        },
+        {
+          "text": "askamoshopsi.com",
+          "kind": "domain_or_file"
+        },
+        {
+          "text": "217.199.121.56",
+          "kind": "ip"
+        },
+        {
+          "text": "skansnekssky.com",
+          "kind": "domain_or_file"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "question": "Which of the three CIA components does the attacker target primarily: availability, integrity, or confidentiality?",
+      "answer": "confidentiality",
+      "atoms": [
+        {
+          "text": "confidentiality",
+          "kind": "cia"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "question": "During what hour did the first signs of infection activity appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+      "answer": "2023-04-19 15:00 UTC",
+      "atoms": [
+        {
+          "text": "2023-04-19 15:00 UTC",
+          "kind": "time"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "question": "According to the connection volume statistics, what single external IP address received the most connections from the infected hosts? Is it a C2 server or a legitimate service?",
+      "answer": "217.199.121.56, C2 server",
+      "atoms": [
+        {
+          "text": "217.199.121.56",
+          "kind": "ip"
+        },
+        {
+          "text": "C2 server",
+          "kind": "label"
+        }
+      ]
+    }
+  ]
+}

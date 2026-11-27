@@ -1,0 +1,140 @@
+{
+  "metadata": {
+    "incident_id": "INC-20260309",
+    "scenario": "managed_lb_0020",
+    "title": "Infrastructure reliability incident investigation",
+    "source": "synthetic/ops-incident-expansion (modeled on neu-nds2/llm-sec-incident-analysis)",
+    "query_window_start": "2026-03-09T00:00:00",
+    "query_window_end": "2026-03-11T23:59:59",
+    "evidence_types": [
+      "change_records",
+      "derived_findings",
+      "infrastructure_events",
+      "monitoring_alerts",
+      "query_coverage",
+      "resource_metrics",
+      "service_logs"
+    ],
+    "artifact_scope_note": "Evidence is aggregated query output (not raw log lines or metric samples); it contains no chat/communication records."
+  },
+  "incident_description": "Reliability incident investigation of a production environment. Evidence consists of Elasticsearch aggregation results over application and proxy logs, Kubernetes, cloud-provider and host system events, Prometheus Alertmanager alerts, change-management / CI-CD audit records and metric anomaly detection. No root cause, impact or trigger is stated; these must be established from the supplied artifacts. Environment context: Organization: Riverpoint Cloud (collaboration SaaS); Platform: AWS ap-southeast-1 (zones ap-southeast-1a/ap-southeast-1b/ap-southeast-1c); network range 10.201.0.0/16; Kubernetes cluster riverp-prod-apsout (EKS); Edge: provider-managed load balancer (edge-lb) in front of app-frontend backends; a standby load balancer exists in a secondary region; Change management: production changes carry CHG- identifiers.",
+  "investigation_questions": [
+    "Which service or component is the origin of the failure?",
+    "What load balancer error detail was logged for most failed requests?",
+    "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+    "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+    "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+    "What change brought the service back to normal? Give its identifier."
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "managed_lb_0020-01",
+      "artifact_type": "service_logs",
+      "subtype": "error_logs",
+      "source": "error_logs",
+      "content": "{\"description\": \"Application and proxy error logs: HTTP/gRPC status codes, failing requests (caller -> callee:port : operation), error messages and the services emitting them.\", \"facts\": [\"error events: 24508 matching events\", \"error events > status codes: 502 \\u2014 24100 events\", \"error events > status codes: 500 \\u2014 408 events\", \"failing requests: edge-lb -> app-frontend:8080 : GET /* (elb_status_code=502) \\u2014 24100 events\", \"failing requests: search-api -> search-db:5432 : query \\u2014 248 events\", \"failing requests: app-frontend -> template loader : render \\u2014 160 events\", \"error messages: elb_status_code=502 target_status_code=- error_reason=TargetConnectionError \\u2014 24100 events\", \"error messages: deadlock detected \\u2014 248 events\", \"error messages: TemplateNotFound: partials/footer_v1.html \\u2014 160 events\", \"emitting services: edge-lb \\u2014 24100 events\", \"emitting services: search-api \\u2014 248 events\", \"emitting services: app-frontend \\u2014 160 events\"]}",
+      "metadata": {
+        "scenario": "managed_lb_0020",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "managed_lb_0020-02",
+      "artifact_type": "service_logs",
+      "subtype": "error_volume_by_service",
+      "source": "error_volume_by_service",
+      "content": "{\"description\": \"Services ranked by number of error events, with each service's most-failed downstream dependencies.\", \"facts\": [\"services: edge-lb \\u2014 24100 events; failing dependencies=1; top dependencies: app-frontend (24100)\", \"services: search-api \\u2014 248 events; failing dependencies=1; top dependencies: search-db (248)\", \"services: app-frontend \\u2014 160 events; failing dependencies=1; top dependencies: template loader (160)\"]}",
+      "metadata": {
+        "scenario": "managed_lb_0020",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "managed_lb_0020-03",
+      "artifact_type": "change_records",
+      "subtype": "change_log",
+      "source": "change_log",
+      "content": "{\"description\": \"Deployments, configuration pushes, infrastructure and automation runs from the change-management and CI/CD audit log: change ID, type, target, actor, time (UTC), status and recorded diff/summary.\", \"facts\": [\"changes: CHG-62171 | deployment | auth-api 12.12.3 -> 12.12.4 | actor: argocd | 2026-03-09 05:47 UTC | status: succeeded | new optional API field \\u2014 1 events\", \"changes: CHG-62187 | deployment | app-frontend content release | actor: argocd | 2026-03-09 21:21 UTC | status: completed | template partials/footer_v1.html removed \\u2014 1 events\", \"changes: CHG-62218 | traffic_steering | DNS app-frontend.riverpoint.com | actor: h.brandt | 2026-03-09 22:54 UTC | status: completed | fail over to standby load balancer in secondary region \\u2014 1 events\", \"changes: CHG-62242 | deployment | export-worker 8.3.8 -> 8.4.0 | actor: argocd | 2026-03-10 21:30 UTC | status: succeeded | logging improvements \\u2014 1 events\", \"changes: CHG-62247 | deployment | search-api 9.2.4 -> 9.2.5 | actor: argocd | 2026-03-11 09:50 UTC | status: succeeded | performance tuning of list endpoint \\u2014 1 events\", \"changes: CHG-62272 | deployment | billing-api 5.25.0 -> 5.25.1 | actor: argocd | 2026-03-11 18:37 UTC | status: succeeded | logging improvements \\u2014 1 events\", \"change types: deployment \\u2014 5 events\", \"change types: traffic_steering \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "managed_lb_0020",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "managed_lb_0020-04",
+      "artifact_type": "infrastructure_events",
+      "subtype": "host_inventory",
+      "source": "host_inventory",
+      "content": "{\"description\": \"Host and node names seen in infrastructure events with their IP address, role and availability zone / rack.\", \"facts\": [\"hosts: ip-10-201-34-123 \\u2014 1160 events; ip: 10.201.34.123; role: app-frontend backend; zone: ap-southeast-1c\", \"hosts: ip-10-201-249-240 \\u2014 1091 events; ip: 10.201.249.240; role: app-frontend backend; zone: ap-southeast-1a\", \"hosts: ip-10-201-211-132 \\u2014 965 events; ip: 10.201.211.132; role: app-frontend backend; zone: ap-southeast-1b\", \"hosts: ip-10-201-249-159 \\u2014 858 events; ip: 10.201.249.159; role: app-frontend backend; zone: ap-southeast-1a\", \"hosts: ip-10-201-34-84 \\u2014 264 events; ip: 10.201.34.84; role: k8s-worker; zone: ap-southeast-1c\"]}",
+      "metadata": {
+        "scenario": "managed_lb_0020",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "managed_lb_0020-05",
+      "artifact_type": "infrastructure_events",
+      "subtype": "platform_events",
+      "source": "platform_events",
+      "content": "{\"description\": \"Kubernetes events, cloud-provider health events and host system messages (kernel, hardware, daemons) with the objects or hosts they refer to.\", \"facts\": [\"cloud health events: AWS Health AWS_ELASTICLOADBALANCING_OPERATIONAL_ISSUE (ap-southeast-1): increased 5xx errors for Application Load Balancers; start 2026-03-09 21:55 UTC \\u2014 2 events; top objects: project riverpoint-prod (2)\", \"load balancer health checks: backend health: HEALTHY \\u2014 5827 events; top objects: ip-10-201-249-240 (1054), ip-10-201-211-132 (884), ip-10-201-249-159 (828), ip-10-201-34-123 (750)\", \"event reasons: Pulled \\u2014 3 events; top objects: pod/auth-api-2b42ca26f-sf4w2 (3)\", \"event reasons: ScalingReplicaSet \\u2014 4 events; top objects: deployment/auth-api (2)\", \"event reasons: Pulled \\u2014 5 events; top objects: pod/search-api-f9b619a9d-499tm (2)\", \"event reasons: ScalingReplicaSet \\u2014 3 events; top objects: deployment/search-api (2)\", \"event reasons: Pulled \\u2014 19 events; top objects: pod/export-worker-d986bcbfe-mh447 (1)\", \"event reasons: ScalingReplicaSet \\u2014 4 events; top objects: deployment/export-worker (3)\", \"event reasons: Pulled \\u2014 13 events; top objects: pod/billing-api-c94740b0e-5wff6 (1)\", \"event reasons: ScalingReplicaSet \\u2014 2 events; top objects: deployment/billing-api (2)\"]}",
+      "metadata": {
+        "scenario": "managed_lb_0020",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "managed_lb_0020-06",
+      "artifact_type": "monitoring_alerts",
+      "subtype": "alertmanager_alerts",
+      "source": "alertmanager_alerts",
+      "content": "{\"description\": \"Prometheus Alertmanager alerts: alert names with severity, critical-alert instances, alert names and services, and an hourly timeline of warning and critical alerts (UTC).\", \"facts\": [\"alert names: Watchdog (info) \\u2014 72 events; service: alertmanager; firing continuously\", \"alert names: LBHigh5xxRatio (critical) \\u2014 5 events; service: edge-lb; first seen in hour 2026-03-09 22:00 UTC; last seen in hour 2026-03-09 22:00 UTC\", \"alert names: TargetDown (warning) \\u2014 4 events; service: export-worker; first seen in hour 2026-03-10 15:00 UTC; last seen in hour 2026-03-10 17:00 UTC\", \"alert names: UptimeCheckFailed (critical) \\u2014 4 events; service: edge-lb; first seen in hour 2026-03-09 22:00 UTC; last seen in hour 2026-03-09 22:00 UTC\", \"critical alerts: 9 matching events\", \"critical alerts > critical instances: edge-lb \\u2014 5 events\", \"critical alerts > critical instances: uptime-check app-frontend-home \\u2014 4 events\", \"critical alerts > critical alert names: LBHigh5xxRatio \\u2014 5 events\", \"critical alerts > critical alert names: UptimeCheckFailed \\u2014 4 events\", \"critical alerts > critical services: edge-lb \\u2014 9 events\", \"alert timeline: 2026-03-09 22:00 UTC \\u2014 9 events\", \"alert timeline: 2026-03-10 15:00 UTC \\u2014 1 events\", \"alert timeline: 2026-03-10 16:00 UTC \\u2014 1 events\", \"alert timeline: 2026-03-10 17:00 UTC \\u2014 2 events\"]}",
+      "metadata": {
+        "scenario": "managed_lb_0020",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "managed_lb_0020-07",
+      "artifact_type": "resource_metrics",
+      "subtype": "metric_anomalies",
+      "source": "metric_anomalies",
+      "content": "{\"description\": \"Metric series that deviated from their 7-day baseline (hourly resolution): baseline, peak or trough value, anomaly onset and recovery (UTC).\", \"facts\": [\"metric anomalies: load balancer 5xx responses per minute on edge-lb \\u2014 baseline ~3/min; peak 1,756/min; onset 2026-03-09 21:00 UTC; recovered 2026-03-09 23:00 UTC\"]}",
+      "metadata": {
+        "scenario": "managed_lb_0020",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "managed_lb_0020-08",
+      "artifact_type": "derived_findings",
+      "subtype": "derived_summary",
+      "source": "derived_summary",
+      "content": "{\"description\": \"Deterministic summary computed from the query results above (error ranking, instance-to-host join, alert timeline, change correlation, earliest metric anomaly).\", \"facts\": [\"Derived: service edge-lb ranks #1 by error volume (24100 events, 1 failing dependencies). Most-failed dependency: app-frontend (24100 errors).\", \"Derived: most-alerted critical instance edge-lb (5 critical alerts); no matching host-inventory entry.\", \"Derived: warning/critical alerts span 2026-03-09 22:00 UTC to 2026-03-10 17:00 UTC; earliest alert hour 2026-03-09 22:00 UTC (9 alerts).\", \"Derived: changes recorded from 6 hours before the earliest alert hour to its end: CHG-62187 (deployment, app-frontend content release, argocd, 2026-03-09 21:21 UTC); CHG-62218 (traffic_steering, DNS app-frontend.riverpoint.com, h.brandt, 2026-03-09 22:54 UTC).\", \"Derived: earliest metric anomaly onset 2026-03-09 21:00 UTC (load balancer 5xx responses per minute on edge-lb).\"]}",
+      "metadata": {
+        "scenario": "managed_lb_0020",
+        "source_kind": "derived_from_es_results",
+        "heuristic": true
+      }
+    },
+    {
+      "artifact_id": "managed_lb_0020-09",
+      "artifact_type": "query_coverage",
+      "subtype": "evidence_gaps",
+      "source": "evidence_gaps",
+      "content": "{\"description\": \"Queries that returned nothing or failed; use these to state what is NOT established.\", \"facts\": [\"Query 'change actors' returned no aggregation results (shards failed: 2 of 111). This evidence is UNAVAILABLE; it is not evidence that nothing exists.\", \"No matching results for: tls certificates / expired certificates. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / expiring within 7 days. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / self signed. (Absence in this query is not proof of absence elsewhere.)\"]}",
+      "metadata": {
+        "scenario": "managed_lb_0020",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    }
+  ]
+}

@@ -1,0 +1,151 @@
+{
+  "metadata": {
+    "incident_id": "INC-20211203",
+    "scenario": "dec21isc",
+    "title": "Network security incident investigation",
+    "source": "neu-nds2/llm-sec-incident-analysis",
+    "query_window_start": "2021-12-03T00:00:00",
+    "query_window_end": "2021-12-04T23:59:59",
+    "evidence_types": [
+      "authentication",
+      "derived_findings",
+      "ids_alerts",
+      "network_summary",
+      "query_coverage"
+    ],
+    "artifact_scope_note": "Evidence is aggregated query output (not raw packets); it contains no chat/communication records."
+  },
+  "incident_description": "Network security investigation of a monitored LAN. Evidence consists of Elasticsearch aggregation results over Zeek and Suricata logs (IDS alerts, Kerberos, HTTP downloads, TLS certificates, domains and external-destination activity). No root cause, impact or C2 attribution is stated; these must be established from the supplied artifacts. Network context: LAN segment range: 10.12.3.0/24 (10.12.3.0 through 10.12.3.255); Domain: fargreentech.com; Domain Controller: 10.12.3.3 - FARGREENTECH-DC; LAN segment gateway: 10.12.3.1; LAN segment broadcast address: 10.12.3.255.",
+  "investigation_questions": [
+    "What was the IP address of the infected Windows computer?",
+    "What was the host name of the infected Windows computer?",
+    "What is the Windows human user account name (not machine accounts ending in $) of the potentially infected machine in the LAN?",
+    "During what hour did the first signs of infection activity appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "What are the suspicious external IP addresses contacted, which might be involved in command-and-control (C2) communication?",
+    "What are the likely suspicious domains used for malware delivery?",
+    "Were any suspicious certificates observed in the encrypted network traffic? If so, identify the domain or IP in the certificate.",
+    "According to the connection volume statistics, what single external IP address received the most connections from the infected hosts? Is it a C2 server or a legitimate service?"
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "dec21isc-01",
+      "artifact_type": "network_summary",
+      "subtype": "file_downloads",
+      "source": "file_downloads",
+      "content": "{\"description\": \"HTTP file downloads and file transfers: download domains/IPs, requests (client -> server:port : URI), file types and download sources.\", \"facts\": [\"download domains: gamaes.shop — 1 events\", \"download domains: newsaarctech.com — 1 events\", \"http requests: no_http_uri — 251 events\", \"http requests: 10.12.3.66 -> 104.21.29.80:80 : /wp-content/plugins/sSTToaEwCG5VASw/ — 2 events\", \"http requests: 10.12.3.66 -> 139.59.6.175:80 : /wp-content/Sx9tvV5/ — 2 events\", \"file transfers: 19 matching events\", \"file transfers > transfer details: file_transfer — 2 events\", \"file transfers > transfer details: 10.12.3.66 -> 104.21.29.80:80 : fuid: Fgt1qpTQKLib5heKg — 1 events\", \"file transfers > transfer details: 10.12.3.66 -> 139.59.6.175:80 : file: IE7MnYfF4c.dll — 1 events\", \"file transfers > transfer details: 10.12.3.66 -> 163.172.50.82:443 : fuid: FmBkZQ1QW21exVxXkf — 1 events\", \"file transfers > transfer details: 10.12.3.66 -> 172.104.227.98:443 : fuid: FRmn1G3jW4ycHzKCk — 1 events\", \"file transfers > transfer details: 10.12.3.66 -> 20.50.201.200:443 : fuid: Ft93YucvRiDc9VXKa — 1 events\", \"file transfers > transfer details: 10.12.3.66 -> 20.72.205.209:443 : fuid: FJFP3C40hex6kT3Ggl — 1 events\", \"file transfers > transfer details: 10.12.3.66 -> 204.79.197.200:443 : fuid: FdlPTh4wos9hySdl7g — 1 events\", \"file transfers > transfer details: 10.12.3.66 -> 204.79.197.203:443 : fuid: F6yvjQ1CPyjn2U59B8 — 1 events\", \"file transfers > transfer details: 10.12.3.66 -> 40.83.240.146:443 : fuid: FzLTB42igmFgNIabdd — 1 events\", \"file types: other — 254 events\", \"file types: exe — 1 events\", \"download sources: 10.12.3.66 — 255 events\"]}",
+      "metadata": {
+        "scenario": "dec21isc",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "dec21isc-02",
+      "artifact_type": "network_summary",
+      "subtype": "high_activity_external_dest",
+      "source": "high_activity_external_dest",
+      "content": "{\"description\": \"Internal clients ranked by number of connections to external destinations, with each client's most-contacted destinations.\", \"facts\": [\"source clients: 10.12.3.66 — 164 events; external destinations=16; top destinations: 172.104.227.98 (79), 163.172.50.82 (19), 51.75.33.120 (10), 51.159.35.157 (9), 52.109.8.24 (7); 40 further events in other values\"]}",
+      "metadata": {
+        "scenario": "dec21isc",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "dec21isc-03",
+      "artifact_type": "authentication",
+      "subtype": "kerberos_clients",
+      "source": "kerberos_clients",
+      "content": "{\"description\": \"Kerberos client account names (user accounts) and the source IPs they authenticated from.\", \"facts\": [\"client accounts: darin.figueroa — 6 events; source ips: 10.12.3.66 (6)\"]}",
+      "metadata": {
+        "scenario": "dec21isc",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "dec21isc-04",
+      "artifact_type": "authentication",
+      "subtype": "kerberos_full_services",
+      "source": "kerberos_full_services",
+      "content": "{\"description\": \"Kerberos services requested (including host and machine account names) per source IP.\", \"facts\": [\"full services: krb_tcp — 7 events; source ips: 10.12.3.66 (7)\", \"full services: krbtgt/FARGREENTECH.COM — 2 events; source ips: 10.12.3.66 (2)\", \"full services: LDAP/FARGREENTECH-DC.fargreentech.com/fargreentech.com — 1 events; source ips: 10.12.3.66 (1)\", \"full services: cifs/FARGREENTECH-DC — 1 events; source ips: 10.12.3.66 (1)\", \"full services: cifs/FARGREENTECH.COM — 1 events; source ips: 10.12.3.66 (1)\", \"full services: host/desktop-luoabv1.fargreentech.com — 1 events; source ips: 10.12.3.66 (1)\", \"full services: krbtgt/FARGREENTECH — 1 events; source ips: 10.12.3.66 (1)\"]}",
+      "metadata": {
+        "scenario": "dec21isc",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "dec21isc-05",
+      "artifact_type": "authentication",
+      "subtype": "kerberos_hostnames",
+      "source": "kerberos_hostnames",
+      "content": "{\"description\": \"Host names seen in Kerberos traffic with their source IPs.\", \"facts\": [\"hostnames: desktop-luoabv1 — 1 events; source ips: 10.12.3.66 (1)\"]}",
+      "metadata": {
+        "scenario": "dec21isc",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "dec21isc-06",
+      "artifact_type": "ids_alerts",
+      "subtype": "suricata_alerts",
+      "source": "suricata_alerts",
+      "content": "{\"description\": \"Suricata IDS alerts: signatures, high-severity alert destinations and sources, and an hourly alert timeline (UTC).\", \"facts\": [\"alert signatures: ET JA3 Hash - [Abuse.ch] Possible Dridex — 50 events\", \"alert signatures: ET INFO Windows Powershell User-Agent Usage — 2 events\", \"alert signatures: ET HUNTING Suspicious Domain Request for Possible COVID-19 Domain M1 — 1 events\", \"alert signatures: ET INFO EXE - Served Attached HTTP — 1 events\", \"alert signatures: ET INFO NTLM Session Setup Request - Auth — 1 events\", \"alert signatures: ET INFO NTLM Session Setup Request - Negotiate — 1 events\", \"alert signatures: ET INFO NTLMv1 Session Setup Response - Challenge — 1 events\", \"alert signatures: ET INFO PE EXE or DLL Windows file download HTTP — 1 events\", \"alert signatures: ET INFO Packed Executable Download — 1 events\", \"alert signatures: GPL NETBIOS SMB IPC$ unicode share access — 1 events\", \"high severity alerts: 2 matching events\", \"high severity alerts > high severity  destinations: 10.12.3.3 — 1 events\", \"high severity alerts > high severity  destinations: 10.12.3.66 — 1 events\", \"high severity alerts > high severity signatures: ET HUNTING Suspicious Domain Request for Possible COVID-19 Domain M1 — 1 events\", \"high severity alerts > high severity signatures: ET INFO PE EXE or DLL Windows file download HTTP — 1 events\", \"high severity alerts > high severity sources: 10.12.3.66 — 1 events\", \"high severity alerts > high severity sources: 139.59.6.175 — 1 events\", \"alert timeline: 2021-12-03 19:00 UTC — 34 events\", \"alert timeline: 2021-12-03 20:00 UTC — 26 events\"]}",
+      "metadata": {
+        "scenario": "dec21isc",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "dec21isc-07",
+      "artifact_type": "network_summary",
+      "subtype": "suspicious_certificates",
+      "source": "suspicious_certificates",
+      "content": "{\"description\": \"TLS certificates that are self-signed, IP-based or short-lived.\", \"facts\": [\"self signed analysis: 3 matching events\", \"self signed analysis > self signed details: self_signed: CN=example.com,OU=IT Department,O=Global Security, — 3 events\", \"short validity certs: normal_validity — 3 events\", \"short validity certs: short_validity_84d: CN=smtp.gmail.com — 2 events\", \"short validity certs: short_validity_84d: CN=smtp.googlemail.com — 1 events\", \"short validity certs: short_validity_89d: CN=mailservice6.greenhost.com — 1 events\"]}",
+      "metadata": {
+        "scenario": "dec21isc",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "dec21isc-08",
+      "artifact_type": "network_summary",
+      "subtype": "suspicious_domains",
+      "source": "suspicious_domains",
+      "content": "{\"description\": \"Unusual domains with their source and destination IPs, and direct-IP HTTP connections.\", \"facts\": [\"domains: gameplayapi.intel.com — 1 events; top source ips: 10.12.3.66 (1); top destination ips: 23.3.6.28 (1)\"]}",
+      "metadata": {
+        "scenario": "dec21isc",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "dec21isc-09",
+      "artifact_type": "derived_findings",
+      "subtype": "derived_summary",
+      "source": "derived_summary",
+      "content": "{\"description\": \"Deterministic summary computed from the query results above (client ranking, IP-to-hostname/account join, alert timeline).\", \"facts\": [\"Derived: internal client 10.12.3.66 ranks #1 by external connections (164 events, 16 distinct external destinations). Most-contacted external IP: 172.104.227.98 (79 connections).\", \"Derived: Kerberos identity of 10.12.3.66: hostname(s) desktop-luoabv1; human user account(s) darin.figueroa.\", \"Derived: Suricata alerts span 2021-12-03 19:00 UTC to 2021-12-03 20:00 UTC; earliest alert hour 2021-12-03 19:00 UTC (34 alerts).\", \"Derived: destinations of high-severity alerts: 10.12.3.3 (1), 10.12.3.66 (1).\"]}",
+      "metadata": {
+        "scenario": "dec21isc",
+        "source_kind": "derived_from_es_results",
+        "heuristic": true
+      }
+    },
+    {
+      "artifact_id": "dec21isc-10",
+      "artifact_type": "query_coverage",
+      "subtype": "evidence_gaps",
+      "source": "evidence_gaps",
+      "content": "{\"description\": \"Queries that returned nothing or failed; use these to state what is NOT established.\", \"facts\": [\"No matching results for: suspicious certificates / ip based certificates. (Absence in this query is not proof of absence elsewhere.)\"]}",
+      "metadata": {
+        "scenario": "dec21isc",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    }
+  ]
+}

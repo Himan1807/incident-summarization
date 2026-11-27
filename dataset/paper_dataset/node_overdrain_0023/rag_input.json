@@ -1,0 +1,154 @@
+{
+  "metadata": {
+    "incident_id": "INC-20210910",
+    "scenario": "node_overdrain_0023",
+    "title": "Infrastructure reliability incident investigation",
+    "source": "synthetic/ops-incident-expansion (modeled on neu-nds2/llm-sec-incident-analysis)",
+    "query_window_start": "2021-09-10T00:00:00",
+    "query_window_end": "2021-09-12T23:59:59",
+    "evidence_types": [
+      "change_records",
+      "derived_findings",
+      "infrastructure_events",
+      "monitoring_alerts",
+      "query_coverage",
+      "resource_metrics",
+      "service_logs"
+    ],
+    "artifact_scope_note": "Evidence is aggregated query output (not raw log lines or metric samples); it contains no chat/communication records."
+  },
+  "incident_description": "Reliability incident investigation of a production environment. Evidence consists of Elasticsearch aggregation results over application and proxy logs, Kubernetes, cloud-provider and host system events, Prometheus Alertmanager alerts, change-management / CI-CD audit records and metric anomaly detection. No root cause, impact or trigger is stated; these must be established from the supplied artifacts. Environment context: Organization: Straten Bank (digital banking); Platform: AWS us-west-2 (zones us-west-2a/us-west-2b/us-west-2c/us-west-2d); network range 10.172.0.0/16; Kubernetes cluster strate-prod-uswest (EKS); Automation: an in-house node-recycler controller rotates worker nodes (cordon, drain, terminate, replace) in batches bounded by maxUnavailable (10% of 23 nodes); runs are recorded with RECYCLE- identifiers; Change management: production changes carry CHG- identifiers.",
+  "investigation_questions": [
+    "Which service or infrastructure component did the incident originate in?",
+    "Which account or automation identity executed the triggering change?",
+    "Which deployment introduced the faulty batch-size logic? Provide its change identifier.",
+    "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+    "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+    "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+    "Which change happened shortly before the incident began but did not cause it? Provide its identifier.",
+    "Which change restored normal service? Provide its change identifier."
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "node_overdrain_0023-01",
+      "artifact_type": "service_logs",
+      "subtype": "error_logs",
+      "source": "error_logs",
+      "content": "{\"description\": \"Application and proxy error logs: HTTP/gRPC status codes, failing requests (caller -> callee:port : operation), error messages and the services emitting them.\", \"facts\": [\"error events: 57820 matching events\", \"error events > status codes: 503 \\u2014 50967 events\", \"error events > status codes: n/a (connection refused) \\u2014 6717 events\", \"error events > status codes: 500 \\u2014 136 events\", \"failing requests: mobile-bff -> transfers-api:8080 : POST /v1/transfers \\u2014 39036 events\", \"failing requests: mobile-bff -> accounts-api:8080 : GET /v1/accounts \\u2014 11931 events\", \"failing requests: transfers-api -> transfers-cache:6379 : GET \\u2014 6717 events\", \"failing requests: ledger-api -> ledger-db:5432 : query \\u2014 136 events\", \"error messages: upstream transfers-api: 503 no healthy upstream \\u2014 39036 events\", \"error messages: upstream accounts-api: 503 no healthy upstream \\u2014 11931 events\", \"error messages: dial tcp transfers-cache:6379: connect: connection refused \\u2014 6717 events\", \"error messages: redis: i/o timeout \\u2014 136 events\", \"emitting services: mobile-bff \\u2014 50967 events\", \"emitting services: transfers-api \\u2014 6717 events\", \"emitting services: ledger-api \\u2014 136 events\"]}",
+      "metadata": {
+        "scenario": "node_overdrain_0023",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "node_overdrain_0023-02",
+      "artifact_type": "service_logs",
+      "subtype": "error_volume_by_service",
+      "source": "error_volume_by_service",
+      "content": "{\"description\": \"Services ranked by number of error events, with each service's most-failed downstream dependencies.\", \"facts\": [\"services: mobile-bff \\u2014 50967 events; failing dependencies=2; top dependencies: transfers-api (39036), accounts-api (11931)\", \"services: transfers-api \\u2014 6717 events; failing dependencies=1; top dependencies: transfers-cache (6717)\", \"services: ledger-api \\u2014 136 events; failing dependencies=1; top dependencies: ledger-db (136)\"]}",
+      "metadata": {
+        "scenario": "node_overdrain_0023",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "node_overdrain_0023-03",
+      "artifact_type": "change_records",
+      "subtype": "change_log",
+      "source": "change_log",
+      "content": "{\"description\": \"Deployments, configuration pushes, infrastructure and automation runs from the change-management and CI/CD audit log: change ID, type, target, actor, time (UTC), status and recorded diff/summary.\", \"facts\": [\"changes: CHG-10294 | deployment | ledger-api 3.18.10 -> 3.19.0 | actor: jenkins-deploy | 2021-09-10 12:00 UTC | status: succeeded | dependency bump \\u2014 1 events\", \"changes: CHG-10304 | deployment | kyc-svc 12.18.11 -> 12.18.12 | actor: jenkins-deploy | 2021-09-11 04:29 UTC | status: succeeded | minor bug fixes \\u2014 1 events\", \"changes: CHG-10315 | deployment | node-recycler 6.9.7 -> 6.10.0 | actor: jenkins-deploy | 2021-09-11 04:31 UTC | status: Synced/Healthy | new batch sizing logic (percentage support for maxUnavailable) \\u2014 1 events\", \"changes: RECYCLE-1217 | node_rotation | general-purpose node group | actor: node-recycler | 2021-09-11 05:43 UTC | status: aborted | eligible nodes 22; computed batch size 10 from maxUnavailable=10%; cordoned and drained 22 nodes concurrently \\u2014 1 events\", \"changes: CHG-10347 | scale_down | deployment node-recycler | actor: l.dubois | 2021-09-11 07:06 UTC | status: completed | replicas 1 -> 0 \\u2014 1 events\", \"changes: CHG-10375 | nodegroup_scale | general-purpose node group | actor: l.dubois | 2021-09-11 07:16 UTC | status: completed | desired 23 -> 29; uncordon remaining nodes \\u2014 1 events\", \"change types: deployment \\u2014 3 events\", \"change types: node_rotation \\u2014 1 events\", \"change types: scale_down \\u2014 1 events\", \"change types: nodegroup_scale \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "node_overdrain_0023",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "node_overdrain_0023-04",
+      "artifact_type": "change_records",
+      "subtype": "change_actors",
+      "source": "change_actors",
+      "content": "{\"description\": \"Accounts and automation identities that executed changes, with the hosts or targets they acted on.\", \"facts\": [\"actors: jenkins-deploy \\u2014 3 events; targets: strate-prod-uswest/node-recycler (1), strate-prod-uswest/kyc-svc (1), strate-prod-uswest/ledger-api (1)\", \"actors: l.dubois \\u2014 2 events; targets: strate-prod-uswest/node-recycler (1), node group (1)\", \"actors: node-recycler \\u2014 1 events; targets: ip-10-172-177-134 (1), ip-10-172-216-175 (1), ip-10-172-135-187 (1), ip-10-172-242-177 (1), ip-10-172-177-144 (1), ip-10-172-216-208 (1), ip-10-172-135-47 (1), ip-10-172-242-236 (1), ip-10-172-177-95 (1), ip-10-172-216-57 (1), ip-10-172-135-43 (1), ip-10-172-242-233 (1), ip-10-172-177-197 (1), ip-10-172-216-248 (1), ip-10-172-135-232 (1), ip-10-172-242-33 (1), ip-10-172-177-183 (1), ip-10-172-216-247 (1), ip-10-172-135-166 (1), ip-10-172-242-107 (1), ip-10-172-177-46 (1), ip-10-172-216-104 (1)\"]}",
+      "metadata": {
+        "scenario": "node_overdrain_0023",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "node_overdrain_0023-05",
+      "artifact_type": "infrastructure_events",
+      "subtype": "host_inventory",
+      "source": "host_inventory",
+      "content": "{\"description\": \"Host and node names seen in infrastructure events with their IP address, role and availability zone / rack.\", \"facts\": [\"hosts: ip-10-172-135-96 \\u2014 279 events; ip: 10.172.135.96; role: k8s-worker; zone: us-west-2c\", \"hosts: ip-10-172-135-78 \\u2014 162 events; ip: 10.172.135.78; role: k8s-worker; zone: us-west-2c\", \"hosts: ip-10-172-135-187 \\u2014 115 events; ip: 10.172.135.187; role: k8s-worker; zone: us-west-2c\", \"hosts: ip-10-172-216-175 \\u2014 113 events; ip: 10.172.216.175; role: k8s-worker; zone: us-west-2b\", \"hosts: ip-10-172-177-134 \\u2014 110 events; ip: 10.172.177.134; role: k8s-worker; zone: us-west-2a\", \"hosts: ip-10-172-242-183 \\u2014 93 events; ip: 10.172.242.183; role: k8s-worker; zone: us-west-2d\"]}",
+      "metadata": {
+        "scenario": "node_overdrain_0023",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "node_overdrain_0023-06",
+      "artifact_type": "infrastructure_events",
+      "subtype": "platform_events",
+      "source": "platform_events",
+      "content": "{\"description\": \"Kubernetes events, cloud-provider health events and host system messages (kernel, hardware, daemons) with the objects or hosts they refer to.\", \"facts\": [\"event reasons: NodeNotSchedulable \\u2014 22 events; top objects: ip-10-172-177-134 (1), ip-10-172-216-175 (1), ip-10-172-135-187 (1), ip-10-172-242-177 (1), ip-10-172-177-144 (1)\", \"event reasons: FailedScheduling \\u2014 4505 events; top objects: pod/transfers-api-e8af3456d-zd5xj (644), pod/accounts-api-4d8ad65a3-t9s66 (388)\", \"controller logs: node-recycler: batch size 10 computed from maxUnavailable=10% (eligible=22); starting batch \\u2014 1 events; top objects: pod/node-recycler-532b06cc5-jdznc (1)\", \"event reasons: Pulled \\u2014 22 events; top objects: pod/kyc-svc-71ceae7fb-gwf46 (3)\", \"event reasons: ScalingReplicaSet \\u2014 3 events; top objects: deployment/kyc-svc (1)\", \"event reasons: Pulled \\u2014 3 events; top objects: pod/ledger-api-6fb97dcf3-xr2ww (1)\", \"event reasons: ScalingReplicaSet \\u2014 4 events; top objects: deployment/ledger-api (2)\"]}",
+      "metadata": {
+        "scenario": "node_overdrain_0023",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "node_overdrain_0023-07",
+      "artifact_type": "monitoring_alerts",
+      "subtype": "alertmanager_alerts",
+      "source": "alertmanager_alerts",
+      "content": "{\"description\": \"Prometheus Alertmanager alerts: alert names with severity, critical-alert instances, alert names and services, and an hourly timeline of warning and critical alerts (UTC).\", \"facts\": [\"alert names: KubeNodeUnschedulable (warning) \\u2014 88 events; service: kubernetes; first seen in hour 2021-09-11 05:00 UTC; last seen in hour 2021-09-11 08:00 UTC\", \"alert names: Watchdog (info) \\u2014 72 events; service: alertmanager; firing continuously\", \"alert names: KubePodPending (critical) \\u2014 12 events; service: transfers-api; first seen in hour 2021-09-11 05:00 UTC; last seen in hour 2021-09-11 08:00 UTC\", \"alert names: MobileBffErrorRateHigh (critical) \\u2014 9 events; service: mobile-bff; first seen in hour 2021-09-11 06:00 UTC; last seen in hour 2021-09-11 08:00 UTC\", \"alert names: KubeNodesCapacityLow (critical) \\u2014 7 events; service: kubernetes; first seen in hour 2021-09-11 05:00 UTC; last seen in hour 2021-09-11 08:00 UTC\", \"alert names: CPUThrottlingHigh (warning) \\u2014 5 events; service: statements-api; first seen in hour 2021-09-11 03:00 UTC; last seen in hour 2021-09-11 05:00 UTC\", \"critical alerts: 28 matching events\", \"critical alerts > critical instances: transfers-api \\u2014 12 events\", \"critical alerts > critical instances: mobile-bff \\u2014 9 events\", \"critical alerts > critical instances: strate-prod-uswest \\u2014 7 events\", \"critical alerts > critical alert names: KubePodPending \\u2014 12 events\", \"critical alerts > critical alert names: MobileBffErrorRateHigh \\u2014 9 events\", \"critical alerts > critical alert names: KubeNodesCapacityLow \\u2014 7 events\", \"critical alerts > critical services: transfers-api \\u2014 12 events\", \"critical alerts > critical services: mobile-bff \\u2014 9 events\", \"critical alerts > critical services: kubernetes \\u2014 7 events\", \"alert timeline: 2021-09-11 03:00 UTC \\u2014 2 events\", \"alert timeline: 2021-09-11 04:00 UTC \\u2014 2 events\", \"alert timeline: 2021-09-11 05:00 UTC \\u2014 28 events\", \"alert timeline: 2021-09-11 06:00 UTC \\u2014 27 events\", \"alert timeline: 2021-09-11 07:00 UTC \\u2014 31 events\", \"alert timeline: 2021-09-11 08:00 UTC \\u2014 31 events\"]}",
+      "metadata": {
+        "scenario": "node_overdrain_0023",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "node_overdrain_0023-08",
+      "artifact_type": "resource_metrics",
+      "subtype": "metric_anomalies",
+      "source": "metric_anomalies",
+      "content": "{\"description\": \"Metric series that deviated from their 7-day baseline (hourly resolution): baseline, peak or trough value, anomaly onset and recovery (UTC).\", \"facts\": [\"metric anomalies: unschedulable nodes on strate-prod-uswest \\u2014 baseline 0; peak 22; onset 2021-09-11 05:00 UTC; recovered 2021-09-11 09:00 UTC\"]}",
+      "metadata": {
+        "scenario": "node_overdrain_0023",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "node_overdrain_0023-09",
+      "artifact_type": "derived_findings",
+      "subtype": "derived_summary",
+      "source": "derived_summary",
+      "content": "{\"description\": \"Deterministic summary computed from the query results above (error ranking, instance-to-host join, alert timeline, change correlation, earliest metric anomaly).\", \"facts\": [\"Derived: service mobile-bff ranks #1 by error volume (50967 events, 2 failing dependencies). Most-failed dependency: transfers-api (39036 errors).\", \"Derived: most-alerted critical instance transfers-api (12 critical alerts); no matching host-inventory entry.\", \"Derived: warning/critical alerts span 2021-09-11 03:00 UTC to 2021-09-11 08:00 UTC; earliest alert hour 2021-09-11 03:00 UTC (2 alerts).\", \"Derived: no changes recorded from 6 hours before the earliest alert hour to its end.\", \"Derived: earliest metric anomaly onset 2021-09-11 05:00 UTC (unschedulable nodes on strate-prod-uswest).\"]}",
+      "metadata": {
+        "scenario": "node_overdrain_0023",
+        "source_kind": "derived_from_es_results",
+        "heuristic": true
+      }
+    },
+    {
+      "artifact_id": "node_overdrain_0023-10",
+      "artifact_type": "query_coverage",
+      "subtype": "evidence_gaps",
+      "source": "evidence_gaps",
+      "content": "{\"description\": \"Queries that returned nothing or failed; use these to state what is NOT established.\", \"facts\": [\"No matching results for: tls certificates / expired certificates. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / expiring within 7 days. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / self signed. (Absence in this query is not proof of absence elsewhere.)\"]}",
+      "metadata": {
+        "scenario": "node_overdrain_0023",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    }
+  ]
+}

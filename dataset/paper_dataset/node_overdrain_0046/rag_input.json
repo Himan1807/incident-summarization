@@ -1,0 +1,167 @@
+{
+  "metadata": {
+    "incident_id": "INC-20260809",
+    "scenario": "node_overdrain_0046",
+    "title": "Infrastructure reliability incident investigation",
+    "source": "synthetic/ops-incident-expansion (modeled on neu-nds2/llm-sec-incident-analysis)",
+    "query_window_start": "2026-08-09T00:00:00",
+    "query_window_end": "2026-08-11T23:59:59",
+    "evidence_types": [
+      "change_records",
+      "derived_findings",
+      "infrastructure_events",
+      "monitoring_alerts",
+      "network_summary",
+      "query_coverage",
+      "resource_metrics",
+      "service_logs"
+    ],
+    "artifact_scope_note": "Evidence is aggregated query output (not raw log lines or metric samples); it contains no chat/communication records."
+  },
+  "incident_description": "Reliability incident investigation of a production environment. Evidence consists of Elasticsearch aggregation results over application and proxy logs, Kubernetes, cloud-provider and host system events, Prometheus Alertmanager alerts, change-management / CI-CD audit records and metric anomaly detection. No root cause, impact or trigger is stated; these must be established from the supplied artifacts. Environment context: Organization: Lumari Media (news and media publishing); Platform: Microsoft Azure eastus2 (zones eastus2-1/eastus2-2/eastus2-3); network range 10.202.0.0/16; Kubernetes cluster lumari-prod-eastus (AKS); Automation: an in-house node-recycler controller rotates worker nodes (cordon, drain, terminate, replace) in batches bounded by maxUnavailable (10% of 17 nodes); runs are recorded with RECYCLE- identifiers; Change management: production changes carry RFC- identifiers.",
+  "investigation_questions": [
+    "Which service or component is the origin of the failure?",
+    "What change, deployment or automation run triggered the incident? Provide its change identifier.",
+    "Which account or automation identity executed the triggering change?",
+    "Which deployment introduced the faulty batch-size logic? Provide its change identifier.",
+    "How many worker nodes were cordoned and drained at the same time?",
+    "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+    "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+    "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?"
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "node_overdrain_0046-01",
+      "artifact_type": "service_logs",
+      "subtype": "error_logs",
+      "source": "error_logs",
+      "content": "{\"description\": \"Application and proxy error logs: HTTP/gRPC status codes, failing requests (caller -> callee:port : operation), error messages and the services emitting them.\", \"facts\": [\"error events: 43393 matching events\", \"error events > status codes: 503 \\u2014 39418 events\", \"error events > status codes: n/a (connection refused) \\u2014 3767 events\", \"error events > status codes: 502 \\u2014 208 events\", \"failing requests: web-frontend -> newsletter-svc:8080 : POST /v1/newsletter \\u2014 27078 events\", \"failing requests: web-frontend -> media-api:8080 : GET /v1/media \\u2014 12340 events\", \"failing requests: newsletter-svc -> newsletter-cache:6379 : GET \\u2014 3767 events\", \"failing requests: search-api -> search-db:5432 : query \\u2014 208 events\", \"error messages: upstream newsletter-svc: 503 no healthy upstream \\u2014 27078 events\", \"error messages: upstream media-api: 503 no healthy upstream \\u2014 12340 events\", \"error messages: dial tcp newsletter-cache:6379: connect: connection refused \\u2014 3767 events\", \"error messages: connection reset by peer \\u2014 208 events\", \"emitting services: web-frontend \\u2014 39418 events\", \"emitting services: newsletter-svc \\u2014 3767 events\", \"emitting services: search-api \\u2014 208 events\"]}",
+      "metadata": {
+        "scenario": "node_overdrain_0046",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "node_overdrain_0046-02",
+      "artifact_type": "service_logs",
+      "subtype": "error_volume_by_service",
+      "source": "error_volume_by_service",
+      "content": "{\"description\": \"Services ranked by number of error events, with each service's most-failed downstream dependencies.\", \"facts\": [\"services: web-frontend \\u2014 39418 events; failing dependencies=2; top dependencies: newsletter-svc (27078), media-api (12340)\", \"services: newsletter-svc \\u2014 3767 events; failing dependencies=1; top dependencies: newsletter-cache (3767)\", \"services: search-api \\u2014 208 events; failing dependencies=1; top dependencies: search-db (208)\"]}",
+      "metadata": {
+        "scenario": "node_overdrain_0046",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "node_overdrain_0046-03",
+      "artifact_type": "change_records",
+      "subtype": "change_log",
+      "source": "change_log",
+      "content": "{\"description\": \"Deployments, configuration pushes, infrastructure and automation runs from the change-management and CI/CD audit log: change ID, type, target, actor, time (UTC), status and recorded diff/summary.\", \"facts\": [\"changes: RFC-39590 | deployment | search-api 0.5.3 -> 0.5.4 | actor: azure-pipelines | 2026-08-09 03:05 UTC | status: Synced/Healthy | logging improvements \\u2014 1 events\", \"changes: RFC-39621 | deployment | node-recycler 7.31.2 -> 7.32.0 | actor: azure-pipelines | 2026-08-10 04:44 UTC | status: Synced/Healthy | new batch sizing logic (percentage support for maxUnavailable) \\u2014 1 events\", \"changes: RECYCLE-8826 | node_rotation | general-purpose node group | actor: node-recycler | 2026-08-10 09:05 UTC | status: aborted | eligible nodes 16; computed batch size 10 from maxUnavailable=10%; cordoned and drained 16 nodes concurrently \\u2014 1 events\", \"changes: RFC-39624 | scale_down | deployment node-recycler | actor: p.tanaka | 2026-08-10 09:54 UTC | status: completed | replicas 1 -> 0 \\u2014 1 events\", \"changes: RFC-39631 | nodegroup_scale | general-purpose node group | actor: p.tanaka | 2026-08-10 10:04 UTC | status: completed | desired 17 -> 23; uncordon remaining nodes \\u2014 1 events\", \"changes: RFC-39665 | deployment | comment-svc 5.25.3 -> 5.25.4 | actor: azure-pipelines | 2026-08-10 19:04 UTC | status: succeeded | logging improvements \\u2014 1 events\", \"change types: deployment \\u2014 3 events\", \"change types: node_rotation \\u2014 1 events\", \"change types: scale_down \\u2014 1 events\", \"change types: nodegroup_scale \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "node_overdrain_0046",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "node_overdrain_0046-04",
+      "artifact_type": "change_records",
+      "subtype": "change_actors",
+      "source": "change_actors",
+      "content": "{\"description\": \"Accounts and automation identities that executed changes, with the hosts or targets they acted on.\", \"facts\": [\"actors: azure-pipelines \\u2014 3 events; targets: lumari-prod-eastus/node-recycler (1), lumari-prod-eastus/comment-svc (1), lumari-prod-eastus/search-api (1)\", \"actors: p.tanaka \\u2014 2 events; targets: lumari-prod-eastus/node-recycler (1), node group (1)\", \"actors: node-recycler \\u2014 1 events; targets: aks-nodepool1-86616857-vmss000017 (1), aks-nodepool1-33106151-vmss000004 (1), aks-nodepool1-69647738-vmss000034 (1), aks-nodepool1-61961318-vmss000018 (1), aks-nodepool1-90241580-vmss000033 (1), aks-nodepool1-65071125-vmss000011 (1), aks-nodepool1-31762814-vmss000004 (1), aks-nodepool1-49484702-vmss000031 (1), aks-nodepool1-94559473-vmss000023 (1), aks-nodepool1-41269796-vmss000039 (1), aks-nodepool1-31275301-vmss000006 (1), aks-nodepool1-65310976-vmss000036 (1), aks-nodepool1-45933016-vmss000033 (1), aks-nodepool1-30478664-vmss000026 (1), aks-nodepool1-43495673-vmss000011 (1), aks-nodepool1-34668559-vmss000013 (1)\"]}",
+      "metadata": {
+        "scenario": "node_overdrain_0046",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "node_overdrain_0046-05",
+      "artifact_type": "infrastructure_events",
+      "subtype": "host_inventory",
+      "source": "host_inventory",
+      "content": "{\"description\": \"Host and node names seen in infrastructure events with their IP address, role and availability zone / rack.\", \"facts\": [\"hosts: aks-nodepool1-58279260-vmss000035 \\u2014 250 events; ip: 10.202.127.40; role: k8s-worker; zone: eastus2-2\", \"hosts: aks-nodepool1-61961318-vmss000018 \\u2014 111 events; ip: 10.202.133.37; role: k8s-worker; zone: eastus2-1\", \"hosts: aks-nodepool1-33106151-vmss000004 \\u2014 103 events; ip: 10.202.127.146; role: k8s-worker; zone: eastus2-2\", \"hosts: aks-nodepool1-65071125-vmss000011 \\u2014 102 events; ip: 10.202.21.249; role: k8s-worker; zone: eastus2-3\", \"hosts: aks-nodepool1-90241580-vmss000033 \\u2014 71 events; ip: 10.202.127.42; role: k8s-worker; zone: eastus2-2\", \"hosts: aks-nodepool1-69647738-vmss000034 \\u2014 63 events; ip: 10.202.21.208; role: k8s-worker; zone: eastus2-3\", \"hosts: aks-nodepool1-86616857-vmss000017 \\u2014 60 events; ip: 10.202.133.21; role: k8s-worker; zone: eastus2-1\"]}",
+      "metadata": {
+        "scenario": "node_overdrain_0046",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "node_overdrain_0046-06",
+      "artifact_type": "infrastructure_events",
+      "subtype": "platform_events",
+      "source": "platform_events",
+      "content": "{\"description\": \"Kubernetes events, cloud-provider health events and host system messages (kernel, hardware, daemons) with the objects or hosts they refer to.\", \"facts\": [\"event reasons: NodeNotSchedulable \\u2014 16 events; top objects: aks-nodepool1-86616857-vmss000017 (1), aks-nodepool1-33106151-vmss000004 (1), aks-nodepool1-69647738-vmss000034 (1), aks-nodepool1-61961318-vmss000018 (1), aks-nodepool1-90241580-vmss000033 (1)\", \"event reasons: FailedScheduling \\u2014 1066 events; top objects: pod/newsletter-svc-fbe9a5b64-7blkm (693), pod/media-api-eac7777f4-dfl4m (373)\", \"controller logs: node-recycler: batch size 10 computed from maxUnavailable=10% (eligible=16); starting batch \\u2014 1 events; top objects: pod/node-recycler-1c832b28f-8mp8r (1)\", \"event reasons: Pulled \\u2014 28 events; top objects: pod/comment-svc-a6701959d-nc6jk (1)\", \"event reasons: ScalingReplicaSet \\u2014 5 events; top objects: deployment/comment-svc (2)\", \"event reasons: Pulled \\u2014 21 events; top objects: pod/search-api-39ffe434d-8rcnn (2)\", \"event reasons: ScalingReplicaSet \\u2014 5 events; top objects: deployment/search-api (1)\"]}",
+      "metadata": {
+        "scenario": "node_overdrain_0046",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "node_overdrain_0046-07",
+      "artifact_type": "monitoring_alerts",
+      "subtype": "alertmanager_alerts",
+      "source": "alertmanager_alerts",
+      "content": "{\"description\": \"Prometheus Alertmanager alerts: alert names with severity, critical-alert instances, alert names and services, and an hourly timeline of warning and critical alerts (UTC).\", \"facts\": [\"alert names: Watchdog (info) \\u2014 72 events; service: alertmanager; firing continuously\", \"alert names: KubeNodeUnschedulable (warning) \\u2014 32 events; service: kubernetes; first seen in hour 2026-08-10 09:00 UTC; last seen in hour 2026-08-10 10:00 UTC\", \"alert names: KubeNodesCapacityLow (critical) \\u2014 6 events; service: kubernetes; first seen in hour 2026-08-10 09:00 UTC; last seen in hour 2026-08-10 10:00 UTC\", \"alert names: KubePodPending (critical) \\u2014 4 events; service: newsletter-svc; first seen in hour 2026-08-10 09:00 UTC; last seen in hour 2026-08-10 10:00 UTC\", \"alert names: WebFrontendErrorRateHigh (critical) \\u2014 3 events; service: web-frontend; first seen in hour 2026-08-10 09:00 UTC; last seen in hour 2026-08-10 10:00 UTC\", \"alert names: CPUThrottlingHigh (warning) \\u2014 2 events; service: content-api; first seen in hour 2026-08-11 10:00 UTC; last seen in hour 2026-08-11 10:00 UTC\", \"critical alerts: 13 matching events\", \"critical alerts > critical instances: lumari-prod-eastus \\u2014 6 events\", \"critical alerts > critical instances: newsletter-svc \\u2014 4 events\", \"critical alerts > critical instances: web-frontend \\u2014 3 events\", \"critical alerts > critical alert names: KubeNodesCapacityLow \\u2014 6 events\", \"critical alerts > critical alert names: KubePodPending \\u2014 4 events\", \"critical alerts > critical alert names: WebFrontendErrorRateHigh \\u2014 3 events\", \"critical alerts > critical services: kubernetes \\u2014 6 events\", \"critical alerts > critical services: newsletter-svc \\u2014 4 events\", \"critical alerts > critical services: web-frontend \\u2014 3 events\", \"alert timeline: 2026-08-10 09:00 UTC \\u2014 24 events\", \"alert timeline: 2026-08-10 10:00 UTC \\u2014 21 events\", \"alert timeline: 2026-08-11 10:00 UTC \\u2014 2 events\"]}",
+      "metadata": {
+        "scenario": "node_overdrain_0046",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "node_overdrain_0046-08",
+      "artifact_type": "resource_metrics",
+      "subtype": "metric_anomalies",
+      "source": "metric_anomalies",
+      "content": "{\"description\": \"Metric series that deviated from their 7-day baseline (hourly resolution): baseline, peak or trough value, anomaly onset and recovery (UTC).\", \"facts\": [\"metric anomalies: unschedulable nodes on lumari-prod-eastus \\u2014 baseline 0; peak 16; onset 2026-08-10 09:00 UTC; recovered 2026-08-10 11:00 UTC\"]}",
+      "metadata": {
+        "scenario": "node_overdrain_0046",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "node_overdrain_0046-09",
+      "artifact_type": "network_summary",
+      "subtype": "tls_certificates",
+      "source": "tls_certificates",
+      "content": "{\"description\": \"TLS certificates observed in edge and service-to-service traffic that are expired, expire within 7 days, or are self-signed.\", \"facts\": [\"expiring within 7 days: 51 matching events\", \"expiring within 7 days > certificate details: CN=content-api.lumari.internal | issuer: CN=R11,O=Let's Encrypt | not_after: 2026-08-14 23:59:00 UTC | seen on: content-api:8443 \\u2014 51 events\"]}",
+      "metadata": {
+        "scenario": "node_overdrain_0046",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "node_overdrain_0046-10",
+      "artifact_type": "derived_findings",
+      "subtype": "derived_summary",
+      "source": "derived_summary",
+      "content": "{\"description\": \"Deterministic summary computed from the query results above (error ranking, instance-to-host join, alert timeline, change correlation, earliest metric anomaly).\", \"facts\": [\"Derived: service web-frontend ranks #1 by error volume (39418 events, 2 failing dependencies). Most-failed dependency: newsletter-svc (27078 errors).\", \"Derived: most-alerted critical instance lumari-prod-eastus (6 critical alerts); no matching host-inventory entry.\", \"Derived: warning/critical alerts span 2026-08-10 09:00 UTC to 2026-08-11 10:00 UTC; earliest alert hour 2026-08-10 09:00 UTC (24 alerts).\", \"Derived: changes recorded from 6 hours before the earliest alert hour to its end: RFC-39621 (deployment, node-recycler 7.31.2 -> 7.32.0, azure-pipelines, 2026-08-10 04:44 UTC); RECYCLE-8826 (node_rotation, general-purpose node group, node-recycler, 2026-08-10 09:05 UTC); RFC-39624 (scale_down, deployment node-recycler, p.tanaka, 2026-08-10 09:54 UTC).\", \"Derived: earliest metric anomaly onset 2026-08-10 09:00 UTC (unschedulable nodes on lumari-prod-eastus).\"]}",
+      "metadata": {
+        "scenario": "node_overdrain_0046",
+        "source_kind": "derived_from_es_results",
+        "heuristic": true
+      }
+    },
+    {
+      "artifact_id": "node_overdrain_0046-11",
+      "artifact_type": "query_coverage",
+      "subtype": "evidence_gaps",
+      "source": "evidence_gaps",
+      "content": "{\"description\": \"Queries that returned nothing or failed; use these to state what is NOT established.\", \"facts\": [\"No matching results for: tls certificates / expired certificates. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / self signed. (Absence in this query is not proof of absence elsewhere.)\"]}",
+      "metadata": {
+        "scenario": "node_overdrain_0046",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    }
+  ]
+}

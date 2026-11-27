@@ -1,0 +1,91 @@
+{
+  "source": "answers.txt (paper dataset)",
+  "confidence": "paper ground truth",
+  "qa": [
+    {
+      "id": 1,
+      "question": "What is the IP address of the infected Windows client?",
+      "answer": "10.1.21.58",
+      "atoms": [
+        {
+          "text": "10.1.21.58",
+          "kind": "ip"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "question": "What is the host name of the infected Windows client?",
+      "answer": "DESKTOP-ES9F3ML",
+      "atoms": [
+        {
+          "text": "DESKTOP-ES9F3ML",
+          "kind": "hostname"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "question": "What is the Windows human user account name (not machine accounts ending in $) of the potentially infected machine in the LAN?",
+      "answer": "gwyatt",
+      "atoms": [
+        {
+          "text": "gwyatt",
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "question": "What domain and IP address triggered the alert for Lumma Stealer?",
+      "answer": "whitepepper.su, 153.92.1.49",
+      "atoms": [
+        {
+          "text": "whitepepper.su",
+          "kind": "domain_or_file"
+        },
+        {
+          "text": "153.92.1.49",
+          "kind": "ip"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "question": "Which of the three CIA components does the attacker target primarily: availability, integrity, or confidentiality?",
+      "answer": "confidentiality",
+      "atoms": [
+        {
+          "text": "confidentiality",
+          "kind": "cia"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "question": "During what hour did the first signs of infection activity appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+      "answer": "2026-01-27 23:00 UTC",
+      "atoms": [
+        {
+          "text": "2026-01-27 23:00 UTC",
+          "kind": "time"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "question": "According to the connection volume statistics, what single external IP address received the most connections from the infected hosts? Is it a C2 server or a legitimate service?",
+      "answer": "153.92.1.49, C2 server",
+      "atoms": [
+        {
+          "text": "153.92.1.49",
+          "kind": "ip"
+        },
+        {
+          "text": "C2 server",
+          "kind": "label"
+        }
+      ]
+    }
+  ]
+}

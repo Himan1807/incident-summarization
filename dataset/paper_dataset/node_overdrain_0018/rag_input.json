@@ -1,0 +1,154 @@
+{
+  "metadata": {
+    "incident_id": "INC-20211015",
+    "scenario": "node_overdrain_0018",
+    "title": "Infrastructure reliability incident investigation",
+    "source": "synthetic/ops-incident-expansion (modeled on neu-nds2/llm-sec-incident-analysis)",
+    "query_window_start": "2021-10-15T00:00:00",
+    "query_window_end": "2021-10-17T23:59:59",
+    "evidence_types": [
+      "change_records",
+      "derived_findings",
+      "infrastructure_events",
+      "monitoring_alerts",
+      "query_coverage",
+      "resource_metrics",
+      "service_logs"
+    ],
+    "artifact_scope_note": "Evidence is aggregated query output (not raw log lines or metric samples); it contains no chat/communication records."
+  },
+  "incident_description": "Reliability incident investigation of a production environment. Evidence consists of Elasticsearch aggregation results over application and proxy logs, Kubernetes, cloud-provider and host system events, Prometheus Alertmanager alerts, change-management / CI-CD audit records and metric anomaly detection. No root cause, impact or trigger is stated; these must be established from the supplied artifacts. Environment context: Organization: Veleron Freight (freight and logistics); Platform: Google Cloud europe-west1 (zones europe-west1-b/europe-west1-c/europe-west1-d); network range 10.197.0.0/16; Kubernetes cluster velero-prod-europe (GKE); Automation: an in-house node-recycler controller rotates worker nodes (cordon, drain, terminate, replace) in batches bounded by maxUnavailable (15% of 18 nodes); runs are recorded with RECYCLE- identifiers; Change management: production changes carry CHG- identifiers.",
+  "investigation_questions": [
+    "Which service or component is the origin of the failure?",
+    "Which account or automation identity executed the triggering change?",
+    "Which deployment introduced the faulty batch-size logic? Provide its change identifier.",
+    "How many worker nodes were cordoned and drained at the same time?",
+    "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+    "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+    "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+    "Which change happened shortly before the incident began but did not cause it? Provide its identifier."
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "node_overdrain_0018-01",
+      "artifact_type": "service_logs",
+      "subtype": "error_logs",
+      "source": "error_logs",
+      "content": "{\"description\": \"Application and proxy error logs: HTTP/gRPC status codes, failing requests (caller -> callee:port : operation), error messages and the services emitting them.\", \"facts\": [\"error events: 79097 matching events\", \"error events > status codes: 503 \\u2014 75011 events\", \"error events > status codes: n/a (connection refused) \\u2014 4045 events\", \"error events > status codes: 500 \\u2014 41 events\", \"failing requests: portal-bff -> rate-engine:8080 : POST /v1/rate \\u2014 54013 events\", \"failing requests: portal-bff -> customs-svc:8080 : GET /v1/customs \\u2014 20998 events\", \"failing requests: rate-engine -> rate-cache:6379 : GET \\u2014 4045 events\", \"failing requests: dock-scheduler -> dock-db:5432 : query \\u2014 41 events\", \"error messages: upstream rate-engine: 503 no healthy upstream \\u2014 54013 events\", \"error messages: upstream customs-svc: 503 no healthy upstream \\u2014 20998 events\", \"error messages: dial tcp rate-cache:6379: connect: connection refused \\u2014 4045 events\", \"error messages: deadlock detected \\u2014 41 events\", \"emitting services: portal-bff \\u2014 75011 events\", \"emitting services: rate-engine \\u2014 4045 events\", \"emitting services: dock-scheduler \\u2014 41 events\"]}",
+      "metadata": {
+        "scenario": "node_overdrain_0018",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "node_overdrain_0018-02",
+      "artifact_type": "service_logs",
+      "subtype": "error_volume_by_service",
+      "source": "error_volume_by_service",
+      "content": "{\"description\": \"Services ranked by number of error events, with each service's most-failed downstream dependencies.\", \"facts\": [\"services: portal-bff \\u2014 75011 events; failing dependencies=2; top dependencies: rate-engine (54013), customs-svc (20998)\", \"services: rate-engine \\u2014 4045 events; failing dependencies=1; top dependencies: rate-cache (4045)\", \"services: dock-scheduler \\u2014 41 events; failing dependencies=1; top dependencies: dock-db (41)\"]}",
+      "metadata": {
+        "scenario": "node_overdrain_0018",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "node_overdrain_0018-03",
+      "artifact_type": "change_records",
+      "subtype": "change_log",
+      "source": "change_log",
+      "content": "{\"description\": \"Deployments, configuration pushes, infrastructure and automation runs from the change-management and CI/CD audit log: change ID, type, target, actor, time (UTC), status and recorded diff/summary.\", \"facts\": [\"changes: CHG-17826 | deployment | node-recycler 10.37.2 -> 10.38.0 | actor: cloudbuild-deployer | 2021-10-15 19:30 UTC | status: Synced/Healthy | new batch sizing logic (percentage support for maxUnavailable) \\u2014 1 events\", \"changes: CHG-17844 | deployment | booking-api 1.26.4 -> 1.26.5 | actor: cloudbuild-deployer | 2021-10-15 22:44 UTC | status: Synced/Healthy | dependency bump \\u2014 1 events\", \"changes: RECYCLE-2144 | node_rotation | general-purpose node group | actor: node-recycler | 2021-10-16 00:18 UTC | status: aborted | eligible nodes 17; computed batch size 15 from maxUnavailable=15%; cordoned and drained 17 nodes concurrently \\u2014 1 events\", \"changes: CHG-17882 | scale_down | deployment node-recycler | actor: r.novak | 2021-10-16 01:25 UTC | status: completed | replicas 1 -> 0 \\u2014 1 events\", \"changes: CHG-17893 | nodegroup_scale | general-purpose node group | actor: r.novak | 2021-10-16 01:35 UTC | status: completed | desired 18 -> 24; uncordon remaining nodes \\u2014 1 events\", \"changes: CHG-17919 | deployment | dock-scheduler 5.25.7 -> 5.26.0 | actor: cloudbuild-deployer | 2021-10-16 08:37 UTC | status: succeeded | copy and UI text changes \\u2014 1 events\", \"changes: CHG-17951 | deployment | label-svc 14.10.7 -> 14.10.8 | actor: cloudbuild-deployer | 2021-10-17 14:32 UTC | status: Synced/Healthy | copy and UI text changes \\u2014 1 events\", \"change types: deployment \\u2014 4 events\", \"change types: node_rotation \\u2014 1 events\", \"change types: scale_down \\u2014 1 events\", \"change types: nodegroup_scale \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "node_overdrain_0018",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "node_overdrain_0018-04",
+      "artifact_type": "change_records",
+      "subtype": "change_actors",
+      "source": "change_actors",
+      "content": "{\"description\": \"Accounts and automation identities that executed changes, with the hosts or targets they acted on.\", \"facts\": [\"actors: cloudbuild-deployer \\u2014 4 events; targets: velero-prod-europe/node-recycler (1), velero-prod-europe/booking-api (1), velero-prod-europe/dock-scheduler (1), velero-prod-europe/label-svc (1)\", \"actors: r.novak \\u2014 2 events; targets: velero-prod-europe/node-recycler (1), node group (1)\", \"actors: node-recycler \\u2014 1 events; targets: gke-velero-prod-eu-pool-c-e6d6 (1), gke-velero-prod-eu-pool-b-9057 (1), gke-velero-prod-eu-pool-c-15f4 (1), gke-velero-prod-eu-pool-a-cc97 (1), gke-velero-prod-eu-pool-b-4055 (1), gke-velero-prod-eu-pool-a-5199 (1), gke-velero-prod-eu-pool-a-14ad (1), gke-velero-prod-eu-pool-b-a2d3 (1), gke-velero-prod-eu-pool-a-5290 (1), gke-velero-prod-eu-pool-a-1426 (1), gke-velero-prod-eu-pool-b-f757 (1), gke-velero-prod-eu-pool-b-83ab (1), gke-velero-prod-eu-pool-a-c984 (1), gke-velero-prod-eu-pool-c-7fbb (1), gke-velero-prod-eu-pool-a-7b39 (1), gke-velero-prod-eu-pool-c-dc4f (1), gke-velero-prod-eu-pool-c-8721 (1)\"]}",
+      "metadata": {
+        "scenario": "node_overdrain_0018",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "node_overdrain_0018-05",
+      "artifact_type": "infrastructure_events",
+      "subtype": "host_inventory",
+      "source": "host_inventory",
+      "content": "{\"description\": \"Host and node names seen in infrastructure events with their IP address, role and availability zone / rack.\", \"facts\": [\"hosts: gke-velero-prod-eu-pool-a-cc97 \\u2014 116 events; ip: 10.197.27.229; role: k8s-worker; zone: europe-west1-b\", \"hosts: gke-velero-prod-eu-pool-a-5199 \\u2014 105 events; ip: 10.197.155.75; role: k8s-worker; zone: europe-west1-d\", \"hosts: gke-velero-prod-eu-pool-b-9057 \\u2014 100 events; ip: 10.197.111.118; role: k8s-worker; zone: europe-west1-c\", \"hosts: gke-velero-prod-eu-pool-c-e6d6 \\u2014 91 events; ip: 10.197.27.127; role: k8s-worker; zone: europe-west1-b\", \"hosts: gke-velero-prod-eu-pool-b-4055 \\u2014 70 events; ip: 10.197.111.22; role: k8s-worker; zone: europe-west1-c\", \"hosts: gke-velero-prod-eu-pool-c-15f4 \\u2014 60 events; ip: 10.197.155.239; role: k8s-worker; zone: europe-west1-d\", \"hosts: gke-velero-prod-eu-pool-b-9a91 \\u2014 46 events; ip: 10.197.27.13; role: k8s-worker; zone: europe-west1-b\"]}",
+      "metadata": {
+        "scenario": "node_overdrain_0018",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "node_overdrain_0018-06",
+      "artifact_type": "infrastructure_events",
+      "subtype": "platform_events",
+      "source": "platform_events",
+      "content": "{\"description\": \"Kubernetes events, cloud-provider health events and host system messages (kernel, hardware, daemons) with the objects or hosts they refer to.\", \"facts\": [\"event reasons: NodeNotSchedulable \\u2014 17 events; top objects: gke-velero-prod-eu-pool-c-e6d6 (1), gke-velero-prod-eu-pool-b-9057 (1), gke-velero-prod-eu-pool-c-15f4 (1), gke-velero-prod-eu-pool-a-cc97 (1), gke-velero-prod-eu-pool-b-4055 (1)\", \"event reasons: FailedScheduling \\u2014 2427 events; top objects: pod/rate-engine-38a54f553-f85p7 (612), pod/customs-svc-8b4b2f4fc-rtqcz (391)\", \"controller logs: node-recycler: batch size 15 computed from maxUnavailable=15% (eligible=17); starting batch \\u2014 1 events; top objects: pod/node-recycler-bfb07b9e5-4bbkx (1)\", \"event reasons: Pulled \\u2014 27 events; top objects: pod/booking-api-9c22f2468-f8sgb (2)\", \"event reasons: ScalingReplicaSet \\u2014 6 events; top objects: deployment/booking-api (2)\", \"event reasons: Pulled \\u2014 5 events; top objects: pod/dock-scheduler-3fc0140e2-6hn9n (2)\", \"event reasons: ScalingReplicaSet \\u2014 3 events; top objects: deployment/dock-scheduler (1)\", \"event reasons: Pulled \\u2014 18 events; top objects: pod/label-svc-166dfa044-p4646 (3)\", \"event reasons: ScalingReplicaSet \\u2014 5 events; top objects: deployment/label-svc (1)\"]}",
+      "metadata": {
+        "scenario": "node_overdrain_0018",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "node_overdrain_0018-07",
+      "artifact_type": "monitoring_alerts",
+      "subtype": "alertmanager_alerts",
+      "source": "alertmanager_alerts",
+      "content": "{\"description\": \"Prometheus Alertmanager alerts: alert names with severity, critical-alert instances, alert names and services, and an hourly timeline of warning and critical alerts (UTC).\", \"facts\": [\"alert names: Watchdog (info) \\u2014 72 events; service: alertmanager; firing continuously\", \"alert names: KubeNodeUnschedulable (warning) \\u2014 51 events; service: kubernetes; first seen in hour 2021-10-16 00:00 UTC; last seen in hour 2021-10-16 02:00 UTC\", \"alert names: KubeNodesCapacityLow (critical) \\u2014 8 events; service: kubernetes; first seen in hour 2021-10-16 00:00 UTC; last seen in hour 2021-10-16 02:00 UTC\", \"alert names: PortalBffErrorRateHigh (critical) \\u2014 8 events; service: portal-bff; first seen in hour 2021-10-16 00:00 UTC; last seen in hour 2021-10-16 02:00 UTC\", \"alert names: KubePodPending (critical) \\u2014 7 events; service: rate-engine; first seen in hour 2021-10-16 00:00 UTC; last seen in hour 2021-10-16 02:00 UTC\", \"alert names: NodeFilesystemSpaceFillingUp (warning) \\u2014 2 events; service: node; first seen in hour 2021-10-15 20:00 UTC; last seen in hour 2021-10-15 21:00 UTC\", \"critical alerts: 23 matching events\", \"critical alerts > critical instances: portal-bff \\u2014 8 events\", \"critical alerts > critical instances: velero-prod-europe \\u2014 8 events\", \"critical alerts > critical instances: rate-engine \\u2014 7 events\", \"critical alerts > critical alert names: KubeNodesCapacityLow \\u2014 8 events\", \"critical alerts > critical alert names: PortalBffErrorRateHigh \\u2014 8 events\", \"critical alerts > critical alert names: KubePodPending \\u2014 7 events\", \"critical alerts > critical services: kubernetes \\u2014 8 events\", \"critical alerts > critical services: portal-bff \\u2014 8 events\", \"critical alerts > critical services: rate-engine \\u2014 7 events\", \"alert timeline: 2021-10-15 20:00 UTC \\u2014 1 events\", \"alert timeline: 2021-10-15 21:00 UTC \\u2014 1 events\", \"alert timeline: 2021-10-16 00:00 UTC \\u2014 28 events\", \"alert timeline: 2021-10-16 01:00 UTC \\u2014 25 events\", \"alert timeline: 2021-10-16 02:00 UTC \\u2014 21 events\"]}",
+      "metadata": {
+        "scenario": "node_overdrain_0018",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "node_overdrain_0018-08",
+      "artifact_type": "resource_metrics",
+      "subtype": "metric_anomalies",
+      "source": "metric_anomalies",
+      "content": "{\"description\": \"Metric series that deviated from their 7-day baseline (hourly resolution): baseline, peak or trough value, anomaly onset and recovery (UTC).\", \"facts\": [\"metric anomalies: unschedulable nodes on velero-prod-europe \\u2014 baseline 0; peak 17; onset 2021-10-16 00:00 UTC; recovered 2021-10-16 03:00 UTC\", \"metric anomalies: node_network_receive_bytes rate on 10.197.27.13 \\u2014 baseline 29 MB/s; peak 759 MB/s; onset 2021-10-15 18:00 UTC; recovered 2021-10-15 20:00 UTC\"]}",
+      "metadata": {
+        "scenario": "node_overdrain_0018",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "node_overdrain_0018-09",
+      "artifact_type": "derived_findings",
+      "subtype": "derived_summary",
+      "source": "derived_summary",
+      "content": "{\"description\": \"Deterministic summary computed from the query results above (error ranking, instance-to-host join, alert timeline, change correlation, earliest metric anomaly).\", \"facts\": [\"Derived: service portal-bff ranks #1 by error volume (75011 events, 2 failing dependencies). Most-failed dependency: rate-engine (54013 errors).\", \"Derived: most-alerted critical instance portal-bff (8 critical alerts); no matching host-inventory entry.\", \"Derived: warning/critical alerts span 2021-10-15 20:00 UTC to 2021-10-16 02:00 UTC; earliest alert hour 2021-10-15 20:00 UTC (1 alerts).\", \"Derived: changes recorded from 6 hours before the earliest alert hour to its end: CHG-17826 (deployment, node-recycler 10.37.2 -> 10.38.0, cloudbuild-deployer, 2021-10-15 19:30 UTC).\", \"Derived: earliest metric anomaly onset 2021-10-15 18:00 UTC (node_network_receive_bytes rate on 10.197.27.13).\"]}",
+      "metadata": {
+        "scenario": "node_overdrain_0018",
+        "source_kind": "derived_from_es_results",
+        "heuristic": true
+      }
+    },
+    {
+      "artifact_id": "node_overdrain_0018-10",
+      "artifact_type": "query_coverage",
+      "subtype": "evidence_gaps",
+      "source": "evidence_gaps",
+      "content": "{\"description\": \"Queries that returned nothing or failed; use these to state what is NOT established.\", \"facts\": [\"No matching results for: tls certificates / expired certificates. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / expiring within 7 days. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / self signed. (Absence in this query is not proof of absence elsewhere.)\"]}",
+      "metadata": {
+        "scenario": "node_overdrain_0018",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    }
+  ]
+}

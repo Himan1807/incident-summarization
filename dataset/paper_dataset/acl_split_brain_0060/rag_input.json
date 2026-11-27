@@ -1,0 +1,153 @@
+{
+  "metadata": {
+    "incident_id": "INC-20240721",
+    "scenario": "acl_split_brain_0060",
+    "title": "Infrastructure reliability incident investigation",
+    "source": "synthetic/ops-incident-expansion (modeled on neu-nds2/llm-sec-incident-analysis)",
+    "query_window_start": "2024-07-21T00:00:00",
+    "query_window_end": "2024-07-23T23:59:59",
+    "evidence_types": [
+      "change_records",
+      "derived_findings",
+      "infrastructure_events",
+      "monitoring_alerts",
+      "query_coverage",
+      "resource_metrics",
+      "service_logs"
+    ],
+    "artifact_scope_note": "Evidence is aggregated query output (not raw log lines or metric samples); it contains no chat/communication records."
+  },
+  "incident_description": "Reliability incident investigation of a production environment. Evidence consists of Elasticsearch aggregation results over application and proxy logs, Kubernetes, cloud-provider and host system events, Prometheus Alertmanager alerts, change-management / CI-CD audit records and metric anomaly detection. No root cause, impact or trigger is stated; these must be established from the supplied artifacts. Environment context: Organization: Ridgeforge Clinics (clinic and patient management SaaS); Platform: on-premises data center DC-West, server range 172.25.0.0/16; Two data centers DC-A and DC-B linked by routed interconnects with a stretched VLAN 50; legacy PostgreSQL primary/standby pair (db-a in DC-A, db-b in DC-B) behind a keepalived VRRP virtual IP 172.25.196.190 with a promote-on-MASTER script; network automation: Ansible AWX pushes router ACLs (job IDs AWX-); Change management: production changes carry CHG- identifiers.",
+  "investigation_questions": [
+    "What change, deployment or automation run triggered the incident? Provide its change identifier.",
+    "Who (account or automation identity) executed the change that caused the incident?",
+    "Which database node was promoted, creating a second writable primary?",
+    "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+    "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+    "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+    "Which change happened shortly before the incident began but did not cause it? Provide its identifier."
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "acl_split_brain_0060-01",
+      "artifact_type": "service_logs",
+      "subtype": "error_logs",
+      "source": "error_logs",
+      "content": "{\"description\": \"Application and proxy error logs: HTTP/gRPC status codes, failing requests (caller -> callee:port : operation), error messages and the services emitting them.\", \"facts\": [\"error events: 8272 matching events\", \"error events > status codes: 409 \\u2014 8079 events\", \"error events > status codes: 500 \\u2014 193 events\", \"failing requests: reconciliation-job -> db-a / db-b : compare ledgers \\u2014 5550 events\", \"failing requests: identity-svc -> 172.25.196.190:5432 : INSERT \\u2014 2529 events\", \"failing requests: lab-results-api -> lab-db:5432 : query \\u2014 182 events\", \"failing requests: nightly-batch -> 172.25.196.190:5432 : SELECT totals \\u2014 11 events\", \"error messages: conflict: record version mismatch between DC-A and DC-B \\u2014 5550 events\", \"error messages: duplicate key value violates unique constraint (sequence collision after promotion) \\u2014 2529 events\", \"error messages: pq: could not serialize access due to concurrent update \\u2014 182 events\", \"error messages: checksum mismatch for nightly batch \\u2014 11 events\", \"emitting services: reconciliation-job \\u2014 5550 events\", \"emitting services: identity-svc \\u2014 2529 events\", \"emitting services: lab-results-api \\u2014 182 events\", \"emitting services: nightly-batch \\u2014 11 events\"]}",
+      "metadata": {
+        "scenario": "acl_split_brain_0060",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "acl_split_brain_0060-02",
+      "artifact_type": "service_logs",
+      "subtype": "error_volume_by_service",
+      "source": "error_volume_by_service",
+      "content": "{\"description\": \"Services ranked by number of error events, with each service's most-failed downstream dependencies.\", \"facts\": [\"services: reconciliation-job \\u2014 5550 events; failing dependencies=1; top dependencies: db-a / db-b (5550)\", \"services: identity-svc \\u2014 2529 events; failing dependencies=1; top dependencies: 172.25.196.190 (2529)\", \"services: lab-results-api \\u2014 182 events; failing dependencies=1; top dependencies: lab-db (182)\", \"services: nightly-batch \\u2014 11 events; failing dependencies=1; top dependencies: 172.25.196.190 (11)\"]}",
+      "metadata": {
+        "scenario": "acl_split_brain_0060",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "acl_split_brain_0060-03",
+      "artifact_type": "change_records",
+      "subtype": "change_log",
+      "source": "change_log",
+      "content": "{\"description\": \"Deployments, configuration pushes, infrastructure and automation runs from the change-management and CI/CD audit log: change ID, type, target, actor, time (UTC), status and recorded diff/summary.\", \"facts\": [\"changes: CHG-12299 | deployment | lab-results-api 3.20.11 -> 3.21.0 | actor: jenkins | 2024-07-21 01:50 UTC | status: Synced/Healthy | minor bug fixes \\u2014 1 events\", \"changes: CHG-12322 | deployment | messaging-svc 0.13.9 -> 0.13.10 | actor: jenkins | 2024-07-22 00:54 UTC | status: succeeded | new optional API field \\u2014 1 events\", \"changes: AWX-17847 | network_automation | job template interconnect-acl-hardening | actor: awx-svc | 2024-07-22 05:13 UTC | status: successful | devices core-a1, core-b1; ACL INTERCONNECT-IN v24 -> v25; rendered permits: tcp/22,179,443 udp/53,123 (allowed_protocols_extra undefined: entries for protocol 112 and tcp/5432 not rendered) \\u2014 1 events\", \"changes: CHG-12338 | network_change | ACL INTERCONNECT-IN on core-a1, core-b1 | actor: e.tan | 2024-07-22 12:28 UTC | status: completed | rollback to v24 \\u2014 1 events\", \"changes: CHG-12368 | db_recovery | db-b | actor: e.tan | 2024-07-22 13:10 UTC | status: completed | fence db-b; export divergent transactions; rebuild standby from db-a \\u2014 1 events\", \"changes: CHG-12380 | deployment | records-api 2.16.12 -> 2.17.0 | actor: jenkins | 2024-07-23 00:16 UTC | status: succeeded | copy and UI text changes \\u2014 1 events\", \"changes: CHG-12419 | deployment | patient-portal 6.3.2 -> 6.3.3 | actor: jenkins | 2024-07-23 00:31 UTC | status: Synced/Healthy | minor bug fixes \\u2014 1 events\", \"change types: deployment \\u2014 4 events\", \"change types: network_automation \\u2014 1 events\", \"change types: network_change \\u2014 1 events\", \"change types: db_recovery \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "acl_split_brain_0060",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "acl_split_brain_0060-04",
+      "artifact_type": "change_records",
+      "subtype": "change_actors",
+      "source": "change_actors",
+      "content": "{\"description\": \"Accounts and automation identities that executed changes, with the hosts or targets they acted on.\", \"facts\": [\"actors: jenkins \\u2014 4 events; targets: messaging-svc (1), lab-results-api (1), patient-portal (1), records-api (1)\", \"actors: e.tan \\u2014 2 events; targets: core-a1 (1), core-b1 (1), db-b (1)\", \"actors: awx-svc \\u2014 1 events; targets: core-a1 (1), core-b1 (1)\"]}",
+      "metadata": {
+        "scenario": "acl_split_brain_0060",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "acl_split_brain_0060-05",
+      "artifact_type": "infrastructure_events",
+      "subtype": "host_inventory",
+      "source": "host_inventory",
+      "content": "{\"description\": \"Host and node names seen in infrastructure events with their IP address, role and availability zone / rack.\", \"facts\": [\"hosts: core-b1 \\u2014 8907 events; ip: 172.25.182.99; role: core-router; zone: DC-B\", \"hosts: patient-08 \\u2014 271 events; ip: 172.25.202.192; role: patient-portal host; zone: rack G15\", \"hosts: patient-04 \\u2014 232 events; ip: 172.25.202.55; role: patient-portal host; zone: rack G17\", \"hosts: patient-01 \\u2014 214 events; ip: 172.25.202.205; role: patient-portal host; zone: rack G15\", \"hosts: db-a \\u2014 180 events; ip: 172.25.196.36; role: postgres-primary; zone: DC-A\", \"hosts: db-b \\u2014 164 events; ip: 172.25.102.79; role: postgres-standby; zone: DC-B\", \"hosts: core-a1 \\u2014 74 events; ip: 172.25.208.55; role: core-router; zone: DC-A\"]}",
+      "metadata": {
+        "scenario": "acl_split_brain_0060",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "acl_split_brain_0060-06",
+      "artifact_type": "infrastructure_events",
+      "subtype": "platform_events",
+      "source": "platform_events",
+      "content": "{\"description\": \"Kubernetes events, cloud-provider health events and host system messages (kernel, hardware, daemons) with the objects or hosts they refer to.\", \"facts\": [\"system messages: Keepalived_vrrp: (VI_DB) Receive advertisement timeout \\u2014 1 events; top objects: db-b (1)\", \"system messages: Keepalived_vrrp: (VI_DB) Entering MASTER STATE \\u2014 1 events; top objects: db-b (1)\", \"system messages: postgres: LOG: received promote request; selected new timeline ID: 3 \\u2014 1 events; top objects: db-b (1)\", \"network device logs: %ACL-6-LOG: INTERCONNECT-IN denied protocol 112 172.25.196.36 -> 224.0.0.18 \\u2014 18793 events; top objects: core-b1 (1)\", \"network device logs: %ACL-6-LOG: INTERCONNECT-IN denied tcp 172.25.196.36(5432) -> 172.25.102.79 \\u2014 1262 events; top objects: core-b1 (1)\", \"network device logs: %IP-4-DUPADDR: Duplicate address 172.25.196.190 on Vlan50 \\u2014 74 events; top objects: core-a1 (1), core-b1 (1)\"]}",
+      "metadata": {
+        "scenario": "acl_split_brain_0060",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "acl_split_brain_0060-07",
+      "artifact_type": "monitoring_alerts",
+      "subtype": "alertmanager_alerts",
+      "source": "alertmanager_alerts",
+      "content": "{\"description\": \"Prometheus Alertmanager alerts: alert names with severity, critical-alert instances, alert names and services, and an hourly timeline of warning and critical alerts (UTC).\", \"facts\": [\"alert names: Watchdog (info) \\u2014 72 events; service: alertmanager; firing continuously\", \"alert names: ReconciliationConflicts (critical) \\u2014 12 events; service: reconciliation-job; first seen in hour 2024-07-22 09:00 UTC; last seen in hour 2024-07-22 12:00 UTC\", \"alert names: DuplicateIPAddressDetected (warning) \\u2014 5 events; service: network; first seen in hour 2024-07-22 05:00 UTC; last seen in hour 2024-07-22 06:00 UTC\", \"alert names: PostgresReplicationBroken (critical) \\u2014 5 events; service: postgres; first seen in hour 2024-07-22 05:00 UTC; last seen in hour 2024-07-22 06:00 UTC\", \"alert names: CPUThrottlingHigh (warning) \\u2014 3 events; service: patient-portal; first seen in hour 2024-07-22 16:00 UTC; last seen in hour 2024-07-22 17:00 UTC\", \"critical alerts: 17 matching events\", \"critical alerts > critical instances: reconciliation-job \\u2014 12 events\", \"critical alerts > critical instances: 172.25.102.79:9187 \\u2014 5 events\", \"critical alerts > critical alert names: ReconciliationConflicts \\u2014 12 events\", \"critical alerts > critical alert names: PostgresReplicationBroken \\u2014 5 events\", \"critical alerts > critical services: reconciliation-job \\u2014 12 events\", \"critical alerts > critical services: postgres \\u2014 5 events\", \"alert timeline: 2024-07-22 05:00 UTC \\u2014 4 events\", \"alert timeline: 2024-07-22 06:00 UTC \\u2014 6 events\", \"alert timeline: 2024-07-22 09:00 UTC \\u2014 2 events\", \"alert timeline: 2024-07-22 10:00 UTC \\u2014 3 events\", \"alert timeline: 2024-07-22 11:00 UTC \\u2014 4 events\", \"alert timeline: 2024-07-22 12:00 UTC \\u2014 3 events\", \"alert timeline: 2024-07-22 16:00 UTC \\u2014 2 events\", \"alert timeline: 2024-07-22 17:00 UTC \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "acl_split_brain_0060",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "acl_split_brain_0060-08",
+      "artifact_type": "resource_metrics",
+      "subtype": "metric_anomalies",
+      "source": "metric_anomalies",
+      "content": "{\"description\": \"Metric series that deviated from their 7-day baseline (hourly resolution): baseline, peak or trough value, anomaly onset and recovery (UTC).\", \"facts\": [\"metric anomalies: connected replication standbys on db-a \\u2014 baseline 1; trough 0; onset 2024-07-22 05:00 UTC; recovered 2024-07-22 14:00 UTC\", \"metric anomalies: write transactions per minute on db-b \\u2014 baseline 0 (standby); peak 284/min; onset 2024-07-22 05:00 UTC; recovered 2024-07-22 13:00 UTC\"]}",
+      "metadata": {
+        "scenario": "acl_split_brain_0060",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "acl_split_brain_0060-09",
+      "artifact_type": "derived_findings",
+      "subtype": "derived_summary",
+      "source": "derived_summary",
+      "content": "{\"description\": \"Deterministic summary computed from the query results above (error ranking, instance-to-host join, alert timeline, change correlation, earliest metric anomaly).\", \"facts\": [\"Derived: service reconciliation-job ranks #1 by error volume (5550 events, 1 failing dependencies). Most-failed dependency: db-a / db-b (5550 errors).\", \"Derived: most-alerted critical instance reconciliation-job (12 critical alerts); no matching host-inventory entry.\", \"Derived: warning/critical alerts span 2024-07-22 05:00 UTC to 2024-07-22 17:00 UTC; earliest alert hour 2024-07-22 05:00 UTC (4 alerts).\", \"Derived: changes recorded from 6 hours before the earliest alert hour to its end: CHG-12322 (deployment, messaging-svc 0.13.9 -> 0.13.10, jenkins, 2024-07-22 00:54 UTC); AWX-17847 (network_automation, job template interconnect-acl-hardening, awx-svc, 2024-07-22 05:13 UTC).\", \"Derived: earliest metric anomaly onset 2024-07-22 05:00 UTC (connected replication standbys on db-a).\"]}",
+      "metadata": {
+        "scenario": "acl_split_brain_0060",
+        "source_kind": "derived_from_es_results",
+        "heuristic": true
+      }
+    },
+    {
+      "artifact_id": "acl_split_brain_0060-10",
+      "artifact_type": "query_coverage",
+      "subtype": "evidence_gaps",
+      "source": "evidence_gaps",
+      "content": "{\"description\": \"Queries that returned nothing or failed; use these to state what is NOT established.\", \"facts\": [\"No matching results for: tls certificates / expired certificates. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / expiring within 7 days. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / self signed. (Absence in this query is not proof of absence elsewhere.)\"]}",
+      "metadata": {
+        "scenario": "acl_split_brain_0060",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    }
+  ]
+}

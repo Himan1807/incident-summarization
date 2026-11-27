@@ -1,0 +1,120 @@
+{
+  "source": "synthetic generator ground truth (ops expansion)",
+  "confidence": "synthetic ground truth",
+  "qa": [
+    {
+      "id": 1,
+      "question": "What is the hostname of the machine where the incident started?",
+      "answer": "tor-r31-a",
+      "atoms": [
+        {
+          "text": "tor-r31-a",
+          "kind": "hostname"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "question": "Which change permanently fixed the fault? Provide its identifier.",
+      "answer": "NET-3585",
+      "atoms": [
+        {
+          "text": "NET-3585",
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "question": "Which storage host was connected to the failing interface?",
+      "answer": "ceph-osd-31",
+      "atoms": [
+        {
+          "text": "ceph-osd-31",
+          "kind": "hostname"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "question": "Which switch interface was flapping?",
+      "answer": "Ethernet1/40",
+      "atoms": [
+        {
+          "text": "Ethernet1/40",
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "question": "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+      "answer": "2021-08-14 00:00 UTC",
+      "atoms": [
+        {
+          "text": "2021-08-14 00:00 UTC",
+          "kind": "time"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "question": "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+      "answer": "hardware failure",
+      "atoms": [
+        {
+          "text": "hardware failure",
+          "kind": "label"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "question": "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+      "answer": "availability",
+      "atoms": [
+        {
+          "text": "availability",
+          "kind": "cia"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "question": "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+      "answer": "vm-agent, downstream symptom",
+      "atoms": [
+        {
+          "text": "vm-agent",
+          "kind": "other"
+        },
+        {
+          "text": "downstream symptom",
+          "kind": "label"
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "question": "Which change is a red herring: recorded shortly before onset but unrelated to the failure? Give its identifier.",
+      "answer": "CHG-21491",
+      "atoms": [
+        {
+          "text": "CHG-21491",
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "question": "Which change restored normal service? Provide its change identifier.",
+      "answer": "CHG-21524",
+      "atoms": [
+        {
+          "text": "CHG-21524",
+          "kind": "other"
+        }
+      ]
+    }
+  ]
+}

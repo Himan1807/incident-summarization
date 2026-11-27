@@ -1,0 +1,16 @@
+{
+  "scenario": "optic_flap_0016",
+  "cleaning": [
+    "first-signs answer 2021-04-08 09:00 UTC differs from the earliest alert-timeline hour 2021-04-08 03:00 UTC (earlier metric onset or an unrelated earlier alert)"
+  ],
+  "skipped": [
+    "tls_certificates: all aggregations empty"
+  ],
+  "gaps": [],
+  "artifacts": 10,
+  "facts": 68,
+  "empty_aggregations": 3,
+  "questions": 9,
+  "answers": 9,
+  "atoms": 10
+}

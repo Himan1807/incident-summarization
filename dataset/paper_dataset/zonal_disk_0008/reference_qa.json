@@ -1,0 +1,109 @@
+{
+  "source": "synthetic generator ground truth (ops expansion)",
+  "confidence": "synthetic ground truth",
+  "qa": [
+    {
+      "id": 1,
+      "question": "What is the hostname of the host or node where the failure originated?",
+      "answer": "db-mysql-01",
+      "atoms": [
+        {
+          "text": "db-mysql-01",
+          "kind": "hostname"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "question": "What is the IP address of the host or node where the failure originated?",
+      "answer": "10.49.117.245",
+      "atoms": [
+        {
+          "text": "10.49.117.245",
+          "kind": "ip"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "question": "Which availability zone was affected by the cloud provider event?",
+      "answer": "sa-east-1b",
+      "atoms": [
+        {
+          "text": "sa-east-1b",
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "question": "Which storage volume attached to the failing host was degraded?",
+      "answer": "vol-06adc3107c4f99387",
+      "atoms": [
+        {
+          "text": "vol-06adc3107c4f99387",
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "question": "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+      "answer": "2024-08-06 16:00 UTC",
+      "atoms": [
+        {
+          "text": "2024-08-06 16:00 UTC",
+          "kind": "time"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "question": "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+      "answer": "cloud provider failure",
+      "atoms": [
+        {
+          "text": "cloud provider failure",
+          "kind": "label"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "question": "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+      "answer": "availability",
+      "atoms": [
+        {
+          "text": "availability",
+          "kind": "cia"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "question": "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+      "answer": "web-bff, downstream symptom",
+      "atoms": [
+        {
+          "text": "web-bff",
+          "kind": "other"
+        },
+        {
+          "text": "downstream symptom",
+          "kind": "label"
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "question": "Which change mitigated the incident? Provide its change identifier.",
+      "answer": "CHG-35333",
+      "atoms": [
+        {
+          "text": "CHG-35333",
+          "kind": "other"
+        }
+      ]
+    }
+  ]
+}

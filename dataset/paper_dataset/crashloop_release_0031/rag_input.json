@@ -1,0 +1,164 @@
+{
+  "metadata": {
+    "incident_id": "INC-20210404",
+    "scenario": "crashloop_release_0031",
+    "title": "Infrastructure reliability incident investigation",
+    "source": "synthetic/ops-incident-expansion (modeled on neu-nds2/llm-sec-incident-analysis)",
+    "query_window_start": "2021-04-04T00:00:00",
+    "query_window_end": "2021-04-06T23:59:59",
+    "evidence_types": [
+      "change_records",
+      "derived_findings",
+      "infrastructure_events",
+      "monitoring_alerts",
+      "network_summary",
+      "query_coverage",
+      "resource_metrics",
+      "service_logs"
+    ],
+    "artifact_scope_note": "Evidence is aggregated query output (not raw log lines or metric samples); it contains no chat/communication records."
+  },
+  "incident_description": "Reliability incident investigation of a production environment. Evidence consists of Elasticsearch aggregation results over application and proxy logs, Kubernetes, cloud-provider and host system events, Prometheus Alertmanager alerts, change-management / CI-CD audit records and metric anomaly detection. No root cause, impact or trigger is stated; these must be established from the supplied artifacts. Environment context: Organization: Riveren Ride (ride-hailing); Platform: Google Cloud southamerica-east1 (zones southamerica-east1-a/southamerica-east1-b/southamerica-east1-c); network range 10.103.0.0/16; Kubernetes cluster rivere-prod-southa (GKE); payments-svc is deployed with RollingUpdate (maxUnavailable 25%) and must run at full replica count during peak traffic; Change management: production changes carry CHG- identifiers.",
+  "investigation_questions": [
+    "Which version of the service introduced the defect?",
+    "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+    "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+    "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+    "Which change restored normal service? Provide its change identifier."
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "crashloop_release_0031-01",
+      "artifact_type": "service_logs",
+      "subtype": "error_logs",
+      "source": "error_logs",
+      "content": "{\"description\": \"Application and proxy error logs: HTTP/gRPC status codes, failing requests (caller -> callee:port : operation), error messages and the services emitting them.\", \"facts\": [\"error events: 8489 matching events\", \"error events > status codes: 503 \\u2014 8283 events\", \"error events > status codes: 500 \\u2014 123 events\", \"error events > status codes: n/a (crash) \\u2014 83 events\", \"failing requests: rider-app-bff -> payments-svc:8080 : POST /v1/payments \\u2014 8283 events\", \"failing requests: trips-api -> trips-db:5432 : query \\u2014 123 events\", \"failing requests: payments-svc -> startup : container start \\u2014 83 events\", \"error messages: upstream payments-svc: 503 upstream overflow \\u2014 8283 events\", \"error messages: deadlock detected \\u2014 123 events\", \"error messages: panic: runtime error: invalid memory address or nil pointer dereference [config: FEATURE_STORE_URL is empty] \\u2014 83 events\", \"emitting services: rider-app-bff \\u2014 8283 events\", \"emitting services: trips-api \\u2014 123 events\", \"emitting services: payments-svc \\u2014 83 events\"]}",
+      "metadata": {
+        "scenario": "crashloop_release_0031",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "crashloop_release_0031-02",
+      "artifact_type": "service_logs",
+      "subtype": "error_volume_by_service",
+      "source": "error_volume_by_service",
+      "content": "{\"description\": \"Services ranked by number of error events, with each service's most-failed downstream dependencies.\", \"facts\": [\"services: rider-app-bff \\u2014 8283 events; failing dependencies=1; top dependencies: payments-svc (8283)\", \"services: trips-api \\u2014 123 events; failing dependencies=1; top dependencies: trips-db (123)\", \"services: payments-svc \\u2014 83 events; failing dependencies=1; top dependencies: startup (83)\"]}",
+      "metadata": {
+        "scenario": "crashloop_release_0031",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "crashloop_release_0031-03",
+      "artifact_type": "change_records",
+      "subtype": "change_log",
+      "source": "change_log",
+      "content": "{\"description\": \"Deployments, configuration pushes, infrastructure and automation runs from the change-management and CI/CD audit log: change ID, type, target, actor, time (UTC), status and recorded diff/summary.\", \"facts\": [\"changes: CHG-11348 | deployment | driver-profile-api 2.27.2 -> 2.28.0 | actor: github-actions | 2021-04-04 06:11 UTC | status: Synced/Healthy | logging improvements \\u2014 1 events\", \"changes: CHG-11388 | deployment | promotions-api 14.7.3 -> 14.7.4 | actor: github-actions | 2021-04-04 16:11 UTC | status: succeeded | minor bug fixes \\u2014 1 events\", \"changes: CHG-11421 | deployment | payments-svc 10.24.3 -> 10.25.0 | actor: github-actions | 2021-04-04 18:45 UTC | status: Progressing (stalled) | RollingUpdate maxUnavailable 25%; new required environment variable FEATURE_STORE_URL (not set in production values) \\u2014 1 events\", \"changes: CHG-11431 | rollback | payments-svc 10.25.0 -> 10.24.3 | actor: h.murphy | 2021-04-04 19:53 UTC | status: completed | kubectl rollout undo \\u2014 1 events\", \"changes: CHG-11459 | deployment | trips-api 10.29.0 -> 10.30.0 | actor: github-actions | 2021-04-06 00:32 UTC | status: completed | copy and UI text changes \\u2014 1 events\", \"change types: deployment \\u2014 4 events\", \"change types: rollback \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "crashloop_release_0031",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "crashloop_release_0031-04",
+      "artifact_type": "change_records",
+      "subtype": "change_actors",
+      "source": "change_actors",
+      "content": "{\"description\": \"Accounts and automation identities that executed changes, with the hosts or targets they acted on.\", \"facts\": [\"actors: github-actions \\u2014 4 events; targets: rivere-prod-southa/payments-svc (1), rivere-prod-southa/promotions-api (1), rivere-prod-southa/trips-api (1), rivere-prod-southa/driver-profile-api (1)\", \"actors: h.murphy \\u2014 1 events; targets: rivere-prod-southa/payments-svc (1)\"]}",
+      "metadata": {
+        "scenario": "crashloop_release_0031",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "crashloop_release_0031-05",
+      "artifact_type": "infrastructure_events",
+      "subtype": "host_inventory",
+      "source": "host_inventory",
+      "content": "{\"description\": \"Host and node names seen in infrastructure events with their IP address, role and availability zone / rack.\", \"facts\": [\"hosts: gke-rivere-prod-so-pool-c-9d3b \\u2014 298 events; ip: 10.103.117.98; role: k8s-worker; zone: southamerica-east1-a\", \"hosts: gke-rivere-prod-so-pool-a-66e7 \\u2014 235 events; ip: 10.103.23.50; role: k8s-worker; zone: southamerica-east1-b\", \"hosts: gke-rivere-prod-so-pool-a-0f3e \\u2014 20 events; ip: 10.103.117.81; role: k8s-worker; zone: southamerica-east1-a\"]}",
+      "metadata": {
+        "scenario": "crashloop_release_0031",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "crashloop_release_0031-06",
+      "artifact_type": "infrastructure_events",
+      "subtype": "platform_events",
+      "source": "platform_events",
+      "content": "{\"description\": \"Kubernetes events, cloud-provider health events and host system messages (kernel, hardware, daemons) with the objects or hosts they refer to.\", \"facts\": [\"event reasons: BackOff \\u2014 83 events; top objects: pod/payments-svc-228e756fc-58jfp (27), pod/payments-svc-5bee19b47-nsdkk (27)\", \"container logs: panic: runtime error: invalid memory address or nil pointer dereference [config: FEATURE_STORE_URL is empty] \\u2014 83 events; top objects: payments-svc (83)\", \"event reasons: Pulled \\u2014 14 events; top objects: pod/promotions-api-227b6419f-lg9cf (3)\", \"event reasons: ScalingReplicaSet \\u2014 6 events; top objects: deployment/promotions-api (3)\", \"event reasons: Pulled \\u2014 16 events; top objects: pod/trips-api-b640d0546-d2ptm (3)\", \"event reasons: ScalingReplicaSet \\u2014 6 events; top objects: deployment/trips-api (1)\", \"event reasons: Pulled \\u2014 3 events; top objects: pod/driver-profile-api-1b16ac3e5-sv8xs (3)\", \"event reasons: ScalingReplicaSet \\u2014 2 events; top objects: deployment/driver-profile-api (2)\"]}",
+      "metadata": {
+        "scenario": "crashloop_release_0031",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "crashloop_release_0031-07",
+      "artifact_type": "monitoring_alerts",
+      "subtype": "alertmanager_alerts",
+      "source": "alertmanager_alerts",
+      "content": "{\"description\": \"Prometheus Alertmanager alerts: alert names with severity, critical-alert instances, alert names and services, and an hourly timeline of warning and critical alerts (UTC).\", \"facts\": [\"alert names: Watchdog (info) \\u2014 72 events; service: alertmanager; firing continuously\", \"alert names: RiderAppBffErrorRateHigh (critical) \\u2014 3 events; service: rider-app-bff; first seen in hour 2021-04-04 19:00 UTC; last seen in hour 2021-04-04 19:00 UTC\", \"alert names: KubeCPUOvercommit (warning) \\u2014 2 events; service: cluster; first seen in hour 2021-04-04 11:00 UTC; last seen in hour 2021-04-04 11:00 UTC\", \"alert names: KubeDeploymentReplicasMismatch (warning) \\u2014 2 events; service: payments-svc; first seen in hour 2021-04-04 19:00 UTC; last seen in hour 2021-04-04 19:00 UTC\", \"alert names: KubePodCrashLooping (critical) \\u2014 2 events; service: payments-svc; first seen in hour 2021-04-04 19:00 UTC; last seen in hour 2021-04-04 19:00 UTC\", \"critical alerts: 5 matching events\", \"critical alerts > critical instances: rider-app-bff \\u2014 3 events\", \"critical alerts > critical instances: payments-svc \\u2014 2 events\", \"critical alerts > critical alert names: RiderAppBffErrorRateHigh \\u2014 3 events\", \"critical alerts > critical alert names: KubePodCrashLooping \\u2014 2 events\", \"critical alerts > critical services: rider-app-bff \\u2014 3 events\", \"critical alerts > critical services: payments-svc \\u2014 2 events\", \"alert timeline: 2021-04-04 11:00 UTC \\u2014 2 events\", \"alert timeline: 2021-04-04 19:00 UTC \\u2014 7 events\"]}",
+      "metadata": {
+        "scenario": "crashloop_release_0031",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "crashloop_release_0031-08",
+      "artifact_type": "resource_metrics",
+      "subtype": "metric_anomalies",
+      "source": "metric_anomalies",
+      "content": "{\"description\": \"Metric series that deviated from their 7-day baseline (hourly resolution): baseline, peak or trough value, anomaly onset and recovery (UTC).\", \"facts\": [\"metric anomalies: payments-svc available replicas on payments-svc \\u2014 baseline 12; trough 9; onset 2021-04-04 18:00 UTC; recovered 2021-04-04 20:00 UTC\", \"metric anomalies: payments-svc CPU per pod on payments-svc \\u2014 baseline 54%; peak 96%; onset 2021-04-04 19:00 UTC; recovered 2021-04-04 20:00 UTC\", \"metric anomalies: node memory utilisation on 10.103.117.81 \\u2014 baseline 50%; peak 86%; onset 2021-04-04 11:00 UTC; recovered 2021-04-04 13:00 UTC\"]}",
+      "metadata": {
+        "scenario": "crashloop_release_0031",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "crashloop_release_0031-09",
+      "artifact_type": "network_summary",
+      "subtype": "tls_certificates",
+      "source": "tls_certificates",
+      "content": "{\"description\": \"TLS certificates observed in edge and service-to-service traffic that are expired, expire within 7 days, or are self-signed.\", \"facts\": [\"expiring within 7 days: 41 matching events\", \"expiring within 7 days > certificate details: CN=driver-profile-api.riveren.internal | issuer: CN=riveren-internal-ca | not_after: 2021-04-07 23:59:00 UTC | seen on: driver-profile-api:8443 \\u2014 41 events\"]}",
+      "metadata": {
+        "scenario": "crashloop_release_0031",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "crashloop_release_0031-10",
+      "artifact_type": "derived_findings",
+      "subtype": "derived_summary",
+      "source": "derived_summary",
+      "content": "{\"description\": \"Deterministic summary computed from the query results above (error ranking, instance-to-host join, alert timeline, change correlation, earliest metric anomaly).\", \"facts\": [\"Derived: service rider-app-bff ranks #1 by error volume (8283 events, 1 failing dependencies). Most-failed dependency: payments-svc (8283 errors).\", \"Derived: most-alerted critical instance rider-app-bff (3 critical alerts); no matching host-inventory entry.\", \"Derived: warning/critical alerts span 2021-04-04 11:00 UTC to 2021-04-04 19:00 UTC; earliest alert hour 2021-04-04 11:00 UTC (2 alerts).\", \"Derived: changes recorded from 6 hours before the earliest alert hour to its end: CHG-11348 (deployment, driver-profile-api 2.27.2 -> 2.28.0, github-actions, 2021-04-04 06:11 UTC).\", \"Derived: earliest metric anomaly onset 2021-04-04 11:00 UTC (node memory utilisation on 10.103.117.81).\"]}",
+      "metadata": {
+        "scenario": "crashloop_release_0031",
+        "source_kind": "derived_from_es_results",
+        "heuristic": true
+      }
+    },
+    {
+      "artifact_id": "crashloop_release_0031-11",
+      "artifact_type": "query_coverage",
+      "subtype": "evidence_gaps",
+      "source": "evidence_gaps",
+      "content": "{\"description\": \"Queries that returned nothing or failed; use these to state what is NOT established.\", \"facts\": [\"No matching results for: tls certificates / expired certificates. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / self signed. (Absence in this query is not proof of absence elsewhere.)\"]}",
+      "metadata": {
+        "scenario": "crashloop_release_0031",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    }
+  ]
+}

@@ -1,0 +1,152 @@
+{
+  "metadata": {
+    "incident_id": "INC-20220226",
+    "scenario": "fan_thermal_0054",
+    "title": "Infrastructure reliability incident investigation",
+    "source": "synthetic/ops-incident-expansion (modeled on neu-nds2/llm-sec-incident-analysis)",
+    "query_window_start": "2022-02-26T00:00:00",
+    "query_window_end": "2022-02-28T23:59:59",
+    "evidence_types": [
+      "change_records",
+      "derived_findings",
+      "infrastructure_events",
+      "monitoring_alerts",
+      "query_coverage",
+      "resource_metrics",
+      "service_logs"
+    ],
+    "artifact_scope_note": "Evidence is aggregated query output (not raw log lines or metric samples); it contains no chat/communication records."
+  },
+  "incident_description": "Reliability incident investigation of a production environment. Evidence consists of Elasticsearch aggregation results over application and proxy logs, Kubernetes, cloud-provider and host system events, Prometheus Alertmanager alerts, change-management / CI-CD audit records and metric anomaly detection. No root cause, impact or trigger is stated; these must be established from the supplied artifacts. Environment context: Organization: Merpine Mobility (ride-hailing); Platform: on-premises data center DC-East, server range 10.111.0.0/16; Application tier: payments-svc runs on dedicated rack servers behind a load balancer; IPMI sensor data and SEL are collected; Change management: production changes carry CHG- identifiers.",
+  "investigation_questions": [
+    "What is the hostname of the host or node where the failure originated?",
+    "What is the IP address of the host or node where the incident started?",
+    "Which hardware component failed first?",
+    "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+    "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+    "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?"
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "fan_thermal_0054-01",
+      "artifact_type": "service_logs",
+      "subtype": "error_logs",
+      "source": "error_logs",
+      "content": "{\"description\": \"Application and proxy error logs: HTTP/gRPC status codes, failing requests (caller -> callee:port : operation), error messages and the services emitting them.\", \"facts\": [\"error events: 32204 matching events\", \"error events > status codes: 504 \\u2014 21726 events\", \"error events > status codes: 503 \\u2014 10390 events\", \"error events > status codes: 500 \\u2014 88 events\", \"failing requests: rider-app-bff -> payments-svc:8080 : GET /v1/payments \\u2014 21726 events\", \"failing requests: payments-svc -> worker threads : request handling \\u2014 10390 events\", \"failing requests: driver-profile-api -> driver-db:5432 : query \\u2014 88 events\", \"error messages: upstream payments-svc: 504 Gateway Timeout \\u2014 21726 events\", \"error messages: request processing exceeded 10s deadline \\u2014 10390 events\", \"error messages: pq: could not serialize access due to concurrent update \\u2014 88 events\", \"emitting services: rider-app-bff \\u2014 21726 events\", \"emitting services: payments-svc \\u2014 10390 events\", \"emitting services: driver-profile-api \\u2014 88 events\"]}",
+      "metadata": {
+        "scenario": "fan_thermal_0054",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "fan_thermal_0054-02",
+      "artifact_type": "service_logs",
+      "subtype": "error_volume_by_service",
+      "source": "error_volume_by_service",
+      "content": "{\"description\": \"Services ranked by number of error events, with each service's most-failed downstream dependencies.\", \"facts\": [\"services: rider-app-bff \\u2014 21726 events; failing dependencies=1; top dependencies: payments-svc (21726)\", \"services: payments-svc \\u2014 10390 events; failing dependencies=1; top dependencies: worker threads (10390)\", \"services: driver-profile-api \\u2014 88 events; failing dependencies=1; top dependencies: driver-db (88)\"]}",
+      "metadata": {
+        "scenario": "fan_thermal_0054",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "fan_thermal_0054-03",
+      "artifact_type": "change_records",
+      "subtype": "change_log",
+      "source": "change_log",
+      "content": "{\"description\": \"Deployments, configuration pushes, infrastructure and automation runs from the change-management and CI/CD audit log: change ID, type, target, actor, time (UTC), status and recorded diff/summary.\", \"facts\": [\"changes: CHG-5502 | deployment | dispatch-svc 1.16.0 -> 1.16.1 | actor: gitlab-ci | 2022-02-27 08:58 UTC | status: Synced/Healthy | performance tuning of list endpoint \\u2014 1 events\", \"changes: CHG-5526 | load_balancer_drain | payments-app-03 in payments-svc pool | actor: e.pillai | 2022-02-27 16:11 UTC | status: completed | drain payments-app-03 from load balancer pool \\u2014 1 events\", \"changes: DC-6502 | hardware_replacement | payments-app-03 Fan6 | actor: dcops-p.das | 2022-02-27 18:11 UTC | status: completed | replaced Fan6 \\u2014 1 events\", \"changes: CHG-5560 | deployment | driver-profile-api 2.25.1 -> 2.25.2 | actor: gitlab-ci | 2022-02-28 16:13 UTC | status: completed | minor bug fixes \\u2014 1 events\", \"change types: deployment \\u2014 2 events\", \"change types: load_balancer_drain \\u2014 1 events\", \"change types: hardware_replacement \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "fan_thermal_0054",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "fan_thermal_0054-04",
+      "artifact_type": "change_records",
+      "subtype": "change_actors",
+      "source": "change_actors",
+      "content": "{\"description\": \"Accounts and automation identities that executed changes, with the hosts or targets they acted on.\", \"facts\": [\"actors: gitlab-ci \\u2014 2 events; targets: dispatch-svc (1), driver-profile-api (1)\", \"actors: dcops-p.das \\u2014 1 events; targets: payments-app-03 (1)\", \"actors: e.pillai \\u2014 1 events; targets: payments-app-03 (1)\"]}",
+      "metadata": {
+        "scenario": "fan_thermal_0054",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "fan_thermal_0054-05",
+      "artifact_type": "infrastructure_events",
+      "subtype": "host_inventory",
+      "source": "host_inventory",
+      "content": "{\"description\": \"Host and node names seen in infrastructure events with their IP address, role and availability zone / rack.\", \"facts\": [\"hosts: payments-app-03 \\u2014 336 events; ip: 10.111.77.158; role: payments-svc host; zone: rack K03\", \"hosts: eta-01 \\u2014 246 events; ip: 10.111.77.119; role: eta-svc host; zone: rack K03\", \"hosts: eta-01-2 \\u2014 43 events; ip: 10.111.77.214; role: eta-svc host; zone: rack K31\"]}",
+      "metadata": {
+        "scenario": "fan_thermal_0054",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "fan_thermal_0054-06",
+      "artifact_type": "infrastructure_events",
+      "subtype": "platform_events",
+      "source": "platform_events",
+      "content": "{\"description\": \"Kubernetes events, cloud-provider health events and host system messages (kernel, hardware, daemons) with the objects or hosts they refer to.\", \"facts\": [\"hardware events (ipmi sel): Fan6 | Lower Critical going low | 0 RPM \\u2014 1 events; top objects: payments-app-03 (1)\", \"hardware events (ipmi sel): CPU1 Temp | Upper Critical going high | 95 degrees C \\u2014 9 events; top objects: payments-app-03 (1)\", \"system messages: kernel: mce: CPU10: Core temperature above threshold, cpu clock throttled (total events = 2446) \\u2014 325 events; top objects: payments-app-03 (1)\", \"system messages: kernel: mce: CPU10: Package temperature above threshold, cpu clock throttled \\u2014 44 events; top objects: payments-app-03 (1)\"]}",
+      "metadata": {
+        "scenario": "fan_thermal_0054",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "fan_thermal_0054-07",
+      "artifact_type": "monitoring_alerts",
+      "subtype": "alertmanager_alerts",
+      "source": "alertmanager_alerts",
+      "content": "{\"description\": \"Prometheus Alertmanager alerts: alert names with severity, critical-alert instances, alert names and services, and an hourly timeline of warning and critical alerts (UTC).\", \"facts\": [\"alert names: Watchdog (info) \\u2014 72 events; service: alertmanager; firing continuously\", \"alert names: IPMIFanFailure (warning) \\u2014 16 events; service: hardware; first seen in hour 2022-02-27 12:00 UTC; last seen in hour 2022-02-27 16:00 UTC\", \"alert names: NodeCPUThrottled (critical) \\u2014 13 events; service: node; first seen in hour 2022-02-27 13:00 UTC; last seen in hour 2022-02-27 16:00 UTC\", \"alert names: PaymentsSvcLatencyHigh (critical) \\u2014 9 events; service: payments-svc; first seen in hour 2022-02-27 13:00 UTC; last seen in hour 2022-02-27 16:00 UTC\", \"alert names: KubeJobFailed (warning) \\u2014 6 events; service: batch; first seen in hour 2022-02-27 08:00 UTC; last seen in hour 2022-02-27 10:00 UTC\", \"critical alerts: 22 matching events\", \"critical alerts > critical instances: 10.111.77.158:9100 \\u2014 13 events\", \"critical alerts > critical instances: payments-svc \\u2014 9 events\", \"critical alerts > critical alert names: NodeCPUThrottled \\u2014 13 events\", \"critical alerts > critical alert names: PaymentsSvcLatencyHigh \\u2014 9 events\", \"critical alerts > critical services: node \\u2014 13 events\", \"critical alerts > critical services: payments-svc \\u2014 9 events\", \"alert timeline: 2022-02-27 08:00 UTC \\u2014 2 events\", \"alert timeline: 2022-02-27 09:00 UTC \\u2014 2 events\", \"alert timeline: 2022-02-27 10:00 UTC \\u2014 2 events\", \"alert timeline: 2022-02-27 12:00 UTC \\u2014 4 events\", \"alert timeline: 2022-02-27 13:00 UTC \\u2014 7 events\", \"alert timeline: 2022-02-27 14:00 UTC \\u2014 9 events\", \"alert timeline: 2022-02-27 15:00 UTC \\u2014 11 events\", \"alert timeline: 2022-02-27 16:00 UTC \\u2014 7 events\"]}",
+      "metadata": {
+        "scenario": "fan_thermal_0054",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "fan_thermal_0054-08",
+      "artifact_type": "resource_metrics",
+      "subtype": "metric_anomalies",
+      "source": "metric_anomalies",
+      "content": "{\"description\": \"Metric series that deviated from their 7-day baseline (hourly resolution): baseline, peak or trough value, anomaly onset and recovery (UTC).\", \"facts\": [\"metric anomalies: ipmi fan speed (Fan6) on payments-app-03 \\u2014 baseline 7,478 RPM; trough 0 RPM; onset 2022-02-27 12:00 UTC; recovered 2022-02-27 17:00 UTC\", \"metric anomalies: ipmi temperature (CPU1) on payments-app-03 \\u2014 baseline 59 C; peak 99 C; onset 2022-02-27 12:00 UTC; recovered 2022-02-27 17:00 UTC\"]}",
+      "metadata": {
+        "scenario": "fan_thermal_0054",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "fan_thermal_0054-09",
+      "artifact_type": "derived_findings",
+      "subtype": "derived_summary",
+      "source": "derived_summary",
+      "content": "{\"description\": \"Deterministic summary computed from the query results above (error ranking, instance-to-host join, alert timeline, change correlation, earliest metric anomaly).\", \"facts\": [\"Derived: service rider-app-bff ranks #1 by error volume (21726 events, 1 failing dependencies). Most-failed dependency: payments-svc (21726 errors).\", \"Derived: most-alerted critical instance 10.111.77.158:9100 (13 critical alerts) maps to hostname payments-app-03; role payments-svc host; zone rack K03.\", \"Derived: warning/critical alerts span 2022-02-27 08:00 UTC to 2022-02-27 16:00 UTC; earliest alert hour 2022-02-27 08:00 UTC (2 alerts).\", \"Derived: changes recorded from 6 hours before the earliest alert hour to its end: CHG-5502 (deployment, dispatch-svc 1.16.0 -> 1.16.1, gitlab-ci, 2022-02-27 08:58 UTC).\", \"Derived: earliest metric anomaly onset 2022-02-27 12:00 UTC (ipmi fan speed (Fan6) on payments-app-03).\"]}",
+      "metadata": {
+        "scenario": "fan_thermal_0054",
+        "source_kind": "derived_from_es_results",
+        "heuristic": true
+      }
+    },
+    {
+      "artifact_id": "fan_thermal_0054-10",
+      "artifact_type": "query_coverage",
+      "subtype": "evidence_gaps",
+      "source": "evidence_gaps",
+      "content": "{\"description\": \"Queries that returned nothing or failed; use these to state what is NOT established.\", \"facts\": [\"No matching results for: tls certificates / expired certificates. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / expiring within 7 days. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / self signed. (Absence in this query is not proof of absence elsewhere.)\"]}",
+      "metadata": {
+        "scenario": "fan_thermal_0054",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    }
+  ]
+}

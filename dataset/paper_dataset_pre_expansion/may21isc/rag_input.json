@@ -1,0 +1,150 @@
+{
+  "metadata": {
+    "incident_id": "INC-20210504",
+    "scenario": "may21isc",
+    "title": "Network security incident investigation",
+    "source": "neu-nds2/llm-sec-incident-analysis",
+    "query_window_start": "2021-05-04T00:00:00",
+    "query_window_end": "2021-05-05T23:59:59",
+    "evidence_types": [
+      "authentication",
+      "derived_findings",
+      "ids_alerts",
+      "network_summary",
+      "query_coverage"
+    ],
+    "artifact_scope_note": "Evidence is aggregated query output (not raw packets); it contains no chat/communication records."
+  },
+  "incident_description": "Network security investigation of a monitored LAN. Evidence consists of Elasticsearch aggregation results over Zeek and Suricata logs (IDS alerts, Kerberos, HTTP downloads, TLS certificates, domains and external-destination activity). No root cause, impact or C2 attribution is stated; these must be established from the supplied artifacts. Network context: LAN segment range: 172.17.4.0/24 (172.17.4.0 through 172.17.4.255); Domain: nutmeg-station.com; Domain Controller: 172.17.4.4 - NutmegCrazy-DC; LAN segment gateway: 172.17.4.1; LAN segment broadcast address: 172.17.4.255.",
+  "investigation_questions": [
+    "What was the IP address of the infected Windows computer?",
+    "What was the host name of the infected Windows computer?",
+    "What is the Windows human user account name (not machine accounts ending in $) of the potentially infected machine in the LAN?",
+    "During what hour did the first signs of infection activity appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "What are the suspicious external IP addresses contacted, which might be involved in command-and-control (C2) communication?",
+    "Were any suspicious certificates observed in the encrypted network traffic? If so, identify the domain or IP in the certificate.",
+    "According to the connection volume statistics, what single external IP address received the most connections from the infected hosts? Is it a C2 server or a legitimate service?"
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "may21isc-01",
+      "artifact_type": "network_summary",
+      "subtype": "file_downloads",
+      "source": "file_downloads",
+      "content": "{\"description\": \"HTTP file downloads and file transfers: download domains/IPs, requests (client -> server:port : URI), file types and download sources.\", \"facts\": [\"download domains: store-images.s-microsoft.com — 14 events\", \"download domains: download.windowsupdate.com — 12 events\", \"download domains: au.download.windowsupdate.com — 3 events\", \"download domains: ctldl.windowsupdate.com — 3 events\", \"download domains: 185.183.99.115 — 1 events\", \"http requests: no_http_uri — 418 events\", \"http requests: 172.17.4.206 -> 8.249.131.254:80 : /c/msdownload/update/software/defu/2021/05/am_delta_patch_1.337.600.0_f8fd1ab601622aa5111bab3b497be9d8ce1b22a6.exe — 2 events\", \"http requests: 172.17.4.206 -> 185.183.99.115:80 : /44313,6048108796.dat — 1 events\", \"http requests: 172.17.4.206 -> 23.47.169.154:80 : /image/apps.11693.14503766937567901.176691f4-19f9-48ef-a75c-2af62972b059.04097907-d16b-47f1-b1a6-83fbc59bb15c?w=172&h=258 — 1 events\", \"http requests: 172.17.4.206 -> 23.47.169.154:80 : /image/apps.13825.14369454977035291.312a1827-6832-45f4-885d-562c4148d669.5c931ffa-b74a-45a6-a9cb-082c7d9cddd9?w=172&h=258 — 1 events\", \"http requests: 172.17.4.206 -> 23.47.169.154:80 : /image/apps.15387.13812021519099434.2bf8d983-bebb-467e-9b6a-e52bb2610650.46530b30-f947-46d5-ae2e-dd024af3da59?w=172&h=258 — 1 events\", \"http requests: 172.17.4.206 -> 23.47.169.154:80 : /image/apps.15459.14018880429702282.f227304a-b5a1-43b5-a5ef-c3a2eafb2c2d.9871105b-6b54-4a8b-9295-e4197c93988e?w=172&h=258 — 1 events\", \"http requests: 172.17.4.206 -> 23.47.169.154:80 : /image/apps.15792.14098991041572765.f2e8d44f-55f2-4b91-b7c9-5fe108fe9c1a.f803e6b2-b8a5-47bb-98f1-9843909974ce?w=172&h=258 — 1 events\", \"http requests: 172.17.4.206 -> 23.47.169.154:80 : /image/apps.45464.14137276003875252.d1d6dd04-81e9-424d-a1b6-7a81e52dfeef.656ba41f-9220-4ebf-9cf4-a685da2f558d?w=172&h=258 — 1 events\", \"http requests: 172.17.4.206 -> 23.47.169.154:80 : /image/apps.57047.14380149729470603.1aef82b1-76c1-46e9-b3a7-bfea4ea54b01.ed79b095-68f1-4190-9ff1-74e2fbf0103a?w=172&h=258 — 1 events\", \"file transfers: 92 matching events\", \"file transfers > transfer details: file_transfer — 29 events\", \"file transfers > transfer details: 172.17.4.206 -> 104.93.49.229:443 : fuid: F2YugI1hndkt6JD5Ne — 1 events\", \"file transfers > transfer details: 172.17.4.206 -> 13.107.246.66:443 : fuid: FEtVKF2lotN7Jqmc5 — 1 events\", \"file transfers > transfer details: 172.17.4.206 -> 13.107.246.66:443 : fuid: FpzdMa114V8kjGBLAh — 1 events\", \"file transfers > transfer details: 172.17.4.206 -> 13.107.42.23:443 : fuid: F4t0zurNNzt8hfape — 1 events\", \"file transfers > transfer details: 172.17.4.206 -> 13.107.42.23:443 : fuid: F5n7EL2wssW88sWr1a — 1 events\", \"file transfers > transfer details: 172.17.4.206 -> 13.107.42.23:443 : fuid: F9hoQd2AyO7PfkaPif — 1 events\", \"file transfers > transfer details: 172.17.4.206 -> 13.107.42.23:443 : fuid: FBV5Km2eArFsCy4Cnc — 1 events\", \"file transfers > transfer details: 172.17.4.206 -> 13.107.42.23:443 : fuid: Frp4qe2vODf6xkENH8 — 1 events\", \"file transfers > transfer details: 172.17.4.206 -> 13.107.42.23:443 : fuid: Fu0nuB257f78thDhb2 — 1 events\", \"file types: other — 445 events\", \"file types: exe — 6 events\", \"download sources: 172.17.4.206 — 451 events\"]}",
+      "metadata": {
+        "scenario": "may21isc",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "may21isc-02",
+      "artifact_type": "network_summary",
+      "subtype": "high_activity_external_dest",
+      "source": "high_activity_external_dest",
+      "content": "{\"description\": \"Internal clients ranked by number of connections to external destinations, with each client's most-contacted destinations.\", \"facts\": [\"source clients: 172.17.4.206 — 451 events; external destinations=36; top destinations: 45.32.211.207 (61), 54.225.155.255 (51), 24.179.77.148 (43), 23.47.169.154 (40), 72.21.81.240 (28); 228 further events in other values\"]}",
+      "metadata": {
+        "scenario": "may21isc",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "may21isc-03",
+      "artifact_type": "authentication",
+      "subtype": "kerberos_clients",
+      "source": "kerberos_clients",
+      "content": "{\"description\": \"Kerberos client account names (user accounts) and the source IPs they authenticated from.\", \"facts\": [\"client accounts: DESKTOP-V0FEH1L$ — 11 events; source ips: 172.17.4.206 (11)\", \"client accounts: alfonso.paternoster — 6 events; source ips: 172.17.4.206 (6)\", \"client accounts: desktop-v0feh1l$ — 6 events; source ips: 172.17.4.206 (6)\"]}",
+      "metadata": {
+        "scenario": "may21isc",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "may21isc-04",
+      "artifact_type": "authentication",
+      "subtype": "kerberos_full_services",
+      "source": "kerberos_full_services",
+      "content": "{\"description\": \"Kerberos services requested (including host and machine account names) per source IP.\", \"facts\": [\"full services: krb_tcp — 24 events; source ips: 172.17.4.206 (24)\", \"full services: krbtgt/NUTMEG-STATION.COM — 11 events; source ips: 172.17.4.206 (11)\", \"full services: LDAP/NutmegCrazy-DC.nutmeg-station.com/nutmeg-station.com — 3 events; source ips: 172.17.4.206 (3)\", \"full services: DESKTOP-V0FEH1L$ — 1 events; source ips: 172.17.4.206 (1)\", \"full services: cifs/NUTMEG-STATION.COM — 1 events; source ips: 172.17.4.206 (1)\", \"full services: cifs/NUTMEGCRAZY-DC — 1 events; source ips: 172.17.4.206 (1)\", \"full services: cifs/NutmegCrazy-DC.nutmeg-station.com — 1 events; source ips: 172.17.4.206 (1)\", \"full services: cifs/NutmegCrazy-DC.nutmeg-station.com/nutmeg-station.com — 1 events; source ips: 172.17.4.206 (1)\", \"full services: desktop-v0feh1l$ — 1 events; source ips: 172.17.4.206 (1)\", \"full services: host/desktop-v0feh1l.nutmeg-station.com — 1 events; source ips: 172.17.4.206 (1)\", \"full services: krbtgt/NUTMEG-STATION — 1 events; source ips: 172.17.4.206 (1)\", \"full services: krbtgt/nutmeg-station.com — 1 events; source ips: 172.17.4.206 (1)\", \"full services: ldap/nutmegcrazy-dc.nutmeg-station.com/nutmeg-station.com — 1 events; source ips: 172.17.4.206 (1)\"]}",
+      "metadata": {
+        "scenario": "may21isc",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "may21isc-05",
+      "artifact_type": "authentication",
+      "subtype": "kerberos_hostnames",
+      "source": "kerberos_hostnames",
+      "content": "{\"description\": \"Host names seen in Kerberos traffic with their source IPs.\", \"facts\": [\"hostnames: desktop-v0feh1l — 1 events; source ips: 172.17.4.206 (1)\"]}",
+      "metadata": {
+        "scenario": "may21isc",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "may21isc-06",
+      "artifact_type": "ids_alerts",
+      "subtype": "suricata_alerts",
+      "source": "suricata_alerts",
+      "content": "{\"description\": \"Suricata IDS alerts: signatures, high-severity alert destinations and sources, and an hourly alert timeline (UTC).\", \"facts\": [\"alert signatures: ET INFO External IP Address Lookup Domain (ipify .org) in TLS SNI — 41 events\", \"alert signatures: ET JA3 Hash - [Abuse.ch] Possible Dridex — 34 events\", \"alert signatures: ET INFO External IP Lookup Domain (ipify .org) in DNS Lookup — 6 events\", \"alert signatures: ET INFO NTLM Session Setup Request - Auth — 1 events\", \"alert signatures: ET INFO NTLM Session Setup Request - Negotiate — 1 events\", \"alert signatures: ET INFO NTLMv1 Session Setup Response - Challenge — 1 events\", \"alert timeline: 2021-05-04 22:00 UTC — 12 events\", \"alert timeline: 2021-05-04 23:00 UTC — 72 events\"]}",
+      "metadata": {
+        "scenario": "may21isc",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "may21isc-07",
+      "artifact_type": "network_summary",
+      "subtype": "suspicious_certificates",
+      "source": "suspicious_certificates",
+      "content": "{\"description\": \"TLS certificates that are self-signed, IP-based or short-lived.\", \"facts\": [\"self signed analysis: 1 matching events\", \"self signed analysis > self signed details: self_signed: CN=zqyefcetkqg.biz,O=Acipnee Bku Nibza Zidvi LLC., — 1 events\", \"short validity certs: normal_validity — 1 events\", \"short validity certs: short_validity_84d: CN=upload.video.google.com,O=G — 1 events\"]}",
+      "metadata": {
+        "scenario": "may21isc",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "may21isc-08",
+      "artifact_type": "network_summary",
+      "subtype": "suspicious_domains",
+      "source": "suspicious_domains",
+      "content": "{\"description\": \"Unusual domains with their source and destination IPs, and direct-IP HTTP connections.\", \"facts\": [\"domains: api.ipify.org — 41 events; top source ips: 172.17.4.206 (41); top destination ips: 54.225.155.255 (17), 23.21.48.44 (9), 54.235.175.90 (8), 50.19.216.111 (7)\", \"domains: img-prod-cms-rt-microsoft-com.akamaized.net — 1 events; top source ips: 172.17.4.206 (1); top destination ips: 23.47.52.180 (1)\", \"domains: www.openssl.org — 1 events; top source ips: 172.17.4.206 (1); top destination ips: 104.93.49.229 (1)\"]}",
+      "metadata": {
+        "scenario": "may21isc",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "may21isc-09",
+      "artifact_type": "derived_findings",
+      "subtype": "derived_summary",
+      "source": "derived_summary",
+      "content": "{\"description\": \"Deterministic summary computed from the query results above (client ranking, IP-to-hostname/account join, alert timeline).\", \"facts\": [\"Derived: internal client 172.17.4.206 ranks #1 by external connections (451 events, 36 distinct external destinations). Most-contacted external IP: 45.32.211.207 (61 connections).\", \"Derived: Kerberos identity of 172.17.4.206: hostname(s) desktop-v0feh1l; human user account(s) alfonso.paternoster.\", \"Derived: Suricata alerts span 2021-05-04 22:00 UTC to 2021-05-04 23:00 UTC; earliest alert hour 2021-05-04 22:00 UTC (12 alerts).\"]}",
+      "metadata": {
+        "scenario": "may21isc",
+        "source_kind": "derived_from_es_results",
+        "heuristic": true
+      }
+    },
+    {
+      "artifact_id": "may21isc-10",
+      "artifact_type": "query_coverage",
+      "subtype": "evidence_gaps",
+      "source": "evidence_gaps",
+      "content": "{\"description\": \"Queries that returned nothing or failed; use these to state what is NOT established.\", \"facts\": [\"No matching results for: suricata alerts / high severity alerts. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: suspicious certificates / ip based certificates. (Absence in this query is not proof of absence elsewhere.)\"]}",
+      "metadata": {
+        "scenario": "may21isc",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    }
+  ]
+}

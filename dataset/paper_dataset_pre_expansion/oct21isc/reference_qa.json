@@ -1,0 +1,134 @@
+{
+  "source": "answers.txt (paper dataset)",
+  "confidence": "paper ground truth",
+  "qa": [
+    {
+      "id": 1,
+      "question": "What are the IP addresses of the potentially infected internal hosts in the LAN?",
+      "answer": "10.10.22.156, 10.10.22.157, 10.10.22.158",
+      "atoms": [
+        {
+          "text": "10.10.22.156",
+          "kind": "ip"
+        },
+        {
+          "text": "10.10.22.157",
+          "kind": "ip"
+        },
+        {
+          "text": "10.10.22.158",
+          "kind": "ip"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "question": "What are the hostnames of the potentially infected machines in the LAN?",
+      "answer": "DESKTOP-NZ875R4, DESKTOP-CFA3367, DESKTOP-87WCE26",
+      "atoms": [
+        {
+          "text": "DESKTOP-NZ875R4",
+          "kind": "hostname"
+        },
+        {
+          "text": "DESKTOP-CFA3367",
+          "kind": "hostname"
+        },
+        {
+          "text": "DESKTOP-87WCE26",
+          "kind": "hostname"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "question": "What are the Windows human user account names (not machine accounts ending in $) of the potentially infected machines in the LAN?",
+      "answer": "marcus.cobb, agnes.warren, kevin.henderson",
+      "atoms": [
+        {
+          "text": "marcus.cobb",
+          "kind": "domain_or_file"
+        },
+        {
+          "text": "agnes.warren",
+          "kind": "domain_or_file"
+        },
+        {
+          "text": "kevin.henderson",
+          "kind": "domain_or_file"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "question": "What external servers (domains and IP addresses) were used to download malicious files?",
+      "answer": "sobolpand.top, 178.23.190.8, 190.14.37.244, 194.36.191.35",
+      "atoms": [
+        {
+          "text": "sobolpand.top",
+          "kind": "domain_or_file"
+        },
+        {
+          "text": "178.23.190.8",
+          "kind": "ip"
+        },
+        {
+          "text": "190.14.37.244",
+          "kind": "ip"
+        },
+        {
+          "text": "194.36.191.35",
+          "kind": "ip"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "question": "What are the suspicious external IP addresses contacted, which might be involved in command-and-control (C2) communication?",
+      "answer": "37.0.10.22",
+      "atoms": [
+        {
+          "text": "37.0.10.22",
+          "kind": "ip"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "question": "What specific malicious file was downloaded by an internal host from multiple external IP addresses?",
+      "answer": "44491.6090605324.dat",
+      "atoms": [
+        {
+          "text": "44491.6090605324.dat",
+          "kind": "domain_or_file"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "question": "During what hour did the first signs of infection activity appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+      "answer": "2021-10-22 14:00 UTC",
+      "atoms": [
+        {
+          "text": "2021-10-22 14:00 UTC",
+          "kind": "time"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "question": "According to the connection volume statistics, what single external IP address received the most connections from the infected hosts? Is it a C2 server or a legitimate service?",
+      "answer": "201.137.10.225, legitimate service",
+      "atoms": [
+        {
+          "text": "201.137.10.225",
+          "kind": "ip"
+        },
+        {
+          "text": "legitimate service",
+          "kind": "label"
+        }
+      ]
+    }
+  ]
+}

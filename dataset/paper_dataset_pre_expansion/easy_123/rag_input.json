@@ -1,0 +1,137 @@
+{
+  "metadata": {
+    "incident_id": "INC-20260228",
+    "scenario": "easy_123",
+    "title": "Network security incident investigation",
+    "source": "neu-nds2/llm-sec-incident-analysis",
+    "query_window_start": "2026-02-28T00:00:00",
+    "query_window_end": "2026-03-02T23:59:59",
+    "evidence_types": [
+      "authentication",
+      "derived_findings",
+      "ids_alerts",
+      "network_summary",
+      "query_coverage"
+    ],
+    "artifact_scope_note": "Evidence is aggregated query output (not raw packets); it contains no chat/communication records."
+  },
+  "incident_description": "Network security investigation of a monitored LAN. Evidence consists of Elasticsearch aggregation results over Zeek and Suricata logs (IDS alerts, Kerberos, HTTP downloads, TLS certificates, domains and external-destination activity). No root cause, impact or C2 attribution is stated; these must be established from the supplied artifacts. Network context: LAN segment range: 10.2.28.0/24 (10.2.28.0 through 10.2.28.255); Domain: easyas123.tech; AD environment name: EASYAS123; Active Directory (AD) domain controller: 10.2.28.2 - EASYAS123-DC; LAN segment gateway: 10.2.28.1; LAN segment broadcast address: 10.2.28.255.",
+  "investigation_questions": [
+    "What is the IP address of the infected Windows client?",
+    "What is the host name of the infected Windows client?",
+    "What is the Windows human user account name (not machine accounts ending in $) of the potentially infected machine in the LAN?",
+    "What are the suspicious external IP addresses contacted, which might be involved in command-and-control (C2) communication?",
+    "During what hour did the first signs of infection activity appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "According to the connection volume statistics, what single external IP address received the most connections from the infected hosts? Is it a C2 server or a legitimate service?"
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "easy_123-01",
+      "artifact_type": "network_summary",
+      "subtype": "file_downloads",
+      "source": "file_downloads",
+      "content": "{\"description\": \"HTTP file downloads and file transfers: download domains/IPs, requests (client -> server:port : URI), file types and download sources.\", \"facts\": [\"file transfers: 598 matching events\", \"file transfers > transfer details: file_transfer — 273 events\", \"file transfers > transfer details: 10.2.28.88 -> 13.70.79.200:443 : fuid: F95H6kTOV7Ac6bcve — 1 events\", \"file transfers > transfer details: 10.2.28.88 -> 13.89.178.27:443 : fuid: Fjm5jt1kCVqVQ0zXsb — 1 events\", \"file transfers > transfer details: 10.2.28.88 -> 13.89.179.14:443 : fuid: F3leWR1jXmw5eIV2n4 — 1 events\", \"file transfers > transfer details: 10.2.28.88 -> 13.89.179.9:443 : fuid: FpfWem1XHYB3V7Z3Kb — 1 events\", \"file transfers > transfer details: 10.2.28.88 -> 135.234.160.246:443 : fuid: F06TIy3seFMGIoCz69 — 1 events\", \"file transfers > transfer details: 10.2.28.88 -> 150.171.22.17:443 : fuid: FApV0N3DxwzTiwATnl — 1 events\", \"file transfers > transfer details: 10.2.28.88 -> 150.171.27.11:443 : fuid: FPHQiS2gqfclBOrFL9 — 1 events\", \"file transfers > transfer details: 10.2.28.88 -> 150.171.27.11:443 : fuid: FWbsVE4la10bZ0rtc8 — 1 events\", \"file transfers > transfer details: 10.2.28.88 -> 150.171.27.11:443 : fuid: Fjw2NV3ZLuYwZhmo2l — 1 events\", \"download sources: 10.2.28.88 — 1539 events\", \"http requests: no_http_uri — 1230 events\", \"http requests: 10.2.28.88 -> 45.131.214.85:443 : http://45.131.214.85/fakeurl.htm — 264 events\", \"http requests: 10.2.28.88 -> 23.218.232.148:80 : /filestreamingservice/files/2132f61f-f790-4ae6-a355-8cf9a1533800?P1=1772824359&P2=404&P3=2&P4=JBAPgdPQ5bbXP3YOD9Ig2AVW51pLa6vxUcHeGTEAadbzNEO5DlV3Wra1C9WqE7WnEd5RG1oYpt8saZgMxML1KA== — 11 events\", \"http requests: 10.2.28.88 -> 23.218.232.166:80 : /filestreamingservice/files/13d0ef9b-70c8-43c9-9a51-13c752dfb777?P1=1772817857&P2=404&P3=2&P4=NxsPWDqY/PRN4X5tyugkA+dfU9EeHebHQ3SqTAWWr5XPVngvgEZDtSFAEYlah9GHFrc+S/ExNx3X0xGxvdOPow== — 7 events\", \"http requests: 10.2.28.88 -> 23.218.232.183:80 : /filestreamingservice/files/86061e48-63b3-483f-8dac-609df0cbb238?P1=1772824359&P2=404&P3=2&P4=M+r84JmdgFPOKPdw6GuIsCbfL0IaRRxCYqeiJbpH9IpxZr7vLbM4w9K8uMU5Ka6CyN/uMqIEMlyIHqGqCS8/Xg== — 6 events\", \"http requests: 10.2.28.88 -> 23.218.232.142:80 : /filestreamingservice/files/0b18f766-7469-4aa3-88b7-99e69c55d14d?P1=1772628813&P2=404&P3=2&P4=P9O/ZqV3zHEog/8GWjY1LjxEXlCShXCmvVwfgCjP6c7Xjf6q9SdV5Cxrlht3k8c6RsZdgDSm48GRm8J1Kej36Q== — 3 events\", \"http requests: 10.2.28.88 -> 23.218.232.142:80 : /filestreamingservice/files/ddbf4492-d475-4fe4-bcde-6cbac56f6034?P1=1772824359&P2=404&P3=2&P4=TMSkemQv9LZfDxme9Q9GxU0tc2G9uhdO6d7QU9JVJHOk+a0A4pJYzApqbFnNEQ6bt9QSukbCYOxGUmPIOR1Xgw== — 3 events\", \"http requests: 10.2.28.88 -> 23.47.50.182:80 : /connecttest.txt — 2 events\", \"http requests: 10.2.28.88 -> 150.171.27.11:80 : /browsernetworktime/time/1/current?cup2key=2:cHFgppt5zfs9cbgaKCO2n0tk698hI27wU971tyrEQQg&cup2hreq=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 — 1 events\", \"http requests: 10.2.28.88 -> 199.232.210.172:80 : /msdownload/update/v3/static/trustedr/en/authrootstl.cab?238f51c2ab526be6 — 1 events\", \"download domains: 45.131.214.85 — 264 events\", \"download domains: msedge.b.tlu.dl.delivery.mp.microsoft.com — 30 events\", \"download domains: ctldl.windowsupdate.com — 9 events\", \"download domains: ocsp.digicert.com — 2 events\", \"download domains: acroipm2.adobe.com — 1 events\", \"download domains: edge.microsoft.com — 1 events\", \"download domains: www.msftconnecttest.com — 1 events\", \"file types: other — 1539 events\"]}",
+      "metadata": {
+        "scenario": "easy_123",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "easy_123-02",
+      "artifact_type": "network_summary",
+      "subtype": "high_activity_external_dest",
+      "source": "high_activity_external_dest",
+      "content": "{\"description\": \"Internal clients ranked by number of connections to external destinations, with each client's most-contacted destinations.\", \"facts\": [\"source clients: 10.2.28.88 — 1539 events; external destinations=95; top destinations: 45.131.214.85 (1061), 150.171.28.11 (38), 150.171.27.11 (15), 23.218.232.148 (14), 23.192.223.17 (13); 398 further events in other values\"]}",
+      "metadata": {
+        "scenario": "easy_123",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "easy_123-03",
+      "artifact_type": "authentication",
+      "subtype": "kerberos_clients",
+      "source": "kerberos_clients",
+      "content": "{\"description\": \"Kerberos client account names (user accounts) and the source IPs they authenticated from.\", \"facts\": [\"client accounts: brolf — 8 events; source ips: 10.2.28.88 (8)\"]}",
+      "metadata": {
+        "scenario": "easy_123",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "easy_123-04",
+      "artifact_type": "authentication",
+      "subtype": "kerberos_full_services",
+      "source": "kerberos_full_services",
+      "content": "{\"description\": \"Kerberos services requested (including host and machine account names) per source IP.\", \"facts\": [\"full services: krb_tcp — 8 events; source ips: 10.2.28.88 (8)\", \"full services: krbtgt/EASYAS123.TECH — 2 events; source ips: 10.2.28.88 (2)\", \"full services: LDAP/EASYAS123-DC.easyas123.tech/easyas123.tech — 1 events; source ips: 10.2.28.88 (1)\", \"full services: cifs/EASYAS123-DC — 1 events; source ips: 10.2.28.88 (1)\", \"full services: cifs/EASYAS123-DC.easyas123.tech — 1 events; source ips: 10.2.28.88 (1)\", \"full services: host/desktop-teyq2nr.easyas123.tech — 1 events; source ips: 10.2.28.88 (1)\", \"full services: krbtgt/EASYAS123 — 1 events; source ips: 10.2.28.88 (1)\", \"full services: ldap/easyas123-dc.easyas123.tech — 1 events; source ips: 10.2.28.88 (1)\"]}",
+      "metadata": {
+        "scenario": "easy_123",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "easy_123-05",
+      "artifact_type": "authentication",
+      "subtype": "kerberos_hostnames",
+      "source": "kerberos_hostnames",
+      "content": "{\"description\": \"Host names seen in Kerberos traffic with their source IPs.\", \"facts\": [\"hostnames: desktop-teyq2nr — 1 events; source ips: 10.2.28.88 (1)\"]}",
+      "metadata": {
+        "scenario": "easy_123",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "easy_123-06",
+      "artifact_type": "ids_alerts",
+      "subtype": "suricata_alerts",
+      "source": "suricata_alerts",
+      "content": "{\"description\": \"Suricata IDS alerts: signatures, high-severity alert destinations and sources, and an hourly alert timeline (UTC).\", \"facts\": [\"alert signatures: ET INFO HTTP traffic on port 443 (POST) — 264 events\", \"alert signatures: ET REMOTE_ACCESS NetSupport Remote Admin Checkin — 264 events\", \"alert signatures: ET JA3 Hash - Possible SoftEther Windows Client SSTP Traffic — 12 events\", \"alert signatures: ET REMOTE_ACCESS NetSupport Remote Admin Response — 2 events\", \"alert signatures: ET INFO Microsoft Connection Test — 1 events\", \"high severity alerts: 264 matching events\", \"high severity alerts > high severity  destinations: 45.131.214.85 — 264 events\", \"high severity alerts > high severity signatures: ET INFO HTTP traffic on port 443 (POST) — 264 events\", \"high severity alerts > high severity sources: 10.2.28.88 — 264 events\", \"alert timeline: 2026-02-28 19:00 UTC — 28 events\", \"alert timeline: 2026-02-28 20:00 UTC — 119 events\", \"alert timeline: 2026-02-28 21:00 UTC — 120 events\", \"alert timeline: 2026-02-28 22:00 UTC — 120 events\", \"alert timeline: 2026-02-28 23:00 UTC — 120 events\", \"alert timeline: 2026-03-01 00:00 UTC — 36 events\"]}",
+      "metadata": {
+        "scenario": "easy_123",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "easy_123-07",
+      "artifact_type": "network_summary",
+      "subtype": "suspicious_domains",
+      "source": "suspicious_domains",
+      "content": "{\"description\": \"Unusual domains with their source and destination IPs, and direct-IP HTTP connections.\", \"facts\": [\"domains: img-s-msn-com.akamaized.net — 4 events; top source ips: 10.2.28.88 (4); top destination ips: 23.55.178.208 (2), 23.55.178.219 (2)\", \"domains: assets.adobedtm.com — 2 events; top source ips: 10.2.28.88 (2); top destination ips: 184.29.31.84 (2)\", \"domains: deff.nelreports.net — 1 events; top source ips: 10.2.28.88 (1); top destination ips: 23.218.232.156 (1)\", \"domains: oneclient.sfx.ms — 1 events; top source ips: 10.2.28.88 (1); top destination ips: 23.218.232.170 (1)\", \"domains: www.fmcsa.dot.gov — 1 events; top source ips: 10.2.28.88 (1); top destination ips: 23.64.147.24 (1)\"]}",
+      "metadata": {
+        "scenario": "easy_123",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "easy_123-08",
+      "artifact_type": "derived_findings",
+      "subtype": "derived_summary",
+      "source": "derived_summary",
+      "content": "{\"description\": \"Deterministic summary computed from the query results above (client ranking, IP-to-hostname/account join, alert timeline).\", \"facts\": [\"Derived: internal client 10.2.28.88 ranks #1 by external connections (1539 events, 95 distinct external destinations). Most-contacted external IP: 45.131.214.85 (1061 connections).\", \"Derived: Kerberos identity of 10.2.28.88: hostname(s) desktop-teyq2nr; human user account(s) brolf.\", \"Derived: Suricata alerts span 2026-02-28 19:00 UTC to 2026-03-01 00:00 UTC; earliest alert hour 2026-02-28 19:00 UTC (28 alerts).\", \"Derived: destinations of high-severity alerts: 45.131.214.85 (264).\"]}",
+      "metadata": {
+        "scenario": "easy_123",
+        "source_kind": "derived_from_es_results",
+        "heuristic": true
+      }
+    },
+    {
+      "artifact_id": "easy_123-09",
+      "artifact_type": "query_coverage",
+      "subtype": "evidence_gaps",
+      "source": "evidence_gaps",
+      "content": "{\"description\": \"Queries that returned nothing or failed; use these to state what is NOT established.\", \"facts\": [\"No matching results for: suspicious certificates / self signed analysis. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: suspicious certificates / ip based certificates. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: suspicious certificates / short validity certs. (Absence in this query is not proof of absence elsewhere.)\"]}",
+      "metadata": {
+        "scenario": "easy_123",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    }
+  ]
+}

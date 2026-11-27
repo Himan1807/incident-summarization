@@ -1,0 +1,14 @@
+{
+  "scenario": "timeout_lowered_0028",
+  "cleaning": [
+    "first-signs answer 2023-10-07 08:00 UTC differs from the earliest alert-timeline hour 2023-10-07 00:00 UTC (earlier metric onset or an unrelated earlier alert)"
+  ],
+  "skipped": [],
+  "gaps": [],
+  "artifacts": 11,
+  "facts": 63,
+  "empty_aggregations": 2,
+  "questions": 8,
+  "answers": 8,
+  "atoms": 9
+}

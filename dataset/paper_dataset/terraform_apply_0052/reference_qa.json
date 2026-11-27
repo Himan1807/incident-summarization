@@ -1,0 +1,131 @@
+{
+  "source": "synthetic generator ground truth (ops expansion)",
+  "confidence": "synthetic ground truth",
+  "qa": [
+    {
+      "id": 1,
+      "question": "What change, deployment or automation run triggered the incident? Provide its change identifier.",
+      "answer": "CHG-23889",
+      "atoms": [
+        {
+          "text": "CHG-23889",
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "question": "Which user or automation account carried out the triggering change?",
+      "answer": "spacelift-runner",
+      "atoms": [
+        {
+          "text": "spacelift-runner",
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "question": "Which database host became unreachable?",
+      "answer": "chat-db-01",
+      "atoms": [
+        {
+          "text": "chat-db-01",
+          "kind": "hostname"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "question": "What is the IP address of the database host that became unreachable?",
+      "answer": "10.242.241.163",
+      "atoms": [
+        {
+          "text": "10.242.241.163",
+          "kind": "ip"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "question": "Which port was blocked by the change?",
+      "answer": "tcp/3306",
+      "atoms": [
+        {
+          "text": "3306",
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "question": "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+      "answer": "2025-08-02 15:00 UTC",
+      "atoms": [
+        {
+          "text": "2025-08-02 15:00 UTC",
+          "kind": "time"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "question": "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+      "answer": "automation error",
+      "atoms": [
+        {
+          "text": "automation error",
+          "kind": "label"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "question": "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+      "answer": "availability",
+      "atoms": [
+        {
+          "text": "availability",
+          "kind": "cia"
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "question": "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+      "answer": "game-gateway, downstream symptom",
+      "atoms": [
+        {
+          "text": "game-gateway",
+          "kind": "other"
+        },
+        {
+          "text": "downstream symptom",
+          "kind": "label"
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "question": "Which change is a red herring: recorded shortly before onset but unrelated to the failure? Give its identifier.",
+      "answer": "CHG-23862",
+      "atoms": [
+        {
+          "text": "CHG-23862",
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "question": "Which change restored normal service? Provide its change identifier.",
+      "answer": "CHG-23925",
+      "atoms": [
+        {
+          "text": "CHG-23925",
+          "kind": "other"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,155 @@
+{
+  "metadata": {
+    "incident_id": "INC-20220613",
+    "scenario": "zonal_disk_0038",
+    "title": "Infrastructure reliability incident investigation",
+    "source": "synthetic/ops-incident-expansion (modeled on neu-nds2/llm-sec-incident-analysis)",
+    "query_window_start": "2022-06-13T00:00:00",
+    "query_window_end": "2022-06-15T23:59:59",
+    "evidence_types": [
+      "change_records",
+      "derived_findings",
+      "infrastructure_events",
+      "monitoring_alerts",
+      "query_coverage",
+      "resource_metrics",
+      "service_logs"
+    ],
+    "artifact_scope_note": "Evidence is aggregated query output (not raw log lines or metric samples); it contains no chat/communication records."
+  },
+  "incident_description": "Reliability incident investigation of a production environment. Evidence consists of Elasticsearch aggregation results over application and proxy logs, Kubernetes, cloud-provider and host system events, Prometheus Alertmanager alerts, change-management / CI-CD audit records and metric anomaly detection. No root cause, impact or trigger is stated; these must be established from the supplied artifacts. Environment context: Organization: Redus Freight (freight and logistics); Platform: AWS eu-west-1 (zones eu-west-1a/eu-west-1b/eu-west-1c); network range 10.179.0.0/16; Database tier: self-managed mysql primary/replica on virtual machines with provider block storage, replica in another zone; Change management: production changes carry RFC- identifiers.",
+  "investigation_questions": [
+    "What is the hostname of the host or node where the failure originated?",
+    "What is the IP address of the host or node where the failure originated?",
+    "Which storage volume attached to the failing host was degraded?",
+    "Which availability zone was affected by the cloud provider event?",
+    "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+    "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+    "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+    "Which change happened shortly before the incident began but did not cause it? Provide its identifier.",
+    "Which change restored normal service? Provide its change identifier."
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "zonal_disk_0038-01",
+      "artifact_type": "service_logs",
+      "subtype": "error_logs",
+      "source": "error_logs",
+      "content": "{\"description\": \"Application and proxy error logs: HTTP/gRPC status codes, failing requests (caller -> callee:port : operation), error messages and the services emitting them.\", \"facts\": [\"error events: 35112 matching events\", \"error events > status codes: 504 \\u2014 22462 events\", \"error events > status codes: 500 \\u2014 12409 events\", \"error events > status codes: 502 \\u2014 241 events\", \"failing requests: portal-bff -> customs-svc:8080 : GET /v1/customs/{id} \\u2014 22462 events\", \"failing requests: customs-svc -> db-mysql-01:3306 : SELECT/UPDATE \\u2014 11470 events\", \"failing requests: label-svc -> db-mysql-01:3306 : INSERT \\u2014 939 events\", \"failing requests: booking-api -> booking-db:5432 : query \\u2014 241 events\", \"error messages: upstream customs-svc: 504 Gateway Timeout \\u2014 22462 events\", \"error messages: Error 2013: Lost connection to MySQL server during query \\u2014 11470 events\", \"error messages: SQLSTATE[HY000] [2002] Connection timed out \\u2014 939 events\", \"error messages: connection reset by peer \\u2014 241 events\", \"emitting services: portal-bff \\u2014 22462 events\", \"emitting services: customs-svc \\u2014 11470 events\", \"emitting services: label-svc \\u2014 939 events\", \"emitting services: booking-api \\u2014 241 events\"]}",
+      "metadata": {
+        "scenario": "zonal_disk_0038",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "zonal_disk_0038-02",
+      "artifact_type": "service_logs",
+      "subtype": "error_volume_by_service",
+      "source": "error_volume_by_service",
+      "content": "{\"description\": \"Services ranked by number of error events, with each service's most-failed downstream dependencies.\", \"facts\": [\"services: portal-bff \\u2014 22462 events; failing dependencies=1; top dependencies: customs-svc (22462)\", \"services: customs-svc \\u2014 11470 events; failing dependencies=1; top dependencies: db-mysql-01 (11470)\", \"services: label-svc \\u2014 939 events; failing dependencies=1; top dependencies: db-mysql-01 (939)\", \"services: booking-api \\u2014 241 events; failing dependencies=1; top dependencies: booking-db (241)\"]}",
+      "metadata": {
+        "scenario": "zonal_disk_0038",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "zonal_disk_0038-03",
+      "artifact_type": "change_records",
+      "subtype": "change_log",
+      "source": "change_log",
+      "content": "{\"description\": \"Deployments, configuration pushes, infrastructure and automation runs from the change-management and CI/CD audit log: change ID, type, target, actor, time (UTC), status and recorded diff/summary.\", \"facts\": [\"changes: RFC-60328 | deployment | booking-api 7.21.3 -> 7.22.0 | actor: github-actions | 2022-06-13 07:12 UTC | status: completed | minor bug fixes \\u2014 1 events\", \"changes: RFC-60359 | deployment | rate-engine 7.8.5 -> 7.9.0 | actor: github-actions | 2022-06-13 14:41 UTC | status: Synced/Healthy | feature flag cleanup \\u2014 1 events\", \"changes: RFC-60377 | deployment | tracking-api 9.25.11 -> 9.26.0 | actor: github-actions | 2022-06-14 17:56 UTC | status: succeeded | minor bug fixes \\u2014 1 events\", \"changes: RFC-60406 | manual_failover | mysql primary db-mysql-01 -> db-mysql-02 | actor: t.weber | 2022-06-14 22:17 UTC | status: completed | promote replica db-mysql-02 (eu-west-1c) \\u2014 1 events\", \"change types: deployment \\u2014 3 events\", \"change types: manual_failover \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "zonal_disk_0038",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "zonal_disk_0038-04",
+      "artifact_type": "change_records",
+      "subtype": "change_actors",
+      "source": "change_actors",
+      "content": "{\"description\": \"Accounts and automation identities that executed changes, with the hosts or targets they acted on.\", \"facts\": [\"actors: github-actions \\u2014 3 events; targets: tracking-api (1), booking-api (1), rate-engine (1)\", \"actors: t.weber \\u2014 1 events; targets: db-mysql-01 (1), db-mysql-02 (1)\"]}",
+      "metadata": {
+        "scenario": "zonal_disk_0038",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "zonal_disk_0038-05",
+      "artifact_type": "infrastructure_events",
+      "subtype": "host_inventory",
+      "source": "host_inventory",
+      "content": "{\"description\": \"Host and node names seen in infrastructure events with their IP address, role and availability zone / rack.\", \"facts\": [\"hosts: db-mysql-01 \\u2014 327 events; ip: 10.179.141.86; role: mysql-primary; zone: eu-west-1b\", \"hosts: rate-04 \\u2014 207 events; ip: 10.179.219.160; role: rate-engine host; zone: eu-west-1a\", \"hosts: db-mysql-02 \\u2014 109 events; ip: 10.179.164.218; role: mysql-replica; zone: eu-west-1c\", \"hosts: rate-05 \\u2014 20 events; ip: 10.179.219.222; role: rate-engine host; zone: eu-west-1b\"]}",
+      "metadata": {
+        "scenario": "zonal_disk_0038",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "zonal_disk_0038-06",
+      "artifact_type": "infrastructure_events",
+      "subtype": "platform_events",
+      "source": "platform_events",
+      "content": "{\"description\": \"Kubernetes events, cloud-provider health events and host system messages (kernel, hardware, daemons) with the objects or hosts they refer to.\", \"facts\": [\"cloud health events: AWS Health AWS_EBS_OPERATIONAL_ISSUE (eu-west-1b): degraded performance for a subset of volumes; impact start 2022-06-14 18:23 UTC \\u2014 2 events; top objects: vol-0c90bc15734bb3c95 (2)\", \"system messages: kernel: nvme nvme1: I/O 545 QID 7 timeout, aborting \\u2014 34 events; top objects: db-mysql-01 (1)\", \"system messages: kernel: INFO: task mysqld:1157 blocked for more than 120 seconds. \\u2014 5 events; top objects: db-mysql-01 (1)\", \"instance status checks: instance and system status checks passed \\u2014 711 events; top objects: db-mysql-01 (1), db-mysql-02 (1)\"]}",
+      "metadata": {
+        "scenario": "zonal_disk_0038",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "zonal_disk_0038-07",
+      "artifact_type": "monitoring_alerts",
+      "subtype": "alertmanager_alerts",
+      "source": "alertmanager_alerts",
+      "content": "{\"description\": \"Prometheus Alertmanager alerts: alert names with severity, critical-alert instances, alert names and services, and an hourly timeline of warning and critical alerts (UTC).\", \"facts\": [\"alert names: Watchdog (info) \\u2014 72 events; service: alertmanager; firing continuously\", \"alert names: HighDiskIOLatency (critical) \\u2014 17 events; service: node; first seen in hour 2022-06-14 18:00 UTC; last seen in hour 2022-06-14 22:00 UTC\", \"alert names: MysqlHighThreadsRunning (critical) \\u2014 12 events; service: mysql; first seen in hour 2022-06-14 18:00 UTC; last seen in hour 2022-06-14 22:00 UTC\", \"alert names: PortalBff5xxRateHigh (critical) \\u2014 10 events; service: portal-bff; first seen in hour 2022-06-14 18:00 UTC; last seen in hour 2022-06-14 22:00 UTC\", \"alert names: CPUThrottlingHigh (warning) \\u2014 6 events; service: rate-engine; first seen in hour 2022-06-15 16:00 UTC; last seen in hour 2022-06-15 18:00 UTC\", \"critical alerts: 39 matching events\", \"critical alerts > critical instances: 10.179.141.86:9100 \\u2014 17 events\", \"critical alerts > critical instances: 10.179.141.86:9104 \\u2014 12 events\", \"critical alerts > critical instances: portal-bff \\u2014 10 events\", \"critical alerts > critical alert names: HighDiskIOLatency \\u2014 17 events\", \"critical alerts > critical alert names: MysqlHighThreadsRunning \\u2014 12 events\", \"critical alerts > critical alert names: PortalBff5xxRateHigh \\u2014 10 events\", \"critical alerts > critical services: node \\u2014 17 events\", \"critical alerts > critical services: mysql \\u2014 12 events\", \"critical alerts > critical services: portal-bff \\u2014 10 events\", \"alert timeline: 2022-06-14 18:00 UTC \\u2014 8 events\", \"alert timeline: 2022-06-14 19:00 UTC \\u2014 9 events\", \"alert timeline: 2022-06-14 20:00 UTC \\u2014 7 events\", \"alert timeline: 2022-06-14 21:00 UTC \\u2014 4 events\", \"alert timeline: 2022-06-14 22:00 UTC \\u2014 11 events\", \"alert timeline: 2022-06-15 16:00 UTC \\u2014 2 events\", \"alert timeline: 2022-06-15 17:00 UTC \\u2014 2 events\", \"alert timeline: 2022-06-15 18:00 UTC \\u2014 2 events\"]}",
+      "metadata": {
+        "scenario": "zonal_disk_0038",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "zonal_disk_0038-08",
+      "artifact_type": "resource_metrics",
+      "subtype": "metric_anomalies",
+      "source": "metric_anomalies",
+      "content": "{\"description\": \"Metric series that deviated from their 7-day baseline (hourly resolution): baseline, peak or trough value, anomaly onset and recovery (UTC).\", \"facts\": [\"metric anomalies: disk await (data volume) on db-mysql-01 \\u2014 baseline 1.3 ms; peak 947 ms; onset 2022-06-14 18:00 UTC; recovered 2022-06-14 23:00 UTC\", \"metric anomalies: replication lag on db-mysql-02 \\u2014 baseline 0 s; peak 1,028 s; onset 2022-06-14 18:00 UTC; recovered 2022-06-14 23:00 UTC\"]}",
+      "metadata": {
+        "scenario": "zonal_disk_0038",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "zonal_disk_0038-09",
+      "artifact_type": "derived_findings",
+      "subtype": "derived_summary",
+      "source": "derived_summary",
+      "content": "{\"description\": \"Deterministic summary computed from the query results above (error ranking, instance-to-host join, alert timeline, change correlation, earliest metric anomaly).\", \"facts\": [\"Derived: service portal-bff ranks #1 by error volume (22462 events, 1 failing dependencies). Most-failed dependency: customs-svc (22462 errors).\", \"Derived: most-alerted critical instance 10.179.141.86:9100 (17 critical alerts) maps to hostname db-mysql-01; role mysql-primary; zone eu-west-1b.\", \"Derived: warning/critical alerts span 2022-06-14 18:00 UTC to 2022-06-15 18:00 UTC; earliest alert hour 2022-06-14 18:00 UTC (8 alerts).\", \"Derived: changes recorded from 6 hours before the earliest alert hour to its end: RFC-60377 (deployment, tracking-api 9.25.11 -> 9.26.0, github-actions, 2022-06-14 17:56 UTC).\", \"Derived: earliest metric anomaly onset 2022-06-14 18:00 UTC (disk await (data volume) on db-mysql-01).\"]}",
+      "metadata": {
+        "scenario": "zonal_disk_0038",
+        "source_kind": "derived_from_es_results",
+        "heuristic": true
+      }
+    },
+    {
+      "artifact_id": "zonal_disk_0038-10",
+      "artifact_type": "query_coverage",
+      "subtype": "evidence_gaps",
+      "source": "evidence_gaps",
+      "content": "{\"description\": \"Queries that returned nothing or failed; use these to state what is NOT established.\", \"facts\": [\"No matching results for: tls certificates / expired certificates. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / expiring within 7 days. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / self signed. (Absence in this query is not proof of absence elsewhere.)\"]}",
+      "metadata": {
+        "scenario": "zonal_disk_0038",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    }
+  ]
+}

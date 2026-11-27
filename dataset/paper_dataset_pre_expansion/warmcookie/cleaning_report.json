@@ -1,0 +1,14 @@
+{
+  "scenario": "warmcookie",
+  "cleaning": [],
+  "skipped": [
+    "suspicious_certificates: all aggregations empty"
+  ],
+  "gaps": [],
+  "artifacts": 9,
+  "facts": 85,
+  "empty_aggregations": 3,
+  "questions": 7,
+  "answers": 7,
+  "atoms": 11
+}

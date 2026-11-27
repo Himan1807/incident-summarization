@@ -1,0 +1,154 @@
+{
+  "metadata": {
+    "incident_id": "INC-20211027",
+    "scenario": "conntrack_0015",
+    "title": "Infrastructure reliability incident investigation",
+    "source": "synthetic/ops-incident-expansion (modeled on neu-nds2/llm-sec-incident-analysis)",
+    "query_window_start": "2021-10-27T00:00:00",
+    "query_window_end": "2021-10-29T23:59:59",
+    "evidence_types": [
+      "change_records",
+      "derived_findings",
+      "infrastructure_events",
+      "monitoring_alerts",
+      "network_summary",
+      "query_coverage",
+      "service_logs"
+    ],
+    "artifact_scope_note": "Evidence is aggregated query output (not raw log lines or metric samples); it contains no chat/communication records."
+  },
+  "incident_description": "Reliability incident investigation of a production environment. Evidence consists of Elasticsearch aggregation results over application and proxy logs, Kubernetes, cloud-provider and host system events, Prometheus Alertmanager alerts, change-management / CI-CD audit records and metric anomaly detection. No root cause, impact or trigger is stated; these must be established from the supplied artifacts. Environment context: Organization: Atlasoxa Networks (mobile operator); Platform: Google Cloud southamerica-east1 (zones southamerica-east1-a/southamerica-east1-b/southamerica-east1-c); network range 10.143.0.0/16; Kubernetes cluster atlaso-prod-southa (GKE); Egress: two Linux NAT gateways (natgw-01, natgw-02) in active/active ECMP carry all outbound traffic to external APIs; Change management: production changes carry CHG- identifiers.",
+  "investigation_questions": [
+    "What is the hostname of the machine where the incident started?",
+    "What is the IP address of the host or node where the failure originated?",
+    "Which kernel table was exhausted?",
+    "Which kernel parameter limited that table on the failing host?",
+    "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+    "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+    "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+    "Which change happened shortly before the incident began but did not cause it? Provide its identifier."
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "conntrack_0015-01",
+      "artifact_type": "service_logs",
+      "subtype": "error_logs",
+      "source": "error_logs",
+      "content": "{\"description\": \"Application and proxy error logs: HTTP/gRPC status codes, failing requests (caller -> callee:port : operation), error messages and the services emitting them.\", \"facts\": [\"error events: 33647 matching events\", \"error events > status codes: 504 \\u2014 18495 events\", \"error events > status codes: n/a (connect timeout) \\u2014 15152 events\", \"failing requests: selfcare-portal -> sms-notifier:8080 : POST /v1/sms \\u2014 18278 events\", \"failing requests: sms-notifier -> sms.relaycast.net:443 : POST /v1/messages \\u2014 10026 events\", \"failing requests: email-notifier -> smtp.sendwave.io:587 : SMTP AUTH \\u2014 5126 events\", \"failing requests: topup-api -> topup-db:5432 : query \\u2014 217 events\", \"error messages: sms-notifier: 504 Gateway Timeout \\u2014 18278 events\", \"error messages: connect timeout to sms.relaycast.net \\u2014 10026 events\", \"error messages: connect timeout to smtp.sendwave.io \\u2014 5126 events\", \"error messages: upstream request timeout \\u2014 217 events\", \"emitting services: selfcare-portal \\u2014 18278 events\", \"emitting services: sms-notifier \\u2014 10026 events\", \"emitting services: email-notifier \\u2014 5126 events\", \"emitting services: topup-api \\u2014 217 events\"]}",
+      "metadata": {
+        "scenario": "conntrack_0015",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "conntrack_0015-02",
+      "artifact_type": "service_logs",
+      "subtype": "error_volume_by_service",
+      "source": "error_volume_by_service",
+      "content": "{\"description\": \"Services ranked by number of error events, with each service's most-failed downstream dependencies.\", \"facts\": [\"services: selfcare-portal \\u2014 18278 events; failing dependencies=1; top dependencies: sms-notifier (18278)\", \"services: sms-notifier \\u2014 10026 events; failing dependencies=1; top dependencies: sms.relaycast.net (10026)\", \"services: email-notifier \\u2014 5126 events; failing dependencies=1; top dependencies: smtp.sendwave.io (5126)\", \"services: topup-api \\u2014 217 events; failing dependencies=1; top dependencies: topup-db (217)\"]}",
+      "metadata": {
+        "scenario": "conntrack_0015",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "conntrack_0015-03",
+      "artifact_type": "change_records",
+      "subtype": "change_log",
+      "source": "change_log",
+      "content": "{\"description\": \"Deployments, configuration pushes, infrastructure and automation runs from the change-management and CI/CD audit log: change ID, type, target, actor, time (UTC), status and recorded diff/summary.\", \"facts\": [\"changes: CHG-7545 | deployment | cdr-ingest 4.5.10 -> 4.6.0 | actor: cloudbuild-deployer | 2021-10-27 22:20 UTC | status: completed | new optional API field \\u2014 1 events\", \"changes: CHG-7568 | sysctl_change | natgw-01 | actor: r.das | 2021-10-28 04:00 UTC | status: completed | net.netfilter.nf_conntrack_max 65536 -> 1048576 (matches natgw-02) \\u2014 1 events\", \"changes: CHG-7605 | deployment | topup-api 1.14.9 -> 1.15.0 | actor: cloudbuild-deployer | 2021-10-28 20:25 UTC | status: Synced/Healthy | performance tuning of list endpoint \\u2014 1 events\", \"change types: deployment \\u2014 2 events\", \"change types: sysctl_change \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "conntrack_0015",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "conntrack_0015-04",
+      "artifact_type": "change_records",
+      "subtype": "change_actors",
+      "source": "change_actors",
+      "content": "{\"description\": \"Accounts and automation identities that executed changes, with the hosts or targets they acted on.\", \"facts\": [\"actors: cloudbuild-deployer \\u2014 2 events; targets: atlaso-prod-southa/cdr-ingest (1), atlaso-prod-southa/topup-api (1)\", \"actors: r.das \\u2014 1 events; targets: natgw-01 (1)\"]}",
+      "metadata": {
+        "scenario": "conntrack_0015",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "conntrack_0015-05",
+      "artifact_type": "infrastructure_events",
+      "subtype": "host_inventory",
+      "source": "host_inventory",
+      "content": "{\"description\": \"Host and node names seen in infrastructure events with their IP address, role and availability zone / rack.\", \"facts\": [\"hosts: natgw-01 \\u2014 33767 events; ip: 10.143.3.140; role: nat-egress-gateway; zone: southamerica-east1-a\", \"hosts: natgw-02 \\u2014 485 events; ip: 10.143.3.34; role: nat-egress-gateway; zone: southamerica-east1-b\", \"hosts: gke-atlaso-prod-so-pool-c-3de0 \\u2014 202 events; ip: 10.143.107.102; role: k8s-worker; zone: southamerica-east1-c\", \"hosts: gke-atlaso-prod-so-pool-b-5b10 \\u2014 103 events; ip: 10.143.48.26; role: k8s-worker; zone: southamerica-east1-a\"]}",
+      "metadata": {
+        "scenario": "conntrack_0015",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "conntrack_0015-06",
+      "artifact_type": "infrastructure_events",
+      "subtype": "platform_events",
+      "source": "platform_events",
+      "content": "{\"description\": \"Kubernetes events, cloud-provider health events and host system messages (kernel, hardware, daemons) with the objects or hosts they refer to.\", \"facts\": [\"system messages: kernel: nf_conntrack: nf_conntrack: table full, dropping packet \\u2014 35151 events; top objects: natgw-01 (35151)\", \"system messages: sysctl: net.netfilter.nf_conntrack_max = 65536 \\u2014 1 events; top objects: natgw-01 (1)\", \"system messages: sysctl: net.netfilter.nf_conntrack_max = 1048576 \\u2014 1 events; top objects: natgw-02 (1)\", \"event reasons: Pulled \\u2014 25 events; top objects: pod/cdr-ingest-257de3f8a-w77rm (3)\", \"event reasons: ScalingReplicaSet \\u2014 4 events; top objects: deployment/cdr-ingest (1)\", \"event reasons: Pulled \\u2014 30 events; top objects: pod/topup-api-68e65e5cf-7kjv4 (1)\", \"event reasons: ScalingReplicaSet \\u2014 5 events; top objects: deployment/topup-api (1)\"]}",
+      "metadata": {
+        "scenario": "conntrack_0015",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "conntrack_0015-07",
+      "artifact_type": "monitoring_alerts",
+      "subtype": "alertmanager_alerts",
+      "source": "alertmanager_alerts",
+      "content": "{\"description\": \"Prometheus Alertmanager alerts: alert names with severity, critical-alert instances, alert names and services, and an hourly timeline of warning and critical alerts (UTC).\", \"facts\": [\"alert names: Watchdog (info) \\u2014 72 events; service: alertmanager; firing continuously\", \"alert names: ConntrackTableNearlyFull (warning) \\u2014 11 events; service: node; first seen in hour 2021-10-28 00:00 UTC; last seen in hour 2021-10-28 04:00 UTC\", \"alert names: ExternalAPITimeouts (critical) \\u2014 7 events; service: sms-notifier; first seen in hour 2021-10-28 02:00 UTC; last seen in hour 2021-10-28 04:00 UTC\", \"alert names: ConntrackTableFull (critical) \\u2014 5 events; service: node; first seen in hour 2021-10-28 02:00 UTC; last seen in hour 2021-10-28 04:00 UTC\", \"alert names: TargetDown (warning) \\u2014 5 events; service: roaming-svc; first seen in hour 2021-10-28 19:00 UTC; last seen in hour 2021-10-28 21:00 UTC\", \"critical alerts: 12 matching events\", \"critical alerts > critical instances: sms-notifier \\u2014 7 events\", \"critical alerts > critical instances: 10.143.3.140:9100 \\u2014 5 events\", \"critical alerts > critical alert names: ExternalAPITimeouts \\u2014 7 events\", \"critical alerts > critical alert names: ConntrackTableFull \\u2014 5 events\", \"critical alerts > critical services: sms-notifier \\u2014 7 events\", \"critical alerts > critical services: node \\u2014 5 events\", \"alert timeline: 2021-10-28 00:00 UTC \\u2014 3 events\", \"alert timeline: 2021-10-28 01:00 UTC \\u2014 1 events\", \"alert timeline: 2021-10-28 02:00 UTC \\u2014 8 events\", \"alert timeline: 2021-10-28 03:00 UTC \\u2014 7 events\", \"alert timeline: 2021-10-28 04:00 UTC \\u2014 4 events\", \"alert timeline: 2021-10-28 19:00 UTC \\u2014 2 events\", \"alert timeline: 2021-10-28 20:00 UTC \\u2014 1 events\", \"alert timeline: 2021-10-28 21:00 UTC \\u2014 2 events\"]}",
+      "metadata": {
+        "scenario": "conntrack_0015",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "conntrack_0015-08",
+      "artifact_type": "network_summary",
+      "subtype": "tls_certificates",
+      "source": "tls_certificates",
+      "content": "{\"description\": \"TLS certificates observed in edge and service-to-service traffic that are expired, expire within 7 days, or are self-signed.\", \"facts\": [\"expiring within 7 days: 19 matching events\", \"expiring within 7 days > certificate details: CN=roaming-svc.atlasoxa.internal | issuer: CN=R11,O=Let's Encrypt | not_after: 2021-11-01 23:59:00 UTC | seen on: roaming-svc:8443 \\u2014 19 events\"]}",
+      "metadata": {
+        "scenario": "conntrack_0015",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "conntrack_0015-09",
+      "artifact_type": "derived_findings",
+      "subtype": "derived_summary",
+      "source": "derived_summary",
+      "content": "{\"description\": \"Deterministic summary computed from the query results above (error ranking, instance-to-host join, alert timeline, change correlation, earliest metric anomaly).\", \"facts\": [\"Derived: service selfcare-portal ranks #1 by error volume (18278 events, 1 failing dependencies). Most-failed dependency: sms-notifier (18278 errors).\", \"Derived: most-alerted critical instance sms-notifier (7 critical alerts); no matching host-inventory entry.\", \"Derived: warning/critical alerts span 2021-10-28 00:00 UTC to 2021-10-28 21:00 UTC; earliest alert hour 2021-10-28 00:00 UTC (3 alerts).\", \"Derived: changes recorded from 6 hours before the earliest alert hour to its end: CHG-7545 (deployment, cdr-ingest 4.5.10 -> 4.6.0, cloudbuild-deployer, 2021-10-27 22:20 UTC).\"]}",
+      "metadata": {
+        "scenario": "conntrack_0015",
+        "source_kind": "derived_from_es_results",
+        "heuristic": true
+      }
+    },
+    {
+      "artifact_id": "conntrack_0015-10",
+      "artifact_type": "query_coverage",
+      "subtype": "evidence_gaps",
+      "source": "evidence_gaps",
+      "content": "{\"description\": \"Queries that returned nothing or failed; use these to state what is NOT established.\", \"facts\": [\"Query 'metric anomalies' returned no aggregation results (shards failed: 3 of 96). This evidence is UNAVAILABLE; it is not evidence that nothing exists.\", \"No matching results for: tls certificates / expired certificates. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / self signed. (Absence in this query is not proof of absence elsewhere.)\"]}",
+      "metadata": {
+        "scenario": "conntrack_0015",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    }
+  ]
+}

@@ -1,0 +1,120 @@
+{
+  "source": "synthetic generator ground truth (ops expansion)",
+  "confidence": "synthetic ground truth",
+  "qa": [
+    {
+      "id": 1,
+      "question": "Which service or component is the origin of the failure?",
+      "answer": "recommendations",
+      "atoms": [
+        {
+          "text": "recommendations",
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "question": "What change, deployment or automation run triggered the incident? Provide its change identifier.",
+      "answer": "RFC-46355",
+      "atoms": [
+        {
+          "text": "RFC-46355",
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "question": "Which account or automation identity executed the triggering change?",
+      "answer": "argocd",
+      "atoms": [
+        {
+          "text": "argocd",
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "question": "Which version of the service introduced the defect?",
+      "answer": "6.25.0",
+      "atoms": [
+        {
+          "text": "6.25.0",
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "question": "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+      "answer": "2025-08-16 09:00 UTC",
+      "atoms": [
+        {
+          "text": "2025-08-16 09:00 UTC",
+          "kind": "time"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "question": "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+      "answer": "software defect",
+      "atoms": [
+        {
+          "text": "software defect",
+          "kind": "label"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "question": "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+      "answer": "availability",
+      "atoms": [
+        {
+          "text": "availability",
+          "kind": "cia"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "question": "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+      "answer": "web-frontend, downstream symptom",
+      "atoms": [
+        {
+          "text": "web-frontend",
+          "kind": "other"
+        },
+        {
+          "text": "downstream symptom",
+          "kind": "label"
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "question": "Which change happened shortly before the incident began but did not cause it? Provide its identifier.",
+      "answer": "RFC-46342",
+      "atoms": [
+        {
+          "text": "RFC-46342",
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "question": "Which change restored normal service? Provide its change identifier.",
+      "answer": "RFC-46376",
+      "atoms": [
+        {
+          "text": "RFC-46376",
+          "kind": "other"
+        }
+      ]
+    }
+  ]
+}

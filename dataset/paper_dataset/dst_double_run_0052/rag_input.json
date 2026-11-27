@@ -1,0 +1,139 @@
+{
+  "metadata": {
+    "incident_id": "INC-20251025",
+    "scenario": "dst_double_run_0052",
+    "title": "Infrastructure reliability incident investigation",
+    "source": "synthetic/ops-incident-expansion (modeled on neu-nds2/llm-sec-incident-analysis)",
+    "query_window_start": "2025-10-25T00:00:00",
+    "query_window_end": "2025-10-27T23:59:59",
+    "evidence_types": [
+      "change_records",
+      "derived_findings",
+      "infrastructure_events",
+      "monitoring_alerts",
+      "query_coverage",
+      "service_logs"
+    ],
+    "artifact_scope_note": "Evidence is aggregated query output (not raw log lines or metric samples); it contains no chat/communication records."
+  },
+  "incident_description": "Reliability incident investigation of a production environment. Evidence consists of Elasticsearch aggregation results over application and proxy logs, Kubernetes, cloud-provider and host system events, Prometheus Alertmanager alerts, change-management / CI-CD audit records and metric anomaly detection. No root cause, impact or trigger is stated; these must be established from the supplied artifacts. Environment context: Organization: Lumen Software (collaboration SaaS); Platform: on-premises data center DC-A, server range 172.24.0.0/16; Kubernetes cluster lumen-prod (kubeadm); Billing: a daily charge job 'subscription-renewals' is triggered by the in-house scheduler 'chronos-lite', which computes run times from local wall-clock time (Europe/London); charges go through payment-gw to an external card processor; job executions are recorded by job name; Change management: production changes carry RFC- identifiers.",
+  "investigation_questions": [
+    "Which user or automation account carried out the triggering change?",
+    "Which job execution was the legitimate run?",
+    "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+    "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+    "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+    "Which change happened shortly before the incident began but did not cause it? Provide its identifier."
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "dst_double_run_0052-01",
+      "artifact_type": "service_logs",
+      "subtype": "error_logs",
+      "source": "error_logs",
+      "content": "{\"description\": \"Application and proxy error logs: HTTP/gRPC status codes, failing requests (caller -> callee:port : operation), error messages and the services emitting them.\", \"facts\": [\"error events: 83446 matching events\", \"error events > status codes: n/a (reconciliation finding) \\u2014 76891 events\", \"error events > status codes: 402 \\u2014 3626 events\", \"error events > status codes: n/a (business event) \\u2014 2856 events\", \"error events > status codes: 500 \\u2014 73 events\", \"failing requests: ledger-reconciler -> billing-db:5432 : reconcile payments vs invoices \\u2014 76891 events\", \"failing requests: payment-gw -> api.paysecure-gw.com:443 : POST /v3/charges \\u2014 3626 events\", \"failing requests: support-portal -> disputes-api:8080 : POST /v1/disputes \\u2014 2856 events\", \"failing requests: audit-log-svc -> audit-db:5432 : query \\u2014 73 events\", \"error messages: ledger imbalance: payments exceed invoiced amount for billing_date 2025-10-26 \\u2014 76891 events\", \"error messages: charge declined: insufficient_funds \\u2014 3626 events\", \"error messages: dispute created: duplicate charge \\u2014 2856 events\", \"error messages: pq: could not serialize access due to concurrent update \\u2014 73 events\", \"emitting services: ledger-reconciler \\u2014 76891 events\", \"emitting services: payment-gw \\u2014 3626 events\", \"emitting services: support-portal \\u2014 2856 events\", \"emitting services: audit-log-svc \\u2014 73 events\"]}",
+      "metadata": {
+        "scenario": "dst_double_run_0052",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "dst_double_run_0052-02",
+      "artifact_type": "service_logs",
+      "subtype": "error_volume_by_service",
+      "source": "error_volume_by_service",
+      "content": "{\"description\": \"Services ranked by number of error events, with each service's most-failed downstream dependencies.\", \"facts\": [\"services: ledger-reconciler \\u2014 76891 events; failing dependencies=1; top dependencies: billing-db (76891)\", \"services: payment-gw \\u2014 3626 events; failing dependencies=1; top dependencies: api.paysecure-gw.com (3626)\", \"services: support-portal \\u2014 2856 events; failing dependencies=1; top dependencies: disputes-api (2856)\", \"services: audit-log-svc \\u2014 73 events; failing dependencies=1; top dependencies: audit-db (73)\"]}",
+      "metadata": {
+        "scenario": "dst_double_run_0052",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "dst_double_run_0052-03",
+      "artifact_type": "change_records",
+      "subtype": "change_log",
+      "source": "change_log",
+      "content": "{\"description\": \"Deployments, configuration pushes, infrastructure and automation runs from the change-management and CI/CD audit log: change ID, type, target, actor, time (UTC), status and recorded diff/summary.\", \"facts\": [\"changes: RFC-66668 | deployment | webhooks-svc 6.9.8 -> 6.9.9 | actor: jenkins | 2025-10-25 23:25 UTC | status: succeeded | minor bug fixes \\u2014 1 events\", \"changes: subscription-renewals-34718724 | scheduled_run | job subscription-renewals (daily 01:00 Europe/London) | actor: chronos-lite-scheduler | 2025-10-26 00:00 UTC | status: Complete | billing_date 2025-10-26 (local); charged 80,517 accounts; total 5,210,544.28 \\u2014 1 events\", \"changes: subscription-renewals-34718784 | scheduled_run | job subscription-renewals (daily 01:00 Europe/London) | actor: chronos-lite-scheduler | 2025-10-26 01:00 UTC | status: Complete | billing_date 2025-10-26 (local); charged 80,517 accounts (3,626 declined) \\u2014 1 events\", \"changes: RFC-66693 | scheduler_admin | job subscription-renewals | actor: v.abara | 2025-10-26 04:42 UTC | status: applied | job suspended \\u2014 1 events\", \"changes: RFC-66719 | deployment | audit-log-svc 3.7.3 -> 3.8.0 | actor: jenkins | 2025-10-26 11:22 UTC | status: completed | feature flag cleanup \\u2014 1 events\", \"changes: RFC-66750 | batch_refund | payment-gw | actor: v.abara | 2025-10-26 12:09 UTC | status: completed | refunded 76,891 duplicate charges from subscription-renewals-34718784 \\u2014 1 events\", \"changes: RFC-66768 | deployment | auth-api 14.9.1 -> 14.10.0 | actor: jenkins | 2025-10-26 16:03 UTC | status: Synced/Healthy | performance tuning of list endpoint \\u2014 1 events\", \"changes: RFC-66793 | deployment | docs-api 2.0.6 -> 2.1.0 | actor: jenkins | 2025-10-26 16:44 UTC | status: Synced/Healthy | new optional API field \\u2014 1 events\", \"change types: deployment \\u2014 4 events\", \"change types: scheduled_run \\u2014 2 events\", \"change types: scheduler_admin \\u2014 1 events\", \"change types: batch_refund \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "dst_double_run_0052",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "dst_double_run_0052-04",
+      "artifact_type": "change_records",
+      "subtype": "change_actors",
+      "source": "change_actors",
+      "content": "{\"description\": \"Accounts and automation identities that executed changes, with the hosts or targets they acted on.\", \"facts\": [\"actors: jenkins \\u2014 4 events; targets: lumen-prod/webhooks-svc (1), lumen-prod/audit-log-svc (1), lumen-prod/docs-api (1), lumen-prod/auth-api (1)\", \"actors: chronos-lite-scheduler \\u2014 2 events; targets: payment-gw (2)\", \"actors: v.abara \\u2014 2 events; targets: chronos-lite (1), payment-gw (1)\"]}",
+      "metadata": {
+        "scenario": "dst_double_run_0052",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "dst_double_run_0052-05",
+      "artifact_type": "infrastructure_events",
+      "subtype": "host_inventory",
+      "source": "host_inventory",
+      "content": "{\"description\": \"Host and node names seen in infrastructure events with their IP address, role and availability zone / rack.\", \"facts\": [\"hosts: lumen-node-15 \\u2014 101 events; ip: 172.24.87.36; role: k8s-worker; zone: rack K35\"]}",
+      "metadata": {
+        "scenario": "dst_double_run_0052",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "dst_double_run_0052-06",
+      "artifact_type": "infrastructure_events",
+      "subtype": "platform_events",
+      "source": "platform_events",
+      "content": "{\"description\": \"Kubernetes events, cloud-provider health events and host system messages (kernel, hardware, daemons) with the objects or hosts they refer to.\", \"facts\": [\"job logs: subscription-renewals: charge run complete (billing_date=2025-10-26) \\u2014 2 events; top objects: subscription-renewals-34718724 (1), subscription-renewals-34718784 (1)\", \"event reasons: Pulled \\u2014 24 events; top objects: pod/webhooks-svc-b63bd3991-2dvvv (3)\", \"event reasons: ScalingReplicaSet \\u2014 3 events; top objects: deployment/webhooks-svc (3)\", \"event reasons: Pulled \\u2014 20 events; top objects: pod/audit-log-svc-9afd87786-bnfkj (1)\", \"event reasons: ScalingReplicaSet \\u2014 2 events; top objects: deployment/audit-log-svc (2)\", \"event reasons: Pulled \\u2014 17 events; top objects: pod/docs-api-996dd938b-8p59q (2)\", \"event reasons: ScalingReplicaSet \\u2014 4 events; top objects: deployment/docs-api (1)\", \"event reasons: Pulled \\u2014 17 events; top objects: pod/auth-api-0d36f9182-fbgww (2)\", \"event reasons: ScalingReplicaSet \\u2014 4 events; top objects: deployment/auth-api (3)\"]}",
+      "metadata": {
+        "scenario": "dst_double_run_0052",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "dst_double_run_0052-07",
+      "artifact_type": "monitoring_alerts",
+      "subtype": "alertmanager_alerts",
+      "source": "alertmanager_alerts",
+      "content": "{\"description\": \"Prometheus Alertmanager alerts: alert names with severity, critical-alert instances, alert names and services, and an hourly timeline of warning and critical alerts (UTC).\", \"facts\": [\"alert names: Watchdog (info) \\u2014 72 events; service: alertmanager; firing continuously\", \"alert names: LedgerImbalanceDetected (critical) \\u2014 15 events; service: ledger-reconciler; first seen in hour 2025-10-26 02:00 UTC; last seen in hour 2025-10-26 06:00 UTC\", \"alert names: CPUThrottlingHigh (warning) \\u2014 3 events; service: docs-api; first seen in hour 2025-10-25 19:00 UTC; last seen in hour 2025-10-25 20:00 UTC\", \"alert names: CardDeclineRateHigh (warning) \\u2014 2 events; service: payment-gw; first seen in hour 2025-10-26 01:00 UTC; last seen in hour 2025-10-26 01:00 UTC\", \"critical alerts: 15 matching events\", \"critical alerts > critical instances: ledger-reconciler \\u2014 15 events\", \"critical alerts > critical alert names: LedgerImbalanceDetected \\u2014 15 events\", \"critical alerts > critical services: ledger-reconciler \\u2014 15 events\", \"alert timeline: 2025-10-25 19:00 UTC \\u2014 2 events\", \"alert timeline: 2025-10-25 20:00 UTC \\u2014 1 events\", \"alert timeline: 2025-10-26 01:00 UTC \\u2014 2 events\", \"alert timeline: 2025-10-26 02:00 UTC \\u2014 4 events\", \"alert timeline: 2025-10-26 03:00 UTC \\u2014 4 events\", \"alert timeline: 2025-10-26 04:00 UTC \\u2014 2 events\", \"alert timeline: 2025-10-26 05:00 UTC \\u2014 2 events\", \"alert timeline: 2025-10-26 06:00 UTC \\u2014 3 events\"]}",
+      "metadata": {
+        "scenario": "dst_double_run_0052",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "dst_double_run_0052-08",
+      "artifact_type": "derived_findings",
+      "subtype": "derived_summary",
+      "source": "derived_summary",
+      "content": "{\"description\": \"Deterministic summary computed from the query results above (error ranking, instance-to-host join, alert timeline, change correlation, earliest metric anomaly).\", \"facts\": [\"Derived: service ledger-reconciler ranks #1 by error volume (76891 events, 1 failing dependencies). Most-failed dependency: billing-db (76891 errors).\", \"Derived: most-alerted critical instance ledger-reconciler (15 critical alerts); no matching host-inventory entry.\", \"Derived: warning/critical alerts span 2025-10-25 19:00 UTC to 2025-10-26 06:00 UTC; earliest alert hour 2025-10-25 19:00 UTC (2 alerts).\", \"Derived: no changes recorded from 6 hours before the earliest alert hour to its end.\"]}",
+      "metadata": {
+        "scenario": "dst_double_run_0052",
+        "source_kind": "derived_from_es_results",
+        "heuristic": true
+      }
+    },
+    {
+      "artifact_id": "dst_double_run_0052-09",
+      "artifact_type": "query_coverage",
+      "subtype": "evidence_gaps",
+      "source": "evidence_gaps",
+      "content": "{\"description\": \"Queries that returned nothing or failed; use these to state what is NOT established.\", \"facts\": [\"Query 'metric anomalies' returned no aggregation results (shards failed: 1 of 111). This evidence is UNAVAILABLE; it is not evidence that nothing exists.\", \"No matching results for: tls certificates / expired certificates. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / expiring within 7 days. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / self signed. (Absence in this query is not proof of absence elsewhere.)\"]}",
+      "metadata": {
+        "scenario": "dst_double_run_0052",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    }
+  ]
+}

@@ -1,0 +1,154 @@
+{
+  "metadata": {
+    "incident_id": "INC-20260926",
+    "scenario": "memory_leak_0043",
+    "title": "Infrastructure reliability incident investigation",
+    "source": "synthetic/ops-incident-expansion (modeled on neu-nds2/llm-sec-incident-analysis)",
+    "query_window_start": "2026-09-26T00:00:00",
+    "query_window_end": "2026-09-28T23:59:59",
+    "evidence_types": [
+      "change_records",
+      "derived_findings",
+      "infrastructure_events",
+      "monitoring_alerts",
+      "query_coverage",
+      "resource_metrics",
+      "service_logs"
+    ],
+    "artifact_scope_note": "Evidence is aggregated query output (not raw log lines or metric samples); it contains no chat/communication records."
+  },
+  "incident_description": "Reliability incident investigation of a production environment. Evidence consists of Elasticsearch aggregation results over application and proxy logs, Kubernetes, cloud-provider and host system events, Prometheus Alertmanager alerts, change-management / CI-CD audit records and metric anomaly detection. No root cause, impact or trigger is stated; these must be established from the supplied artifacts. Environment context: Organization: Riverpath Go (ride-hailing); Platform: Microsoft Azure southeastasia (zones southeastasia-1/southeastasia-2/southeastasia-3); network range 10.180.0.0/16; Kubernetes cluster riverp-prod-southe (AKS); payments-svc pods run with 4 GiB memory limits; deployments are canary releases with automated analysis; Change management: production changes carry CHG- identifiers.",
+  "investigation_questions": [
+    "Which service or component is the origin of the failure?",
+    "What change, deployment or automation run triggered the incident? Provide its change identifier.",
+    "Which account or automation identity executed the triggering change?",
+    "Which version of the service introduced the defect?",
+    "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+    "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+    "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+    "Which change restored normal service? Provide its change identifier."
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "memory_leak_0043-01",
+      "artifact_type": "service_logs",
+      "subtype": "error_logs",
+      "source": "error_logs",
+      "content": "{\"description\": \"Application and proxy error logs: HTTP/gRPC status codes, failing requests (caller -> callee:port : operation), error messages and the services emitting them.\", \"facts\": [\"error events: 24970 matching events\", \"error events > status codes: 503 \\u2014 22979 events\", \"error events > status codes: 499 \\u2014 1821 events\", \"error events > status codes: 502 \\u2014 170 events\", \"failing requests: rider-app-bff -> payments-svc:8080 : GET /v1/payments \\u2014 20122 events\", \"failing requests: safety-svc -> payments-svc:8080 : POST /v1/payments/batch \\u2014 2857 events\", \"failing requests: payments-svc -> clients : in-flight requests \\u2014 1821 events\", \"failing requests: eta-svc -> eta-db:5432 : query \\u2014 170 events\", \"error messages: upstream payments-svc: 503 no healthy upstream \\u2014 20122 events\", \"error messages: payments-svc: 503 Service Unavailable \\u2014 2857 events\", \"error messages: context canceled (shutdown in progress) \\u2014 1821 events\", \"error messages: connection reset by peer \\u2014 170 events\", \"emitting services: rider-app-bff \\u2014 20122 events\", \"emitting services: safety-svc \\u2014 2857 events\", \"emitting services: payments-svc \\u2014 1821 events\", \"emitting services: eta-svc \\u2014 170 events\"]}",
+      "metadata": {
+        "scenario": "memory_leak_0043",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "memory_leak_0043-02",
+      "artifact_type": "service_logs",
+      "subtype": "error_volume_by_service",
+      "source": "error_volume_by_service",
+      "content": "{\"description\": \"Services ranked by number of error events, with each service's most-failed downstream dependencies.\", \"facts\": [\"services: rider-app-bff \\u2014 20122 events; failing dependencies=1; top dependencies: payments-svc (20122)\", \"services: safety-svc \\u2014 2857 events; failing dependencies=1; top dependencies: payments-svc (2857)\", \"services: payments-svc \\u2014 1821 events; failing dependencies=1; top dependencies: clients (1821)\", \"services: eta-svc \\u2014 170 events; failing dependencies=1; top dependencies: eta-db (170)\"]}",
+      "metadata": {
+        "scenario": "memory_leak_0043",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "memory_leak_0043-03",
+      "artifact_type": "change_records",
+      "subtype": "change_log",
+      "source": "change_log",
+      "content": "{\"description\": \"Deployments, configuration pushes, infrastructure and automation runs from the change-management and CI/CD audit log: change ID, type, target, actor, time (UTC), status and recorded diff/summary.\", \"facts\": [\"changes: CHG-19717 | deployment | payments-svc 3.14.5 -> 3.15.0 | actor: azure-pipelines | 2026-09-27 06:47 UTC | status: Healthy | canary 10% -> 50% -> 100% (analysis passed: error rate, p99 latency); new in-process template cache \\u2014 1 events\", \"changes: CHG-19757 | node_rotation | node pool AMI/image update | actor: cluster-autoscaler | 2026-09-27 12:15 UTC | status: completed | node image drift replacement \\u2014 1 events\", \"changes: CHG-19772 | rollback | payments-svc 3.15.0 -> 3.14.5 | actor: v.osei | 2026-09-27 15:27 UTC | status: Healthy | rollout undo \\u2014 1 events\", \"changes: CHG-19798 | deployment | eta-svc 13.13.4 -> 13.13.5 | actor: azure-pipelines | 2026-09-27 21:30 UTC | status: succeeded | minor bug fixes \\u2014 1 events\", \"changes: CHG-19821 | deployment | promotions-api 4.30.0 -> 4.30.1 | actor: azure-pipelines | 2026-09-28 10:32 UTC | status: succeeded | minor bug fixes \\u2014 1 events\", \"changes: CHG-19839 | deployment | pricing-svc 12.18.8 -> 12.19.0 | actor: azure-pipelines | 2026-09-28 21:04 UTC | status: succeeded | dependency bump \\u2014 1 events\", \"change types: deployment \\u2014 4 events\", \"change types: node_rotation \\u2014 1 events\", \"change types: rollback \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "memory_leak_0043",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "memory_leak_0043-04",
+      "artifact_type": "change_records",
+      "subtype": "change_actors",
+      "source": "change_actors",
+      "content": "{\"description\": \"Accounts and automation identities that executed changes, with the hosts or targets they acted on.\", \"facts\": [\"actors: azure-pipelines \\u2014 4 events; targets: riverp-prod-southe/payments-svc (1), riverp-prod-southe/pricing-svc (1), riverp-prod-southe/eta-svc (1), riverp-prod-southe/promotions-api (1)\", \"actors: cluster-autoscaler \\u2014 1 events; targets: aks-nodepool1-86687927-vmss000017 (1), aks-nodepool1-47816705-vmss000023 (1), aks-nodepool1-22565721-vmss000033 (1)\", \"actors: v.osei \\u2014 1 events; targets: riverp-prod-southe/payments-svc (1)\"]}",
+      "metadata": {
+        "scenario": "memory_leak_0043",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "memory_leak_0043-05",
+      "artifact_type": "infrastructure_events",
+      "subtype": "host_inventory",
+      "source": "host_inventory",
+      "content": "{\"description\": \"Host and node names seen in infrastructure events with their IP address, role and availability zone / rack.\", \"facts\": [\"hosts: aks-nodepool1-22565721-vmss000033 \\u2014 148 events; ip: 10.180.225.139; role: k8s-worker; zone: southeastasia-2\", \"hosts: aks-nodepool1-86687927-vmss000017 \\u2014 144 events; ip: 10.180.139.13; role: k8s-worker; zone: southeastasia-1\", \"hosts: aks-nodepool1-47816705-vmss000023 \\u2014 101 events; ip: 10.180.204.106; role: k8s-worker; zone: southeastasia-3\", \"hosts: aks-nodepool1-90808495-vmss000022 \\u2014 90 events; ip: 10.180.204.243; role: k8s-worker; zone: southeastasia-3\"]}",
+      "metadata": {
+        "scenario": "memory_leak_0043",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "memory_leak_0043-06",
+      "artifact_type": "infrastructure_events",
+      "subtype": "platform_events",
+      "source": "platform_events",
+      "content": "{\"description\": \"Kubernetes events, cloud-provider health events and host system messages (kernel, hardware, daemons) with the objects or hosts they refer to.\", \"facts\": [\"event reasons: OOMKilling \\u2014 43 events; top objects: pod/payments-svc-7daa5af68-bx6jp (21)\", \"system messages: kernel: Memory cgroup out of memory: Killed process (payments-svc) anon-rss:4192000kB \\u2014 43 events; top objects: aks-nodepool1-86687927-vmss000017 (1), aks-nodepool1-47816705-vmss000023 (1), aks-nodepool1-22565721-vmss000033 (1)\", \"event reasons: Pulled \\u2014 13 events; top objects: pod/pricing-svc-bed295d7e-792z8 (2)\", \"event reasons: ScalingReplicaSet \\u2014 3 events; top objects: deployment/pricing-svc (3)\", \"event reasons: Pulled \\u2014 29 events; top objects: pod/eta-svc-debd24eb9-jn8k6 (1)\", \"event reasons: ScalingReplicaSet \\u2014 3 events; top objects: deployment/eta-svc (3)\", \"event reasons: Pulled \\u2014 16 events; top objects: pod/promotions-api-04f030dcc-wmmgr (1)\", \"event reasons: ScalingReplicaSet \\u2014 3 events; top objects: deployment/promotions-api (3)\"]}",
+      "metadata": {
+        "scenario": "memory_leak_0043",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "memory_leak_0043-07",
+      "artifact_type": "monitoring_alerts",
+      "subtype": "alertmanager_alerts",
+      "source": "alertmanager_alerts",
+      "content": "{\"description\": \"Prometheus Alertmanager alerts: alert names with severity, critical-alert instances, alert names and services, and an hourly timeline of warning and critical alerts (UTC).\", \"facts\": [\"alert names: Watchdog (info) \\u2014 72 events; service: alertmanager; firing continuously\", \"alert names: ContainerMemoryNearLimit (warning) \\u2014 13 events; service: payments-svc; first seen in hour 2026-09-27 11:00 UTC; last seen in hour 2026-09-27 15:00 UTC\", \"alert names: RiderAppBffAvailabilityLow (critical) \\u2014 12 events; service: rider-app-bff; first seen in hour 2026-09-27 13:00 UTC; last seen in hour 2026-09-27 15:00 UTC\", \"alert names: KubePodCrashLooping (critical) \\u2014 6 events; service: payments-svc; first seen in hour 2026-09-27 13:00 UTC; last seen in hour 2026-09-27 15:00 UTC\", \"alert names: KubeJobFailed (warning) \\u2014 3 events; service: batch; first seen in hour 2026-09-27 02:00 UTC; last seen in hour 2026-09-27 03:00 UTC\", \"alert names: TargetDown (warning) \\u2014 2 events; service: promotions-api; first seen in hour 2026-09-28 04:00 UTC; last seen in hour 2026-09-28 05:00 UTC\", \"critical alerts: 18 matching events\", \"critical alerts > critical instances: slo:rider-app-bff-availability \\u2014 12 events\", \"critical alerts > critical instances: payments-svc \\u2014 6 events\", \"critical alerts > critical alert names: RiderAppBffAvailabilityLow \\u2014 12 events\", \"critical alerts > critical alert names: KubePodCrashLooping \\u2014 6 events\", \"critical alerts > critical services: rider-app-bff \\u2014 12 events\", \"critical alerts > critical services: payments-svc \\u2014 6 events\", \"alert timeline: 2026-09-27 02:00 UTC \\u2014 1 events\", \"alert timeline: 2026-09-27 03:00 UTC \\u2014 2 events\", \"alert timeline: 2026-09-27 11:00 UTC \\u2014 1 events\", \"alert timeline: 2026-09-27 12:00 UTC \\u2014 4 events\", \"alert timeline: 2026-09-27 13:00 UTC \\u2014 9 events\", \"alert timeline: 2026-09-27 14:00 UTC \\u2014 9 events\", \"alert timeline: 2026-09-27 15:00 UTC \\u2014 8 events\", \"alert timeline: 2026-09-28 04:00 UTC \\u2014 1 events\", \"alert timeline: 2026-09-28 05:00 UTC \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "memory_leak_0043",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "memory_leak_0043-08",
+      "artifact_type": "resource_metrics",
+      "subtype": "metric_anomalies",
+      "source": "metric_anomalies",
+      "content": "{\"description\": \"Metric series that deviated from their 7-day baseline (hourly resolution): baseline, peak or trough value, anomaly onset and recovery (UTC).\", \"facts\": [\"metric anomalies: container memory working set (avg per payments-svc pod) on payments-svc \\u2014 baseline 1.2 GiB (flat); peak 4.0 GiB (limit); onset 2026-09-27 06:00 UTC; recovered 2026-09-27 16:00 UTC\", \"metric anomalies: container restarts per hour on payments-svc \\u2014 baseline 0/h; peak 36/h; onset 2026-09-27 13:00 UTC; recovered 2026-09-27 16:00 UTC\"]}",
+      "metadata": {
+        "scenario": "memory_leak_0043",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "memory_leak_0043-09",
+      "artifact_type": "derived_findings",
+      "subtype": "derived_summary",
+      "source": "derived_summary",
+      "content": "{\"description\": \"Deterministic summary computed from the query results above (error ranking, instance-to-host join, alert timeline, change correlation, earliest metric anomaly).\", \"facts\": [\"Derived: service rider-app-bff ranks #1 by error volume (20122 events, 1 failing dependencies). Most-failed dependency: payments-svc (20122 errors).\", \"Derived: most-alerted critical instance slo:rider-app-bff-availability (12 critical alerts); no matching host-inventory entry.\", \"Derived: warning/critical alerts span 2026-09-27 02:00 UTC to 2026-09-28 05:00 UTC; earliest alert hour 2026-09-27 02:00 UTC (1 alerts).\", \"Derived: no changes recorded from 6 hours before the earliest alert hour to its end.\", \"Derived: earliest metric anomaly onset 2026-09-27 06:00 UTC (container memory working set (avg per payments-svc pod) on payments-svc).\"]}",
+      "metadata": {
+        "scenario": "memory_leak_0043",
+        "source_kind": "derived_from_es_results",
+        "heuristic": true
+      }
+    },
+    {
+      "artifact_id": "memory_leak_0043-10",
+      "artifact_type": "query_coverage",
+      "subtype": "evidence_gaps",
+      "source": "evidence_gaps",
+      "content": "{\"description\": \"Queries that returned nothing or failed; use these to state what is NOT established.\", \"facts\": [\"No matching results for: tls certificates / expired certificates. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / expiring within 7 days. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / self signed. (Absence in this query is not proof of absence elsewhere.)\"]}",
+      "metadata": {
+        "scenario": "memory_leak_0043",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    }
+  ]
+}

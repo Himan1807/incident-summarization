@@ -1,0 +1,98 @@
+{
+  "source": "synthetic generator ground truth (ops expansion)",
+  "confidence": "synthetic ground truth",
+  "qa": [
+    {
+      "id": 1,
+      "question": "Which host or node did the failure originate on? Give its hostname.",
+      "answer": "lb-02",
+      "atoms": [
+        {
+          "text": "lb-02",
+          "kind": "hostname"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "question": "Give the IP address of the machine where the failure originated.",
+      "answer": "10.94.45.93",
+      "atoms": [
+        {
+          "text": "10.94.45.93",
+          "kind": "ip"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "question": "What was the open-file limit on the failing host?",
+      "answer": "1024",
+      "atoms": [
+        {
+          "text": "LimitNOFILE=1024",
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "question": "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+      "answer": "2022-07-08 09:00 UTC",
+      "atoms": [
+        {
+          "text": "2022-07-08 09:00 UTC",
+          "kind": "time"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "question": "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+      "answer": "capacity exhaustion",
+      "atoms": [
+        {
+          "text": "capacity exhaustion",
+          "kind": "label"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "question": "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+      "answer": "availability",
+      "atoms": [
+        {
+          "text": "availability",
+          "kind": "cia"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "question": "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+      "answer": "ingress-lb, root cause",
+      "atoms": [
+        {
+          "text": "ingress-lb",
+          "kind": "other"
+        },
+        {
+          "text": "root cause",
+          "kind": "label"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "question": "Which change restored normal service? Provide its change identifier.",
+      "answer": "CHG-53848",
+      "atoms": [
+        {
+          "text": "CHG-53848",
+          "kind": "other"
+        }
+      ]
+    }
+  ]
+}

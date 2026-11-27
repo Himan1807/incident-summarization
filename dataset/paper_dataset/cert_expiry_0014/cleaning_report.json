@@ -1,0 +1,14 @@
+{
+  "scenario": "cert_expiry_0014",
+  "cleaning": [
+    "first-signs answer 2026-10-19 16:00 UTC differs from the earliest alert-timeline hour 2026-10-19 00:00 UTC (earlier metric onset or an unrelated earlier alert)"
+  ],
+  "skipped": [],
+  "gaps": [],
+  "artifacts": 10,
+  "facts": 79,
+  "empty_aggregations": 0,
+  "questions": 6,
+  "answers": 6,
+  "atoms": 7
+}

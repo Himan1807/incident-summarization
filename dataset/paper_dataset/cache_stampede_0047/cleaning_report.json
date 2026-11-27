@@ -1,0 +1,12 @@
+{
+  "scenario": "cache_stampede_0047",
+  "cleaning": [],
+  "skipped": [],
+  "gaps": [],
+  "artifacts": 11,
+  "facts": 77,
+  "empty_aggregations": 2,
+  "questions": 8,
+  "answers": 8,
+  "atoms": 9
+}

@@ -1,0 +1,166 @@
+{
+  "metadata": {
+    "incident_id": "INC-20230130",
+    "scenario": "memory_leak_0004",
+    "title": "Infrastructure reliability incident investigation",
+    "source": "synthetic/ops-incident-expansion (modeled on neu-nds2/llm-sec-incident-analysis)",
+    "query_window_start": "2023-01-30T00:00:00",
+    "query_window_end": "2023-02-01T23:59:59",
+    "evidence_types": [
+      "change_records",
+      "derived_findings",
+      "infrastructure_events",
+      "monitoring_alerts",
+      "network_summary",
+      "query_coverage",
+      "resource_metrics",
+      "service_logs"
+    ],
+    "artifact_scope_note": "Evidence is aggregated query output (not raw log lines or metric samples); it contains no chat/communication records."
+  },
+  "incident_description": "Reliability incident investigation of a production environment. Evidence consists of Elasticsearch aggregation results over application and proxy logs, Kubernetes, cloud-provider and host system events, Prometheus Alertmanager alerts, change-management / CI-CD audit records and metric anomaly detection. No root cause, impact or trigger is stated; these must be established from the supplied artifacts. Environment context: Organization: Silverpath Journeys (travel booking); Platform: Google Cloud asia-south1 (zones asia-south1-a/asia-south1-b/asia-south1-c); network range 10.50.0.0/16; Kubernetes cluster silver-prod-asiaso (GKE); inventory-sync pods run with 4 GiB memory limits; deployments are canary releases with automated analysis; Change management: production changes carry CHG- identifiers.",
+  "investigation_questions": [
+    "Which service or component is the origin of the failure?",
+    "Which change occurred shortly before the first OOM kill but is unrelated? Provide its identifier.",
+    "Which version of the service introduced the defect?",
+    "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+    "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+    "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+    "Which change restored normal service? Provide its change identifier."
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "memory_leak_0004-01",
+      "artifact_type": "service_logs",
+      "subtype": "error_logs",
+      "source": "error_logs",
+      "content": "{\"description\": \"Application and proxy error logs: HTTP/gRPC status codes, failing requests (caller -> callee:port : operation), error messages and the services emitting them.\", \"facts\": [\"error events: 37710 matching events\", \"error events > status codes: 503 \\u2014 36113 events\", \"error events > status codes: 499 \\u2014 1511 events\", \"error events > status codes: 500 \\u2014 86 events\", \"failing requests: booking-web -> inventory-sync:8080 : GET /v1/inventory \\u2014 28751 events\", \"failing requests: loyalty-api -> inventory-sync:8080 : POST /v1/inventory/batch \\u2014 7362 events\", \"failing requests: inventory-sync -> clients : in-flight requests \\u2014 1511 events\", \"failing requests: ancillaries-svc -> ancillaries-db:5432 : query \\u2014 86 events\", \"error messages: upstream inventory-sync: 503 no healthy upstream \\u2014 28751 events\", \"error messages: inventory-sync: 503 Service Unavailable \\u2014 7362 events\", \"error messages: context canceled (shutdown in progress) \\u2014 1511 events\", \"error messages: pq: could not serialize access due to concurrent update \\u2014 86 events\", \"emitting services: booking-web \\u2014 28751 events\", \"emitting services: loyalty-api \\u2014 7362 events\", \"emitting services: inventory-sync \\u2014 1511 events\", \"emitting services: ancillaries-svc \\u2014 86 events\"]}",
+      "metadata": {
+        "scenario": "memory_leak_0004",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "memory_leak_0004-02",
+      "artifact_type": "service_logs",
+      "subtype": "error_volume_by_service",
+      "source": "error_volume_by_service",
+      "content": "{\"description\": \"Services ranked by number of error events, with each service's most-failed downstream dependencies.\", \"facts\": [\"services: booking-web \\u2014 28751 events; failing dependencies=1; top dependencies: inventory-sync (28751)\", \"services: loyalty-api \\u2014 7362 events; failing dependencies=1; top dependencies: inventory-sync (7362)\", \"services: inventory-sync \\u2014 1511 events; failing dependencies=1; top dependencies: clients (1511)\", \"services: ancillaries-svc \\u2014 86 events; failing dependencies=1; top dependencies: ancillaries-db (86)\"]}",
+      "metadata": {
+        "scenario": "memory_leak_0004",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "memory_leak_0004-03",
+      "artifact_type": "change_records",
+      "subtype": "change_log",
+      "source": "change_log",
+      "content": "{\"description\": \"Deployments, configuration pushes, infrastructure and automation runs from the change-management and CI/CD audit log: change ID, type, target, actor, time (UTC), status and recorded diff/summary.\", \"facts\": [\"changes: CHG-26199 | deployment | inventory-sync 1.26.1 -> 1.27.0 | actor: argocd | 2023-01-31 00:31 UTC | status: Healthy | canary 10% -> 50% -> 100% (analysis passed: error rate, p99 latency); new in-process pricing cache \\u2014 1 events\", \"changes: CHG-26224 | node_rotation | node pool AMI/image update | actor: karpenter | 2023-01-31 07:58 UTC | status: completed | node image drift replacement \\u2014 1 events\", \"changes: CHG-26260 | rollback | inventory-sync 1.27.0 -> 1.26.1 | actor: h.ali | 2023-01-31 12:31 UTC | status: Healthy | rollout undo \\u2014 1 events\", \"changes: CHG-26280 | deployment | ancillaries-svc 7.2.8 -> 7.2.9 | actor: argocd | 2023-02-01 03:16 UTC | status: Synced/Healthy | logging improvements \\u2014 1 events\", \"changes: CHG-26295 | deployment | fares-svc 2.12.11 -> 2.12.12 | actor: argocd | 2023-02-01 05:48 UTC | status: completed | minor bug fixes \\u2014 1 events\", \"changes: CHG-26308 | deployment | itinerary-api 7.9.5 -> 7.9.6 | actor: argocd | 2023-02-01 20:08 UTC | status: completed | dependency bump \\u2014 1 events\", \"changes: CHG-26348 | deployment | search-api 11.0.3 -> 11.0.4 | actor: argocd | 2023-02-01 21:11 UTC | status: completed | new optional API field \\u2014 1 events\", \"change types: deployment \\u2014 5 events\", \"change types: node_rotation \\u2014 1 events\", \"change types: rollback \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "memory_leak_0004",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "memory_leak_0004-04",
+      "artifact_type": "change_records",
+      "subtype": "change_actors",
+      "source": "change_actors",
+      "content": "{\"description\": \"Accounts and automation identities that executed changes, with the hosts or targets they acted on.\", \"facts\": [\"actors: argocd \\u2014 5 events; targets: silver-prod-asiaso/inventory-sync (1), silver-prod-asiaso/itinerary-api (1), silver-prod-asiaso/ancillaries-svc (1), silver-prod-asiaso/fares-svc (1), silver-prod-asiaso/search-api (1)\", \"actors: h.ali \\u2014 1 events; targets: silver-prod-asiaso/inventory-sync (1)\", \"actors: karpenter \\u2014 1 events; targets: gke-silver-prod-as-pool-b-e3e9 (1), gke-silver-prod-as-pool-b-24d3 (1), gke-silver-prod-as-pool-b-a03d (1)\"]}",
+      "metadata": {
+        "scenario": "memory_leak_0004",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "memory_leak_0004-05",
+      "artifact_type": "infrastructure_events",
+      "subtype": "host_inventory",
+      "source": "host_inventory",
+      "content": "{\"description\": \"Host and node names seen in infrastructure events with their IP address, role and availability zone / rack.\", \"facts\": [\"hosts: gke-silver-prod-as-pool-a-739d \\u2014 262 events; ip: 10.50.32.143; role: k8s-worker; zone: asia-south1-a\", \"hosts: gke-silver-prod-as-pool-c-fe09 \\u2014 185 events; ip: 10.50.81.217; role: k8s-worker; zone: asia-south1-b\", \"hosts: gke-silver-prod-as-pool-b-e3e9 \\u2014 159 events; ip: 10.50.81.133; role: k8s-worker; zone: asia-south1-b\", \"hosts: gke-silver-prod-as-pool-b-a03d \\u2014 154 events; ip: 10.50.79.214; role: k8s-worker; zone: asia-south1-c\", \"hosts: gke-silver-prod-as-pool-b-24d3 \\u2014 125 events; ip: 10.50.79.156; role: k8s-worker; zone: asia-south1-c\"]}",
+      "metadata": {
+        "scenario": "memory_leak_0004",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "memory_leak_0004-06",
+      "artifact_type": "infrastructure_events",
+      "subtype": "platform_events",
+      "source": "platform_events",
+      "content": "{\"description\": \"Kubernetes events, cloud-provider health events and host system messages (kernel, hardware, daemons) with the objects or hosts they refer to.\", \"facts\": [\"event reasons: OOMKilling \\u2014 47 events; top objects: pod/inventory-sync-17190403d-kx89t (23)\", \"system messages: kernel: Memory cgroup out of memory: Killed process (inventory-sync) anon-rss:4192000kB \\u2014 47 events; top objects: gke-silver-prod-as-pool-b-e3e9 (1), gke-silver-prod-as-pool-b-24d3 (1), gke-silver-prod-as-pool-b-a03d (1)\", \"event reasons: Pulled \\u2014 28 events; top objects: pod/itinerary-api-4907eef71-pn85m (3)\", \"event reasons: ScalingReplicaSet \\u2014 2 events; top objects: deployment/itinerary-api (2)\", \"event reasons: Pulled \\u2014 3 events; top objects: pod/ancillaries-svc-8407a3088-rbc4c (3)\", \"event reasons: ScalingReplicaSet \\u2014 3 events; top objects: deployment/ancillaries-svc (1)\", \"event reasons: Pulled \\u2014 11 events; top objects: pod/fares-svc-dbe18f50c-g5tld (3)\", \"event reasons: ScalingReplicaSet \\u2014 6 events; top objects: deployment/fares-svc (2)\", \"event reasons: Pulled \\u2014 9 events; top objects: pod/search-api-61a12e257-jrcxg (1)\", \"event reasons: ScalingReplicaSet \\u2014 4 events; top objects: deployment/search-api (3)\"]}",
+      "metadata": {
+        "scenario": "memory_leak_0004",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "memory_leak_0004-07",
+      "artifact_type": "monitoring_alerts",
+      "subtype": "alertmanager_alerts",
+      "source": "alertmanager_alerts",
+      "content": "{\"description\": \"Prometheus Alertmanager alerts: alert names with severity, critical-alert instances, alert names and services, and an hourly timeline of warning and critical alerts (UTC).\", \"facts\": [\"alert names: Watchdog (info) \\u2014 72 events; service: alertmanager; firing continuously\", \"alert names: BookingWebAvailabilityLow (critical) \\u2014 16 events; service: booking-web; first seen in hour 2023-01-31 08:00 UTC; last seen in hour 2023-01-31 12:00 UTC\", \"alert names: ContainerMemoryNearLimit (warning) \\u2014 16 events; service: inventory-sync; first seen in hour 2023-01-31 07:00 UTC; last seen in hour 2023-01-31 12:00 UTC\", \"alert names: KubePodCrashLooping (critical) \\u2014 14 events; service: inventory-sync; first seen in hour 2023-01-31 08:00 UTC; last seen in hour 2023-01-31 12:00 UTC\", \"alert names: KubeJobFailed (warning) \\u2014 2 events; service: batch; first seen in hour 2023-01-30 22:00 UTC; last seen in hour 2023-01-30 22:00 UTC\", \"critical alerts: 30 matching events\", \"critical alerts > critical instances: slo:booking-web-availability \\u2014 16 events\", \"critical alerts > critical instances: inventory-sync \\u2014 14 events\", \"critical alerts > critical alert names: BookingWebAvailabilityLow \\u2014 16 events\", \"critical alerts > critical alert names: KubePodCrashLooping \\u2014 14 events\", \"critical alerts > critical services: booking-web \\u2014 16 events\", \"critical alerts > critical services: inventory-sync \\u2014 14 events\", \"alert timeline: 2023-01-30 22:00 UTC \\u2014 2 events\", \"alert timeline: 2023-01-31 07:00 UTC \\u2014 2 events\", \"alert timeline: 2023-01-31 08:00 UTC \\u2014 6 events\", \"alert timeline: 2023-01-31 09:00 UTC \\u2014 10 events\", \"alert timeline: 2023-01-31 10:00 UTC \\u2014 7 events\", \"alert timeline: 2023-01-31 11:00 UTC \\u2014 11 events\", \"alert timeline: 2023-01-31 12:00 UTC \\u2014 10 events\"]}",
+      "metadata": {
+        "scenario": "memory_leak_0004",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "memory_leak_0004-08",
+      "artifact_type": "resource_metrics",
+      "subtype": "metric_anomalies",
+      "source": "metric_anomalies",
+      "content": "{\"description\": \"Metric series that deviated from their 7-day baseline (hourly resolution): baseline, peak or trough value, anomaly onset and recovery (UTC).\", \"facts\": [\"metric anomalies: container memory working set (avg per inventory-sync pod) on inventory-sync \\u2014 baseline 0.8 GiB (flat); peak 4.0 GiB (limit); onset 2023-01-31 00:00 UTC; recovered 2023-01-31 13:00 UTC\", \"metric anomalies: container restarts per hour on inventory-sync \\u2014 baseline 0/h; peak 17/h; onset 2023-01-31 08:00 UTC; recovered 2023-01-31 13:00 UTC\"]}",
+      "metadata": {
+        "scenario": "memory_leak_0004",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "memory_leak_0004-09",
+      "artifact_type": "network_summary",
+      "subtype": "tls_certificates",
+      "source": "tls_certificates",
+      "content": "{\"description\": \"TLS certificates observed in edge and service-to-service traffic that are expired, expire within 7 days, or are self-signed.\", \"facts\": [\"expiring within 7 days: 32 matching events\", \"expiring within 7 days > certificate details: CN=fares-svc.silverpath.internal | issuer: CN=silverpath-internal-ca | not_after: 2023-02-02 23:59:00 UTC | seen on: fares-svc:8443 \\u2014 32 events\"]}",
+      "metadata": {
+        "scenario": "memory_leak_0004",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "memory_leak_0004-10",
+      "artifact_type": "derived_findings",
+      "subtype": "derived_summary",
+      "source": "derived_summary",
+      "content": "{\"description\": \"Deterministic summary computed from the query results above (error ranking, instance-to-host join, alert timeline, change correlation, earliest metric anomaly).\", \"facts\": [\"Derived: service booking-web ranks #1 by error volume (28751 events, 1 failing dependencies). Most-failed dependency: inventory-sync (28751 errors).\", \"Derived: most-alerted critical instance slo:booking-web-availability (16 critical alerts); no matching host-inventory entry.\", \"Derived: warning/critical alerts span 2023-01-30 22:00 UTC to 2023-01-31 12:00 UTC; earliest alert hour 2023-01-30 22:00 UTC (2 alerts).\", \"Derived: no changes recorded from 6 hours before the earliest alert hour to its end.\", \"Derived: earliest metric anomaly onset 2023-01-31 00:00 UTC (container memory working set (avg per inventory-sync pod) on inventory-sync).\"]}",
+      "metadata": {
+        "scenario": "memory_leak_0004",
+        "source_kind": "derived_from_es_results",
+        "heuristic": true
+      }
+    },
+    {
+      "artifact_id": "memory_leak_0004-11",
+      "artifact_type": "query_coverage",
+      "subtype": "evidence_gaps",
+      "source": "evidence_gaps",
+      "content": "{\"description\": \"Queries that returned nothing or failed; use these to state what is NOT established.\", \"facts\": [\"No matching results for: tls certificates / expired certificates. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / self signed. (Absence in this query is not proof of absence elsewhere.)\"]}",
+      "metadata": {
+        "scenario": "memory_leak_0004",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    }
+  ]
+}

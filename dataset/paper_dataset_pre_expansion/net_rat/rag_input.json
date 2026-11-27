@@ -1,0 +1,138 @@
+{
+  "metadata": {
+    "incident_id": "INC-20241126",
+    "scenario": "net_rat",
+    "title": "Network security incident investigation",
+    "source": "neu-nds2/llm-sec-incident-analysis",
+    "query_window_start": "2024-11-26T00:00:00",
+    "query_window_end": "2024-11-26T23:59:59",
+    "evidence_types": [
+      "authentication",
+      "derived_findings",
+      "ids_alerts",
+      "network_summary",
+      "query_coverage"
+    ],
+    "artifact_scope_note": "Evidence is aggregated query output (not raw packets); it contains no chat/communication records."
+  },
+  "incident_description": "Network security investigation of a monitored LAN. Evidence consists of Elasticsearch aggregation results over Zeek and Suricata logs (IDS alerts, Kerberos, HTTP downloads, TLS certificates, domains and external-destination activity). No root cause, impact or C2 attribution is stated; these must be established from the supplied artifacts. Network context: LAN segment range: 10.11.26.0/24 (10.11.26.0 through 10.11.26.255); Domain: nemotodes.health; Active Directory (AD) domain controller: 10.11.26.3 - NEMOTODES-DC; AD environment name: NEMOTODES; LAN segment gateway: 10.11.26.1; LAN segment broadcast address: 10.11.26.255.",
+  "investigation_questions": [
+    "What is the IP address of the potentially infected internal host in the LAN?",
+    "What is the hostname of the potentially infected machine in the LAN?",
+    "What is the Windows human user account name (not machine accounts ending in $) of the potentially infected machine in the LAN?",
+    "What are the likely fake or suspicious domains / URLs for initial infection?",
+    "What are the suspicious external IP addresses contacted, which might be involved in command-and-control (C2) communication?",
+    "During what hour did the first signs of infection activity appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "According to the connection volume statistics, what single external IP address received the most connections from the infected hosts? Is it a C2 server or a legitimate service?"
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "net_rat-01",
+      "artifact_type": "network_summary",
+      "subtype": "file_downloads",
+      "source": "file_downloads",
+      "content": "{\"description\": \"HTTP file downloads and file transfers: download domains/IPs, requests (client -> server:port : URI), file types and download sources.\", \"facts\": [\"download domains: 194.180.191.64 — 58 events\", \"download domains: ctldl.windowsupdate.com — 2 events\", \"download domains: acroipm2.adobe.com — 1 events\", \"download domains: geo.netsupportsoftware.com — 1 events\", \"download domains: r10.o.lencr.org — 1 events\", \"download domains: www.msftconnecttest.com — 1 events\", \"http requests: no_http_uri — 406 events\", \"http requests: 10.11.26.183 -> 194.180.191.64:443 : http://194.180.191.64/fakeurl.htm — 58 events\", \"http requests: 10.11.26.183 -> 104.117.247.184:80 : /connecttest.txt — 2 events\", \"http requests: 10.11.26.183 -> 104.117.247.99:80 : /MFMwUTBPME0wSzAJBgUrDgMCGgUABBRpD+QVZ+1vf7U0RGQGBm8JZwdxcgQUdKR2KRcYVIUxN75n5gZYwLzFBXICEgRSsdGCXQJklJZNbHi669GH4A== — 1 events\", \"http requests: 10.11.26.183 -> 104.26.1.231:80 : /location/loca.asp — 1 events\", \"http requests: 10.11.26.183 -> 104.26.1.231:80 : /location/loca.asp\\\\\\\"; — 1 events\", \"http requests: 10.11.26.183 -> 23.53.127.105:80 : /assets/Owner/arm/ProcessMAU.txt — 1 events\", \"http requests: 10.11.26.183 -> 23.53.127.200:80 : /msdownload/update/v3/static/trustedr/en/authrootstl.cab?778a0928305752e9 — 1 events\", \"http requests: 10.11.26.183 -> 23.53.127.200:80 : /msdownload/update/v3/static/trustedr/en/disallowedcertstl.cab?ce02e9976e1239e1 — 1 events\", \"file transfers: 157 matching events\", \"file transfers > transfer details: file_transfer — 62 events\", \"file transfers > transfer details: 10.11.26.183 -> 104.117.247.184:80 : fuid: FS19Ny2ccXfItSAHY5 — 1 events\", \"file transfers > transfer details: 10.11.26.183 -> 104.117.247.99:80 : fuid: FY81pL3SoAHblZVNm9 — 1 events\", \"file transfers > transfer details: 10.11.26.183 -> 104.26.1.231:80 : fuid: FrDUHo17nOjSeXu4Xi — 1 events\", \"file transfers > transfer details: 10.11.26.183 -> 13.107.21.239:443 : fuid: FI6c6S3JlYMPnhFu24 — 1 events\", \"file transfers > transfer details: 10.11.26.183 -> 13.107.21.239:443 : fuid: FgdrHo4QVLUC7gV4ef — 1 events\", \"file transfers > transfer details: 10.11.26.183 -> 173.222.49.101:443 : fuid: FAKahgYUBa0eyvTdi — 1 events\", \"file transfers > transfer details: 10.11.26.183 -> 173.222.49.101:443 : fuid: FNnQvX2QZleZ0W9ZZb — 1 events\", \"file transfers > transfer details: 10.11.26.183 -> 173.222.49.101:443 : fuid: Fcjb5f3T8uL7OfxJE7 — 1 events\", \"file transfers > transfer details: 10.11.26.183 -> 173.222.49.101:443 : fuid: FgmqH63niJ7wfAjZh1 — 1 events\", \"file types: other — 472 events\", \"download sources: 10.11.26.183 — 472 events\"]}",
+      "metadata": {
+        "scenario": "net_rat",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "net_rat-02",
+      "artifact_type": "network_summary",
+      "subtype": "high_activity_external_dest",
+      "source": "high_activity_external_dest",
+      "content": "{\"description\": \"Internal clients ranked by number of connections to external destinations, with each client's most-contacted destinations.\", \"facts\": [\"source clients: 10.11.26.183 — 472 events; external destinations=55; top destinations: 194.180.191.64 (238), 52.113.194.132 (25), 193.42.38.139 (16), 173.222.49.101 (15), 204.79.197.203 (14); 164 further events in other values\"]}",
+      "metadata": {
+        "scenario": "net_rat",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "net_rat-03",
+      "artifact_type": "authentication",
+      "subtype": "kerberos_clients",
+      "source": "kerberos_clients",
+      "content": "{\"description\": \"Kerberos client account names (user accounts) and the source IPs they authenticated from.\", \"facts\": [\"client accounts: oboomwald — 8 events; source ips: 10.11.26.183 (8)\"]}",
+      "metadata": {
+        "scenario": "net_rat",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "net_rat-04",
+      "artifact_type": "authentication",
+      "subtype": "kerberos_full_services",
+      "source": "kerberos_full_services",
+      "content": "{\"description\": \"Kerberos services requested (including host and machine account names) per source IP.\", \"facts\": [\"full services: krb_tcp — 8 events; source ips: 10.11.26.183 (8)\", \"full services: krbtgt/NEMOTODES.HEALTH — 2 events; source ips: 10.11.26.183 (2)\", \"full services: LDAP/NEMOTODES-DC.nemotodes.health/nemotodes.health — 1 events; source ips: 10.11.26.183 (1)\", \"full services: cifs/NEMOTODES-DC — 1 events; source ips: 10.11.26.183 (1)\", \"full services: cifs/NEMOTODES-DC.nemotodes.health — 1 events; source ips: 10.11.26.183 (1)\", \"full services: host/desktop-b8tqk49.nemotodes.health — 1 events; source ips: 10.11.26.183 (1)\", \"full services: krbtgt/NEMOTODES — 1 events; source ips: 10.11.26.183 (1)\", \"full services: ldap/nemotodes-dc.nemotodes.health — 1 events; source ips: 10.11.26.183 (1)\"]}",
+      "metadata": {
+        "scenario": "net_rat",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "net_rat-05",
+      "artifact_type": "authentication",
+      "subtype": "kerberos_hostnames",
+      "source": "kerberos_hostnames",
+      "content": "{\"description\": \"Host names seen in Kerberos traffic with their source IPs.\", \"facts\": [\"hostnames: desktop-b8tqk49 — 1 events; source ips: 10.11.26.183 (1)\"]}",
+      "metadata": {
+        "scenario": "net_rat",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "net_rat-06",
+      "artifact_type": "ids_alerts",
+      "subtype": "suricata_alerts",
+      "source": "suricata_alerts",
+      "content": "{\"description\": \"Suricata IDS alerts: signatures, high-severity alert destinations and sources, and an hourly alert timeline (UTC).\", \"facts\": [\"alert signatures: ET INFO HTTP traffic on port 443 (POST) — 58 events\", \"alert signatures: ET REMOTE_ACCESS NetSupport Remote Admin Checkin — 58 events\", \"alert signatures: GPL NETBIOS SMB IPC$ unicode share access — 5 events\", \"alert signatures: ET INFO Microsoft Connection Test — 1 events\", \"alert signatures: ET REMOTE_ACCESS NetSupport GeoLocation Lookup Request — 1 events\", \"high severity alerts: 59 matching events\", \"high severity alerts > high severity  destinations: 194.180.191.64 — 58 events\", \"high severity alerts > high severity  destinations: 104.26.1.231 — 1 events\", \"high severity alerts > high severity signatures: ET INFO HTTP traffic on port 443 (POST) — 58 events\", \"high severity alerts > high severity signatures: ET REMOTE_ACCESS NetSupport GeoLocation Lookup Request — 1 events\", \"high severity alerts > high severity sources: 10.11.26.183 — 59 events\", \"alert timeline: 2024-11-26 04:00 UTC — 31 events\", \"alert timeline: 2024-11-26 05:00 UTC — 92 events\"]}",
+      "metadata": {
+        "scenario": "net_rat",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "net_rat-07",
+      "artifact_type": "network_summary",
+      "subtype": "suspicious_domains",
+      "source": "suspicious_domains",
+      "content": "{\"description\": \"Unusual domains with their source and destination IPs, and direct-IP HTTP connections.\", \"facts\": [\"domains: modandcrackedapk.com — 8 events; top source ips: 10.11.26.183 (8); top destination ips: 193.42.38.139 (8)\", \"domains: fonts.gstatic.com — 4 events; top source ips: 10.11.26.183 (4); top destination ips: 142.250.138.94 (4)\", \"domains: classicgrand.com — 2 events; top source ips: 10.11.26.183 (2); top destination ips: 213.246.109.5 (2)\", \"domains: confirmsubscription.com — 2 events; top source ips: 10.11.26.183 (2); top destination ips: 13.56.30.207 (1), 52.8.34.0 (1)\", \"domains: default.exp-tas.com — 2 events; top source ips: 10.11.26.183 (2); top destination ips: 13.107.5.93 (2)\", \"domains: code.jquery.com — 1 events; top source ips: 10.11.26.183 (1); top destination ips: 151.101.66.137 (1)\", \"domains: css.createsend1.com — 1 events; top source ips: 10.11.26.183 (1); top destination ips: 18.160.156.103 (1)\", \"domains: fa000000002.resources.office.net — 1 events; top source ips: 10.11.26.183 (1); top destination ips: 173.222.49.101 (1)\", \"domains: fa000000005.resources.office.net — 1 events; top source ips: 10.11.26.183 (1); top destination ips: 173.222.49.101 (1)\", \"domains: fa000000116.resources.office.net — 1 events; top source ips: 10.11.26.183 (1); top destination ips: 173.222.49.101 (1)\", \"domains: fa000000128.resources.office.net — 1 events; top source ips: 10.11.26.183 (1); top destination ips: 173.222.49.101 (1)\", \"domains: fa000000163.resources.office.net — 1 events; top source ips: 10.11.26.183 (1); top destination ips: 173.222.49.101 (1)\", \"domains: img-s-msn-com.akamaized.net — 1 events; top source ips: 10.11.26.183 (1); top destination ips: 104.117.247.162 (1)\", \"domains: js.createsend1.com — 1 events; top source ips: 10.11.26.183 (1); top destination ips: 18.160.156.61 (1)\", \"domains: maps.gstatic.com — 1 events; top source ips: 10.11.26.183 (1); top destination ips: 142.250.113.120 (1)\", \"domains: www.gstatic.com — 1 events; top source ips: 10.11.26.183 (1); top destination ips: 142.250.113.94 (1)\"]}",
+      "metadata": {
+        "scenario": "net_rat",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "net_rat-08",
+      "artifact_type": "derived_findings",
+      "subtype": "derived_summary",
+      "source": "derived_summary",
+      "content": "{\"description\": \"Deterministic summary computed from the query results above (client ranking, IP-to-hostname/account join, alert timeline).\", \"facts\": [\"Derived: internal client 10.11.26.183 ranks #1 by external connections (472 events, 55 distinct external destinations). Most-contacted external IP: 194.180.191.64 (238 connections).\", \"Derived: Kerberos identity of 10.11.26.183: hostname(s) desktop-b8tqk49; human user account(s) oboomwald.\", \"Derived: Suricata alerts span 2024-11-26 04:00 UTC to 2024-11-26 05:00 UTC; earliest alert hour 2024-11-26 04:00 UTC (31 alerts).\", \"Derived: destinations of high-severity alerts: 194.180.191.64 (58), 104.26.1.231 (1).\"]}",
+      "metadata": {
+        "scenario": "net_rat",
+        "source_kind": "derived_from_es_results",
+        "heuristic": true
+      }
+    },
+    {
+      "artifact_id": "net_rat-09",
+      "artifact_type": "query_coverage",
+      "subtype": "evidence_gaps",
+      "source": "evidence_gaps",
+      "content": "{\"description\": \"Queries that returned nothing or failed; use these to state what is NOT established.\", \"facts\": [\"No matching results for: suspicious certificates / self signed analysis. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: suspicious certificates / ip based certificates. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: suspicious certificates / short validity certs. (Absence in this query is not proof of absence elsewhere.)\"]}",
+      "metadata": {
+        "scenario": "net_rat",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    }
+  ]
+}

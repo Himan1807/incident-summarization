@@ -1,0 +1,14 @@
+{
+  "scenario": "retention_bad_filter_0042",
+  "cleaning": [],
+  "skipped": [
+    "tls_certificates: all aggregations empty"
+  ],
+  "gaps": [],
+  "artifacts": 10,
+  "facts": 77,
+  "empty_aggregations": 3,
+  "questions": 10,
+  "answers": 10,
+  "atoms": 11
+}

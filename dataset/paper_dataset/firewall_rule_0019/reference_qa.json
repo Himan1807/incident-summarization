@@ -1,0 +1,109 @@
+{
+  "source": "synthetic generator ground truth (ops expansion)",
+  "confidence": "synthetic ground truth",
+  "qa": [
+    {
+      "id": 1,
+      "question": "What change, deployment or automation run triggered the incident? Provide its change identifier.",
+      "answer": "CHG-77634",
+      "atoms": [
+        {
+          "text": "CHG-77634",
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "question": "Which account or automation identity executed the triggering change?",
+      "answer": "j.costa",
+      "atoms": [
+        {
+          "text": "j.costa",
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "question": "What is the IP address of the database host that became unreachable?",
+      "answer": "10.175.149.200",
+      "atoms": [
+        {
+          "text": "10.175.149.200",
+          "kind": "ip"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "question": "Which port was blocked by the change?",
+      "answer": "tcp/5432",
+      "atoms": [
+        {
+          "text": "5432",
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "question": "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+      "answer": "2025-10-10 22:00 UTC",
+      "atoms": [
+        {
+          "text": "2025-10-10 22:00 UTC",
+          "kind": "time"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "question": "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+      "answer": "configuration change",
+      "atoms": [
+        {
+          "text": "configuration change",
+          "kind": "label"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "question": "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+      "answer": "availability",
+      "atoms": [
+        {
+          "text": "availability",
+          "kind": "cia"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "question": "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+      "answer": "game-gateway, downstream symptom",
+      "atoms": [
+        {
+          "text": "game-gateway",
+          "kind": "other"
+        },
+        {
+          "text": "downstream symptom",
+          "kind": "label"
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "question": "Which change mitigated the incident? Provide its change identifier.",
+      "answer": "CHG-77650",
+      "atoms": [
+        {
+          "text": "CHG-77650",
+          "kind": "other"
+        }
+      ]
+    }
+  ]
+}

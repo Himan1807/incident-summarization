@@ -1,0 +1,156 @@
+{
+  "metadata": {
+    "incident_id": "INC-20250802",
+    "scenario": "terraform_apply_0052",
+    "title": "Infrastructure reliability incident investigation",
+    "source": "synthetic/ops-incident-expansion (modeled on neu-nds2/llm-sec-incident-analysis)",
+    "query_window_start": "2025-08-02T00:00:00",
+    "query_window_end": "2025-08-04T23:59:59",
+    "evidence_types": [
+      "change_records",
+      "derived_findings",
+      "infrastructure_events",
+      "monitoring_alerts",
+      "query_coverage",
+      "resource_metrics",
+      "service_logs"
+    ],
+    "artifact_scope_note": "Evidence is aggregated query output (not raw log lines or metric samples); it contains no chat/communication records."
+  },
+  "incident_description": "Reliability incident investigation of a production environment. Evidence consists of Elasticsearch aggregation results over application and proxy logs, Kubernetes, cloud-provider and host system events, Prometheus Alertmanager alerts, change-management / CI-CD audit records and metric anomaly detection. No root cause, impact or trigger is stated; these must be established from the supplied artifacts. Environment context: Organization: Cedarfold Interactive (online gaming); Platform: Microsoft Azure eastus (zones eastus-1/eastus-2/eastus-3); network range 10.242.0.0/16; Kubernetes cluster cedarf-prod-eastus (AKS); Database: mysql server chat-db-01 reachable from the application network only through NSG chat-db-01-nsg rule Allow-App-3306; infrastructure is managed with Terraform applied from CI; Change management: production changes carry CHG- identifiers.",
+  "investigation_questions": [
+    "What change, deployment or automation run triggered the incident? Provide its change identifier.",
+    "Which user or automation account carried out the triggering change?",
+    "Which database host became unreachable?",
+    "What is the IP address of the database host that became unreachable?",
+    "Which port was blocked by the change?",
+    "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+    "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+    "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+    "Which change is a red herring: recorded shortly before onset but unrelated to the failure? Give its identifier.",
+    "Which change restored normal service? Provide its change identifier."
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "terraform_apply_0052-01",
+      "artifact_type": "service_logs",
+      "subtype": "error_logs",
+      "source": "error_logs",
+      "content": "{\"description\": \"Application and proxy error logs: HTTP/gRPC status codes, failing requests (caller -> callee:port : operation), error messages and the services emitting them.\", \"facts\": [\"error events: 33898 matching events\", \"error events > status codes: 503 \\u2014 22104 events\", \"error events > status codes: n/a (connect timeout) \\u2014 11592 events\", \"error events > status codes: 504 \\u2014 202 events\", \"failing requests: game-gateway -> chat-svc:8080 : GET /v1/chat \\u2014 22104 events\", \"failing requests: chat-svc -> chat-db-01:3306 : connect \\u2014 11592 events\", \"failing requests: profile-api -> profile-db:5432 : query \\u2014 202 events\", \"error messages: chat-svc: 503 Service Unavailable \\u2014 22104 events\", \"error messages: SQLSTATE[HY000] [2002] Connection timed out (host 10.242.241.163:3306) \\u2014 11592 events\", \"error messages: upstream request timeout \\u2014 202 events\", \"emitting services: game-gateway \\u2014 22104 events\", \"emitting services: chat-svc \\u2014 11592 events\", \"emitting services: profile-api \\u2014 202 events\"]}",
+      "metadata": {
+        "scenario": "terraform_apply_0052",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "terraform_apply_0052-02",
+      "artifact_type": "service_logs",
+      "subtype": "error_volume_by_service",
+      "source": "error_volume_by_service",
+      "content": "{\"description\": \"Services ranked by number of error events, with each service's most-failed downstream dependencies.\", \"facts\": [\"services: game-gateway \\u2014 22104 events; failing dependencies=1; top dependencies: chat-svc (22104)\", \"services: chat-svc \\u2014 11592 events; failing dependencies=1; top dependencies: chat-db-01 (11592)\", \"services: profile-api \\u2014 202 events; failing dependencies=1; top dependencies: profile-db (202)\"]}",
+      "metadata": {
+        "scenario": "terraform_apply_0052",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "terraform_apply_0052-03",
+      "artifact_type": "change_records",
+      "subtype": "change_log",
+      "source": "change_log",
+      "content": "{\"description\": \"Deployments, configuration pushes, infrastructure and automation runs from the change-management and CI/CD audit log: change ID, type, target, actor, time (UTC), status and recorded diff/summary.\", \"facts\": [\"changes: CHG-23844 | deployment | profile-api 9.9.1 -> 9.10.0 | actor: azure-pipelines | 2025-08-02 01:14 UTC | status: succeeded | new optional API field \\u2014 1 events\", \"changes: CHG-23862 | deployment | matchmaking-svc 14.0.11 -> 14.1.0 | actor: azure-pipelines | 2025-08-02 11:22 UTC | status: Synced/Healthy | minor bug fixes \\u2014 1 events\", \"changes: CHG-23889 | terraform_apply | NSG chat-db-01-nsg rule Allow-App-3306 | actor: spacelift-runner | 2025-08-02 15:00 UTC | status: completed | plan: 0 to add, 1 to change, 0 to destroy; ingress tcp/3306 from 10.242.0.0/16 removed from NSG chat-db-01-nsg rule Allow-App-3306 (apply from stale branch infra/cleanup) \\u2014 1 events\", \"changes: CHG-23925 | network_change | NSG chat-db-01-nsg rule Allow-App-3306 | actor: b.obrien | 2025-08-02 16:27 UTC | status: completed | restore ingress tcp/3306 from 10.242.0.0/16 \\u2014 1 events\", \"changes: CHG-23965 | deployment | telemetry-ingest 1.0.2 -> 1.0.3 | actor: azure-pipelines | 2025-08-03 02:59 UTC | status: completed | logging improvements \\u2014 1 events\", \"change types: deployment \\u2014 3 events\", \"change types: terraform_apply \\u2014 1 events\", \"change types: network_change \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "terraform_apply_0052",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "terraform_apply_0052-04",
+      "artifact_type": "change_records",
+      "subtype": "change_actors",
+      "source": "change_actors",
+      "content": "{\"description\": \"Accounts and automation identities that executed changes, with the hosts or targets they acted on.\", \"facts\": [\"actors: azure-pipelines \\u2014 3 events; targets: cedarf-prod-eastus/matchmaking-svc (1), cedarf-prod-eastus/profile-api (1), cedarf-prod-eastus/telemetry-ingest (1)\", \"actors: b.obrien \\u2014 1 events; targets: chat-db-01 (1)\", \"actors: spacelift-runner \\u2014 1 events; targets: chat-db-01 (1)\"]}",
+      "metadata": {
+        "scenario": "terraform_apply_0052",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "terraform_apply_0052-05",
+      "artifact_type": "infrastructure_events",
+      "subtype": "host_inventory",
+      "source": "host_inventory",
+      "content": "{\"description\": \"Host and node names seen in infrastructure events with their IP address, role and availability zone / rack.\", \"facts\": [\"hosts: aks-nodepool1-70143643-vmss000037 \\u2014 296 events; ip: 10.242.38.25; role: k8s-worker; zone: eastus-3\", \"hosts: aks-nodepool1-44945814-vmss000013 \\u2014 294 events; ip: 10.242.179.53; role: k8s-worker; zone: eastus-2\", \"hosts: aks-nodepool1-57019936-vmss000002 \\u2014 247 events; ip: 10.242.179.106; role: k8s-worker; zone: eastus-2\", \"hosts: chat-db-01 \\u2014 41 events; ip: 10.242.241.163; role: mysql-primary; zone: eastus-1\"]}",
+      "metadata": {
+        "scenario": "terraform_apply_0052",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "terraform_apply_0052-06",
+      "artifact_type": "infrastructure_events",
+      "subtype": "platform_events",
+      "source": "platform_events",
+      "content": "{\"description\": \"Kubernetes events, cloud-provider health events and host system messages (kernel, hardware, daemons) with the objects or hosts they refer to.\", \"facts\": [\"flow logs: REJECT tcp 10.242.0.0/16 -> 10.242.241.163:3306 \\u2014 70896 events; top objects: chat-db-01 (1)\", \"event reasons: Pulled \\u2014 17 events; top objects: pod/matchmaking-svc-433264761-nnlwg (2)\", \"event reasons: ScalingReplicaSet \\u2014 6 events; top objects: deployment/matchmaking-svc (2)\", \"event reasons: Pulled \\u2014 9 events; top objects: pod/profile-api-c464a6a58-h29ld (2)\", \"event reasons: ScalingReplicaSet \\u2014 3 events; top objects: deployment/profile-api (2)\", \"event reasons: Pulled \\u2014 27 events; top objects: pod/telemetry-ingest-ba34a159d-6ms27 (2)\", \"event reasons: ScalingReplicaSet \\u2014 3 events; top objects: deployment/telemetry-ingest (3)\"]}",
+      "metadata": {
+        "scenario": "terraform_apply_0052",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "terraform_apply_0052-07",
+      "artifact_type": "monitoring_alerts",
+      "subtype": "alertmanager_alerts",
+      "source": "alertmanager_alerts",
+      "content": "{\"description\": \"Prometheus Alertmanager alerts: alert names with severity, critical-alert instances, alert names and services, and an hourly timeline of warning and critical alerts (UTC).\", \"facts\": [\"alert names: Watchdog (info) \\u2014 72 events; service: alertmanager; firing continuously\", \"alert names: MysqlConnectionsDropped (critical) \\u2014 4 events; service: mysql; first seen in hour 2025-08-02 15:00 UTC; last seen in hour 2025-08-02 16:00 UTC\", \"alert names: KubeJobFailed (warning) \\u2014 3 events; service: batch; first seen in hour 2025-08-03 07:00 UTC; last seen in hour 2025-08-03 08:00 UTC\", \"alert names: ChatSvcUnavailable (critical) \\u2014 2 events; service: chat-svc; first seen in hour 2025-08-02 15:00 UTC; last seen in hour 2025-08-02 16:00 UTC\", \"critical alerts: 6 matching events\", \"critical alerts > critical instances: 10.242.241.163:9104 \\u2014 4 events\", \"critical alerts > critical instances: chat-svc \\u2014 2 events\", \"critical alerts > critical alert names: MysqlConnectionsDropped \\u2014 4 events\", \"critical alerts > critical alert names: ChatSvcUnavailable \\u2014 2 events\", \"critical alerts > critical services: mysql \\u2014 4 events\", \"critical alerts > critical services: chat-svc \\u2014 2 events\", \"alert timeline: 2025-08-02 15:00 UTC \\u2014 2 events\", \"alert timeline: 2025-08-02 16:00 UTC \\u2014 4 events\", \"alert timeline: 2025-08-03 07:00 UTC \\u2014 2 events\", \"alert timeline: 2025-08-03 08:00 UTC \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "terraform_apply_0052",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "terraform_apply_0052-08",
+      "artifact_type": "resource_metrics",
+      "subtype": "metric_anomalies",
+      "source": "metric_anomalies",
+      "content": "{\"description\": \"Metric series that deviated from their 7-day baseline (hourly resolution): baseline, peak or trough value, anomaly onset and recovery (UTC).\", \"facts\": [\"metric anomalies: mysql client connections on chat-db-01 \\u2014 baseline ~164; trough 0; onset 2025-08-02 15:00 UTC; recovered 2025-08-02 17:00 UTC\"]}",
+      "metadata": {
+        "scenario": "terraform_apply_0052",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "terraform_apply_0052-09",
+      "artifact_type": "derived_findings",
+      "subtype": "derived_summary",
+      "source": "derived_summary",
+      "content": "{\"description\": \"Deterministic summary computed from the query results above (error ranking, instance-to-host join, alert timeline, change correlation, earliest metric anomaly).\", \"facts\": [\"Derived: service game-gateway ranks #1 by error volume (22104 events, 1 failing dependencies). Most-failed dependency: chat-svc (22104 errors).\", \"Derived: most-alerted critical instance 10.242.241.163:9104 (4 critical alerts) maps to hostname chat-db-01; role mysql-primary; zone eastus-1.\", \"Derived: warning/critical alerts span 2025-08-02 15:00 UTC to 2025-08-03 08:00 UTC; earliest alert hour 2025-08-02 15:00 UTC (2 alerts).\", \"Derived: changes recorded from 6 hours before the earliest alert hour to its end: CHG-23862 (deployment, matchmaking-svc 14.0.11 -> 14.1.0, azure-pipelines, 2025-08-02 11:22 UTC); CHG-23889 (terraform_apply, NSG chat-db-01-nsg rule Allow-App-3306, spacelift-runner, 2025-08-02 15:00 UTC).\", \"Derived: earliest metric anomaly onset 2025-08-02 15:00 UTC (mysql client connections on chat-db-01).\"]}",
+      "metadata": {
+        "scenario": "terraform_apply_0052",
+        "source_kind": "derived_from_es_results",
+        "heuristic": true
+      }
+    },
+    {
+      "artifact_id": "terraform_apply_0052-10",
+      "artifact_type": "query_coverage",
+      "subtype": "evidence_gaps",
+      "source": "evidence_gaps",
+      "content": "{\"description\": \"Queries that returned nothing or failed; use these to state what is NOT established.\", \"facts\": [\"Query 'tls certificates' returned no aggregation results (shards failed: 3 of 111). This evidence is UNAVAILABLE; it is not evidence that nothing exists.\"]}",
+      "metadata": {
+        "scenario": "terraform_apply_0052",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    }
+  ]
+}

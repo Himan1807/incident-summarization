@@ -1,0 +1,14 @@
+{
+  "scenario": "pool_size_values_0021",
+  "cleaning": [
+    "first-signs answer 2023-06-21 01:00 UTC differs from the earliest alert-timeline hour 2023-06-21 02:00 UTC (earlier metric onset or an unrelated earlier alert)"
+  ],
+  "skipped": [],
+  "gaps": [],
+  "artifacts": 11,
+  "facts": 71,
+  "empty_aggregations": 2,
+  "questions": 10,
+  "answers": 10,
+  "atoms": 12
+}

@@ -1,0 +1,155 @@
+{
+  "metadata": {
+    "incident_id": "INC-20230806",
+    "scenario": "terraform_apply_0039",
+    "title": "Infrastructure reliability incident investigation",
+    "source": "synthetic/ops-incident-expansion (modeled on neu-nds2/llm-sec-incident-analysis)",
+    "query_window_start": "2023-08-06T00:00:00",
+    "query_window_end": "2023-08-08T23:59:59",
+    "evidence_types": [
+      "change_records",
+      "derived_findings",
+      "infrastructure_events",
+      "monitoring_alerts",
+      "query_coverage",
+      "resource_metrics",
+      "service_logs"
+    ],
+    "artifact_scope_note": "Evidence is aggregated query output (not raw log lines or metric samples); it contains no chat/communication records."
+  },
+  "incident_description": "Reliability incident investigation of a production environment. Evidence consists of Elasticsearch aggregation results over application and proxy logs, Kubernetes, cloud-provider and host system events, Prometheus Alertmanager alerts, change-management / CI-CD audit records and metric anomaly detection. No root cause, impact or trigger is stated; these must be established from the supplied artifacts. Environment context: Organization: Novaent Pay (digital banking); Platform: Google Cloud asia-southeast1 (zones asia-southeast1-a/asia-southeast1-b/asia-southeast1-c); network range 10.18.0.0/16; Kubernetes cluster novaen-prod-asiaso (GKE); Database: mysql server kyc-db-01 reachable from the application network only through firewall rule allow-kyc-to-db; infrastructure is managed with Terraform applied from CI; Change management: production changes carry CR- identifiers.",
+  "investigation_questions": [
+    "Which account or automation identity executed the triggering change?",
+    "Which network control object was modified?",
+    "Which database host became unreachable?",
+    "Which port was blocked by the change?",
+    "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+    "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+    "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+    "Which change happened shortly before the incident began but did not cause it? Provide its identifier.",
+    "What change brought the service back to normal? Give its identifier."
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "terraform_apply_0039-01",
+      "artifact_type": "service_logs",
+      "subtype": "error_logs",
+      "source": "error_logs",
+      "content": "{\"description\": \"Application and proxy error logs: HTTP/gRPC status codes, failing requests (caller -> callee:port : operation), error messages and the services emitting them.\", \"facts\": [\"error events: 44886 matching events\", \"error events > status codes: 503 \\u2014 28615 events\", \"error events > status codes: n/a (connect timeout) \\u2014 16061 events\", \"error events > status codes: 502 \\u2014 210 events\", \"failing requests: mobile-bff -> kyc-svc:8080 : GET /v1/kyc \\u2014 28615 events\", \"failing requests: kyc-svc -> kyc-db-01:3306 : connect \\u2014 16061 events\", \"failing requests: cards-api -> cards-db:5432 : query \\u2014 210 events\", \"error messages: kyc-svc: 503 Service Unavailable \\u2014 28615 events\", \"error messages: SQLSTATE[HY000] [2002] Connection timed out (host 10.18.225.133:3306) \\u2014 16061 events\", \"error messages: connection reset by peer \\u2014 210 events\", \"emitting services: mobile-bff \\u2014 28615 events\", \"emitting services: kyc-svc \\u2014 16061 events\", \"emitting services: cards-api \\u2014 210 events\"]}",
+      "metadata": {
+        "scenario": "terraform_apply_0039",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "terraform_apply_0039-02",
+      "artifact_type": "service_logs",
+      "subtype": "error_volume_by_service",
+      "source": "error_volume_by_service",
+      "content": "{\"description\": \"Services ranked by number of error events, with each service's most-failed downstream dependencies.\", \"facts\": [\"services: mobile-bff \\u2014 28615 events; failing dependencies=1; top dependencies: kyc-svc (28615)\", \"services: kyc-svc \\u2014 16061 events; failing dependencies=1; top dependencies: kyc-db-01 (16061)\", \"services: cards-api \\u2014 210 events; failing dependencies=1; top dependencies: cards-db (210)\"]}",
+      "metadata": {
+        "scenario": "terraform_apply_0039",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "terraform_apply_0039-03",
+      "artifact_type": "change_records",
+      "subtype": "change_log",
+      "source": "change_log",
+      "content": "{\"description\": \"Deployments, configuration pushes, infrastructure and automation runs from the change-management and CI/CD audit log: change ID, type, target, actor, time (UTC), status and recorded diff/summary.\", \"facts\": [\"changes: CR-73062 | deployment | cards-api 0.22.10 -> 0.22.11 | actor: release-bot | 2023-08-06 11:08 UTC | status: Synced/Healthy | minor bug fixes \\u2014 1 events\", \"changes: CR-73078 | deployment | statements-api 10.28.6 -> 10.29.0 | actor: release-bot | 2023-08-06 14:40 UTC | status: completed | logging improvements \\u2014 1 events\", \"changes: CR-73114 | deployment | transfers-api 2.14.10 -> 2.15.0 | actor: release-bot | 2023-08-07 17:42 UTC | status: completed | minor bug fixes \\u2014 1 events\", \"changes: CR-73132 | terraform_apply | firewall rule allow-kyc-to-db | actor: atlantis | 2023-08-07 21:57 UTC | status: completed | plan: 0 to add, 1 to change, 0 to destroy; ingress tcp/3306 from 10.18.0.0/16 removed from firewall rule allow-kyc-to-db (apply from stale branch infra/tags-update) \\u2014 1 events\", \"changes: CR-73151 | network_change | firewall rule allow-kyc-to-db | actor: w.rossi | 2023-08-07 22:52 UTC | status: completed | restore ingress tcp/3306 from 10.18.0.0/16 \\u2014 1 events\", \"changes: CR-73157 | deployment | fx-rates-svc 5.7.12 -> 5.7.13 | actor: release-bot | 2023-08-08 12:13 UTC | status: Synced/Healthy | performance tuning of list endpoint \\u2014 1 events\", \"change types: deployment \\u2014 4 events\", \"change types: terraform_apply \\u2014 1 events\", \"change types: network_change \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "terraform_apply_0039",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "terraform_apply_0039-04",
+      "artifact_type": "change_records",
+      "subtype": "change_actors",
+      "source": "change_actors",
+      "content": "{\"description\": \"Accounts and automation identities that executed changes, with the hosts or targets they acted on.\", \"facts\": [\"actors: release-bot \\u2014 4 events; targets: novaen-prod-asiaso/transfers-api (1), novaen-prod-asiaso/cards-api (1), novaen-prod-asiaso/fx-rates-svc (1), novaen-prod-asiaso/statements-api (1)\", \"actors: atlantis \\u2014 1 events; targets: kyc-db-01 (1)\", \"actors: w.rossi \\u2014 1 events; targets: kyc-db-01 (1)\"]}",
+      "metadata": {
+        "scenario": "terraform_apply_0039",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "terraform_apply_0039-05",
+      "artifact_type": "infrastructure_events",
+      "subtype": "host_inventory",
+      "source": "host_inventory",
+      "content": "{\"description\": \"Host and node names seen in infrastructure events with their IP address, role and availability zone / rack.\", \"facts\": [\"hosts: kyc-db-01 \\u2014 175 events; ip: 10.18.225.133; role: mysql-primary; zone: asia-southeast1-a\", \"hosts: gke-novaen-prod-as-pool-a-795a \\u2014 133 events; ip: 10.18.217.47; role: k8s-worker; zone: asia-southeast1-c\", \"hosts: gke-novaen-prod-as-pool-a-76a0 \\u2014 126 events; ip: 10.18.120.112; role: k8s-worker; zone: asia-southeast1-a\", \"hosts: gke-novaen-prod-as-pool-c-810d \\u2014 36 events; ip: 10.18.120.228; role: k8s-worker; zone: asia-southeast1-a\"]}",
+      "metadata": {
+        "scenario": "terraform_apply_0039",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "terraform_apply_0039-06",
+      "artifact_type": "infrastructure_events",
+      "subtype": "platform_events",
+      "source": "platform_events",
+      "content": "{\"description\": \"Kubernetes events, cloud-provider health events and host system messages (kernel, hardware, daemons) with the objects or hosts they refer to.\", \"facts\": [\"flow logs: REJECT tcp 10.18.0.0/16 -> 10.18.225.133:3306 \\u2014 47193 events; top objects: kyc-db-01 (1)\", \"event reasons: Pulled \\u2014 12 events; top objects: pod/transfers-api-ec7225a62-kcwrt (1)\", \"event reasons: ScalingReplicaSet \\u2014 6 events; top objects: deployment/transfers-api (2)\", \"event reasons: Pulled \\u2014 16 events; top objects: pod/cards-api-6ca50a317-dzlcz (1)\", \"event reasons: ScalingReplicaSet \\u2014 4 events; top objects: deployment/cards-api (1)\", \"event reasons: Pulled \\u2014 10 events; top objects: pod/fx-rates-svc-38d639e86-w2vtz (3)\", \"event reasons: ScalingReplicaSet \\u2014 4 events; top objects: deployment/fx-rates-svc (3)\", \"event reasons: Pulled \\u2014 26 events; top objects: pod/statements-api-e56ee1035-wrqtv (2)\", \"event reasons: ScalingReplicaSet \\u2014 3 events; top objects: deployment/statements-api (2)\"]}",
+      "metadata": {
+        "scenario": "terraform_apply_0039",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "terraform_apply_0039-07",
+      "artifact_type": "monitoring_alerts",
+      "subtype": "alertmanager_alerts",
+      "source": "alertmanager_alerts",
+      "content": "{\"description\": \"Prometheus Alertmanager alerts: alert names with severity, critical-alert instances, alert names and services, and an hourly timeline of warning and critical alerts (UTC).\", \"facts\": [\"alert names: Watchdog (info) \\u2014 72 events; service: alertmanager; firing continuously\", \"alert names: MysqlConnectionsDropped (critical) \\u2014 3 events; service: mysql; first seen in hour 2023-08-07 22:00 UTC; last seen in hour 2023-08-07 22:00 UTC\", \"alert names: KubeJobFailed (warning) \\u2014 1 events; service: batch; first seen in hour 2023-08-07 19:00 UTC; last seen in hour 2023-08-07 19:00 UTC\", \"alert names: KycSvcUnavailable (critical) \\u2014 1 events; service: kyc-svc; first seen in hour 2023-08-07 22:00 UTC; last seen in hour 2023-08-07 22:00 UTC\", \"critical alerts: 4 matching events\", \"critical alerts > critical instances: 10.18.225.133:9104 \\u2014 3 events\", \"critical alerts > critical instances: kyc-svc \\u2014 1 events\", \"critical alerts > critical alert names: MysqlConnectionsDropped \\u2014 3 events\", \"critical alerts > critical alert names: KycSvcUnavailable \\u2014 1 events\", \"critical alerts > critical services: mysql \\u2014 3 events\", \"critical alerts > critical services: kyc-svc \\u2014 1 events\", \"alert timeline: 2023-08-07 19:00 UTC \\u2014 1 events\", \"alert timeline: 2023-08-07 22:00 UTC \\u2014 4 events\"]}",
+      "metadata": {
+        "scenario": "terraform_apply_0039",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "terraform_apply_0039-08",
+      "artifact_type": "resource_metrics",
+      "subtype": "metric_anomalies",
+      "source": "metric_anomalies",
+      "content": "{\"description\": \"Metric series that deviated from their 7-day baseline (hourly resolution): baseline, peak or trough value, anomaly onset and recovery (UTC).\", \"facts\": [\"metric anomalies: mysql client connections on kyc-db-01 \\u2014 baseline ~196; trough 0; onset 2023-08-07 22:00 UTC; recovered 2023-08-07 23:00 UTC\"]}",
+      "metadata": {
+        "scenario": "terraform_apply_0039",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "terraform_apply_0039-09",
+      "artifact_type": "derived_findings",
+      "subtype": "derived_summary",
+      "source": "derived_summary",
+      "content": "{\"description\": \"Deterministic summary computed from the query results above (error ranking, instance-to-host join, alert timeline, change correlation, earliest metric anomaly).\", \"facts\": [\"Derived: service mobile-bff ranks #1 by error volume (28615 events, 1 failing dependencies). Most-failed dependency: kyc-svc (28615 errors).\", \"Derived: most-alerted critical instance 10.18.225.133:9104 (3 critical alerts) maps to hostname kyc-db-01; role mysql-primary; zone asia-southeast1-a.\", \"Derived: warning/critical alerts span 2023-08-07 19:00 UTC to 2023-08-07 22:00 UTC; earliest alert hour 2023-08-07 19:00 UTC (1 alerts).\", \"Derived: changes recorded from 6 hours before the earliest alert hour to its end: CR-73114 (deployment, transfers-api 2.14.10 -> 2.15.0, release-bot, 2023-08-07 17:42 UTC).\", \"Derived: earliest metric anomaly onset 2023-08-07 22:00 UTC (mysql client connections on kyc-db-01).\"]}",
+      "metadata": {
+        "scenario": "terraform_apply_0039",
+        "source_kind": "derived_from_es_results",
+        "heuristic": true
+      }
+    },
+    {
+      "artifact_id": "terraform_apply_0039-10",
+      "artifact_type": "query_coverage",
+      "subtype": "evidence_gaps",
+      "source": "evidence_gaps",
+      "content": "{\"description\": \"Queries that returned nothing or failed; use these to state what is NOT established.\", \"facts\": [\"No matching results for: tls certificates / expired certificates. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / expiring within 7 days. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / self signed. (Absence in this query is not proof of absence elsewhere.)\"]}",
+      "metadata": {
+        "scenario": "terraform_apply_0039",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    }
+  ]
+}

@@ -1,0 +1,139 @@
+{
+  "metadata": {
+    "incident_id": "INC-20240904",
+    "scenario": "koi_stealer",
+    "title": "Network security incident investigation",
+    "source": "neu-nds2/llm-sec-incident-analysis",
+    "query_window_start": "2024-09-04T00:00:00",
+    "query_window_end": "2024-09-04T23:59:59",
+    "evidence_types": [
+      "authentication",
+      "derived_findings",
+      "ids_alerts",
+      "network_summary",
+      "query_coverage"
+    ],
+    "artifact_scope_note": "Evidence is aggregated query output (not raw packets); it contains no chat/communication records."
+  },
+  "incident_description": "Network security investigation of a monitored LAN. Evidence consists of Elasticsearch aggregation results over Zeek and Suricata logs (IDS alerts, Kerberos, HTTP downloads, TLS certificates, domains and external-destination activity). No root cause, impact or C2 attribution is stated; these must be established from the supplied artifacts. Network context: LAN segment range: 172.17.0.0/24 (172.17.0.0 through 172.17.0.255); Domain: bepositive.com; Active Directory (AD) domain controller: 172.17.0.17 - WIN-CTL9XBQ9Y19; AD environment name: BEPOSITIVE; LAN segment gateway: 172.17.0.1; LAN segment broadcast address: 172.17.0.255.",
+  "investigation_questions": [
+    "What is the IP address of the potentially infected internal host in the LAN?",
+    "What is the hostname of the potentially infected machine in the LAN?",
+    "What is the Windows human user account name (not machine accounts ending in $) of the potentially infected machine in the LAN?",
+    "What are the likely fake or suspicious domains / URLs for initial infection?",
+    "What are the suspicious external IP addresses contacted, which might be involved in command-and-control (C2) communication?",
+    "Which of the three CIA components does the attacker target primarily: availability, integrity, or confidentiality?",
+    "During what hour did the first signs of infection activity appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "According to the connection volume statistics, what single external IP address received the most connections from the infected hosts? Is it a C2 server or a legitimate service?"
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "koi_stealer-01",
+      "artifact_type": "network_summary",
+      "subtype": "file_downloads",
+      "source": "file_downloads",
+      "content": "{\"description\": \"HTTP file downloads and file transfers: download domains/IPs, requests (client -> server:port : URI), file types and download sources.\", \"facts\": [\"download domains: 79.124.78.197 — 50 events\", \"download domains: ctldl.windowsupdate.com — 3 events\", \"download domains: www.msftconnecttest.com — 2 events\", \"download domains: acroipm2.adobe.com — 1 events\", \"download domains: x1.c.lencr.org — 1 events\", \"http requests: no_http_uri — 301 events\", \"http requests: 172.17.0.99 -> 79.124.78.197:80 : /foots.php — 48 events\", \"http requests: 172.17.0.99 -> 23.220.251.149:80 : /connecttest.txt — 2 events\", \"http requests: 172.17.0.99 -> 23.220.251.158:80 : /connecttest.txt — 2 events\", \"http requests: 172.17.0.99 -> 79.124.78.197:80 : /index.php?id=&subid=qIOuKk7U — 2 events\", \"http requests: 172.17.0.99 -> 184.29.137.96:80 : / — 1 events\", \"http requests: 172.17.0.99 -> 199.232.210.172:80 : /msdownload/update/v3/static/trustedr/en/authrootstl.cab?d7a8a57aa5acd39b — 1 events\", \"http requests: 172.17.0.99 -> 199.232.210.172:80 : /msdownload/update/v3/static/trustedr/en/disallowedcertstl.cab?91717f420e6dda94 — 1 events\", \"http requests: 172.17.0.99 -> 199.232.214.172:80 : /msdownload/update/v3/static/trustedr/en/pinrulesstl.cab?a5fef2ac8502b132 — 1 events\", \"http requests: 172.17.0.99 -> 23.220.251.47:80 : /assets/Owner/arm/ProcessMAU.txt — 1 events\", \"file transfers: 123 matching events\", \"file transfers > transfer details: file_transfer — 53 events\", \"file transfers > transfer details: 172.17.0.99 -> 13.70.79.200:443 : fuid: FU0Kma3jtLVDFQsWRa — 1 events\", \"file transfers > transfer details: 172.17.0.99 -> 13.89.179.9:443 : fuid: FMvkJInaCxvQDPRv9 — 1 events\", \"file transfers > transfer details: 172.17.0.99 -> 20.189.173.1:443 : fuid: FLUKDa36wJdASXKgHg — 1 events\", \"file transfers > transfer details: 172.17.0.99 -> 20.189.173.26:443 : fuid: FhRlFk2pp8tC1dsabb — 1 events\", \"file transfers > transfer details: 172.17.0.99 -> 20.241.44.114:443 : fuid: FyjT0AzkMPMcF8Uck — 1 events\", \"file transfers > transfer details: 172.17.0.99 -> 20.42.73.28:443 : fuid: FpR8YU2UKfciamuQTd — 1 events\", \"file transfers > transfer details: 172.17.0.99 -> 20.96.153.111:443 : fuid: FSvMjvPqRih6zUFI5 — 1 events\", \"file transfers > transfer details: 172.17.0.99 -> 20.96.153.111:443 : fuid: FwBwUeLMampjgOJ5k — 1 events\", \"file transfers > transfer details: 172.17.0.99 -> 23.194.68.140:443 : fuid: FYIShP1GoXJB2e2LHc — 1 events\", \"file types: other — 361 events\", \"download sources: 172.17.0.99 — 361 events\"]}",
+      "metadata": {
+        "scenario": "koi_stealer",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "koi_stealer-02",
+      "artifact_type": "network_summary",
+      "subtype": "high_activity_external_dest",
+      "source": "high_activity_external_dest",
+      "content": "{\"description\": \"Internal clients ranked by number of connections to external destinations, with each client's most-contacted destinations.\", \"facts\": [\"source clients: 172.17.0.99 — 361 events; external destinations=35; top destinations: 79.124.78.197 (218), 23.45.119.144 (18), 204.79.197.203 (14), 52.113.194.132 (10), 23.195.212.189 (9); 92 further events in other values\"]}",
+      "metadata": {
+        "scenario": "koi_stealer",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "koi_stealer-03",
+      "artifact_type": "authentication",
+      "subtype": "kerberos_clients",
+      "source": "kerberos_clients",
+      "content": "{\"description\": \"Kerberos client account names (user accounts) and the source IPs they authenticated from.\", \"facts\": [\"client accounts: afletcher — 8 events; source ips: 172.17.0.99 (8)\"]}",
+      "metadata": {
+        "scenario": "koi_stealer",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "koi_stealer-04",
+      "artifact_type": "authentication",
+      "subtype": "kerberos_full_services",
+      "source": "kerberos_full_services",
+      "content": "{\"description\": \"Kerberos services requested (including host and machine account names) per source IP.\", \"facts\": [\"full services: krb_tcp — 8 events; source ips: 172.17.0.99 (8)\", \"full services: krbtgt/BEPOSITIVE.COM — 2 events; source ips: 172.17.0.99 (2)\", \"full services: LDAP/WIN-CTL9XBQ9Y19.bepositive.com/bepositive.com — 1 events; source ips: 172.17.0.99 (1)\", \"full services: cifs/WIN-CTL9XBQ9Y19 — 1 events; source ips: 172.17.0.99 (1)\", \"full services: cifs/WIN-CTL9XBQ9Y19.bepositive.com — 1 events; source ips: 172.17.0.99 (1)\", \"full services: host/desktop-rnvo9at.bepositive.com — 1 events; source ips: 172.17.0.99 (1)\", \"full services: krbtgt/BEPOSITIVE — 1 events; source ips: 172.17.0.99 (1)\", \"full services: ldap/win-ctl9xbq9y19.bepositive.com — 1 events; source ips: 172.17.0.99 (1)\"]}",
+      "metadata": {
+        "scenario": "koi_stealer",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "koi_stealer-05",
+      "artifact_type": "authentication",
+      "subtype": "kerberos_hostnames",
+      "source": "kerberos_hostnames",
+      "content": "{\"description\": \"Host names seen in Kerberos traffic with their source IPs.\", \"facts\": [\"hostnames: desktop-rnvo9at — 1 events; source ips: 172.17.0.99 (1)\"]}",
+      "metadata": {
+        "scenario": "koi_stealer",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "koi_stealer-06",
+      "artifact_type": "ids_alerts",
+      "subtype": "suricata_alerts",
+      "source": "suricata_alerts",
+      "content": "{\"description\": \"Suricata IDS alerts: signatures, high-severity alert destinations and sources, and an hourly alert timeline (UTC).\", \"facts\": [\"alert signatures: ET HUNTING GENERIC SUSPICIOUS POST to Dotted Quad with Fake Browser 1 — 48 events\", \"alert signatures: GPL NETBIOS SMB IPC$ unicode share access — 5 events\", \"alert signatures: ET INFO Microsoft Connection Test — 2 events\", \"alert signatures: ET ATTACK_RESPONSE Koi Loader/Stealer CnC Config Inbound — 1 events\", \"alert signatures: ET MALWARE Win32/Koi Stealer CnC Checkin (GET) — 1 events\", \"high severity alerts: 50 matching events\", \"high severity alerts > high severity  destinations: 79.124.78.197 — 49 events\", \"high severity alerts > high severity  destinations: 172.17.0.99 — 1 events\", \"high severity alerts > high severity signatures: ET HUNTING GENERIC SUSPICIOUS POST to Dotted Quad with Fake Browser 1 — 48 events\", \"high severity alerts > high severity signatures: ET ATTACK_RESPONSE Koi Loader/Stealer CnC Config Inbound — 1 events\", \"high severity alerts > high severity signatures: ET MALWARE Win32/Koi Stealer CnC Checkin (GET) — 1 events\", \"high severity alerts > high severity sources: 172.17.0.99 — 49 events\", \"high severity alerts > high severity sources: 79.124.78.197 — 1 events\", \"alert timeline: 2024-09-04 17:00 UTC — 31 events\", \"alert timeline: 2024-09-04 18:00 UTC — 26 events\"]}",
+      "metadata": {
+        "scenario": "koi_stealer",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "koi_stealer-07",
+      "artifact_type": "network_summary",
+      "subtype": "suspicious_domains",
+      "source": "suspicious_domains",
+      "content": "{\"description\": \"Unusual domains with their source and destination IPs, and direct-IP HTTP connections.\", \"facts\": [\"domains: sso.godaddy.com — 3 events\", \"domains: www.bellantonicioccolato.it — 2 events\", \"domains: img-s-msn-com.akamaized.net — 1 events\", \"domains: oneclient.sfx.ms — 1 events\", \"domains: weathermapdata.blob.core.windows.net — 1 events\"]}",
+      "metadata": {
+        "scenario": "koi_stealer",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "koi_stealer-08",
+      "artifact_type": "derived_findings",
+      "subtype": "derived_summary",
+      "source": "derived_summary",
+      "content": "{\"description\": \"Deterministic summary computed from the query results above (client ranking, IP-to-hostname/account join, alert timeline).\", \"facts\": [\"Derived: internal client 172.17.0.99 ranks #1 by external connections (361 events, 35 distinct external destinations). Most-contacted external IP: 79.124.78.197 (218 connections).\", \"Derived: Kerberos identity of 172.17.0.99: hostname(s) desktop-rnvo9at; human user account(s) afletcher.\", \"Derived: Suricata alerts span 2024-09-04 17:00 UTC to 2024-09-04 18:00 UTC; earliest alert hour 2024-09-04 17:00 UTC (31 alerts).\", \"Derived: destinations of high-severity alerts: 79.124.78.197 (49), 172.17.0.99 (1).\"]}",
+      "metadata": {
+        "scenario": "koi_stealer",
+        "source_kind": "derived_from_es_results",
+        "heuristic": true
+      }
+    },
+    {
+      "artifact_id": "koi_stealer-09",
+      "artifact_type": "query_coverage",
+      "subtype": "evidence_gaps",
+      "source": "evidence_gaps",
+      "content": "{\"description\": \"Queries that returned nothing or failed; use these to state what is NOT established.\", \"facts\": [\"No matching results for: suspicious certificates / self signed analysis. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: suspicious certificates / ip based certificates. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: suspicious certificates / short validity certs. (Absence in this query is not proof of absence elsewhere.)\"]}",
+      "metadata": {
+        "scenario": "koi_stealer",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    }
+  ]
+}

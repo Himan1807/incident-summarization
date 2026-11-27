@@ -1,0 +1,167 @@
+{
+  "metadata": {
+    "incident_id": "INC-20230426",
+    "scenario": "zonal_disk_0029",
+    "title": "Infrastructure reliability incident investigation",
+    "source": "synthetic/ops-incident-expansion (modeled on neu-nds2/llm-sec-incident-analysis)",
+    "query_window_start": "2023-04-26T00:00:00",
+    "query_window_end": "2023-04-28T23:59:59",
+    "evidence_types": [
+      "change_records",
+      "derived_findings",
+      "infrastructure_events",
+      "monitoring_alerts",
+      "network_summary",
+      "query_coverage",
+      "resource_metrics",
+      "service_logs"
+    ],
+    "artifact_scope_note": "Evidence is aggregated query output (not raw log lines or metric samples); it contains no chat/communication records."
+  },
+  "incident_description": "Reliability incident investigation of a production environment. Evidence consists of Elasticsearch aggregation results over application and proxy logs, Kubernetes, cloud-provider and host system events, Prometheus Alertmanager alerts, change-management / CI-CD audit records and metric anomaly detection. No root cause, impact or trigger is stated; these must be established from the supplied artifacts. Environment context: Organization: Kescrest Insurance (insurance); Platform: Microsoft Azure eastus (zones eastus-1/eastus-2/eastus-3); network range 10.203.0.0/16; Kubernetes cluster kescre-prod-eastus (AKS); Database tier: self-managed mysql primary/replica on virtual machines with provider block storage, replica in another zone; Change management: production changes carry RFC- identifiers.",
+  "investigation_questions": [
+    "Which host or node did the failure originate on? Give its hostname.",
+    "What is the IP address of the host or node where the failure originated?",
+    "Which storage volume attached to the failing host was degraded?",
+    "What is the cloud provider's incident or tracking identifier?",
+    "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+    "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+    "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+    "What change brought the service back to normal? Give its identifier."
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "zonal_disk_0029-01",
+      "artifact_type": "service_logs",
+      "subtype": "error_logs",
+      "source": "error_logs",
+      "content": "{\"description\": \"Application and proxy error logs: HTTP/gRPC status codes, failing requests (caller -> callee:port : operation), error messages and the services emitting them.\", \"facts\": [\"error events: 66271 matching events\", \"error events > status codes: 504 \\u2014 51469 events\", \"error events > status codes: 500 \\u2014 14802 events\", \"failing requests: agent-portal -> broker-api:8080 : GET /v1/broker/{id} \\u2014 51469 events\", \"failing requests: broker-api -> db-mysql-01:3306 : SELECT/UPDATE \\u2014 11609 events\", \"failing requests: payments-api -> db-mysql-01:3306 : INSERT \\u2014 3146 events\", \"failing requests: claims-api -> claims-db:5432 : query \\u2014 47 events\", \"error messages: upstream broker-api: 504 Gateway Timeout \\u2014 51469 events\", \"error messages: Lock wait timeout exceeded; try restarting transaction \\u2014 11609 events\", \"error messages: SQLSTATE[HY000] [2002] Connection timed out \\u2014 3146 events\", \"error messages: redis: i/o timeout \\u2014 47 events\", \"emitting services: agent-portal \\u2014 51469 events\", \"emitting services: broker-api \\u2014 11609 events\", \"emitting services: payments-api \\u2014 3146 events\", \"emitting services: claims-api \\u2014 47 events\"]}",
+      "metadata": {
+        "scenario": "zonal_disk_0029",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "zonal_disk_0029-02",
+      "artifact_type": "service_logs",
+      "subtype": "error_volume_by_service",
+      "source": "error_volume_by_service",
+      "content": "{\"description\": \"Services ranked by number of error events, with each service's most-failed downstream dependencies.\", \"facts\": [\"services: agent-portal \\u2014 51469 events; failing dependencies=1; top dependencies: broker-api (51469)\", \"services: broker-api \\u2014 11609 events; failing dependencies=1; top dependencies: db-mysql-01 (11609)\", \"services: payments-api \\u2014 3146 events; failing dependencies=1; top dependencies: db-mysql-01 (3146)\", \"services: claims-api \\u2014 47 events; failing dependencies=1; top dependencies: claims-db (47)\"]}",
+      "metadata": {
+        "scenario": "zonal_disk_0029",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "zonal_disk_0029-03",
+      "artifact_type": "change_records",
+      "subtype": "change_log",
+      "source": "change_log",
+      "content": "{\"description\": \"Deployments, configuration pushes, infrastructure and automation runs from the change-management and CI/CD audit log: change ID, type, target, actor, time (UTC), status and recorded diff/summary.\", \"facts\": [\"changes: RFC-63069 | manual_failover | mysql primary db-mysql-01 -> db-mysql-02 | actor: c.khan | 2023-04-27 06:46 UTC | status: completed | promote replica db-mysql-02 (eastus-1) \\u2014 1 events\", \"changes: RFC-63105 | deployment | quotes-svc 3.10.11 -> 3.10.12 | actor: azure-pipelines | 2023-04-27 17:22 UTC | status: Synced/Healthy | feature flag cleanup \\u2014 1 events\", \"changes: RFC-63142 | deployment | claims-api 3.17.5 -> 3.18.0 | actor: azure-pipelines | 2023-04-28 19:20 UTC | status: succeeded | dependency bump \\u2014 1 events\", \"change types: deployment \\u2014 2 events\", \"change types: manual_failover \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "zonal_disk_0029",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "zonal_disk_0029-04",
+      "artifact_type": "change_records",
+      "subtype": "change_actors",
+      "source": "change_actors",
+      "content": "{\"description\": \"Accounts and automation identities that executed changes, with the hosts or targets they acted on.\", \"facts\": [\"actors: azure-pipelines \\u2014 2 events; targets: kescre-prod-eastus/quotes-svc (1), kescre-prod-eastus/claims-api (1)\", \"actors: c.khan \\u2014 1 events; targets: db-mysql-01 (1), db-mysql-02 (1)\"]}",
+      "metadata": {
+        "scenario": "zonal_disk_0029",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "zonal_disk_0029-05",
+      "artifact_type": "infrastructure_events",
+      "subtype": "host_inventory",
+      "source": "host_inventory",
+      "content": "{\"description\": \"Host and node names seen in infrastructure events with their IP address, role and availability zone / rack.\", \"facts\": [\"hosts: db-mysql-01 \\u2014 247 events; ip: 10.203.105.107; role: mysql-primary; zone: eastus-3\", \"hosts: db-mysql-02 \\u2014 145 events; ip: 10.203.179.123; role: mysql-replica; zone: eastus-1\", \"hosts: aks-nodepool1-51895269-vmss000022 \\u2014 117 events; ip: 10.203.101.184; role: k8s-worker; zone: eastus-3\", \"hosts: aks-nodepool1-88111701-vmss000026 \\u2014 57 events; ip: 10.203.145.236; role: k8s-worker; zone: eastus-1\"]}",
+      "metadata": {
+        "scenario": "zonal_disk_0029",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "zonal_disk_0029-06",
+      "artifact_type": "infrastructure_events",
+      "subtype": "platform_events",
+      "source": "platform_events",
+      "content": "{\"description\": \"Kubernetes events, cloud-provider health events and host system messages (kernel, hardware, daemons) with the objects or hosts they refer to.\", \"facts\": [\"cloud health events: Azure Service Health: Managed Disks - degraded performance - eastus-3 (tracking ID D1Q2-F4Z); impact start 2023-04-27 04:26 UTC \\u2014 2 events; top objects: db-mysql-01-data-disk (2)\", \"system messages: kernel: sd 1:0:0:0: [sdc] tag#134 timing out command, waited 180s \\u2014 109 events; top objects: db-mysql-01 (1)\", \"system messages: kernel: INFO: task mysqld:3679 blocked for more than 120 seconds. \\u2014 23 events; top objects: db-mysql-01 (1)\", \"instance status checks: instance and system status checks passed \\u2014 1399 events; top objects: db-mysql-01 (1), db-mysql-02 (1)\", \"event reasons: Pulled \\u2014 3 events; top objects: pod/quotes-svc-e9548109a-jn84j (3)\", \"event reasons: ScalingReplicaSet \\u2014 4 events; top objects: deployment/quotes-svc (1)\", \"event reasons: Pulled \\u2014 4 events; top objects: pod/claims-api-8b4deeabc-szm44 (1)\", \"event reasons: ScalingReplicaSet \\u2014 4 events; top objects: deployment/claims-api (3)\"]}",
+      "metadata": {
+        "scenario": "zonal_disk_0029",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "zonal_disk_0029-07",
+      "artifact_type": "monitoring_alerts",
+      "subtype": "alertmanager_alerts",
+      "source": "alertmanager_alerts",
+      "content": "{\"description\": \"Prometheus Alertmanager alerts: alert names with severity, critical-alert instances, alert names and services, and an hourly timeline of warning and critical alerts (UTC).\", \"facts\": [\"alert names: Watchdog (info) \\u2014 72 events; service: alertmanager; firing continuously\", \"alert names: HighDiskIOLatency (critical) \\u2014 16 events; service: node; first seen in hour 2023-04-27 04:00 UTC; last seen in hour 2023-04-27 07:00 UTC\", \"alert names: MysqlHighThreadsRunning (critical) \\u2014 10 events; service: mysql; first seen in hour 2023-04-27 04:00 UTC; last seen in hour 2023-04-27 06:00 UTC\", \"alert names: AgentPortal5xxRateHigh (critical) \\u2014 9 events; service: agent-portal; first seen in hour 2023-04-27 04:00 UTC; last seen in hour 2023-04-27 06:00 UTC\", \"alert names: CPUThrottlingHigh (warning) \\u2014 2 events; service: underwriting-svc; first seen in hour 2023-04-26 23:00 UTC; last seen in hour 2023-04-27 00:00 UTC\", \"alert names: NodeFilesystemSpaceFillingUp (warning) \\u2014 2 events; service: node; first seen in hour 2023-04-28 02:00 UTC; last seen in hour 2023-04-28 02:00 UTC\", \"critical alerts: 35 matching events\", \"critical alerts > critical instances: 10.203.105.107:9100 \\u2014 16 events\", \"critical alerts > critical instances: 10.203.105.107:9104 \\u2014 10 events\", \"critical alerts > critical instances: agent-portal \\u2014 9 events\", \"critical alerts > critical alert names: HighDiskIOLatency \\u2014 16 events\", \"critical alerts > critical alert names: MysqlHighThreadsRunning \\u2014 10 events\", \"critical alerts > critical alert names: AgentPortal5xxRateHigh \\u2014 9 events\", \"critical alerts > critical services: node \\u2014 16 events\", \"critical alerts > critical services: mysql \\u2014 10 events\", \"critical alerts > critical services: agent-portal \\u2014 9 events\", \"alert timeline: 2023-04-26 23:00 UTC \\u2014 1 events\", \"alert timeline: 2023-04-27 00:00 UTC \\u2014 1 events\", \"alert timeline: 2023-04-27 04:00 UTC \\u2014 10 events\", \"alert timeline: 2023-04-27 05:00 UTC \\u2014 11 events\", \"alert timeline: 2023-04-27 06:00 UTC \\u2014 9 events\", \"alert timeline: 2023-04-27 07:00 UTC \\u2014 5 events\", \"alert timeline: 2023-04-28 02:00 UTC \\u2014 2 events\"]}",
+      "metadata": {
+        "scenario": "zonal_disk_0029",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "zonal_disk_0029-08",
+      "artifact_type": "resource_metrics",
+      "subtype": "metric_anomalies",
+      "source": "metric_anomalies",
+      "content": "{\"description\": \"Metric series that deviated from their 7-day baseline (hourly resolution): baseline, peak or trough value, anomaly onset and recovery (UTC).\", \"facts\": [\"metric anomalies: disk await (data volume) on db-mysql-01 \\u2014 baseline 1.4 ms; peak 3,082 ms; onset 2023-04-27 04:00 UTC; recovered 2023-04-27 08:00 UTC\", \"metric anomalies: replication lag on db-mysql-02 \\u2014 baseline 0 s; peak 1,123 s; onset 2023-04-27 04:00 UTC; recovered 2023-04-27 07:00 UTC\"]}",
+      "metadata": {
+        "scenario": "zonal_disk_0029",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "zonal_disk_0029-09",
+      "artifact_type": "network_summary",
+      "subtype": "tls_certificates",
+      "source": "tls_certificates",
+      "content": "{\"description\": \"TLS certificates observed in edge and service-to-service traffic that are expired, expire within 7 days, or are self-signed.\", \"facts\": [\"expiring within 7 days: 43 matching events\", \"expiring within 7 days > certificate details: CN=underwriting-svc.kescrest.internal | issuer: CN=R10,O=Let's Encrypt | not_after: 2023-05-02 23:59:00 UTC | seen on: underwriting-svc:8443 \\u2014 43 events\"]}",
+      "metadata": {
+        "scenario": "zonal_disk_0029",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "zonal_disk_0029-10",
+      "artifact_type": "derived_findings",
+      "subtype": "derived_summary",
+      "source": "derived_summary",
+      "content": "{\"description\": \"Deterministic summary computed from the query results above (error ranking, instance-to-host join, alert timeline, change correlation, earliest metric anomaly).\", \"facts\": [\"Derived: service agent-portal ranks #1 by error volume (51469 events, 1 failing dependencies). Most-failed dependency: broker-api (51469 errors).\", \"Derived: most-alerted critical instance 10.203.105.107:9100 (16 critical alerts) maps to hostname db-mysql-01; role mysql-primary; zone eastus-3.\", \"Derived: warning/critical alerts span 2023-04-26 23:00 UTC to 2023-04-28 02:00 UTC; earliest alert hour 2023-04-26 23:00 UTC (1 alerts).\", \"Derived: no changes recorded from 6 hours before the earliest alert hour to its end.\", \"Derived: earliest metric anomaly onset 2023-04-27 04:00 UTC (disk await (data volume) on db-mysql-01).\"]}",
+      "metadata": {
+        "scenario": "zonal_disk_0029",
+        "source_kind": "derived_from_es_results",
+        "heuristic": true
+      }
+    },
+    {
+      "artifact_id": "zonal_disk_0029-11",
+      "artifact_type": "query_coverage",
+      "subtype": "evidence_gaps",
+      "source": "evidence_gaps",
+      "content": "{\"description\": \"Queries that returned nothing or failed; use these to state what is NOT established.\", \"facts\": [\"No matching results for: tls certificates / expired certificates. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / self signed. (Absence in this query is not proof of absence elsewhere.)\"]}",
+      "metadata": {
+        "scenario": "zonal_disk_0029",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    }
+  ]
+}

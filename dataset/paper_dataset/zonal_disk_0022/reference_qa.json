@@ -1,0 +1,98 @@
+{
+  "source": "synthetic generator ground truth (ops expansion)",
+  "confidence": "synthetic ground truth",
+  "qa": [
+    {
+      "id": 1,
+      "question": "What is the IP address of the host or node where the incident started?",
+      "answer": "10.150.114.133",
+      "atoms": [
+        {
+          "text": "10.150.114.133",
+          "kind": "ip"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "question": "What is the cloud provider's incident or tracking identifier?",
+      "answer": "22103",
+      "atoms": [
+        {
+          "text": "22103",
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "question": "Which availability zone was affected by the cloud provider event?",
+      "answer": "asia-southeast1-b",
+      "atoms": [
+        {
+          "text": "asia-southeast1-b",
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "question": "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+      "answer": "2023-07-19 05:00 UTC",
+      "atoms": [
+        {
+          "text": "2023-07-19 05:00 UTC",
+          "kind": "time"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "question": "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+      "answer": "cloud provider failure",
+      "atoms": [
+        {
+          "text": "cloud provider failure",
+          "kind": "label"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "question": "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+      "answer": "availability",
+      "atoms": [
+        {
+          "text": "availability",
+          "kind": "cia"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "question": "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+      "answer": "mobile-bff, downstream symptom",
+      "atoms": [
+        {
+          "text": "mobile-bff",
+          "kind": "other"
+        },
+        {
+          "text": "downstream symptom",
+          "kind": "label"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "question": "Which change restored normal service? Provide its change identifier.",
+      "answer": "CHG-82865",
+      "atoms": [
+        {
+          "text": "CHG-82865",
+          "kind": "other"
+        }
+      ]
+    }
+  ]
+}

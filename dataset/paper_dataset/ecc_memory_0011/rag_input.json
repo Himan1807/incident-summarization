@@ -1,0 +1,153 @@
+{
+  "metadata": {
+    "incident_id": "INC-20230305",
+    "scenario": "ecc_memory_0011",
+    "title": "Infrastructure reliability incident investigation",
+    "source": "synthetic/ops-incident-expansion (modeled on neu-nds2/llm-sec-incident-analysis)",
+    "query_window_start": "2023-03-05T00:00:00",
+    "query_window_end": "2023-03-07T23:59:59",
+    "evidence_types": [
+      "change_records",
+      "derived_findings",
+      "infrastructure_events",
+      "monitoring_alerts",
+      "query_coverage",
+      "resource_metrics",
+      "service_logs"
+    ],
+    "artifact_scope_note": "Evidence is aggregated query output (not raw log lines or metric samples); it contains no chat/communication records."
+  },
+  "incident_description": "Reliability incident investigation of a production environment. Evidence consists of Elasticsearch aggregation results over application and proxy logs, Kubernetes, cloud-provider and host system events, Prometheus Alertmanager alerts, change-management / CI-CD audit records and metric anomaly detection. No root cause, impact or trigger is stated; these must be established from the supplied artifacts. Environment context: Organization: Lakeforge Mutual (insurance); Platform: on-premises data center DC-East, server range 172.19.0.0/16; Kubernetes cluster lakefo-prod (kubeadm); Bare-metal Kubernetes workers; IPMI SEL and EDAC kernel messages are forwarded to Elasticsearch; data-center work uses DC- identifiers; Change management: production changes carry CR- identifiers.",
+  "investigation_questions": [
+    "What is the hostname of the host or node where the failure originated?",
+    "What is the IP address of the host or node where the failure originated?",
+    "Which memory module (DIMM slot) did the hardware event log identify?",
+    "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+    "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+    "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+    "Which change restored normal service? Provide its change identifier."
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "ecc_memory_0011-01",
+      "artifact_type": "service_logs",
+      "subtype": "error_logs",
+      "source": "error_logs",
+      "content": "{\"description\": \"Application and proxy error logs: HTTP/gRPC status codes, failing requests (caller -> callee:port : operation), error messages and the services emitting them.\", \"facts\": [\"error events: 11103 matching events\", \"error events > status codes: n/a (job failure) \\u2014 8257 events\", \"error events > status codes: 500 \\u2014 2594 events\", \"error events > status codes: 502 \\u2014 252 events\", \"failing requests: batch-scheduler -> workers on lakef-node-26 : task execution \\u2014 8257 events\", \"failing requests: query-engine -> worker@172.19.79.197:8080 : task status update \\u2014 1763 events\", \"failing requests: reporting-portal -> query-engine:8080 : POST /v1/statement \\u2014 831 events\", \"failing requests: claims-api -> claims-db:5432 : query \\u2014 252 events\", \"error messages: ExecutorLostFailure (executor exited unrelated to the running tasks) Reason: node lakef-node-26 NotReady \\u2014 8257 events\", \"error messages: Encountered too many errors talking to a worker node (172.19.79.197:8080) \\u2014 1763 events\", \"error messages: query-engine: 500 Internal Server Error \\u2014 831 events\", \"error messages: connection reset by peer \\u2014 252 events\", \"emitting services: batch-scheduler \\u2014 8257 events\", \"emitting services: query-engine \\u2014 1763 events\", \"emitting services: reporting-portal \\u2014 831 events\", \"emitting services: claims-api \\u2014 252 events\"]}",
+      "metadata": {
+        "scenario": "ecc_memory_0011",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "ecc_memory_0011-02",
+      "artifact_type": "service_logs",
+      "subtype": "error_volume_by_service",
+      "source": "error_volume_by_service",
+      "content": "{\"description\": \"Services ranked by number of error events, with each service's most-failed downstream dependencies.\", \"facts\": [\"services: batch-scheduler \\u2014 8257 events; failing dependencies=1; top dependencies: workers on lakef-node-26 (8257)\", \"services: query-engine \\u2014 1763 events; failing dependencies=1; top dependencies: worker@172.19.79.197 (1763)\", \"services: reporting-portal \\u2014 831 events; failing dependencies=1; top dependencies: query-engine (831)\", \"services: claims-api \\u2014 252 events; failing dependencies=1; top dependencies: claims-db (252)\"]}",
+      "metadata": {
+        "scenario": "ecc_memory_0011",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "ecc_memory_0011-03",
+      "artifact_type": "change_records",
+      "subtype": "change_log",
+      "source": "change_log",
+      "content": "{\"description\": \"Deployments, configuration pushes, infrastructure and automation runs from the change-management and CI/CD audit log: change ID, type, target, actor, time (UTC), status and recorded diff/summary.\", \"facts\": [\"changes: CR-64125 | deployment | claims-api 8.8.6 -> 8.9.0 | actor: jenkins | 2023-03-05 00:30 UTC | status: completed | logging improvements \\u2014 1 events\", \"changes: CR-64165 | deployment | policy-api 14.30.0 -> 14.30.1 | actor: jenkins | 2023-03-05 04:36 UTC | status: succeeded | minor bug fixes \\u2014 1 events\", \"changes: CR-64174 | deployment | payments-api 5.18.6 -> 5.19.0 | actor: jenkins | 2023-03-05 13:37 UTC | status: Synced/Healthy | copy and UI text changes \\u2014 1 events\", \"changes: CR-64203 | kubectl_cordon_drain | node lakef-node-26 | actor: g.ivanova | 2023-03-05 20:02 UTC | status: completed | cordon and drain; handed to DC operations \\u2014 1 events\", \"changes: DC-6029 | hardware_replacement | lakef-node-26 memory module | actor: dcops-a.varga | 2023-03-05 23:20 UTC | status: completed | replaced DIMM D5; memtest passed \\u2014 1 events\", \"change types: deployment \\u2014 3 events\", \"change types: kubectl_cordon_drain \\u2014 1 events\", \"change types: hardware_replacement \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "ecc_memory_0011",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "ecc_memory_0011-04",
+      "artifact_type": "change_records",
+      "subtype": "change_actors",
+      "source": "change_actors",
+      "content": "{\"description\": \"Accounts and automation identities that executed changes, with the hosts or targets they acted on.\", \"facts\": [\"actors: jenkins \\u2014 3 events; targets: lakefo-prod/payments-api (1), lakefo-prod/claims-api (1), lakefo-prod/policy-api (1)\", \"actors: dcops-a.varga \\u2014 1 events; targets: lakef-node-26 (1)\", \"actors: g.ivanova \\u2014 1 events; targets: lakef-node-26 (1)\"]}",
+      "metadata": {
+        "scenario": "ecc_memory_0011",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "ecc_memory_0011-05",
+      "artifact_type": "infrastructure_events",
+      "subtype": "host_inventory",
+      "source": "host_inventory",
+      "content": "{\"description\": \"Host and node names seen in infrastructure events with their IP address, role and availability zone / rack.\", \"facts\": [\"hosts: lakef-node-26 \\u2014 782 events; ip: 172.19.79.197; role: k8s-worker; zone: rack D23\", \"hosts: lakef-node-16 \\u2014 107 events; ip: 172.19.79.87; role: k8s-worker; zone: rack D23\"]}",
+      "metadata": {
+        "scenario": "ecc_memory_0011",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "ecc_memory_0011-06",
+      "artifact_type": "infrastructure_events",
+      "subtype": "platform_events",
+      "source": "platform_events",
+      "content": "{\"description\": \"Kubernetes events, cloud-provider health events and host system messages (kernel, hardware, daemons) with the objects or hosts they refer to.\", \"facts\": [\"hardware events (ipmi sel): Memory #0x42 | Correctable ECC | DIMM D5 \\u2014 171 events; top objects: lakef-node-26 (171)\", \"hardware events (ipmi sel): Memory #0x4b | Uncorrectable ECC | DIMM D5 \\u2014 4 events; top objects: lakef-node-26 (4)\", \"system messages: kernel: EDAC MC0: 1 CE memory read error on CPU_SrcID#1_MC#0_Chan#2_DIMM#0 \\u2014 171 events; top objects: lakef-node-26 (171)\", \"system messages: kernel: Kernel panic - not syncing: Fatal machine check \\u2014 4 events; top objects: lakef-node-26 (4)\", \"event reasons: NodeNotReady \\u2014 4 events; top objects: node/lakef-node-26 (4)\", \"event reasons: TaintManagerEviction \\u2014 111 events; top objects: pods on lakef-node-26 (1)\", \"event reasons: Pulled \\u2014 24 events; top objects: pod/payments-api-d324325c6-dfmzq (1)\", \"event reasons: ScalingReplicaSet \\u2014 4 events; top objects: deployment/payments-api (3)\", \"event reasons: Pulled \\u2014 6 events; top objects: pod/claims-api-57ef62037-bj9nt (3)\", \"event reasons: ScalingReplicaSet \\u2014 6 events; top objects: deployment/claims-api (2)\", \"event reasons: Pulled \\u2014 8 events; top objects: pod/policy-api-502cdf84a-hx4ns (1)\", \"event reasons: ScalingReplicaSet \\u2014 2 events; top objects: deployment/policy-api (2)\"]}",
+      "metadata": {
+        "scenario": "ecc_memory_0011",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "ecc_memory_0011-07",
+      "artifact_type": "monitoring_alerts",
+      "subtype": "alertmanager_alerts",
+      "source": "alertmanager_alerts",
+      "content": "{\"description\": \"Prometheus Alertmanager alerts: alert names with severity, critical-alert instances, alert names and services, and an hourly timeline of warning and critical alerts (UTC).\", \"facts\": [\"alert names: Watchdog (info) \\u2014 72 events; service: alertmanager; firing continuously\", \"alert names: NodeMemoryECCCorrectableErrors (warning) \\u2014 28 events; service: node; first seen in hour 2023-03-05 11:00 UTC; last seen in hour 2023-03-05 20:00 UTC\", \"alert names: BatchSchedulerJobFailures (critical) \\u2014 12 events; service: batch-scheduler; first seen in hour 2023-03-05 17:00 UTC; last seen in hour 2023-03-05 21:00 UTC\", \"alert names: KubeNodeNotReady (critical) \\u2014 11 events; service: kubernetes; first seen in hour 2023-03-05 16:00 UTC; last seen in hour 2023-03-05 20:00 UTC\", \"alert names: CPUThrottlingHigh (warning) \\u2014 4 events; service: policy-api; first seen in hour 2023-03-05 08:00 UTC; last seen in hour 2023-03-05 10:00 UTC\", \"critical alerts: 23 matching events\", \"critical alerts > critical instances: batch-scheduler \\u2014 12 events\", \"critical alerts > critical instances: lakef-node-26 \\u2014 11 events\", \"critical alerts > critical alert names: BatchSchedulerJobFailures \\u2014 12 events\", \"critical alerts > critical alert names: KubeNodeNotReady \\u2014 11 events\", \"critical alerts > critical services: batch-scheduler \\u2014 12 events\", \"critical alerts > critical services: kubernetes \\u2014 11 events\", \"alert timeline: 2023-03-05 08:00 UTC \\u2014 1 events\", \"alert timeline: 2023-03-05 09:00 UTC \\u2014 1 events\", \"alert timeline: 2023-03-05 10:00 UTC \\u2014 2 events\", \"alert timeline: 2023-03-05 11:00 UTC \\u2014 1 events\", \"alert timeline: 2023-03-05 12:00 UTC \\u2014 2 events\", \"alert timeline: 2023-03-05 13:00 UTC \\u2014 2 events\", \"alert timeline: 2023-03-05 14:00 UTC \\u2014 4 events\", \"alert timeline: 2023-03-05 15:00 UTC \\u2014 2 events\", \"alert timeline: 2023-03-05 16:00 UTC \\u2014 6 events\", \"alert timeline: 2023-03-05 17:00 UTC \\u2014 7 events\", \"alert timeline: 2023-03-05 18:00 UTC \\u2014 9 events\", \"alert timeline: 2023-03-05 19:00 UTC \\u2014 7 events\", \"alert timeline: 2023-03-05 20:00 UTC \\u2014 8 events\", \"alert timeline: 2023-03-05 21:00 UTC \\u2014 3 events\"]}",
+      "metadata": {
+        "scenario": "ecc_memory_0011",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "ecc_memory_0011-08",
+      "artifact_type": "resource_metrics",
+      "subtype": "metric_anomalies",
+      "source": "metric_anomalies",
+      "content": "{\"description\": \"Metric series that deviated from their 7-day baseline (hourly resolution): baseline, peak or trough value, anomaly onset and recovery (UTC).\", \"facts\": [\"metric anomalies: node_edac_correctable_errors_total rate on lakef-node-26 \\u2014 baseline 0/h; peak 54/h; onset 2023-03-05 11:00 UTC; recovered 2023-03-05 21:00 UTC\"]}",
+      "metadata": {
+        "scenario": "ecc_memory_0011",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "ecc_memory_0011-09",
+      "artifact_type": "derived_findings",
+      "subtype": "derived_summary",
+      "source": "derived_summary",
+      "content": "{\"description\": \"Deterministic summary computed from the query results above (error ranking, instance-to-host join, alert timeline, change correlation, earliest metric anomaly).\", \"facts\": [\"Derived: service batch-scheduler ranks #1 by error volume (8257 events, 1 failing dependencies). Most-failed dependency: workers on lakef-node-26 (8257 errors).\", \"Derived: most-alerted critical instance batch-scheduler (12 critical alerts); no matching host-inventory entry.\", \"Derived: warning/critical alerts span 2023-03-05 08:00 UTC to 2023-03-05 21:00 UTC; earliest alert hour 2023-03-05 08:00 UTC (1 alerts).\", \"Derived: changes recorded from 6 hours before the earliest alert hour to its end: CR-64165 (deployment, policy-api 14.30.0 -> 14.30.1, jenkins, 2023-03-05 04:36 UTC).\", \"Derived: earliest metric anomaly onset 2023-03-05 11:00 UTC (node_edac_correctable_errors_total rate on lakef-node-26).\"]}",
+      "metadata": {
+        "scenario": "ecc_memory_0011",
+        "source_kind": "derived_from_es_results",
+        "heuristic": true
+      }
+    },
+    {
+      "artifact_id": "ecc_memory_0011-10",
+      "artifact_type": "query_coverage",
+      "subtype": "evidence_gaps",
+      "source": "evidence_gaps",
+      "content": "{\"description\": \"Queries that returned nothing or failed; use these to state what is NOT established.\", \"facts\": [\"No matching results for: tls certificates / expired certificates. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / expiring within 7 days. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / self signed. (Absence in this query is not proof of absence elsewhere.)\"]}",
+      "metadata": {
+        "scenario": "ecc_memory_0011",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    }
+  ]
+}

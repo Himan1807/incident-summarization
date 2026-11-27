@@ -1,0 +1,131 @@
+{
+  "source": "synthetic generator ground truth (ops expansion)",
+  "confidence": "synthetic ground truth",
+  "qa": [
+    {
+      "id": 1,
+      "question": "Which service or component is the origin of the failure?",
+      "answer": "token-svc",
+      "atoms": [
+        {
+          "text": "token-svc",
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "question": "What change, deployment or automation run triggered the incident? Provide its change identifier.",
+      "answer": "CHG-38673",
+      "atoms": [
+        {
+          "text": "CHG-38673",
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "question": "Which account or automation identity executed the triggering change?",
+      "answer": "github-actions",
+      "atoms": [
+        {
+          "text": "github-actions",
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "question": "Which database index removal caused the slowdown?",
+      "answer": "idx_entitlements_token_id",
+      "atoms": [
+        {
+          "text": "idx_entitlements_token_id",
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "question": "What client-side behaviour amplified the load on the failing service?",
+      "answer": "immediate retries without backoff (retry storm)",
+      "atoms": [
+        {
+          "text": "retry",
+          "kind": "label"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "question": "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+      "answer": "2022-02-22 09:00 UTC",
+      "atoms": [
+        {
+          "text": "2022-02-22 09:00 UTC",
+          "kind": "time"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "question": "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+      "answer": "software defect",
+      "atoms": [
+        {
+          "text": "software defect",
+          "kind": "label"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "question": "Did the failure stay isolated to one component or cascade across services? Answer 'isolated failure' or 'cascading failure'.",
+      "answer": "cascading failure",
+      "atoms": [
+        {
+          "text": "cascading failure",
+          "kind": "label"
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "question": "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+      "answer": "availability",
+      "atoms": [
+        {
+          "text": "availability",
+          "kind": "cia"
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "question": "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+      "answer": "web-bff, downstream symptom",
+      "atoms": [
+        {
+          "text": "web-bff",
+          "kind": "other"
+        },
+        {
+          "text": "downstream symptom",
+          "kind": "label"
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "question": "Which change is a red herring: recorded shortly before onset but unrelated to the failure? Give its identifier.",
+      "answer": "CHG-38655",
+      "atoms": [
+        {
+          "text": "CHG-38655",
+          "kind": "other"
+        }
+      ]
+    }
+  ]
+}

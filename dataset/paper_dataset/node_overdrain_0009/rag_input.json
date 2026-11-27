@@ -1,0 +1,143 @@
+{
+  "metadata": {
+    "incident_id": "INC-20250928",
+    "scenario": "node_overdrain_0009",
+    "title": "Infrastructure reliability incident investigation",
+    "source": "synthetic/ops-incident-expansion (modeled on neu-nds2/llm-sec-incident-analysis)",
+    "query_window_start": "2025-09-28T00:00:00",
+    "query_window_end": "2025-09-30T23:59:59",
+    "evidence_types": [
+      "change_records",
+      "derived_findings",
+      "infrastructure_events",
+      "monitoring_alerts",
+      "query_coverage",
+      "resource_metrics",
+      "service_logs"
+    ],
+    "artifact_scope_note": "Evidence is aggregated query output (not raw log lines or metric samples); it contains no chat/communication records."
+  },
+  "incident_description": "Reliability incident investigation of a production environment. Evidence consists of Elasticsearch aggregation results over application and proxy logs, Kubernetes, cloud-provider and host system events, Prometheus Alertmanager alerts, change-management / CI-CD audit records and metric anomaly detection. No root cause, impact or trigger is stated; these must be established from the supplied artifacts. Environment context: Organization: Oaktrail Telecom (mobile operator); Platform: AWS ap-southeast-1 (zones ap-southeast-1a/ap-southeast-1b/ap-southeast-1c); network range 10.97.0.0/16; Kubernetes cluster oaktra-prod-apsout (EKS); Automation: an in-house node-recycler controller rotates worker nodes (cordon, drain, terminate, replace) in batches bounded by maxUnavailable (15% of 13 nodes); runs are recorded with RECYCLE- identifiers; Change management: production changes carry RFC- identifiers.",
+  "investigation_questions": [
+    "Which service or component is the origin of the failure?",
+    "Which change or automation run triggered the incident? Give its identifier.",
+    "Who (account or automation identity) executed the change that caused the incident?",
+    "Which deployment introduced the faulty batch-size logic? Provide its change identifier.",
+    "How many worker nodes were cordoned and drained at the same time?",
+    "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+    "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+    "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+    "What change brought the service back to normal? Give its identifier."
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "node_overdrain_0009-01",
+      "artifact_type": "service_logs",
+      "subtype": "error_logs",
+      "source": "error_logs",
+      "content": "{\"description\": \"Application and proxy error logs: HTTP/gRPC status codes, failing requests (caller -> callee:port : operation), error messages and the services emitting them.\", \"facts\": [\"error events: 51178 matching events\", \"error events > status codes: 503 \\u2014 45842 events\", \"error events > status codes: n/a (connection refused) \\u2014 5208 events\", \"error events > status codes: 504 \\u2014 128 events\", \"failing requests: selfcare-portal -> topup-api:8080 : POST /v1/topup \\u2014 31569 events\", \"failing requests: selfcare-portal -> sim-provisioning:8080 : GET /v1/sim \\u2014 14273 events\", \"failing requests: topup-api -> topup-cache:6379 : GET \\u2014 5208 events\", \"failing requests: roaming-svc -> roaming-db:5432 : query \\u2014 128 events\", \"error messages: upstream topup-api: 503 no healthy upstream \\u2014 31569 events\", \"error messages: upstream sim-provisioning: 503 no healthy upstream \\u2014 14273 events\", \"error messages: dial tcp topup-cache:6379: connect: connection refused \\u2014 5208 events\", \"error messages: upstream request timeout \\u2014 128 events\", \"emitting services: selfcare-portal \\u2014 45842 events\", \"emitting services: topup-api \\u2014 5208 events\", \"emitting services: roaming-svc \\u2014 128 events\"]}",
+      "metadata": {
+        "scenario": "node_overdrain_0009",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "node_overdrain_0009-02",
+      "artifact_type": "service_logs",
+      "subtype": "error_volume_by_service",
+      "source": "error_volume_by_service",
+      "content": "{\"description\": \"Services ranked by number of error events, with each service's most-failed downstream dependencies.\", \"facts\": [\"services: selfcare-portal \\u2014 45842 events; failing dependencies=2; top dependencies: topup-api (31569), sim-provisioning (14273)\", \"services: topup-api \\u2014 5208 events; failing dependencies=1; top dependencies: topup-cache (5208)\", \"services: roaming-svc \\u2014 128 events; failing dependencies=1; top dependencies: roaming-db (128)\"]}",
+      "metadata": {
+        "scenario": "node_overdrain_0009",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "node_overdrain_0009-03",
+      "artifact_type": "change_records",
+      "subtype": "change_log",
+      "source": "change_log",
+      "content": "{\"description\": \"Deployments, configuration pushes, infrastructure and automation runs from the change-management and CI/CD audit log: change ID, type, target, actor, time (UTC), status and recorded diff/summary.\", \"facts\": [\"changes: RFC-52649 | deployment | billing-rater 9.11.6 -> 9.12.0 | actor: argocd | 2025-09-29 14:28 UTC | status: succeeded | copy and UI text changes \\u2014 1 events\", \"changes: RFC-52654 | deployment | node-recycler 4.35.3 -> 4.36.0 | actor: argocd | 2025-09-29 16:19 UTC | status: Synced/Healthy | new batch sizing logic (percentage support for maxUnavailable) \\u2014 1 events\", \"changes: RECYCLE-9174 | node_rotation | general-purpose node group | actor: node-recycler | 2025-09-29 17:56 UTC | status: aborted | eligible nodes 12; computed batch size 15 from maxUnavailable=15%; cordoned and drained 12 nodes concurrently \\u2014 1 events\", \"changes: RFC-52665 | scale_down | deployment node-recycler | actor: w.chaudhary | 2025-09-29 19:05 UTC | status: completed | replicas 1 -> 0 \\u2014 1 events\", \"changes: RFC-52691 | nodegroup_scale | general-purpose node group | actor: w.chaudhary | 2025-09-29 19:15 UTC | status: completed | desired 13 -> 19; uncordon remaining nodes \\u2014 1 events\", \"changes: RFC-52701 | deployment | roaming-svc 8.17.10 -> 8.17.11 | actor: argocd | 2025-09-30 08:25 UTC | status: succeeded | copy and UI text changes \\u2014 1 events\", \"change types: deployment \\u2014 3 events\", \"change types: node_rotation \\u2014 1 events\", \"change types: scale_down \\u2014 1 events\", \"change types: nodegroup_scale \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "node_overdrain_0009",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "node_overdrain_0009-04",
+      "artifact_type": "infrastructure_events",
+      "subtype": "host_inventory",
+      "source": "host_inventory",
+      "content": "{\"description\": \"Host and node names seen in infrastructure events with their IP address, role and availability zone / rack.\", \"facts\": [\"hosts: ip-10-97-146-249 \\u2014 288 events; ip: 10.97.146.249; role: k8s-worker; zone: ap-southeast-1c\", \"hosts: ip-10-97-151-161 \\u2014 226 events; ip: 10.97.151.161; role: k8s-worker; zone: ap-southeast-1a\", \"hosts: ip-10-97-213-171 \\u2014 108 events; ip: 10.97.213.171; role: k8s-worker; zone: ap-southeast-1b\", \"hosts: ip-10-97-151-212 \\u2014 103 events; ip: 10.97.151.212; role: k8s-worker; zone: ap-southeast-1a\", \"hosts: ip-10-97-213-114 \\u2014 103 events; ip: 10.97.213.114; role: k8s-worker; zone: ap-southeast-1b\", \"hosts: ip-10-97-213-231 \\u2014 100 events; ip: 10.97.213.231; role: k8s-worker; zone: ap-southeast-1b\", \"hosts: ip-10-97-146-16 \\u2014 66 events; ip: 10.97.146.16; role: k8s-worker; zone: ap-southeast-1c\", \"hosts: ip-10-97-151-133 \\u2014 65 events; ip: 10.97.151.133; role: k8s-worker; zone: ap-southeast-1a\"]}",
+      "metadata": {
+        "scenario": "node_overdrain_0009",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "node_overdrain_0009-05",
+      "artifact_type": "infrastructure_events",
+      "subtype": "platform_events",
+      "source": "platform_events",
+      "content": "{\"description\": \"Kubernetes events, cloud-provider health events and host system messages (kernel, hardware, daemons) with the objects or hosts they refer to.\", \"facts\": [\"event reasons: NodeNotSchedulable \\u2014 12 events; top objects: ip-10-97-151-212 (1), ip-10-97-213-171 (1), ip-10-97-146-16 (1), ip-10-97-151-133 (1), ip-10-97-213-114 (1)\", \"event reasons: FailedScheduling \\u2014 4408 events; top objects: pod/sim-provisioning-d783313d9-gm6dn (480), pod/topup-api-161ef3974-vtp5h (385)\", \"controller logs: node-recycler: batch size 15 computed from maxUnavailable=15% (eligible=12); starting batch \\u2014 1 events; top objects: pod/node-recycler-7de83d2ef-wx2qx (1)\", \"event reasons: Pulled \\u2014 15 events; top objects: pod/billing-rater-3d71d4ed9-mhsnm (3)\", \"event reasons: ScalingReplicaSet \\u2014 4 events; top objects: deployment/billing-rater (3)\", \"event reasons: Pulled \\u2014 7 events; top objects: pod/roaming-svc-f19f54372-kfnft (1)\", \"event reasons: ScalingReplicaSet \\u2014 5 events; top objects: deployment/roaming-svc (3)\"]}",
+      "metadata": {
+        "scenario": "node_overdrain_0009",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "node_overdrain_0009-06",
+      "artifact_type": "monitoring_alerts",
+      "subtype": "alertmanager_alerts",
+      "source": "alertmanager_alerts",
+      "content": "{\"description\": \"Prometheus Alertmanager alerts: alert names with severity, critical-alert instances, alert names and services, and an hourly timeline of warning and critical alerts (UTC).\", \"facts\": [\"alert names: Watchdog (info) \\u2014 72 events; service: alertmanager; firing continuously\", \"alert names: KubeNodeUnschedulable (warning) \\u2014 36 events; service: kubernetes; first seen in hour 2025-09-29 17:00 UTC; last seen in hour 2025-09-29 19:00 UTC\", \"alert names: KubePodPending (critical) \\u2014 6 events; service: topup-api; first seen in hour 2025-09-29 18:00 UTC; last seen in hour 2025-09-29 19:00 UTC\", \"alert names: SelfcarePortalErrorRateHigh (critical) \\u2014 5 events; service: selfcare-portal; first seen in hour 2025-09-29 18:00 UTC; last seen in hour 2025-09-29 19:00 UTC\", \"alert names: KubeNodesCapacityLow (critical) \\u2014 4 events; service: kubernetes; first seen in hour 2025-09-29 18:00 UTC; last seen in hour 2025-09-29 19:00 UTC\", \"alert names: NodeFilesystemSpaceFillingUp (warning) \\u2014 1 events; service: node; first seen in hour 2025-09-29 11:00 UTC; last seen in hour 2025-09-29 11:00 UTC\", \"alert names: TargetDown (warning) \\u2014 1 events; service: number-porting-svc; first seen in hour 2025-09-29 10:00 UTC; last seen in hour 2025-09-29 10:00 UTC\", \"critical alerts: 15 matching events\", \"critical alerts > critical instances: topup-api \\u2014 6 events\", \"critical alerts > critical instances: selfcare-portal \\u2014 5 events\", \"critical alerts > critical instances: oaktra-prod-apsout \\u2014 4 events\", \"critical alerts > critical alert names: KubePodPending \\u2014 6 events\", \"critical alerts > critical alert names: SelfcarePortalErrorRateHigh \\u2014 5 events\", \"critical alerts > critical alert names: KubeNodesCapacityLow \\u2014 4 events\", \"critical alerts > critical services: topup-api \\u2014 6 events\", \"critical alerts > critical services: selfcare-portal \\u2014 5 events\", \"critical alerts > critical services: kubernetes \\u2014 4 events\", \"alert timeline: 2025-09-29 10:00 UTC \\u2014 1 events\", \"alert timeline: 2025-09-29 11:00 UTC \\u2014 1 events\", \"alert timeline: 2025-09-29 17:00 UTC \\u2014 12 events\", \"alert timeline: 2025-09-29 18:00 UTC \\u2014 16 events\", \"alert timeline: 2025-09-29 19:00 UTC \\u2014 23 events\"]}",
+      "metadata": {
+        "scenario": "node_overdrain_0009",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "node_overdrain_0009-07",
+      "artifact_type": "resource_metrics",
+      "subtype": "metric_anomalies",
+      "source": "metric_anomalies",
+      "content": "{\"description\": \"Metric series that deviated from their 7-day baseline (hourly resolution): baseline, peak or trough value, anomaly onset and recovery (UTC).\", \"facts\": [\"metric anomalies: unschedulable nodes on oaktra-prod-apsout \\u2014 baseline 0; peak 12; onset 2025-09-29 17:00 UTC; recovered 2025-09-29 20:00 UTC\", \"metric anomalies: node memory utilisation on 10.97.151.161 \\u2014 baseline 51%; peak 87%; onset 2025-09-29 15:00 UTC; recovered 2025-09-29 17:00 UTC\"]}",
+      "metadata": {
+        "scenario": "node_overdrain_0009",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "node_overdrain_0009-08",
+      "artifact_type": "derived_findings",
+      "subtype": "derived_summary",
+      "source": "derived_summary",
+      "content": "{\"description\": \"Deterministic summary computed from the query results above (error ranking, instance-to-host join, alert timeline, change correlation, earliest metric anomaly).\", \"facts\": [\"Derived: service selfcare-portal ranks #1 by error volume (45842 events, 2 failing dependencies). Most-failed dependency: topup-api (31569 errors).\", \"Derived: most-alerted critical instance topup-api (6 critical alerts); no matching host-inventory entry.\", \"Derived: warning/critical alerts span 2025-09-29 10:00 UTC to 2025-09-29 19:00 UTC; earliest alert hour 2025-09-29 10:00 UTC (1 alerts).\", \"Derived: no changes recorded from 6 hours before the earliest alert hour to its end.\", \"Derived: earliest metric anomaly onset 2025-09-29 15:00 UTC (node memory utilisation on 10.97.151.161).\"]}",
+      "metadata": {
+        "scenario": "node_overdrain_0009",
+        "source_kind": "derived_from_es_results",
+        "heuristic": true
+      }
+    },
+    {
+      "artifact_id": "node_overdrain_0009-09",
+      "artifact_type": "query_coverage",
+      "subtype": "evidence_gaps",
+      "source": "evidence_gaps",
+      "content": "{\"description\": \"Queries that returned nothing or failed; use these to state what is NOT established.\", \"facts\": [\"Query 'change actors' returned no aggregation results (shards failed: 1 of 128). This evidence is UNAVAILABLE; it is not evidence that nothing exists.\", \"No matching results for: tls certificates / expired certificates. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / expiring within 7 days. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / self signed. (Absence in this query is not proof of absence elsewhere.)\"]}",
+      "metadata": {
+        "scenario": "node_overdrain_0009",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    }
+  ]
+}

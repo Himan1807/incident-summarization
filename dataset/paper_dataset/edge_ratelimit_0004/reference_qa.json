@@ -1,0 +1,124 @@
+{
+  "source": "synthetic generator ground truth (ops expansion)",
+  "confidence": "synthetic ground truth",
+  "qa": [
+    {
+      "id": 1,
+      "question": "Which service or component is the origin of the failure?",
+      "answer": "api-gateway (Envoy edge tier)",
+      "atoms": [
+        {
+          "text": "api-gateway",
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "question": "What change, deployment or automation run triggered the incident? Provide its change identifier.",
+      "answer": "CHG-39812",
+      "atoms": [
+        {
+          "text": "CHG-39812",
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "question": "Which user or automation account carried out the triggering change?",
+      "answer": "config-sync-bot",
+      "atoms": [
+        {
+          "text": "config-sync-bot",
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "question": "Which configuration file and parameter were modified by the triggering change?",
+      "answer": "ratelimit.yaml, requests_per_unit (1000 -> 1)",
+      "atoms": [
+        {
+          "text": "ratelimit.yaml",
+          "kind": "domain_or_file"
+        },
+        {
+          "text": "requests_per_unit",
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "question": "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+      "answer": "2024-08-16 15:00 UTC",
+      "atoms": [
+        {
+          "text": "2024-08-16 15:00 UTC",
+          "kind": "time"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "question": "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+      "answer": "configuration change",
+      "atoms": [
+        {
+          "text": "configuration change",
+          "kind": "label"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "question": "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+      "answer": "availability",
+      "atoms": [
+        {
+          "text": "availability",
+          "kind": "cia"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "question": "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+      "answer": "api-gateway, root cause",
+      "atoms": [
+        {
+          "text": "api-gateway",
+          "kind": "other"
+        },
+        {
+          "text": "root cause",
+          "kind": "label"
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "question": "Which change happened shortly before the incident began but did not cause it? Provide its identifier.",
+      "answer": "CHG-39785",
+      "atoms": [
+        {
+          "text": "CHG-39785",
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "question": "Which change restored normal service? Provide its change identifier.",
+      "answer": "CHG-39851",
+      "atoms": [
+        {
+          "text": "CHG-39851",
+          "kind": "other"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "scenario": "fan_thermal_0019",
+  "cleaning": [],
+  "skipped": [
+    "tls_certificates: all aggregations empty"
+  ],
+  "gaps": [
+    "metric_anomalies"
+  ],
+  "artifacts": 9,
+  "facts": 75,
+  "empty_aggregations": 3,
+  "questions": 7,
+  "answers": 7,
+  "atoms": 8
+}

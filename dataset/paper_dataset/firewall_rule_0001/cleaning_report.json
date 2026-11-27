@@ -1,0 +1,12 @@
+{
+  "scenario": "firewall_rule_0001",
+  "cleaning": [],
+  "skipped": [],
+  "gaps": [],
+  "artifacts": 11,
+  "facts": 55,
+  "empty_aggregations": 2,
+  "questions": 11,
+  "answers": 11,
+  "atoms": 12
+}

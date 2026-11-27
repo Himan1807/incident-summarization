@@ -1,0 +1,15 @@
+{
+  "scenario": "memory_leak_0002",
+  "cleaning": [
+    "first signs come from the memory working-set anomaly that starts with the release, hours before the first alert",
+    "first-signs answer 2023-05-22 12:00 UTC differs from the earliest alert-timeline hour 2023-05-22 10:00 UTC (earlier metric onset or an unrelated earlier alert)"
+  ],
+  "skipped": [],
+  "gaps": [],
+  "artifacts": 11,
+  "facts": 77,
+  "empty_aggregations": 2,
+  "questions": 8,
+  "answers": 8,
+  "atoms": 9
+}

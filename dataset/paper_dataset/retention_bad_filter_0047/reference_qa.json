@@ -1,0 +1,98 @@
+{
+  "source": "synthetic generator ground truth (ops expansion)",
+  "confidence": "synthetic ground truth",
+  "qa": [
+    {
+      "id": 1,
+      "question": "What is the identifier of the change that caused the incident?",
+      "answer": "RUN-59816",
+      "atoms": [
+        {
+          "text": "RUN-59816",
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "question": "Which user or automation account carried out the triggering change?",
+      "answer": "svc-retention",
+      "atoms": [
+        {
+          "text": "svc-retention",
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "question": "Which code change introduced the faulty eligibility filter? Provide its change identifier.",
+      "answer": "CHG-70597",
+      "atoms": [
+        {
+          "text": "CHG-70597",
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "question": "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+      "answer": "2024-05-03 05:00 UTC",
+      "atoms": [
+        {
+          "text": "2024-05-03 05:00 UTC",
+          "kind": "time"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "question": "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+      "answer": "automation error",
+      "atoms": [
+        {
+          "text": "automation error",
+          "kind": "label"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "question": "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+      "answer": "integrity",
+      "atoms": [
+        {
+          "text": "integrity",
+          "kind": "cia"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "question": "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+      "answer": "identity-svc, downstream symptom",
+      "atoms": [
+        {
+          "text": "identity-svc",
+          "kind": "other"
+        },
+        {
+          "text": "downstream symptom",
+          "kind": "label"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "question": "Which change happened shortly before the incident began but did not cause it? Provide its identifier.",
+      "answer": "CHG-70589",
+      "atoms": [
+        {
+          "text": "CHG-70589",
+          "kind": "other"
+        }
+      ]
+    }
+  ]
+}

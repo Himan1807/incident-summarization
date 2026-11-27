@@ -1,0 +1,109 @@
+{
+  "source": "synthetic generator ground truth (ops expansion)",
+  "confidence": "synthetic ground truth",
+  "qa": [
+    {
+      "id": 1,
+      "question": "What is the hostname of the host or node where the failure originated?",
+      "answer": "haldp-node-59",
+      "atoms": [
+        {
+          "text": "haldp-node-59",
+          "kind": "hostname"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "question": "What is the IP address of the host or node where the incident started?",
+      "answer": "10.157.185.64",
+      "atoms": [
+        {
+          "text": "10.157.185.64",
+          "kind": "ip"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "question": "Which memory module (DIMM slot) did the hardware event log identify?",
+      "answer": "DIMM C8",
+      "atoms": [
+        {
+          "text": "DIMM C8",
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "question": "Which Kubernetes node condition was reported for the failing node?",
+      "answer": "NotReady",
+      "atoms": [
+        {
+          "text": "NotReady",
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "question": "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+      "answer": "2024-03-01 19:00 UTC",
+      "atoms": [
+        {
+          "text": "2024-03-01 19:00 UTC",
+          "kind": "time"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "question": "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+      "answer": "hardware failure",
+      "atoms": [
+        {
+          "text": "hardware failure",
+          "kind": "label"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "question": "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+      "answer": "availability",
+      "atoms": [
+        {
+          "text": "availability",
+          "kind": "cia"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "question": "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+      "answer": "batch-scheduler, downstream symptom",
+      "atoms": [
+        {
+          "text": "batch-scheduler",
+          "kind": "other"
+        },
+        {
+          "text": "downstream symptom",
+          "kind": "label"
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "question": "Which change restored normal service? Provide its change identifier.",
+      "answer": "RFC-45897",
+      "atoms": [
+        {
+          "text": "RFC-45897",
+          "kind": "other"
+        }
+      ]
+    }
+  ]
+}

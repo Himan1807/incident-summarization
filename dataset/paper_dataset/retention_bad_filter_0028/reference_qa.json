@@ -1,0 +1,109 @@
+{
+  "source": "synthetic generator ground truth (ops expansion)",
+  "confidence": "synthetic ground truth",
+  "qa": [
+    {
+      "id": 1,
+      "question": "Which account or automation identity executed the triggering change?",
+      "answer": "svc-retention",
+      "atoms": [
+        {
+          "text": "svc-retention",
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "question": "Which code change introduced the faulty eligibility filter? Provide its change identifier.",
+      "answer": "CHG-84993",
+      "atoms": [
+        {
+          "text": "CHG-84993",
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "question": "Which file contained the faulty filter?",
+      "answer": "purge_dormant_profiles.py",
+      "atoms": [
+        {
+          "text": "purge_dormant_profiles.py",
+          "kind": "domain_or_file"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "question": "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+      "answer": "2025-08-23 13:00 UTC",
+      "atoms": [
+        {
+          "text": "2025-08-23 13:00 UTC",
+          "kind": "time"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "question": "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+      "answer": "automation error",
+      "atoms": [
+        {
+          "text": "automation error",
+          "kind": "label"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "question": "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+      "answer": "integrity",
+      "atoms": [
+        {
+          "text": "integrity",
+          "kind": "cia"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "question": "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+      "answer": "login-api, downstream symptom",
+      "atoms": [
+        {
+          "text": "login-api",
+          "kind": "other"
+        },
+        {
+          "text": "downstream symptom",
+          "kind": "label"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "question": "Which change happened shortly before the incident began but did not cause it? Provide its identifier.",
+      "answer": "CHG-85015",
+      "atoms": [
+        {
+          "text": "CHG-85015",
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "question": "Which change restored normal service? Provide its change identifier.",
+      "answer": "CHG-85076",
+      "atoms": [
+        {
+          "text": "CHG-85076",
+          "kind": "other"
+        }
+      ]
+    }
+  ]
+}

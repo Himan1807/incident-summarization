@@ -1,0 +1,166 @@
+{
+  "metadata": {
+    "incident_id": "INC-20240831",
+    "scenario": "cert_expiry_0048",
+    "title": "Infrastructure reliability incident investigation",
+    "source": "synthetic/ops-incident-expansion (modeled on neu-nds2/llm-sec-incident-analysis)",
+    "query_window_start": "2024-08-31T00:00:00",
+    "query_window_end": "2024-09-02T23:59:59",
+    "evidence_types": [
+      "change_records",
+      "derived_findings",
+      "infrastructure_events",
+      "monitoring_alerts",
+      "network_summary",
+      "query_coverage",
+      "resource_metrics",
+      "service_logs"
+    ],
+    "artifact_scope_note": "Evidence is aggregated query output (not raw log lines or metric samples); it contains no chat/communication records."
+  },
+  "incident_description": "Reliability incident investigation of a production environment. Evidence consists of Elasticsearch aggregation results over application and proxy logs, Kubernetes, cloud-provider and host system events, Prometheus Alertmanager alerts, change-management / CI-CD audit records and metric anomaly detection. No root cause, impact or trigger is stated; these must be established from the supplied artifacts. Environment context: Organization: Coppereron Pay (digital banking); Platform: Google Cloud us-central1 (zones us-central1-a/us-central1-b/us-central1-c/us-central1-f); network range 10.147.0.0/16; Kubernetes cluster copper-prod-uscent (GKE); Istio service mesh (mTLS STRICT); workload certificates are signed by istiod with an intermediate CA certificate that cert-manager obtains from a Vault PKI issuer; Change management: production changes carry CR- identifiers.",
+  "investigation_questions": [
+    "Which certificate expired?",
+    "When did the certificate expire? Provide YYYY-MM-DD HH:MM UTC.",
+    "During what hour did the service outage begin? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+    "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+    "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+    "Which change happened shortly before the incident began but did not cause it? Provide its identifier.",
+    "Which change restored normal service? Provide its change identifier."
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "cert_expiry_0048-01",
+      "artifact_type": "service_logs",
+      "subtype": "error_logs",
+      "source": "error_logs",
+      "content": "{\"description\": \"Application and proxy error logs: HTTP/gRPC status codes, failing requests (caller -> callee:port : operation), error messages and the services emitting them.\", \"facts\": [\"error events: 102942 matching events\", \"error events > status codes: 503 \\u2014 102705 events\", \"error events > status codes: 502 \\u2014 225 events\", \"error events > status codes: n/a (controller log) \\u2014 12 events\", \"failing requests: istio-ingressgateway -> ledger-api:8080 : HTTP \\u2014 65885 events\", \"failing requests: accounts-api -> ledger-api:8080 : HTTP \\u2014 21668 events\", \"failing requests: transfers-api -> ledger-api:8080 : HTTP \\u2014 15152 events\", \"failing requests: kyc-svc -> kyc-db:5432 : query \\u2014 225 events\", \"failing requests: cert-manager -> vault-01:8200 : POST /v1/pki_int/sign/mesh-intermediate \\u2014 12 events\", \"error messages: upstream connect error or disconnect/reset before headers. transport failure reason: TLS error: SSLV3_ALERT_CERTIFICATE_EXPIRED \\u2014 102705 events\", \"error messages: connection reset by peer \\u2014 225 events\", \"error messages: Failed to sign certificate: Vault: Error making API request. Code: 403. Errors: * permission denied \\u2014 12 events\", \"emitting services: istio-ingressgateway \\u2014 65885 events\", \"emitting services: accounts-api \\u2014 21668 events\", \"emitting services: transfers-api \\u2014 15152 events\", \"emitting services: kyc-svc \\u2014 225 events\", \"emitting services: cert-manager \\u2014 12 events\"]}",
+      "metadata": {
+        "scenario": "cert_expiry_0048",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "cert_expiry_0048-02",
+      "artifact_type": "service_logs",
+      "subtype": "error_volume_by_service",
+      "source": "error_volume_by_service",
+      "content": "{\"description\": \"Services ranked by number of error events, with each service's most-failed downstream dependencies.\", \"facts\": [\"services: istio-ingressgateway \\u2014 65885 events; failing dependencies=1; top dependencies: ledger-api (65885)\", \"services: accounts-api \\u2014 21668 events; failing dependencies=1; top dependencies: ledger-api (21668)\", \"services: transfers-api \\u2014 15152 events; failing dependencies=1; top dependencies: ledger-api (15152)\", \"services: kyc-svc \\u2014 225 events; failing dependencies=1; top dependencies: kyc-db (225)\", \"services: cert-manager \\u2014 12 events; failing dependencies=1; top dependencies: vault-01 (12)\"]}",
+      "metadata": {
+        "scenario": "cert_expiry_0048",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "cert_expiry_0048-03",
+      "artifact_type": "change_records",
+      "subtype": "change_log",
+      "source": "change_log",
+      "content": "{\"description\": \"Deployments, configuration pushes, infrastructure and automation runs from the change-management and CI/CD audit log: change ID, type, target, actor, time (UTC), status and recorded diff/summary.\", \"facts\": [\"changes: CR-72487 | deployment | mobile-bff 13.17.9 -> 13.17.10 | actor: argocd | 2024-08-31 13:42 UTC | status: Synced/Healthy | new optional API field \\u2014 1 events\", \"changes: CR-72514 | deployment | cards-api 0.25.7 -> 0.25.8 | actor: argocd | 2024-08-31 19:57 UTC | status: Synced/Healthy | feature flag cleanup \\u2014 1 events\", \"changes: CR-72519 | vault_policy | policy cert-manager-pki | actor: j.okoye | 2024-09-01 00:41 UTC | status: applied | add capabilities [create, update] on pki_int/sign/mesh-intermediate \\u2014 1 events\", \"changes: CR-72545 | certificate_renewal | certificate istio-system/coppereron-mesh-intermediate | actor: j.okoye | 2024-09-01 01:16 UTC | status: Ready | renewed; workloads restarted to reissue certificates \\u2014 1 events\", \"changes: CR-72578 | deployment | kyc-svc 1.6.10 -> 1.7.0 | actor: argocd | 2024-09-02 17:29 UTC | status: Synced/Healthy | minor bug fixes \\u2014 1 events\", \"changes: CR-72587 | deployment | limits-svc 0.21.11 -> 0.22.0 | actor: argocd | 2024-09-02 18:38 UTC | status: completed | copy and UI text changes \\u2014 1 events\", \"change types: deployment \\u2014 4 events\", \"change types: vault_policy \\u2014 1 events\", \"change types: certificate_renewal \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "cert_expiry_0048",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "cert_expiry_0048-04",
+      "artifact_type": "change_records",
+      "subtype": "change_actors",
+      "source": "change_actors",
+      "content": "{\"description\": \"Accounts and automation identities that executed changes, with the hosts or targets they acted on.\", \"facts\": [\"actors: argocd \\u2014 4 events; targets: copper-prod-uscent/cards-api (1), copper-prod-uscent/kyc-svc (1), copper-prod-uscent/mobile-bff (1), copper-prod-uscent/limits-svc (1)\", \"actors: j.okoye \\u2014 2 events; targets: vault-01 (1), istio-system/coppereron-mesh-intermediate (1)\"]}",
+      "metadata": {
+        "scenario": "cert_expiry_0048",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "cert_expiry_0048-05",
+      "artifact_type": "infrastructure_events",
+      "subtype": "host_inventory",
+      "source": "host_inventory",
+      "content": "{\"description\": \"Host and node names seen in infrastructure events with their IP address, role and availability zone / rack.\", \"facts\": [\"hosts: gke-copper-prod-us-pool-a-9492 \\u2014 256 events; ip: 10.147.29.34; role: k8s-worker; zone: us-central1-b\", \"hosts: gke-copper-prod-us-pool-b-4339 \\u2014 172 events; ip: 10.147.214.201; role: k8s-worker; zone: us-central1-c\", \"hosts: vault-01 \\u2014 50 events; ip: 10.147.26.165; role: vault; zone: us-central1-a\"]}",
+      "metadata": {
+        "scenario": "cert_expiry_0048",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "cert_expiry_0048-06",
+      "artifact_type": "infrastructure_events",
+      "subtype": "platform_events",
+      "source": "platform_events",
+      "content": "{\"description\": \"Kubernetes events, cloud-provider health events and host system messages (kernel, hardware, daemons) with the objects or hosts they refer to.\", \"facts\": [\"event reasons: Failed (CertificateRequest) \\u2014 8 events; top objects: certificaterequest/coppereron-mesh-intermediate-b23f7 (1)\", \"istiod logs: error: failed to sign CSR: CA certificate expired \\u2014 913 events; top objects: pod/istiod (1)\", \"event reasons: Pulled \\u2014 26 events; top objects: pod/cards-api-4aa432d39-8v2ln (1)\", \"event reasons: ScalingReplicaSet \\u2014 3 events; top objects: deployment/cards-api (1)\", \"event reasons: Pulled \\u2014 8 events; top objects: pod/kyc-svc-71d057664-jp22v (1)\", \"event reasons: ScalingReplicaSet \\u2014 4 events; top objects: deployment/kyc-svc (1)\", \"event reasons: Pulled \\u2014 11 events; top objects: pod/mobile-bff-c9083eaa1-sh7qq (2)\", \"event reasons: ScalingReplicaSet \\u2014 3 events; top objects: deployment/mobile-bff (1)\", \"event reasons: Pulled \\u2014 11 events; top objects: pod/limits-svc-34c327aa3-2ngdv (1)\", \"event reasons: ScalingReplicaSet \\u2014 3 events; top objects: deployment/limits-svc (2)\"]}",
+      "metadata": {
+        "scenario": "cert_expiry_0048",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "cert_expiry_0048-07",
+      "artifact_type": "monitoring_alerts",
+      "subtype": "alertmanager_alerts",
+      "source": "alertmanager_alerts",
+      "content": "{\"description\": \"Prometheus Alertmanager alerts: alert names with severity, critical-alert instances, alert names and services, and an hourly timeline of warning and critical alerts (UTC).\", \"facts\": [\"alert names: Watchdog (info) \\u2014 72 events; service: alertmanager; firing continuously\", \"alert names: CertManagerCertNotReady (warning) \\u2014 25 events; service: cert-manager; first seen in hour 2024-08-31 00:00 UTC; last seen in hour 2024-09-01 00:00 UTC\", \"alert names: LedgerApiErrorRateHigh (critical) \\u2014 6 events; service: ledger-api; first seen in hour 2024-08-31 23:00 UTC; last seen in hour 2024-09-01 01:00 UTC\", \"alert names: CPUThrottlingHigh (warning) \\u2014 5 events; service: mobile-bff; first seen in hour 2024-09-01 15:00 UTC; last seen in hour 2024-09-01 17:00 UTC\", \"alert names: TLSHandshakeErrors (critical) \\u2014 4 events; service: istio-ingressgateway; first seen in hour 2024-08-31 23:00 UTC; last seen in hour 2024-09-01 01:00 UTC\", \"alert names: KubeCPUOvercommit (warning) \\u2014 1 events; service: cluster; first seen in hour 2024-08-31 17:00 UTC; last seen in hour 2024-08-31 17:00 UTC\", \"critical alerts: 10 matching events\", \"critical alerts > critical instances: ledger-api \\u2014 6 events\", \"critical alerts > critical instances: istio-ingressgateway \\u2014 4 events\", \"critical alerts > critical alert names: LedgerApiErrorRateHigh \\u2014 6 events\", \"critical alerts > critical alert names: TLSHandshakeErrors \\u2014 4 events\", \"critical alerts > critical services: ledger-api \\u2014 6 events\", \"critical alerts > critical services: istio-ingressgateway \\u2014 4 events\", \"alert timeline: 2024-08-31 00:00 UTC \\u2014 1 events\", \"alert timeline: 2024-08-31 01:00 UTC \\u2014 1 events\", \"alert timeline: 2024-08-31 02:00 UTC \\u2014 1 events\", \"alert timeline: 2024-08-31 03:00 UTC \\u2014 1 events\", \"alert timeline: 2024-08-31 04:00 UTC \\u2014 1 events\", \"alert timeline: 2024-08-31 05:00 UTC \\u2014 1 events\", \"alert timeline: 2024-08-31 06:00 UTC \\u2014 1 events\", \"alert timeline: 2024-08-31 07:00 UTC \\u2014 1 events\", \"alert timeline: 2024-08-31 08:00 UTC \\u2014 1 events\", \"alert timeline: 2024-08-31 09:00 UTC \\u2014 1 events\", \"alert timeline: 2024-08-31 10:00 UTC \\u2014 1 events\", \"alert timeline: 2024-08-31 11:00 UTC \\u2014 1 events\", \"alert timeline: 2024-08-31 12:00 UTC \\u2014 1 events\", \"alert timeline: 2024-08-31 13:00 UTC \\u2014 1 events\", \"alert timeline: 2024-08-31 14:00 UTC \\u2014 1 events\", \"alert timeline: 2024-08-31 15:00 UTC \\u2014 1 events\", \"alert timeline: 2024-08-31 16:00 UTC \\u2014 1 events\", \"alert timeline: 2024-08-31 17:00 UTC \\u2014 2 events\", \"alert timeline: 2024-08-31 18:00 UTC \\u2014 1 events\", \"alert timeline: 2024-08-31 19:00 UTC \\u2014 1 events\", \"alert timeline: 2024-08-31 20:00 UTC \\u2014 1 events\", \"alert timeline: 2024-08-31 21:00 UTC \\u2014 1 events\", \"alert timeline: 2024-08-31 22:00 UTC \\u2014 1 events\", \"alert timeline: 2024-08-31 23:00 UTC \\u2014 4 events\", \"alert timeline: 2024-09-01 00:00 UTC \\u2014 3 events\", \"alert timeline: 2024-09-01 01:00 UTC \\u2014 5 events\", \"alert timeline: 2024-09-01 15:00 UTC \\u2014 2 events\", \"alert timeline: 2024-09-01 16:00 UTC \\u2014 2 events\", \"alert timeline: 2024-09-01 17:00 UTC \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "cert_expiry_0048",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "cert_expiry_0048-08",
+      "artifact_type": "resource_metrics",
+      "subtype": "metric_anomalies",
+      "source": "metric_anomalies",
+      "content": "{\"description\": \"Metric series that deviated from their 7-day baseline (hourly resolution): baseline, peak or trough value, anomaly onset and recovery (UTC).\", \"facts\": [\"metric anomalies: TLS handshake failures per second on istio-ingressgateway \\u2014 baseline ~0/s; peak 464/s; onset 2024-08-31 23:00 UTC; recovered 2024-09-01 02:00 UTC\"]}",
+      "metadata": {
+        "scenario": "cert_expiry_0048",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "cert_expiry_0048-09",
+      "artifact_type": "network_summary",
+      "subtype": "tls_certificates",
+      "source": "tls_certificates",
+      "content": "{\"description\": \"TLS certificates observed in edge and service-to-service traffic that are expired, expire within 7 days, or are self-signed.\", \"facts\": [\"expired certificates: 2808 matching events\", \"expired certificates > certificate details: CN=coppereron-mesh-intermediate | issuer: CN=coppereron-root-ca | not_after: 2024-08-31 23:45:00 UTC | seen on: istio-system/istio-ca-secret (istiod) \\u2014 2808 events\", \"expiring within 7 days: 1907 matching events\", \"expiring within 7 days > certificate details: CN=coppereron-mesh-intermediate | issuer: CN=coppereron-root-ca | not_after: 2024-08-31 23:45:00 UTC | seen on: istio-system/istio-ca-secret (istiod) \\u2014 1907 events\"]}",
+      "metadata": {
+        "scenario": "cert_expiry_0048",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "cert_expiry_0048-10",
+      "artifact_type": "derived_findings",
+      "subtype": "derived_summary",
+      "source": "derived_summary",
+      "content": "{\"description\": \"Deterministic summary computed from the query results above (error ranking, instance-to-host join, alert timeline, change correlation, earliest metric anomaly).\", \"facts\": [\"Derived: service istio-ingressgateway ranks #1 by error volume (65885 events, 1 failing dependencies). Most-failed dependency: ledger-api (65885 errors).\", \"Derived: most-alerted critical instance ledger-api (6 critical alerts); no matching host-inventory entry.\", \"Derived: warning/critical alerts span 2024-08-31 00:00 UTC to 2024-09-01 17:00 UTC; earliest alert hour 2024-08-31 00:00 UTC (1 alerts).\", \"Derived: no changes recorded from 6 hours before the earliest alert hour to its end.\", \"Derived: earliest metric anomaly onset 2024-08-31 23:00 UTC (TLS handshake failures per second on istio-ingressgateway).\"]}",
+      "metadata": {
+        "scenario": "cert_expiry_0048",
+        "source_kind": "derived_from_es_results",
+        "heuristic": true
+      }
+    },
+    {
+      "artifact_id": "cert_expiry_0048-11",
+      "artifact_type": "query_coverage",
+      "subtype": "evidence_gaps",
+      "source": "evidence_gaps",
+      "content": "{\"description\": \"Queries that returned nothing or failed; use these to state what is NOT established.\", \"facts\": [\"No matching results for: tls certificates / self signed. (Absence in this query is not proof of absence elsewhere.)\"]}",
+      "metadata": {
+        "scenario": "cert_expiry_0048",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    }
+  ]
+}

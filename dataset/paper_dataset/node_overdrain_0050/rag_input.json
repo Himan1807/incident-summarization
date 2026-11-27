@@ -1,0 +1,142 @@
+{
+  "metadata": {
+    "incident_id": "INC-20230522",
+    "scenario": "node_overdrain_0050",
+    "title": "Infrastructure reliability incident investigation",
+    "source": "synthetic/ops-incident-expansion (modeled on neu-nds2/llm-sec-incident-analysis)",
+    "query_window_start": "2023-05-22T00:00:00",
+    "query_window_end": "2023-05-24T23:59:59",
+    "evidence_types": [
+      "change_records",
+      "derived_findings",
+      "infrastructure_events",
+      "monitoring_alerts",
+      "query_coverage",
+      "resource_metrics",
+      "service_logs"
+    ],
+    "artifact_scope_note": "Evidence is aggregated query output (not raw log lines or metric samples); it contains no chat/communication records."
+  },
+  "incident_description": "Reliability incident investigation of a production environment. Evidence consists of Elasticsearch aggregation results over application and proxy logs, Kubernetes, cloud-provider and host system events, Prometheus Alertmanager alerts, change-management / CI-CD audit records and metric anomaly detection. No root cause, impact or trigger is stated; these must be established from the supplied artifacts. Environment context: Organization: Willowmark Labs (collaboration SaaS); Platform: AWS us-east-2 (zones us-east-2a/us-east-2b/us-east-2c); network range 10.238.0.0/16; Kubernetes cluster willow-prod-useast (EKS); Automation: an in-house node-recycler controller rotates worker nodes (cordon, drain, terminate, replace) in batches bounded by maxUnavailable (15% of 21 nodes); runs are recorded with RECYCLE- identifiers; Change management: production changes carry CHG- identifiers.",
+  "investigation_questions": [
+    "Which service or component is the origin of the failure?",
+    "What change, deployment or automation run triggered the incident? Provide its change identifier.",
+    "Which account or automation identity executed the triggering change?",
+    "How many worker nodes were cordoned and drained at the same time?",
+    "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+    "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+    "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+    "What change brought the service back to normal? Give its identifier."
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "node_overdrain_0050-01",
+      "artifact_type": "service_logs",
+      "subtype": "error_logs",
+      "source": "error_logs",
+      "content": "{\"description\": \"Application and proxy error logs: HTTP/gRPC status codes, failing requests (caller -> callee:port : operation), error messages and the services emitting them.\", \"facts\": [\"error events: 35918 matching events\", \"error events > status codes: 503 \\u2014 31613 events\", \"error events > status codes: n/a (connection refused) \\u2014 4292 events\", \"error events > status codes: 499 \\u2014 13 events\", \"failing requests: app-frontend -> webhooks-svc:8080 : POST /v1/webhooks \\u2014 22618 events\", \"failing requests: app-frontend -> auth-api:8080 : GET /v1/auth \\u2014 8995 events\", \"failing requests: webhooks-svc -> webhooks-cache:6379 : GET \\u2014 4292 events\", \"failing requests: workspace-api -> workspace-db:5432 : query \\u2014 13 events\", \"error messages: upstream webhooks-svc: 503 no healthy upstream \\u2014 22618 events\", \"error messages: upstream auth-api: 503 no healthy upstream \\u2014 8995 events\", \"error messages: dial tcp webhooks-cache:6379: connect: connection refused \\u2014 4292 events\", \"error messages: context canceled \\u2014 13 events\", \"emitting services: app-frontend \\u2014 31613 events\", \"emitting services: webhooks-svc \\u2014 4292 events\", \"emitting services: workspace-api \\u2014 13 events\"]}",
+      "metadata": {
+        "scenario": "node_overdrain_0050",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "node_overdrain_0050-02",
+      "artifact_type": "service_logs",
+      "subtype": "error_volume_by_service",
+      "source": "error_volume_by_service",
+      "content": "{\"description\": \"Services ranked by number of error events, with each service's most-failed downstream dependencies.\", \"facts\": [\"services: app-frontend \\u2014 31613 events; failing dependencies=2; top dependencies: webhooks-svc (22618), auth-api (8995)\", \"services: webhooks-svc \\u2014 4292 events; failing dependencies=1; top dependencies: webhooks-cache (4292)\", \"services: workspace-api \\u2014 13 events; failing dependencies=1; top dependencies: workspace-db (13)\"]}",
+      "metadata": {
+        "scenario": "node_overdrain_0050",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "node_overdrain_0050-03",
+      "artifact_type": "change_records",
+      "subtype": "change_log",
+      "source": "change_log",
+      "content": "{\"description\": \"Deployments, configuration pushes, infrastructure and automation runs from the change-management and CI/CD audit log: change ID, type, target, actor, time (UTC), status and recorded diff/summary.\", \"facts\": [\"changes: CHG-78396 | deployment | export-worker 10.12.1 -> 10.12.2 | actor: spinnaker | 2023-05-22 06:53 UTC | status: Synced/Healthy | performance tuning of list endpoint \\u2014 1 events\", \"changes: CHG-78403 | deployment | node-recycler 7.36.6 -> 7.37.0 | actor: spinnaker | 2023-05-22 07:44 UTC | status: Synced/Healthy | new batch sizing logic (percentage support for maxUnavailable) \\u2014 1 events\", \"changes: RECYCLE-5837 | node_rotation | general-purpose node group | actor: node-recycler | 2023-05-22 10:59 UTC | status: aborted | eligible nodes 18; computed batch size 15 from maxUnavailable=15%; cordoned and drained 18 nodes concurrently \\u2014 1 events\", \"changes: CHG-78412 | scale_down | deployment node-recycler | actor: v.cho | 2023-05-22 12:21 UTC | status: completed | replicas 1 -> 0 \\u2014 1 events\", \"changes: CHG-78427 | nodegroup_scale | general-purpose node group | actor: v.cho | 2023-05-22 12:31 UTC | status: completed | desired 21 -> 27; uncordon remaining nodes \\u2014 1 events\", \"changes: CHG-78444 | deployment | workspace-api 0.4.4 -> 0.5.0 | actor: spinnaker | 2023-05-24 21:52 UTC | status: Synced/Healthy | dependency bump \\u2014 1 events\", \"change types: deployment \\u2014 3 events\", \"change types: node_rotation \\u2014 1 events\", \"change types: scale_down \\u2014 1 events\", \"change types: nodegroup_scale \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "node_overdrain_0050",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "node_overdrain_0050-04",
+      "artifact_type": "change_records",
+      "subtype": "change_actors",
+      "source": "change_actors",
+      "content": "{\"description\": \"Accounts and automation identities that executed changes, with the hosts or targets they acted on.\", \"facts\": [\"actors: spinnaker \\u2014 3 events; targets: willow-prod-useast/node-recycler (1), willow-prod-useast/export-worker (1), willow-prod-useast/workspace-api (1)\", \"actors: v.cho \\u2014 2 events; targets: willow-prod-useast/node-recycler (1), node group (1)\", \"actors: node-recycler \\u2014 1 events; targets: ip-10-238-93-162 (1), ip-10-238-62-247 (1), ip-10-238-70-115 (1), ip-10-238-93-79 (1), ip-10-238-62-105 (1), ip-10-238-70-150 (1), ip-10-238-93-24 (1), ip-10-238-62-91 (1), ip-10-238-70-78 (1), ip-10-238-93-35 (1), ip-10-238-62-13 (1), ip-10-238-70-16 (1), ip-10-238-93-28 (1), ip-10-238-62-214 (1), ip-10-238-70-8 (1), ip-10-238-93-144 (1), ip-10-238-62-52 (1), ip-10-238-70-178 (1)\"]}",
+      "metadata": {
+        "scenario": "node_overdrain_0050",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "node_overdrain_0050-05",
+      "artifact_type": "infrastructure_events",
+      "subtype": "platform_events",
+      "source": "platform_events",
+      "content": "{\"description\": \"Kubernetes events, cloud-provider health events and host system messages (kernel, hardware, daemons) with the objects or hosts they refer to.\", \"facts\": [\"event reasons: NodeNotSchedulable \\u2014 18 events; top objects: ip-10-238-93-162 (1), ip-10-238-62-247 (1), ip-10-238-70-115 (1), ip-10-238-93-79 (1), ip-10-238-62-105 (1)\", \"event reasons: FailedScheduling \\u2014 2576 events; top objects: pod/auth-api-7fc7a4500-cxz9d (402), pod/webhooks-svc-57e3ccee8-pq8xk (275)\", \"controller logs: node-recycler: batch size 15 computed from maxUnavailable=15% (eligible=18); starting batch \\u2014 1 events; top objects: pod/node-recycler-848decc41-qrmgl (1)\", \"event reasons: Pulled \\u2014 15 events; top objects: pod/export-worker-46be0e854-lm9gk (1)\", \"event reasons: ScalingReplicaSet \\u2014 2 events; top objects: deployment/export-worker (1)\", \"event reasons: Pulled \\u2014 18 events; top objects: pod/workspace-api-d62e35bb7-84jzb (1)\", \"event reasons: ScalingReplicaSet \\u2014 4 events; top objects: deployment/workspace-api (1)\"]}",
+      "metadata": {
+        "scenario": "node_overdrain_0050",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "node_overdrain_0050-06",
+      "artifact_type": "monitoring_alerts",
+      "subtype": "alertmanager_alerts",
+      "source": "alertmanager_alerts",
+      "content": "{\"description\": \"Prometheus Alertmanager alerts: alert names with severity, critical-alert instances, alert names and services, and an hourly timeline of warning and critical alerts (UTC).\", \"facts\": [\"alert names: Watchdog (info) \\u2014 72 events; service: alertmanager; firing continuously\", \"alert names: KubeNodeUnschedulable (warning) \\u2014 54 events; service: kubernetes; first seen in hour 2023-05-22 11:00 UTC; last seen in hour 2023-05-22 13:00 UTC\", \"alert names: KubePodPending (critical) \\u2014 10 events; service: webhooks-svc; first seen in hour 2023-05-22 11:00 UTC; last seen in hour 2023-05-22 13:00 UTC\", \"alert names: AppFrontendErrorRateHigh (critical) \\u2014 8 events; service: app-frontend; first seen in hour 2023-05-22 11:00 UTC; last seen in hour 2023-05-22 13:00 UTC\", \"alert names: KubeNodesCapacityLow (critical) \\u2014 7 events; service: kubernetes; first seen in hour 2023-05-22 11:00 UTC; last seen in hour 2023-05-22 13:00 UTC\", \"alert names: NodeFilesystemSpaceFillingUp (warning) \\u2014 6 events; service: node; first seen in hour 2023-05-22 07:00 UTC; last seen in hour 2023-05-22 09:00 UTC\", \"alert names: KubeJobFailed (warning) \\u2014 2 events; service: batch; first seen in hour 2023-05-23 07:00 UTC; last seen in hour 2023-05-23 07:00 UTC\", \"critical alerts: 25 matching events\", \"critical alerts > critical instances: webhooks-svc \\u2014 10 events\", \"critical alerts > critical instances: app-frontend \\u2014 8 events\", \"critical alerts > critical instances: willow-prod-useast \\u2014 7 events\", \"critical alerts > critical alert names: KubePodPending \\u2014 10 events\", \"critical alerts > critical alert names: AppFrontendErrorRateHigh \\u2014 8 events\", \"critical alerts > critical alert names: KubeNodesCapacityLow \\u2014 7 events\", \"critical alerts > critical services: webhooks-svc \\u2014 10 events\", \"critical alerts > critical services: app-frontend \\u2014 8 events\", \"critical alerts > critical services: kubernetes \\u2014 7 events\", \"alert timeline: 2023-05-22 07:00 UTC \\u2014 2 events\", \"alert timeline: 2023-05-22 08:00 UTC \\u2014 2 events\", \"alert timeline: 2023-05-22 09:00 UTC \\u2014 2 events\", \"alert timeline: 2023-05-22 11:00 UTC \\u2014 29 events\", \"alert timeline: 2023-05-22 12:00 UTC \\u2014 27 events\", \"alert timeline: 2023-05-22 13:00 UTC \\u2014 23 events\", \"alert timeline: 2023-05-23 07:00 UTC \\u2014 2 events\"]}",
+      "metadata": {
+        "scenario": "node_overdrain_0050",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "node_overdrain_0050-07",
+      "artifact_type": "resource_metrics",
+      "subtype": "metric_anomalies",
+      "source": "metric_anomalies",
+      "content": "{\"description\": \"Metric series that deviated from their 7-day baseline (hourly resolution): baseline, peak or trough value, anomaly onset and recovery (UTC).\", \"facts\": [\"metric anomalies: unschedulable nodes on willow-prod-useast \\u2014 baseline 0; peak 18; onset 2023-05-22 10:00 UTC; recovered 2023-05-22 14:00 UTC\"]}",
+      "metadata": {
+        "scenario": "node_overdrain_0050",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "node_overdrain_0050-08",
+      "artifact_type": "derived_findings",
+      "subtype": "derived_summary",
+      "source": "derived_summary",
+      "content": "{\"description\": \"Deterministic summary computed from the query results above (error ranking, instance-to-host join, alert timeline, change correlation, earliest metric anomaly).\", \"facts\": [\"Derived: service app-frontend ranks #1 by error volume (31613 events, 2 failing dependencies). Most-failed dependency: webhooks-svc (22618 errors).\", \"Derived: most-alerted critical instance webhooks-svc (10 critical alerts); no matching host-inventory entry.\", \"Derived: warning/critical alerts span 2023-05-22 07:00 UTC to 2023-05-23 07:00 UTC; earliest alert hour 2023-05-22 07:00 UTC (2 alerts).\", \"Derived: changes recorded from 6 hours before the earliest alert hour to its end: CHG-78396 (deployment, export-worker 10.12.1 -> 10.12.2, spinnaker, 2023-05-22 06:53 UTC); CHG-78403 (deployment, node-recycler 7.36.6 -> 7.37.0, spinnaker, 2023-05-22 07:44 UTC).\", \"Derived: earliest metric anomaly onset 2023-05-22 10:00 UTC (unschedulable nodes on willow-prod-useast).\"]}",
+      "metadata": {
+        "scenario": "node_overdrain_0050",
+        "source_kind": "derived_from_es_results",
+        "heuristic": true
+      }
+    },
+    {
+      "artifact_id": "node_overdrain_0050-09",
+      "artifact_type": "query_coverage",
+      "subtype": "evidence_gaps",
+      "source": "evidence_gaps",
+      "content": "{\"description\": \"Queries that returned nothing or failed; use these to state what is NOT established.\", \"facts\": [\"Query 'host inventory' returned no aggregation results (shards failed: 3 of 96). This evidence is UNAVAILABLE; it is not evidence that nothing exists.\", \"No matching results for: tls certificates / expired certificates. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / expiring within 7 days. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / self signed. (Absence in this query is not proof of absence elsewhere.)\"]}",
+      "metadata": {
+        "scenario": "node_overdrain_0050",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    }
+  ]
+}

@@ -1,0 +1,156 @@
+{
+  "metadata": {
+    "incident_id": "INC-20241115",
+    "scenario": "zonal_disk_0021",
+    "title": "Infrastructure reliability incident investigation",
+    "source": "synthetic/ops-incident-expansion (modeled on neu-nds2/llm-sec-incident-analysis)",
+    "query_window_start": "2024-11-15T00:00:00",
+    "query_window_end": "2024-11-17T23:59:59",
+    "evidence_types": [
+      "change_records",
+      "derived_findings",
+      "infrastructure_events",
+      "monitoring_alerts",
+      "query_coverage",
+      "resource_metrics",
+      "service_logs"
+    ],
+    "artifact_scope_note": "Evidence is aggregated query output (not raw log lines or metric samples); it contains no chat/communication records."
+  },
+  "incident_description": "Reliability incident investigation of a production environment. Evidence consists of Elasticsearch aggregation results over application and proxy logs, Kubernetes, cloud-provider and host system events, Prometheus Alertmanager alerts, change-management / CI-CD audit records and metric anomaly detection. No root cause, impact or trigger is stated; these must be established from the supplied artifacts. Environment context: Organization: Ironix Shop (online retail); Platform: Microsoft Azure centralindia (zones centralindia-1/centralindia-2/centralindia-3); network range 10.145.0.0/16; Kubernetes cluster ironix-prod-centra (AKS); Database tier: self-managed postgres primary/replica on virtual machines with provider block storage, replica in another zone; Change management: production changes carry CR- identifiers.",
+  "investigation_questions": [
+    "What is the hostname of the host or node where the failure originated?",
+    "Give the IP address of the machine where the failure originated.",
+    "Which storage volume attached to the failing host was degraded?",
+    "Which availability zone was affected by the cloud provider event?",
+    "What is the cloud provider's incident or tracking identifier?",
+    "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+    "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+    "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+    "Which change happened shortly before the incident began but did not cause it? Provide its identifier.",
+    "Which change restored normal service? Provide its change identifier."
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "zonal_disk_0021-01",
+      "artifact_type": "service_logs",
+      "subtype": "error_logs",
+      "source": "error_logs",
+      "content": "{\"description\": \"Application and proxy error logs: HTTP/gRPC status codes, failing requests (caller -> callee:port : operation), error messages and the services emitting them.\", \"facts\": [\"error events: 44675 matching events\", \"error events > status codes: 504 \\u2014 31580 events\", \"error events > status codes: 500 \\u2014 13095 events\", \"failing requests: web-bff -> orders-api:8080 : GET /v1/orders/{id} \\u2014 31580 events\", \"failing requests: orders-api -> db-postgres-01:5432 : SELECT/UPDATE \\u2014 10255 events\", \"failing requests: payments-api -> db-postgres-01:5432 : INSERT \\u2014 2607 events\", \"failing requests: cart-service -> cart-db:5432 : query \\u2014 233 events\", \"error messages: upstream orders-api: 504 Gateway Timeout \\u2014 31580 events\", \"error messages: pq: canceling statement due to statement timeout \\u2014 10255 events\", \"error messages: ERROR: canceling statement due to statement timeout \\u2014 2607 events\", \"error messages: pq: could not serialize access due to concurrent update \\u2014 233 events\", \"emitting services: web-bff \\u2014 31580 events\", \"emitting services: orders-api \\u2014 10255 events\", \"emitting services: payments-api \\u2014 2607 events\", \"emitting services: cart-service \\u2014 233 events\"]}",
+      "metadata": {
+        "scenario": "zonal_disk_0021",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "zonal_disk_0021-02",
+      "artifact_type": "service_logs",
+      "subtype": "error_volume_by_service",
+      "source": "error_volume_by_service",
+      "content": "{\"description\": \"Services ranked by number of error events, with each service's most-failed downstream dependencies.\", \"facts\": [\"services: web-bff \\u2014 31580 events; failing dependencies=1; top dependencies: orders-api (31580)\", \"services: orders-api \\u2014 10255 events; failing dependencies=1; top dependencies: db-postgres-01 (10255)\", \"services: payments-api \\u2014 2607 events; failing dependencies=1; top dependencies: db-postgres-01 (2607)\", \"services: cart-service \\u2014 233 events; failing dependencies=1; top dependencies: cart-db (233)\"]}",
+      "metadata": {
+        "scenario": "zonal_disk_0021",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "zonal_disk_0021-03",
+      "artifact_type": "change_records",
+      "subtype": "change_log",
+      "source": "change_log",
+      "content": "{\"description\": \"Deployments, configuration pushes, infrastructure and automation runs from the change-management and CI/CD audit log: change ID, type, target, actor, time (UTC), status and recorded diff/summary.\", \"facts\": [\"changes: CR-30219 | deployment | cart-service 3.22.7 -> 3.22.8 | actor: azure-pipelines | 2024-11-15 08:43 UTC | status: Synced/Healthy | performance tuning of list endpoint \\u2014 1 events\", \"changes: CR-30236 | deployment | inventory-svc 5.10.4 -> 5.11.0 | actor: azure-pipelines | 2024-11-16 00:21 UTC | status: Synced/Healthy | dependency bump \\u2014 1 events\", \"changes: CR-30264 | manual_failover | postgres primary db-postgres-01 -> db-postgres-02 | actor: k.das | 2024-11-16 06:03 UTC | status: completed | promote replica db-postgres-02 (centralindia-3) \\u2014 1 events\", \"changes: CR-30281 | deployment | promo-svc 6.30.11 -> 6.30.12 | actor: azure-pipelines | 2024-11-16 13:36 UTC | status: succeeded | logging improvements \\u2014 1 events\", \"change types: deployment \\u2014 3 events\", \"change types: manual_failover \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "zonal_disk_0021",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "zonal_disk_0021-04",
+      "artifact_type": "change_records",
+      "subtype": "change_actors",
+      "source": "change_actors",
+      "content": "{\"description\": \"Accounts and automation identities that executed changes, with the hosts or targets they acted on.\", \"facts\": [\"actors: azure-pipelines \\u2014 3 events; targets: ironix-prod-centra/inventory-svc (1), ironix-prod-centra/cart-service (1), ironix-prod-centra/promo-svc (1)\", \"actors: k.das \\u2014 1 events; targets: db-postgres-01 (1), db-postgres-02 (1)\"]}",
+      "metadata": {
+        "scenario": "zonal_disk_0021",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "zonal_disk_0021-05",
+      "artifact_type": "infrastructure_events",
+      "subtype": "host_inventory",
+      "source": "host_inventory",
+      "content": "{\"description\": \"Host and node names seen in infrastructure events with their IP address, role and availability zone / rack.\", \"facts\": [\"hosts: db-postgres-01 \\u2014 228 events; ip: 10.145.96.154; role: postgres-primary; zone: centralindia-2\", \"hosts: aks-nodepool1-83277084-vmss000020 \\u2014 181 events; ip: 10.145.229.74; role: k8s-worker; zone: centralindia-3\", \"hosts: aks-nodepool1-16439562-vmss000032 \\u2014 122 events; ip: 10.145.229.195; role: k8s-worker; zone: centralindia-3\", \"hosts: db-postgres-02 \\u2014 93 events; ip: 10.145.144.51; role: postgres-replica; zone: centralindia-3\"]}",
+      "metadata": {
+        "scenario": "zonal_disk_0021",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "zonal_disk_0021-06",
+      "artifact_type": "infrastructure_events",
+      "subtype": "platform_events",
+      "source": "platform_events",
+      "content": "{\"description\": \"Kubernetes events, cloud-provider health events and host system messages (kernel, hardware, daemons) with the objects or hosts they refer to.\", \"facts\": [\"cloud health events: Azure Service Health: Managed Disks - degraded performance - centralindia-2 (tracking ID B9S7-H2Y); impact start 2024-11-16 04:11 UTC \\u2014 2 events; top objects: db-postgres-01-data-disk (2)\", \"system messages: kernel: sd 1:0:0:0: [sdc] tag#386 timing out command, waited 180s \\u2014 119 events; top objects: db-postgres-01 (1)\", \"system messages: kernel: INFO: task postgres:4012 blocked for more than 120 seconds. \\u2014 29 events; top objects: db-postgres-01 (1)\", \"instance status checks: instance and system status checks passed \\u2014 774 events; top objects: db-postgres-01 (1), db-postgres-02 (1)\", \"event reasons: Pulled \\u2014 22 events; top objects: pod/inventory-svc-388efd716-m8jgw (1)\", \"event reasons: ScalingReplicaSet \\u2014 4 events; top objects: deployment/inventory-svc (1)\", \"event reasons: Pulled \\u2014 26 events; top objects: pod/cart-service-2c273ea01-wkbx2 (2)\", \"event reasons: ScalingReplicaSet \\u2014 6 events; top objects: deployment/cart-service (1)\", \"event reasons: Pulled \\u2014 19 events; top objects: pod/promo-svc-0ffea6052-vm5s4 (3)\", \"event reasons: ScalingReplicaSet \\u2014 4 events; top objects: deployment/promo-svc (3)\"]}",
+      "metadata": {
+        "scenario": "zonal_disk_0021",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "zonal_disk_0021-07",
+      "artifact_type": "monitoring_alerts",
+      "subtype": "alertmanager_alerts",
+      "source": "alertmanager_alerts",
+      "content": "{\"description\": \"Prometheus Alertmanager alerts: alert names with severity, critical-alert instances, alert names and services, and an hourly timeline of warning and critical alerts (UTC).\", \"facts\": [\"alert names: Watchdog (info) \\u2014 72 events; service: alertmanager; firing continuously\", \"alert names: HighDiskIOLatency (critical) \\u2014 13 events; service: node; first seen in hour 2024-11-16 04:00 UTC; last seen in hour 2024-11-16 06:00 UTC\", \"alert names: PostgresSlowQueries (critical) \\u2014 9 events; service: postgres; first seen in hour 2024-11-16 04:00 UTC; last seen in hour 2024-11-16 06:00 UTC\", \"alert names: WebBff5xxRateHigh (critical) \\u2014 7 events; service: web-bff; first seen in hour 2024-11-16 04:00 UTC; last seen in hour 2024-11-16 06:00 UTC\", \"alert names: NodeFilesystemSpaceFillingUp (warning) \\u2014 2 events; service: node; first seen in hour 2024-11-16 14:00 UTC; last seen in hour 2024-11-16 14:00 UTC\", \"critical alerts: 29 matching events\", \"critical alerts > critical instances: 10.145.96.154:9100 \\u2014 13 events\", \"critical alerts > critical instances: 10.145.96.154:9187 \\u2014 9 events\", \"critical alerts > critical instances: web-bff \\u2014 7 events\", \"critical alerts > critical alert names: HighDiskIOLatency \\u2014 13 events\", \"critical alerts > critical alert names: PostgresSlowQueries \\u2014 9 events\", \"critical alerts > critical alert names: WebBff5xxRateHigh \\u2014 7 events\", \"critical alerts > critical services: node \\u2014 13 events\", \"critical alerts > critical services: postgres \\u2014 9 events\", \"critical alerts > critical services: web-bff \\u2014 7 events\", \"alert timeline: 2024-11-16 04:00 UTC \\u2014 10 events\", \"alert timeline: 2024-11-16 05:00 UTC \\u2014 11 events\", \"alert timeline: 2024-11-16 06:00 UTC \\u2014 8 events\", \"alert timeline: 2024-11-16 14:00 UTC \\u2014 2 events\"]}",
+      "metadata": {
+        "scenario": "zonal_disk_0021",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "zonal_disk_0021-08",
+      "artifact_type": "resource_metrics",
+      "subtype": "metric_anomalies",
+      "source": "metric_anomalies",
+      "content": "{\"description\": \"Metric series that deviated from their 7-day baseline (hourly resolution): baseline, peak or trough value, anomaly onset and recovery (UTC).\", \"facts\": [\"metric anomalies: disk await (data volume) on db-postgres-01 \\u2014 baseline 1.4 ms; peak 1,946 ms; onset 2024-11-16 04:00 UTC; recovered 2024-11-16 07:00 UTC\", \"metric anomalies: replication lag on db-postgres-02 \\u2014 baseline 0 s; peak 1,109 s; onset 2024-11-16 04:00 UTC; recovered 2024-11-16 07:00 UTC\"]}",
+      "metadata": {
+        "scenario": "zonal_disk_0021",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "zonal_disk_0021-09",
+      "artifact_type": "derived_findings",
+      "subtype": "derived_summary",
+      "source": "derived_summary",
+      "content": "{\"description\": \"Deterministic summary computed from the query results above (error ranking, instance-to-host join, alert timeline, change correlation, earliest metric anomaly).\", \"facts\": [\"Derived: service web-bff ranks #1 by error volume (31580 events, 1 failing dependencies). Most-failed dependency: orders-api (31580 errors).\", \"Derived: most-alerted critical instance 10.145.96.154:9100 (13 critical alerts) maps to hostname db-postgres-01; role postgres-primary; zone centralindia-2.\", \"Derived: warning/critical alerts span 2024-11-16 04:00 UTC to 2024-11-16 14:00 UTC; earliest alert hour 2024-11-16 04:00 UTC (10 alerts).\", \"Derived: changes recorded from 6 hours before the earliest alert hour to its end: CR-30236 (deployment, inventory-svc 5.10.4 -> 5.11.0, azure-pipelines, 2024-11-16 00:21 UTC).\", \"Derived: earliest metric anomaly onset 2024-11-16 04:00 UTC (disk await (data volume) on db-postgres-01).\"]}",
+      "metadata": {
+        "scenario": "zonal_disk_0021",
+        "source_kind": "derived_from_es_results",
+        "heuristic": true
+      }
+    },
+    {
+      "artifact_id": "zonal_disk_0021-10",
+      "artifact_type": "query_coverage",
+      "subtype": "evidence_gaps",
+      "source": "evidence_gaps",
+      "content": "{\"description\": \"Queries that returned nothing or failed; use these to state what is NOT established.\", \"facts\": [\"No matching results for: tls certificates / expired certificates. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / expiring within 7 days. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / self signed. (Absence in this query is not proof of absence elsewhere.)\"]}",
+      "metadata": {
+        "scenario": "zonal_disk_0021",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    }
+  ]
+}

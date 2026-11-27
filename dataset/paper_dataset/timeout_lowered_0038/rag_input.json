@@ -1,0 +1,153 @@
+{
+  "metadata": {
+    "incident_id": "INC-20251223",
+    "scenario": "timeout_lowered_0038",
+    "title": "Infrastructure reliability incident investigation",
+    "source": "synthetic/ops-incident-expansion (modeled on neu-nds2/llm-sec-incident-analysis)",
+    "query_window_start": "2025-12-23T00:00:00",
+    "query_window_end": "2025-12-25T23:59:59",
+    "evidence_types": [
+      "change_records",
+      "derived_findings",
+      "infrastructure_events",
+      "monitoring_alerts",
+      "query_coverage",
+      "resource_metrics",
+      "service_logs"
+    ],
+    "artifact_scope_note": "Evidence is aggregated query output (not raw log lines or metric samples); it contains no chat/communication records."
+  },
+  "incident_description": "Reliability incident investigation of a production environment. Evidence consists of Elasticsearch aggregation results over application and proxy logs, Kubernetes, cloud-provider and host system events, Prometheus Alertmanager alerts, change-management / CI-CD audit records and metric anomaly detection. No root cause, impact or trigger is stated; these must be established from the supplied artifacts. Environment context: Organization: Copperoxa Mutual (insurance); Platform: Microsoft Azure centralindia (zones centralindia-1/centralindia-2/centralindia-3); network range 10.219.0.0/16; Kubernetes cluster copper-prod-centra (AKS); Edge tier: agent-portal proxies API calls to backend services using per-upstream timeouts from its configuration file; Change management: production changes carry RFC- identifiers.",
+  "investigation_questions": [
+    "Which component is the source of the failure?",
+    "Which account or automation identity executed the triggering change?",
+    "To what value was the upstream timeout changed?",
+    "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+    "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+    "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+    "Which change restored normal service? Provide its change identifier."
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "timeout_lowered_0038-01",
+      "artifact_type": "service_logs",
+      "subtype": "error_logs",
+      "source": "error_logs",
+      "content": "{\"description\": \"Application and proxy error logs: HTTP/gRPC status codes, failing requests (caller -> callee:port : operation), error messages and the services emitting them.\", \"facts\": [\"error events: 17031 matching events\", \"error events > status codes: 504 \\u2014 12759 events\", \"error events > status codes: 499 \\u2014 4059 events\", \"error events > status codes: 500 \\u2014 213 events\", \"failing requests: agent-portal -> fraud-scorer:8080 : GET /v1/reports/export \\u2014 10911 events\", \"failing requests: fraud-scorer -> client : /v1/reports/export \\u2014 4059 events\", \"failing requests: agent-portal -> fraud-scorer:8080 : GET /v1/other endpoints \\u2014 1848 events\", \"failing requests: underwriting-svc -> underwriting-db:5432 : query \\u2014 213 events\", \"error messages: upstream request timeout after 300ms \\u2014 12759 events\", \"error messages: client closed connection before response (context canceled) \\u2014 4059 events\", \"error messages: pq: could not serialize access due to concurrent update \\u2014 213 events\", \"emitting services: agent-portal \\u2014 12759 events\", \"emitting services: fraud-scorer \\u2014 4059 events\", \"emitting services: underwriting-svc \\u2014 213 events\"]}",
+      "metadata": {
+        "scenario": "timeout_lowered_0038",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "timeout_lowered_0038-02",
+      "artifact_type": "service_logs",
+      "subtype": "error_volume_by_service",
+      "source": "error_volume_by_service",
+      "content": "{\"description\": \"Services ranked by number of error events, with each service's most-failed downstream dependencies.\", \"facts\": [\"services: agent-portal \\u2014 12759 events; failing dependencies=1; top dependencies: fraud-scorer (12759)\", \"services: fraud-scorer \\u2014 4059 events; failing dependencies=1; top dependencies: client (4059)\", \"services: underwriting-svc \\u2014 213 events; failing dependencies=1; top dependencies: underwriting-db (213)\"]}",
+      "metadata": {
+        "scenario": "timeout_lowered_0038",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "timeout_lowered_0038-03",
+      "artifact_type": "change_records",
+      "subtype": "change_log",
+      "source": "change_log",
+      "content": "{\"description\": \"Deployments, configuration pushes, infrastructure and automation runs from the change-management and CI/CD audit log: change ID, type, target, actor, time (UTC), status and recorded diff/summary.\", \"facts\": [\"changes: RFC-54180 | deployment | payments-api 1.20.4 -> 1.20.5 | actor: github-actions | 2025-12-23 15:31 UTC | status: completed | performance tuning of list endpoint \\u2014 1 events\", \"changes: RFC-54211 | deployment | broker-api 4.28.5 -> 4.28.6 | actor: github-actions | 2025-12-24 06:15 UTC | status: succeeded | logging improvements \\u2014 1 events\", \"changes: RFC-54238 | config_push | agent-portal routes.yaml | actor: j.weber | 2025-12-24 23:47 UTC | status: completed | upstream fraud-scorer: timeout 30s -> 300ms (intended for health-check route) \\u2014 1 events\", \"changes: RFC-54249 | config_push | agent-portal routes.yaml | actor: i.nguyen | 2025-12-25 02:52 UTC | status: completed | revert RFC-54238: timeout 300ms -> 30s \\u2014 1 events\", \"changes: RFC-54258 | deployment | underwriting-svc 11.24.1 -> 11.25.0 | actor: github-actions | 2025-12-25 09:03 UTC | status: completed | logging improvements \\u2014 1 events\", \"changes: RFC-54295 | deployment | claims-api 11.4.11 -> 11.4.12 | actor: github-actions | 2025-12-25 13:47 UTC | status: completed | minor bug fixes \\u2014 1 events\", \"change types: deployment \\u2014 4 events\", \"change types: config_push \\u2014 2 events\"]}",
+      "metadata": {
+        "scenario": "timeout_lowered_0038",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "timeout_lowered_0038-04",
+      "artifact_type": "change_records",
+      "subtype": "change_actors",
+      "source": "change_actors",
+      "content": "{\"description\": \"Accounts and automation identities that executed changes, with the hosts or targets they acted on.\", \"facts\": [\"actors: github-actions \\u2014 4 events; targets: copper-prod-centra/payments-api (1), copper-prod-centra/underwriting-svc (1), copper-prod-centra/claims-api (1), copper-prod-centra/broker-api (1)\", \"actors: i.nguyen \\u2014 1 events; targets: copper-prod-centra/agent-portal (1)\", \"actors: j.weber \\u2014 1 events; targets: copper-prod-centra/agent-portal (1)\"]}",
+      "metadata": {
+        "scenario": "timeout_lowered_0038",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "timeout_lowered_0038-05",
+      "artifact_type": "infrastructure_events",
+      "subtype": "host_inventory",
+      "source": "host_inventory",
+      "content": "{\"description\": \"Host and node names seen in infrastructure events with their IP address, role and availability zone / rack.\", \"facts\": [\"hosts: aks-nodepool1-39675322-vmss000002 \\u2014 119 events; ip: 10.219.31.197; role: k8s-worker; zone: centralindia-3\", \"hosts: aks-nodepool1-58314044-vmss000023 \\u2014 75 events; ip: 10.219.120.64; role: k8s-worker; zone: centralindia-1\"]}",
+      "metadata": {
+        "scenario": "timeout_lowered_0038",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "timeout_lowered_0038-06",
+      "artifact_type": "infrastructure_events",
+      "subtype": "platform_events",
+      "source": "platform_events",
+      "content": "{\"description\": \"Kubernetes events, cloud-provider health events and host system messages (kernel, hardware, daemons) with the objects or hosts they refer to.\", \"facts\": [\"event reasons: Pulled \\u2014 30 events; top objects: pod/payments-api-e2b215156-j5p6c (3)\", \"event reasons: ScalingReplicaSet \\u2014 3 events; top objects: deployment/payments-api (1)\", \"event reasons: Pulled \\u2014 3 events; top objects: pod/underwriting-svc-bc96f9bf3-pxwwx (1)\", \"event reasons: ScalingReplicaSet \\u2014 6 events; top objects: deployment/underwriting-svc (3)\", \"event reasons: Pulled \\u2014 8 events; top objects: pod/claims-api-59a7cf16a-r648n (1)\", \"event reasons: ScalingReplicaSet \\u2014 6 events; top objects: deployment/claims-api (3)\", \"event reasons: Pulled \\u2014 10 events; top objects: pod/broker-api-42380ab9c-nclwj (1)\", \"event reasons: ScalingReplicaSet \\u2014 2 events; top objects: deployment/broker-api (2)\"]}",
+      "metadata": {
+        "scenario": "timeout_lowered_0038",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "timeout_lowered_0038-07",
+      "artifact_type": "monitoring_alerts",
+      "subtype": "alertmanager_alerts",
+      "source": "alertmanager_alerts",
+      "content": "{\"description\": \"Prometheus Alertmanager alerts: alert names with severity, critical-alert instances, alert names and services, and an hourly timeline of warning and critical alerts (UTC).\", \"facts\": [\"alert names: Watchdog (info) \\u2014 72 events; service: alertmanager; firing continuously\", \"alert names: AgentPortalGatewayTimeouts (critical) \\u2014 14 events; service: agent-portal; first seen in hour 2025-12-25 00:00 UTC; last seen in hour 2025-12-25 02:00 UTC\", \"alert names: SLOLatencyBudgetBurn (warning) \\u2014 7 events; service: agent-portal; first seen in hour 2025-12-25 00:00 UTC; last seen in hour 2025-12-25 02:00 UTC\", \"alert names: NodeFilesystemSpaceFillingUp (warning) \\u2014 5 events; service: node; first seen in hour 2025-12-25 15:00 UTC; last seen in hour 2025-12-25 17:00 UTC\", \"alert names: KubeJobFailed (warning) \\u2014 1 events; service: batch; first seen in hour 2025-12-25 16:00 UTC; last seen in hour 2025-12-25 16:00 UTC\", \"critical alerts: 14 matching events\", \"critical alerts > critical instances: agent-portal \\u2014 14 events\", \"critical alerts > critical alert names: AgentPortalGatewayTimeouts \\u2014 14 events\", \"critical alerts > critical services: agent-portal \\u2014 14 events\", \"alert timeline: 2025-12-25 00:00 UTC \\u2014 7 events\", \"alert timeline: 2025-12-25 01:00 UTC \\u2014 7 events\", \"alert timeline: 2025-12-25 02:00 UTC \\u2014 7 events\", \"alert timeline: 2025-12-25 15:00 UTC \\u2014 2 events\", \"alert timeline: 2025-12-25 16:00 UTC \\u2014 3 events\", \"alert timeline: 2025-12-25 17:00 UTC \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "timeout_lowered_0038",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "timeout_lowered_0038-08",
+      "artifact_type": "resource_metrics",
+      "subtype": "metric_anomalies",
+      "source": "metric_anomalies",
+      "content": "{\"description\": \"Metric series that deviated from their 7-day baseline (hourly resolution): baseline, peak or trough value, anomaly onset and recovery (UTC).\", \"facts\": [\"metric anomalies: 504 responses for /v1/reports/export on agent-portal \\u2014 baseline ~0/min; peak 522/min; onset 2025-12-24 23:00 UTC; recovered 2025-12-25 03:00 UTC\"]}",
+      "metadata": {
+        "scenario": "timeout_lowered_0038",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "timeout_lowered_0038-09",
+      "artifact_type": "derived_findings",
+      "subtype": "derived_summary",
+      "source": "derived_summary",
+      "content": "{\"description\": \"Deterministic summary computed from the query results above (error ranking, instance-to-host join, alert timeline, change correlation, earliest metric anomaly).\", \"facts\": [\"Derived: service agent-portal ranks #1 by error volume (12759 events, 1 failing dependencies). Most-failed dependency: fraud-scorer (12759 errors).\", \"Derived: most-alerted critical instance agent-portal (14 critical alerts); no matching host-inventory entry.\", \"Derived: warning/critical alerts span 2025-12-25 00:00 UTC to 2025-12-25 17:00 UTC; earliest alert hour 2025-12-25 00:00 UTC (7 alerts).\", \"Derived: changes recorded from 6 hours before the earliest alert hour to its end: RFC-54238 (config_push, agent-portal routes.yaml, j.weber, 2025-12-24 23:47 UTC).\", \"Derived: earliest metric anomaly onset 2025-12-24 23:00 UTC (504 responses for /v1/reports/export on agent-portal).\"]}",
+      "metadata": {
+        "scenario": "timeout_lowered_0038",
+        "source_kind": "derived_from_es_results",
+        "heuristic": true
+      }
+    },
+    {
+      "artifact_id": "timeout_lowered_0038-10",
+      "artifact_type": "query_coverage",
+      "subtype": "evidence_gaps",
+      "source": "evidence_gaps",
+      "content": "{\"description\": \"Queries that returned nothing or failed; use these to state what is NOT established.\", \"facts\": [\"No matching results for: tls certificates / expired certificates. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / expiring within 7 days. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / self signed. (Absence in this query is not proof of absence elsewhere.)\"]}",
+      "metadata": {
+        "scenario": "timeout_lowered_0038",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    }
+  ]
+}

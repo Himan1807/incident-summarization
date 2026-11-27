@@ -1,0 +1,166 @@
+{
+  "metadata": {
+    "incident_id": "INC-20230501",
+    "scenario": "cache_stampede_0017",
+    "title": "Infrastructure reliability incident investigation",
+    "source": "synthetic/ops-incident-expansion (modeled on neu-nds2/llm-sec-incident-analysis)",
+    "query_window_start": "2023-05-01T00:00:00",
+    "query_window_end": "2023-05-03T23:59:59",
+    "evidence_types": [
+      "change_records",
+      "derived_findings",
+      "infrastructure_events",
+      "monitoring_alerts",
+      "network_summary",
+      "query_coverage",
+      "resource_metrics",
+      "service_logs"
+    ],
+    "artifact_scope_note": "Evidence is aggregated query output (not raw log lines or metric samples); it contains no chat/communication records."
+  },
+  "incident_description": "Reliability incident investigation of a production environment. Evidence consists of Elasticsearch aggregation results over application and proxy logs, Kubernetes, cloud-provider and host system events, Prometheus Alertmanager alerts, change-management / CI-CD audit records and metric anomaly detection. No root cause, impact or trigger is stated; these must be established from the supplied artifacts. Environment context: Organization: Stoneidian Studios (online gaming); Platform: on-premises data center DC-Central, server range 10.184.0.0/16; Caching tier: self-managed Redis (cache-redis-02, maxmemory 4gb, allkeys-lru) in front of the profile-api PostgreSQL database profile-db-01; Change management: production changes carry CHG- identifiers.",
+  "investigation_questions": [
+    "What is the IP address of the host or node where the failure originated?",
+    "Which database host became overloaded as a consequence of the initial failure?",
+    "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+    "Did the failure stay isolated to one component or cascade across services? Answer 'isolated failure' or 'cascading failure'.",
+    "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+    "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+    "Which change restored normal service? Provide its change identifier."
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "cache_stampede_0017-01",
+      "artifact_type": "service_logs",
+      "subtype": "error_logs",
+      "source": "error_logs",
+      "content": "{\"description\": \"Application and proxy error logs: HTTP/gRPC status codes, failing requests (caller -> callee:port : operation), error messages and the services emitting them.\", \"facts\": [\"error events: 50707 matching events\", \"error events > status codes: 504 \\u2014 33936 events\", \"error events > status codes: 503 \\u2014 9100 events\", \"error events > status codes: 500 \\u2014 7671 events\", \"failing requests: game-gateway -> profile-api:8080 : GET /v1/profile \\u2014 33731 events\", \"failing requests: inventory-api -> profile-api:8080 : GET /v1/profile/{id} \\u2014 9100 events\", \"failing requests: profile-api -> profile-db-01:5432 : SELECT (cache miss fallback) \\u2014 7671 events\", \"failing requests: matchmaking-svc -> matchmaking-db:5432 : query \\u2014 205 events\", \"error messages: upstream profile-api: 504 Gateway Timeout \\u2014 33731 events\", \"error messages: profile-api: context deadline exceeded \\u2014 9100 events\", \"error messages: pq: sorry, too many clients already \\u2014 7671 events\", \"error messages: upstream request timeout \\u2014 205 events\", \"emitting services: game-gateway \\u2014 33731 events\", \"emitting services: inventory-api \\u2014 9100 events\", \"emitting services: profile-api \\u2014 7671 events\", \"emitting services: matchmaking-svc \\u2014 205 events\"]}",
+      "metadata": {
+        "scenario": "cache_stampede_0017",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "cache_stampede_0017-02",
+      "artifact_type": "service_logs",
+      "subtype": "error_volume_by_service",
+      "source": "error_volume_by_service",
+      "content": "{\"description\": \"Services ranked by number of error events, with each service's most-failed downstream dependencies.\", \"facts\": [\"services: game-gateway \\u2014 33731 events; failing dependencies=1; top dependencies: profile-api (33731)\", \"services: inventory-api \\u2014 9100 events; failing dependencies=1; top dependencies: profile-api (9100)\", \"services: profile-api \\u2014 7671 events; failing dependencies=1; top dependencies: profile-db-01 (7671)\", \"services: matchmaking-svc \\u2014 205 events; failing dependencies=1; top dependencies: matchmaking-db (205)\"]}",
+      "metadata": {
+        "scenario": "cache_stampede_0017",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "cache_stampede_0017-03",
+      "artifact_type": "change_records",
+      "subtype": "change_log",
+      "source": "change_log",
+      "content": "{\"description\": \"Deployments, configuration pushes, infrastructure and automation runs from the change-management and CI/CD audit log: change ID, type, target, actor, time (UTC), status and recorded diff/summary.\", \"facts\": [\"changes: CHG-18723 | deployment | telemetry-ingest 9.5.8 -> 9.5.9 | actor: ansible-deploy | 2023-05-01 04:37 UTC | status: Synced/Healthy | feature flag cleanup \\u2014 1 events\", \"changes: CHG-18728 | deployment | matchmaking-svc 10.9.11 -> 10.9.12 | actor: ansible-deploy | 2023-05-01 08:18 UTC | status: succeeded | feature flag cleanup \\u2014 1 events\", \"changes: CHG-18757 | deployment | store-api 10.4.8 -> 10.5.0 | actor: ansible-deploy | 2023-05-01 14:12 UTC | status: succeeded | new optional API field \\u2014 1 events\", \"changes: CHG-18796 | batch_job | profile-api cache warm-up / metadata backfill | actor: ansible-deploy | 2023-05-01 20:25 UTC | status: completed | backfill wrote 46k new cache keys \\u2014 1 events\", \"changes: CHG-18812 | deployment | leaderboard-api 12.22.0 -> 12.22.1 | actor: ansible-deploy | 2023-05-02 00:17 UTC | status: completed | copy and UI text changes \\u2014 1 events\", \"changes: CHG-18826 | config_push | cache-redis-02 redis.conf | actor: m.horvat | 2023-05-02 06:41 UTC | status: completed | CONFIG SET maxmemory 4gb -> 8gb; CONFIG REWRITE \\u2014 1 events\", \"change types: deployment \\u2014 4 events\", \"change types: batch_job \\u2014 1 events\", \"change types: config_push \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "cache_stampede_0017",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "cache_stampede_0017-04",
+      "artifact_type": "change_records",
+      "subtype": "change_actors",
+      "source": "change_actors",
+      "content": "{\"description\": \"Accounts and automation identities that executed changes, with the hosts or targets they acted on.\", \"facts\": [\"actors: ansible-deploy \\u2014 5 events; targets: profile-api (1), leaderboard-api (1), matchmaking-svc (1), telemetry-ingest (1), store-api (1)\", \"actors: m.horvat \\u2014 1 events; targets: cache-redis-02 (1)\"]}",
+      "metadata": {
+        "scenario": "cache_stampede_0017",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "cache_stampede_0017-05",
+      "artifact_type": "infrastructure_events",
+      "subtype": "host_inventory",
+      "source": "host_inventory",
+      "content": "{\"description\": \"Host and node names seen in infrastructure events with their IP address, role and availability zone / rack.\", \"facts\": [\"hosts: telemetry-08 \\u2014 221 events; ip: 10.184.208.156; role: telemetry-ingest host; zone: rack D29\", \"hosts: profile-db-01 \\u2014 213 events; ip: 10.184.213.157; role: postgres-primary; zone: rack D29\", \"hosts: cache-redis-02 \\u2014 203 events; ip: 10.184.217.50; role: redis-cache; zone: rack D27\", \"hosts: telemetry-03 \\u2014 133 events; ip: 10.184.208.97; role: telemetry-ingest host; zone: rack D29\"]}",
+      "metadata": {
+        "scenario": "cache_stampede_0017",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "cache_stampede_0017-06",
+      "artifact_type": "infrastructure_events",
+      "subtype": "platform_events",
+      "source": "platform_events",
+      "content": "{\"description\": \"Kubernetes events, cloud-provider health events and host system messages (kernel, hardware, daemons) with the objects or hosts they refer to.\", \"facts\": [\"system messages: postgres: FATAL: sorry, too many clients already \\u2014 5941 events; top objects: profile-db-01 (1)\"]}",
+      "metadata": {
+        "scenario": "cache_stampede_0017",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "cache_stampede_0017-07",
+      "artifact_type": "monitoring_alerts",
+      "subtype": "alertmanager_alerts",
+      "source": "alertmanager_alerts",
+      "content": "{\"description\": \"Prometheus Alertmanager alerts: alert names with severity, critical-alert instances, alert names and services, and an hourly timeline of warning and critical alerts (UTC).\", \"facts\": [\"alert names: Watchdog (info) \\u2014 72 events; service: alertmanager; firing continuously\", \"alert names: RedisCacheHitRatioLow (critical) \\u2014 15 events; service: redis; first seen in hour 2023-05-02 03:00 UTC; last seen in hour 2023-05-02 06:00 UTC\", \"alert names: GameGateway5xxHigh (critical) \\u2014 12 events; service: game-gateway; first seen in hour 2023-05-02 03:00 UTC; last seen in hour 2023-05-02 06:00 UTC\", \"alert names: ProfileApiErrorRateHigh (critical) \\u2014 12 events; service: profile-api; first seen in hour 2023-05-02 03:00 UTC; last seen in hour 2023-05-02 06:00 UTC\", \"alert names: RedisMemoryHigh (warning) \\u2014 10 events; service: redis; first seen in hour 2023-05-02 00:00 UTC; last seen in hour 2023-05-02 06:00 UTC\", \"alert names: PostgresTooManyConnections (critical) \\u2014 8 events; service: postgres; first seen in hour 2023-05-02 03:00 UTC; last seen in hour 2023-05-02 06:00 UTC\", \"alert names: KubeJobFailed (warning) \\u2014 5 events; service: batch; first seen in hour 2023-05-02 18:00 UTC; last seen in hour 2023-05-02 20:00 UTC\", \"alert names: NodeFilesystemSpaceFillingUp (warning) \\u2014 3 events; service: node; first seen in hour 2023-05-02 17:00 UTC; last seen in hour 2023-05-02 18:00 UTC\", \"critical alerts: 47 matching events\", \"critical alerts > critical instances: 10.184.217.50:9121 \\u2014 15 events\", \"critical alerts > critical instances: game-gateway \\u2014 12 events\", \"critical alerts > critical instances: profile-api \\u2014 12 events\", \"critical alerts > critical instances: 10.184.213.157:9187 \\u2014 8 events\", \"critical alerts > critical alert names: RedisCacheHitRatioLow \\u2014 15 events\", \"critical alerts > critical alert names: GameGateway5xxHigh \\u2014 12 events\", \"critical alerts > critical alert names: ProfileApiErrorRateHigh \\u2014 12 events\", \"critical alerts > critical alert names: PostgresTooManyConnections \\u2014 8 events\", \"critical alerts > critical services: redis \\u2014 15 events\", \"critical alerts > critical services: game-gateway \\u2014 12 events\", \"critical alerts > critical services: profile-api \\u2014 12 events\", \"critical alerts > critical services: postgres \\u2014 8 events\", \"alert timeline: 2023-05-02 00:00 UTC \\u2014 1 events\", \"alert timeline: 2023-05-02 01:00 UTC \\u2014 1 events\", \"alert timeline: 2023-05-02 02:00 UTC \\u2014 1 events\", \"alert timeline: 2023-05-02 03:00 UTC \\u2014 18 events\", \"alert timeline: 2023-05-02 04:00 UTC \\u2014 9 events\", \"alert timeline: 2023-05-02 05:00 UTC \\u2014 14 events\", \"alert timeline: 2023-05-02 06:00 UTC \\u2014 13 events\", \"alert timeline: 2023-05-02 17:00 UTC \\u2014 1 events\", \"alert timeline: 2023-05-02 18:00 UTC \\u2014 4 events\", \"alert timeline: 2023-05-02 19:00 UTC \\u2014 2 events\", \"alert timeline: 2023-05-02 20:00 UTC \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "cache_stampede_0017",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "cache_stampede_0017-08",
+      "artifact_type": "resource_metrics",
+      "subtype": "metric_anomalies",
+      "source": "metric_anomalies",
+      "content": "{\"description\": \"Metric series that deviated from their 7-day baseline (hourly resolution): baseline, peak or trough value, anomaly onset and recovery (UTC).\", \"facts\": [\"metric anomalies: redis_memory_used_bytes / redis_memory_max_bytes on cache-redis-02 \\u2014 baseline 64%; peak 100%; onset 2023-05-02 00:00 UTC; recovered 2023-05-02 07:00 UTC\", \"metric anomalies: redis_evicted_keys_total rate on cache-redis-02 \\u2014 baseline 0/s; peak 843/s; onset 2023-05-02 03:00 UTC; recovered 2023-05-02 07:00 UTC\", \"metric anomalies: redis keyspace hit ratio on cache-redis-02 \\u2014 baseline 97%; trough 21%; onset 2023-05-02 03:00 UTC; recovered 2023-05-02 07:00 UTC\", \"metric anomalies: node_cpu utilisation on profile-db-01 \\u2014 baseline 21%; peak 100%; onset 2023-05-02 03:00 UTC; recovered 2023-05-02 07:00 UTC\"]}",
+      "metadata": {
+        "scenario": "cache_stampede_0017",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "cache_stampede_0017-09",
+      "artifact_type": "network_summary",
+      "subtype": "tls_certificates",
+      "source": "tls_certificates",
+      "content": "{\"description\": \"TLS certificates observed in edge and service-to-service traffic that are expired, expire within 7 days, or are self-signed.\", \"facts\": [\"expiring within 7 days: 7 matching events\", \"expiring within 7 days > certificate details: CN=telemetry-ingest.stoneidian.internal | issuer: CN=R11,O=Let's Encrypt | not_after: 2023-05-08 23:59:00 UTC | seen on: telemetry-ingest:8443 \\u2014 7 events\"]}",
+      "metadata": {
+        "scenario": "cache_stampede_0017",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "cache_stampede_0017-10",
+      "artifact_type": "derived_findings",
+      "subtype": "derived_summary",
+      "source": "derived_summary",
+      "content": "{\"description\": \"Deterministic summary computed from the query results above (error ranking, instance-to-host join, alert timeline, change correlation, earliest metric anomaly).\", \"facts\": [\"Derived: service game-gateway ranks #1 by error volume (33731 events, 1 failing dependencies). Most-failed dependency: profile-api (33731 errors).\", \"Derived: most-alerted critical instance 10.184.217.50:9121 (15 critical alerts) maps to hostname cache-redis-02; role redis-cache; zone rack D27.\", \"Derived: warning/critical alerts span 2023-05-02 00:00 UTC to 2023-05-02 20:00 UTC; earliest alert hour 2023-05-02 00:00 UTC (1 alerts).\", \"Derived: changes recorded from 6 hours before the earliest alert hour to its end: CHG-18796 (batch_job, profile-api cache warm-up / metadata backfill, ansible-deploy, 2023-05-01 20:25 UTC); CHG-18812 (deployment, leaderboard-api 12.22.0 -> 12.22.1, ansible-deploy, 2023-05-02 00:17 UTC).\", \"Derived: earliest metric anomaly onset 2023-05-02 00:00 UTC (redis_memory_used_bytes / redis_memory_max_bytes on cache-redis-02).\"]}",
+      "metadata": {
+        "scenario": "cache_stampede_0017",
+        "source_kind": "derived_from_es_results",
+        "heuristic": true
+      }
+    },
+    {
+      "artifact_id": "cache_stampede_0017-11",
+      "artifact_type": "query_coverage",
+      "subtype": "evidence_gaps",
+      "source": "evidence_gaps",
+      "content": "{\"description\": \"Queries that returned nothing or failed; use these to state what is NOT established.\", \"facts\": [\"No matching results for: tls certificates / expired certificates. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / self signed. (Absence in this query is not proof of absence elsewhere.)\"]}",
+      "metadata": {
+        "scenario": "cache_stampede_0017",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    }
+  ]
+}

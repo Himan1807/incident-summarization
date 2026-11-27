@@ -1,0 +1,165 @@
+{
+  "metadata": {
+    "incident_id": "INC-20230623",
+    "scenario": "object_storage_0024",
+    "title": "Infrastructure reliability incident investigation",
+    "source": "synthetic/ops-incident-expansion (modeled on neu-nds2/llm-sec-incident-analysis)",
+    "query_window_start": "2023-06-23T00:00:00",
+    "query_window_end": "2023-06-25T23:59:59",
+    "evidence_types": [
+      "change_records",
+      "derived_findings",
+      "infrastructure_events",
+      "monitoring_alerts",
+      "network_summary",
+      "query_coverage",
+      "resource_metrics",
+      "service_logs"
+    ],
+    "artifact_scope_note": "Evidence is aggregated query output (not raw log lines or metric samples); it contains no chat/communication records."
+  },
+  "incident_description": "Reliability incident investigation of a production environment. Evidence consists of Elasticsearch aggregation results over application and proxy logs, Kubernetes, cloud-provider and host system events, Prometheus Alertmanager alerts, change-management / CI-CD audit records and metric anomaly detection. No root cause, impact or trigger is stated; these must be established from the supplied artifacts. Environment context: Organization: Mapleari Press (news and media publishing); Platform: Google Cloud europe-west1 (zones europe-west1-b/europe-west1-c/europe-west1-d); network range 10.84.0.0/16; Object storage: provider-managed bucket/account for user content, accessed directly by backend services; Change management: production changes carry CHG- identifiers.",
+  "investigation_questions": [
+    "Which external storage endpoint returned the errors?",
+    "What is the cloud provider's incident or tracking identifier?",
+    "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+    "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+    "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+    "Which change happened shortly before the incident began but did not cause it? Provide its identifier."
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "object_storage_0024-01",
+      "artifact_type": "service_logs",
+      "subtype": "error_logs",
+      "source": "error_logs",
+      "content": "{\"description\": \"Application and proxy error logs: HTTP/gRPC status codes, failing requests (caller -> callee:port : operation), error messages and the services emitting them.\", \"facts\": [\"error events: 57923 matching events\", \"error events > status codes: 503 \\u2014 57855 events\", \"error events > status codes: 499 \\u2014 68 events\", \"failing requests: asset-origin -> storage.googleapis.com:443 : PUT objects \\u2014 49977 events\", \"failing requests: thumbnail-worker -> storage.googleapis.com:443 : GET/PUT objects \\u2014 7878 events\", \"failing requests: content-api -> content-db:5432 : query \\u2014 68 events\", \"error messages: googleapi: Error 503: We encountered an internal error. Please try again., backendError (bucket mapleari-assets-04) \\u2014 57855 events\", \"error messages: context canceled \\u2014 68 events\", \"emitting services: asset-origin \\u2014 49977 events\", \"emitting services: thumbnail-worker \\u2014 7878 events\", \"emitting services: content-api \\u2014 68 events\"]}",
+      "metadata": {
+        "scenario": "object_storage_0024",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "object_storage_0024-02",
+      "artifact_type": "service_logs",
+      "subtype": "error_volume_by_service",
+      "source": "error_volume_by_service",
+      "content": "{\"description\": \"Services ranked by number of error events, with each service's most-failed downstream dependencies.\", \"facts\": [\"services: asset-origin \\u2014 49977 events; failing dependencies=1; top dependencies: storage.googleapis.com (49977)\", \"services: thumbnail-worker \\u2014 7878 events; failing dependencies=1; top dependencies: storage.googleapis.com (7878)\", \"services: content-api \\u2014 68 events; failing dependencies=1; top dependencies: content-db (68)\"]}",
+      "metadata": {
+        "scenario": "object_storage_0024",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "object_storage_0024-03",
+      "artifact_type": "change_records",
+      "subtype": "change_log",
+      "source": "change_log",
+      "content": "{\"description\": \"Deployments, configuration pushes, infrastructure and automation runs from the change-management and CI/CD audit log: change ID, type, target, actor, time (UTC), status and recorded diff/summary.\", \"facts\": [\"changes: CHG-4392 | deployment | content-api 4.16.5 -> 4.17.0 | actor: cloudbuild-deployer | 2023-06-24 02:54 UTC | status: Synced/Healthy | logging improvements \\u2014 1 events\", \"changes: CHG-4414 | deployment | newsletter-svc 6.10.6 -> 6.10.7 | actor: cloudbuild-deployer | 2023-06-24 17:22 UTC | status: succeeded | copy and UI text changes \\u2014 1 events\", \"change types: deployment \\u2014 2 events\"]}",
+      "metadata": {
+        "scenario": "object_storage_0024",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "object_storage_0024-04",
+      "artifact_type": "change_records",
+      "subtype": "change_actors",
+      "source": "change_actors",
+      "content": "{\"description\": \"Accounts and automation identities that executed changes, with the hosts or targets they acted on.\", \"facts\": [\"actors: cloudbuild-deployer \\u2014 2 events; targets: newsletter-svc (1), content-api (1)\"]}",
+      "metadata": {
+        "scenario": "object_storage_0024",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "object_storage_0024-05",
+      "artifact_type": "infrastructure_events",
+      "subtype": "host_inventory",
+      "source": "host_inventory",
+      "content": "{\"description\": \"Host and node names seen in infrastructure events with their IP address, role and availability zone / rack.\", \"facts\": [\"hosts: search-01 \\u2014 41 events; ip: 10.84.75.32; role: search-api host; zone: europe-west1-d\"]}",
+      "metadata": {
+        "scenario": "object_storage_0024",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "object_storage_0024-06",
+      "artifact_type": "infrastructure_events",
+      "subtype": "platform_events",
+      "source": "platform_events",
+      "content": "{\"description\": \"Kubernetes events, cloud-provider health events and host system messages (kernel, hardware, daemons) with the objects or hosts they refer to.\", \"facts\": [\"cloud health events: Google Cloud incident 20998: Cloud Storage - elevated error rates in europe-west1; impact start 2023-06-24 20:09 UTC, mitigated 2023-06-24 22:03 UTC \\u2014 2 events; top objects: account mapleari-prod (2)\"]}",
+      "metadata": {
+        "scenario": "object_storage_0024",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "object_storage_0024-07",
+      "artifact_type": "monitoring_alerts",
+      "subtype": "alertmanager_alerts",
+      "source": "alertmanager_alerts",
+      "content": "{\"description\": \"Prometheus Alertmanager alerts: alert names with severity, critical-alert instances, alert names and services, and an hourly timeline of warning and critical alerts (UTC).\", \"facts\": [\"alert names: Watchdog (info) \\u2014 72 events; service: alertmanager; firing continuously\", \"alert names: ObjectStorageErrorRateHigh (critical) \\u2014 12 events; service: storage; first seen in hour 2023-06-24 20:00 UTC; last seen in hour 2023-06-24 22:00 UTC\", \"alert names: AssetOriginFailureRateHigh (critical) \\u2014 9 events; service: asset-origin; first seen in hour 2023-06-24 20:00 UTC; last seen in hour 2023-06-24 22:00 UTC\", \"alert names: KubeJobFailed (warning) \\u2014 5 events; service: batch; first seen in hour 2023-06-25 07:00 UTC; last seen in hour 2023-06-25 09:00 UTC\", \"alert names: CPUThrottlingHigh (warning) \\u2014 4 events; service: search-api; first seen in hour 2023-06-24 11:00 UTC; last seen in hour 2023-06-24 12:00 UTC\", \"critical alerts: 21 matching events\", \"critical alerts > critical instances: storage.googleapis.com \\u2014 12 events\", \"critical alerts > critical instances: asset-origin \\u2014 9 events\", \"critical alerts > critical alert names: ObjectStorageErrorRateHigh \\u2014 12 events\", \"critical alerts > critical alert names: AssetOriginFailureRateHigh \\u2014 9 events\", \"critical alerts > critical services: storage \\u2014 12 events\", \"critical alerts > critical services: asset-origin \\u2014 9 events\", \"alert timeline: 2023-06-24 11:00 UTC \\u2014 2 events\", \"alert timeline: 2023-06-24 12:00 UTC \\u2014 2 events\", \"alert timeline: 2023-06-24 20:00 UTC \\u2014 10 events\", \"alert timeline: 2023-06-24 21:00 UTC \\u2014 7 events\", \"alert timeline: 2023-06-24 22:00 UTC \\u2014 4 events\", \"alert timeline: 2023-06-25 07:00 UTC \\u2014 2 events\", \"alert timeline: 2023-06-25 08:00 UTC \\u2014 2 events\", \"alert timeline: 2023-06-25 09:00 UTC \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "object_storage_0024",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "object_storage_0024-08",
+      "artifact_type": "resource_metrics",
+      "subtype": "metric_anomalies",
+      "source": "metric_anomalies",
+      "content": "{\"description\": \"Metric series that deviated from their 7-day baseline (hourly resolution): baseline, peak or trough value, anomaly onset and recovery (UTC).\", \"facts\": [\"metric anomalies: object storage 5xx responses per minute on storage.googleapis.com \\u2014 baseline ~5/min; peak 18,845/min; onset 2023-06-24 20:00 UTC; recovered 2023-06-24 23:00 UTC\", \"metric anomalies: node_network_receive_bytes rate on 10.84.75.32 \\u2014 baseline 43 MB/s; peak 717 MB/s; onset 2023-06-25 08:00 UTC; recovered 2023-06-25 11:00 UTC\"]}",
+      "metadata": {
+        "scenario": "object_storage_0024",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "object_storage_0024-09",
+      "artifact_type": "network_summary",
+      "subtype": "tls_certificates",
+      "source": "tls_certificates",
+      "content": "{\"description\": \"TLS certificates observed in edge and service-to-service traffic that are expired, expire within 7 days, or are self-signed.\", \"facts\": [\"expiring within 7 days: 58 matching events\", \"expiring within 7 days > certificate details: CN=search-api.mapleari.internal | issuer: CN=R11,O=Let's Encrypt | not_after: 2023-06-29 23:59:00 UTC | seen on: search-api:8443 \\u2014 58 events\"]}",
+      "metadata": {
+        "scenario": "object_storage_0024",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "object_storage_0024-10",
+      "artifact_type": "derived_findings",
+      "subtype": "derived_summary",
+      "source": "derived_summary",
+      "content": "{\"description\": \"Deterministic summary computed from the query results above (error ranking, instance-to-host join, alert timeline, change correlation, earliest metric anomaly).\", \"facts\": [\"Derived: service asset-origin ranks #1 by error volume (49977 events, 1 failing dependencies). Most-failed dependency: storage.googleapis.com (49977 errors).\", \"Derived: most-alerted critical instance storage.googleapis.com (12 critical alerts); no matching host-inventory entry.\", \"Derived: warning/critical alerts span 2023-06-24 11:00 UTC to 2023-06-25 09:00 UTC; earliest alert hour 2023-06-24 11:00 UTC (2 alerts).\", \"Derived: no changes recorded from 6 hours before the earliest alert hour to its end.\", \"Derived: earliest metric anomaly onset 2023-06-24 20:00 UTC (object storage 5xx responses per minute on storage.googleapis.com).\"]}",
+      "metadata": {
+        "scenario": "object_storage_0024",
+        "source_kind": "derived_from_es_results",
+        "heuristic": true
+      }
+    },
+    {
+      "artifact_id": "object_storage_0024-11",
+      "artifact_type": "query_coverage",
+      "subtype": "evidence_gaps",
+      "source": "evidence_gaps",
+      "content": "{\"description\": \"Queries that returned nothing or failed; use these to state what is NOT established.\", \"facts\": [\"No matching results for: tls certificates / expired certificates. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / self signed. (Absence in this query is not proof of absence elsewhere.)\"]}",
+      "metadata": {
+        "scenario": "object_storage_0024",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    }
+  ]
+}

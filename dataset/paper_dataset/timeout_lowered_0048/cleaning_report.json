@@ -1,0 +1,14 @@
+{
+  "scenario": "timeout_lowered_0048",
+  "cleaning": [],
+  "skipped": [],
+  "gaps": [
+    "tls_certificates"
+  ],
+  "artifacts": 10,
+  "facts": 50,
+  "empty_aggregations": 0,
+  "questions": 10,
+  "answers": 10,
+  "atoms": 11
+}

@@ -1,0 +1,155 @@
+{
+  "metadata": {
+    "incident_id": "INC-20240211",
+    "scenario": "dns_forward_removed_0026",
+    "title": "Infrastructure reliability incident investigation",
+    "source": "synthetic/ops-incident-expansion (modeled on neu-nds2/llm-sec-incident-analysis)",
+    "query_window_start": "2024-02-11T00:00:00",
+    "query_window_end": "2024-02-13T23:59:59",
+    "evidence_types": [
+      "change_records",
+      "derived_findings",
+      "infrastructure_events",
+      "monitoring_alerts",
+      "network_summary",
+      "query_coverage",
+      "resource_metrics",
+      "service_logs"
+    ],
+    "artifact_scope_note": "Evidence is aggregated query output (not raw log lines or metric samples); it contains no chat/communication records."
+  },
+  "incident_description": "Reliability incident investigation of a production environment. Evidence consists of Elasticsearch aggregation results over application and proxy logs, Kubernetes, cloud-provider and host system events, Prometheus Alertmanager alerts, change-management / CI-CD audit records and metric anomaly detection. No root cause, impact or trigger is stated; these must be established from the supplied artifacts. Environment context: Organization: Stratus Journeys (travel booking); Platform: Microsoft Azure northeurope (zones northeurope-1/northeurope-2/northeurope-3); network range 10.114.0.0/16; Kubernetes cluster stratu-prod-northe (AKS); Cluster add-ons: CoreDNS, ingress controller, Argo CD; services call external SaaS APIs; direct kubectl changes are recorded by the Kubernetes audit log with AUD- identifiers; Change management: production changes carry CR- identifiers.",
+  "investigation_questions": [
+    "Which component is the source of the failure?",
+    "What change, deployment or automation run triggered the incident? Provide its change identifier.",
+    "What is the IP address of the cluster DNS service that the failing lookups were sent to?",
+    "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+    "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+    "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+    "Which change is a red herring: recorded shortly before onset but unrelated to the failure? Give its identifier.",
+    "Which change restored normal service? Provide its change identifier."
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "dns_forward_removed_0026-01",
+      "artifact_type": "service_logs",
+      "subtype": "error_logs",
+      "source": "error_logs",
+      "content": "{\"description\": \"Application and proxy error logs: HTTP/gRPC status codes, failing requests (caller -> callee:port : operation), error messages and the services emitting them.\", \"facts\": [\"error events: 49999 matching events\", \"error events > status codes: n/a (client-side DNS resolution error) \\u2014 49876 events\", \"error events > status codes: n/a (log-only) \\u2014 72 events\", \"error events > status codes: 429 \\u2014 51 events\", \"failing requests: shipping-quotes-svc -> api.shipcalc.io:443 : POST /v2/rates \\u2014 17956 events\", \"failing requests: email-notifier -> smtp.sendwave.io:587 : SMTP AUTH \\u2014 16396 events\", \"failing requests: fx-svc -> fx.ratebridge.io:443 : GET /v1/rates \\u2014 15524 events\", \"failing requests: coredns -> plugin chain : resolve \\u2014 72 events\", \"failing requests: fares-svc -> fares-db:5432 : query \\u2014 51 events\", \"error messages: dial tcp: lookup api.shipcalc.io on 10.0.0.10:53: server misbehaving \\u2014 17956 events\", \"error messages: getaddrinfo EAI_AGAIN smtp.sendwave.io \\u2014 16396 events\", \"error messages: dial tcp: lookup fx.ratebridge.io on 10.0.0.10:53: server misbehaving \\u2014 15524 events\", \"error messages: [ERROR] plugin/errors: consolidated errors like '^.* no next plugin found$' occurred in last 5m \\u2014 72 events\", \"error messages: HTTP 429 Too Many Requests from upstream \\u2014 51 events\", \"emitting services: shipping-quotes-svc \\u2014 17956 events\", \"emitting services: email-notifier \\u2014 16396 events\", \"emitting services: fx-svc \\u2014 15524 events\", \"emitting services: coredns \\u2014 72 events\", \"emitting services: fares-svc \\u2014 51 events\"]}",
+      "metadata": {
+        "scenario": "dns_forward_removed_0026",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "dns_forward_removed_0026-02",
+      "artifact_type": "service_logs",
+      "subtype": "error_volume_by_service",
+      "source": "error_volume_by_service",
+      "content": "{\"description\": \"Services ranked by number of error events, with each service's most-failed downstream dependencies.\", \"facts\": [\"services: shipping-quotes-svc \\u2014 17956 events; failing dependencies=1; top dependencies: api.shipcalc.io (17956)\", \"services: email-notifier \\u2014 16396 events; failing dependencies=1; top dependencies: smtp.sendwave.io (16396)\", \"services: fx-svc \\u2014 15524 events; failing dependencies=1; top dependencies: fx.ratebridge.io (15524)\", \"services: coredns \\u2014 72 events; failing dependencies=1; top dependencies: plugin chain (72)\", \"services: fares-svc \\u2014 51 events; failing dependencies=1; top dependencies: fares-db (51)\"]}",
+      "metadata": {
+        "scenario": "dns_forward_removed_0026",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "dns_forward_removed_0026-03",
+      "artifact_type": "change_records",
+      "subtype": "change_log",
+      "source": "change_log",
+      "content": "{\"description\": \"Deployments, configuration pushes, infrastructure and automation runs from the change-management and CI/CD audit log: change ID, type, target, actor, time (UTC), status and recorded diff/summary.\", \"facts\": [\"changes: CR-76527 | deployment | checkin-api 11.24.7 -> 11.24.8 | actor: azure-pipelines | 2024-02-11 15:17 UTC | status: completed | feature flag cleanup \\u2014 1 events\", \"changes: AUD-9440ad | kubectl_edit | configmap kube-system/coredns | actor: i.pillai | 2024-02-11 16:53 UTC | status: applied | Corefile .:53 block: removed 'forward . /etc/resolv.conf'; added 'hosts /etc/coredns/customdomains.db { fallthrough }' \\u2014 1 events\", \"changes: AUD-68aace | kubectl_rollout_restart | deployment kube-system/coredns | actor: i.pillai | 2024-02-11 16:55 UTC | status: applied | rollout restart \\u2014 1 events\", \"changes: AUD-1e4e62 | kubectl_apply | configmap kube-system/coredns | actor: i.rao | 2024-02-11 20:21 UTC | status: applied | Corefile restored from configmap revision 68 \\u2014 1 events\", \"changes: CR-76547 | deployment | fares-svc 13.27.4 -> 13.27.5 | actor: azure-pipelines | 2024-02-12 09:55 UTC | status: completed | minor bug fixes \\u2014 1 events\", \"changes: CR-76565 | deployment | loyalty-api 8.26.10 -> 8.27.0 | actor: azure-pipelines | 2024-02-12 12:36 UTC | status: Synced/Healthy | new optional API field \\u2014 1 events\", \"changes: CR-76578 | deployment | itinerary-api 0.7.6 -> 0.8.0 | actor: azure-pipelines | 2024-02-12 21:11 UTC | status: succeeded | logging improvements \\u2014 1 events\", \"change types: deployment \\u2014 4 events\", \"change types: kubectl_edit \\u2014 1 events\", \"change types: kubectl_rollout_restart \\u2014 1 events\", \"change types: kubectl_apply \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "dns_forward_removed_0026",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "dns_forward_removed_0026-04",
+      "artifact_type": "infrastructure_events",
+      "subtype": "host_inventory",
+      "source": "host_inventory",
+      "content": "{\"description\": \"Host and node names seen in infrastructure events with their IP address, role and availability zone / rack.\", \"facts\": [\"hosts: aks-nodepool1-96719051-vmss000038 \\u2014 245 events; ip: 10.114.90.236; role: k8s-worker; zone: northeurope-2\", \"hosts: aks-nodepool1-10383317-vmss000001 \\u2014 243 events; ip: 10.114.90.65; role: k8s-worker; zone: northeurope-2\", \"hosts: aks-nodepool1-28538174-vmss000034 \\u2014 87 events; ip: 10.114.50.234; role: k8s-worker; zone: northeurope-3\"]}",
+      "metadata": {
+        "scenario": "dns_forward_removed_0026",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "dns_forward_removed_0026-05",
+      "artifact_type": "infrastructure_events",
+      "subtype": "platform_events",
+      "source": "platform_events",
+      "content": "{\"description\": \"Kubernetes events, cloud-provider health events and host system messages (kernel, hardware, daemons) with the objects or hosts they refer to.\", \"facts\": [\"audit events: update configmaps kube-system/coredns \\u2014 2 events; top objects: i.pillai (1), i.rao (1)\", \"event reasons: Unhealthy \\u2014 135 events; top objects: pod/shipping-quotes-svc-5718bb449-8nzd7 (39)\", \"event reasons: Pulled \\u2014 10 events; top objects: pod/checkin-api-057f02954-bvddg (1)\", \"event reasons: ScalingReplicaSet \\u2014 3 events; top objects: deployment/checkin-api (1)\", \"event reasons: Pulled \\u2014 18 events; top objects: pod/fares-svc-4234651f0-rpvkv (2)\", \"event reasons: ScalingReplicaSet \\u2014 5 events; top objects: deployment/fares-svc (1)\", \"event reasons: Pulled \\u2014 24 events; top objects: pod/itinerary-api-b38f8be2d-bcrdr (3)\", \"event reasons: ScalingReplicaSet \\u2014 6 events; top objects: deployment/itinerary-api (1)\", \"event reasons: Pulled \\u2014 6 events; top objects: pod/loyalty-api-9a3c6f179-7f92q (2)\", \"event reasons: ScalingReplicaSet \\u2014 6 events; top objects: deployment/loyalty-api (1)\"]}",
+      "metadata": {
+        "scenario": "dns_forward_removed_0026",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "dns_forward_removed_0026-06",
+      "artifact_type": "monitoring_alerts",
+      "subtype": "alertmanager_alerts",
+      "source": "alertmanager_alerts",
+      "content": "{\"description\": \"Prometheus Alertmanager alerts: alert names with severity, critical-alert instances, alert names and services, and an hourly timeline of warning and critical alerts (UTC).\", \"facts\": [\"alert names: Watchdog (info) \\u2014 72 events; service: alertmanager; firing continuously\", \"alert names: CoreDNSErrorsHigh (critical) \\u2014 11 events; service: coredns; first seen in hour 2024-02-11 17:00 UTC; last seen in hour 2024-02-11 20:00 UTC\", \"alert names: ShippingQuotesSvcErrorRateHigh (critical) \\u2014 6 events; service: shipping-quotes-svc; first seen in hour 2024-02-11 17:00 UTC; last seen in hour 2024-02-11 20:00 UTC\", \"alert names: TargetDown (warning) \\u2014 3 events; service: itinerary-api; first seen in hour 2024-02-11 12:00 UTC; last seen in hour 2024-02-11 13:00 UTC\", \"alert names: KubeJobFailed (warning) \\u2014 1 events; service: batch; first seen in hour 2024-02-12 13:00 UTC; last seen in hour 2024-02-12 13:00 UTC\", \"critical alerts: 17 matching events\", \"critical alerts > critical instances: 10.244.14.185:9153 \\u2014 6 events\", \"critical alerts > critical instances: shipping-quotes-svc \\u2014 6 events\", \"critical alerts > critical instances: 10.244.33.115:9153 \\u2014 5 events\", \"critical alerts > critical alert names: CoreDNSErrorsHigh \\u2014 11 events\", \"critical alerts > critical alert names: ShippingQuotesSvcErrorRateHigh \\u2014 6 events\", \"critical alerts > critical services: coredns \\u2014 11 events\", \"critical alerts > critical services: shipping-quotes-svc \\u2014 6 events\", \"alert timeline: 2024-02-11 12:00 UTC \\u2014 2 events\", \"alert timeline: 2024-02-11 13:00 UTC \\u2014 1 events\", \"alert timeline: 2024-02-11 17:00 UTC \\u2014 4 events\", \"alert timeline: 2024-02-11 18:00 UTC \\u2014 5 events\", \"alert timeline: 2024-02-11 19:00 UTC \\u2014 3 events\", \"alert timeline: 2024-02-11 20:00 UTC \\u2014 5 events\", \"alert timeline: 2024-02-12 13:00 UTC \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "dns_forward_removed_0026",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "dns_forward_removed_0026-07",
+      "artifact_type": "resource_metrics",
+      "subtype": "metric_anomalies",
+      "source": "metric_anomalies",
+      "content": "{\"description\": \"Metric series that deviated from their 7-day baseline (hourly resolution): baseline, peak or trough value, anomaly onset and recovery (UTC).\", \"facts\": [\"metric anomalies: coredns_dns_responses_total{rcode=\\\"SERVFAIL\\\"} rate on kube-system/coredns \\u2014 baseline 0.2/s; peak 509/s; onset 2024-02-11 16:00 UTC; recovered 2024-02-11 21:00 UTC\", \"metric anomalies: node_network_receive_bytes rate on 10.114.90.65 \\u2014 baseline 43 MB/s; peak 479 MB/s; onset 2024-02-12 05:00 UTC; recovered 2024-02-12 07:00 UTC\"]}",
+      "metadata": {
+        "scenario": "dns_forward_removed_0026",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "dns_forward_removed_0026-08",
+      "artifact_type": "network_summary",
+      "subtype": "tls_certificates",
+      "source": "tls_certificates",
+      "content": "{\"description\": \"TLS certificates observed in edge and service-to-service traffic that are expired, expire within 7 days, or are self-signed.\", \"facts\": [\"expiring within 7 days: 26 matching events\", \"expiring within 7 days > certificate details: CN=itinerary-api.stratus.internal | issuer: CN=stratus-internal-ca | not_after: 2024-02-15 23:59:00 UTC | seen on: itinerary-api:8443 \\u2014 26 events\"]}",
+      "metadata": {
+        "scenario": "dns_forward_removed_0026",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "dns_forward_removed_0026-09",
+      "artifact_type": "derived_findings",
+      "subtype": "derived_summary",
+      "source": "derived_summary",
+      "content": "{\"description\": \"Deterministic summary computed from the query results above (error ranking, instance-to-host join, alert timeline, change correlation, earliest metric anomaly).\", \"facts\": [\"Derived: service shipping-quotes-svc ranks #1 by error volume (17956 events, 1 failing dependencies). Most-failed dependency: api.shipcalc.io (17956 errors).\", \"Derived: most-alerted critical instance 10.244.14.185:9153 (6 critical alerts); no matching host-inventory entry.\", \"Derived: warning/critical alerts span 2024-02-11 12:00 UTC to 2024-02-12 13:00 UTC; earliest alert hour 2024-02-11 12:00 UTC (2 alerts).\", \"Derived: no changes recorded from 6 hours before the earliest alert hour to its end.\", \"Derived: earliest metric anomaly onset 2024-02-11 16:00 UTC (coredns_dns_responses_total{rcode=\\\"SERVFAIL\\\"} rate on kube-system/coredns).\"]}",
+      "metadata": {
+        "scenario": "dns_forward_removed_0026",
+        "source_kind": "derived_from_es_results",
+        "heuristic": true
+      }
+    },
+    {
+      "artifact_id": "dns_forward_removed_0026-10",
+      "artifact_type": "query_coverage",
+      "subtype": "evidence_gaps",
+      "source": "evidence_gaps",
+      "content": "{\"description\": \"Queries that returned nothing or failed; use these to state what is NOT established.\", \"facts\": [\"Query 'change actors' returned no aggregation results (shards failed: 1 of 96). This evidence is UNAVAILABLE; it is not evidence that nothing exists.\", \"No matching results for: tls certificates / expired certificates. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / self signed. (Absence in this query is not proof of absence elsewhere.)\"]}",
+      "metadata": {
+        "scenario": "dns_forward_removed_0026",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    }
+  ]
+}

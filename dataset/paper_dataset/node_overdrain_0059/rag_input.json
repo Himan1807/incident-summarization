@@ -1,0 +1,143 @@
+{
+  "metadata": {
+    "incident_id": "INC-20240429",
+    "scenario": "node_overdrain_0059",
+    "title": "Infrastructure reliability incident investigation",
+    "source": "synthetic/ops-incident-expansion (modeled on neu-nds2/llm-sec-incident-analysis)",
+    "query_window_start": "2024-04-29T00:00:00",
+    "query_window_end": "2024-05-01T23:59:59",
+    "evidence_types": [
+      "change_records",
+      "derived_findings",
+      "infrastructure_events",
+      "monitoring_alerts",
+      "query_coverage",
+      "service_logs"
+    ],
+    "artifact_scope_note": "Evidence is aggregated query output (not raw log lines or metric samples); it contains no chat/communication records."
+  },
+  "incident_description": "Reliability incident investigation of a production environment. Evidence consists of Elasticsearch aggregation results over application and proxy logs, Kubernetes, cloud-provider and host system events, Prometheus Alertmanager alerts, change-management / CI-CD audit records and metric anomaly detection. No root cause, impact or trigger is stated; these must be established from the supplied artifacts. Environment context: Organization: Atlasworks Press (news and media publishing); Platform: Google Cloud asia-south1 (zones asia-south1-a/asia-south1-b/asia-south1-c); network range 10.15.0.0/16; Kubernetes cluster atlasw-prod-asiaso (GKE); Automation: an in-house node-recycler controller rotates worker nodes (cordon, drain, terminate, replace) in batches bounded by maxUnavailable (15% of 16 nodes); runs are recorded with RECYCLE- identifiers; Change management: production changes carry CR- identifiers.",
+  "investigation_questions": [
+    "Which component is the source of the failure?",
+    "What is the identifier of the change that caused the incident?",
+    "Which account or automation identity executed the triggering change?",
+    "Which deployment introduced the faulty batch-size logic? Provide its change identifier.",
+    "How many worker nodes were cordoned and drained at the same time?",
+    "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+    "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+    "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+    "Which change happened shortly before the incident began but did not cause it? Provide its identifier.",
+    "Which change mitigated the incident? Provide its change identifier."
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "node_overdrain_0059-01",
+      "artifact_type": "service_logs",
+      "subtype": "error_logs",
+      "source": "error_logs",
+      "content": "{\"description\": \"Application and proxy error logs: HTTP/gRPC status codes, failing requests (caller -> callee:port : operation), error messages and the services emitting them.\", \"facts\": [\"error events: 31116 matching events\", \"error events > status codes: 503 \\u2014 27080 events\", \"error events > status codes: n/a (connection refused) \\u2014 3985 events\", \"error events > status codes: 500 \\u2014 51 events\", \"failing requests: web-frontend -> media-api:8080 : POST /v1/media \\u2014 22238 events\", \"failing requests: web-frontend -> newsletter-svc:8080 : GET /v1/newsletter \\u2014 4842 events\", \"failing requests: media-api -> media-cache:6379 : GET \\u2014 3985 events\", \"failing requests: content-api -> content-db:5432 : query \\u2014 51 events\", \"error messages: upstream media-api: 503 no healthy upstream \\u2014 22238 events\", \"error messages: upstream newsletter-svc: 503 no healthy upstream \\u2014 4842 events\", \"error messages: dial tcp media-cache:6379: connect: connection refused \\u2014 3985 events\", \"error messages: redis: i/o timeout \\u2014 51 events\", \"emitting services: web-frontend \\u2014 27080 events\", \"emitting services: media-api \\u2014 3985 events\", \"emitting services: content-api \\u2014 51 events\"]}",
+      "metadata": {
+        "scenario": "node_overdrain_0059",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "node_overdrain_0059-02",
+      "artifact_type": "service_logs",
+      "subtype": "error_volume_by_service",
+      "source": "error_volume_by_service",
+      "content": "{\"description\": \"Services ranked by number of error events, with each service's most-failed downstream dependencies.\", \"facts\": [\"services: web-frontend \\u2014 27080 events; failing dependencies=2; top dependencies: media-api (22238), newsletter-svc (4842)\", \"services: media-api \\u2014 3985 events; failing dependencies=1; top dependencies: media-cache (3985)\", \"services: content-api \\u2014 51 events; failing dependencies=1; top dependencies: content-db (51)\"]}",
+      "metadata": {
+        "scenario": "node_overdrain_0059",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "node_overdrain_0059-03",
+      "artifact_type": "change_records",
+      "subtype": "change_log",
+      "source": "change_log",
+      "content": "{\"description\": \"Deployments, configuration pushes, infrastructure and automation runs from the change-management and CI/CD audit log: change ID, type, target, actor, time (UTC), status and recorded diff/summary.\", \"facts\": [\"changes: CR-80150 | deployment | node-recycler 9.39.5 -> 9.40.0 | actor: cloudbuild-deployer | 2024-04-29 19:18 UTC | status: Synced/Healthy | new batch sizing logic (percentage support for maxUnavailable) \\u2014 1 events\", \"changes: CR-80163 | deployment | recommendations 8.18.4 -> 8.19.0 | actor: cloudbuild-deployer | 2024-04-29 21:33 UTC | status: completed | logging improvements \\u2014 1 events\", \"changes: RECYCLE-7971 | node_rotation | general-purpose node group | actor: node-recycler | 2024-04-29 22:40 UTC | status: aborted | eligible nodes 15; computed batch size 15 from maxUnavailable=15%; cordoned and drained 15 nodes concurrently \\u2014 1 events\", \"changes: CR-80181 | scale_down | deployment node-recycler | actor: a.garcia | 2024-04-29 23:40 UTC | status: completed | replicas 1 -> 0 \\u2014 1 events\", \"changes: CR-80211 | nodegroup_scale | general-purpose node group | actor: a.garcia | 2024-04-29 23:50 UTC | status: completed | desired 16 -> 22; uncordon remaining nodes \\u2014 1 events\", \"changes: CR-80218 | deployment | paywall-svc 11.2.12 -> 11.2.13 | actor: cloudbuild-deployer | 2024-04-30 10:40 UTC | status: completed | new optional API field \\u2014 1 events\", \"changes: CR-80238 | deployment | comment-svc 6.28.9 -> 6.28.10 | actor: cloudbuild-deployer | 2024-05-01 08:26 UTC | status: Synced/Healthy | logging improvements \\u2014 1 events\", \"changes: CR-80248 | deployment | content-api 12.0.12 -> 12.1.0 | actor: cloudbuild-deployer | 2024-05-01 13:14 UTC | status: succeeded | copy and UI text changes \\u2014 1 events\", \"change types: deployment \\u2014 5 events\", \"change types: node_rotation \\u2014 1 events\", \"change types: scale_down \\u2014 1 events\", \"change types: nodegroup_scale \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "node_overdrain_0059",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "node_overdrain_0059-04",
+      "artifact_type": "change_records",
+      "subtype": "change_actors",
+      "source": "change_actors",
+      "content": "{\"description\": \"Accounts and automation identities that executed changes, with the hosts or targets they acted on.\", \"facts\": [\"actors: cloudbuild-deployer \\u2014 5 events; targets: atlasw-prod-asiaso/node-recycler (1), atlasw-prod-asiaso/recommendations (1), atlasw-prod-asiaso/content-api (1), atlasw-prod-asiaso/paywall-svc (1), atlasw-prod-asiaso/comment-svc (1)\", \"actors: a.garcia \\u2014 2 events; targets: atlasw-prod-asiaso/node-recycler (1), node group (1)\", \"actors: node-recycler \\u2014 1 events; targets: gke-atlasw-prod-as-pool-b-8593 (1), gke-atlasw-prod-as-pool-b-dec7 (1), gke-atlasw-prod-as-pool-c-21be (1), gke-atlasw-prod-as-pool-b-35cf (1), gke-atlasw-prod-as-pool-b-5fcb (1), gke-atlasw-prod-as-pool-a-8d4b (1), gke-atlasw-prod-as-pool-b-7908 (1), gke-atlasw-prod-as-pool-b-c719 (1), gke-atlasw-prod-as-pool-a-bce7 (1), gke-atlasw-prod-as-pool-b-6ddf (1), gke-atlasw-prod-as-pool-c-2f3d (1), gke-atlasw-prod-as-pool-a-fd4d (1), gke-atlasw-prod-as-pool-c-f730 (1), gke-atlasw-prod-as-pool-c-b064 (1), gke-atlasw-prod-as-pool-b-041a (1)\"]}",
+      "metadata": {
+        "scenario": "node_overdrain_0059",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "node_overdrain_0059-05",
+      "artifact_type": "infrastructure_events",
+      "subtype": "host_inventory",
+      "source": "host_inventory",
+      "content": "{\"description\": \"Host and node names seen in infrastructure events with their IP address, role and availability zone / rack.\", \"facts\": [\"hosts: gke-atlasw-prod-as-pool-c-3a0f \\u2014 130 events; ip: 10.15.90.96; role: k8s-worker; zone: asia-south1-b\", \"hosts: gke-atlasw-prod-as-pool-b-8593 \\u2014 118 events; ip: 10.15.62.35; role: k8s-worker; zone: asia-south1-a\", \"hosts: gke-atlasw-prod-as-pool-a-2516 \\u2014 107 events; ip: 10.15.181.125; role: k8s-worker; zone: asia-south1-c\", \"hosts: gke-atlasw-prod-as-pool-c-21be \\u2014 88 events; ip: 10.15.181.68; role: k8s-worker; zone: asia-south1-c\", \"hosts: gke-atlasw-prod-as-pool-b-dec7 \\u2014 61 events; ip: 10.15.90.207; role: k8s-worker; zone: asia-south1-b\", \"hosts: gke-atlasw-prod-as-pool-b-dcf6 \\u2014 26 events; ip: 10.15.62.178; role: k8s-worker; zone: asia-south1-a\"]}",
+      "metadata": {
+        "scenario": "node_overdrain_0059",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "node_overdrain_0059-06",
+      "artifact_type": "infrastructure_events",
+      "subtype": "platform_events",
+      "source": "platform_events",
+      "content": "{\"description\": \"Kubernetes events, cloud-provider health events and host system messages (kernel, hardware, daemons) with the objects or hosts they refer to.\", \"facts\": [\"event reasons: NodeNotSchedulable \\u2014 15 events; top objects: gke-atlasw-prod-as-pool-b-8593 (1), gke-atlasw-prod-as-pool-b-dec7 (1), gke-atlasw-prod-as-pool-c-21be (1), gke-atlasw-prod-as-pool-b-35cf (1), gke-atlasw-prod-as-pool-b-5fcb (1)\", \"event reasons: FailedScheduling \\u2014 2488 events; top objects: pod/media-api-3de4061ef-lc8td (872), pod/newsletter-svc-82be576be-rvlzg (447)\", \"controller logs: node-recycler: batch size 15 computed from maxUnavailable=15% (eligible=15); starting batch \\u2014 1 events; top objects: pod/node-recycler-0d3a7685e-xm4sv (1)\", \"event reasons: Pulled \\u2014 13 events; top objects: pod/recommendations-adca46766-hglsx (3)\", \"event reasons: ScalingReplicaSet \\u2014 2 events; top objects: deployment/recommendations (2)\", \"event reasons: Pulled \\u2014 26 events; top objects: pod/content-api-45dbea57e-tvb64 (1)\", \"event reasons: ScalingReplicaSet \\u2014 5 events; top objects: deployment/content-api (3)\", \"event reasons: Pulled \\u2014 15 events; top objects: pod/paywall-svc-6d0340f71-tgwvp (2)\", \"event reasons: ScalingReplicaSet \\u2014 6 events; top objects: deployment/paywall-svc (3)\", \"event reasons: Pulled \\u2014 8 events; top objects: pod/comment-svc-689e1f884-ktbzm (3)\", \"event reasons: ScalingReplicaSet \\u2014 5 events; top objects: deployment/comment-svc (3)\"]}",
+      "metadata": {
+        "scenario": "node_overdrain_0059",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "node_overdrain_0059-07",
+      "artifact_type": "monitoring_alerts",
+      "subtype": "alertmanager_alerts",
+      "source": "alertmanager_alerts",
+      "content": "{\"description\": \"Prometheus Alertmanager alerts: alert names with severity, critical-alert instances, alert names and services, and an hourly timeline of warning and critical alerts (UTC).\", \"facts\": [\"alert names: Watchdog (info) \\u2014 72 events; service: alertmanager; firing continuously\", \"alert names: KubeNodeUnschedulable (warning) \\u2014 45 events; service: kubernetes; first seen in hour 2024-04-29 22:00 UTC; last seen in hour 2024-04-30 00:00 UTC\", \"alert names: KubePodPending (critical) \\u2014 11 events; service: media-api; first seen in hour 2024-04-29 22:00 UTC; last seen in hour 2024-04-30 00:00 UTC\", \"alert names: KubeNodesCapacityLow (critical) \\u2014 10 events; service: kubernetes; first seen in hour 2024-04-29 22:00 UTC; last seen in hour 2024-04-30 00:00 UTC\", \"alert names: WebFrontendErrorRateHigh (critical) \\u2014 7 events; service: web-frontend; first seen in hour 2024-04-29 22:00 UTC; last seen in hour 2024-04-30 00:00 UTC\", \"alert names: NodeFilesystemSpaceFillingUp (warning) \\u2014 4 events; service: node; first seen in hour 2024-04-30 18:00 UTC; last seen in hour 2024-04-30 19:00 UTC\", \"alert names: TargetDown (warning) \\u2014 3 events; service: paywall-svc; first seen in hour 2024-04-30 16:00 UTC; last seen in hour 2024-04-30 17:00 UTC\", \"critical alerts: 28 matching events\", \"critical alerts > critical instances: media-api \\u2014 11 events\", \"critical alerts > critical instances: atlasw-prod-asiaso \\u2014 10 events\", \"critical alerts > critical instances: web-frontend \\u2014 7 events\", \"critical alerts > critical alert names: KubePodPending \\u2014 11 events\", \"critical alerts > critical alert names: KubeNodesCapacityLow \\u2014 10 events\", \"critical alerts > critical alert names: WebFrontendErrorRateHigh \\u2014 7 events\", \"critical alerts > critical services: media-api \\u2014 11 events\", \"critical alerts > critical services: kubernetes \\u2014 10 events\", \"critical alerts > critical services: web-frontend \\u2014 7 events\", \"alert timeline: 2024-04-29 22:00 UTC \\u2014 25 events\", \"alert timeline: 2024-04-29 23:00 UTC \\u2014 24 events\", \"alert timeline: 2024-04-30 00:00 UTC \\u2014 24 events\", \"alert timeline: 2024-04-30 16:00 UTC \\u2014 2 events\", \"alert timeline: 2024-04-30 17:00 UTC \\u2014 1 events\", \"alert timeline: 2024-04-30 18:00 UTC \\u2014 2 events\", \"alert timeline: 2024-04-30 19:00 UTC \\u2014 2 events\"]}",
+      "metadata": {
+        "scenario": "node_overdrain_0059",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "node_overdrain_0059-08",
+      "artifact_type": "derived_findings",
+      "subtype": "derived_summary",
+      "source": "derived_summary",
+      "content": "{\"description\": \"Deterministic summary computed from the query results above (error ranking, instance-to-host join, alert timeline, change correlation, earliest metric anomaly).\", \"facts\": [\"Derived: service web-frontend ranks #1 by error volume (27080 events, 2 failing dependencies). Most-failed dependency: media-api (22238 errors).\", \"Derived: most-alerted critical instance media-api (11 critical alerts); no matching host-inventory entry.\", \"Derived: warning/critical alerts span 2024-04-29 22:00 UTC to 2024-04-30 19:00 UTC; earliest alert hour 2024-04-29 22:00 UTC (25 alerts).\", \"Derived: changes recorded from 6 hours before the earliest alert hour to its end: CR-80150 (deployment, node-recycler 9.39.5 -> 9.40.0, cloudbuild-deployer, 2024-04-29 19:18 UTC); CR-80163 (deployment, recommendations 8.18.4 -> 8.19.0, cloudbuild-deployer, 2024-04-29 21:33 UTC); RECYCLE-7971 (node_rotation, general-purpose node group, node-recycler, 2024-04-29 22:40 UTC).\"]}",
+      "metadata": {
+        "scenario": "node_overdrain_0059",
+        "source_kind": "derived_from_es_results",
+        "heuristic": true
+      }
+    },
+    {
+      "artifact_id": "node_overdrain_0059-09",
+      "artifact_type": "query_coverage",
+      "subtype": "evidence_gaps",
+      "source": "evidence_gaps",
+      "content": "{\"description\": \"Queries that returned nothing or failed; use these to state what is NOT established.\", \"facts\": [\"Query 'metric anomalies' returned no aggregation results (shards failed: 1 of 96). This evidence is UNAVAILABLE; it is not evidence that nothing exists.\", \"No matching results for: tls certificates / expired certificates. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / expiring within 7 days. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / self signed. (Absence in this query is not proof of absence elsewhere.)\"]}",
+      "metadata": {
+        "scenario": "node_overdrain_0059",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    }
+  ]
+}

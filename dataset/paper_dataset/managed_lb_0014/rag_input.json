@@ -1,0 +1,153 @@
+{
+  "metadata": {
+    "incident_id": "INC-20230921",
+    "scenario": "managed_lb_0014",
+    "title": "Infrastructure reliability incident investigation",
+    "source": "synthetic/ops-incident-expansion (modeled on neu-nds2/llm-sec-incident-analysis)",
+    "query_window_start": "2023-09-21T00:00:00",
+    "query_window_end": "2023-09-23T23:59:59",
+    "evidence_types": [
+      "change_records",
+      "derived_findings",
+      "infrastructure_events",
+      "monitoring_alerts",
+      "query_coverage",
+      "resource_metrics",
+      "service_logs"
+    ],
+    "artifact_scope_note": "Evidence is aggregated query output (not raw log lines or metric samples); it contains no chat/communication records."
+  },
+  "incident_description": "Reliability incident investigation of a production environment. Evidence consists of Elasticsearch aggregation results over application and proxy logs, Kubernetes, cloud-provider and host system events, Prometheus Alertmanager alerts, change-management / CI-CD audit records and metric anomaly detection. No root cause, impact or trigger is stated; these must be established from the supplied artifacts. Environment context: Organization: Silvermark Credit Union (digital banking); Platform: AWS us-west-2 (zones us-west-2a/us-west-2b/us-west-2c/us-west-2d); network range 10.228.0.0/16; Kubernetes cluster silver-prod-uswest (EKS); Edge: provider-managed load balancer (edge-lb) in front of mobile-bff backends; a standby load balancer exists in a secondary region; Change management: production changes carry CR- identifiers.",
+  "investigation_questions": [
+    "Which service or component is the origin of the failure?",
+    "Were the backend instances unhealthy during the incident? Answer yes or no.",
+    "What load balancer error detail was logged for most failed requests?",
+    "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+    "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+    "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+    "Which change happened shortly before the incident began but did not cause it? Provide its identifier."
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "managed_lb_0014-01",
+      "artifact_type": "service_logs",
+      "subtype": "error_logs",
+      "source": "error_logs",
+      "content": "{\"description\": \"Application and proxy error logs: HTTP/gRPC status codes, failing requests (caller -> callee:port : operation), error messages and the services emitting them.\", \"facts\": [\"error events: 71858 matching events\", \"error events > status codes: 502 \\u2014 71349 events\", \"error events > status codes: 500 \\u2014 295 events\", \"error events > status codes: 504 \\u2014 214 events\", \"failing requests: edge-lb -> mobile-bff:8080 : GET /* (elb_status_code=502) \\u2014 71349 events\", \"failing requests: mobile-bff -> template loader : render \\u2014 295 events\", \"failing requests: accounts-api -> accounts-db:5432 : query \\u2014 214 events\", \"error messages: elb_status_code=502 target_status_code=- error_reason=TargetConnectionError \\u2014 71349 events\", \"error messages: TemplateNotFound: guides/legacy.html \\u2014 295 events\", \"error messages: upstream request timeout \\u2014 214 events\", \"emitting services: edge-lb \\u2014 71349 events\", \"emitting services: mobile-bff \\u2014 295 events\", \"emitting services: accounts-api \\u2014 214 events\"]}",
+      "metadata": {
+        "scenario": "managed_lb_0014",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "managed_lb_0014-02",
+      "artifact_type": "service_logs",
+      "subtype": "error_volume_by_service",
+      "source": "error_volume_by_service",
+      "content": "{\"description\": \"Services ranked by number of error events, with each service's most-failed downstream dependencies.\", \"facts\": [\"services: edge-lb \\u2014 71349 events; failing dependencies=1; top dependencies: mobile-bff (71349)\", \"services: mobile-bff \\u2014 295 events; failing dependencies=1; top dependencies: template loader (295)\", \"services: accounts-api \\u2014 214 events; failing dependencies=1; top dependencies: accounts-db (214)\"]}",
+      "metadata": {
+        "scenario": "managed_lb_0014",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "managed_lb_0014-03",
+      "artifact_type": "change_records",
+      "subtype": "change_log",
+      "source": "change_log",
+      "content": "{\"description\": \"Deployments, configuration pushes, infrastructure and automation runs from the change-management and CI/CD audit log: change ID, type, target, actor, time (UTC), status and recorded diff/summary.\", \"facts\": [\"changes: CR-83039 | deployment | cards-api 13.0.5 -> 13.1.0 | actor: ci-deployer | 2023-09-21 14:19 UTC | status: completed | new optional API field \\u2014 1 events\", \"changes: CR-83057 | deployment | statements-api 11.20.3 -> 11.20.4 | actor: ci-deployer | 2023-09-21 21:30 UTC | status: succeeded | feature flag cleanup \\u2014 1 events\", \"changes: CR-83060 | deployment | mobile-bff content release | actor: ci-deployer | 2023-09-22 06:20 UTC | status: completed | template guides/legacy.html removed \\u2014 1 events\", \"changes: CR-83085 | traffic_steering | DNS mobile-bff.silvermark.com | actor: c.ali | 2023-09-22 09:07 UTC | status: completed | fail over to standby load balancer in secondary region \\u2014 1 events\", \"changes: CR-83090 | deployment | kyc-svc 5.2.6 -> 5.3.0 | actor: ci-deployer | 2023-09-23 00:00 UTC | status: completed | dependency bump \\u2014 1 events\", \"changes: CR-83100 | deployment | accounts-api 13.13.0 -> 13.13.1 | actor: ci-deployer | 2023-09-23 00:38 UTC | status: completed | dependency bump \\u2014 1 events\", \"change types: deployment \\u2014 5 events\", \"change types: traffic_steering \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "managed_lb_0014",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "managed_lb_0014-04",
+      "artifact_type": "change_records",
+      "subtype": "change_actors",
+      "source": "change_actors",
+      "content": "{\"description\": \"Accounts and automation identities that executed changes, with the hosts or targets they acted on.\", \"facts\": [\"actors: ci-deployer \\u2014 5 events; targets: silver-prod-uswest/mobile-bff (1), silver-prod-uswest/cards-api (1), silver-prod-uswest/accounts-api (1), silver-prod-uswest/kyc-svc (1), silver-prod-uswest/statements-api (1)\", \"actors: c.ali \\u2014 1 events; targets: edge-lb (1)\"]}",
+      "metadata": {
+        "scenario": "managed_lb_0014",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "managed_lb_0014-05",
+      "artifact_type": "infrastructure_events",
+      "subtype": "host_inventory",
+      "source": "host_inventory",
+      "content": "{\"description\": \"Host and node names seen in infrastructure events with their IP address, role and availability zone / rack.\", \"facts\": [\"hosts: ip-10-228-9-131 \\u2014 1060 events; ip: 10.228.9.131; role: mobile-bff backend; zone: us-west-2a\", \"hosts: ip-10-228-48-51 \\u2014 780 events; ip: 10.228.48.51; role: mobile-bff backend; zone: us-west-2b\", \"hosts: ip-10-228-232-241 \\u2014 269 events; ip: 10.228.232.241; role: k8s-worker; zone: us-west-2d\", \"hosts: ip-10-228-9-27 \\u2014 84 events; ip: 10.228.9.27; role: k8s-worker; zone: us-west-2a\"]}",
+      "metadata": {
+        "scenario": "managed_lb_0014",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "managed_lb_0014-06",
+      "artifact_type": "infrastructure_events",
+      "subtype": "platform_events",
+      "source": "platform_events",
+      "content": "{\"description\": \"Kubernetes events, cloud-provider health events and host system messages (kernel, hardware, daemons) with the objects or hosts they refer to.\", \"facts\": [\"cloud health events: AWS Health AWS_ELASTICLOADBALANCING_OPERATIONAL_ISSUE (us-west-2): increased 5xx errors for Application Load Balancers; start 2023-09-22 07:09 UTC \\u2014 2 events; top objects: project silvermark-prod (2)\", \"load balancer health checks: backend health: HEALTHY \\u2014 3314 events; top objects: ip-10-228-48-51 (1346), ip-10-228-9-131 (856)\", \"event reasons: Pulled \\u2014 10 events; top objects: pod/cards-api-6c25c346a-vgzjp (3)\", \"event reasons: ScalingReplicaSet \\u2014 3 events; top objects: deployment/cards-api (1)\", \"event reasons: Pulled \\u2014 21 events; top objects: pod/accounts-api-829284fff-mjh4b (2)\", \"event reasons: ScalingReplicaSet \\u2014 4 events; top objects: deployment/accounts-api (3)\", \"event reasons: Pulled \\u2014 27 events; top objects: pod/kyc-svc-816196643-lbnjd (3)\", \"event reasons: ScalingReplicaSet \\u2014 2 events; top objects: deployment/kyc-svc (2)\", \"event reasons: Pulled \\u2014 24 events; top objects: pod/statements-api-735f9c462-drrv9 (1)\", \"event reasons: ScalingReplicaSet \\u2014 4 events; top objects: deployment/statements-api (1)\"]}",
+      "metadata": {
+        "scenario": "managed_lb_0014",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "managed_lb_0014-07",
+      "artifact_type": "monitoring_alerts",
+      "subtype": "alertmanager_alerts",
+      "source": "alertmanager_alerts",
+      "content": "{\"description\": \"Prometheus Alertmanager alerts: alert names with severity, critical-alert instances, alert names and services, and an hourly timeline of warning and critical alerts (UTC).\", \"facts\": [\"alert names: Watchdog (info) \\u2014 72 events; service: alertmanager; firing continuously\", \"alert names: LBHigh5xxRatio (critical) \\u2014 14 events; service: edge-lb; first seen in hour 2023-09-22 07:00 UTC; last seen in hour 2023-09-22 09:00 UTC\", \"alert names: UptimeCheckFailed (critical) \\u2014 5 events; service: edge-lb; first seen in hour 2023-09-22 07:00 UTC; last seen in hour 2023-09-22 09:00 UTC\", \"alert names: KubeCPUOvercommit (warning) \\u2014 1 events; service: cluster; first seen in hour 2023-09-22 00:00 UTC; last seen in hour 2023-09-22 00:00 UTC\", \"critical alerts: 19 matching events\", \"critical alerts > critical instances: edge-lb \\u2014 14 events\", \"critical alerts > critical instances: uptime-check mobile-bff-home \\u2014 5 events\", \"critical alerts > critical alert names: LBHigh5xxRatio \\u2014 14 events\", \"critical alerts > critical alert names: UptimeCheckFailed \\u2014 5 events\", \"critical alerts > critical services: edge-lb \\u2014 19 events\", \"alert timeline: 2023-09-22 00:00 UTC \\u2014 1 events\", \"alert timeline: 2023-09-22 07:00 UTC \\u2014 6 events\", \"alert timeline: 2023-09-22 08:00 UTC \\u2014 8 events\", \"alert timeline: 2023-09-22 09:00 UTC \\u2014 5 events\"]}",
+      "metadata": {
+        "scenario": "managed_lb_0014",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "managed_lb_0014-08",
+      "artifact_type": "resource_metrics",
+      "subtype": "metric_anomalies",
+      "source": "metric_anomalies",
+      "content": "{\"description\": \"Metric series that deviated from their 7-day baseline (hourly resolution): baseline, peak or trough value, anomaly onset and recovery (UTC).\", \"facts\": [\"metric anomalies: load balancer 5xx responses per minute on edge-lb \\u2014 baseline ~5/min; peak 1,386/min; onset 2023-09-22 07:00 UTC; recovered 2023-09-22 10:00 UTC\"]}",
+      "metadata": {
+        "scenario": "managed_lb_0014",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "managed_lb_0014-09",
+      "artifact_type": "derived_findings",
+      "subtype": "derived_summary",
+      "source": "derived_summary",
+      "content": "{\"description\": \"Deterministic summary computed from the query results above (error ranking, instance-to-host join, alert timeline, change correlation, earliest metric anomaly).\", \"facts\": [\"Derived: service edge-lb ranks #1 by error volume (71349 events, 1 failing dependencies). Most-failed dependency: mobile-bff (71349 errors).\", \"Derived: most-alerted critical instance edge-lb (14 critical alerts); no matching host-inventory entry.\", \"Derived: warning/critical alerts span 2023-09-22 00:00 UTC to 2023-09-22 09:00 UTC; earliest alert hour 2023-09-22 00:00 UTC (1 alerts).\", \"Derived: changes recorded from 6 hours before the earliest alert hour to its end: CR-83057 (deployment, statements-api 11.20.3 -> 11.20.4, ci-deployer, 2023-09-21 21:30 UTC).\", \"Derived: earliest metric anomaly onset 2023-09-22 07:00 UTC (load balancer 5xx responses per minute on edge-lb).\"]}",
+      "metadata": {
+        "scenario": "managed_lb_0014",
+        "source_kind": "derived_from_es_results",
+        "heuristic": true
+      }
+    },
+    {
+      "artifact_id": "managed_lb_0014-10",
+      "artifact_type": "query_coverage",
+      "subtype": "evidence_gaps",
+      "source": "evidence_gaps",
+      "content": "{\"description\": \"Queries that returned nothing or failed; use these to state what is NOT established.\", \"facts\": [\"No matching results for: tls certificates / expired certificates. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / expiring within 7 days. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / self signed. (Absence in this query is not proof of absence elsewhere.)\"]}",
+      "metadata": {
+        "scenario": "managed_lb_0014",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    }
+  ]
+}

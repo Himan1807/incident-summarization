@@ -1,0 +1,153 @@
+{
+  "metadata": {
+    "incident_id": "INC-20210122",
+    "scenario": "zonal_disk_0010",
+    "title": "Infrastructure reliability incident investigation",
+    "source": "synthetic/ops-incident-expansion (modeled on neu-nds2/llm-sec-incident-analysis)",
+    "query_window_start": "2021-01-22T00:00:00",
+    "query_window_end": "2021-01-24T23:59:59",
+    "evidence_types": [
+      "change_records",
+      "derived_findings",
+      "infrastructure_events",
+      "monitoring_alerts",
+      "query_coverage",
+      "resource_metrics",
+      "service_logs"
+    ],
+    "artifact_scope_note": "Evidence is aggregated query output (not raw log lines or metric samples); it contains no chat/communication records."
+  },
+  "incident_description": "Reliability incident investigation of a production environment. Evidence consists of Elasticsearch aggregation results over application and proxy logs, Kubernetes, cloud-provider and host system events, Prometheus Alertmanager alerts, change-management / CI-CD audit records and metric anomaly detection. No root cause, impact or trigger is stated; these must be established from the supplied artifacts. Environment context: Organization: Haldoxa Health (clinic and patient management SaaS); Platform: AWS us-east-2 (zones us-east-2a/us-east-2b/us-east-2c); network range 10.223.0.0/16; Kubernetes cluster haldox-prod-useast (EKS); Database tier: self-managed postgres primary/replica on virtual machines with provider block storage, replica in another zone; Change management: production changes carry CHG- identifiers.",
+  "investigation_questions": [
+    "What is the hostname of the machine where the incident started?",
+    "What is the IP address of the host or node where the failure originated?",
+    "Which availability zone was affected by the cloud provider event?",
+    "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+    "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+    "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+    "Which change restored normal service? Provide its change identifier."
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "zonal_disk_0010-01",
+      "artifact_type": "service_logs",
+      "subtype": "error_logs",
+      "source": "error_logs",
+      "content": "{\"description\": \"Application and proxy error logs: HTTP/gRPC status codes, failing requests (caller -> callee:port : operation), error messages and the services emitting them.\", \"facts\": [\"error events: 79053 matching events\", \"error events > status codes: 504 \\u2014 56335 events\", \"error events > status codes: 500 \\u2014 22718 events\", \"failing requests: patient-portal -> pharmacy-api:8080 : GET /v1/pharmacy/{id} \\u2014 56335 events\", \"failing requests: pharmacy-api -> db-postgres-01:5432 : SELECT/UPDATE \\u2014 17257 events\", \"failing requests: records-api -> db-postgres-01:5432 : INSERT \\u2014 5453 events\", \"failing requests: scheduling-api -> scheduling-db:5432 : query \\u2014 8 events\", \"error messages: upstream pharmacy-api: 504 Gateway Timeout \\u2014 56335 events\", \"error messages: pq: canceling statement due to statement timeout \\u2014 17257 events\", \"error messages: ERROR: canceling statement due to statement timeout \\u2014 5453 events\", \"error messages: pq: could not serialize access due to concurrent update \\u2014 8 events\", \"emitting services: patient-portal \\u2014 56335 events\", \"emitting services: pharmacy-api \\u2014 17257 events\", \"emitting services: records-api \\u2014 5453 events\", \"emitting services: scheduling-api \\u2014 8 events\"]}",
+      "metadata": {
+        "scenario": "zonal_disk_0010",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "zonal_disk_0010-02",
+      "artifact_type": "service_logs",
+      "subtype": "error_volume_by_service",
+      "source": "error_volume_by_service",
+      "content": "{\"description\": \"Services ranked by number of error events, with each service's most-failed downstream dependencies.\", \"facts\": [\"services: patient-portal \\u2014 56335 events; failing dependencies=1; top dependencies: pharmacy-api (56335)\", \"services: pharmacy-api \\u2014 17257 events; failing dependencies=1; top dependencies: db-postgres-01 (17257)\", \"services: records-api \\u2014 5453 events; failing dependencies=1; top dependencies: db-postgres-01 (5453)\", \"services: scheduling-api \\u2014 8 events; failing dependencies=1; top dependencies: scheduling-db (8)\"]}",
+      "metadata": {
+        "scenario": "zonal_disk_0010",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "zonal_disk_0010-03",
+      "artifact_type": "change_records",
+      "subtype": "change_log",
+      "source": "change_log",
+      "content": "{\"description\": \"Deployments, configuration pushes, infrastructure and automation runs from the change-management and CI/CD audit log: change ID, type, target, actor, time (UTC), status and recorded diff/summary.\", \"facts\": [\"changes: CHG-8477 | manual_failover | postgres primary db-postgres-01 -> db-postgres-02 | actor: h.lindqvist | 2021-01-22 14:01 UTC | status: completed | promote replica db-postgres-02 (us-east-2a) \\u2014 1 events\", \"changes: CHG-8501 | deployment | lab-results-api 6.9.12 -> 6.9.13 | actor: jenkins-deploy | 2021-01-23 06:30 UTC | status: Synced/Healthy | dependency bump \\u2014 1 events\", \"changes: CHG-8508 | deployment | scheduling-api 8.19.3 -> 8.19.4 | actor: jenkins-deploy | 2021-01-24 01:19 UTC | status: completed | performance tuning of list endpoint \\u2014 1 events\", \"changes: CHG-8547 | deployment | messaging-svc 12.30.6 -> 12.31.0 | actor: jenkins-deploy | 2021-01-24 09:05 UTC | status: Synced/Healthy | logging improvements \\u2014 1 events\", \"change types: deployment \\u2014 3 events\", \"change types: manual_failover \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "zonal_disk_0010",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "zonal_disk_0010-04",
+      "artifact_type": "change_records",
+      "subtype": "change_actors",
+      "source": "change_actors",
+      "content": "{\"description\": \"Accounts and automation identities that executed changes, with the hosts or targets they acted on.\", \"facts\": [\"actors: jenkins-deploy \\u2014 3 events; targets: haldox-prod-useast/messaging-svc (1), haldox-prod-useast/scheduling-api (1), haldox-prod-useast/lab-results-api (1)\", \"actors: h.lindqvist \\u2014 1 events; targets: db-postgres-01 (1), db-postgres-02 (1)\"]}",
+      "metadata": {
+        "scenario": "zonal_disk_0010",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "zonal_disk_0010-05",
+      "artifact_type": "infrastructure_events",
+      "subtype": "host_inventory",
+      "source": "host_inventory",
+      "content": "{\"description\": \"Host and node names seen in infrastructure events with their IP address, role and availability zone / rack.\", \"facts\": [\"hosts: db-postgres-01 \\u2014 269 events; ip: 10.223.216.102; role: postgres-primary; zone: us-east-2b\", \"hosts: db-postgres-02 \\u2014 140 events; ip: 10.223.34.153; role: postgres-replica; zone: us-east-2a\", \"hosts: ip-10-223-112-174 \\u2014 70 events; ip: 10.223.112.174; role: k8s-worker; zone: us-east-2a\"]}",
+      "metadata": {
+        "scenario": "zonal_disk_0010",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "zonal_disk_0010-06",
+      "artifact_type": "infrastructure_events",
+      "subtype": "platform_events",
+      "source": "platform_events",
+      "content": "{\"description\": \"Kubernetes events, cloud-provider health events and host system messages (kernel, hardware, daemons) with the objects or hosts they refer to.\", \"facts\": [\"cloud health events: AWS Health AWS_EBS_OPERATIONAL_ISSUE (us-east-2b): degraded performance for a subset of volumes; impact start 2021-01-22 10:52 UTC \\u2014 2 events; top objects: vol-01e74d704466020c4 (2)\", \"system messages: kernel: nvme nvme1: I/O 612 QID 2 timeout, aborting \\u2014 90 events; top objects: db-postgres-01 (1)\", \"system messages: kernel: INFO: task postgres:5067 blocked for more than 120 seconds. \\u2014 34 events; top objects: db-postgres-01 (1)\", \"instance status checks: instance and system status checks passed \\u2014 743 events; top objects: db-postgres-01 (1), db-postgres-02 (1)\", \"event reasons: Pulled \\u2014 14 events; top objects: pod/messaging-svc-8fb195de8-xc4tc (3)\", \"event reasons: ScalingReplicaSet \\u2014 3 events; top objects: deployment/messaging-svc (3)\", \"event reasons: Pulled \\u2014 14 events; top objects: pod/scheduling-api-571d2934c-p5v9b (3)\", \"event reasons: ScalingReplicaSet \\u2014 6 events; top objects: deployment/scheduling-api (1)\", \"event reasons: Pulled \\u2014 28 events; top objects: pod/lab-results-api-4f690ceaf-rb2ds (2)\", \"event reasons: ScalingReplicaSet \\u2014 2 events; top objects: deployment/lab-results-api (2)\"]}",
+      "metadata": {
+        "scenario": "zonal_disk_0010",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "zonal_disk_0010-07",
+      "artifact_type": "monitoring_alerts",
+      "subtype": "alertmanager_alerts",
+      "source": "alertmanager_alerts",
+      "content": "{\"description\": \"Prometheus Alertmanager alerts: alert names with severity, critical-alert instances, alert names and services, and an hourly timeline of warning and critical alerts (UTC).\", \"facts\": [\"alert names: Watchdog (info) \\u2014 72 events; service: alertmanager; firing continuously\", \"alert names: HighDiskIOLatency (critical) \\u2014 21 events; service: node; first seen in hour 2021-01-22 10:00 UTC; last seen in hour 2021-01-22 14:00 UTC\", \"alert names: PostgresSlowQueries (critical) \\u2014 10 events; service: postgres; first seen in hour 2021-01-22 11:00 UTC; last seen in hour 2021-01-22 14:00 UTC\", \"alert names: PatientPortal5xxRateHigh (critical) \\u2014 6 events; service: patient-portal; first seen in hour 2021-01-22 11:00 UTC; last seen in hour 2021-01-22 14:00 UTC\", \"alert names: NodeFilesystemSpaceFillingUp (warning) \\u2014 5 events; service: node; first seen in hour 2021-01-22 04:00 UTC; last seen in hour 2021-01-22 06:00 UTC\", \"alert names: KubeJobFailed (warning) \\u2014 4 events; service: batch; first seen in hour 2021-01-22 02:00 UTC; last seen in hour 2021-01-22 04:00 UTC\", \"critical alerts: 37 matching events\", \"critical alerts > critical instances: 10.223.216.102:9100 \\u2014 21 events\", \"critical alerts > critical instances: 10.223.216.102:9187 \\u2014 10 events\", \"critical alerts > critical instances: patient-portal \\u2014 6 events\", \"critical alerts > critical alert names: HighDiskIOLatency \\u2014 21 events\", \"critical alerts > critical alert names: PostgresSlowQueries \\u2014 10 events\", \"critical alerts > critical alert names: PatientPortal5xxRateHigh \\u2014 6 events\", \"critical alerts > critical services: node \\u2014 21 events\", \"critical alerts > critical services: postgres \\u2014 10 events\", \"critical alerts > critical services: patient-portal \\u2014 6 events\", \"alert timeline: 2021-01-22 02:00 UTC \\u2014 1 events\", \"alert timeline: 2021-01-22 03:00 UTC \\u2014 2 events\", \"alert timeline: 2021-01-22 04:00 UTC \\u2014 3 events\", \"alert timeline: 2021-01-22 05:00 UTC \\u2014 2 events\", \"alert timeline: 2021-01-22 06:00 UTC \\u2014 1 events\", \"alert timeline: 2021-01-22 10:00 UTC \\u2014 5 events\", \"alert timeline: 2021-01-22 11:00 UTC \\u2014 8 events\", \"alert timeline: 2021-01-22 12:00 UTC \\u2014 12 events\", \"alert timeline: 2021-01-22 13:00 UTC \\u2014 6 events\", \"alert timeline: 2021-01-22 14:00 UTC \\u2014 6 events\"]}",
+      "metadata": {
+        "scenario": "zonal_disk_0010",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "zonal_disk_0010-08",
+      "artifact_type": "resource_metrics",
+      "subtype": "metric_anomalies",
+      "source": "metric_anomalies",
+      "content": "{\"description\": \"Metric series that deviated from their 7-day baseline (hourly resolution): baseline, peak or trough value, anomaly onset and recovery (UTC).\", \"facts\": [\"metric anomalies: disk await (data volume) on db-postgres-01 \\u2014 baseline 0.3 ms; peak 2,437 ms; onset 2021-01-22 10:00 UTC; recovered 2021-01-22 15:00 UTC\", \"metric anomalies: replication lag on db-postgres-02 \\u2014 baseline 0 s; peak 1,964 s; onset 2021-01-22 10:00 UTC; recovered 2021-01-22 15:00 UTC\", \"metric anomalies: node_network_receive_bytes rate on 10.223.112.174 \\u2014 baseline 43 MB/s; peak 342 MB/s; onset 2021-01-23 04:00 UTC; recovered 2021-01-23 07:00 UTC\"]}",
+      "metadata": {
+        "scenario": "zonal_disk_0010",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "zonal_disk_0010-09",
+      "artifact_type": "derived_findings",
+      "subtype": "derived_summary",
+      "source": "derived_summary",
+      "content": "{\"description\": \"Deterministic summary computed from the query results above (error ranking, instance-to-host join, alert timeline, change correlation, earliest metric anomaly).\", \"facts\": [\"Derived: service patient-portal ranks #1 by error volume (56335 events, 1 failing dependencies). Most-failed dependency: pharmacy-api (56335 errors).\", \"Derived: most-alerted critical instance 10.223.216.102:9100 (21 critical alerts) maps to hostname db-postgres-01; role postgres-primary; zone us-east-2b.\", \"Derived: warning/critical alerts span 2021-01-22 02:00 UTC to 2021-01-22 14:00 UTC; earliest alert hour 2021-01-22 02:00 UTC (1 alerts).\", \"Derived: no changes recorded from 6 hours before the earliest alert hour to its end.\", \"Derived: earliest metric anomaly onset 2021-01-22 10:00 UTC (disk await (data volume) on db-postgres-01).\"]}",
+      "metadata": {
+        "scenario": "zonal_disk_0010",
+        "source_kind": "derived_from_es_results",
+        "heuristic": true
+      }
+    },
+    {
+      "artifact_id": "zonal_disk_0010-10",
+      "artifact_type": "query_coverage",
+      "subtype": "evidence_gaps",
+      "source": "evidence_gaps",
+      "content": "{\"description\": \"Queries that returned nothing or failed; use these to state what is NOT established.\", \"facts\": [\"No matching results for: tls certificates / expired certificates. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / expiring within 7 days. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / self signed. (Absence in this query is not proof of absence elsewhere.)\"]}",
+      "metadata": {
+        "scenario": "zonal_disk_0010",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    }
+  ]
+}

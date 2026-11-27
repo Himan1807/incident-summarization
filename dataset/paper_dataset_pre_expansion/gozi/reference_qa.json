@@ -1,0 +1,161 @@
+{
+  "source": "answers.txt (paper dataset)",
+  "confidence": "paper ground truth",
+  "qa": [
+    {
+      "id": 1,
+      "question": "What is the IP address of the potentially infected internal host in the LAN?",
+      "answer": "172.16.1.137",
+      "atoms": [
+        {
+          "text": "172.16.1.137",
+          "kind": "ip"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "question": "What is the hostname of the potentially infected machine in the LAN?",
+      "answer": "DESKTOP-3GJL3PV",
+      "atoms": [
+        {
+          "text": "DESKTOP-3GJL3PV",
+          "kind": "hostname"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "question": "What is the Windows human user account name (not machine accounts ending in $) of the potentially infected machine in the LAN?",
+      "answer": "sherita.kolb",
+      "atoms": [
+        {
+          "text": "sherita.kolb",
+          "kind": "domain_or_file"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "question": "What are the likely suspicious domains for initial infection?",
+      "answer": "unapromo.com",
+      "atoms": [
+        {
+          "text": "unapromo.com",
+          "kind": "domain_or_file"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "question": "What are the suspicious external IP addresses contacted, which might be involved in command-and-control (C2) communication?",
+      "answer": "62.173.140.103, 62.173.138.138, 62.173.149.243, 62.173.140.94, 31.41.44.60, 46.8.19.233, 5.44.45.201, 89.116.236.41, 62.173.140.76, 31.41.44.49, 46.8.19.86",
+      "atoms": [
+        {
+          "text": "62.173.140.103",
+          "kind": "ip"
+        },
+        {
+          "text": "62.173.138.138",
+          "kind": "ip"
+        },
+        {
+          "text": "62.173.149.243",
+          "kind": "ip"
+        },
+        {
+          "text": "62.173.140.94",
+          "kind": "ip"
+        },
+        {
+          "text": "31.41.44.60",
+          "kind": "ip"
+        },
+        {
+          "text": "46.8.19.233",
+          "kind": "ip"
+        },
+        {
+          "text": "5.44.45.201",
+          "kind": "ip"
+        },
+        {
+          "text": "89.116.236.41",
+          "kind": "ip"
+        },
+        {
+          "text": "62.173.140.76",
+          "kind": "ip"
+        },
+        {
+          "text": "31.41.44.49",
+          "kind": "ip"
+        },
+        {
+          "text": "46.8.19.86",
+          "kind": "ip"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "question": "What are the exact filenames of the encoded modules or plugins downloaded by the malware?",
+      "answer": "stilak32.rar, stilak64.rar, cook32.rar, cook64.rar",
+      "atoms": [
+        {
+          "text": "stilak32.rar",
+          "kind": "domain_or_file"
+        },
+        {
+          "text": "stilak64.rar",
+          "kind": "domain_or_file"
+        },
+        {
+          "text": "cook32.rar",
+          "kind": "domain_or_file"
+        },
+        {
+          "text": "cook64.rar",
+          "kind": "domain_or_file"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "question": "Which of the three CIA components does the attacker target primarily: availability, integrity, or confidentiality?",
+      "answer": "confidentiality",
+      "atoms": [
+        {
+          "text": "confidentiality",
+          "kind": "cia"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "question": "During what hour did the first signs of infection activity appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+      "answer": "2023-03-07 02:00 UTC",
+      "atoms": [
+        {
+          "text": "2023-03-07 02:00 UTC",
+          "kind": "time"
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "question": "According to the connection volume statistics, what single external IP address received the most connections from the infected hosts? Is it a C2 server or a legitimate service?",
+      "answer": "62.173.138.138, C2 server",
+      "atoms": [
+        {
+          "text": "62.173.138.138",
+          "kind": "ip"
+        },
+        {
+          "text": "C2 server",
+          "kind": "label"
+        }
+      ]
+    }
+  ]
+}

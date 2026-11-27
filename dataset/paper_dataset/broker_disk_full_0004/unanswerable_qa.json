@@ -1,0 +1,28 @@
+{
+  "scenario": "broker_disk_full_0004",
+  "section_profile": "security",
+  "note": "Evaluation only. Every question asks for a value whose type does not occur anywhere in this incident's evidence (checked by src/check_unanswerable.py).",
+  "questions": [
+    {
+      "id": "U1",
+      "question": "Which Windows registry key did the malware modify to persist on the potentially infected host?",
+      "answerable": false,
+      "absent_type": "registry_key",
+      "why_absent": "no registry data in this incident's evidence"
+    },
+    {
+      "id": "U2",
+      "question": "Which CVE identifier was exploited for the initial infection?",
+      "answerable": false,
+      "absent_type": "cve",
+      "why_absent": "no CVE identifiers in this incident's evidence"
+    },
+    {
+      "id": "U3",
+      "question": "What is the email address of the sender of the message that delivered the initial infection?",
+      "answerable": false,
+      "absent_type": "email",
+      "why_absent": "no email addresses in this incident's evidence"
+    }
+  ]
+}

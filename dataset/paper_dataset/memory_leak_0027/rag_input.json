@@ -1,0 +1,153 @@
+{
+  "metadata": {
+    "incident_id": "INC-20251112",
+    "scenario": "memory_leak_0027",
+    "title": "Infrastructure reliability incident investigation",
+    "source": "synthetic/ops-incident-expansion (modeled on neu-nds2/llm-sec-incident-analysis)",
+    "query_window_start": "2025-11-12T00:00:00",
+    "query_window_end": "2025-11-14T23:59:59",
+    "evidence_types": [
+      "change_records",
+      "derived_findings",
+      "infrastructure_events",
+      "monitoring_alerts",
+      "query_coverage",
+      "resource_metrics",
+      "service_logs"
+    ],
+    "artifact_scope_note": "Evidence is aggregated query output (not raw log lines or metric samples); it contains no chat/communication records."
+  },
+  "incident_description": "Reliability incident investigation of a production environment. Evidence consists of Elasticsearch aggregation results over application and proxy logs, Kubernetes, cloud-provider and host system events, Prometheus Alertmanager alerts, change-management / CI-CD audit records and metric anomaly detection. No root cause, impact or trigger is stated; these must be established from the supplied artifacts. Environment context: Organization: Ironen Ride (ride-hailing); Platform: on-premises data center DC-South, server range 172.20.0.0/16; Kubernetes cluster ironen-prod (kubeadm); eta-svc pods run with 2 GiB memory limits; deployments are canary releases with automated analysis; Change management: production changes carry CHG- identifiers.",
+  "investigation_questions": [
+    "What change, deployment or automation run triggered the incident? Provide its change identifier.",
+    "Which user or automation account carried out the triggering change?",
+    "Which version of the service introduced the defect?",
+    "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+    "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+    "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+    "Which change restored normal service? Provide its change identifier."
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "memory_leak_0027-01",
+      "artifact_type": "service_logs",
+      "subtype": "error_logs",
+      "source": "error_logs",
+      "content": "{\"description\": \"Application and proxy error logs: HTTP/gRPC status codes, failing requests (caller -> callee:port : operation), error messages and the services emitting them.\", \"facts\": [\"error events: 11428 matching events\", \"error events > status codes: 503 \\u2014 10000 events\", \"error events > status codes: 499 \\u2014 1207 events\", \"error events > status codes: 502 \\u2014 221 events\", \"failing requests: rider-app-bff -> eta-svc:8080 : GET /v1/eta \\u2014 8405 events\", \"failing requests: pricing-svc -> eta-svc:8080 : POST /v1/eta/batch \\u2014 1595 events\", \"failing requests: eta-svc -> clients : in-flight requests \\u2014 1207 events\", \"failing requests: dispatch-svc -> dispatch-db:5432 : query \\u2014 221 events\", \"error messages: upstream eta-svc: 503 no healthy upstream \\u2014 8405 events\", \"error messages: eta-svc: 503 Service Unavailable \\u2014 1595 events\", \"error messages: context canceled (shutdown in progress) \\u2014 1207 events\", \"error messages: connection reset by peer \\u2014 221 events\", \"emitting services: rider-app-bff \\u2014 8405 events\", \"emitting services: pricing-svc \\u2014 1595 events\", \"emitting services: eta-svc \\u2014 1207 events\", \"emitting services: dispatch-svc \\u2014 221 events\"]}",
+      "metadata": {
+        "scenario": "memory_leak_0027",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "memory_leak_0027-02",
+      "artifact_type": "service_logs",
+      "subtype": "error_volume_by_service",
+      "source": "error_volume_by_service",
+      "content": "{\"description\": \"Services ranked by number of error events, with each service's most-failed downstream dependencies.\", \"facts\": [\"services: rider-app-bff \\u2014 8405 events; failing dependencies=1; top dependencies: eta-svc (8405)\", \"services: pricing-svc \\u2014 1595 events; failing dependencies=1; top dependencies: eta-svc (1595)\", \"services: eta-svc \\u2014 1207 events; failing dependencies=1; top dependencies: clients (1207)\", \"services: dispatch-svc \\u2014 221 events; failing dependencies=1; top dependencies: dispatch-db (221)\"]}",
+      "metadata": {
+        "scenario": "memory_leak_0027",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "memory_leak_0027-03",
+      "artifact_type": "change_records",
+      "subtype": "change_log",
+      "source": "change_log",
+      "content": "{\"description\": \"Deployments, configuration pushes, infrastructure and automation runs from the change-management and CI/CD audit log: change ID, type, target, actor, time (UTC), status and recorded diff/summary.\", \"facts\": [\"changes: CHG-10062 | deployment | driver-profile-api 2.18.0 -> 2.18.1 | actor: argocd | 2025-11-12 06:20 UTC | status: Synced/Healthy | logging improvements \\u2014 1 events\", \"changes: CHG-10071 | deployment | eta-svc 9.31.5 -> 9.32.0 | actor: argocd | 2025-11-13 07:15 UTC | status: Healthy | canary 10% -> 50% -> 100% (analysis passed: error rate, p99 latency); new in-process query-suggestion cache \\u2014 1 events\", \"changes: CHG-10083 | node_rotation | node pool AMI/image update | actor: node-upgrader | 2025-11-13 13:30 UTC | status: completed | node image drift replacement \\u2014 1 events\", \"changes: CHG-10100 | deployment | dispatch-svc 5.6.9 -> 5.7.0 | actor: argocd | 2025-11-13 15:34 UTC | status: Synced/Healthy | minor bug fixes \\u2014 1 events\", \"changes: CHG-10137 | rollback | eta-svc 9.32.0 -> 9.31.5 | actor: j.menon | 2025-11-13 17:17 UTC | status: Healthy | rollout undo \\u2014 1 events\", \"changes: CHG-10167 | deployment | trips-api 0.25.11 -> 0.26.0 | actor: argocd | 2025-11-13 19:38 UTC | status: succeeded | new optional API field \\u2014 1 events\", \"change types: deployment \\u2014 4 events\", \"change types: node_rotation \\u2014 1 events\", \"change types: rollback \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "memory_leak_0027",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "memory_leak_0027-04",
+      "artifact_type": "change_records",
+      "subtype": "change_actors",
+      "source": "change_actors",
+      "content": "{\"description\": \"Accounts and automation identities that executed changes, with the hosts or targets they acted on.\", \"facts\": [\"actors: argocd \\u2014 4 events; targets: ironen-prod/eta-svc (1), ironen-prod/trips-api (1), ironen-prod/dispatch-svc (1), ironen-prod/driver-profile-api (1)\", \"actors: j.menon \\u2014 1 events; targets: ironen-prod/eta-svc (1)\", \"actors: node-upgrader \\u2014 1 events; targets: irone-node-01 (1), irone-node-40 (1), irone-node-37 (1)\"]}",
+      "metadata": {
+        "scenario": "memory_leak_0027",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "memory_leak_0027-05",
+      "artifact_type": "infrastructure_events",
+      "subtype": "host_inventory",
+      "source": "host_inventory",
+      "content": "{\"description\": \"Host and node names seen in infrastructure events with their IP address, role and availability zone / rack.\", \"facts\": [\"hosts: irone-node-11 \\u2014 299 events; ip: 172.20.56.214; role: k8s-worker; zone: rack F27\", \"hosts: irone-node-34 \\u2014 240 events; ip: 172.20.31.250; role: k8s-worker; zone: rack F39\", \"hosts: irone-node-37 \\u2014 153 events; ip: 172.20.122.206; role: k8s-worker; zone: rack F23\", \"hosts: irone-node-35 \\u2014 151 events; ip: 172.20.56.113; role: k8s-worker; zone: rack F27\", \"hosts: irone-node-01 \\u2014 146 events; ip: 172.20.31.97; role: k8s-worker; zone: rack F39\", \"hosts: irone-node-40 \\u2014 84 events; ip: 172.20.31.138; role: k8s-worker; zone: rack F39\"]}",
+      "metadata": {
+        "scenario": "memory_leak_0027",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "memory_leak_0027-06",
+      "artifact_type": "infrastructure_events",
+      "subtype": "platform_events",
+      "source": "platform_events",
+      "content": "{\"description\": \"Kubernetes events, cloud-provider health events and host system messages (kernel, hardware, daemons) with the objects or hosts they refer to.\", \"facts\": [\"event reasons: OOMKilling \\u2014 48 events; top objects: pod/eta-svc-ac9231a98-wnpl9 (24)\", \"system messages: kernel: Memory cgroup out of memory: Killed process (eta-svc) anon-rss:2096000kB \\u2014 48 events; top objects: irone-node-01 (1), irone-node-40 (1), irone-node-37 (1)\", \"event reasons: Pulled \\u2014 26 events; top objects: pod/trips-api-9fe833d49-xnj45 (1)\", \"event reasons: ScalingReplicaSet \\u2014 5 events; top objects: deployment/trips-api (3)\", \"event reasons: Pulled \\u2014 20 events; top objects: pod/dispatch-svc-4cf78a2a3-lpqcc (1)\", \"event reasons: ScalingReplicaSet \\u2014 4 events; top objects: deployment/dispatch-svc (1)\", \"event reasons: Pulled \\u2014 16 events; top objects: pod/driver-profile-api-4fc3ff5ad-fhcjz (1)\", \"event reasons: ScalingReplicaSet \\u2014 6 events; top objects: deployment/driver-profile-api (3)\"]}",
+      "metadata": {
+        "scenario": "memory_leak_0027",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "memory_leak_0027-07",
+      "artifact_type": "monitoring_alerts",
+      "subtype": "alertmanager_alerts",
+      "source": "alertmanager_alerts",
+      "content": "{\"description\": \"Prometheus Alertmanager alerts: alert names with severity, critical-alert instances, alert names and services, and an hourly timeline of warning and critical alerts (UTC).\", \"facts\": [\"alert names: Watchdog (info) \\u2014 72 events; service: alertmanager; firing continuously\", \"alert names: ContainerMemoryNearLimit (warning) \\u2014 16 events; service: eta-svc; first seen in hour 2025-11-13 13:00 UTC; last seen in hour 2025-11-13 17:00 UTC\", \"alert names: RiderAppBffAvailabilityLow (critical) \\u2014 14 events; service: rider-app-bff; first seen in hour 2025-11-13 14:00 UTC; last seen in hour 2025-11-13 17:00 UTC\", \"alert names: KubePodCrashLooping (critical) \\u2014 12 events; service: eta-svc; first seen in hour 2025-11-13 14:00 UTC; last seen in hour 2025-11-13 17:00 UTC\", \"alert names: NodeFilesystemSpaceFillingUp (warning) \\u2014 4 events; service: node; first seen in hour 2025-11-14 00:00 UTC; last seen in hour 2025-11-14 02:00 UTC\", \"alert names: TargetDown (warning) \\u2014 2 events; service: driver-profile-api; first seen in hour 2025-11-14 08:00 UTC; last seen in hour 2025-11-14 08:00 UTC\", \"critical alerts: 26 matching events\", \"critical alerts > critical instances: slo:rider-app-bff-availability \\u2014 14 events\", \"critical alerts > critical instances: eta-svc \\u2014 12 events\", \"critical alerts > critical alert names: RiderAppBffAvailabilityLow \\u2014 14 events\", \"critical alerts > critical alert names: KubePodCrashLooping \\u2014 12 events\", \"critical alerts > critical services: rider-app-bff \\u2014 14 events\", \"critical alerts > critical services: eta-svc \\u2014 12 events\", \"alert timeline: 2025-11-13 13:00 UTC \\u2014 3 events\", \"alert timeline: 2025-11-13 14:00 UTC \\u2014 11 events\", \"alert timeline: 2025-11-13 15:00 UTC \\u2014 11 events\", \"alert timeline: 2025-11-13 16:00 UTC \\u2014 8 events\", \"alert timeline: 2025-11-13 17:00 UTC \\u2014 9 events\", \"alert timeline: 2025-11-14 00:00 UTC \\u2014 1 events\", \"alert timeline: 2025-11-14 01:00 UTC \\u2014 1 events\", \"alert timeline: 2025-11-14 02:00 UTC \\u2014 2 events\", \"alert timeline: 2025-11-14 08:00 UTC \\u2014 2 events\"]}",
+      "metadata": {
+        "scenario": "memory_leak_0027",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "memory_leak_0027-08",
+      "artifact_type": "resource_metrics",
+      "subtype": "metric_anomalies",
+      "source": "metric_anomalies",
+      "content": "{\"description\": \"Metric series that deviated from their 7-day baseline (hourly resolution): baseline, peak or trough value, anomaly onset and recovery (UTC).\", \"facts\": [\"metric anomalies: container memory working set (avg per eta-svc pod) on eta-svc \\u2014 baseline 1.0 GiB (flat); peak 2.0 GiB (limit); onset 2025-11-13 07:00 UTC; recovered 2025-11-13 18:00 UTC\", \"metric anomalies: container restarts per hour on eta-svc \\u2014 baseline 0/h; peak 35/h; onset 2025-11-13 14:00 UTC; recovered 2025-11-13 18:00 UTC\", \"metric anomalies: node_network_receive_bytes rate on 172.20.56.113 \\u2014 baseline 43 MB/s; peak 444 MB/s; onset 2025-11-13 03:00 UTC; recovered 2025-11-13 05:00 UTC\"]}",
+      "metadata": {
+        "scenario": "memory_leak_0027",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "memory_leak_0027-09",
+      "artifact_type": "derived_findings",
+      "subtype": "derived_summary",
+      "source": "derived_summary",
+      "content": "{\"description\": \"Deterministic summary computed from the query results above (error ranking, instance-to-host join, alert timeline, change correlation, earliest metric anomaly).\", \"facts\": [\"Derived: service rider-app-bff ranks #1 by error volume (8405 events, 1 failing dependencies). Most-failed dependency: eta-svc (8405 errors).\", \"Derived: most-alerted critical instance slo:rider-app-bff-availability (14 critical alerts); no matching host-inventory entry.\", \"Derived: warning/critical alerts span 2025-11-13 13:00 UTC to 2025-11-14 08:00 UTC; earliest alert hour 2025-11-13 13:00 UTC (3 alerts).\", \"Derived: changes recorded from 6 hours before the earliest alert hour to its end: CHG-10071 (deployment, eta-svc 9.31.5 -> 9.32.0, argocd, 2025-11-13 07:15 UTC); CHG-10083 (node_rotation, node pool AMI/image update, node-upgrader, 2025-11-13 13:30 UTC).\", \"Derived: earliest metric anomaly onset 2025-11-13 03:00 UTC (node_network_receive_bytes rate on 172.20.56.113).\"]}",
+      "metadata": {
+        "scenario": "memory_leak_0027",
+        "source_kind": "derived_from_es_results",
+        "heuristic": true
+      }
+    },
+    {
+      "artifact_id": "memory_leak_0027-10",
+      "artifact_type": "query_coverage",
+      "subtype": "evidence_gaps",
+      "source": "evidence_gaps",
+      "content": "{\"description\": \"Queries that returned nothing or failed; use these to state what is NOT established.\", \"facts\": [\"No matching results for: tls certificates / expired certificates. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / expiring within 7 days. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / self signed. (Absence in this query is not proof of absence elsewhere.)\"]}",
+      "metadata": {
+        "scenario": "memory_leak_0027",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    }
+  ]
+}

@@ -1,0 +1,153 @@
+{
+  "metadata": {
+    "incident_id": "INC-20250408",
+    "scenario": "node_recycler_drain",
+    "title": "Infrastructure reliability incident investigation",
+    "source": "synthetic/ops-incident-expansion (modeled on neu-nds2/llm-sec-incident-analysis)",
+    "query_window_start": "2025-04-08T00:00:00",
+    "query_window_end": "2025-04-10T23:59:59",
+    "evidence_types": [
+      "change_records",
+      "derived_findings",
+      "infrastructure_events",
+      "monitoring_alerts",
+      "query_coverage",
+      "resource_metrics",
+      "service_logs"
+    ],
+    "artifact_scope_note": "Evidence is aggregated query output (not raw log lines or metric samples); it contains no chat/communication records."
+  },
+  "incident_description": "Reliability incident investigation of a production environment. Evidence consists of Elasticsearch aggregation results over application and proxy logs, Kubernetes, cloud-provider and host system events, Prometheus Alertmanager alerts, change-management / CI-CD audit records and metric anomaly detection. No root cause, impact or trigger is stated; these must be established from the supplied artifacts. Environment context: Organization: Stratus Ride (ride-hailing); Platform: AWS ap-southeast-1; Kubernetes cluster sr-prod-apse1 (EKS, 14 general-purpose worker nodes, node range 10.90.0.0/16); Automation: an in-house node-recycler controller rotates worker nodes older than 14 days (cordon, drain, terminate, replace) in batches bounded by its maxUnavailable setting (15%); controller runs are recorded with RECYCLE- identifiers; Deployments: Argo CD (CHG- identifiers).",
+  "investigation_questions": [
+    "Which service or component is the origin of the failure?",
+    "What change, deployment or automation run triggered the incident? Provide its change identifier.",
+    "Which deployment introduced the faulty batch-size logic? Provide its change identifier.",
+    "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+    "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+    "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+    "Which change restored normal service? Provide its change identifier."
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "node_recycler_drain-01",
+      "artifact_type": "service_logs",
+      "subtype": "error_logs",
+      "source": "error_logs",
+      "content": "{\"description\": \"Application and proxy error logs: HTTP/gRPC status codes, failing requests (caller -> callee:port : operation), error messages and the services emitting them.\", \"facts\": [\"error events: 69862 matching events\", \"error events > status codes: 503 \\u2014 59979 events\", \"error events > status codes: n/a (connection refused) \\u2014 9806 events\", \"error events > status codes: 500 \\u2014 77 events\", \"failing requests: rider-app-bff -> dispatch-svc:8080 : POST /v2/trips/quote \\u2014 30114 events\", \"failing requests: rider-app-bff -> pricing-svc:8080 : GET /v1/fare-estimate \\u2014 11095 events\", \"failing requests: driver-app-bff -> dispatch-svc:8080 : POST /v2/offers/ack \\u2014 18770 events\", \"failing requests: dispatch-svc -> redis-dispatch:6379 : GEOSEARCH drivers \\u2014 9806 events\", \"failing requests: pricing-svc -> pricing-db:5432 : SELECT surge_zones \\u2014 77 events\", \"error messages: upstream dispatch-svc: 503 no healthy upstream \\u2014 48884 events\", \"error messages: upstream pricing-svc: 503 no healthy upstream \\u2014 11095 events\", \"error messages: redis: dial tcp redis-dispatch:6379: connect: connection refused \\u2014 9806 events\", \"error messages: pq: deadlock detected \\u2014 77 events\", \"emitting services: rider-app-bff \\u2014 41209 events\", \"emitting services: driver-app-bff \\u2014 18770 events\", \"emitting services: dispatch-svc \\u2014 9806 events\", \"emitting services: pricing-svc \\u2014 77 events\"]}",
+      "metadata": {
+        "scenario": "node_recycler_drain",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "node_recycler_drain-02",
+      "artifact_type": "service_logs",
+      "subtype": "error_volume_by_service",
+      "source": "error_volume_by_service",
+      "content": "{\"description\": \"Services ranked by number of error events, with each service's most-failed downstream dependencies.\", \"facts\": [\"services: rider-app-bff \\u2014 41209 events; failing dependencies=2; top dependencies: dispatch-svc (30114), pricing-svc (11095)\", \"services: driver-app-bff \\u2014 18770 events; failing dependencies=1; top dependencies: dispatch-svc (18770)\", \"services: dispatch-svc \\u2014 9806 events; failing dependencies=1; top dependencies: redis-dispatch (9806)\", \"services: pricing-svc \\u2014 77 events; failing dependencies=1; top dependencies: pricing-db (77)\"]}",
+      "metadata": {
+        "scenario": "node_recycler_drain",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "node_recycler_drain-03",
+      "artifact_type": "change_records",
+      "subtype": "change_log",
+      "source": "change_log",
+      "content": "{\"description\": \"Deployments, configuration pushes, infrastructure and automation runs from the change-management and CI/CD audit log: change ID, type, target, actor, time (UTC), status and recorded diff/summary.\", \"facts\": [\"changes: CHG-7004 | deployment | node-recycler 0.8.4 -> 0.9.0 | actor: argocd | 2025-04-08 01:10 UTC | status: Synced/Healthy | new batch sizing logic (percentage support for maxUnavailable) \\u2014 1 events\", \"changes: CHG-7009 | deployment | pricing-svc 5.6.1 -> 5.7.0 | actor: argocd | 2025-04-08 02:40 UTC | status: Synced/Healthy | airport surcharge rules \\u2014 1 events\", \"changes: RECYCLE-5531 | node_rotation | nodegroup general-v7 | actor: node-recycler | 2025-04-08 03:00 UTC | status: aborted | eligible nodes 12; computed batch size 15 from maxUnavailable=15%; cordoned and drained 12 nodes concurrently; terminated 9 before abort \\u2014 1 events\", \"changes: CHG-7019 | scale_down | deployment node-recycler | actor: m.tan | 2025-04-08 04:20 UTC | status: completed | replicas 1 -> 0 \\u2014 1 events\", \"changes: CHG-7021 | nodegroup_scale | nodegroup general-v7 | actor: m.tan | 2025-04-08 04:31 UTC | status: completed | desired 14 -> 20; uncordon remaining nodes \\u2014 1 events\", \"change types: deployment \\u2014 2 events\", \"change types: node_rotation \\u2014 1 events\", \"change types: scale_down \\u2014 1 events\", \"change types: nodegroup_scale \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "node_recycler_drain",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "node_recycler_drain-04",
+      "artifact_type": "change_records",
+      "subtype": "change_actors",
+      "source": "change_actors",
+      "content": "{\"description\": \"Accounts and automation identities that executed changes, with the hosts or targets they acted on.\", \"facts\": [\"actors: argocd \\u2014 2 events; targets: sr-prod-apse1/node-recycler (1), sr-prod-apse1/pricing-svc (1)\", \"actors: m.tan \\u2014 2 events; targets: sr-prod-apse1/node-recycler (1), nodegroup general-v7 (1)\", \"actors: node-recycler \\u2014 1 events; targets: ip-10-90-11-23 (1), ip-10-90-11-87 (1), ip-10-90-12-40 (1), ip-10-90-12-91 (1), ip-10-90-13-15 (1), ip-10-90-13-62 (1)\"]}",
+      "metadata": {
+        "scenario": "node_recycler_drain",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "node_recycler_drain-05",
+      "artifact_type": "infrastructure_events",
+      "subtype": "host_inventory",
+      "source": "host_inventory",
+      "content": "{\"description\": \"Host and node names seen in infrastructure events with their IP address, role and availability zone / rack.\", \"facts\": [\"hosts: ip-10-90-11-23 \\u2014 96 events; ip: 10.90.11.23; role: eks-worker (general); zone: ap-southeast-1a\", \"hosts: ip-10-90-11-87 \\u2014 94 events; ip: 10.90.11.87; role: eks-worker (general); zone: ap-southeast-1a\", \"hosts: ip-10-90-12-40 \\u2014 91 events; ip: 10.90.12.40; role: eks-worker (general); zone: ap-southeast-1b\", \"hosts: ip-10-90-12-91 \\u2014 90 events; ip: 10.90.12.91; role: eks-worker (general); zone: ap-southeast-1b\", \"hosts: ip-10-90-13-15 \\u2014 88 events; ip: 10.90.13.15; role: eks-worker (general); zone: ap-southeast-1c\", \"hosts: ip-10-90-13-62 \\u2014 85 events; ip: 10.90.13.62; role: eks-worker (general); zone: ap-southeast-1c\"]}",
+      "metadata": {
+        "scenario": "node_recycler_drain",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "node_recycler_drain-06",
+      "artifact_type": "infrastructure_events",
+      "subtype": "platform_events",
+      "source": "platform_events",
+      "content": "{\"description\": \"Kubernetes events, cloud-provider health events and host system messages (kernel, hardware, daemons) with the objects or hosts they refer to.\", \"facts\": [\"event reasons: NodeNotSchedulable \\u2014 12 events; top objects: ip-10-90-11-23 (1), ip-10-90-11-87 (1), ip-10-90-12-40 (1), ip-10-90-12-91 (1), ip-10-90-13-15 (1), ip-10-90-13-62 (1)\", \"event reasons: FailedScheduling \\u2014 3412 events; top objects: pod/dispatch-svc-6f7c8d9b5-* (1488), pod/redis-dispatch-0 (402), pod/pricing-svc-5d6e7f8a9-* (377)\", \"event reasons: Killing \\u2014 611 events; top objects: pods on drained nodes (611)\", \"cloud audit events: ec2:TerminateInstances by role node-recycler-irsa \\u2014 9 events; top objects: nodegroup general-v7 (9)\", \"controller logs: node-recycler: batch size 15 computed from maxUnavailable=15% (eligible=12); starting batch \\u2014 1 events; top objects: pod/node-recycler-7d9c5b8f6-q2w4e (1)\"]}",
+      "metadata": {
+        "scenario": "node_recycler_drain",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "node_recycler_drain-07",
+      "artifact_type": "monitoring_alerts",
+      "subtype": "alertmanager_alerts",
+      "source": "alertmanager_alerts",
+      "content": "{\"description\": \"Prometheus Alertmanager alerts: alert names with severity, critical-alert instances, alert names and services, and an hourly timeline of warning and critical alerts (UTC).\", \"facts\": [\"alert names: Watchdog (info) \\u2014 72 events\", \"alert names: KubeNodeUnschedulable (warning) \\u2014 16 events\", \"alert names: DispatchUnavailable (critical) \\u2014 10 events\", \"alert names: BffErrorRateHigh (critical) \\u2014 9 events\", \"alert names: KubeNodesCapacityLow (critical) \\u2014 9 events\", \"alert names: KubePodPending (critical) \\u2014 9 events\", \"critical alerts: 37 matching events\", \"critical alerts > critical instances: dispatch-svc \\u2014 16 events\", \"critical alerts > critical instances: rider-app-bff \\u2014 9 events\", \"critical alerts > critical instances: sr-prod-apse1 \\u2014 9 events\", \"critical alerts > critical instances: redis-dispatch \\u2014 3 events\", \"critical alerts > critical alert names: DispatchUnavailable \\u2014 10 events\", \"critical alerts > critical alert names: BffErrorRateHigh \\u2014 9 events\", \"critical alerts > critical alert names: KubeNodesCapacityLow \\u2014 9 events\", \"critical alerts > critical alert names: KubePodPending \\u2014 9 events\", \"critical alerts > critical services: dispatch-svc \\u2014 19 events\", \"critical alerts > critical services: kubernetes \\u2014 9 events\", \"critical alerts > critical services: rider-app-bff \\u2014 9 events\", \"alert timeline: 2025-04-08 03:00 UTC \\u2014 26 events\", \"alert timeline: 2025-04-08 04:00 UTC \\u2014 20 events\", \"alert timeline: 2025-04-08 05:00 UTC \\u2014 7 events\"]}",
+      "metadata": {
+        "scenario": "node_recycler_drain",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "node_recycler_drain-08",
+      "artifact_type": "resource_metrics",
+      "subtype": "metric_anomalies",
+      "source": "metric_anomalies",
+      "content": "{\"description\": \"Metric series that deviated from their 7-day baseline (hourly resolution): baseline, peak or trough value, anomaly onset and recovery (UTC).\", \"facts\": [\"metric anomalies: kube_node_spec_unschedulable (count) on sr-prod-apse1 \\u2014 baseline 0; peak 12; onset 2025-04-08 03:00 UTC; recovered 2025-04-08 05:00 UTC\", \"metric anomalies: allocatable CPU cores (schedulable nodes) on sr-prod-apse1 \\u2014 baseline 224; trough 32; onset 2025-04-08 03:00 UTC; recovered 2025-04-08 05:00 UTC\", \"metric anomalies: trip requests completed per minute on dispatch-svc \\u2014 baseline ~1,450/min; trough 60/min; onset 2025-04-08 03:00 UTC; recovered 2025-04-08 05:00 UTC\"]}",
+      "metadata": {
+        "scenario": "node_recycler_drain",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "node_recycler_drain-09",
+      "artifact_type": "derived_findings",
+      "subtype": "derived_summary",
+      "source": "derived_summary",
+      "content": "{\"description\": \"Deterministic summary computed from the query results above (error ranking, instance-to-host join, alert timeline, change correlation, earliest metric anomaly).\", \"facts\": [\"Derived: service rider-app-bff ranks #1 by error volume (41209 events, 2 failing dependencies). Most-failed dependency: dispatch-svc (30114 errors).\", \"Derived: most-alerted critical instance dispatch-svc (16 critical alerts); no matching host-inventory entry.\", \"Derived: warning/critical alerts span 2025-04-08 03:00 UTC to 2025-04-08 05:00 UTC; earliest alert hour 2025-04-08 03:00 UTC (26 alerts).\", \"Derived: changes recorded from 6 hours before the earliest alert hour to its end: CHG-7004 (deployment, node-recycler 0.8.4 -> 0.9.0, argocd, 2025-04-08 01:10 UTC); CHG-7009 (deployment, pricing-svc 5.6.1 -> 5.7.0, argocd, 2025-04-08 02:40 UTC); RECYCLE-5531 (node_rotation, nodegroup general-v7, node-recycler, 2025-04-08 03:00 UTC).\", \"Derived: earliest metric anomaly onset 2025-04-08 03:00 UTC (kube_node_spec_unschedulable (count) on sr-prod-apse1).\"]}",
+      "metadata": {
+        "scenario": "node_recycler_drain",
+        "source_kind": "derived_from_es_results",
+        "heuristic": true
+      }
+    },
+    {
+      "artifact_id": "node_recycler_drain-10",
+      "artifact_type": "query_coverage",
+      "subtype": "evidence_gaps",
+      "source": "evidence_gaps",
+      "content": "{\"description\": \"Queries that returned nothing or failed; use these to state what is NOT established.\", \"facts\": [\"No matching results for: tls certificates / expired certificates. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / expiring within 7 days. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / self signed. (Absence in this query is not proof of absence elsewhere.)\"]}",
+      "metadata": {
+        "scenario": "node_recycler_drain",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    }
+  ]
+}

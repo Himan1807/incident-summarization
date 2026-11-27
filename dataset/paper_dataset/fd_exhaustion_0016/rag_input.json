@@ -1,0 +1,165 @@
+{
+  "metadata": {
+    "incident_id": "INC-20231214",
+    "scenario": "fd_exhaustion_0016",
+    "title": "Infrastructure reliability incident investigation",
+    "source": "synthetic/ops-incident-expansion (modeled on neu-nds2/llm-sec-incident-analysis)",
+    "query_window_start": "2023-12-14T00:00:00",
+    "query_window_end": "2023-12-16T23:59:59",
+    "evidence_types": [
+      "change_records",
+      "derived_findings",
+      "infrastructure_events",
+      "monitoring_alerts",
+      "network_summary",
+      "query_coverage",
+      "resource_metrics",
+      "service_logs"
+    ],
+    "artifact_scope_note": "Evidence is aggregated query output (not raw log lines or metric samples); it contains no chat/communication records."
+  },
+  "incident_description": "Reliability incident investigation of a production environment. Evidence consists of Elasticsearch aggregation results over application and proxy logs, Kubernetes, cloud-provider and host system events, Prometheus Alertmanager alerts, change-management / CI-CD audit records and metric anomaly detection. No root cause, impact or trigger is stated; these must be established from the supplied artifacts. Environment context: Organization: Cortrel Retail (online retail); Platform: on-premises data center DC-Central, server range 10.24.0.0/16; Kubernetes cluster cortre-prod (kubeadm); Edge: two nginx load balancers (lb-01, lb-02) behind DNS round-robin terminate client connections for web-bff; Change management: production changes carry CHG- identifiers.",
+  "investigation_questions": [
+    "Which host or node did the failure originate on? Give its hostname.",
+    "Which operating-system resource was exhausted?",
+    "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+    "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+    "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+    "Which change restored normal service? Provide its change identifier."
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "fd_exhaustion_0016-01",
+      "artifact_type": "service_logs",
+      "subtype": "error_logs",
+      "source": "error_logs",
+      "content": "{\"description\": \"Application and proxy error logs: HTTP/gRPC status codes, failing requests (caller -> callee:port : operation), error messages and the services emitting them.\", \"facts\": [\"error events: 31979 matching events\", \"error events > status codes: n/a (connection not accepted) \\u2014 25764 events\", \"error events > status codes: 502 \\u2014 5994 events\", \"error events > status codes: 429 \\u2014 221 events\", \"failing requests: ingress-lb -> clients : accept() \\u2014 25764 events\", \"failing requests: ingress-lb -> web-bff:8080 : proxy_pass \\u2014 5994 events\", \"failing requests: cart-service -> cart-db:5432 : query \\u2014 221 events\", \"error messages: [crit] accept4() failed (24: Too many open files) \\u2014 25764 events\", \"error messages: [alert] socket() failed (24: Too many open files) while connecting to upstream \\u2014 5994 events\", \"error messages: HTTP 429 Too Many Requests from upstream \\u2014 221 events\", \"emitting services: ingress-lb \\u2014 31758 events\", \"emitting services: cart-service \\u2014 221 events\"]}",
+      "metadata": {
+        "scenario": "fd_exhaustion_0016",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "fd_exhaustion_0016-02",
+      "artifact_type": "service_logs",
+      "subtype": "error_volume_by_service",
+      "source": "error_volume_by_service",
+      "content": "{\"description\": \"Services ranked by number of error events, with each service's most-failed downstream dependencies.\", \"facts\": [\"services: ingress-lb \\u2014 31758 events; failing dependencies=2; top dependencies: clients (25764), web-bff (5994)\", \"services: cart-service \\u2014 221 events; failing dependencies=1; top dependencies: cart-db (221)\"]}",
+      "metadata": {
+        "scenario": "fd_exhaustion_0016",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "fd_exhaustion_0016-03",
+      "artifact_type": "change_records",
+      "subtype": "change_log",
+      "source": "change_log",
+      "content": "{\"description\": \"Deployments, configuration pushes, infrastructure and automation runs from the change-management and CI/CD audit log: change ID, type, target, actor, time (UTC), status and recorded diff/summary.\", \"facts\": [\"changes: CHG-70580 | deployment | promo-svc 13.7.1 -> 13.8.0 | actor: argocd | 2023-12-14 11:42 UTC | status: completed | performance tuning of list endpoint \\u2014 1 events\", \"changes: CHG-70617 | config_push | lb-02 systemd drop-in nginx.service | actor: i.yilmaz | 2023-12-14 13:46 UTC | status: completed | LimitNOFILE 4096 -> 65535; worker_rlimit_nofile 65535; restart nginx \\u2014 1 events\", \"changes: CHG-70640 | deployment | checkout-api 13.8.10 -> 13.8.11 | actor: argocd | 2023-12-15 20:42 UTC | status: completed | feature flag cleanup \\u2014 1 events\", \"changes: CHG-70650 | deployment | orders-api 0.7.11 -> 0.7.12 | actor: argocd | 2023-12-16 09:11 UTC | status: completed | performance tuning of list endpoint \\u2014 1 events\", \"changes: CHG-70675 | deployment | cart-service 11.29.10 -> 11.29.11 | actor: argocd | 2023-12-16 14:54 UTC | status: succeeded | minor bug fixes \\u2014 1 events\", \"change types: deployment \\u2014 4 events\", \"change types: config_push \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "fd_exhaustion_0016",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "fd_exhaustion_0016-04",
+      "artifact_type": "change_records",
+      "subtype": "change_actors",
+      "source": "change_actors",
+      "content": "{\"description\": \"Accounts and automation identities that executed changes, with the hosts or targets they acted on.\", \"facts\": [\"actors: argocd \\u2014 4 events; targets: cortre-prod/promo-svc (1), cortre-prod/cart-service (1), cortre-prod/checkout-api (1), cortre-prod/orders-api (1)\", \"actors: i.yilmaz \\u2014 1 events; targets: lb-02 (1)\"]}",
+      "metadata": {
+        "scenario": "fd_exhaustion_0016",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "fd_exhaustion_0016-05",
+      "artifact_type": "infrastructure_events",
+      "subtype": "host_inventory",
+      "source": "host_inventory",
+      "content": "{\"description\": \"Host and node names seen in infrastructure events with their IP address, role and availability zone / rack.\", \"facts\": [\"hosts: lb-02 \\u2014 2331 events; ip: 10.24.10.82; role: nginx load balancer; zone: rack D23\", \"hosts: lb-01 \\u2014 433 events; ip: 10.24.10.177; role: nginx load balancer; zone: rack D10\", \"hosts: cortr-node-39 \\u2014 228 events; ip: 10.24.133.75; role: k8s-worker; zone: rack D10\", \"hosts: cortr-node-23 \\u2014 95 events; ip: 10.24.133.223; role: k8s-worker; zone: rack D10\"]}",
+      "metadata": {
+        "scenario": "fd_exhaustion_0016",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "fd_exhaustion_0016-06",
+      "artifact_type": "infrastructure_events",
+      "subtype": "platform_events",
+      "source": "platform_events",
+      "content": "{\"description\": \"Kubernetes events, cloud-provider health events and host system messages (kernel, hardware, daemons) with the objects or hosts they refer to.\", \"facts\": [\"system messages: systemd: nginx.service: LimitNOFILE=4096 \\u2014 1 events; top objects: lb-02 (1)\", \"system messages: systemd: nginx.service: LimitNOFILE=65535 \\u2014 1 events; top objects: lb-01 (1)\", \"event reasons: Pulled \\u2014 8 events; top objects: pod/promo-svc-71b4d1806-lhkdx (2)\", \"event reasons: ScalingReplicaSet \\u2014 2 events; top objects: deployment/promo-svc (1)\", \"event reasons: Pulled \\u2014 21 events; top objects: pod/cart-service-3f47abedf-wvw48 (1)\", \"event reasons: ScalingReplicaSet \\u2014 6 events; top objects: deployment/cart-service (1)\", \"event reasons: Pulled \\u2014 30 events; top objects: pod/checkout-api-63360c5da-g2gbh (2)\", \"event reasons: ScalingReplicaSet \\u2014 6 events; top objects: deployment/checkout-api (1)\", \"event reasons: Pulled \\u2014 6 events; top objects: pod/orders-api-75b65b125-jwrxm (1)\", \"event reasons: ScalingReplicaSet \\u2014 4 events; top objects: deployment/orders-api (1)\"]}",
+      "metadata": {
+        "scenario": "fd_exhaustion_0016",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "fd_exhaustion_0016-07",
+      "artifact_type": "monitoring_alerts",
+      "subtype": "alertmanager_alerts",
+      "source": "alertmanager_alerts",
+      "content": "{\"description\": \"Prometheus Alertmanager alerts: alert names with severity, critical-alert instances, alert names and services, and an hourly timeline of warning and critical alerts (UTC).\", \"facts\": [\"alert names: Watchdog (info) \\u2014 72 events; service: alertmanager; firing continuously\", \"alert names: ProcessFdUsageHigh (warning) \\u2014 9 events; service: ingress-lb; first seen in hour 2023-12-14 11:00 UTC; last seen in hour 2023-12-14 13:00 UTC\", \"alert names: NginxAcceptErrors (critical) \\u2014 6 events; service: ingress-lb; first seen in hour 2023-12-14 12:00 UTC; last seen in hour 2023-12-14 13:00 UTC\", \"alert names: SyntheticCheckFailed (critical) \\u2014 5 events; service: external; first seen in hour 2023-12-14 12:00 UTC; last seen in hour 2023-12-14 13:00 UTC\", \"alert names: NodeFilesystemSpaceFillingUp (warning) \\u2014 3 events; service: node; first seen in hour 2023-12-15 07:00 UTC; last seen in hour 2023-12-15 08:00 UTC\", \"critical alerts: 11 matching events\", \"critical alerts > critical instances: 10.24.10.82:9113 \\u2014 6 events\", \"critical alerts > critical instances: probe us-east \\u2014 3 events\", \"critical alerts > critical instances: probe eu-west \\u2014 2 events\", \"critical alerts > critical alert names: NginxAcceptErrors \\u2014 6 events\", \"critical alerts > critical alert names: SyntheticCheckFailed \\u2014 5 events\", \"critical alerts > critical services: ingress-lb \\u2014 6 events\", \"critical alerts > critical services: external \\u2014 5 events\", \"alert timeline: 2023-12-14 11:00 UTC \\u2014 3 events\", \"alert timeline: 2023-12-14 12:00 UTC \\u2014 8 events\", \"alert timeline: 2023-12-14 13:00 UTC \\u2014 9 events\", \"alert timeline: 2023-12-15 07:00 UTC \\u2014 2 events\", \"alert timeline: 2023-12-15 08:00 UTC \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "fd_exhaustion_0016",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "fd_exhaustion_0016-08",
+      "artifact_type": "resource_metrics",
+      "subtype": "metric_anomalies",
+      "source": "metric_anomalies",
+      "content": "{\"description\": \"Metric series that deviated from their 7-day baseline (hourly resolution): baseline, peak or trough value, anomaly onset and recovery (UTC).\", \"facts\": [\"metric anomalies: process open file descriptors (nginx) on lb-02 \\u2014 baseline ~1228; peak 4096 (limit); onset 2023-12-14 11:00 UTC; recovered 2023-12-14 14:00 UTC\", \"metric anomalies: web-bff requests per second on web-bff \\u2014 baseline ~2,100/s; peak 3.4x baseline; onset 2023-12-14 11:00 UTC; recovered 2023-12-14 14:00 UTC\"]}",
+      "metadata": {
+        "scenario": "fd_exhaustion_0016",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "fd_exhaustion_0016-09",
+      "artifact_type": "network_summary",
+      "subtype": "tls_certificates",
+      "source": "tls_certificates",
+      "content": "{\"description\": \"TLS certificates observed in edge and service-to-service traffic that are expired, expire within 7 days, or are self-signed.\", \"facts\": [\"expiring within 7 days: 38 matching events\", \"expiring within 7 days > certificate details: CN=checkout-api.cortrel.internal | issuer: CN=R11,O=Let's Encrypt | not_after: 2023-12-18 23:59:00 UTC | seen on: checkout-api:8443 \\u2014 38 events\"]}",
+      "metadata": {
+        "scenario": "fd_exhaustion_0016",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "fd_exhaustion_0016-10",
+      "artifact_type": "derived_findings",
+      "subtype": "derived_summary",
+      "source": "derived_summary",
+      "content": "{\"description\": \"Deterministic summary computed from the query results above (error ranking, instance-to-host join, alert timeline, change correlation, earliest metric anomaly).\", \"facts\": [\"Derived: service ingress-lb ranks #1 by error volume (31758 events, 2 failing dependencies). Most-failed dependency: clients (25764 errors).\", \"Derived: most-alerted critical instance 10.24.10.82:9113 (6 critical alerts) maps to hostname lb-02; role nginx load balancer; zone rack D23.\", \"Derived: warning/critical alerts span 2023-12-14 11:00 UTC to 2023-12-15 08:00 UTC; earliest alert hour 2023-12-14 11:00 UTC (3 alerts).\", \"Derived: changes recorded from 6 hours before the earliest alert hour to its end: CHG-70580 (deployment, promo-svc 13.7.1 -> 13.8.0, argocd, 2023-12-14 11:42 UTC).\", \"Derived: earliest metric anomaly onset 2023-12-14 11:00 UTC (process open file descriptors (nginx) on lb-02).\"]}",
+      "metadata": {
+        "scenario": "fd_exhaustion_0016",
+        "source_kind": "derived_from_es_results",
+        "heuristic": true
+      }
+    },
+    {
+      "artifact_id": "fd_exhaustion_0016-11",
+      "artifact_type": "query_coverage",
+      "subtype": "evidence_gaps",
+      "source": "evidence_gaps",
+      "content": "{\"description\": \"Queries that returned nothing or failed; use these to state what is NOT established.\", \"facts\": [\"No matching results for: tls certificates / expired certificates. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / self signed. (Absence in this query is not proof of absence elsewhere.)\"]}",
+      "metadata": {
+        "scenario": "fd_exhaustion_0016",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    }
+  ]
+}

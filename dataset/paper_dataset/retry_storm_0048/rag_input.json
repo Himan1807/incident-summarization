@@ -1,0 +1,158 @@
+{
+  "metadata": {
+    "incident_id": "INC-20230519",
+    "scenario": "retry_storm_0048",
+    "title": "Infrastructure reliability incident investigation",
+    "source": "synthetic/ops-incident-expansion (modeled on neu-nds2/llm-sec-incident-analysis)",
+    "query_window_start": "2023-05-19T00:00:00",
+    "query_window_end": "2023-05-21T23:59:59",
+    "evidence_types": [
+      "change_records",
+      "derived_findings",
+      "infrastructure_events",
+      "monitoring_alerts",
+      "query_coverage",
+      "resource_metrics",
+      "service_logs"
+    ],
+    "artifact_scope_note": "Evidence is aggregated query output (not raw log lines or metric samples); it contains no chat/communication records."
+  },
+  "incident_description": "Reliability incident investigation of a production environment. Evidence consists of Elasticsearch aggregation results over application and proxy logs, Kubernetes, cloud-provider and host system events, Prometheus Alertmanager alerts, change-management / CI-CD audit records and metric anomaly detection. No root cause, impact or trigger is stated; these must be established from the supplied artifacts. Environment context: Organization: Lummark Clinics (clinic and patient management SaaS); Platform: Google Cloud europe-west4 (zones europe-west4-a/europe-west4-b/europe-west4-c); network range 10.131.0.0/16; Kubernetes cluster lummar-prod-europe (GKE); Identity/token service token-svc is called synchronously by every API request and is backed by PostgreSQL token-db-01; deployments may bundle database migrations; Change management: production changes carry RFC- identifiers.",
+  "investigation_questions": [
+    "Which component is the source of the failure?",
+    "What change, deployment or automation run triggered the incident? Provide its change identifier.",
+    "Which account or automation identity executed the triggering change?",
+    "Which database index removal caused the slowdown?",
+    "What client-side behaviour amplified the load on the failing service?",
+    "Which database migration file was part of the triggering change?",
+    "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+    "Did the failure stay isolated to one component or cascade across services? Answer 'isolated failure' or 'cascading failure'.",
+    "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+    "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+    "Which change happened shortly before the incident began but did not cause it? Provide its identifier.",
+    "Which change restored normal service? Provide its change identifier."
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "retry_storm_0048-01",
+      "artifact_type": "service_logs",
+      "subtype": "error_logs",
+      "source": "error_logs",
+      "content": "{\"description\": \"Application and proxy error logs: HTTP/gRPC status codes, failing requests (caller -> callee:port : operation), error messages and the services emitting them.\", \"facts\": [\"error events: 87813 matching events\", \"error events > status codes: 504 \\u2014 74059 events\", \"error events > status codes: 500 \\u2014 13716 events\", \"error events > status codes: 499 \\u2014 38 events\", \"failing requests: patient-portal -> token-svc:8443 : POST /introspect (gateway auth) \\u2014 43595 events\", \"failing requests: lab-results-api -> token-svc:8443 : POST /introspect \\u2014 24220 events\", \"failing requests: token-svc -> token-db-01:5432 : SELECT tokens by subject_id \\u2014 13716 events\", \"failing requests: identity-svc -> token-svc:8443 : POST /introspect \\u2014 6244 events\", \"failing requests: scheduling-api -> scheduling-db:5432 : query \\u2014 38 events\", \"error messages: token-svc call failed: context deadline exceeded (attempt 3/3, backoff 0ms) \\u2014 74059 events\", \"error messages: ERROR: canceling statement due to statement timeout \\u2014 13716 events\", \"error messages: context canceled \\u2014 38 events\", \"emitting services: patient-portal \\u2014 43595 events\", \"emitting services: lab-results-api \\u2014 24220 events\", \"emitting services: token-svc \\u2014 13716 events\", \"emitting services: identity-svc \\u2014 6244 events\", \"emitting services: scheduling-api \\u2014 38 events\"]}",
+      "metadata": {
+        "scenario": "retry_storm_0048",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "retry_storm_0048-02",
+      "artifact_type": "service_logs",
+      "subtype": "error_volume_by_service",
+      "source": "error_volume_by_service",
+      "content": "{\"description\": \"Services ranked by number of error events, with each service's most-failed downstream dependencies.\", \"facts\": [\"services: patient-portal \\u2014 43595 events; failing dependencies=1; top dependencies: token-svc (43595)\", \"services: lab-results-api \\u2014 24220 events; failing dependencies=1; top dependencies: token-svc (24220)\", \"services: token-svc \\u2014 13716 events; failing dependencies=1; top dependencies: token-db-01 (13716)\", \"services: identity-svc \\u2014 6244 events; failing dependencies=1; top dependencies: token-svc (6244)\", \"services: scheduling-api \\u2014 38 events; failing dependencies=1; top dependencies: scheduling-db (38)\"]}",
+      "metadata": {
+        "scenario": "retry_storm_0048",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "retry_storm_0048-03",
+      "artifact_type": "change_records",
+      "subtype": "change_log",
+      "source": "change_log",
+      "content": "{\"description\": \"Deployments, configuration pushes, infrastructure and automation runs from the change-management and CI/CD audit log: change ID, type, target, actor, time (UTC), status and recorded diff/summary.\", \"facts\": [\"changes: RFC-65185 | deployment | billing-api 11.28.6 -> 11.28.7 | actor: cloudbuild-deployer | 2023-05-19 09:11 UTC | status: completed | dependency bump \\u2014 1 events\", \"changes: RFC-65214 | deployment | token-svc 2.34.9 -> 2.35.0 | actor: cloudbuild-deployer | 2023-05-19 11:00 UTC | status: succeeded | bundled migration 20230519_1100_drop_legacy_indexes.sql (DROP INDEX idx_tokens_legacy; DROP INDEX idx_tokens_subject_id) \\u2014 1 events\", \"changes: RFC-65225 | config_push | retry policy for token-svc callers | actor: s.mueller | 2023-05-19 13:22 UTC | status: succeeded | retries 3 -> 0 (temporary) \\u2014 1 events\", \"changes: RFC-65262 | db_migration | token-db-01 | actor: s.mueller | 2023-05-19 14:39 UTC | status: succeeded | CREATE INDEX CONCURRENTLY idx_tokens_subject_id ON tokens(subject_id) \\u2014 1 events\", \"changes: RFC-65289 | deployment | consent-svc 14.2.5 -> 14.2.6 | actor: cloudbuild-deployer | 2023-05-20 07:45 UTC | status: succeeded | copy and UI text changes \\u2014 1 events\", \"changes: RFC-65319 | deployment | scheduling-api 10.26.1 -> 10.26.2 | actor: cloudbuild-deployer | 2023-05-21 07:05 UTC | status: Synced/Healthy | logging improvements \\u2014 1 events\", \"change types: deployment \\u2014 4 events\", \"change types: config_push \\u2014 1 events\", \"change types: db_migration \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "retry_storm_0048",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "retry_storm_0048-04",
+      "artifact_type": "change_records",
+      "subtype": "change_actors",
+      "source": "change_actors",
+      "content": "{\"description\": \"Accounts and automation identities that executed changes, with the hosts or targets they acted on.\", \"facts\": [\"actors: cloudbuild-deployer \\u2014 4 events; targets: lummar-prod-europe/token-svc (1), token-db-01 (1), lummar-prod-europe/billing-api (1), lummar-prod-europe/scheduling-api (1), lummar-prod-europe/consent-svc (1)\", \"actors: s.mueller \\u2014 2 events; targets: lummar-prod-europe/patient-portal (1), lummar-prod-europe/lab-results-api (1), lummar-prod-europe/identity-svc (1), token-db-01 (1)\"]}",
+      "metadata": {
+        "scenario": "retry_storm_0048",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "retry_storm_0048-05",
+      "artifact_type": "infrastructure_events",
+      "subtype": "host_inventory",
+      "source": "host_inventory",
+      "content": "{\"description\": \"Host and node names seen in infrastructure events with their IP address, role and availability zone / rack.\", \"facts\": [\"hosts: gke-lummar-prod-eu-pool-c-3abf \\u2014 278 events; ip: 10.131.164.185; role: k8s-worker; zone: europe-west4-c\", \"hosts: token-db-01 \\u2014 246 events; ip: 10.131.74.195; role: postgres-primary; zone: europe-west4-b\", \"hosts: gke-lummar-prod-eu-pool-c-0e85 \\u2014 242 events; ip: 10.131.227.98; role: k8s-worker; zone: europe-west4-b\"]}",
+      "metadata": {
+        "scenario": "retry_storm_0048",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "retry_storm_0048-06",
+      "artifact_type": "infrastructure_events",
+      "subtype": "platform_events",
+      "source": "platform_events",
+      "content": "{\"description\": \"Kubernetes events, cloud-provider health events and host system messages (kernel, hardware, daemons) with the objects or hosts they refer to.\", \"facts\": [\"system messages: postgres: LOG: duration: 2840.730 ms statement: SELECT * FROM tokens WHERE subject_id = $1 \\u2014 43255 events; top objects: token-db-01 (1)\", \"event reasons: Pulled \\u2014 8 events; top objects: pod/billing-api-d25b35392-nhm85 (2)\", \"event reasons: ScalingReplicaSet \\u2014 3 events; top objects: deployment/billing-api (2)\", \"event reasons: Pulled \\u2014 5 events; top objects: pod/scheduling-api-23dcfddd3-9rj7g (2)\", \"event reasons: ScalingReplicaSet \\u2014 5 events; top objects: deployment/scheduling-api (2)\", \"event reasons: Pulled \\u2014 3 events; top objects: pod/consent-svc-2fb92bf56-wfkpq (1)\", \"event reasons: ScalingReplicaSet \\u2014 5 events; top objects: deployment/consent-svc (3)\"]}",
+      "metadata": {
+        "scenario": "retry_storm_0048",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "retry_storm_0048-07",
+      "artifact_type": "monitoring_alerts",
+      "subtype": "alertmanager_alerts",
+      "source": "alertmanager_alerts",
+      "content": "{\"description\": \"Prometheus Alertmanager alerts: alert names with severity, critical-alert instances, alert names and services, and an hourly timeline of warning and critical alerts (UTC).\", \"facts\": [\"alert names: Watchdog (info) \\u2014 72 events; service: alertmanager; firing continuously\", \"alert names: PostgresConnectionsExhausted (critical) \\u2014 10 events; service: postgres; first seen in hour 2023-05-19 11:00 UTC; last seen in hour 2023-05-19 14:00 UTC\", \"alert names: TokenSvcLatencyP99High (warning) \\u2014 10 events; service: token-svc; first seen in hour 2023-05-19 11:00 UTC; last seen in hour 2023-05-19 14:00 UTC\", \"alert names: PatientPortalErrorBudgetBurn (critical) \\u2014 9 events; service: patient-portal; first seen in hour 2023-05-19 11:00 UTC; last seen in hour 2023-05-19 14:00 UTC\", \"alert names: CPUThrottlingHigh (warning) \\u2014 4 events; service: consent-svc; first seen in hour 2023-05-19 04:00 UTC; last seen in hour 2023-05-19 06:00 UTC\", \"critical alerts: 19 matching events\", \"critical alerts > critical instances: 10.131.74.195:9187 \\u2014 10 events\", \"critical alerts > critical instances: slo:patient-portal-availability \\u2014 9 events\", \"critical alerts > critical alert names: PostgresConnectionsExhausted \\u2014 10 events\", \"critical alerts > critical alert names: PatientPortalErrorBudgetBurn \\u2014 9 events\", \"critical alerts > critical services: postgres \\u2014 10 events\", \"critical alerts > critical services: patient-portal \\u2014 9 events\", \"alert timeline: 2023-05-19 04:00 UTC \\u2014 1 events\", \"alert timeline: 2023-05-19 05:00 UTC \\u2014 2 events\", \"alert timeline: 2023-05-19 06:00 UTC \\u2014 1 events\", \"alert timeline: 2023-05-19 11:00 UTC \\u2014 10 events\", \"alert timeline: 2023-05-19 12:00 UTC \\u2014 10 events\", \"alert timeline: 2023-05-19 13:00 UTC \\u2014 3 events\", \"alert timeline: 2023-05-19 14:00 UTC \\u2014 6 events\"]}",
+      "metadata": {
+        "scenario": "retry_storm_0048",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "retry_storm_0048-08",
+      "artifact_type": "resource_metrics",
+      "subtype": "metric_anomalies",
+      "source": "metric_anomalies",
+      "content": "{\"description\": \"Metric series that deviated from their 7-day baseline (hourly resolution): baseline, peak or trough value, anomaly onset and recovery (UTC).\", \"facts\": [\"metric anomalies: mean execution time (SELECT tokens by subject_id) on token-db-01 \\u2014 baseline 0.4 ms; peak 2,455 ms; onset 2023-05-19 11:00 UTC; recovered 2023-05-19 15:00 UTC\", \"metric anomalies: token-svc request rate on token-svc \\u2014 baseline ~818 req/s; peak 4x baseline; onset 2023-05-19 11:00 UTC; recovered 2023-05-19 15:00 UTC\"]}",
+      "metadata": {
+        "scenario": "retry_storm_0048",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "retry_storm_0048-09",
+      "artifact_type": "derived_findings",
+      "subtype": "derived_summary",
+      "source": "derived_summary",
+      "content": "{\"description\": \"Deterministic summary computed from the query results above (error ranking, instance-to-host join, alert timeline, change correlation, earliest metric anomaly).\", \"facts\": [\"Derived: service patient-portal ranks #1 by error volume (43595 events, 1 failing dependencies). Most-failed dependency: token-svc (43595 errors).\", \"Derived: most-alerted critical instance 10.131.74.195:9187 (10 critical alerts) maps to hostname token-db-01; role postgres-primary; zone europe-west4-b.\", \"Derived: warning/critical alerts span 2023-05-19 04:00 UTC to 2023-05-19 14:00 UTC; earliest alert hour 2023-05-19 04:00 UTC (1 alerts).\", \"Derived: no changes recorded from 6 hours before the earliest alert hour to its end.\", \"Derived: earliest metric anomaly onset 2023-05-19 11:00 UTC (mean execution time (SELECT tokens by subject_id) on token-db-01).\"]}",
+      "metadata": {
+        "scenario": "retry_storm_0048",
+        "source_kind": "derived_from_es_results",
+        "heuristic": true
+      }
+    },
+    {
+      "artifact_id": "retry_storm_0048-10",
+      "artifact_type": "query_coverage",
+      "subtype": "evidence_gaps",
+      "source": "evidence_gaps",
+      "content": "{\"description\": \"Queries that returned nothing or failed; use these to state what is NOT established.\", \"facts\": [\"No matching results for: tls certificates / expired certificates. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / expiring within 7 days. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / self signed. (Absence in this query is not proof of absence elsewhere.)\"]}",
+      "metadata": {
+        "scenario": "retry_storm_0048",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    }
+  ]
+}

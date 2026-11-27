@@ -1,0 +1,16 @@
+{
+  "scenario": "crashloop_release_0033",
+  "cleaning": [],
+  "skipped": [
+    "tls_certificates: all aggregations empty"
+  ],
+  "gaps": [
+    "metric_anomalies"
+  ],
+  "artifacts": 9,
+  "facts": 54,
+  "empty_aggregations": 3,
+  "questions": 11,
+  "answers": 11,
+  "atoms": 12
+}

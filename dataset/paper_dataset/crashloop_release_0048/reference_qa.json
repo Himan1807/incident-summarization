@@ -1,0 +1,120 @@
+{
+  "source": "synthetic generator ground truth (ops expansion)",
+  "confidence": "synthetic ground truth",
+  "qa": [
+    {
+      "id": 1,
+      "question": "Which service or component is the origin of the failure?",
+      "answer": "limits-svc",
+      "atoms": [
+        {
+          "text": "limits-svc",
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "question": "What change, deployment or automation run triggered the incident? Provide its change identifier.",
+      "answer": "RFC-68194",
+      "atoms": [
+        {
+          "text": "RFC-68194",
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "question": "Which user or automation account carried out the triggering change?",
+      "answer": "github-actions",
+      "atoms": [
+        {
+          "text": "github-actions",
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "question": "Which configuration key did the new version fail on at startup?",
+      "answer": "PAYMENT_WEBHOOK_SECRET",
+      "atoms": [
+        {
+          "text": "PAYMENT_WEBHOOK_SECRET",
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "question": "Which version of the service introduced the defect?",
+      "answer": "2.29.0",
+      "atoms": [
+        {
+          "text": "2.29.0",
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "question": "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+      "answer": "2025-07-07 23:00 UTC",
+      "atoms": [
+        {
+          "text": "2025-07-07 23:00 UTC",
+          "kind": "time"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "question": "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+      "answer": "software defect",
+      "atoms": [
+        {
+          "text": "software defect",
+          "kind": "label"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "question": "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+      "answer": "availability",
+      "atoms": [
+        {
+          "text": "availability",
+          "kind": "cia"
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "question": "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+      "answer": "mobile-bff, downstream symptom",
+      "atoms": [
+        {
+          "text": "mobile-bff",
+          "kind": "other"
+        },
+        {
+          "text": "downstream symptom",
+          "kind": "label"
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "question": "Which change restored normal service? Provide its change identifier.",
+      "answer": "RFC-68221",
+      "atoms": [
+        {
+          "text": "RFC-68221",
+          "kind": "other"
+        }
+      ]
+    }
+  ]
+}

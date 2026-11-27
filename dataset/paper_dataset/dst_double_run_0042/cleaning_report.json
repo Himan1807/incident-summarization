@@ -1,0 +1,16 @@
+{
+  "scenario": "dst_double_run_0042",
+  "cleaning": [
+    "'daylight saving' is inferred from the job's local schedule, time zone and date; it does not appear verbatim in the evidence"
+  ],
+  "skipped": [
+    "tls_certificates: all aggregations empty"
+  ],
+  "gaps": [],
+  "artifacts": 10,
+  "facts": 65,
+  "empty_aggregations": 3,
+  "questions": 9,
+  "answers": 9,
+  "atoms": 10
+}

@@ -1,0 +1,98 @@
+{
+  "source": "synthetic generator ground truth (ops expansion)",
+  "confidence": "synthetic ground truth",
+  "qa": [
+    {
+      "id": 1,
+      "question": "What is the hostname of the host or node where the failure originated?",
+      "answer": "natgw-02",
+      "atoms": [
+        {
+          "text": "natgw-02",
+          "kind": "hostname"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "question": "Give the IP address of the machine where the failure originated.",
+      "answer": "172.24.27.19",
+      "atoms": [
+        {
+          "text": "172.24.27.19",
+          "kind": "ip"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "question": "Which kernel parameter limited that table on the failing host?",
+      "answer": "net.netfilter.nf_conntrack_max (262144)",
+      "atoms": [
+        {
+          "text": "nf_conntrack_max",
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "question": "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+      "answer": "2022-07-02 12:00 UTC",
+      "atoms": [
+        {
+          "text": "2022-07-02 12:00 UTC",
+          "kind": "time"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "question": "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+      "answer": "capacity exhaustion",
+      "atoms": [
+        {
+          "text": "capacity exhaustion",
+          "kind": "label"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "question": "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+      "answer": "availability",
+      "atoms": [
+        {
+          "text": "availability",
+          "kind": "cia"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "question": "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+      "answer": "portal-bff, downstream symptom",
+      "atoms": [
+        {
+          "text": "portal-bff",
+          "kind": "other"
+        },
+        {
+          "text": "downstream symptom",
+          "kind": "label"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "question": "What change brought the service back to normal? Give its identifier.",
+      "answer": "CR-17071",
+      "atoms": [
+        {
+          "text": "CR-17071",
+          "kind": "other"
+        }
+      ]
+    }
+  ]
+}

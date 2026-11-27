@@ -1,0 +1,154 @@
+{
+  "metadata": {
+    "incident_id": "INC-20250529",
+    "scenario": "memory_leak_0034",
+    "title": "Infrastructure reliability incident investigation",
+    "source": "synthetic/ops-incident-expansion (modeled on neu-nds2/llm-sec-incident-analysis)",
+    "query_window_start": "2025-05-29T00:00:00",
+    "query_window_end": "2025-05-31T23:59:59",
+    "evidence_types": [
+      "change_records",
+      "derived_findings",
+      "infrastructure_events",
+      "monitoring_alerts",
+      "query_coverage",
+      "resource_metrics",
+      "service_logs"
+    ],
+    "artifact_scope_note": "Evidence is aggregated query output (not raw log lines or metric samples); it contains no chat/communication records."
+  },
+  "incident_description": "Reliability incident investigation of a production environment. Evidence consists of Elasticsearch aggregation results over application and proxy logs, Kubernetes, cloud-provider and host system events, Prometheus Alertmanager alerts, change-management / CI-CD audit records and metric anomaly detection. No root cause, impact or trigger is stated; these must be established from the supplied artifacts. Environment context: Organization: Velwell Learning (online learning); Platform: AWS ap-south-1 (zones ap-south-1a/ap-south-1b/ap-south-1c); network range 10.188.0.0/16; Kubernetes cluster velwel-prod-apsout (EKS); video-api pods run with 8 GiB memory limits; deployments are canary releases with automated analysis; Change management: production changes carry RFC- identifiers.",
+  "investigation_questions": [
+    "Which service or component is the origin of the failure?",
+    "What change, deployment or automation run triggered the incident? Provide its change identifier.",
+    "Which account or automation identity executed the triggering change?",
+    "Which version of the service introduced the defect?",
+    "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+    "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+    "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+    "Which change restored normal service? Provide its change identifier."
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "memory_leak_0034-01",
+      "artifact_type": "service_logs",
+      "subtype": "error_logs",
+      "source": "error_logs",
+      "content": "{\"description\": \"Application and proxy error logs: HTTP/gRPC status codes, failing requests (caller -> callee:port : operation), error messages and the services emitting them.\", \"facts\": [\"error events: 27418 matching events\", \"error events > status codes: 503 \\u2014 26085 events\", \"error events > status codes: 499 \\u2014 1096 events\", \"error events > status codes: 502 \\u2014 237 events\", \"failing requests: learner-web -> video-api:8080 : GET /v1/video \\u2014 22783 events\", \"failing requests: forum-svc -> video-api:8080 : POST /v1/video/batch \\u2014 3302 events\", \"failing requests: video-api -> clients : in-flight requests \\u2014 1096 events\", \"failing requests: progress-api -> progress-db:5432 : query \\u2014 237 events\", \"error messages: upstream video-api: 503 no healthy upstream \\u2014 22783 events\", \"error messages: video-api: 503 Service Unavailable \\u2014 3302 events\", \"error messages: context canceled (shutdown in progress) \\u2014 1096 events\", \"error messages: connection reset by peer \\u2014 237 events\", \"emitting services: learner-web \\u2014 22783 events\", \"emitting services: forum-svc \\u2014 3302 events\", \"emitting services: video-api \\u2014 1096 events\", \"emitting services: progress-api \\u2014 237 events\"]}",
+      "metadata": {
+        "scenario": "memory_leak_0034",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "memory_leak_0034-02",
+      "artifact_type": "service_logs",
+      "subtype": "error_volume_by_service",
+      "source": "error_volume_by_service",
+      "content": "{\"description\": \"Services ranked by number of error events, with each service's most-failed downstream dependencies.\", \"facts\": [\"services: learner-web \\u2014 22783 events; failing dependencies=1; top dependencies: video-api (22783)\", \"services: forum-svc \\u2014 3302 events; failing dependencies=1; top dependencies: video-api (3302)\", \"services: video-api \\u2014 1096 events; failing dependencies=1; top dependencies: clients (1096)\", \"services: progress-api \\u2014 237 events; failing dependencies=1; top dependencies: progress-db (237)\"]}",
+      "metadata": {
+        "scenario": "memory_leak_0034",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "memory_leak_0034-03",
+      "artifact_type": "change_records",
+      "subtype": "change_log",
+      "source": "change_log",
+      "content": "{\"description\": \"Deployments, configuration pushes, infrastructure and automation runs from the change-management and CI/CD audit log: change ID, type, target, actor, time (UTC), status and recorded diff/summary.\", \"facts\": [\"changes: RFC-39776 | deployment | progress-api 4.22.8 -> 4.23.0 | actor: argocd | 2025-05-29 22:40 UTC | status: completed | feature flag cleanup \\u2014 1 events\", \"changes: RFC-39807 | deployment | video-api 10.8.4 -> 10.9.0 | actor: argocd | 2025-05-30 06:52 UTC | status: Healthy | canary 10% -> 50% -> 100% (analysis passed: error rate, p99 latency); new in-process session cache \\u2014 1 events\", \"changes: RFC-39841 | node_rotation | node pool AMI/image update | actor: karpenter | 2025-05-30 11:39 UTC | status: completed | node image drift replacement \\u2014 1 events\", \"changes: RFC-39877 | rollback | video-api 10.9.0 -> 10.8.4 | actor: k.kovacs | 2025-05-30 15:25 UTC | status: Healthy | rollout undo \\u2014 1 events\", \"changes: RFC-39917 | deployment | quiz-engine 12.3.5 -> 12.3.6 | actor: argocd | 2025-05-31 00:59 UTC | status: completed | feature flag cleanup \\u2014 1 events\", \"change types: deployment \\u2014 3 events\", \"change types: node_rotation \\u2014 1 events\", \"change types: rollback \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "memory_leak_0034",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "memory_leak_0034-04",
+      "artifact_type": "change_records",
+      "subtype": "change_actors",
+      "source": "change_actors",
+      "content": "{\"description\": \"Accounts and automation identities that executed changes, with the hosts or targets they acted on.\", \"facts\": [\"actors: argocd \\u2014 3 events; targets: velwel-prod-apsout/video-api (1), velwel-prod-apsout/quiz-engine (1), velwel-prod-apsout/progress-api (1)\", \"actors: k.kovacs \\u2014 1 events; targets: velwel-prod-apsout/video-api (1)\", \"actors: karpenter \\u2014 1 events; targets: ip-10-188-48-202 (1), ip-10-188-196-67 (1), ip-10-188-196-105 (1)\"]}",
+      "metadata": {
+        "scenario": "memory_leak_0034",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "memory_leak_0034-05",
+      "artifact_type": "infrastructure_events",
+      "subtype": "host_inventory",
+      "source": "host_inventory",
+      "content": "{\"description\": \"Host and node names seen in infrastructure events with their IP address, role and availability zone / rack.\", \"facts\": [\"hosts: ip-10-188-196-67 \\u2014 149 events; ip: 10.188.196.67; role: k8s-worker; zone: ap-south-1b\", \"hosts: ip-10-188-196-105 \\u2014 134 events; ip: 10.188.196.105; role: k8s-worker; zone: ap-south-1b\", \"hosts: ip-10-188-48-202 \\u2014 106 events; ip: 10.188.48.202; role: k8s-worker; zone: ap-south-1a\", \"hosts: ip-10-188-196-54 \\u2014 56 events; ip: 10.188.196.54; role: k8s-worker; zone: ap-south-1b\"]}",
+      "metadata": {
+        "scenario": "memory_leak_0034",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "memory_leak_0034-06",
+      "artifact_type": "infrastructure_events",
+      "subtype": "platform_events",
+      "source": "platform_events",
+      "content": "{\"description\": \"Kubernetes events, cloud-provider health events and host system messages (kernel, hardware, daemons) with the objects or hosts they refer to.\", \"facts\": [\"event reasons: OOMKilling \\u2014 33 events; top objects: pod/video-api-d453a17ff-xv7wt (16)\", \"system messages: kernel: Memory cgroup out of memory: Killed process (video-api) anon-rss:8384000kB \\u2014 33 events; top objects: ip-10-188-48-202 (1), ip-10-188-196-67 (1), ip-10-188-196-105 (1)\", \"event reasons: Pulled \\u2014 23 events; top objects: pod/quiz-engine-f554ec206-pt42z (3)\", \"event reasons: ScalingReplicaSet \\u2014 4 events; top objects: deployment/quiz-engine (3)\", \"event reasons: Pulled \\u2014 6 events; top objects: pod/progress-api-5e4153089-bpxlw (1)\", \"event reasons: ScalingReplicaSet \\u2014 2 events; top objects: deployment/progress-api (2)\"]}",
+      "metadata": {
+        "scenario": "memory_leak_0034",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "memory_leak_0034-07",
+      "artifact_type": "monitoring_alerts",
+      "subtype": "alertmanager_alerts",
+      "source": "alertmanager_alerts",
+      "content": "{\"description\": \"Prometheus Alertmanager alerts: alert names with severity, critical-alert instances, alert names and services, and an hourly timeline of warning and critical alerts (UTC).\", \"facts\": [\"alert names: Watchdog (info) \\u2014 72 events; service: alertmanager; firing continuously\", \"alert names: ContainerMemoryNearLimit (warning) \\u2014 13 events; service: video-api; first seen in hour 2025-05-30 11:00 UTC; last seen in hour 2025-05-30 15:00 UTC\", \"alert names: KubePodCrashLooping (critical) \\u2014 11 events; service: video-api; first seen in hour 2025-05-30 12:00 UTC; last seen in hour 2025-05-30 15:00 UTC\", \"alert names: LearnerWebAvailabilityLow (critical) \\u2014 10 events; service: learner-web; first seen in hour 2025-05-30 12:00 UTC; last seen in hour 2025-05-30 15:00 UTC\", \"alert names: CPUThrottlingHigh (warning) \\u2014 5 events; service: certificate-svc; first seen in hour 2025-05-31 08:00 UTC; last seen in hour 2025-05-31 10:00 UTC\", \"alert names: NodeFilesystemSpaceFillingUp (warning) \\u2014 2 events; service: node; first seen in hour 2025-05-30 03:00 UTC; last seen in hour 2025-05-30 04:00 UTC\", \"critical alerts: 21 matching events\", \"critical alerts > critical instances: video-api \\u2014 11 events\", \"critical alerts > critical instances: slo:learner-web-availability \\u2014 10 events\", \"critical alerts > critical alert names: KubePodCrashLooping \\u2014 11 events\", \"critical alerts > critical alert names: LearnerWebAvailabilityLow \\u2014 10 events\", \"critical alerts > critical services: video-api \\u2014 11 events\", \"critical alerts > critical services: learner-web \\u2014 10 events\", \"alert timeline: 2025-05-30 03:00 UTC \\u2014 1 events\", \"alert timeline: 2025-05-30 04:00 UTC \\u2014 1 events\", \"alert timeline: 2025-05-30 11:00 UTC \\u2014 3 events\", \"alert timeline: 2025-05-30 12:00 UTC \\u2014 8 events\", \"alert timeline: 2025-05-30 13:00 UTC \\u2014 8 events\", \"alert timeline: 2025-05-30 14:00 UTC \\u2014 8 events\", \"alert timeline: 2025-05-30 15:00 UTC \\u2014 7 events\", \"alert timeline: 2025-05-31 08:00 UTC \\u2014 1 events\", \"alert timeline: 2025-05-31 09:00 UTC \\u2014 2 events\", \"alert timeline: 2025-05-31 10:00 UTC \\u2014 2 events\"]}",
+      "metadata": {
+        "scenario": "memory_leak_0034",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "memory_leak_0034-08",
+      "artifact_type": "resource_metrics",
+      "subtype": "metric_anomalies",
+      "source": "metric_anomalies",
+      "content": "{\"description\": \"Metric series that deviated from their 7-day baseline (hourly resolution): baseline, peak or trough value, anomaly onset and recovery (UTC).\", \"facts\": [\"metric anomalies: container memory working set (avg per video-api pod) on video-api \\u2014 baseline 1.0 GiB (flat); peak 8.0 GiB (limit); onset 2025-05-30 06:00 UTC; recovered 2025-05-30 16:00 UTC\", \"metric anomalies: container restarts per hour on video-api \\u2014 baseline 0/h; peak 11/h; onset 2025-05-30 12:00 UTC; recovered 2025-05-30 16:00 UTC\", \"metric anomalies: node memory utilisation on 10.188.196.54 \\u2014 baseline 45%; peak 85%; onset 2025-05-31 05:00 UTC; recovered 2025-05-31 07:00 UTC\"]}",
+      "metadata": {
+        "scenario": "memory_leak_0034",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "memory_leak_0034-09",
+      "artifact_type": "derived_findings",
+      "subtype": "derived_summary",
+      "source": "derived_summary",
+      "content": "{\"description\": \"Deterministic summary computed from the query results above (error ranking, instance-to-host join, alert timeline, change correlation, earliest metric anomaly).\", \"facts\": [\"Derived: service learner-web ranks #1 by error volume (22783 events, 1 failing dependencies). Most-failed dependency: video-api (22783 errors).\", \"Derived: most-alerted critical instance video-api (11 critical alerts); no matching host-inventory entry.\", \"Derived: warning/critical alerts span 2025-05-30 03:00 UTC to 2025-05-31 10:00 UTC; earliest alert hour 2025-05-30 03:00 UTC (1 alerts).\", \"Derived: changes recorded from 6 hours before the earliest alert hour to its end: RFC-39776 (deployment, progress-api 4.22.8 -> 4.23.0, argocd, 2025-05-29 22:40 UTC).\", \"Derived: earliest metric anomaly onset 2025-05-30 06:00 UTC (container memory working set (avg per video-api pod) on video-api).\"]}",
+      "metadata": {
+        "scenario": "memory_leak_0034",
+        "source_kind": "derived_from_es_results",
+        "heuristic": true
+      }
+    },
+    {
+      "artifact_id": "memory_leak_0034-10",
+      "artifact_type": "query_coverage",
+      "subtype": "evidence_gaps",
+      "source": "evidence_gaps",
+      "content": "{\"description\": \"Queries that returned nothing or failed; use these to state what is NOT established.\", \"facts\": [\"No matching results for: tls certificates / expired certificates. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / expiring within 7 days. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / self signed. (Absence in this query is not proof of absence elsewhere.)\"]}",
+      "metadata": {
+        "scenario": "memory_leak_0034",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    }
+  ]
+}

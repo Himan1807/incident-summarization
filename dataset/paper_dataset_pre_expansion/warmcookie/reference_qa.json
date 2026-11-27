@@ -1,0 +1,99 @@
+{
+  "source": "answers.txt (paper dataset)",
+  "confidence": "paper ground truth",
+  "qa": [
+    {
+      "id": 1,
+      "question": "What is the IP address of the potentially infected internal host in the LAN?",
+      "answer": "10.8.15.133",
+      "atoms": [
+        {
+          "text": "10.8.15.133",
+          "kind": "ip"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "question": "What is the hostname of the potentially infected machine in the LAN?",
+      "answer": "DESKTOP-H8ALZBV",
+      "atoms": [
+        {
+          "text": "DESKTOP-H8ALZBV",
+          "kind": "hostname"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "question": "What is the Windows human user account name (not machine accounts ending in $) of the potentially infected machine in the LAN?",
+      "answer": "plucero",
+      "atoms": [
+        {
+          "text": "plucero",
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "question": "What are the likely suspicious domains or URLs for initial infection?",
+      "answer": "quote.checkfedexexp.com, business.checkfedexexp.com, 104.21.55.70, 172.67.170.169",
+      "atoms": [
+        {
+          "text": "quote.checkfedexexp.com",
+          "kind": "domain_or_file"
+        },
+        {
+          "text": "business.checkfedexexp.com",
+          "kind": "domain_or_file"
+        },
+        {
+          "text": "104.21.55.70",
+          "kind": "ip"
+        },
+        {
+          "text": "172.67.170.169",
+          "kind": "ip"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "question": "What are the suspicious external IP addresses contacted, which might be involved in command-and-control (C2) communication?",
+      "answer": "72.5.43.29",
+      "atoms": [
+        {
+          "text": "72.5.43.29",
+          "kind": "ip"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "question": "During what hour did the first signs of infection activity appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+      "answer": "2024-08-15 00:00 UTC",
+      "atoms": [
+        {
+          "text": "2024-08-15 00:00 UTC",
+          "kind": "time"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "question": "According to the connection volume statistics, what single external IP address received the most connections from the infected hosts? Is it a C2 server or a legitimate service?",
+      "answer": "72.5.43.29, C2 server",
+      "atoms": [
+        {
+          "text": "72.5.43.29",
+          "kind": "ip"
+        },
+        {
+          "text": "C2 server",
+          "kind": "label"
+        }
+      ]
+    }
+  ]
+}

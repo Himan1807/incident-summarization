@@ -1,0 +1,14 @@
+{
+  "scenario": "gozi",
+  "cleaning": [],
+  "skipped": [
+    "suspicious_certificates: all aggregations empty"
+  ],
+  "gaps": [],
+  "artifacts": 9,
+  "facts": 92,
+  "empty_aggregations": 3,
+  "questions": 9,
+  "answers": 9,
+  "atoms": 23
+}

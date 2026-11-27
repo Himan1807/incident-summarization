@@ -1,0 +1,153 @@
+{
+  "metadata": {
+    "incident_id": "INC-20240829",
+    "scenario": "cache_stampede_0033",
+    "title": "Infrastructure reliability incident investigation",
+    "source": "synthetic/ops-incident-expansion (modeled on neu-nds2/llm-sec-incident-analysis)",
+    "query_window_start": "2024-08-29T00:00:00",
+    "query_window_end": "2024-08-31T23:59:59",
+    "evidence_types": [
+      "change_records",
+      "derived_findings",
+      "infrastructure_events",
+      "monitoring_alerts",
+      "query_coverage",
+      "resource_metrics",
+      "service_logs"
+    ],
+    "artifact_scope_note": "Evidence is aggregated query output (not raw log lines or metric samples); it contains no chat/communication records."
+  },
+  "incident_description": "Reliability incident investigation of a production environment. Evidence consists of Elasticsearch aggregation results over application and proxy logs, Kubernetes, cloud-provider and host system events, Prometheus Alertmanager alerts, change-management / CI-CD audit records and metric anomaly detection. No root cause, impact or trigger is stated; these must be established from the supplied artifacts. Environment context: Organization: Rivershore Health (clinic and patient management SaaS); Platform: Microsoft Azure uksouth (zones uksouth-1/uksouth-2/uksouth-3); network range 10.111.0.0/16; Caching tier: self-managed Redis (cache-redis-01, maxmemory 8gb, allkeys-lru) in front of the records-api PostgreSQL database records-db-01; Change management: production changes carry CHG- identifiers.",
+  "investigation_questions": [
+    "What is the IP address of the host or node where the failure originated?",
+    "Which database host became overloaded as a consequence of the initial failure?",
+    "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+    "Did the failure stay isolated to one component or cascade across services? Answer 'isolated failure' or 'cascading failure'.",
+    "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+    "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+    "What change brought the service back to normal? Give its identifier."
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "cache_stampede_0033-01",
+      "artifact_type": "service_logs",
+      "subtype": "error_logs",
+      "source": "error_logs",
+      "content": "{\"description\": \"Application and proxy error logs: HTTP/gRPC status codes, failing requests (caller -> callee:port : operation), error messages and the services emitting them.\", \"facts\": [\"error events: 48427 matching events\", \"error events > status codes: 504 \\u2014 31347 events\", \"error events > status codes: 500 \\u2014 10449 events\", \"error events > status codes: 503 \\u2014 6631 events\", \"failing requests: patient-portal -> records-api:8080 : GET /v1/records \\u2014 31347 events\", \"failing requests: records-api -> records-db-01:5432 : SELECT (cache miss fallback) \\u2014 10195 events\", \"failing requests: consent-svc -> records-api:8080 : GET /v1/records/{id} \\u2014 6631 events\", \"failing requests: scheduling-api -> scheduling-db:5432 : query \\u2014 254 events\", \"error messages: upstream records-api: 504 Gateway Timeout \\u2014 31347 events\", \"error messages: pq: sorry, too many clients already \\u2014 10195 events\", \"error messages: records-api: context deadline exceeded \\u2014 6631 events\", \"error messages: deadlock detected \\u2014 254 events\", \"emitting services: patient-portal \\u2014 31347 events\", \"emitting services: records-api \\u2014 10195 events\", \"emitting services: consent-svc \\u2014 6631 events\", \"emitting services: scheduling-api \\u2014 254 events\"]}",
+      "metadata": {
+        "scenario": "cache_stampede_0033",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "cache_stampede_0033-02",
+      "artifact_type": "service_logs",
+      "subtype": "error_volume_by_service",
+      "source": "error_volume_by_service",
+      "content": "{\"description\": \"Services ranked by number of error events, with each service's most-failed downstream dependencies.\", \"facts\": [\"services: patient-portal \\u2014 31347 events; failing dependencies=1; top dependencies: records-api (31347)\", \"services: records-api \\u2014 10195 events; failing dependencies=1; top dependencies: records-db-01 (10195)\", \"services: consent-svc \\u2014 6631 events; failing dependencies=1; top dependencies: records-api (6631)\", \"services: scheduling-api \\u2014 254 events; failing dependencies=1; top dependencies: scheduling-db (254)\"]}",
+      "metadata": {
+        "scenario": "cache_stampede_0033",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "cache_stampede_0033-03",
+      "artifact_type": "change_records",
+      "subtype": "change_log",
+      "source": "change_log",
+      "content": "{\"description\": \"Deployments, configuration pushes, infrastructure and automation runs from the change-management and CI/CD audit log: change ID, type, target, actor, time (UTC), status and recorded diff/summary.\", \"facts\": [\"changes: CHG-72916 | deployment | scheduling-api 1.3.6 -> 1.3.7 | actor: github-actions | 2024-08-29 07:29 UTC | status: completed | dependency bump \\u2014 1 events\", \"changes: CHG-72922 | deployment | lab-results-api 7.26.0 -> 7.26.1 | actor: github-actions | 2024-08-29 22:36 UTC | status: Synced/Healthy | new optional API field \\u2014 1 events\", \"changes: CHG-72933 | batch_job | records-api cache warm-up / metadata backfill | actor: airflow | 2024-08-30 03:40 UTC | status: completed | backfill wrote 26k new cache keys \\u2014 1 events\", \"changes: CHG-72967 | config_push | cache-redis-01 redis.conf | actor: p.park | 2024-08-30 11:58 UTC | status: completed | CONFIG SET maxmemory 8gb -> 16gb; CONFIG REWRITE \\u2014 1 events\", \"change types: deployment \\u2014 2 events\", \"change types: batch_job \\u2014 1 events\", \"change types: config_push \\u2014 1 events\"]}",
+      "metadata": {
+        "scenario": "cache_stampede_0033",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "cache_stampede_0033-04",
+      "artifact_type": "change_records",
+      "subtype": "change_actors",
+      "source": "change_actors",
+      "content": "{\"description\": \"Accounts and automation identities that executed changes, with the hosts or targets they acted on.\", \"facts\": [\"actors: github-actions \\u2014 2 events; targets: lab-results-api (1), scheduling-api (1)\", \"actors: airflow \\u2014 1 events; targets: records-api (1)\", \"actors: p.park \\u2014 1 events; targets: cache-redis-01 (1)\"]}",
+      "metadata": {
+        "scenario": "cache_stampede_0033",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "cache_stampede_0033-05",
+      "artifact_type": "infrastructure_events",
+      "subtype": "host_inventory",
+      "source": "host_inventory",
+      "content": "{\"description\": \"Host and node names seen in infrastructure events with their IP address, role and availability zone / rack.\", \"facts\": [\"hosts: cache-redis-01 \\u2014 249 events; ip: 10.111.23.179; role: redis-cache; zone: uksouth-2\", \"hosts: identity-02 \\u2014 163 events; ip: 10.111.124.66; role: identity-svc host; zone: uksouth-1\", \"hosts: records-db-01 \\u2014 142 events; ip: 10.111.177.32; role: postgres-primary; zone: uksouth-2\"]}",
+      "metadata": {
+        "scenario": "cache_stampede_0033",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "cache_stampede_0033-06",
+      "artifact_type": "infrastructure_events",
+      "subtype": "platform_events",
+      "source": "platform_events",
+      "content": "{\"description\": \"Kubernetes events, cloud-provider health events and host system messages (kernel, hardware, daemons) with the objects or hosts they refer to.\", \"facts\": [\"system messages: postgres: FATAL: sorry, too many clients already \\u2014 2485 events; top objects: records-db-01 (1)\"]}",
+      "metadata": {
+        "scenario": "cache_stampede_0033",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "cache_stampede_0033-07",
+      "artifact_type": "monitoring_alerts",
+      "subtype": "alertmanager_alerts",
+      "source": "alertmanager_alerts",
+      "content": "{\"description\": \"Prometheus Alertmanager alerts: alert names with severity, critical-alert instances, alert names and services, and an hourly timeline of warning and critical alerts (UTC).\", \"facts\": [\"alert names: Watchdog (info) \\u2014 72 events; service: alertmanager; firing continuously\", \"alert names: RedisCacheHitRatioLow (critical) \\u2014 12 events; service: redis; first seen in hour 2024-08-30 09:00 UTC; last seen in hour 2024-08-30 12:00 UTC\", \"alert names: RedisMemoryHigh (warning) \\u2014 12 events; service: redis; first seen in hour 2024-08-30 06:00 UTC; last seen in hour 2024-08-30 12:00 UTC\", \"alert names: PostgresTooManyConnections (critical) \\u2014 10 events; service: postgres; first seen in hour 2024-08-30 09:00 UTC; last seen in hour 2024-08-30 12:00 UTC\", \"alert names: PatientPortal5xxHigh (critical) \\u2014 9 events; service: patient-portal; first seen in hour 2024-08-30 09:00 UTC; last seen in hour 2024-08-30 12:00 UTC\", \"alert names: RecordsApiErrorRateHigh (critical) \\u2014 7 events; service: records-api; first seen in hour 2024-08-30 10:00 UTC; last seen in hour 2024-08-30 12:00 UTC\", \"alert names: CPUThrottlingHigh (warning) \\u2014 4 events; service: identity-svc; first seen in hour 2024-08-31 03:00 UTC; last seen in hour 2024-08-31 04:00 UTC\", \"critical alerts: 38 matching events\", \"critical alerts > critical instances: 10.111.23.179:9121 \\u2014 12 events\", \"critical alerts > critical instances: 10.111.177.32:9187 \\u2014 10 events\", \"critical alerts > critical instances: patient-portal \\u2014 9 events\", \"critical alerts > critical instances: records-api \\u2014 7 events\", \"critical alerts > critical alert names: RedisCacheHitRatioLow \\u2014 12 events\", \"critical alerts > critical alert names: PostgresTooManyConnections \\u2014 10 events\", \"critical alerts > critical alert names: PatientPortal5xxHigh \\u2014 9 events\", \"critical alerts > critical alert names: RecordsApiErrorRateHigh \\u2014 7 events\", \"critical alerts > critical services: redis \\u2014 12 events\", \"critical alerts > critical services: postgres \\u2014 10 events\", \"critical alerts > critical services: patient-portal \\u2014 9 events\", \"critical alerts > critical services: records-api \\u2014 7 events\", \"alert timeline: 2024-08-30 06:00 UTC \\u2014 1 events\", \"alert timeline: 2024-08-30 07:00 UTC \\u2014 1 events\", \"alert timeline: 2024-08-30 08:00 UTC \\u2014 1 events\", \"alert timeline: 2024-08-30 09:00 UTC \\u2014 9 events\", \"alert timeline: 2024-08-30 10:00 UTC \\u2014 11 events\", \"alert timeline: 2024-08-30 11:00 UTC \\u2014 15 events\", \"alert timeline: 2024-08-30 12:00 UTC \\u2014 12 events\", \"alert timeline: 2024-08-31 03:00 UTC \\u2014 2 events\", \"alert timeline: 2024-08-31 04:00 UTC \\u2014 2 events\"]}",
+      "metadata": {
+        "scenario": "cache_stampede_0033",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "cache_stampede_0033-08",
+      "artifact_type": "resource_metrics",
+      "subtype": "metric_anomalies",
+      "source": "metric_anomalies",
+      "content": "{\"description\": \"Metric series that deviated from their 7-day baseline (hourly resolution): baseline, peak or trough value, anomaly onset and recovery (UTC).\", \"facts\": [\"metric anomalies: redis_memory_used_bytes / redis_memory_max_bytes on cache-redis-01 \\u2014 baseline 63%; peak 100%; onset 2024-08-30 06:00 UTC; recovered 2024-08-30 13:00 UTC\", \"metric anomalies: redis_evicted_keys_total rate on cache-redis-01 \\u2014 baseline 0/s; peak 2,708/s; onset 2024-08-30 09:00 UTC; recovered 2024-08-30 13:00 UTC\", \"metric anomalies: redis keyspace hit ratio on cache-redis-01 \\u2014 baseline 96%; trough 19%; onset 2024-08-30 09:00 UTC; recovered 2024-08-30 13:00 UTC\", \"metric anomalies: node_cpu utilisation on records-db-01 \\u2014 baseline 43%; peak 100%; onset 2024-08-30 09:00 UTC; recovered 2024-08-30 13:00 UTC\", \"metric anomalies: node memory utilisation on 10.111.124.66 \\u2014 baseline 54%; peak 92%; onset 2024-08-31 05:00 UTC; recovered 2024-08-31 08:00 UTC\"]}",
+      "metadata": {
+        "scenario": "cache_stampede_0033",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "cache_stampede_0033-09",
+      "artifact_type": "derived_findings",
+      "subtype": "derived_summary",
+      "source": "derived_summary",
+      "content": "{\"description\": \"Deterministic summary computed from the query results above (error ranking, instance-to-host join, alert timeline, change correlation, earliest metric anomaly).\", \"facts\": [\"Derived: service patient-portal ranks #1 by error volume (31347 events, 1 failing dependencies). Most-failed dependency: records-api (31347 errors).\", \"Derived: most-alerted critical instance 10.111.23.179:9121 (12 critical alerts) maps to hostname cache-redis-01; role redis-cache; zone uksouth-2.\", \"Derived: warning/critical alerts span 2024-08-30 06:00 UTC to 2024-08-31 04:00 UTC; earliest alert hour 2024-08-30 06:00 UTC (1 alerts).\", \"Derived: changes recorded from 6 hours before the earliest alert hour to its end: CHG-72933 (batch_job, records-api cache warm-up / metadata backfill, airflow, 2024-08-30 03:40 UTC).\", \"Derived: earliest metric anomaly onset 2024-08-30 06:00 UTC (redis_memory_used_bytes / redis_memory_max_bytes on cache-redis-01).\"]}",
+      "metadata": {
+        "scenario": "cache_stampede_0033",
+        "source_kind": "derived_from_es_results",
+        "heuristic": true
+      }
+    },
+    {
+      "artifact_id": "cache_stampede_0033-10",
+      "artifact_type": "query_coverage",
+      "subtype": "evidence_gaps",
+      "source": "evidence_gaps",
+      "content": "{\"description\": \"Queries that returned nothing or failed; use these to state what is NOT established.\", \"facts\": [\"No matching results for: tls certificates / expired certificates. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / expiring within 7 days. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: tls certificates / self signed. (Absence in this query is not proof of absence elsewhere.)\"]}",
+      "metadata": {
+        "scenario": "cache_stampede_0033",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    }
+  ]
+}

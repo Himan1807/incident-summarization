@@ -1,0 +1,14 @@
+{
+  "scenario": "broker_disk_full_0017",
+  "cleaning": [],
+  "skipped": [
+    "tls_certificates: all aggregations empty"
+  ],
+  "gaps": [],
+  "artifacts": 10,
+  "facts": 80,
+  "empty_aggregations": 3,
+  "questions": 5,
+  "answers": 5,
+  "atoms": 6
+}

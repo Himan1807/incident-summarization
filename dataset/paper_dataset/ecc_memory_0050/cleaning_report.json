@@ -1,0 +1,14 @@
+{
+  "scenario": "ecc_memory_0050",
+  "cleaning": [
+    "first-signs answer 2026-06-25 00:00 UTC differs from the earliest alert-timeline hour 2026-06-24 23:00 UTC (earlier metric onset or an unrelated earlier alert)"
+  ],
+  "skipped": [],
+  "gaps": [],
+  "artifacts": 11,
+  "facts": 80,
+  "empty_aggregations": 2,
+  "questions": 8,
+  "answers": 8,
+  "atoms": 9
+}

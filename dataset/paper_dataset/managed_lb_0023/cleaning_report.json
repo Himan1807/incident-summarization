@@ -1,0 +1,16 @@
+{
+  "scenario": "managed_lb_0023",
+  "cleaning": [
+    "first-signs answer 2022-03-27 22:00 UTC differs from the earliest alert-timeline hour 2022-03-27 18:00 UTC (earlier metric onset or an unrelated earlier alert)"
+  ],
+  "skipped": [],
+  "gaps": [
+    "host_inventory"
+  ],
+  "artifacts": 10,
+  "facts": 54,
+  "empty_aggregations": 2,
+  "questions": 7,
+  "answers": 7,
+  "atoms": 8
+}

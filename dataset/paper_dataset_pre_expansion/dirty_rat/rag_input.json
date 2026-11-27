@@ -1,0 +1,138 @@
+{
+  "metadata": {
+    "incident_id": "INC-20240729",
+    "scenario": "dirty_rat",
+    "title": "Network security incident investigation",
+    "source": "neu-nds2/llm-sec-incident-analysis",
+    "query_window_start": "2024-07-29T00:00:00",
+    "query_window_end": "2024-08-01T23:59:59",
+    "evidence_types": [
+      "authentication",
+      "derived_findings",
+      "ids_alerts",
+      "network_summary",
+      "query_coverage"
+    ],
+    "artifact_scope_note": "Evidence is aggregated query output (not raw packets); it contains no chat/communication records."
+  },
+  "incident_description": "Network security investigation of a monitored LAN. Evidence consists of Elasticsearch aggregation results over Zeek and Suricata logs (IDS alerts, Kerberos, HTTP downloads, TLS certificates, domains and external-destination activity). No root cause, impact or C2 attribution is stated; these must be established from the supplied artifacts. Network context: LAN segment range: 172.16.1.0/24 (172.16.1.0 through 172.16.1.255); Domain: wiresharkworkshop.online; Domain Controller: 172.16.1.4 - WIRESHARK-WS-DC; LAN segment gateway: 172.16.1.1; LAN segment broadcast address: 172.16.1.255.",
+  "investigation_questions": [
+    "What is the IP address of the potentially infected internal host in the LAN?",
+    "What is the hostname of the potentially infected machine in the LAN?",
+    "What is the Windows human user account name (not machine accounts ending in $) of the potentially infected machine in the LAN?",
+    "What external servers (domains and IP addresses) were used to download malicious files?",
+    "What are the suspicious external IP addresses contacted, which might be involved in command-and-control (C2) communication?",
+    "During what hour did the first signs of infection activity appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "According to the connection volume statistics, what single external IP address received the most connections from the infected hosts? Is it a C2 server or a legitimate service?"
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "dirty_rat-01",
+      "artifact_type": "network_summary",
+      "subtype": "file_downloads",
+      "source": "file_downloads",
+      "content": "{\"description\": \"HTTP file downloads and file transfers: download domains/IPs, requests (client -> server:port : URI), file types and download sources.\", \"facts\": [\"file transfers: 23 matching events\", \"file transfers > transfer details: file_transfer — 2 events\", \"file transfers > transfer details: 172.16.1.66 -> 13.69.239.79:443 : fuid: FQyVNG1qSUWl88SPO8 — 1 events\", \"file transfers > transfer details: 172.16.1.66 -> 20.166.2.191:443 : fuid: FTAoZx1f3vyui6NSY8 — 1 events\", \"file transfers > transfer details: 172.16.1.66 -> 20.189.173.26:443 : fuid: Fm9YMM3CNdjDmDuB2h — 1 events\", \"file transfers > transfer details: 172.16.1.66 -> 20.241.44.114:443 : fuid: F7RGOfAJ7v7njmqxc — 1 events\", \"file transfers > transfer details: 172.16.1.66 -> 20.96.153.111:443 : fuid: FtBrUL3KjJyjPbQ5V8 — 1 events\", \"file transfers > transfer details: 172.16.1.66 -> 208.95.112.1:80 : fuid: FdlG6pwAk9IIWc546 — 1 events\", \"file transfers > transfer details: 172.16.1.66 -> 23.194.164.136:443 : fuid: FwX9H2P4ySsBUtJw5 — 1 events\", \"file transfers > transfer details: 172.16.1.66 -> 23.215.55.140:80 : fuid: FbBtHc4DJvYjRTHKi — 1 events\", \"file transfers > transfer details: 172.16.1.66 -> 23.221.22.68:443 : fuid: FPikSY3rOlbAkpQ1Wa — 1 events\", \"download sources: 172.16.1.66 — 164 events\", \"http requests: no_http_uri — 160 events\", \"http requests: 172.16.1.66 -> 208.95.112.1:80 : /json/ — 2 events\", \"http requests: 172.16.1.66 -> 23.215.55.140:80 : /connecttest.txt — 2 events\", \"download domains: ip-api.com — 1 events\", \"download domains: www.msftconnecttest.com — 1 events\", \"file types: other — 164 events\"]}",
+      "metadata": {
+        "scenario": "dirty_rat",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "dirty_rat-02",
+      "artifact_type": "network_summary",
+      "subtype": "high_activity_external_dest",
+      "source": "high_activity_external_dest",
+      "content": "{\"description\": \"Internal clients ranked by number of connections to external destinations, with each client's most-contacted destinations.\", \"facts\": [\"source clients: 172.16.1.66 — 164 events; external destinations=38; top destinations: 23.52.9.222 (22), 204.79.197.203 (13), 23.198.7.177 (12), 52.109.20.47 (12), 23.48.203.208 (8); 97 further events in other values\"]}",
+      "metadata": {
+        "scenario": "dirty_rat",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "dirty_rat-03",
+      "artifact_type": "authentication",
+      "subtype": "kerberos_clients",
+      "source": "kerberos_clients",
+      "content": "{\"description\": \"Kerberos client account names (user accounts) and the source IPs they authenticated from.\", \"facts\": [\"client accounts: DESKTOP-SKBR25F$ — 13 events; source ips: 172.16.1.66 (13)\", \"client accounts: ccollier — 8 events; source ips: 172.16.1.66 (8)\", \"client accounts: desktop-skbr25f$ — 6 events; source ips: 172.16.1.66 (6)\"]}",
+      "metadata": {
+        "scenario": "dirty_rat",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "dirty_rat-04",
+      "artifact_type": "authentication",
+      "subtype": "kerberos_full_services",
+      "source": "kerberos_full_services",
+      "content": "{\"description\": \"Kerberos services requested (including host and machine account names) per source IP.\", \"facts\": [\"full services: krb_tcp — 28 events; source ips: 172.16.1.66 (28)\", \"full services: krbtgt/WIRESHARKWORKSHOP.ONLINE — 10 events; source ips: 172.16.1.66 (10)\", \"full services: ldap/wireshark-ws-dc.wiresharkworkshop.online/wiresharkworkshop.online — 3 events; source ips: 172.16.1.66 (3)\", \"full services: LDAP/WIRESHARK-WS-DC.wiresharkworkshop.online/wiresharkworkshop.online — 2 events; source ips: 172.16.1.66 (2)\", \"full services: cifs/WIRESHARK-WS-DC.wiresharkworkshop.online — 2 events; source ips: 172.16.1.66 (2)\", \"full services: krbtgt/wiresharkworkshop.online — 2 events; source ips: 172.16.1.66 (2)\", \"full services: DESKTOP-SKBR25F$ — 1 events; source ips: 172.16.1.66 (1)\", \"full services: LDAP/WIRESHARK-WS-DC.wiresharkworkshop.online — 1 events; source ips: 172.16.1.66 (1)\", \"full services: cifs/WIRESHARK-WS-DC — 1 events; source ips: 172.16.1.66 (1)\", \"full services: cifs/WIRESHARK-WS-DC.wiresharkworkshop.online/wiresharkworkshop.online — 1 events; source ips: 172.16.1.66 (1)\", \"full services: cifs/wiresharkworkshop.online — 1 events; source ips: 172.16.1.66 (1)\", \"full services: desktop-skbr25f$ — 1 events; source ips: 172.16.1.66 (1)\", \"full services: host/desktop-skbr25f.wiresharkworkshop.online — 1 events; source ips: 172.16.1.66 (1)\", \"full services: krbtgt/WIRESHARKWORKSH — 1 events; source ips: 172.16.1.66 (1)\", \"full services: ldap/wireshark-ws-dc.wiresharkworkshop.online — 1 events; source ips: 172.16.1.66 (1)\"]}",
+      "metadata": {
+        "scenario": "dirty_rat",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "dirty_rat-05",
+      "artifact_type": "authentication",
+      "subtype": "kerberos_hostnames",
+      "source": "kerberos_hostnames",
+      "content": "{\"description\": \"Host names seen in Kerberos traffic with their source IPs.\", \"facts\": [\"hostnames: desktop-skbr25f — 1 events; source ips: 172.16.1.66 (1)\"]}",
+      "metadata": {
+        "scenario": "dirty_rat",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "dirty_rat-06",
+      "artifact_type": "ids_alerts",
+      "subtype": "suricata_alerts",
+      "source": "suricata_alerts",
+      "content": "{\"description\": \"Suricata IDS alerts: signatures, high-severity alert destinations and sources, and an hourly alert timeline (UTC).\", \"facts\": [\"alert signatures: ET MALWARE STRRAT CnC Checkin — 102 events\", \"alert signatures: GPL NETBIOS SMB IPC$ unicode share access — 5 events\", \"alert signatures: ET DROP Spamhaus DROP Listed Traffic Inbound group 26 — 1 events\", \"alert signatures: ET INFO External IP Lookup Domain in DNS Lookup (ip-api .com) — 1 events\", \"alert signatures: ET INFO External IP Lookup ip-api.com — 1 events\", \"alert signatures: ET INFO Microsoft Connection Test — 1 events\", \"alert signatures: ET INFO NTLM Session Setup Request - Auth — 1 events\", \"alert signatures: ET INFO NTLM Session Setup Request - Negotiate — 1 events\", \"alert signatures: ET INFO NTLMv1 Session Setup Response - Challenge — 1 events\", \"high severity alerts: 105 matching events\", \"high severity alerts > high severity  destinations: 141.98.10.79 — 102 events\", \"high severity alerts > high severity  destinations: 172.16.1.4 — 1 events\", \"high severity alerts > high severity  destinations: 172.16.1.66 — 1 events\", \"high severity alerts > high severity  destinations: 208.95.112.1 — 1 events\", \"high severity alerts > high severity signatures: ET MALWARE STRRAT CnC Checkin — 102 events\", \"high severity alerts > high severity signatures: ET DROP Spamhaus DROP Listed Traffic Inbound group 26 — 1 events\", \"high severity alerts > high severity signatures: ET INFO External IP Lookup Domain in DNS Lookup (ip-api .com) — 1 events\", \"high severity alerts > high severity signatures: ET INFO External IP Lookup ip-api.com — 1 events\", \"high severity alerts > high severity sources: 172.16.1.66 — 104 events\", \"high severity alerts > high severity sources: 141.98.10.79 — 1 events\", \"alert timeline: 2024-07-30 02:00 UTC — 114 events\"]}",
+      "metadata": {
+        "scenario": "dirty_rat",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "dirty_rat-07",
+      "artifact_type": "network_summary",
+      "subtype": "suspicious_domains",
+      "source": "suspicious_domains",
+      "content": "{\"description\": \"Unusual domains with their source and destination IPs, and direct-IP HTTP connections.\", \"facts\": [\"domains: repo1.maven.org — 3 events; top source ips: 172.16.1.66 (3); top destination ips: 199.232.196.209 (3)\", \"domains: autodiscover-s.outlook.com — 1 events; top source ips: 172.16.1.66 (1); top destination ips: 40.97.199.114 (1)\", \"domains: default.exp-tas.com — 1 events; top source ips: 172.16.1.66 (1); top destination ips: 13.107.5.93 (1)\", \"domains: ecn.dev.virtualearth.net — 1 events; top source ips: 172.16.1.66 (1); top destination ips: 23.46.192.165 (1)\", \"domains: github.com — 1 events; top source ips: 172.16.1.66 (1); top destination ips: 140.82.113.3 (1)\", \"domains: img-s-msn-com.akamaized.net — 1 events; top source ips: 172.16.1.66 (1); top destination ips: 23.215.55.133 (1)\", \"domains: javadl-esd-secure.oracle.com — 1 events; top source ips: 172.16.1.66 (1); top destination ips: 23.194.164.136 (1)\", \"domains: metadata.templates.cdn.office.net — 1 events; top source ips: 172.16.1.66 (1); top destination ips: 23.221.22.68 (1)\", \"domains: objects.githubusercontent.com — 1 events; top source ips: 172.16.1.66 (1); top destination ips: 185.199.110.133 (1)\", \"domains: oneclient.sfx.ms — 1 events; top source ips: 172.16.1.66 (1); top destination ips: 23.52.9.140 (1)\"]}",
+      "metadata": {
+        "scenario": "dirty_rat",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "dirty_rat-08",
+      "artifact_type": "derived_findings",
+      "subtype": "derived_summary",
+      "source": "derived_summary",
+      "content": "{\"description\": \"Deterministic summary computed from the query results above (client ranking, IP-to-hostname/account join, alert timeline).\", \"facts\": [\"Derived: internal client 172.16.1.66 ranks #1 by external connections (164 events, 38 distinct external destinations). Most-contacted external IP: 23.52.9.222 (22 connections).\", \"Derived: Kerberos identity of 172.16.1.66: hostname(s) desktop-skbr25f; human user account(s) ccollier.\", \"Derived: Suricata alerts span 2024-07-30 02:00 UTC to 2024-07-30 02:00 UTC; earliest alert hour 2024-07-30 02:00 UTC (114 alerts).\", \"Derived: destinations of high-severity alerts: 141.98.10.79 (102), 172.16.1.4 (1), 172.16.1.66 (1), 208.95.112.1 (1).\"]}",
+      "metadata": {
+        "scenario": "dirty_rat",
+        "source_kind": "derived_from_es_results",
+        "heuristic": true
+      }
+    },
+    {
+      "artifact_id": "dirty_rat-09",
+      "artifact_type": "query_coverage",
+      "subtype": "evidence_gaps",
+      "source": "evidence_gaps",
+      "content": "{\"description\": \"Queries that returned nothing or failed; use these to state what is NOT established.\", \"facts\": [\"No matching results for: suspicious certificates / self signed analysis. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: suspicious certificates / short validity certs. (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: suspicious certificates / ip based certificates. (Absence in this query is not proof of absence elsewhere.)\"]}",
+      "metadata": {
+        "scenario": "dirty_rat",
+        "source_kind": "es_query_result",
+        "heuristic": false
+      }
+    }
+  ]
+}

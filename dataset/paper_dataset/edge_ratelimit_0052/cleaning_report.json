@@ -1,0 +1,12 @@
+{
+  "scenario": "edge_ratelimit_0052",
+  "cleaning": [],
+  "skipped": [],
+  "gaps": [],
+  "artifacts": 11,
+  "facts": 68,
+  "empty_aggregations": 2,
+  "questions": 8,
+  "answers": 8,
+  "atoms": 10
+}

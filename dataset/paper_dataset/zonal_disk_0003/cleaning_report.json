@@ -1,0 +1,14 @@
+{
+  "scenario": "zonal_disk_0003",
+  "cleaning": [
+    "first-signs answer 2023-03-23 14:00 UTC differs from the earliest alert-timeline hour 2023-03-23 12:00 UTC (earlier metric onset or an unrelated earlier alert)"
+  ],
+  "skipped": [],
+  "gaps": [],
+  "artifacts": 11,
+  "facts": 71,
+  "empty_aggregations": 2,
+  "questions": 11,
+  "answers": 11,
+  "atoms": 12
+}

@@ -1,0 +1,109 @@
+{
+  "source": "synthetic generator ground truth (ops expansion)",
+  "confidence": "synthetic ground truth",
+  "qa": [
+    {
+      "id": 1,
+      "question": "What is the hostname of the machine where the incident started?",
+      "answer": "kafka-b2",
+      "atoms": [
+        {
+          "text": "kafka-b2",
+          "kind": "hostname"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "question": "What is the IP address of the host or node where the incident started?",
+      "answer": "10.186.184.84",
+      "atoms": [
+        {
+          "text": "10.186.184.84",
+          "kind": "ip"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "question": "Which filesystem path ran out of space?",
+      "answer": "/data/kafka",
+      "atoms": [
+        {
+          "text": "/data/kafka",
+          "kind": "domain_or_file"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "question": "Which topic partition first reported the storage exception?",
+      "answer": "dispatch-events-3",
+      "atoms": [
+        {
+          "text": "dispatch-events-3",
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "question": "During what hour did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+      "answer": "2024-03-26 21:00 UTC",
+      "atoms": [
+        {
+          "text": "2024-03-26 21:00 UTC",
+          "kind": "time"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "question": "What is the root cause category of the incident: configuration change, software defect, hardware failure, cloud provider failure, capacity exhaustion, automation error, certificate expiry, or third-party dependency failure?",
+      "answer": "capacity exhaustion",
+      "atoms": [
+        {
+          "text": "capacity exhaustion",
+          "kind": "label"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "question": "Did the failure stay isolated to one component or cascade across services? Answer 'isolated failure' or 'cascading failure'.",
+      "answer": "cascading failure",
+      "atoms": [
+        {
+          "text": "cascading failure",
+          "kind": "label"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "question": "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+      "answer": "availability",
+      "atoms": [
+        {
+          "text": "availability",
+          "kind": "cia"
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "question": "According to the error volume statistics, what single service emitted the most errors? Is it the root cause or a downstream symptom?",
+      "answer": "dispatch-svc, downstream symptom",
+      "atoms": [
+        {
+          "text": "dispatch-svc",
+          "kind": "other"
+        },
+        {
+          "text": "downstream symptom",
+          "kind": "label"
+        }
+      ]
+    }
+  ]
+}
