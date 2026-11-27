@@ -27,7 +27,7 @@ from src.adv_chunking import chunk_artifacts
 from src.enrichment import build_enrichment
 from src.adv_retrieval import AdvancedRetriever
 from src.sections import build_sections, resolve_profile
-from src.adv_generation import section_prompt, summary_prompt, call_ollama
+from src.adv_generation import section_prompt, summary_prompt, call_llm
 from src.postprocess import (clean_model_output, attribute_citations, dedupe_sections, drop_partial_tail,
                              drop_orphan_parents)
 from src.evaluate import evaluate_unanswerable, UNANSWERABLE_HEADING
@@ -117,8 +117,8 @@ def run(args, embedder=None, reranker=None, llm=None):
         chosen = [s for i, s in enumerate(sections) if i in keep]
     names = [s["name"] for s in sections]
 
-    gen = llm or (lambda p, n: call_ollama(p, S.ollama_url, S.ollama_model, S.temperature,
-                                           S.timeout_seconds, S.num_ctx, n))
+    usage = {}                                           # filled only by hosted models (src/llm_api.py)
+    gen = llm or (lambda p, n: call_llm(p, S, n, usage))
     # ------------------------------------------------------------------ phase 1: retrieve + generate + clean + attribute
     work, run_log = [], []
     for sec in chosen:
@@ -239,6 +239,8 @@ def run(args, embedder=None, reranker=None, llm=None):
               "run_log": run_log, "flagged": all_flags}
     if getattr(args, "section_profile", None):                 # recorded only when the option is used
         result["section_profile"] = profile
+    if usage:                                              # hosted models only: tokens (and DeepInfra's cost estimate)
+        result["llm_usage"] = dict(usage)
     qa = folder / "reference_qa.json"
     if qa.exists():                                        # evaluation only, never given to the LLM
         result["evaluation"] = evaluate_report(report, str(qa), global_ev, valid_ids, chunk_text)

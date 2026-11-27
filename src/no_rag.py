@@ -16,7 +16,7 @@ from pathlib import Path
 from config import AdvancedSettings
 from src.adv_ingestion import load_artifacts
 from src.adv_chunking import chunk_artifacts
-from src.adv_generation import call_ollama
+from src.adv_generation import call_llm
 from src.check_env import preflight
 from src.enrichment import build_enrichment
 from src.common import incident_header
@@ -65,7 +65,8 @@ def run_no_rag(args, llm=None):
         artifacts = artifacts + build_enrichment(artifacts, str(folder), scenario)
     chunks = chunk_artifacts(artifacts, S.items_per_chunk)           # used ONLY to evaluate (real evidence), never shown to the LLM
     header = incident_header(meta, data["description"])
-    gen = llm or (lambda p, n: call_ollama(p, S.ollama_url, S.ollama_model, S.temperature, S.timeout_seconds, S.num_ctx, n))
+    usage = {}                                           # filled only by hosted models (src/llm_api.py)
+    gen = llm or (lambda p, n: call_llm(p, S, n, usage))
     profile = resolve_profile(getattr(args, "section_profile", None), meta)
     sections = build_sections(data.get("questions"), profile)
     names = [s["name"] for s in sections]
@@ -96,6 +97,8 @@ def run_no_rag(args, llm=None):
         result["evaluation_evidence"] = "same as RAG (artifacts + raw-log enrichment)"
     if getattr(args, "section_profile", None):                 # recorded only when the option is used
         result["section_profile"] = profile
+    if usage:                                              # hosted models only
+        result["llm_usage"] = dict(usage)
     qa = folder / "reference_qa.json"
     if qa.exists():                                          # evaluation only; answers are never given to the LLM
         ev_text = make_evidence("\n".join(c["text"] for c in chunks), header)

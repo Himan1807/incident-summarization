@@ -50,6 +50,14 @@ def summary_prompt(header: str, sections_text: str, profile: str = "security") -
             f"assessment. The query time window is NOT the incident duration: take event times only from the sections.\n\nSECTIONS:\n{sections_text}\n\nIncident Summary:")
 
 
+def call_llm(prompt, S, num_predict, usage=None):
+    """Ollama for plain model names (unchanged); a hosted API for prefixed names such as deepinfra:deepseek-ai/DeepSeek-V3."""
+    from src.llm_api import is_api_model, call_api
+    if is_api_model(S.ollama_model):
+        return call_api(prompt, S.ollama_model, S.temperature, S.api_timeout_seconds, num_predict, usage)
+    return call_ollama(prompt, S.ollama_url, S.ollama_model, S.temperature, S.timeout_seconds, S.num_ctx, num_predict)
+
+
 def call_ollama(prompt, url, model, temperature, timeout, num_ctx=4096, num_predict=450):
     try:
         r = requests.post(url, json={"model": model, "prompt": prompt, "stream": False,

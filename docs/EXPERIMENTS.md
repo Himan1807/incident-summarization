@@ -61,6 +61,7 @@ the real questions); `--write` rebuilds the files and reports how many candidate
 ```powershell
 python -m src.check_unanswerable
 python -m src.run_experiment --models llama3.2:3b,qwen2.5:7b-instruct,llama3.1:8b-instruct-q4_K_M --with-unanswerable --section-profile auto
+python -m src.run_api --models deepseek-ai/DeepSeek-V3,anthropic/claude-sonnet-4-6 --with-unanswerable --section-profile auto
 ```
 With `--with-unanswerable` the questions get a separate Q&A call built like the real one (same task, per-question retrieval, budget and token
 cap) and the answers go to a separate section "Additional Investigation Questions" (U1-U3) at the end of the postmortem. The real Q&A,
@@ -70,3 +71,23 @@ answers and after the fact-check (how many inventions the fact-check removed), a
 answer is fully in the evidence but which were answered 'Not established'); exact McNemar tests on correct abstention between models on
 the same questions; and every question with its answer and status. The fact-check verifies IPs, domains, hosts, URLs, times and numbers,
 so an invented hash, version or ticket id is not removed by it; "invention after check" measures exactly that.
+
+## Hosted models (DeepInfra)
+Local and hosted models are run with separate commands that take the same options and write to the same `results/` tree:
+```powershell
+python -m src.run_experiment --models llama3.2:3b,qwen2.5:7b-instruct ...          # local Ollama models only
+python -m src.run_api --models deepseek-ai/DeepSeek-V3,anthropic/claude-sonnet-4-6 ...   # hosted DeepInfra models only
+```
+`run_experiment` refuses hosted models (and prints the `run_api` command to use); `run_api` takes DeepInfra model ids, adds the
+`deepinfra:` prefix itself and never contacts Ollama. `src/llm_api.py` calls DeepInfra's OpenAI-compatible chat-completions API; single
+runs (`pipeline_adv --model`, `no_rag --model`, `check_env --model`) select it with a `deepinfra:<model id>` name.
+* Key: environment variable `DEEPINFRA_API_KEY` (or `DEEPINFRA_TOKEN`). It is only read from the environment, never stored in the repo.
+* Same conditions as Ollama: one user message with the identical prompt, temperature 0.1, `max_tokens` = the section's token cap (600 / 900);
+  a reply cut off by the cap is handled like Ollama's. A leading `<think>...</think>` block of reasoning models is removed.
+* HTTP 429 and 5xx are retried with backoff (`Retry-After` respected); a wrong key, unknown model id or missing credit stops with a clear message.
+  `run_api` checks every model before it starts (the key and a 1-token request), as `run_experiment` does for Ollama.
+* Results: `results/<incident>/deepinfra_<org>_<model>/`, compared with the local models in every report. `llm_usage` in the run JSON:
+  calls, retries, prompt/completion tokens and DeepInfra's cost estimate when the API returns one.
+* Size of a full run (47 incidents: RAG + no-RAG + RQ4, about 940 calls): about 1.0M input and 0.2-0.6M output tokens per model.
+  Multiply by the model's price per 1M tokens on its DeepInfra page. Try two incidents first.
+* The incident evidence is sent to DeepInfra (and, for Claude models, served by Anthropic through DeepInfra). The datasets here are public.

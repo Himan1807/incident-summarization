@@ -24,6 +24,7 @@ class AdvancedSettings:
     reranker_model: str = "cross-encoder/ms-marco-MiniLM-L-6-v2"  # 22M params, fine on CPU
     temperature: float = 0.1
     timeout_seconds: int = 1800
+    api_timeout_seconds: int = 600 # hosted models (src/llm_api.py, model names such as deepinfra:deepseek-ai/DeepSeek-V3)
     num_ctx: int = 4096            # per-section prompts are small; keeps RAM/latency low
     num_predict: int = 600         # max tokens generated per section
     num_predict_long: int = 900    # sections flagged long=True in sections.py (Timeline)

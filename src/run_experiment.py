@@ -1,4 +1,5 @@
-"""Run incidents x models x conditions (RAG and no RAG) and build every text report.
+"""Run incidents x LOCAL (Ollama) models x conditions (RAG and no RAG) and build every text report.
+Hosted models (DeepInfra) have their own command with the same options:  python -m src.run_api --models deepseek-ai/DeepSeek-V3
 
 python -m src.run_experiment --scenarios koi_stealer --models llama3.2:3b
 python -m src.run_experiment --scenarios koi_stealer,easy_123 --models llama3.2:3b,llama3.1:8b-instruct-q4_K_M
@@ -16,7 +17,7 @@ import traceback
 from pathlib import Path
 
 from config import AdvancedSettings
-from src.check_env import check_ollama, check_packages
+from src.check_env import check_model, check_packages
 from src.no_rag import run_no_rag
 from src.pipeline_adv import run
 from src.reporting import model_tag, refresh_reports, write_overall_summary, write_unanswerable_eval
@@ -29,13 +30,19 @@ def _has_rq4(path: Path) -> bool:                        # a finished RAG run wi
         return False
 
 
-def main(argv=None):
+def main(argv=None, backend: str = "local"):
+    """backend 'local': Ollama models only (python -m src.run_experiment). backend 'api': DeepInfra models only (python -m src.run_api)."""
     S = AdvancedSettings()
-    ap = argparse.ArgumentParser()
+    api = backend == "api"
+    ap = argparse.ArgumentParser(prog="python -m src.run_api" if api else "python -m src.run_experiment",
+                                 description=("Hosted DeepInfra models (needs DEEPINFRA_API_KEY)." if api else "Local Ollama models."))
     ap.add_argument("--root", default="dataset/paper_dataset")
     ap.add_argument("--results", default="results")
     ap.add_argument("--scenarios", default=None, help="comma-separated incidents (default: all in --root)")
-    ap.add_argument("--models", default=S.ollama_model, help="comma-separated Ollama models, e.g. llama3.2:3b,llama3.1:8b-instruct-q4_K_M")
+    if api:
+        ap.add_argument("--models", default=None, help="comma-separated DeepInfra model ids, e.g. deepseek-ai/DeepSeek-V3,anthropic/claude-sonnet-4-6")
+    else:
+        ap.add_argument("--models", default=S.ollama_model, help="comma-separated Ollama models, e.g. llama3.2:3b,llama3.1:8b-instruct-q4_K_M")
     ap.add_argument("--skip-rag", action="store_true")
     ap.add_argument("--skip-no-rag", action="store_true")
     ap.add_argument("--force", action="store_true", help="re-run finished runs")
@@ -50,12 +57,20 @@ def main(argv=None):
     a = ap.parse_args(argv)
     root, results = Path(a.root), Path(a.results)
     names = a.scenarios.split(",") if a.scenarios else sorted(p.name for p in root.iterdir() if (p / "rag_input.json").exists())
-    models = [m.strip() for m in a.models.split(",") if m.strip()]
+    models = [m.strip() for m in (a.models or "").split(",") if m.strip()]
+    from src.llm_api import is_api_model
+    if api:                                                 # hosted only: plain DeepInfra ids get the deepinfra: prefix
+        if not models and not a.reports_only:
+            ap.error("--models is required, e.g. --models deepseek-ai/DeepSeek-V3,anthropic/claude-sonnet-4-6")
+        models = [m if is_api_model(m) else f"deepinfra:{m}" for m in models]
+    elif any(is_api_model(m) for m in models):              # local only: hosted models have their own command
+        hosted = ",".join(m.split(":", 1)[1] for m in models if is_api_model(m))
+        ap.error(f"this command runs local Ollama models only. Run hosted models with:  python -m src.run_api --models {hosted}")
 
     if not a.reports_only:                                  # fail early, before hours of generation
         problems = check_packages()
         for m in models:
-            problems += check_ollama(S.ollama_url, m)
+            problems += check_model(S.ollama_url, m)          # Ollama (run_experiment) or the DeepInfra key + model (run_api)
         if problems:
             raise SystemExit("\nSetup problem(s):\n  - " + "\n  - ".join(problems))
         for sc in names:

@@ -1,6 +1,7 @@
 """Environment pre-flight check.   python -m src.check_env [--model llama3.2:3b]
 
-Verifies the Python packages and, optionally, that Ollama is running and has the model, and prints the exact fix for anything missing.
+Verifies the Python packages and, optionally, that Ollama is running and has the model (or, for a hosted model such as
+deepinfra:deepseek-ai/DeepSeek-V3, that the API key is set and the model answers), and prints the exact fix for anything missing.
 """
 import argparse
 import importlib
@@ -38,10 +39,16 @@ def check_ollama(url: str, model: str) -> list[str]:
     return []
 
 
+def check_model(url: str, model: str) -> list[str]:
+    """Ollama check for plain names, API check for hosted models (src/llm_api.py)."""
+    from src.llm_api import is_api_model, check_api
+    return check_api(model) if is_api_model(model) else check_ollama(url, model)
+
+
 def preflight(model: str, url: str, need_llm: bool = True) -> None:
     problems = check_packages()
     if need_llm:
-        problems += check_ollama(url, model)
+        problems += check_model(url, model)
     if problems:
         raise SystemExit("\nSetup problem(s):\n  - " + "\n  - ".join(problems) +
                          "\nAfter fixing, run the same command again. (Tip: 'pip install -r requirements.txt' installs all packages.)")
@@ -54,7 +61,7 @@ def main():
     ap.add_argument("--model", default=S.ollama_model)
     a = ap.parse_args()
     preflight(a.model, S.ollama_url, need_llm=True)
-    print(f"Environment OK (packages present; Ollama running with '{a.model}').")
+    print(f"Environment OK (packages present; model '{a.model}' answers).")
 
 
 if __name__ == "__main__":
