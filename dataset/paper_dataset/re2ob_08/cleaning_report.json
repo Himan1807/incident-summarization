@@ -1,0 +1,15 @@
+{
+  "scenario": "re2ob_08",
+  "source_case": "RE2-OB/currencyservice_delay/1",
+  "root_cause_service": "currencyservice",
+  "fault": "delay",
+  "inject_time": "2024-01-19 22:06:52 UTC",
+  "artifacts": 7,
+  "facts": 61,
+  "questions": 8,
+  "answers": 8,
+  "atoms": 9,
+  "atoms_in_evidence": 9,
+  "atoms_not_in_evidence": [],
+  "notes": []
+}

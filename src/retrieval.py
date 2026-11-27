@@ -1,6 +1,5 @@
 import re
 import numpy as np
-from sentence_transformers import SentenceTransformer
 from sklearn.metrics.pairwise import cosine_similarity
 
 
@@ -21,6 +20,8 @@ class HybridRetriever:
         model_name: str
     ):
         self.chunks = chunks
+
+        from sentence_transformers import SentenceTransformer   # loaded only when a retriever is built
 
         self.embedder = SentenceTransformer(
             model_name

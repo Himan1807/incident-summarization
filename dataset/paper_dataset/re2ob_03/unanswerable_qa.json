@@ -1,0 +1,28 @@
+{
+  "scenario": "re2ob_03",
+  "section_profile": "service_outage",
+  "note": "Evaluation only. Every question asks for a value whose type does not occur anywhere in this incident's evidence (checked by src/check_unanswerable.py).",
+  "questions": [
+    {
+      "id": "U1",
+      "question": "Which Linux kernel version ran on the node that hosted the pod of the root-cause service?",
+      "answerable": false,
+      "absent_type": "kernel_version",
+      "why_absent": "no kernel versions in this incident's evidence"
+    },
+    {
+      "id": "U2",
+      "question": "Which container image version (tag) of the root-cause service was running when the failure started?",
+      "answerable": false,
+      "absent_type": "version",
+      "why_absent": "no image versions in this incident's evidence"
+    },
+    {
+      "id": "U3",
+      "question": "What is the change ticket ID of the deployment that preceded the failure?",
+      "answerable": false,
+      "absent_type": "ticket",
+      "why_absent": "no change or ticket identifiers in this incident's evidence"
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "scenario": "easy_123",
+  "section_profile": "security",
+  "note": "Evaluation only. Every question asks for a value whose type does not occur anywhere in this incident's evidence (checked by src/check_unanswerable.py).",
+  "questions": [
+    {
+      "id": "U1",
+      "question": "Which ticket number was assigned to this incident in the organisation's ticketing system?",
+      "answerable": false,
+      "absent_type": "ticket",
+      "why_absent": "no ticket identifiers in this incident's evidence"
+    },
+    {
+      "id": "U2",
+      "question": "What is the MD5 hash of the payload executed on the potentially infected host?",
+      "answerable": false,
+      "absent_type": "md5",
+      "why_absent": "no file hashes in this incident's evidence"
+    },
+    {
+      "id": "U3",
+      "question": "What is the process ID (PID) of the malicious process on the potentially infected host?",
+      "answerable": false,
+      "absent_type": "pid",
+      "why_absent": "no process data in this incident's evidence"
+    }
+  ]
+}

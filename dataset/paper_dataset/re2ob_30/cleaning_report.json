@@ -1,0 +1,15 @@
+{
+  "scenario": "re2ob_30",
+  "source_case": "RE2-OB/recommendationservice_socket/1",
+  "root_cause_service": "recommendationservice",
+  "fault": "socket",
+  "inject_time": "2024-01-16 09:44:02 UTC",
+  "artifacts": 7,
+  "facts": 53,
+  "questions": 8,
+  "answers": 8,
+  "atoms": 9,
+  "atoms_in_evidence": 9,
+  "atoms_not_in_evidence": [],
+  "notes": []
+}

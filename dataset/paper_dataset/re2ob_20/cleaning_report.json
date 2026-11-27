@@ -1,0 +1,17 @@
+{
+  "scenario": "re2ob_20",
+  "source_case": "RE2-OB/productcatalogservice_delay/1",
+  "root_cause_service": "productcatalogservice",
+  "fault": "delay",
+  "inject_time": "2024-01-16 08:42:58 UTC",
+  "artifacts": 7,
+  "facts": 53,
+  "questions": 8,
+  "answers": 8,
+  "atoms": 9,
+  "atoms_in_evidence": 8,
+  "atoms_not_in_evidence": [
+    "2024-01-16 08:42 UTC"
+  ],
+  "notes": []
+}

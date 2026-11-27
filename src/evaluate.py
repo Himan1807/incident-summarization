@@ -119,7 +119,7 @@ def evaluate_report(report: str, qa_path: str, ev: Evidence, valid_ids: set[str]
         "answerable_entity_recall": round(ans_hit / ans_tot, 3) if ans_tot else None,
         "overall_entity_recall": round(all_hit / all_tot, 3) if all_tot else None,
         "faithfulness": cs["faithfulness"], "grounding_rate": cs["grounding_rate"],
-        "claims": cs["claims"], "assessment_lines": cs["assessments"], "uncited_lines": cs["uncited_claims"],
+        "claims": cs["claims"], "assessment_lines": cs["assessments"],
         "hallucination_rate": round(len(v["unsupported_entities"]) / max(len(v["entities"]), 1), 3),
         "unsupported_entities": v["unsupported_entities"],
         "unsupported_number_count": len(v["unsupported_numbers"]),
@@ -127,3 +127,67 @@ def evaluate_report(report: str, qa_path: str, ev: Evidence, valid_ids: set[str]
         "placeholder_count": len(v["placeholders"]),
         "per_question": rows,
     }
+
+
+# ---------------------------------------------------------------------------------------------------------------- RQ4
+UNANSWERABLE_HEADING = "Additional Investigation Questions"
+
+
+def unanswerable_blocks(text: str) -> dict[int, str]:
+    """{N: answer} from the lines 'U<N>. ...' (or 'N. ...') of the Additional Investigation Questions section text."""
+    blocks, cur = {}, None
+    for ln in (text or "").splitlines():
+        if ln.strip().startswith("---") or ln.strip().lower().startswith(("verification note", "_verification")):
+            break
+        n = re.match(r"^\s{0,3}U?(\d+)[.)]\s*(.*)$", ln, re.I)
+        if n:
+            cur = int(n.group(1)); blocks[cur] = n.group(2)
+        elif cur is not None and ln.strip():
+            blocks[cur] += " " + ln.strip()
+    return blocks
+
+
+def classify_unanswerable(answer: str | None, question: str, absent_type: str) -> tuple[str, list[str]]:
+    """ABSTAINED: says the information is not established (the evaluator's ABSTAINED test) and gives no value of the asked type.
+    INVENTED : gives a value of the asked type (pattern from src.check_unanswerable), or any entity / number (verify.extract_entities /
+               numbers_in) without abstaining. Values that already occur in the question do not count.
+    OTHER    : an answer without a specific value and without the abstention phrase (e.g. 'unknown').  NO ANSWER: no answer line."""
+    from src.check_unanswerable import ABSENT_TYPES
+    from src.verify import numbers_in
+    if answer is None or not strip_cites(answer).strip():
+        return "NO ANSWER", []
+    a = re.sub(r"\s+", " ", strip_cites(answer)).strip()
+    asked = sorted(set(m.group(0) for m in ABSENT_TYPES[absent_type].finditer(a)))
+    q_l = question.lower()
+    other = sorted(v for v in (extract_entities(a) | numbers_in(a)) if v.lower() not in q_l)
+    abstains = "not established" in a.lower()
+    if asked or (other and not abstains):
+        return "INVENTED", asked or other
+    return ("ABSTAINED" if abstains else "OTHER"), []
+
+
+def evaluate_unanswerable(raw_text: str, final_text: str, questions: list[dict], real_eval: dict | None = None) -> dict:
+    """RQ4 scores for one report. raw_text = the model's section after formatting, before the fact-check; final_text = the section as
+    published (after the fact-check). real_eval = evaluate_report() of the same report, for over-abstention on answerable questions."""
+    raw_b, fin_b = unanswerable_blocks(raw_text), unanswerable_blocks(final_text)
+    rows = []
+    for i, q in enumerate(questions, 1):
+        rs, rv = classify_unanswerable(raw_b.get(i), q["question"], q["absent_type"])
+        fs, fv = classify_unanswerable(fin_b.get(i), q["question"], q["absent_type"])
+        rows.append({"id": q["id"], "question": q["question"], "absent_type": q["absent_type"],
+                     "raw_answer": raw_b.get(i), "raw_status": rs, "raw_values": rv,
+                     "final_answer": fin_b.get(i), "final_status": fs, "final_values": fv,
+                     "removed_by_fact_check": rs == "INVENTED" and fs != "INVENTED"})
+    n = len(rows)
+    rate = lambda k, key="raw_status": round(sum(r[key] == k for r in rows) / n, 3) if n else None
+    out = {"questions": n, "correct_abstention_rate": rate("ABSTAINED"), "invention_rate": rate("INVENTED"),
+           "invention_rate_after_fact_check": rate("INVENTED", "final_status"),
+           "invented_removed_by_fact_check": sum(r["removed_by_fact_check"] for r in rows),
+           "other_rate": rate("OTHER"), "no_answer_rate": rate("NO ANSWER"), "per_question": rows}
+    if real_eval:                                          # control: abstentions on the real questions
+        real = [r for r in real_eval.get("per_question", []) if r.get("atoms")]
+        answerable = [r for r in real if set(r["atoms"]) <= set(r.get("answerable_from_evidence", []))]
+        out["answerable_questions"] = len(answerable)
+        out["over_abstention_rate"] = round(sum(r["status"] == "ABSTAINED" for r in answerable) / len(answerable), 3) if answerable else None
+        out["over_abstention_rate_all_questions"] = round(sum(r["status"] == "ABSTAINED" for r in real) / len(real), 3) if real else None
+    return out

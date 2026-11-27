@@ -1,0 +1,904 @@
+{
+ "condition": "rag",
+ "evaluation": {
+  "answer_f1": 0.114,
+  "answer_precision": 0.167,
+  "answer_recall": 0.087,
+  "answerable_entity_recall": 0.87,
+  "assessment_lines": 1,
+  "claims": 71,
+  "faithfulness": 1.0,
+  "grounding_rate": 1.0,
+  "hallucination_rate": 0.0,
+  "overall_entity_recall": 0.87,
+  "per_question": [
+   {
+    "answer_text": "Derived: internal client 10.6.15.119 ranks #1 by external connections (43437 events, 124 distinct external destinations). Most-contacted external IP: 65.60.35.141 (42522 connections).",
+    "answerable_from_evidence": [
+     "10.6.15.93",
+     "10.6.15.119",
+     "10.6.15.187"
+    ],
+    "atoms": [
+     "10.6.15.93",
+     "10.6.15.119",
+     "10.6.15.187"
+    ],
+    "atoms_found_in_answer": [
+     "10.6.15.119"
+    ],
+    "correct_entities": [
+     "10.6.15.119"
+    ],
+    "found_in_report": [
+     "10.6.15.93",
+     "10.6.15.119",
+     "10.6.15.187"
+    ],
+    "id": 1,
+    "missing_from_evidence": [],
+    "precision": 0.5,
+    "predicted_entities": [
+     "10.6.15.119",
+     "65.60.35.141"
+    ],
+    "question": "What are the IP addresses of the potentially infected internal hosts in the LAN?",
+    "recall": 0.333,
+    "reference_answer": "10.6.15.93, 10.6.15.119, 10.6.15.187",
+    "status": "PARTIAL",
+    "wrong_entities": [
+     "65.60.35.141"
+    ]
+   },
+   {
+    "answer_text": "Derived: Kerberos identity of 10.6.15.119: hostname(s) desktop-niee9lp; human user account(s) tommy.vega.",
+    "answerable_from_evidence": [
+     "DEKSTOP-A1CTJVY",
+     "DESKTOP-NIEE9LP",
+     "DESKTOP-YS6FZ2G"
+    ],
+    "atoms": [
+     "DEKSTOP-A1CTJVY",
+     "DESKTOP-NIEE9LP",
+     "DESKTOP-YS6FZ2G"
+    ],
+    "atoms_found_in_answer": [
+     "DESKTOP-NIEE9LP"
+    ],
+    "correct_entities": [
+     "DESKTOP-NIEE9LP"
+    ],
+    "found_in_report": [
+     "DEKSTOP-A1CTJVY",
+     "DESKTOP-NIEE9LP",
+     "DESKTOP-YS6FZ2G"
+    ],
+    "id": 2,
+    "missing_from_evidence": [],
+    "precision": 0.333,
+    "predicted_entities": [
+     "10.6.15.119",
+     "DESKTOP-NIEE9LP",
+     "tommy.vega"
+    ],
+    "question": "What are the hostnames of the potentially infected machines in the LAN?",
+    "recall": 0.333,
+    "reference_answer": "DEKSTOP-A1CTJVY, DESKTOP-NIEE9LP, DESKTOP-YS6FZ2G",
+    "status": "PARTIAL",
+    "wrong_entities": [
+     "10.6.15.119",
+     "tommy.vega"
+    ]
+   },
+   {
+    "answer_text": "Derived: internal client 10.6.15.93 ranks #2 by external connections (376 events, 65 distinct external destinations). Most-contacted external IP: 23.47.49.179 (61 connections).",
+    "answerable_from_evidence": [
+     "raquel.anderson",
+     "tommy.vega",
+     "horace.maddox"
+    ],
+    "atoms": [
+     "raquel.anderson",
+     "tommy.vega",
+     "horace.maddox"
+    ],
+    "atoms_found_in_answer": [],
+    "correct_entities": [],
+    "found_in_report": [
+     "raquel.anderson",
+     "tommy.vega",
+     "horace.maddox"
+    ],
+    "id": 3,
+    "missing_from_evidence": [],
+    "precision": 0.0,
+    "predicted_entities": [
+     "10.6.15.93",
+     "23.47.49.179"
+    ],
+    "question": "What are the Windows human user account names (not machine accounts ending in $) of the potentially infected machines in the LAN?",
+    "recall": 0.0,
+    "reference_answer": "raquel.anderson, tommy.vega, horace.maddox",
+    "status": "WRONG",
+    "wrong_entities": [
+     "10.6.15.93",
+     "23.47.49.179"
+    ]
+   },
+   {
+    "answer_text": "Not established from the available artifacts.",
+    "answerable_from_evidence": [
+     "ststephenskisugu.church",
+     "srand04rf.ru",
+     "solarwindsonline.com",
+     "hadevatjulps.com"
+    ],
+    "atoms": [
+     "ststephenskisugu.church",
+     "srand04rf.ru",
+     "solarwindsonline.com",
+     "hadevatjulps.com"
+    ],
+    "atoms_found_in_answer": [],
+    "correct_entities": [],
+    "found_in_report": [
+     "ststephenskisugu.church",
+     "srand04rf.ru",
+     "solarwindsonline.com",
+     "hadevatjulps.com"
+    ],
+    "id": 4,
+    "missing_from_evidence": [],
+    "precision": null,
+    "predicted_entities": [],
+    "question": "What external domains or IP addresses are associated with the initial infection and malware delivery?",
+    "recall": 0.0,
+    "reference_answer": "ststephenskisugu.church, srand04rf.ru, solarwindsonline.com, hadevatjulps.com",
+    "status": "ABSTAINED",
+    "wrong_entities": []
+   },
+   {
+    "answer_text": "No matching results for: suspicious certificates / ip based certificates. (Absence in this query is not proof of absence elsewhere.)",
+    "answerable_from_evidence": [
+     "65.60.35.141",
+     "194.226.60.15",
+     "185.66.15.228",
+     "162.244.83.95",
+     "103.28.39.29",
+     "104.244.121.13"
+    ],
+    "atoms": [
+     "65.60.35.141",
+     "194.226.60.15",
+     "185.66.15.228",
+     "162.244.83.95",
+     "103.28.39.29",
+     "104.244.121.13"
+    ],
+    "atoms_found_in_answer": [],
+    "correct_entities": [],
+    "found_in_report": [
+     "65.60.35.141",
+     "194.226.60.15",
+     "185.66.15.228",
+     "162.244.83.95"
+    ],
+    "id": 5,
+    "missing_from_evidence": [],
+    "precision": null,
+    "predicted_entities": [],
+    "question": "What are the suspicious external IP addresses contacted, which might be involved in command-and-control (C2) communication?",
+    "recall": 0.0,
+    "reference_answer": "65.60.35.141, 194.226.60.15, 185.66.15.228, 162.244.83.95, 103.28.39.29, 104.244.121.13",
+    "status": "WRONG",
+    "wrong_entities": []
+   },
+   {
+    "answer_text": "Derived: internal client 10.6.15.187 ranks #3 by external connections (365 events, 75 distinct external destinations). Most-contacted external IP: 52.183.220.149 (18 connections).",
+    "answerable_from_evidence": [
+     "2021-06-16 14:00 UTC"
+    ],
+    "atoms": [
+     "2021-06-16 14:00 UTC"
+    ],
+    "atoms_found_in_answer": [],
+    "correct_entities": [],
+    "found_in_report": [
+     "2021-06-16 14:00 UTC"
+    ],
+    "id": 6,
+    "missing_from_evidence": [],
+    "precision": 0.0,
+    "predicted_entities": [
+     "10.6.15.187",
+     "52.183.220.149"
+    ],
+    "question": "During what hour did the first signs of infection activity appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "recall": 0.0,
+    "reference_answer": "2021-06-16 14:00 UTC",
+    "status": "WRONG",
+    "wrong_entities": [
+     "10.6.15.187",
+     "52.183.220.149"
+    ]
+   },
+   {
+    "answer_text": "Derived: Kerberos identity of 10.6.15.187: hostname(s) desktop-ys6fz2g; human user account(s) horace.maddox.",
+    "answerable_from_evidence": [
+     "zqyefcetkqg.biz"
+    ],
+    "atoms": [
+     "zqyefcetkqg.biz"
+    ],
+    "atoms_found_in_answer": [],
+    "correct_entities": [],
+    "found_in_report": [],
+    "id": 7,
+    "missing_from_evidence": [],
+    "precision": 0.0,
+    "predicted_entities": [
+     "10.6.15.187",
+     "DESKTOP-YS6FZ2G",
+     "horace.maddox"
+    ],
+    "question": "Were any suspicious certificates observed in the encrypted network traffic? If so, identify the domain or IP in the certificate.",
+    "recall": 0.0,
+    "reference_answer": "zqyefcetkqg.biz",
+    "status": "WRONG",
+    "wrong_entities": [
+     "10.6.15.187",
+     "DESKTOP-YS6FZ2G",
+     "horace.maddox"
+    ]
+   },
+   {
+    "answer_text": "Not established from the available artifacts.",
+    "answerable_from_evidence": [
+     "65.60.35.141",
+     "C2 server"
+    ],
+    "atoms": [
+     "65.60.35.141",
+     "C2 server"
+    ],
+    "atoms_found_in_answer": [],
+    "correct_entities": [],
+    "found_in_report": [
+     "65.60.35.141",
+     "C2 server"
+    ],
+    "id": 8,
+    "missing_from_evidence": [],
+    "precision": null,
+    "predicted_entities": [],
+    "question": "According to the connection volume statistics, what single external IP address received the most connections from the infected hosts? Is it a C2 server or a legitimate service?",
+    "recall": 0.0,
+    "reference_answer": "65.60.35.141, C2 server",
+    "status": "ABSTAINED",
+    "wrong_entities": []
+   }
+  ],
+  "placeholder_count": 0,
+  "question_recall": 0.833,
+  "questions_correct": "7/8",
+  "unsupported_entities": [],
+  "unsupported_number_count": 0,
+  "unsupported_numbers": []
+ },
+ "flagged": [],
+ "mode": "drop",
+ "model": "golden",
+ "postprocessing": {
+  "auto_attributed_lines": 0,
+  "duplicate_lines_removed": 90,
+  "enabled": true,
+  "invalid_citations_removed": 0,
+  "partial_lines_dropped": 0,
+  "removed": [
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- high severity alerts > high severity signatures: ET MALWARE Cobalt Strike Beacon Observed — 14137 events [jun21isc-06#5]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- high severity alerts > high severity signatures: ET MALWARE Tordal/Hancitor/Chanitor Checkin — 78 events [jun21isc-06#5]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- high severity alerts > high severity signatures: ET HUNTING GENERIC SUSPICIOUS POST to Dotted Quad with Fake Browser 1 — 9 events [jun21isc-06#5]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Timeline",
+    "line": "- alert timeline: 2021-06-16 16:00 UTC — 5624 events [jun21isc-06#8]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Timeline",
+    "line": "- alert timeline: 2021-06-16 17:00 UTC — 1243 events [jun21isc-06#8]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Timeline",
+    "line": "- alert timeline: 2021-06-16 14:00 UTC — 1699 events [jun21isc-06#7]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Timeline",
+    "line": "- alert timeline: 2021-06-16 15:00 UTC — 5715 events [jun21isc-06#7]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: internal client 10.6.15.187 ranks #3 by external connections (365 events, 75 distinct external destinations). Most-contacted external IP: 52.183.220.149 (18 connections). [jun21isc-09#1]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: Kerberos identity of 10.6.15.187: hostname(s) desktop-ys6fz2g; human user account(s) horace.maddox. [jun21isc-09#1]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: Suricata alerts span 2021-06-16 14:00 UTC to 2021-06-16 17:00 UTC; earliest alert hour 2021-06-16 14:00 UTC (1699 alerts). [jun21isc-09#1]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: destinations of high-severity alerts: 65.60.35.141 (14155), 194.226.60.15 (78), 185.66.15.228 (2), 50.19.92.227 (1), 54.225.78.40 (1). [jun21isc-09#1]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: ET INFO External IP Lookup Domain (ipify .org) in DNS Lookup — 2 events [jun21isc-06#2]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: ET MALWARE Win32/Ficker Stealer Activity M3 — 2 events [jun21isc-06#2]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: ET INFO External IP Lookup (ipify .org) — 1 events [jun21isc-06#2]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: ET INFO External IP Lookup api.ipify.org — 1 events [jun21isc-06#2]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: internal client 10.6.15.119 ranks #1 by external connections (43437 events, 124 distinct external destinations). Most-contacted external IP: 65.60.35.141 (42522 connections). [jun21isc-09#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: Kerberos identity of 10.6.15.119: hostname(s) desktop-niee9lp; human user account(s) tommy.vega. [jun21isc-09#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: internal client 10.6.15.93 ranks #2 by external connections (376 events, 65 distinct external destinations). Most-contacted external IP: 23.47.49.179 (61 connections). [jun21isc-09#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: Kerberos identity of 10.6.15.93: hostname(s) dekstop-a1ctjvy; human user account(s) raquel.anderson. [jun21isc-09#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- high severity alerts > high severity signatures: ET MALWARE Win32/Ficker Stealer Activity M3 — 2 events [jun21isc-06#6]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- high severity alerts > high severity signatures: ET INFO External IP Lookup (ipify .org) — 1 events [jun21isc-06#6]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- high severity alerts > high severity signatures: ET INFO External IP Lookup api.ipify.org — 1 events [jun21isc-06#6]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- high severity alerts > high severity signatures: ET MALWARE AgentTesla Exfil Via SMTP — 1 events [jun21isc-06#6]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Command-and-Control and Network Activity",
+    "line": "- source clients: 10.6.15.119 — 43437 events; external destinations=124; top destinations: 65.60.35.141 (42522), 194.226.60.15 (390), 72.21.81.200 (30), 52.185.211.133 (23), 204.79.197.200 (16); 456 further events in other values [jun21isc-02#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Command-and-Control and Network Activity",
+    "line": "- source clients: 10.6.15.93 — 376 events; external destinations=65; top destinations: 23.47.49.179 (61), 52.185.211.133 (30), 13.107.42.23 (21), 52.242.211.89 (18), 52.183.220.149 (13); 233 further events in other values [jun21isc-02#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Command-and-Control and Network Activity",
+    "line": "- source clients: 10.6.15.187 — 365 events; external destinations=75; top destinations: 52.183.220.149 (18), 52.242.211.89 (17), 52.185.211.133 (15), 23.207.19.11 (14), 23.47.49.156 (13); 288 further events in other values [jun21isc-02#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: 65.60.35.141:443 — 13991 events [jun21isc-01#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: 65.60.35.141 — 155 events [jun21isc-01#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: hadevatjulps.com — 78 events [jun21isc-01#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: download.windowsupdate.com — 48 events [jun21isc-01#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: internal client 10.6.15.187 ranks #3 by external connections (365 events, 75 distinct external destinations). Most-contacted external IP: 52.183.220.149 (18 connections). [jun21isc-09#1]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: Kerberos identity of 10.6.15.187: hostname(s) desktop-ys6fz2g; human user account(s) horace.maddox. [jun21isc-09#1]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: Suricata alerts span 2021-06-16 14:00 UTC to 2021-06-16 17:00 UTC; earliest alert hour 2021-06-16 14:00 UTC (1699 alerts). [jun21isc-09#1]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: destinations of high-severity alerts: 65.60.35.141 (14155), 194.226.60.15 (78), 185.66.15.228 (2), 50.19.92.227 (1), 54.225.78.40 (1). [jun21isc-09#1]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: internal client 10.6.15.119 ranks #1 by external connections (43437 events, 124 distinct external destinations). Most-contacted external IP: 65.60.35.141 (42522 connections). [jun21isc-09#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: Kerberos identity of 10.6.15.119: hostname(s) desktop-niee9lp; human user account(s) tommy.vega. [jun21isc-09#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: internal client 10.6.15.93 ranks #2 by external connections (376 events, 65 distinct external destinations). Most-contacted external IP: 23.47.49.179 (61 connections). [jun21isc-09#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: Kerberos identity of 10.6.15.93: hostname(s) dekstop-a1ctjvy; human user account(s) raquel.anderson. [jun21isc-09#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: ctldl.windowsupdate.com — 12 events [jun21isc-01#1]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: au.download.windowsupdate.com — 6 events [jun21isc-01#1]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: 2.au.download.windowsupdate.com — 4 events [jun21isc-01#1]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: 9.au.download.windowsupdate.com — 3 events [jun21isc-01#1]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: srand04rf.ru — 3 events [jun21isc-01#2]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: ststephenskisugu.church — 3 events [jun21isc-01#2]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: api.ipify.org — 2 events [jun21isc-01#2]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: ocsp.digicert.com — 2 events [jun21isc-01#2]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: ctldl.windowsupdate.com — 12 events [jun21isc-01#1]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: au.download.windowsupdate.com — 6 events [jun21isc-01#1]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: 2.au.download.windowsupdate.com — 4 events [jun21isc-01#1]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: 9.au.download.windowsupdate.com — 3 events [jun21isc-01#1]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: 65.60.35.141:443 — 13991 events [jun21isc-01#0]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: 65.60.35.141 — 155 events [jun21isc-01#0]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: hadevatjulps.com — 78 events [jun21isc-01#0]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: download.windowsupdate.com — 48 events [jun21isc-01#0]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: srand04rf.ru — 3 events [jun21isc-01#2]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: ststephenskisugu.church — 3 events [jun21isc-01#2]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: api.ipify.org — 2 events [jun21isc-01#2]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: ocsp.digicert.com — 2 events [jun21isc-01#2]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.6.15.119 -> 65.60.35.141:443 : /g.pixel — 27966 events [jun21isc-01#4]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: no_http_uri — 15725 events [jun21isc-01#4]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.6.15.119 -> 65.60.35.141:80 : /pixel — 310 events [jun21isc-01#4]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.6.15.119 -> 194.226.60.15:80 : /8/forum.php — 78 events [jun21isc-01#4]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.6.15.119 -> 54.225.78.40:80 : /?format=xml — 2 events [jun21isc-01#6]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.6.15.187 -> 205.185.216.10:80 : /c/msdownload/update/software/defu/2021/06/am_delta_patch_1.341.846.0_64568a48100a64111aefee77d2dbd189a20c751e.exe — 2 events [jun21isc-01#6]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers: 565 matching events [jun21isc-01#6]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: file_transfer — 165 events [jun21isc-01#6]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: internal client 10.6.15.119 ranks #1 by external connections (43437 events, 124 distinct external destinations). Most-contacted external IP: 65.60.35.141 (42522 connections). [jun21isc-09#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: Kerberos identity of 10.6.15.119: hostname(s) desktop-niee9lp; human user account(s) tommy.vega. [jun21isc-09#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: internal client 10.6.15.93 ranks #2 by external connections (376 events, 65 distinct external destinations). Most-contacted external IP: 23.47.49.179 (61 connections). [jun21isc-09#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: Kerberos identity of 10.6.15.93: hostname(s) dekstop-a1ctjvy; human user account(s) raquel.anderson. [jun21isc-09#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: internal client 10.6.15.187 ranks #3 by external connections (365 events, 75 distinct external destinations). Most-contacted external IP: 52.183.220.149 (18 connections). [jun21isc-09#1]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: Kerberos identity of 10.6.15.187: hostname(s) desktop-ys6fz2g; human user account(s) horace.maddox. [jun21isc-09#1]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: Suricata alerts span 2021-06-16 14:00 UTC to 2021-06-16 17:00 UTC; earliest alert hour 2021-06-16 14:00 UTC (1699 alerts). [jun21isc-09#1]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: destinations of high-severity alerts: 65.60.35.141 (14155), 194.226.60.15 (78), 185.66.15.228 (2), 50.19.92.227 (1), 54.225.78.40 (1). [jun21isc-09#1]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: ctldl.windowsupdate.com — 12 events [jun21isc-01#1]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: au.download.windowsupdate.com — 6 events [jun21isc-01#1]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: 2.au.download.windowsupdate.com — 4 events [jun21isc-01#1]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: 9.au.download.windowsupdate.com — 3 events [jun21isc-01#1]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: 65.60.35.141:443 — 13991 events [jun21isc-01#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: 65.60.35.141 — 155 events [jun21isc-01#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: hadevatjulps.com — 78 events [jun21isc-01#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: download.windowsupdate.com — 48 events [jun21isc-01#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: srand04rf.ru — 3 events [jun21isc-01#2]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: ststephenskisugu.church — 3 events [jun21isc-01#2]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: api.ipify.org — 2 events [jun21isc-01#2]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: ocsp.digicert.com — 2 events [jun21isc-01#2]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Root Cause and Evidence Gaps",
+    "line": "- download domains: solarwindsonline.com — 2 events [jun21isc-01#3]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Root Cause and Evidence Gaps",
+    "line": "- download domains: 162.244.83.95 — 1 events [jun21isc-01#3]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Root Cause and Evidence Gaps",
+    "line": "- download domains: 162.244.83.95:443 — 1 events [jun21isc-01#3]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Root Cause and Evidence Gaps",
+    "line": "- download domains: feedproxy.google.com — 1 events [jun21isc-01#3]",
+    "section": "Corrective and Preventive Actions"
+   }
+  ]
+ },
+ "removed_unverified_lines": 0,
+ "run_log": [
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "jun21isc-09#0",
+    "jun21isc-03#2",
+    "jun21isc-03#1",
+    "jun21isc-03#0",
+    "jun21isc-09#1",
+    "jun21isc-05#0"
+   ],
+   "seconds": 0,
+   "section": "Affected Host and User",
+   "truncated": false
+  },
+  {
+   "extractive": true,
+   "flag_counts": {},
+   "retrieved": [
+    "jun21isc-06#7",
+    "jun21isc-09#1",
+    "jun21isc-06#8"
+   ],
+   "seconds": 0,
+   "section": "Timeline"
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "jun21isc-06#0",
+    "jun21isc-06#5",
+    "jun21isc-06#3",
+    "jun21isc-06#2",
+    "jun21isc-06#8",
+    "jun21isc-06#7"
+   ],
+   "seconds": 0,
+   "section": "Detection: IDS Alerts",
+   "truncated": false
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "jun21isc-01#1",
+    "jun21isc-01#0",
+    "jun21isc-01#6",
+    "jun21isc-01#4",
+    "jun21isc-01#2",
+    "jun21isc-01#10"
+   ],
+   "seconds": 0,
+   "section": "Initial Infection Indicators",
+   "truncated": false
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "jun21isc-09#1",
+    "jun21isc-06#2",
+    "jun21isc-09#0",
+    "jun21isc-02#0",
+    "jun21isc-06#6"
+   ],
+   "seconds": 0,
+   "section": "Command-and-Control and Network Activity",
+   "truncated": false
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "jun21isc-02#0",
+    "jun21isc-01#0",
+    "jun21isc-09#1",
+    "jun21isc-09#0",
+    "jun21isc-01#1",
+    "jun21isc-01#2"
+   ],
+   "seconds": 0,
+   "section": "Impact Assessment",
+   "truncated": false
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "jun21isc-01#1",
+    "jun21isc-01#0",
+    "jun21isc-01#2",
+    "jun21isc-01#3",
+    "jun21isc-01#4",
+    "jun21isc-01#6"
+   ],
+   "seconds": 0,
+   "section": "Root Cause and Evidence Gaps",
+   "truncated": false
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "jun21isc-09#0",
+    "jun21isc-09#1",
+    "jun21isc-01#1",
+    "jun21isc-01#0",
+    "jun21isc-01#2",
+    "jun21isc-01#3"
+   ],
+   "seconds": 0,
+   "section": "Corrective and Preventive Actions",
+   "truncated": false
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "jun21isc-09#0",
+    "jun21isc-10#0",
+    "jun21isc-09#1",
+    "jun21isc-03#2",
+    "jun21isc-05#0",
+    "jun21isc-03#0",
+    "jun21isc-06#2",
+    "jun21isc-02#0"
+   ],
+   "seconds": 0,
+   "section": "Answers to Investigation Questions",
+   "truncated": false
+  }
+ ],
+ "scenario": "jun21isc",
+ "seconds_total": 0,
+ "verification_totals": {}
+}

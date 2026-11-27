@@ -1,0 +1,251 @@
+{
+ "retrievals": [
+  {
+   "ids": [
+    "iced_id-08#0",
+    "iced_id-03#1",
+    "iced_id-03#0",
+    "iced_id-04#4",
+    "iced_id-05#0",
+    "iced_id-07#8"
+   ],
+   "queries": [
+    "internal client IP address ranked by external connections",
+    "Kerberos hostname source IP",
+    "Kerberos client account human user source IP",
+    "derived Kerberos identity of internal client"
+   ],
+   "rerank_query": "Which internal host is affected (IP address, hostname and human user account)?"
+  },
+  {
+   "ids": [
+    "iced_id-06#1",
+    "iced_id-06#2",
+    "iced_id-06#3",
+    "iced_id-06#0",
+    "iced_id-06#4",
+    "iced_id-06#5"
+   ],
+   "queries": [
+    "earliest alert hour alert timeline",
+    "alert timeline hourly Suricata alerts UTC",
+    "first seen last seen timestamp UTC",
+    "first contact external IP first queried domain"
+   ],
+   "rerank_query": "Chronological order of key events with UTC timestamps."
+  },
+  {
+   "ids": [
+    "iced_id-06#0",
+    "iced_id-06#1",
+    "iced_id-06#5",
+    "iced_id-06#2",
+    "iced_id-06#3",
+    "iced_id-06#4"
+   ],
+   "queries": [
+    "Suricata alert signatures malware CnC",
+    "high severity alerts destinations sources",
+    "ET MALWARE trojan alert signature",
+    "suspicious POST user agent alert"
+   ],
+   "rerank_query": "Which Suricata alerts indicate malicious activity, and which hosts do they involve?"
+  },
+  {
+   "ids": [
+    "iced_id-01#2",
+    "iced_id-07#0",
+    "iced_id-07#11",
+    "iced_id-07#8",
+    "iced_id-01#4",
+    "iced_id-01#3"
+   ],
+   "queries": [
+    "suspicious domains fake site download",
+    "HTTP file downloads URI file type",
+    "download domains requests client to server",
+    "TLS certificate self-signed IP-based",
+    "direct IP HTTP connections raw IP"
+   ],
+   "rerank_query": "Which domains, URLs or downloads were the likely initial infection vector?"
+  },
+  {
+   "ids": [
+    "iced_id-08#0",
+    "iced_id-07#2",
+    "iced_id-07#3",
+    "iced_id-02#0",
+    "iced_id-07#5",
+    "iced_id-07#1"
+   ],
+   "queries": [
+    "most contacted external IP connections",
+    "high severity alert destination C2 check-in",
+    "external destinations top destinations connections",
+    "direct IP connections POST beaconing"
+   ],
+   "rerank_query": "Which external IP addresses look like command-and-control servers and why?"
+  },
+  {
+   "ids": [
+    "iced_id-02#0",
+    "iced_id-08#0",
+    "iced_id-08#1",
+    "iced_id-01#0",
+    "iced_id-01#1",
+    "iced_id-01#2"
+   ],
+   "queries": [
+    "data theft stealer credential exfiltration alert",
+    "ransomware encryption availability integrity",
+    "volume of connections external destinations",
+    "number of affected hosts"
+   ],
+   "rerank_query": "Which security property (confidentiality, integrity or availability) is targeted, and what is the scale of impact?"
+  },
+  {
+   "ids": [
+    "iced_id-01#3",
+    "iced_id-01#2",
+    "iced_id-01#4",
+    "iced_id-01#0",
+    "iced_id-01#5",
+    "iced_id-01#1"
+   ],
+   "queries": [
+    "no matching results query returned nothing",
+    "evidence unavailable shard failed",
+    "initial infection vector unknown",
+    "no results certificates"
+   ],
+   "rerank_query": "What is the most likely root cause and what cannot be determined from the evidence?"
+  },
+  {
+   "ids": [
+    "iced_id-08#0",
+    "iced_id-01#0",
+    "iced_id-01#2",
+    "iced_id-02#0",
+    "iced_id-07#8",
+    "iced_id-06#1"
+   ],
+   "queries": [
+    "block malicious IP domain",
+    "suspicious external server alert destination",
+    "affected host user account",
+    "malicious download URL"
+   ],
+   "rerank_query": "Which concrete containment and prevention actions follow from the observed indicators?"
+  },
+  {
+   "ids": [
+    "iced_id-09#0",
+    "iced_id-03#1",
+    "iced_id-08#0"
+   ],
+   "queries": [
+    "What is the IP address of the potentially infected internal host in the LAN?"
+   ],
+   "rerank_query": "What is the IP address of the potentially infected internal host in the LAN?"
+  },
+  {
+   "ids": [
+    "iced_id-09#0",
+    "iced_id-08#0",
+    "iced_id-08#1"
+   ],
+   "queries": [
+    "What is the hostname of the potentially infected machine in the LAN?"
+   ],
+   "rerank_query": "What is the hostname of the potentially infected machine in the LAN?"
+  },
+  {
+   "ids": [
+    "iced_id-08#0",
+    "iced_id-03#1",
+    "iced_id-09#0"
+   ],
+   "queries": [
+    "What is the Windows human user account name (not machine accounts ending in $) of the potentially infected machine in the LAN?"
+   ],
+   "rerank_query": "What is the Windows human user account name (not machine accounts ending in $) of the potentially infected machine in the LAN?"
+  },
+  {
+   "ids": [
+    "iced_id-01#1",
+    "iced_id-07#8",
+    "iced_id-07#9"
+   ],
+   "queries": [
+    "What are the likely fake or suspicious domains / URLs for initial infection?"
+   ],
+   "rerank_query": "What are the likely fake or suspicious domains / URLs for initial infection?"
+  },
+  {
+   "ids": [
+    "iced_id-06#1",
+    "iced_id-02#0",
+    "iced_id-08#0"
+   ],
+   "queries": [
+    "What domain names AND external IP addresses are involved in command-and-control (C2) communication?"
+   ],
+   "rerank_query": "What domain names AND external IP addresses are involved in command-and-control (C2) communication?"
+  },
+  {
+   "ids": [
+    "iced_id-03#1",
+    "iced_id-08#1",
+    "iced_id-09#0"
+   ],
+   "queries": [
+    "Which of the three CIA components does the attacker target primarily: availability, integrity, or confidentiality?"
+   ],
+   "rerank_query": "Which of the three CIA components does the attacker target primarily: availability, integrity, or confidentiality?"
+  },
+  {
+   "ids": [
+    "iced_id-08#1",
+    "iced_id-09#0",
+    "iced_id-03#1"
+   ],
+   "queries": [
+    "During what hour did the first signs of infection activity appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format."
+   ],
+   "rerank_query": "During what hour did the first signs of infection activity appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format."
+  },
+  {
+   "ids": [
+    "iced_id-08#0",
+    "iced_id-09#0",
+    "iced_id-07#2"
+   ],
+   "queries": [
+    "According to the connection volume statistics, what single external IP address received the most connections from the infected hosts? Is it a C2 server or a legitimate service?"
+   ],
+   "rerank_query": "According to the connection volume statistics, what single external IP address received the most connections from the infected hosts? Is it a C2 server or a legitimate service?"
+  }
+ ],
+ "stdout": [
+  "[enrich] added 0 artifact(s) from raw logs",
+  "[index] 9 artifacts -> 39 chunks",
+  "",
+  "=== Affected Host and User -> ['iced_id-08#0', 'iced_id-03#1', 'iced_id-03#0', 'iced_id-04#4', 'iced_id-05#0', 'iced_id-07#8']",
+  "",
+  "=== Timeline -> ['iced_id-06#1', 'iced_id-06#2', 'iced_id-06#3', 'iced_id-06#0', 'iced_id-06#4', 'iced_id-06#5']",
+  "",
+  "=== Detection: IDS Alerts -> ['iced_id-06#0', 'iced_id-06#1', 'iced_id-06#5', 'iced_id-06#2', 'iced_id-06#3', 'iced_id-06#4']",
+  "",
+  "=== Initial Infection Indicators -> ['iced_id-01#2', 'iced_id-07#0', 'iced_id-07#11', 'iced_id-07#8', 'iced_id-01#4', 'iced_id-01#3']",
+  "",
+  "=== Command-and-Control and Network Activity -> ['iced_id-08#0', 'iced_id-07#2', 'iced_id-07#3', 'iced_id-02#0', 'iced_id-07#5', 'iced_id-07#1']",
+  "",
+  "=== Impact Assessment -> ['iced_id-02#0', 'iced_id-08#0', 'iced_id-08#1', 'iced_id-01#0', 'iced_id-01#1', 'iced_id-01#2']",
+  "",
+  "=== Root Cause and Evidence Gaps -> ['iced_id-01#3', 'iced_id-01#2', 'iced_id-01#4', 'iced_id-01#0', 'iced_id-01#5', 'iced_id-01#1']",
+  "",
+  "=== Corrective and Preventive Actions -> ['iced_id-08#0', 'iced_id-01#0', 'iced_id-01#2', 'iced_id-02#0', 'iced_id-07#8', 'iced_id-06#1']",
+  "",
+  "=== Answers to Investigation Questions -> ['iced_id-09#0', 'iced_id-03#1', 'iced_id-08#0', 'iced_id-08#1', 'iced_id-01#1', 'iced_id-07#8', 'iced_id-07#9', 'iced_id-06#1', 'iced_id-02#0', 'iced_id-07#2']"
+ ]
+}

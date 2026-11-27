@@ -1,0 +1,98 @@
+====================================================================================================
+INCIDENT : apr21isc
+MODEL    : golden
+CONDITION: RAG (advanced pipeline)
+RUN TIME : 0.0 min of LLM generation
+REPORT   : <results>/apr21isc/golden/advanced_postmortem.md
+CREATED  : <timestamp>
+====================================================================================================
+
+A. QUESTION-BY-QUESTION EVALUATION
+   Found = reference items present in the report's answer; Prec. = correct entities / entities the answer gave;
+   Wrong items = entities in the answer that are not in the reference answer.
+
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| #   | Question                         | Reference answer           | Answer from the report             | Found | Prec. | Wrong items      | Status    |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 1   | What was the IP address of the   | 192.168.5.125              | Derived: Suricata alerts span      | 0/1   | 0/2   | 2021-03-29,      | WRONG     |
+|     | infected Windows computer?       |                            | 2021-03-29 22:00 UTC to 2021-03-29 |       |       | 2021-03-29 22:00 |           |
+|     |                                  |                            | 22:00 UTC; earliest alert hour     |       |       |                  |           |
+|     |                                  |                            | 2021-03-29 22:00 UTC (2 alerts).   |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 2   | What was the host name of the    | LAPTOP-X9NAQ2EU            | Derived: destinations of high-     | 0/1   | 0/1   | 192.168.5.125    | WRONG     |
+|     | infected Windows computer?       |                            | severity alerts: 192.168.5.125     |       |       |                  |           |
+|     |                                  |                            | (2).                               |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 3   | What is the Windows human user   | wilmer.coughlin            | No matching results for: high      | 0/1   | -     | -                | WRONG     |
+|     | account name (not machine        |                            | activity external dest / source    |       |       |                  |           |
+|     | accounts ending in $) of the     |                            | clients. (Absence in this query is |       |       |                  |           |
+|     | potentially infected machine in  |                            | not proof of absence elsewhere.)   |       |       |                  |           |
+|     | the LAN?                         |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 4   | During what hour did the first   | 2021-03-29 22:00 UTC       | Not established from the available | 0/1   | -     | -                | ABSTAINED |
+|     | signs of infection activity      |                            | artifacts.                         |       |       |                  |           |
+|     | appear? Provide the earliest     |                            |                                    |       |       |                  |           |
+|     | date and time in YYYY-MM-DD      |                            |                                    |       |       |                  |           |
+|     | HH:MM UTC format.                |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 5   | What malware family do the IDS   | Baza                       | No matching results for:           | 0/1   | -     | -                | WRONG     |
+|     | alerts identify?                 |                            | suspicious certificates / ip based |       |       |                  |           |
+|     |                                  |                            | certificates. (Absence in this     |       |       |                  |           |
+|     |                                  |                            | query is not proof of absence      |       |       |                  |           |
+|     |                                  |                            | elsewhere.)                        |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 6   | What are the suspicious external | 176.111.174.53,            | client accounts: laptop-x9naq2eu$  | 0/6   | 0/2   | 192.168.5.125,   | WRONG     |
+|     | IP addresses contacted, which    | 104.21.74.174,             | — 32 events; source ips:           |       |       | LAPTOP-X9NAQ2EU  |           |
+|     | might be involved in command-    | 54.184.119.29,             | 192.168.5.125 (32)                 |       |       |                  |           |
+|     | and-control (C2) communication?  | 184.72.1.208,              |                                    |       |       |                  |           |
+|     |                                  | 217.12.218.46,             |                                    |       |       |                  |           |
+|     |                                  | 8.209.100.246              |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 7   | What are the likely suspicious   | gtmers.xyz, veso2.xyz      | client accounts: wilmer.coughlin — | 0/2   | 0/2   | 192.168.5.125,   | WRONG     |
+|     | domains for initial infection or |                            | 3 events; source ips:              |       |       | wilmer.coughlin  |           |
+|     | C2?                              |                            | 192.168.5.125 (3)                  |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 8   | Were any suspicious certificates | forenzik.kz                | Not established from the available | 0/1   | -     | -                | ABSTAINED |
+|     | observed in the encrypted        |                            | artifacts.                         |       |       |                  |           |
+|     | network traffic? If so, identify |                            |                                    |       |       |                  |           |
+|     | the domain or IP in the          |                            |                                    |       |       |                  |           |
+|     | certificate.                     |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+
+B. METRICS
+
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Metric                                       | Value        | Meaning                                                                |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Answer precision                             | 0.000        | Entities (IPs, domains, hosts, URLs, times) in the report's answers    |
+|                                              |              | that also occur in the reference / all entities it gave                |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Answer recall                                | 0.000        | Reference answer items found in the report's answers / all reference   |
+|                                              |              | items                                                                  |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Answer F1                                    | 0.000        | Harmonic mean of answer precision and recall                           |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Question recall                              | 0.854        | Mean over questions of reference items found anywhere in the report    |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Faithfulness                                 | 1.000        | Claims whose facts are in the evidence AND in the chunks they cite /   |
+|                                              |              | all claims                                                             |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Grounding rate                               | 1.000        | Claims whose entities and numbers all exist in the evidence            |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Hallucination rate                           | 0.000        | Entities in the report that are absent from the evidence / all         |
+|                                              |              | entities (lower is better)                                             |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Unsupported numbers                          | 0            | Numbers in the report that are absent from the evidence (lower is      |
+|                                              |              | better)                                                                |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Placeholders                                 | 0            | '[insert ...]' placeholders left in the report (lower is better)       |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Questions correct / partial / wrong /        | 0 / 0 / 6 /  | Per-question status in the table above                                 |
+| abstained / unanswered                       | 2 / 0        |                                                                        |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Claims                                       | 49           | Claim lines counted by the verifier; hedged assessments are excluded   |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+
+Status: CORRECT = every reference item found and nothing wrong; PARTIAL = some items found or wrong items present;
+        WRONG = answer given but no reference item found; ABSTAINED = the report says 'Not established from the available artifacts';
+        NO ANSWER = the report has no answer for that question.

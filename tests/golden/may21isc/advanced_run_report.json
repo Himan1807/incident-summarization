@@ -1,0 +1,852 @@
+{
+ "condition": "rag",
+ "evaluation": {
+  "answer_f1": 0.0,
+  "answer_precision": 0.0,
+  "answer_recall": 0.0,
+  "answerable_entity_recall": 0.875,
+  "assessment_lines": 1,
+  "claims": 48,
+  "faithfulness": 1.0,
+  "grounding_rate": 1.0,
+  "hallucination_rate": 0.0,
+  "overall_entity_recall": 0.875,
+  "per_question": [
+   {
+    "answer_text": "No matching results for: suricata alerts / high severity alerts. (Absence in this query is not proof of absence elsewhere.)",
+    "answerable_from_evidence": [
+     "172.17.4.206"
+    ],
+    "atoms": [
+     "172.17.4.206"
+    ],
+    "atoms_found_in_answer": [],
+    "correct_entities": [],
+    "found_in_report": [
+     "172.17.4.206"
+    ],
+    "id": 1,
+    "missing_from_evidence": [],
+    "precision": null,
+    "predicted_entities": [],
+    "question": "What was the IP address of the infected Windows computer?",
+    "recall": 0.0,
+    "reference_answer": "172.17.4.206",
+    "status": "WRONG",
+    "wrong_entities": []
+   },
+   {
+    "answer_text": "No matching results for: suspicious certificates / ip based certificates. (Absence in this query is not proof of absence elsewhere.)",
+    "answerable_from_evidence": [
+     "DESKTOP-V0FEH1L"
+    ],
+    "atoms": [
+     "DESKTOP-V0FEH1L"
+    ],
+    "atoms_found_in_answer": [],
+    "correct_entities": [],
+    "found_in_report": [
+     "DESKTOP-V0FEH1L"
+    ],
+    "id": 2,
+    "missing_from_evidence": [],
+    "precision": null,
+    "predicted_entities": [],
+    "question": "What was the host name of the infected Windows computer?",
+    "recall": 0.0,
+    "reference_answer": "DESKTOP-V0FEH1L",
+    "status": "WRONG",
+    "wrong_entities": []
+   },
+   {
+    "answer_text": "Derived: internal client 172.17.4.206 ranks #1 by external connections (451 events, 36 distinct external destinations). Most-contacted external IP: 45.32.211.207 (61 connections).",
+    "answerable_from_evidence": [
+     "alfonso.paternoster"
+    ],
+    "atoms": [
+     "alfonso.paternoster"
+    ],
+    "atoms_found_in_answer": [],
+    "correct_entities": [],
+    "found_in_report": [
+     "alfonso.paternoster"
+    ],
+    "id": 3,
+    "missing_from_evidence": [],
+    "precision": 0.0,
+    "predicted_entities": [
+     "172.17.4.206",
+     "45.32.211.207"
+    ],
+    "question": "What is the Windows human user account name (not machine accounts ending in $) of the potentially infected machine in the LAN?",
+    "recall": 0.0,
+    "reference_answer": "alfonso.paternoster",
+    "status": "WRONG",
+    "wrong_entities": [
+     "172.17.4.206",
+     "45.32.211.207"
+    ]
+   },
+   {
+    "answer_text": "Not established from the available artifacts.",
+    "answerable_from_evidence": [
+     "2021-05-04 22:00 UTC"
+    ],
+    "atoms": [
+     "2021-05-04 22:00 UTC"
+    ],
+    "atoms_found_in_answer": [],
+    "correct_entities": [],
+    "found_in_report": [
+     "2021-05-04 22:00 UTC"
+    ],
+    "id": 4,
+    "missing_from_evidence": [],
+    "precision": null,
+    "predicted_entities": [],
+    "question": "During what hour did the first signs of infection activity appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "recall": 0.0,
+    "reference_answer": "2021-05-04 22:00 UTC",
+    "status": "ABSTAINED",
+    "wrong_entities": []
+   },
+   {
+    "answer_text": "Derived: Suricata alerts span 2021-05-04 22:00 UTC to 2021-05-04 23:00 UTC; earliest alert hour 2021-05-04 22:00 UTC (12 alerts).",
+    "answerable_from_evidence": [
+     "185.183.99.115"
+    ],
+    "atoms": [
+     "185.183.99.115"
+    ],
+    "atoms_found_in_answer": [],
+    "correct_entities": [],
+    "found_in_report": [
+     "185.183.99.115"
+    ],
+    "id": 5,
+    "missing_from_evidence": [],
+    "precision": 0.0,
+    "predicted_entities": [
+     "2021-05-04",
+     "2021-05-04 22:00",
+     "2021-05-04 23:00"
+    ],
+    "question": "What are the suspicious external IP addresses contacted, which might be involved in command-and-control (C2) communication?",
+    "recall": 0.0,
+    "reference_answer": "185.183.99.115",
+    "status": "WRONG",
+    "wrong_entities": [
+     "2021-05-04",
+     "2021-05-04 22:00",
+     "2021-05-04 23:00"
+    ]
+   },
+   {
+    "answer_text": "alert signatures: ET INFO External IP Address Lookup Domain (ipify.org) in TLS SNI — 41 events",
+    "answerable_from_evidence": [
+     "zqyefcetkqg.biz"
+    ],
+    "atoms": [
+     "zqyefcetkqg.biz"
+    ],
+    "atoms_found_in_answer": [],
+    "correct_entities": [],
+    "found_in_report": [],
+    "id": 6,
+    "missing_from_evidence": [],
+    "precision": null,
+    "predicted_entities": [],
+    "question": "Were any suspicious certificates observed in the encrypted network traffic? If so, identify the domain or IP in the certificate.",
+    "recall": 0.0,
+    "reference_answer": "zqyefcetkqg.biz",
+    "status": "WRONG",
+    "wrong_entities": []
+   },
+   {
+    "answer_text": "alert signatures: ET JA3 Hash - [Abuse.ch] Possible Dridex — 34 events",
+    "answerable_from_evidence": [
+     "45.32.211.207",
+     "C2 server"
+    ],
+    "atoms": [
+     "45.32.211.207",
+     "C2 server"
+    ],
+    "atoms_found_in_answer": [],
+    "correct_entities": [],
+    "found_in_report": [
+     "45.32.211.207",
+     "C2 server"
+    ],
+    "id": 7,
+    "missing_from_evidence": [],
+    "precision": 0.0,
+    "predicted_entities": [
+     "abuse.ch"
+    ],
+    "question": "According to the connection volume statistics, what single external IP address received the most connections from the infected hosts? Is it a C2 server or a legitimate service?",
+    "recall": 0.0,
+    "reference_answer": "45.32.211.207, C2 server",
+    "status": "WRONG",
+    "wrong_entities": [
+     "abuse.ch"
+    ]
+   }
+  ],
+  "placeholder_count": 0,
+  "question_recall": 0.857,
+  "questions_correct": "6/7",
+  "unsupported_entities": [],
+  "unsupported_number_count": 0,
+  "unsupported_numbers": []
+ },
+ "flagged": [],
+ "mode": "drop",
+ "model": "golden",
+ "postprocessing": {
+  "auto_attributed_lines": 0,
+  "duplicate_lines_removed": 97,
+  "enabled": true,
+  "invalid_citations_removed": 0,
+  "partial_lines_dropped": 0,
+  "removed": [
+   {
+    "duplicate_of": "Timeline",
+    "line": "- alert timeline: 2021-05-04 22:00 UTC — 12 events [may21isc-06#1]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Timeline",
+    "line": "- alert timeline: 2021-05-04 23:00 UTC — 72 events [may21isc-06#1]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: ET INFO NTLM Session Setup Request - Auth — 1 events [may21isc-06#0]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: internal client 172.17.4.206 ranks #1 by external connections (451 events, 36 distinct external destinations). Most-contacted external IP: 45.32.211.207 (61 connections). [may21isc-09#0]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: Kerberos identity of 172.17.4.206: hostname(s) desktop-v0feh1l; human user account(s) alfonso.paternoster. [may21isc-09#0]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: Suricata alerts span 2021-05-04 22:00 UTC to 2021-05-04 23:00 UTC; earliest alert hour 2021-05-04 22:00 UTC (12 alerts). [may21isc-09#0]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: store-images.s-microsoft.com — 14 events [may21isc-01#0]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: download.windowsupdate.com — 12 events [may21isc-01#0]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: au.download.windowsupdate.com — 3 events [may21isc-01#0]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: ctldl.windowsupdate.com — 3 events [may21isc-01#0]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: 185.183.99.115 — 1 events [may21isc-01#1]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- http requests: no_http_uri — 418 events [may21isc-01#1]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- http requests: 172.17.4.206 -> 8.249.131.254:80 : /c/msdownload/update/software/defu/2021/05/am_delta_patch_1.337.600.0_f8fd1ab601622aa5111bab3b497be9d8ce1b22a6.exe — 2 events [may21isc-01#1]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- http requests: 172.17.4.206 -> 185.183.99.115:80 : /44313,6048108796.dat — 1 events [may21isc-01#1]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: 185.183.99.115 — 1 events [may21isc-01#1]",
+    "section": "Initial Infection Indicators"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- http requests: no_http_uri — 418 events [may21isc-01#1]",
+    "section": "Initial Infection Indicators"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- http requests: 172.17.4.206 -> 8.249.131.254:80 : /c/msdownload/update/software/defu/2021/05/am_delta_patch_1.337.600.0_f8fd1ab601622aa5111bab3b497be9d8ce1b22a6.exe — 2 events [may21isc-01#1]",
+    "section": "Initial Infection Indicators"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- http requests: 172.17.4.206 -> 185.183.99.115:80 : /44313,6048108796.dat — 1 events [may21isc-01#1]",
+    "section": "Initial Infection Indicators"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: store-images.s-microsoft.com — 14 events [may21isc-01#0]",
+    "section": "Initial Infection Indicators"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: download.windowsupdate.com — 12 events [may21isc-01#0]",
+    "section": "Initial Infection Indicators"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: au.download.windowsupdate.com — 3 events [may21isc-01#0]",
+    "section": "Initial Infection Indicators"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: ctldl.windowsupdate.com — 3 events [may21isc-01#0]",
+    "section": "Initial Infection Indicators"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- http requests: 172.17.4.206 -> 23.47.169.154:80 : /image/apps.11693.14503766937567901.176691f4-19f9-48ef-a75c-2af62972b059.04097907-d16b-47f1-b1a6-83fbc59bb15c?w=172&h=258 — 1 events [may21isc-01#2]",
+    "section": "Initial Infection Indicators"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- http requests: 172.17.4.206 -> 23.47.169.154:80 : /image/apps.13825.14369454977035291.312a1827-6832-45f4-885d-562c4148d669.5c931ffa-b74a-45a6-a9cb-082c7d9cddd9?w=172&h=258 — 1 events [may21isc-01#2]",
+    "section": "Initial Infection Indicators"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- http requests: 172.17.4.206 -> 23.47.169.154:80 : /image/apps.15387.13812021519099434.2bf8d983-bebb-467e-9b6a-e52bb2610650.46530b30-f947-46d5-ae2e-dd024af3da59?w=172&h=258 — 1 events [may21isc-01#2]",
+    "section": "Initial Infection Indicators"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- http requests: 172.17.4.206 -> 23.47.169.154:80 : /image/apps.15459.14018880429702282.f227304a-b5a1-43b5-a5ef-c3a2eafb2c2d.9871105b-6b54-4a8b-9295-e4197c93988e?w=172&h=258 — 1 events [may21isc-01#2]",
+    "section": "Initial Infection Indicators"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: internal client 172.17.4.206 ranks #1 by external connections (451 events, 36 distinct external destinations). Most-contacted external IP: 45.32.211.207 (61 connections). [may21isc-09#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: Kerberos identity of 172.17.4.206: hostname(s) desktop-v0feh1l; human user account(s) alfonso.paternoster. [may21isc-09#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: Suricata alerts span 2021-05-04 22:00 UTC to 2021-05-04 23:00 UTC; earliest alert hour 2021-05-04 22:00 UTC (12 alerts). [may21isc-09#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: ET INFO External IP Address Lookup Domain (ipify .org) in TLS SNI — 41 events [may21isc-06#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: ET JA3 Hash - [Abuse.ch] Possible Dridex — 34 events [may21isc-06#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: ET INFO External IP Lookup Domain (ipify .org) in DNS Lookup — 6 events [may21isc-06#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: ET INFO NTLM Session Setup Request - Auth — 1 events [may21isc-06#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- source clients: 172.17.4.206 — 451 events; external destinations=36; top destinations: 45.32.211.207 (61), 54.225.155.255 (51), 24.179.77.148 (43), 23.47.169.154 (40), 72.21.81.240 (28); 228 further events in other values [may21isc-02#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: store-images.s-microsoft.com — 14 events [may21isc-01#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: download.windowsupdate.com — 12 events [may21isc-01#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: au.download.windowsupdate.com — 3 events [may21isc-01#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: ctldl.windowsupdate.com — 3 events [may21isc-01#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: 185.183.99.115 — 1 events [may21isc-01#1]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- http requests: no_http_uri — 418 events [may21isc-01#1]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- http requests: 172.17.4.206 -> 8.249.131.254:80 : /c/msdownload/update/software/defu/2021/05/am_delta_patch_1.337.600.0_f8fd1ab601622aa5111bab3b497be9d8ce1b22a6.exe — 2 events [may21isc-01#1]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- http requests: 172.17.4.206 -> 185.183.99.115:80 : /44313,6048108796.dat — 1 events [may21isc-01#1]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 172.17.4.206 -> 23.47.169.154:80 : /image/apps.15792.14098991041572765.f2e8d44f-55f2-4b91-b7c9-5fe108fe9c1a.f803e6b2-b8a5-47bb-98f1-9843909974ce?w=172&h=258 — 1 events [may21isc-01#3]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 172.17.4.206 -> 23.47.169.154:80 : /image/apps.45464.14137276003875252.d1d6dd04-81e9-424d-a1b6-7a81e52dfeef.656ba41f-9220-4ebf-9cf4-a685da2f558d?w=172&h=258 — 1 events [may21isc-01#3]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 172.17.4.206 -> 23.47.169.154:80 : /image/apps.57047.14380149729470603.1aef82b1-76c1-46e9-b3a7-bfea4ea54b01.ed79b095-68f1-4190-9ff1-74e2fbf0103a?w=172&h=258 — 1 events [may21isc-01#3]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers: 92 matching events [may21isc-01#3]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: store-images.s-microsoft.com — 14 events [may21isc-01#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: download.windowsupdate.com — 12 events [may21isc-01#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: au.download.windowsupdate.com — 3 events [may21isc-01#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: ctldl.windowsupdate.com — 3 events [may21isc-01#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- source clients: 172.17.4.206 — 451 events; external destinations=36; top destinations: 45.32.211.207 (61), 54.225.155.255 (51), 24.179.77.148 (43), 23.47.169.154 (40), 72.21.81.240 (28); 228 further events in other values [may21isc-02#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: 185.183.99.115 — 1 events [may21isc-01#1]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- http requests: no_http_uri — 418 events [may21isc-01#1]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- http requests: 172.17.4.206 -> 8.249.131.254:80 : /c/msdownload/update/software/defu/2021/05/am_delta_patch_1.337.600.0_f8fd1ab601622aa5111bab3b497be9d8ce1b22a6.exe — 2 events [may21isc-01#1]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- http requests: 172.17.4.206 -> 185.183.99.115:80 : /44313,6048108796.dat — 1 events [may21isc-01#1]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- http requests: 172.17.4.206 -> 23.47.169.154:80 : /image/apps.11693.14503766937567901.176691f4-19f9-48ef-a75c-2af62972b059.04097907-d16b-47f1-b1a6-83fbc59bb15c?w=172&h=258 — 1 events [may21isc-01#2]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- http requests: 172.17.4.206 -> 23.47.169.154:80 : /image/apps.13825.14369454977035291.312a1827-6832-45f4-885d-562c4148d669.5c931ffa-b74a-45a6-a9cb-082c7d9cddd9?w=172&h=258 — 1 events [may21isc-01#2]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- http requests: 172.17.4.206 -> 23.47.169.154:80 : /image/apps.15387.13812021519099434.2bf8d983-bebb-467e-9b6a-e52bb2610650.46530b30-f947-46d5-ae2e-dd024af3da59?w=172&h=258 — 1 events [may21isc-01#2]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- http requests: 172.17.4.206 -> 23.47.169.154:80 : /image/apps.15459.14018880429702282.f227304a-b5a1-43b5-a5ef-c3a2eafb2c2d.9871105b-6b54-4a8b-9295-e4197c93988e?w=172&h=258 — 1 events [may21isc-01#2]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Impact Assessment",
+    "line": "- file transfers > transfer details: 172.17.4.206 -> 13.107.246.66:443 : fuid: FpzdMa114V8kjGBLAh — 1 events [may21isc-01#4]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: store-images.s-microsoft.com — 14 events [may21isc-01#0]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: download.windowsupdate.com — 12 events [may21isc-01#0]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: au.download.windowsupdate.com — 3 events [may21isc-01#0]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: ctldl.windowsupdate.com — 3 events [may21isc-01#0]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: 185.183.99.115 — 1 events [may21isc-01#1]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- http requests: no_http_uri — 418 events [may21isc-01#1]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- http requests: 172.17.4.206 -> 8.249.131.254:80 : /c/msdownload/update/software/defu/2021/05/am_delta_patch_1.337.600.0_f8fd1ab601622aa5111bab3b497be9d8ce1b22a6.exe — 2 events [may21isc-01#1]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- http requests: 172.17.4.206 -> 185.183.99.115:80 : /44313,6048108796.dat — 1 events [may21isc-01#1]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Root Cause and Evidence Gaps",
+    "line": "- file transfers > transfer details: 172.17.4.206 -> 13.107.42.23:443 : fuid: Fu0nuB257f78thDhb2 — 1 events [may21isc-01#6]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 172.17.4.206 -> 23.47.169.154:80 : /image/apps.15792.14098991041572765.f2e8d44f-55f2-4b91-b7c9-5fe108fe9c1a.f803e6b2-b8a5-47bb-98f1-9843909974ce?w=172&h=258 — 1 events [may21isc-01#3]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 172.17.4.206 -> 23.47.169.154:80 : /image/apps.45464.14137276003875252.d1d6dd04-81e9-424d-a1b6-7a81e52dfeef.656ba41f-9220-4ebf-9cf4-a685da2f558d?w=172&h=258 — 1 events [may21isc-01#3]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 172.17.4.206 -> 23.47.169.154:80 : /image/apps.57047.14380149729470603.1aef82b1-76c1-46e9-b3a7-bfea4ea54b01.ed79b095-68f1-4190-9ff1-74e2fbf0103a?w=172&h=258 — 1 events [may21isc-01#3]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers: 92 matching events [may21isc-01#3]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- http requests: 172.17.4.206 -> 23.47.169.154:80 : /image/apps.11693.14503766937567901.176691f4-19f9-48ef-a75c-2af62972b059.04097907-d16b-47f1-b1a6-83fbc59bb15c?w=172&h=258 — 1 events [may21isc-01#2]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- http requests: 172.17.4.206 -> 23.47.169.154:80 : /image/apps.13825.14369454977035291.312a1827-6832-45f4-885d-562c4148d669.5c931ffa-b74a-45a6-a9cb-082c7d9cddd9?w=172&h=258 — 1 events [may21isc-01#2]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- http requests: 172.17.4.206 -> 23.47.169.154:80 : /image/apps.15387.13812021519099434.2bf8d983-bebb-467e-9b6a-e52bb2610650.46530b30-f947-46d5-ae2e-dd024af3da59?w=172&h=258 — 1 events [may21isc-01#2]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- http requests: 172.17.4.206 -> 23.47.169.154:80 : /image/apps.15459.14018880429702282.f227304a-b5a1-43b5-a5ef-c3a2eafb2c2d.9871105b-6b54-4a8b-9295-e4197c93988e?w=172&h=258 — 1 events [may21isc-01#2]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- client accounts: DESKTOP-V0FEH1L$ — 11 events; source ips: 172.17.4.206 (11) [may21isc-03#0]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- client accounts: alfonso.paternoster — 6 events; source ips: 172.17.4.206 (6) [may21isc-03#0]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- client accounts: desktop-v0feh1l$ — 6 events; source ips: 172.17.4.206 (6) [may21isc-03#0]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: store-images.s-microsoft.com — 14 events [may21isc-01#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: download.windowsupdate.com — 12 events [may21isc-01#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: au.download.windowsupdate.com — 3 events [may21isc-01#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: ctldl.windowsupdate.com — 3 events [may21isc-01#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: 185.183.99.115 — 1 events [may21isc-01#1]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- http requests: no_http_uri — 418 events [may21isc-01#1]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- http requests: 172.17.4.206 -> 8.249.131.254:80 : /c/msdownload/update/software/defu/2021/05/am_delta_patch_1.337.600.0_f8fd1ab601622aa5111bab3b497be9d8ce1b22a6.exe — 2 events [may21isc-01#1]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- http requests: 172.17.4.206 -> 185.183.99.115:80 : /44313,6048108796.dat — 1 events [may21isc-01#1]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 172.17.4.206 -> 23.47.169.154:80 : /image/apps.15792.14098991041572765.f2e8d44f-55f2-4b91-b7c9-5fe108fe9c1a.f803e6b2-b8a5-47bb-98f1-9843909974ce?w=172&h=258 — 1 events [may21isc-01#3]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 172.17.4.206 -> 23.47.169.154:80 : /image/apps.45464.14137276003875252.d1d6dd04-81e9-424d-a1b6-7a81e52dfeef.656ba41f-9220-4ebf-9cf4-a685da2f558d?w=172&h=258 — 1 events [may21isc-01#3]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 172.17.4.206 -> 23.47.169.154:80 : /image/apps.57047.14380149729470603.1aef82b1-76c1-46e9-b3a7-bfea4ea54b01.ed79b095-68f1-4190-9ff1-74e2fbf0103a?w=172&h=258 — 1 events [may21isc-01#3]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers: 92 matching events [may21isc-01#3]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download sources: 172.17.4.206 — 451 events [may21isc-01#7]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Root Cause and Evidence Gaps",
+    "line": "- file transfers > transfer details: 172.17.4.206 -> 13.107.42.23:443 : fuid: Frp4qe2vODf6xkENH8 — 1 events [may21isc-01#6]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Root Cause and Evidence Gaps",
+    "line": "- file transfers > transfer details: 172.17.4.206 -> 13.107.42.23:443 : fuid: Fu0nuB257f78thDhb2 — 1 events [may21isc-01#6]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Root Cause and Evidence Gaps",
+    "line": "- file types: other — 445 events [may21isc-01#6]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Root Cause and Evidence Gaps",
+    "line": "- file types: exe — 6 events [may21isc-01#6]",
+    "section": "Corrective and Preventive Actions"
+   }
+  ]
+ },
+ "removed_unverified_lines": 0,
+ "run_log": [
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "may21isc-09#0",
+    "may21isc-03#0",
+    "may21isc-04#3",
+    "may21isc-02#0",
+    "may21isc-01#0",
+    "may21isc-01#1"
+   ],
+   "seconds": 0,
+   "section": "Affected Host and User",
+   "truncated": false
+  },
+  {
+   "extractive": true,
+   "flag_counts": {},
+   "retrieved": [
+    "may21isc-06#1",
+    "may21isc-09#0"
+   ],
+   "seconds": 0,
+   "section": "Timeline"
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "may21isc-06#1",
+    "may21isc-06#0",
+    "may21isc-09#0",
+    "may21isc-01#0",
+    "may21isc-01#1",
+    "may21isc-01#2"
+   ],
+   "seconds": 0,
+   "section": "Detection: IDS Alerts",
+   "truncated": false
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "may21isc-01#1",
+    "may21isc-01#0",
+    "may21isc-01#3",
+    "may21isc-01#2",
+    "may21isc-08#0",
+    "may21isc-01#7"
+   ],
+   "seconds": 0,
+   "section": "Initial Infection Indicators",
+   "truncated": false
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "may21isc-09#0",
+    "may21isc-06#0",
+    "may21isc-02#0",
+    "may21isc-01#0",
+    "may21isc-01#1",
+    "may21isc-01#3"
+   ],
+   "seconds": 0,
+   "section": "Command-and-Control and Network Activity",
+   "truncated": false
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "may21isc-01#0",
+    "may21isc-02#0",
+    "may21isc-01#1",
+    "may21isc-01#2",
+    "may21isc-01#4"
+   ],
+   "seconds": 0,
+   "section": "Impact Assessment",
+   "truncated": false
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "may21isc-01#0",
+    "may21isc-01#1",
+    "may21isc-01#6",
+    "may21isc-01#3",
+    "may21isc-01#2",
+    "may21isc-03#0"
+   ],
+   "seconds": 0,
+   "section": "Root Cause and Evidence Gaps",
+   "truncated": false
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "may21isc-01#0",
+    "may21isc-01#1",
+    "may21isc-01#3",
+    "may21isc-01#7",
+    "may21isc-04#0",
+    "may21isc-01#6"
+   ],
+   "seconds": 0,
+   "section": "Corrective and Preventive Actions",
+   "truncated": false
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "may21isc-10#0",
+    "may21isc-09#0",
+    "may21isc-06#0",
+    "may21isc-03#0",
+    "may21isc-06#1",
+    "may21isc-05#0",
+    "may21isc-02#0"
+   ],
+   "seconds": 0,
+   "section": "Answers to Investigation Questions",
+   "truncated": false
+  }
+ ],
+ "scenario": "may21isc",
+ "seconds_total": 0,
+ "verification_totals": {}
+}

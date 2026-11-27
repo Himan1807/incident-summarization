@@ -1,0 +1,82 @@
+[
+ {
+  "id": "dec21isc-01#0",
+  "text": "[dec21isc-01 | network_summary/file_downloads] HTTP file downloads and file transfers: download domains/IPs, requests (client -> server:port : URI), file types and download sources.\ndownload domains: gamaes.shop — 1 events\ndownload domains: newsaarctech.com — 1 events\nhttp requests: no_http_uri — 251 events\nhttp requests: 10.12.3.66 -> 104.21.29.80:80 : /wp-content/plugins/sSTToaEwCG5VASw/ — 2 events"
+ },
+ {
+  "id": "dec21isc-01#1",
+  "text": "[dec21isc-01 | network_summary/file_downloads] HTTP file downloads and file transfers: download domains/IPs, requests (client -> server:port : URI), file types and download sources.\nhttp requests: 10.12.3.66 -> 139.59.6.175:80 : /wp-content/Sx9tvV5/ — 2 events\nfile transfers: 19 matching events\nfile transfers > transfer details: file_transfer — 2 events\nfile transfers > transfer details: 10.12.3.66 -> 104.21.29.80:80 : fuid: Fgt1qpTQKLib5heKg — 1 events"
+ },
+ {
+  "id": "dec21isc-01#2",
+  "text": "[dec21isc-01 | network_summary/file_downloads] HTTP file downloads and file transfers: download domains/IPs, requests (client -> server:port : URI), file types and download sources.\nfile transfers > transfer details: 10.12.3.66 -> 139.59.6.175:80 : file: IE7MnYfF4c.dll — 1 events\nfile transfers > transfer details: 10.12.3.66 -> 163.172.50.82:443 : fuid: FmBkZQ1QW21exVxXkf — 1 events\nfile transfers > transfer details: 10.12.3.66 -> 172.104.227.98:443 : fuid: FRmn1G3jW4ycHzKCk — 1 events\nfile transfers > transfer details: 10.12.3.66 -> 20.50.201.200:443 : fuid: Ft93YucvRiDc9VXKa — 1 events"
+ },
+ {
+  "id": "dec21isc-01#3",
+  "text": "[dec21isc-01 | network_summary/file_downloads] HTTP file downloads and file transfers: download domains/IPs, requests (client -> server:port : URI), file types and download sources.\nfile transfers > transfer details: 10.12.3.66 -> 20.72.205.209:443 : fuid: FJFP3C40hex6kT3Ggl — 1 events\nfile transfers > transfer details: 10.12.3.66 -> 204.79.197.200:443 : fuid: FdlPTh4wos9hySdl7g — 1 events\nfile transfers > transfer details: 10.12.3.66 -> 204.79.197.203:443 : fuid: F6yvjQ1CPyjn2U59B8 — 1 events\nfile transfers > transfer details: 10.12.3.66 -> 40.83.240.146:443 : fuid: FzLTB42igmFgNIabdd — 1 events"
+ },
+ {
+  "id": "dec21isc-01#4",
+  "text": "[dec21isc-01 | network_summary/file_downloads] HTTP file downloads and file transfers: download domains/IPs, requests (client -> server:port : URI), file types and download sources.\nfile types: other — 254 events\nfile types: exe — 1 events\ndownload sources: 10.12.3.66 — 255 events"
+ },
+ {
+  "id": "dec21isc-02#0",
+  "text": "[dec21isc-02 | network_summary/high_activity_external_dest] Internal clients ranked by number of connections to external destinations, with each client's most-contacted destinations.\nsource clients: 10.12.3.66 — 164 events; external destinations=16; top destinations: 172.104.227.98 (79), 163.172.50.82 (19), 51.75.33.120 (10), 51.159.35.157 (9), 52.109.8.24 (7); 40 further events in other values"
+ },
+ {
+  "id": "dec21isc-03#0",
+  "text": "[dec21isc-03 | authentication/kerberos_clients] Kerberos client account names (user accounts) and the source IPs they authenticated from.\nclient accounts: darin.figueroa — 6 events; source ips: 10.12.3.66 (6)"
+ },
+ {
+  "id": "dec21isc-04#0",
+  "text": "[dec21isc-04 | authentication/kerberos_full_services] Kerberos services requested (including host and machine account names) per source IP.\nfull services: krb_tcp — 7 events; source ips: 10.12.3.66 (7)\nfull services: krbtgt/FARGREENTECH.COM — 2 events; source ips: 10.12.3.66 (2)\nfull services: LDAP/FARGREENTECH-DC.fargreentech.com/fargreentech.com — 1 events; source ips: 10.12.3.66 (1)\nfull services: cifs/FARGREENTECH-DC — 1 events; source ips: 10.12.3.66 (1)"
+ },
+ {
+  "id": "dec21isc-04#1",
+  "text": "[dec21isc-04 | authentication/kerberos_full_services] Kerberos services requested (including host and machine account names) per source IP.\nfull services: cifs/FARGREENTECH.COM — 1 events; source ips: 10.12.3.66 (1)\nfull services: host/desktop-luoabv1.fargreentech.com — 1 events; source ips: 10.12.3.66 (1)\nfull services: krbtgt/FARGREENTECH — 1 events; source ips: 10.12.3.66 (1)"
+ },
+ {
+  "id": "dec21isc-05#0",
+  "text": "[dec21isc-05 | authentication/kerberos_hostnames] Host names seen in Kerberos traffic with their source IPs.\nhostnames: desktop-luoabv1 — 1 events; source ips: 10.12.3.66 (1)"
+ },
+ {
+  "id": "dec21isc-06#0",
+  "text": "[dec21isc-06 | ids_alerts/suricata_alerts] Suricata IDS alerts: signatures, high-severity alert destinations and sources, and an hourly alert timeline (UTC).\nalert signatures: ET JA3 Hash - [Abuse.ch] Possible Dridex — 50 events\nalert signatures: ET INFO Windows Powershell User-Agent Usage — 2 events\nalert signatures: ET HUNTING Suspicious Domain Request for Possible COVID-19 Domain M1 — 1 events\nalert signatures: ET INFO EXE - Served Attached HTTP — 1 events"
+ },
+ {
+  "id": "dec21isc-06#1",
+  "text": "[dec21isc-06 | ids_alerts/suricata_alerts] Suricata IDS alerts: signatures, high-severity alert destinations and sources, and an hourly alert timeline (UTC).\nalert signatures: ET INFO NTLM Session Setup Request - Auth — 1 events\nalert signatures: ET INFO NTLM Session Setup Request - Negotiate — 1 events\nalert signatures: ET INFO NTLMv1 Session Setup Response - Challenge — 1 events\nalert signatures: ET INFO PE EXE or DLL Windows file download HTTP — 1 events"
+ },
+ {
+  "id": "dec21isc-06#2",
+  "text": "[dec21isc-06 | ids_alerts/suricata_alerts] Suricata IDS alerts: signatures, high-severity alert destinations and sources, and an hourly alert timeline (UTC).\nalert signatures: ET INFO Packed Executable Download — 1 events\nalert signatures: GPL NETBIOS SMB IPC$ unicode share access — 1 events\nhigh severity alerts: 2 matching events\nhigh severity alerts > high severity  destinations: 10.12.3.3 — 1 events"
+ },
+ {
+  "id": "dec21isc-06#3",
+  "text": "[dec21isc-06 | ids_alerts/suricata_alerts] Suricata IDS alerts: signatures, high-severity alert destinations and sources, and an hourly alert timeline (UTC).\nhigh severity alerts > high severity  destinations: 10.12.3.66 — 1 events\nhigh severity alerts > high severity signatures: ET HUNTING Suspicious Domain Request for Possible COVID-19 Domain M1 — 1 events\nhigh severity alerts > high severity signatures: ET INFO PE EXE or DLL Windows file download HTTP — 1 events\nhigh severity alerts > high severity sources: 10.12.3.66 — 1 events"
+ },
+ {
+  "id": "dec21isc-06#4",
+  "text": "[dec21isc-06 | ids_alerts/suricata_alerts] Suricata IDS alerts: signatures, high-severity alert destinations and sources, and an hourly alert timeline (UTC).\nhigh severity alerts > high severity sources: 139.59.6.175 — 1 events\nalert timeline: 2021-12-03 19:00 UTC — 34 events\nalert timeline: 2021-12-03 20:00 UTC — 26 events"
+ },
+ {
+  "id": "dec21isc-07#0",
+  "text": "[dec21isc-07 | network_summary/suspicious_certificates] TLS certificates that are self-signed, IP-based or short-lived.\nself signed analysis: 3 matching events\nself signed analysis > self signed details: self_signed: CN=example.com,OU=IT Department,O=Global Security, — 3 events\nshort validity certs: normal_validity — 3 events\nshort validity certs: short_validity_84d: CN=smtp.gmail.com — 2 events"
+ },
+ {
+  "id": "dec21isc-07#1",
+  "text": "[dec21isc-07 | network_summary/suspicious_certificates] TLS certificates that are self-signed, IP-based or short-lived.\nshort validity certs: short_validity_84d: CN=smtp.googlemail.com — 1 events\nshort validity certs: short_validity_89d: CN=mailservice6.greenhost.com — 1 events"
+ },
+ {
+  "id": "dec21isc-08#0",
+  "text": "[dec21isc-08 | network_summary/suspicious_domains] Unusual domains with their source and destination IPs, and direct-IP HTTP connections.\ndomains: gameplayapi.intel.com — 1 events; top source ips: 10.12.3.66 (1); top destination ips: 23.3.6.28 (1)"
+ },
+ {
+  "id": "dec21isc-09#0",
+  "text": "[dec21isc-09 | derived_findings/derived_summary] Deterministic summary computed from the query results above (client ranking, IP-to-hostname/account join, alert timeline).\nDerived: internal client 10.12.3.66 ranks #1 by external connections (164 events, 16 distinct external destinations). Most-contacted external IP: 172.104.227.98 (79 connections).\nDerived: Kerberos identity of 10.12.3.66: hostname(s) desktop-luoabv1; human user account(s) darin.figueroa.\nDerived: Suricata alerts span 2021-12-03 19:00 UTC to 2021-12-03 20:00 UTC; earliest alert hour 2021-12-03 19:00 UTC (34 alerts).\nDerived: destinations of high-severity alerts: 10.12.3.3 (1), 10.12.3.66 (1)."
+ },
+ {
+  "id": "dec21isc-10#0",
+  "text": "[dec21isc-10 | query_coverage/evidence_gaps] Queries that returned nothing or failed; use these to state what is NOT established.\nNo matching results for: suspicious certificates / ip based certificates. (Absence in this query is not proof of absence elsewhere.)"
+ }
+]

@@ -1,0 +1,61 @@
+====================================================================================================
+INCIDENT: oct21isc   -   comparison of 1 run(s) (models and conditions)
+CREATED : <timestamp>
+====================================================================================================
+
+Runs:  R1 = golden (RAG)
+
+A. METRICS PER RUN (higher is better except Halluc. and BadNum)
+
++------+------------------------------------+----------+----------+----------+----------+----------+----------+----------+----------+--------+
+| Run  | Model / condition                  | Ans-P    | Ans-R    | Ans-F1   | Q-recall | Faithful | Ground.  | Halluc.  | BadNum   | Min    |
++------+------------------------------------+----------+----------+----------+----------+----------+----------+----------+----------+--------+
+| R1   | golden (RAG)                       | 0.143    | 0.111    | 0.125    | 0.938    | 1.000    | 1.000    | 0.000    | 0        | 0.0    |
++------+------------------------------------+----------+----------+----------+----------+----------+----------+----------+----------+--------+
+
+B. ANSWER STATUS PER QUESTION  (OK = correct, PART = partial, WRONG, ABST = 'Not established', NONE = no answer in the report)
+
++-----+------------------------------------------+--------------------------------+--------+
+| #   | Question                                 | Reference answer               | R1     |
++-----+------------------------------------------+--------------------------------+--------+
+| 1   | What are the IP addresses of the         | 10.10.22.156, 10.10.22.157,    | PART   |
+|     | potentially infected internal hosts in   | 10.10.22.158                   |        |
+|     | the LAN?                                 |                                |        |
++-----+------------------------------------------+--------------------------------+--------+
+| 2   | What are the hostnames of the            | DESKTOP-NZ875R4, DESKTOP-      | PART   |
+|     | potentially infected machines in the     | CFA3367, DESKTOP-87WCE26       |        |
+|     | LAN?                                     |                                |        |
++-----+------------------------------------------+--------------------------------+--------+
+| 3   | What are the Windows human user account  | marcus.cobb, agnes.warren,     | WRONG  |
+|     | names (not machine accounts ending in $) | kevin.henderson                |        |
+|     | of the potentially infected machines in  |                                |        |
+|     | the LAN?                                 |                                |        |
++-----+------------------------------------------+--------------------------------+--------+
+| 4   | What external servers (domains and IP    | sobolpand.top, 178.23.190.8,   | ABST   |
+|     | addresses) were used to download         | 190.14.37.244, 194.36.191.35   |        |
+|     | malicious files?                         |                                |        |
++-----+------------------------------------------+--------------------------------+--------+
+| 5   | What are the suspicious external IP      | 37.0.10.22                     | WRONG  |
+|     | addresses contacted, which might be      |                                |        |
+|     | involved in command-and-control (C2)     |                                |        |
+|     | communication?                           |                                |        |
++-----+------------------------------------------+--------------------------------+--------+
+| 6   | What specific malicious file was         | 44491.6090605324.dat           | WRONG  |
+|     | downloaded by an internal host from      |                                |        |
+|     | multiple external IP addresses?          |                                |        |
++-----+------------------------------------------+--------------------------------+--------+
+| 7   | During what hour did the first signs of  | 2021-10-22 14:00 UTC           | WRONG  |
+|     | infection activity appear? Provide the   |                                |        |
+|     | earliest date and time in YYYY-MM-DD     |                                |        |
+|     | HH:MM UTC format.                        |                                |        |
++-----+------------------------------------------+--------------------------------+--------+
+| 8   | According to the connection volume       | 201.137.10.225, legitimate     | ABST   |
+|     | statistics, what single external IP      | service                        |        |
+|     | address received the most connections    |                                |        |
+|     | from the infected hosts? Is it a C2      |                                |        |
+|     | server or a legitimate service?          |                                |        |
++-----+------------------------------------------+--------------------------------+--------+
+
+Best answer F1: golden (RAG) (0.125)
+
+Metric definitions: see METRICS.md. 'no RAG' rows have no retrieved evidence, so their faithfulness is 0 or '-'.

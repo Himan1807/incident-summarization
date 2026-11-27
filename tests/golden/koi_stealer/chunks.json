@@ -1,0 +1,82 @@
+[
+ {
+  "id": "koi_stealer-01#0",
+  "text": "[koi_stealer-01 | network_summary/file_downloads] HTTP file downloads and file transfers: download domains/IPs, requests (client -> server:port : URI), file types and download sources.\ndownload domains: 79.124.78.197 — 50 events\ndownload domains: ctldl.windowsupdate.com — 3 events\ndownload domains: www.msftconnecttest.com — 2 events\ndownload domains: acroipm2.adobe.com — 1 events"
+ },
+ {
+  "id": "koi_stealer-01#1",
+  "text": "[koi_stealer-01 | network_summary/file_downloads] HTTP file downloads and file transfers: download domains/IPs, requests (client -> server:port : URI), file types and download sources.\ndownload domains: x1.c.lencr.org — 1 events\nhttp requests: no_http_uri — 301 events\nhttp requests: 172.17.0.99 -> 79.124.78.197:80 : /foots.php — 48 events\nhttp requests: 172.17.0.99 -> 23.220.251.149:80 : /connecttest.txt — 2 events"
+ },
+ {
+  "id": "koi_stealer-01#2",
+  "text": "[koi_stealer-01 | network_summary/file_downloads] HTTP file downloads and file transfers: download domains/IPs, requests (client -> server:port : URI), file types and download sources.\nhttp requests: 172.17.0.99 -> 23.220.251.158:80 : /connecttest.txt — 2 events\nhttp requests: 172.17.0.99 -> 79.124.78.197:80 : /index.php?id=&subid=qIOuKk7U — 2 events\nhttp requests: 172.17.0.99 -> 184.29.137.96:80 : / — 1 events\nhttp requests: 172.17.0.99 -> 199.232.210.172:80 : /msdownload/update/v3/static/trustedr/en/authrootstl.cab?d7a8a57aa5acd39b — 1 events"
+ },
+ {
+  "id": "koi_stealer-01#3",
+  "text": "[koi_stealer-01 | network_summary/file_downloads] HTTP file downloads and file transfers: download domains/IPs, requests (client -> server:port : URI), file types and download sources.\nhttp requests: 172.17.0.99 -> 199.232.210.172:80 : /msdownload/update/v3/static/trustedr/en/disallowedcertstl.cab?91717f420e6dda94 — 1 events\nhttp requests: 172.17.0.99 -> 199.232.214.172:80 : /msdownload/update/v3/static/trustedr/en/pinrulesstl.cab?a5fef2ac8502b132 — 1 events\nhttp requests: 172.17.0.99 -> 23.220.251.47:80 : /assets/Owner/arm/ProcessMAU.txt — 1 events\nfile transfers: 123 matching events"
+ },
+ {
+  "id": "koi_stealer-01#4",
+  "text": "[koi_stealer-01 | network_summary/file_downloads] HTTP file downloads and file transfers: download domains/IPs, requests (client -> server:port : URI), file types and download sources.\nfile transfers > transfer details: file_transfer — 53 events\nfile transfers > transfer details: 172.17.0.99 -> 13.70.79.200:443 : fuid: FU0Kma3jtLVDFQsWRa — 1 events\nfile transfers > transfer details: 172.17.0.99 -> 13.89.179.9:443 : fuid: FMvkJInaCxvQDPRv9 — 1 events\nfile transfers > transfer details: 172.17.0.99 -> 20.189.173.1:443 : fuid: FLUKDa36wJdASXKgHg — 1 events"
+ },
+ {
+  "id": "koi_stealer-01#5",
+  "text": "[koi_stealer-01 | network_summary/file_downloads] HTTP file downloads and file transfers: download domains/IPs, requests (client -> server:port : URI), file types and download sources.\nfile transfers > transfer details: 172.17.0.99 -> 20.189.173.26:443 : fuid: FhRlFk2pp8tC1dsabb — 1 events\nfile transfers > transfer details: 172.17.0.99 -> 20.241.44.114:443 : fuid: FyjT0AzkMPMcF8Uck — 1 events\nfile transfers > transfer details: 172.17.0.99 -> 20.42.73.28:443 : fuid: FpR8YU2UKfciamuQTd — 1 events\nfile transfers > transfer details: 172.17.0.99 -> 20.96.153.111:443 : fuid: FSvMjvPqRih6zUFI5 — 1 events"
+ },
+ {
+  "id": "koi_stealer-01#6",
+  "text": "[koi_stealer-01 | network_summary/file_downloads] HTTP file downloads and file transfers: download domains/IPs, requests (client -> server:port : URI), file types and download sources.\nfile transfers > transfer details: 172.17.0.99 -> 20.96.153.111:443 : fuid: FwBwUeLMampjgOJ5k — 1 events\nfile transfers > transfer details: 172.17.0.99 -> 23.194.68.140:443 : fuid: FYIShP1GoXJB2e2LHc — 1 events\nfile types: other — 361 events\ndownload sources: 172.17.0.99 — 361 events"
+ },
+ {
+  "id": "koi_stealer-02#0",
+  "text": "[koi_stealer-02 | network_summary/high_activity_external_dest] Internal clients ranked by number of connections to external destinations, with each client's most-contacted destinations.\nsource clients: 172.17.0.99 — 361 events; external destinations=35; top destinations: 79.124.78.197 (218), 23.45.119.144 (18), 204.79.197.203 (14), 52.113.194.132 (10), 23.195.212.189 (9); 92 further events in other values"
+ },
+ {
+  "id": "koi_stealer-03#0",
+  "text": "[koi_stealer-03 | authentication/kerberos_clients] Kerberos client account names (user accounts) and the source IPs they authenticated from.\nclient accounts: afletcher — 8 events; source ips: 172.17.0.99 (8)"
+ },
+ {
+  "id": "koi_stealer-04#0",
+  "text": "[koi_stealer-04 | authentication/kerberos_full_services] Kerberos services requested (including host and machine account names) per source IP.\nfull services: krb_tcp — 8 events; source ips: 172.17.0.99 (8)\nfull services: krbtgt/BEPOSITIVE.COM — 2 events; source ips: 172.17.0.99 (2)\nfull services: LDAP/WIN-CTL9XBQ9Y19.bepositive.com/bepositive.com — 1 events; source ips: 172.17.0.99 (1)\nfull services: cifs/WIN-CTL9XBQ9Y19 — 1 events; source ips: 172.17.0.99 (1)"
+ },
+ {
+  "id": "koi_stealer-04#1",
+  "text": "[koi_stealer-04 | authentication/kerberos_full_services] Kerberos services requested (including host and machine account names) per source IP.\nfull services: cifs/WIN-CTL9XBQ9Y19.bepositive.com — 1 events; source ips: 172.17.0.99 (1)\nfull services: host/desktop-rnvo9at.bepositive.com — 1 events; source ips: 172.17.0.99 (1)\nfull services: krbtgt/BEPOSITIVE — 1 events; source ips: 172.17.0.99 (1)\nfull services: ldap/win-ctl9xbq9y19.bepositive.com — 1 events; source ips: 172.17.0.99 (1)"
+ },
+ {
+  "id": "koi_stealer-05#0",
+  "text": "[koi_stealer-05 | authentication/kerberos_hostnames] Host names seen in Kerberos traffic with their source IPs.\nhostnames: desktop-rnvo9at — 1 events; source ips: 172.17.0.99 (1)"
+ },
+ {
+  "id": "koi_stealer-06#0",
+  "text": "[koi_stealer-06 | ids_alerts/suricata_alerts] Suricata IDS alerts: signatures, high-severity alert destinations and sources, and an hourly alert timeline (UTC).\nalert signatures: ET HUNTING GENERIC SUSPICIOUS POST to Dotted Quad with Fake Browser 1 — 48 events\nalert signatures: GPL NETBIOS SMB IPC$ unicode share access — 5 events\nalert signatures: ET INFO Microsoft Connection Test — 2 events\nalert signatures: ET ATTACK_RESPONSE Koi Loader/Stealer CnC Config Inbound — 1 events"
+ },
+ {
+  "id": "koi_stealer-06#1",
+  "text": "[koi_stealer-06 | ids_alerts/suricata_alerts] Suricata IDS alerts: signatures, high-severity alert destinations and sources, and an hourly alert timeline (UTC).\nalert signatures: ET MALWARE Win32/Koi Stealer CnC Checkin (GET) — 1 events\nhigh severity alerts: 50 matching events\nhigh severity alerts > high severity  destinations: 79.124.78.197 — 49 events\nhigh severity alerts > high severity  destinations: 172.17.0.99 — 1 events"
+ },
+ {
+  "id": "koi_stealer-06#2",
+  "text": "[koi_stealer-06 | ids_alerts/suricata_alerts] Suricata IDS alerts: signatures, high-severity alert destinations and sources, and an hourly alert timeline (UTC).\nhigh severity alerts > high severity signatures: ET HUNTING GENERIC SUSPICIOUS POST to Dotted Quad with Fake Browser 1 — 48 events\nhigh severity alerts > high severity signatures: ET ATTACK_RESPONSE Koi Loader/Stealer CnC Config Inbound — 1 events\nhigh severity alerts > high severity signatures: ET MALWARE Win32/Koi Stealer CnC Checkin (GET) — 1 events\nhigh severity alerts > high severity sources: 172.17.0.99 — 49 events"
+ },
+ {
+  "id": "koi_stealer-06#3",
+  "text": "[koi_stealer-06 | ids_alerts/suricata_alerts] Suricata IDS alerts: signatures, high-severity alert destinations and sources, and an hourly alert timeline (UTC).\nhigh severity alerts > high severity sources: 79.124.78.197 — 1 events\nalert timeline: 2024-09-04 17:00 UTC — 31 events\nalert timeline: 2024-09-04 18:00 UTC — 26 events"
+ },
+ {
+  "id": "koi_stealer-07#0",
+  "text": "[koi_stealer-07 | network_summary/suspicious_domains] Unusual domains with their source and destination IPs, and direct-IP HTTP connections.\ndomains: sso.godaddy.com — 3 events\ndomains: www.bellantonicioccolato.it — 2 events\ndomains: img-s-msn-com.akamaized.net — 1 events\ndomains: oneclient.sfx.ms — 1 events"
+ },
+ {
+  "id": "koi_stealer-07#1",
+  "text": "[koi_stealer-07 | network_summary/suspicious_domains] Unusual domains with their source and destination IPs, and direct-IP HTTP connections.\ndomains: weathermapdata.blob.core.windows.net — 1 events"
+ },
+ {
+  "id": "koi_stealer-08#0",
+  "text": "[koi_stealer-08 | derived_findings/derived_summary] Deterministic summary computed from the query results above (client ranking, IP-to-hostname/account join, alert timeline).\nDerived: internal client 172.17.0.99 ranks #1 by external connections (361 events, 35 distinct external destinations). Most-contacted external IP: 79.124.78.197 (218 connections).\nDerived: Kerberos identity of 172.17.0.99: hostname(s) desktop-rnvo9at; human user account(s) afletcher.\nDerived: Suricata alerts span 2024-09-04 17:00 UTC to 2024-09-04 18:00 UTC; earliest alert hour 2024-09-04 17:00 UTC (31 alerts).\nDerived: destinations of high-severity alerts: 79.124.78.197 (49), 172.17.0.99 (1)."
+ },
+ {
+  "id": "koi_stealer-09#0",
+  "text": "[koi_stealer-09 | query_coverage/evidence_gaps] Queries that returned nothing or failed; use these to state what is NOT established.\nNo matching results for: suspicious certificates / self signed analysis. (Absence in this query is not proof of absence elsewhere.)\nNo matching results for: suspicious certificates / ip based certificates. (Absence in this query is not proof of absence elsewhere.)\nNo matching results for: suspicious certificates / short validity certs. (Absence in this query is not proof of absence elsewhere.)"
+ }
+]

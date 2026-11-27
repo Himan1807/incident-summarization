@@ -1,0 +1,15 @@
+{
+  "scenario": "re2ob_16",
+  "source_case": "RE2-OB/emailservice_loss/1",
+  "root_cause_service": "emailservice",
+  "fault": "loss",
+  "inject_time": "2024-01-15 20:47:12 UTC",
+  "artifacts": 7,
+  "facts": 56,
+  "questions": 8,
+  "answers": 8,
+  "atoms": 9,
+  "atoms_in_evidence": 9,
+  "atoms_not_in_evidence": [],
+  "notes": []
+}

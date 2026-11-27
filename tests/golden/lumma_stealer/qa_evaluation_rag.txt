@@ -1,0 +1,96 @@
+====================================================================================================
+INCIDENT : lumma_stealer
+MODEL    : golden
+CONDITION: RAG (advanced pipeline)
+RUN TIME : 0.0 min of LLM generation
+REPORT   : <results>/lumma_stealer/golden/advanced_postmortem.md
+CREATED  : <timestamp>
+====================================================================================================
+
+A. QUESTION-BY-QUESTION EVALUATION
+   Found = reference items present in the report's answer; Prec. = correct entities / entities the answer gave;
+   Wrong items = entities in the answer that are not in the reference answer.
+
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| #   | Question                         | Reference answer           | Answer from the report             | Found | Prec. | Wrong items      | Status    |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 1   | What is the IP address of the    | 10.1.21.58                 | No matching results for:           | 0/1   | -     | -                | WRONG     |
+|     | infected Windows client?         |                            | suspicious certificates / self     |       |       |                  |           |
+|     |                                  |                            | signed analysis. (Absence in this  |       |       |                  |           |
+|     |                                  |                            | query is not proof of absence      |       |       |                  |           |
+|     |                                  |                            | elsewhere.)                        |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 2   | What is the host name of the     | DESKTOP-ES9F3ML            | No matching results for:           | 0/1   | -     | -                | WRONG     |
+|     | infected Windows client?         |                            | suspicious certificates / ip based |       |       |                  |           |
+|     |                                  |                            | certificates. (Absence in this     |       |       |                  |           |
+|     |                                  |                            | query is not proof of absence      |       |       |                  |           |
+|     |                                  |                            | elsewhere.)                        |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 3   | What is the Windows human user   | gwyatt                     | No matching results for:           | 0/1   | -     | -                | WRONG     |
+|     | account name (not machine        |                            | suspicious certificates / short    |       |       |                  |           |
+|     | accounts ending in $) of the     |                            | validity certs. (Absence in this   |       |       |                  |           |
+|     | potentially infected machine in  |                            | query is not proof of absence      |       |       |                  |           |
+|     | the LAN?                         |                            | elsewhere.)                        |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 4   | What domain and IP address       | whitepepper.su,            | Not established from the available | 0/2   | -     | -                | ABSTAINED |
+|     | triggered the alert for Lumma    | 153.92.1.49                | artifacts.                         |       |       |                  |           |
+|     | Stealer?                         |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 5   | Which of the three CIA           | confidentiality            | Derived: internal client           | 0/1   | 0/2   | 10.1.21.58,      | WRONG     |
+|     | components does the attacker     |                            | 10.1.21.58 ranks #1 by external    |       |       | 153.92.1.49      |           |
+|     | target primarily: availability,  |                            | connections (312 events, 57        |       |       |                  |           |
+|     | integrity, or confidentiality?   |                            | distinct external destinations).   |       |       |                  |           |
+|     |                                  |                            | Most-contacted external IP:        |       |       |                  |           |
+|     |                                  |                            | 153.92.1.49 (91 connections).      |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 6   | During what hour did the first   | 2026-01-27 23:00 UTC       | Derived: Kerberos identity of      | 0/1   | 0/2   | 10.1.21.58,      | WRONG     |
+|     | signs of infection activity      |                            | 10.1.21.58: hostname(s) desktop-   |       |       | DESKTOP-ES9F3ML  |           |
+|     | appear? Provide the earliest     |                            | es9f3ml; human user account(s)     |       |       |                  |           |
+|     | date and time in YYYY-MM-DD      |                            | gwyatt.                            |       |       |                  |           |
+|     | HH:MM UTC format.                |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 7   | According to the connection      | 153.92.1.49, C2 server     | Derived: Suricata alerts span      | 0/2   | 0/2   | 2026-01-27,      | WRONG     |
+|     | volume statistics, what single   |                            | 2026-01-27 23:00 UTC to 2026-01-27 |       |       | 2026-01-27 23:00 |           |
+|     | external IP address received the |                            | 23:00 UTC; earliest alert hour     |       |       |                  |           |
+|     | most connections from the        |                            | 2026-01-27 23:00 UTC (70 alerts).  |       |       |                  |           |
+|     | infected hosts? Is it a C2       |                            |                                    |       |       |                  |           |
+|     | server or a legitimate service?  |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+
+B. METRICS
+
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Metric                                       | Value        | Meaning                                                                |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Answer precision                             | 0.000        | Entities (IPs, domains, hosts, URLs, times) in the report's answers    |
+|                                              |              | that also occur in the reference / all entities it gave                |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Answer recall                                | 0.000        | Reference answer items found in the report's answers / all reference   |
+|                                              |              | items                                                                  |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Answer F1                                    | 0.000        | Harmonic mean of answer precision and recall                           |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Question recall                              | 0.857        | Mean over questions of reference items found anywhere in the report    |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Faithfulness                                 | 1.000        | Claims whose facts are in the evidence AND in the chunks they cite /   |
+|                                              |              | all claims                                                             |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Grounding rate                               | 1.000        | Claims whose entities and numbers all exist in the evidence            |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Hallucination rate                           | 0.000        | Entities in the report that are absent from the evidence / all         |
+|                                              |              | entities (lower is better)                                             |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Unsupported numbers                          | 0            | Numbers in the report that are absent from the evidence (lower is      |
+|                                              |              | better)                                                                |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Placeholders                                 | 0            | '[insert ...]' placeholders left in the report (lower is better)       |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Questions correct / partial / wrong /        | 0 / 0 / 6 /  | Per-question status in the table above                                 |
+| abstained / unanswered                       | 1 / 0        |                                                                        |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Claims                                       | 60           | Claim lines counted by the verifier; hedged assessments are excluded   |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+
+Status: CORRECT = every reference item found and nothing wrong; PARTIAL = some items found or wrong items present;
+        WRONG = answer given but no reference item found; ABSTAINED = the report says 'Not established from the available artifacts';
+        NO ANSWER = the report has no answer for that question.

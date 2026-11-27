@@ -20,7 +20,7 @@ DATE_RE = re.compile(r"\b\d{4}-\d{2}-\d{2}\b")
 NUM_RE = re.compile(r"(?<![\w.])\d+(?:,\d{3})*(?:\.\d+)?(?![\w])")
 CITE_GROUP_RE = re.compile(r"\[([^\[\]]*#\d+[^\[\]]*)\]")
 # Citations attached by post-processing (src/postprocess.attribute_citations), not by the model: [auto: id#1, id#2].
-# They are valid citations for the report, but citation metrics count model-generated citations only.
+# They are valid citations for the report, but faithfulness counts model-generated citations only.
 AUTO_PREFIX_RE = re.compile(r"^\s*auto\s*:\s*", re.I)
 AUTO_GROUP_RE = re.compile(r"\[\s*auto\s*:[^\[\]]*#\d+[^\[\]]*\]", re.I)
 PAREN_CITE_RE = re.compile(r"\(\s*(?:[\w\-.]+)?#\d+(?:\s*[,;]\s*(?:[\w\-.]+)?#\d+)*\s*\)")
@@ -240,22 +240,19 @@ def sanitize(text: str, ev: Evidence, valid_ids: set[str], mode: str = "drop"):
 def claim_stats(text: str, ev: Evidence, valid_ids: set[str], chunk_text: dict | None = None) -> dict:
     """Claim-level metrics.
       grounding_rate     claims whose entities/numbers all exist in the evidence (works for ANY report, cited or not)
-      citation_precision model-cited claims whose entities/numbers (or, if none, >=3 content words) are in the chunks they cite
-      faithfulness       claims that are grounded AND supported by their own MODEL-written cited chunks
-    Citation metrics use model-generated citations only. Citations added by post-processing ([auto: ...]) are chosen by the
-    same string matching these metrics use, so counting them would score the post-processor, not the model. They are
-    reported separately (auto_cited_claims, citation_rate_with_auto)."""
+      faithfulness       claims that are grounded AND supported by their own MODEL-written cited chunks (a cited chunk supports
+                         a claim if it contains the claim's entities/numbers or, if it has none, >=3 of its content words)
+    Faithfulness uses model-generated citations only. Citations added by post-processing ([auto: ...]) are chosen by the
+    same string matching, so counting them would score the post-processor, not the model."""
     all_rows = analyze_text(text, ev, valid_ids)
     rows = [r for r in all_rows if r["is_claim"]]
     n = len(rows)
-    grounded = cited = cite_ok = faithful = any_cited = 0
+    grounded = faithful = 0
     for r in rows:
         g = not (r["unsupported_entities"] or r["unsupported_numbers"] or r["invalid_citations"] or r["placeholders"] or r["role_conflicts"])
         grounded += g
-        any_cited += bool(r["cite_ids"])
         if not r["model_cite_ids"]:
             continue
-        cited += 1
         if chunk_text:
             ct = norm_ts(" ".join(chunk_text.get(c, "") for c in r["model_cite_ids"])).lower()
             cnum = numbers_in(ct)
@@ -265,15 +262,10 @@ def claim_stats(text: str, ev: Evidence, valid_ids: set[str], chunk_text: dict |
                 ok = len(content_words(r["line"]) & content_words(ct)) >= 3
         else:
             ok = True
-        cite_ok += ok
         faithful += (ok and g)
-    return {"claims": n, "cited_claims": cited, "assessments": sum(r["is_assessment"] for r in all_rows),
+    return {"claims": n, "assessments": sum(r["is_assessment"] for r in all_rows),
             "grounding_rate": round(grounded / n, 3) if n else None,
-            "citation_precision": round(cite_ok / cited, 3) if cited else None,
-            "faithfulness": round(faithful / n, 3) if n else None,
-            "uncited_claims": n - cited,
-            "auto_cited_claims": any_cited - cited,
-            "citation_rate_with_auto": round(any_cited / n, 3) if n else None}
+            "faithfulness": round(faithful / n, 3) if n else None}
 
 
 def verify_text(text: str, ev: Evidence, valid_ids: set[str]) -> dict:
@@ -287,5 +279,4 @@ def verify_text(text: str, ev: Evidence, valid_ids: set[str]) -> dict:
         "invalid_citations": sorted({c for r in rows for c in r["invalid_citations"]}),
         "placeholders": [p for r in rows for p in r["placeholders"]],
         "claim_lines": len(claims),
-        "uncited_lines": sum(r["uncited"] for r in claims),
     }

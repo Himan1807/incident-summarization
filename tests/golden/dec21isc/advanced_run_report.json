@@ -1,0 +1,875 @@
+{
+ "condition": "rag",
+ "evaluation": {
+  "answer_f1": 0.091,
+  "answer_precision": 0.091,
+  "answer_recall": 0.091,
+  "answerable_entity_recall": 0.909,
+  "assessment_lines": 1,
+  "claims": 52,
+  "faithfulness": 1.0,
+  "grounding_rate": 1.0,
+  "hallucination_rate": 0.0,
+  "overall_entity_recall": 0.909,
+  "per_question": [
+   {
+    "answer_text": "No matching results for: suspicious certificates / ip based certificates. (Absence in this query is not proof of absence elsewhere.)",
+    "answerable_from_evidence": [
+     "10.12.3.66"
+    ],
+    "atoms": [
+     "10.12.3.66"
+    ],
+    "atoms_found_in_answer": [],
+    "correct_entities": [],
+    "found_in_report": [
+     "10.12.3.66"
+    ],
+    "id": 1,
+    "missing_from_evidence": [],
+    "precision": null,
+    "predicted_entities": [],
+    "question": "What was the IP address of the infected Windows computer?",
+    "recall": 0.0,
+    "reference_answer": "10.12.3.66",
+    "status": "WRONG",
+    "wrong_entities": []
+   },
+   {
+    "answer_text": "Derived: internal client 10.12.3.66 ranks #1 by external connections (164 events, 16 distinct external destinations). Most-contacted external IP: 172.104.227.98 (79 connections).",
+    "answerable_from_evidence": [
+     "DESKTOP-LUOABV1"
+    ],
+    "atoms": [
+     "DESKTOP-LUOABV1"
+    ],
+    "atoms_found_in_answer": [],
+    "correct_entities": [],
+    "found_in_report": [
+     "DESKTOP-LUOABV1"
+    ],
+    "id": 2,
+    "missing_from_evidence": [],
+    "precision": 0.0,
+    "predicted_entities": [
+     "10.12.3.66",
+     "172.104.227.98"
+    ],
+    "question": "What was the host name of the infected Windows computer?",
+    "recall": 0.0,
+    "reference_answer": "DESKTOP-LUOABV1",
+    "status": "WRONG",
+    "wrong_entities": [
+     "10.12.3.66",
+     "172.104.227.98"
+    ]
+   },
+   {
+    "answer_text": "Derived: Kerberos identity of 10.12.3.66: hostname(s) desktop-luoabv1; human user account(s) darin.figueroa.",
+    "answerable_from_evidence": [
+     "darin.figueroa"
+    ],
+    "atoms": [
+     "darin.figueroa"
+    ],
+    "atoms_found_in_answer": [
+     "darin.figueroa"
+    ],
+    "correct_entities": [
+     "darin.figueroa"
+    ],
+    "found_in_report": [
+     "darin.figueroa"
+    ],
+    "id": 3,
+    "missing_from_evidence": [],
+    "precision": 0.333,
+    "predicted_entities": [
+     "10.12.3.66",
+     "DESKTOP-LUOABV1",
+     "darin.figueroa"
+    ],
+    "question": "What is the Windows human user account name (not machine accounts ending in $) of the potentially infected machine in the LAN?",
+    "recall": 1.0,
+    "reference_answer": "darin.figueroa",
+    "status": "PARTIAL",
+    "wrong_entities": [
+     "10.12.3.66",
+     "DESKTOP-LUOABV1"
+    ]
+   },
+   {
+    "answer_text": "Not established from the available artifacts.",
+    "answerable_from_evidence": [
+     "2021-12-03 19:00 UTC"
+    ],
+    "atoms": [
+     "2021-12-03 19:00 UTC"
+    ],
+    "atoms_found_in_answer": [],
+    "correct_entities": [],
+    "found_in_report": [
+     "2021-12-03 19:00 UTC"
+    ],
+    "id": 4,
+    "missing_from_evidence": [],
+    "precision": null,
+    "predicted_entities": [],
+    "question": "During what hour did the first signs of infection activity appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "recall": 0.0,
+    "reference_answer": "2021-12-03 19:00 UTC",
+    "status": "ABSTAINED",
+    "wrong_entities": []
+   },
+   {
+    "answer_text": "Derived: destinations of high-severity alerts: 10.12.3.3 (1), 10.12.3.66 (1).",
+    "answerable_from_evidence": [
+     "172.104.227.98",
+     "163.172.50.82"
+    ],
+    "atoms": [
+     "172.104.227.98",
+     "163.172.50.82"
+    ],
+    "atoms_found_in_answer": [],
+    "correct_entities": [],
+    "found_in_report": [
+     "172.104.227.98",
+     "163.172.50.82"
+    ],
+    "id": 5,
+    "missing_from_evidence": [],
+    "precision": 0.0,
+    "predicted_entities": [
+     "10.12.3.3",
+     "10.12.3.66"
+    ],
+    "question": "What are the suspicious external IP addresses contacted, which might be involved in command-and-control (C2) communication?",
+    "recall": 0.0,
+    "reference_answer": "172.104.227.98, 163.172.50.82",
+    "status": "WRONG",
+    "wrong_entities": [
+     "10.12.3.3",
+     "10.12.3.66"
+    ]
+   },
+   {
+    "answer_text": "client accounts: darin.figueroa — 6 events; source ips: 10.12.3.66 (6)",
+    "answerable_from_evidence": [
+     "gamaes.shop",
+     "newsaarctech.com"
+    ],
+    "atoms": [
+     "gamaes.shop",
+     "newsaarctech.com"
+    ],
+    "atoms_found_in_answer": [],
+    "correct_entities": [],
+    "found_in_report": [
+     "gamaes.shop",
+     "newsaarctech.com"
+    ],
+    "id": 6,
+    "missing_from_evidence": [],
+    "precision": 0.0,
+    "predicted_entities": [
+     "10.12.3.66",
+     "darin.figueroa"
+    ],
+    "question": "What are the likely suspicious domains used for malware delivery?",
+    "recall": 0.0,
+    "reference_answer": "gamaes.shop, newsaarctech.com",
+    "status": "WRONG",
+    "wrong_entities": [
+     "10.12.3.66",
+     "darin.figueroa"
+    ]
+   },
+   {
+    "answer_text": "hostnames: desktop-luoabv1 — 1 events; source ips: 10.12.3.66 (1)",
+    "answerable_from_evidence": [
+     "example.com"
+    ],
+    "atoms": [
+     "example.com"
+    ],
+    "atoms_found_in_answer": [],
+    "correct_entities": [],
+    "found_in_report": [],
+    "id": 7,
+    "missing_from_evidence": [],
+    "precision": 0.0,
+    "predicted_entities": [
+     "10.12.3.66",
+     "DESKTOP-LUOABV1"
+    ],
+    "question": "Were any suspicious certificates observed in the encrypted network traffic? If so, identify the domain or IP in the certificate.",
+    "recall": 0.0,
+    "reference_answer": "example.com",
+    "status": "WRONG",
+    "wrong_entities": [
+     "10.12.3.66",
+     "DESKTOP-LUOABV1"
+    ]
+   },
+   {
+    "answer_text": "Not established from the available artifacts.",
+    "answerable_from_evidence": [
+     "172.104.227.98",
+     "C2 server"
+    ],
+    "atoms": [
+     "172.104.227.98",
+     "C2 server"
+    ],
+    "atoms_found_in_answer": [],
+    "correct_entities": [],
+    "found_in_report": [
+     "172.104.227.98",
+     "C2 server"
+    ],
+    "id": 8,
+    "missing_from_evidence": [],
+    "precision": null,
+    "predicted_entities": [],
+    "question": "According to the connection volume statistics, what single external IP address received the most connections from the infected hosts? Is it a C2 server or a legitimate service?",
+    "recall": 0.0,
+    "reference_answer": "172.104.227.98, C2 server",
+    "status": "ABSTAINED",
+    "wrong_entities": []
+   }
+  ],
+  "placeholder_count": 0,
+  "question_recall": 0.875,
+  "questions_correct": "7/8",
+  "unsupported_entities": [],
+  "unsupported_number_count": 0,
+  "unsupported_numbers": []
+ },
+ "flagged": [],
+ "mode": "drop",
+ "model": "golden",
+ "postprocessing": {
+  "auto_attributed_lines": 0,
+  "duplicate_lines_removed": 92,
+  "enabled": true,
+  "invalid_citations_removed": 0,
+  "partial_lines_dropped": 0,
+  "removed": [
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: ET INFO NTLM Session Setup Request - Negotiate — 1 events [dec21isc-06#1]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- high severity alerts > high severity signatures: ET HUNTING Suspicious Domain Request for Possible COVID-19 Domain M1 — 1 events [dec21isc-06#3]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- high severity alerts > high severity signatures: ET INFO PE EXE or DLL Windows file download HTTP — 1 events [dec21isc-06#3]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- high severity alerts > high severity sources: 10.12.3.66 — 1 events [dec21isc-06#3]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Timeline",
+    "line": "- alert timeline: 2021-12-03 19:00 UTC — 34 events [dec21isc-06#4]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Timeline",
+    "line": "- alert timeline: 2021-12-03 20:00 UTC — 26 events [dec21isc-06#4]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: internal client 10.12.3.66 ranks #1 by external connections (164 events, 16 distinct external destinations). Most-contacted external IP: 172.104.227.98 (79 connections). [dec21isc-09#0]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: Kerberos identity of 10.12.3.66: hostname(s) desktop-luoabv1; human user account(s) darin.figueroa. [dec21isc-09#0]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: Suricata alerts span 2021-12-03 19:00 UTC to 2021-12-03 20:00 UTC; earliest alert hour 2021-12-03 19:00 UTC (34 alerts). [dec21isc-09#0]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: destinations of high-severity alerts: 10.12.3.3 (1), 10.12.3.66 (1). [dec21isc-09#0]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: gamaes.shop — 1 events [dec21isc-01#0]",
+    "section": "Initial Infection Indicators"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: newsaarctech.com — 1 events [dec21isc-01#0]",
+    "section": "Initial Infection Indicators"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- http requests: no_http_uri — 251 events [dec21isc-01#0]",
+    "section": "Initial Infection Indicators"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- http requests: 10.12.3.66 -> 104.21.29.80:80 : /wp-content/plugins/sSTToaEwCG5VASw/ — 2 events [dec21isc-01#0]",
+    "section": "Initial Infection Indicators"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- source clients: 10.12.3.66 — 164 events; external destinations=16; top destinations: 172.104.227.98 (79), 163.172.50.82 (19), 51.75.33.120 (10), 51.159.35.157 (9), 52.109.8.24 (7); 40 further events in other values [dec21isc-02#0]",
+    "section": "Initial Infection Indicators"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: internal client 10.12.3.66 ranks #1 by external connections (164 events, 16 distinct external destinations). Most-contacted external IP: 172.104.227.98 (79 connections). [dec21isc-09#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: Kerberos identity of 10.12.3.66: hostname(s) desktop-luoabv1; human user account(s) darin.figueroa. [dec21isc-09#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: Suricata alerts span 2021-12-03 19:00 UTC to 2021-12-03 20:00 UTC; earliest alert hour 2021-12-03 19:00 UTC (34 alerts). [dec21isc-09#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: destinations of high-severity alerts: 10.12.3.3 (1), 10.12.3.66 (1). [dec21isc-09#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- source clients: 10.12.3.66 — 164 events; external destinations=16; top destinations: 172.104.227.98 (79), 163.172.50.82 (19), 51.75.33.120 (10), 51.159.35.157 (9), 52.109.8.24 (7); 40 further events in other values [dec21isc-02#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.12.3.66 -> 139.59.6.175:80 : /wp-content/Sx9tvV5/ — 2 events [dec21isc-01#1]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers: 19 matching events [dec21isc-01#1]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: file_transfer — 2 events [dec21isc-01#1]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: 10.12.3.66 -> 104.21.29.80:80 : fuid: Fgt1qpTQKLib5heKg — 1 events [dec21isc-01#1]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: 10.12.3.66 -> 20.72.205.209:443 : fuid: FJFP3C40hex6kT3Ggl — 1 events [dec21isc-01#3]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: 10.12.3.66 -> 204.79.197.200:443 : fuid: FdlPTh4wos9hySdl7g — 1 events [dec21isc-01#3]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: 10.12.3.66 -> 204.79.197.203:443 : fuid: F6yvjQ1CPyjn2U59B8 — 1 events [dec21isc-01#3]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: 10.12.3.66 -> 40.83.240.146:443 : fuid: FzLTB42igmFgNIabdd — 1 events [dec21isc-01#3]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file types: other — 254 events [dec21isc-01#4]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file types: exe — 1 events [dec21isc-01#4]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download sources: 10.12.3.66 — 255 events [dec21isc-01#4]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- source clients: 10.12.3.66 — 164 events; external destinations=16; top destinations: 172.104.227.98 (79), 163.172.50.82 (19), 51.75.33.120 (10), 51.159.35.157 (9), 52.109.8.24 (7); 40 further events in other values [dec21isc-02#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: gamaes.shop — 1 events [dec21isc-01#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: newsaarctech.com — 1 events [dec21isc-01#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- http requests: no_http_uri — 251 events [dec21isc-01#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- http requests: 10.12.3.66 -> 104.21.29.80:80 : /wp-content/plugins/sSTToaEwCG5VASw/ — 2 events [dec21isc-01#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.12.3.66 -> 139.59.6.175:80 : /wp-content/Sx9tvV5/ — 2 events [dec21isc-01#1]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers: 19 matching events [dec21isc-01#1]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: file_transfer — 2 events [dec21isc-01#1]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: 10.12.3.66 -> 104.21.29.80:80 : fuid: Fgt1qpTQKLib5heKg — 1 events [dec21isc-01#1]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: ET INFO Packed Executable Download — 1 events [dec21isc-06#2]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: GPL NETBIOS SMB IPC$ unicode share access — 1 events [dec21isc-06#2]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- high severity alerts: 2 matching events [dec21isc-06#2]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- high severity alerts > high severity  destinations: 10.12.3.3 — 1 events [dec21isc-06#2]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Command-and-Control and Network Activity",
+    "line": "- file transfers > transfer details: 10.12.3.66 -> 139.59.6.175:80 : file: IE7MnYfF4c.dll — 1 events [dec21isc-01#2]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Command-and-Control and Network Activity",
+    "line": "- file transfers > transfer details: 10.12.3.66 -> 163.172.50.82:443 : fuid: FmBkZQ1QW21exVxXkf — 1 events [dec21isc-01#2]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Command-and-Control and Network Activity",
+    "line": "- file transfers > transfer details: 10.12.3.66 -> 172.104.227.98:443 : fuid: FRmn1G3jW4ycHzKCk — 1 events [dec21isc-01#2]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Command-and-Control and Network Activity",
+    "line": "- file transfers > transfer details: 10.12.3.66 -> 20.50.201.200:443 : fuid: Ft93YucvRiDc9VXKa — 1 events [dec21isc-01#2]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file types: other — 254 events [dec21isc-01#4]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file types: exe — 1 events [dec21isc-01#4]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download sources: 10.12.3.66 — 255 events [dec21isc-01#4]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: gamaes.shop — 1 events [dec21isc-01#0]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: newsaarctech.com — 1 events [dec21isc-01#0]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- http requests: no_http_uri — 251 events [dec21isc-01#0]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- http requests: 10.12.3.66 -> 104.21.29.80:80 : /wp-content/plugins/sSTToaEwCG5VASw/ — 2 events [dec21isc-01#0]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.12.3.66 -> 139.59.6.175:80 : /wp-content/Sx9tvV5/ — 2 events [dec21isc-01#1]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers: 19 matching events [dec21isc-01#1]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: file_transfer — 2 events [dec21isc-01#1]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: 10.12.3.66 -> 104.21.29.80:80 : fuid: Fgt1qpTQKLib5heKg — 1 events [dec21isc-01#1]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Command-and-Control and Network Activity",
+    "line": "- file transfers > transfer details: 10.12.3.66 -> 139.59.6.175:80 : file: IE7MnYfF4c.dll — 1 events [dec21isc-01#2]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Command-and-Control and Network Activity",
+    "line": "- file transfers > transfer details: 10.12.3.66 -> 163.172.50.82:443 : fuid: FmBkZQ1QW21exVxXkf — 1 events [dec21isc-01#2]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Command-and-Control and Network Activity",
+    "line": "- file transfers > transfer details: 10.12.3.66 -> 172.104.227.98:443 : fuid: FRmn1G3jW4ycHzKCk — 1 events [dec21isc-01#2]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Command-and-Control and Network Activity",
+    "line": "- file transfers > transfer details: 10.12.3.66 -> 20.50.201.200:443 : fuid: Ft93YucvRiDc9VXKa — 1 events [dec21isc-01#2]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: 10.12.3.66 -> 20.72.205.209:443 : fuid: FJFP3C40hex6kT3Ggl — 1 events [dec21isc-01#3]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: 10.12.3.66 -> 204.79.197.200:443 : fuid: FdlPTh4wos9hySdl7g — 1 events [dec21isc-01#3]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: 10.12.3.66 -> 204.79.197.203:443 : fuid: F6yvjQ1CPyjn2U59B8 — 1 events [dec21isc-01#3]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: 10.12.3.66 -> 40.83.240.146:443 : fuid: FzLTB42igmFgNIabdd — 1 events [dec21isc-01#3]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file types: other — 254 events [dec21isc-01#4]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file types: exe — 1 events [dec21isc-01#4]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download sources: 10.12.3.66 — 255 events [dec21isc-01#4]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- client accounts: darin.figueroa — 6 events; source ips: 10.12.3.66 (6) [dec21isc-03#0]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: ET JA3 Hash - [Abuse.ch] Possible Dridex — 50 events [dec21isc-06#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: ET INFO Windows Powershell User-Agent Usage — 2 events [dec21isc-06#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: ET HUNTING Suspicious Domain Request for Possible COVID-19 Domain M1 — 1 events [dec21isc-06#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: ET INFO EXE - Served Attached HTTP — 1 events [dec21isc-06#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: gamaes.shop — 1 events [dec21isc-01#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: newsaarctech.com — 1 events [dec21isc-01#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- http requests: no_http_uri — 251 events [dec21isc-01#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- http requests: 10.12.3.66 -> 104.21.29.80:80 : /wp-content/plugins/sSTToaEwCG5VASw/ — 2 events [dec21isc-01#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.12.3.66 -> 139.59.6.175:80 : /wp-content/Sx9tvV5/ — 2 events [dec21isc-01#1]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers: 19 matching events [dec21isc-01#1]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: file_transfer — 2 events [dec21isc-01#1]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: 10.12.3.66 -> 104.21.29.80:80 : fuid: Fgt1qpTQKLib5heKg — 1 events [dec21isc-01#1]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- high severity alerts > high severity  destinations: 10.12.3.66 — 1 events [dec21isc-06#3]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- high severity alerts > high severity signatures: ET HUNTING Suspicious Domain Request for Possible COVID-19 Domain M1 — 1 events [dec21isc-06#3]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- high severity alerts > high severity signatures: ET INFO PE EXE or DLL Windows file download HTTP — 1 events [dec21isc-06#3]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- high severity alerts > high severity sources: 10.12.3.66 — 1 events [dec21isc-06#3]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Command-and-Control and Network Activity",
+    "line": "- file transfers > transfer details: 10.12.3.66 -> 139.59.6.175:80 : file: IE7MnYfF4c.dll — 1 events [dec21isc-01#2]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Command-and-Control and Network Activity",
+    "line": "- file transfers > transfer details: 10.12.3.66 -> 163.172.50.82:443 : fuid: FmBkZQ1QW21exVxXkf — 1 events [dec21isc-01#2]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Command-and-Control and Network Activity",
+    "line": "- file transfers > transfer details: 10.12.3.66 -> 172.104.227.98:443 : fuid: FRmn1G3jW4ycHzKCk — 1 events [dec21isc-01#2]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Command-and-Control and Network Activity",
+    "line": "- file transfers > transfer details: 10.12.3.66 -> 20.50.201.200:443 : fuid: Ft93YucvRiDc9VXKa — 1 events [dec21isc-01#2]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- source clients: 10.12.3.66 — 164 events; external destinations=16; top destinations: 172.104.227.98 (79), 163.172.50.82 (19), 51.75.33.120 (10), 51.159.35.157 (9), 52.109.8.24 (7); 40 further events in other values [dec21isc-02#0]",
+    "section": "Corrective and Preventive Actions"
+   }
+  ]
+ },
+ "removed_unverified_lines": 0,
+ "run_log": [
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "dec21isc-09#0",
+    "dec21isc-03#0",
+    "dec21isc-02#0",
+    "dec21isc-04#0",
+    "dec21isc-10#0",
+    "dec21isc-01#0"
+   ],
+   "seconds": 0,
+   "section": "Affected Host and User",
+   "truncated": false
+  },
+  {
+   "extractive": true,
+   "flag_counts": {},
+   "retrieved": [
+    "dec21isc-06#4",
+    "dec21isc-09#0"
+   ],
+   "seconds": 0,
+   "section": "Timeline"
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "dec21isc-06#0",
+    "dec21isc-06#1",
+    "dec21isc-06#2",
+    "dec21isc-06#3",
+    "dec21isc-06#4",
+    "dec21isc-09#0"
+   ],
+   "seconds": 0,
+   "section": "Detection: IDS Alerts",
+   "truncated": false
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "dec21isc-01#0",
+    "dec21isc-01#4",
+    "dec21isc-01#1",
+    "dec21isc-08#0",
+    "dec21isc-01#3",
+    "dec21isc-02#0"
+   ],
+   "seconds": 0,
+   "section": "Initial Infection Indicators",
+   "truncated": false
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "dec21isc-09#0",
+    "dec21isc-02#0",
+    "dec21isc-01#1",
+    "dec21isc-01#3",
+    "dec21isc-01#2",
+    "dec21isc-01#4"
+   ],
+   "seconds": 0,
+   "section": "Command-and-Control and Network Activity",
+   "truncated": false
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "dec21isc-02#0",
+    "dec21isc-01#0",
+    "dec21isc-01#1",
+    "dec21isc-06#2",
+    "dec21isc-01#2",
+    "dec21isc-01#4"
+   ],
+   "seconds": 0,
+   "section": "Impact Assessment",
+   "truncated": false
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "dec21isc-01#0",
+    "dec21isc-01#1",
+    "dec21isc-01#2",
+    "dec21isc-01#3",
+    "dec21isc-01#4",
+    "dec21isc-03#0"
+   ],
+   "seconds": 0,
+   "section": "Root Cause and Evidence Gaps",
+   "truncated": false
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "dec21isc-06#0",
+    "dec21isc-01#0",
+    "dec21isc-01#1",
+    "dec21isc-06#3",
+    "dec21isc-01#2",
+    "dec21isc-02#0"
+   ],
+   "seconds": 0,
+   "section": "Corrective and Preventive Actions",
+   "truncated": false
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "dec21isc-10#0",
+    "dec21isc-09#0",
+    "dec21isc-03#0",
+    "dec21isc-05#0",
+    "dec21isc-02#0",
+    "dec21isc-07#1",
+    "dec21isc-06#0",
+    "dec21isc-01#1"
+   ],
+   "seconds": 0,
+   "section": "Answers to Investigation Questions",
+   "truncated": false
+  }
+ ],
+ "scenario": "dec21isc",
+ "seconds_total": 0,
+ "verification_totals": {}
+}

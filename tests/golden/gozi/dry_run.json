@@ -1,0 +1,260 @@
+{
+ "retrievals": [
+  {
+   "ids": [
+    "gozi-08#0",
+    "gozi-02#0",
+    "gozi-01#3",
+    "gozi-03#0",
+    "gozi-04#1",
+    "gozi-07#0"
+   ],
+   "queries": [
+    "internal client IP address ranked by external connections",
+    "Kerberos hostname source IP",
+    "Kerberos client account human user source IP",
+    "derived Kerberos identity of internal client"
+   ],
+   "rerank_query": "Which internal host is affected (IP address, hostname and human user account)?"
+  },
+  {
+   "ids": [
+    "gozi-08#0",
+    "gozi-01#4",
+    "gozi-06#2",
+    "gozi-06#6",
+    "gozi-06#1"
+   ],
+   "queries": [
+    "earliest alert hour alert timeline",
+    "alert timeline hourly Suricata alerts UTC",
+    "first seen last seen timestamp UTC",
+    "first contact external IP first queried domain"
+   ],
+   "rerank_query": "Chronological order of key events with UTC timestamps."
+  },
+  {
+   "ids": [
+    "gozi-06#2",
+    "gozi-06#0",
+    "gozi-06#1",
+    "gozi-06#5",
+    "gozi-06#6",
+    "gozi-08#0"
+   ],
+   "queries": [
+    "Suricata alert signatures malware CnC",
+    "high severity alerts destinations sources",
+    "ET MALWARE trojan alert signature",
+    "suspicious POST user agent alert"
+   ],
+   "rerank_query": "Which Suricata alerts indicate malicious activity, and which hosts do they involve?"
+  },
+  {
+   "ids": [
+    "gozi-01#0",
+    "gozi-01#3",
+    "gozi-01#1",
+    "gozi-01#2",
+    "gozi-01#4",
+    "gozi-01#6"
+   ],
+   "queries": [
+    "suspicious domains fake site download",
+    "HTTP file downloads URI file type",
+    "download domains requests client to server",
+    "TLS certificate self-signed IP-based",
+    "direct IP HTTP connections raw IP"
+   ],
+   "rerank_query": "Which domains, URLs or downloads were the likely initial infection vector?"
+  },
+  {
+   "ids": [
+    "gozi-08#0",
+    "gozi-02#0",
+    "gozi-01#0",
+    "gozi-01#4",
+    "gozi-01#1",
+    "gozi-01#2"
+   ],
+   "queries": [
+    "most contacted external IP connections",
+    "high severity alert destination C2 check-in",
+    "external destinations top destinations connections",
+    "direct IP connections POST beaconing"
+   ],
+   "rerank_query": "Which external IP addresses look like command-and-control servers and why?"
+  },
+  {
+   "ids": [
+    "gozi-01#0",
+    "gozi-01#1",
+    "gozi-01#4",
+    "gozi-01#2",
+    "gozi-01#3",
+    "gozi-08#0"
+   ],
+   "queries": [
+    "data theft stealer credential exfiltration alert",
+    "ransomware encryption availability integrity",
+    "volume of connections external destinations",
+    "number of affected hosts"
+   ],
+   "rerank_query": "Which security property (confidentiality, integrity or availability) is targeted, and what is the scale of impact?"
+  },
+  {
+   "ids": [
+    "gozi-01#0",
+    "gozi-01#1",
+    "gozi-01#4",
+    "gozi-01#6",
+    "gozi-01#8"
+   ],
+   "queries": [
+    "no matching results query returned nothing",
+    "evidence unavailable shard failed",
+    "initial infection vector unknown",
+    "no results certificates"
+   ],
+   "rerank_query": "What is the most likely root cause and what cannot be determined from the evidence?"
+  },
+  {
+   "ids": [
+    "gozi-01#0",
+    "gozi-01#3",
+    "gozi-04#0",
+    "gozi-08#0",
+    "gozi-01#1",
+    "gozi-01#2"
+   ],
+   "queries": [
+    "block malicious IP domain",
+    "suspicious external server alert destination",
+    "affected host user account",
+    "malicious download URL"
+   ],
+   "rerank_query": "Which concrete containment and prevention actions follow from the observed indicators?"
+  },
+  {
+   "ids": [
+    "gozi-09#0",
+    "gozi-08#0",
+    "gozi-05#0"
+   ],
+   "queries": [
+    "What is the IP address of the potentially infected internal host in the LAN?"
+   ],
+   "rerank_query": "What is the IP address of the potentially infected internal host in the LAN?"
+  },
+  {
+   "ids": [
+    "gozi-09#0",
+    "gozi-08#0",
+    "gozi-03#0"
+   ],
+   "queries": [
+    "What is the hostname of the potentially infected machine in the LAN?"
+   ],
+   "rerank_query": "What is the hostname of the potentially infected machine in the LAN?"
+  },
+  {
+   "ids": [
+    "gozi-09#0",
+    "gozi-03#0",
+    "gozi-08#0"
+   ],
+   "queries": [
+    "What is the Windows human user account name (not machine accounts ending in $) of the potentially infected machine in the LAN?"
+   ],
+   "rerank_query": "What is the Windows human user account name (not machine accounts ending in $) of the potentially infected machine in the LAN?"
+  },
+  {
+   "ids": [
+    "gozi-09#0",
+    "gozi-01#2",
+    "gozi-01#0"
+   ],
+   "queries": [
+    "What are the likely suspicious domains for initial infection?"
+   ],
+   "rerank_query": "What are the likely suspicious domains for initial infection?"
+  },
+  {
+   "ids": [
+    "gozi-09#0",
+    "gozi-08#0",
+    "gozi-02#0"
+   ],
+   "queries": [
+    "What are the suspicious external IP addresses contacted, which might be involved in command-and-control (C2) communication?"
+   ],
+   "rerank_query": "What are the suspicious external IP addresses contacted, which might be involved in command-and-control (C2) communication?"
+  },
+  {
+   "ids": [
+    "gozi-09#0",
+    "gozi-08#0",
+    "gozi-06#2"
+   ],
+   "queries": [
+    "What are the exact filenames of the encoded modules or plugins downloaded by the malware?"
+   ],
+   "rerank_query": "What are the exact filenames of the encoded modules or plugins downloaded by the malware?"
+  },
+  {
+   "ids": [
+    "gozi-09#0",
+    "gozi-08#0",
+    "gozi-03#0"
+   ],
+   "queries": [
+    "Which of the three CIA components does the attacker target primarily: availability, integrity, or confidentiality?"
+   ],
+   "rerank_query": "Which of the three CIA components does the attacker target primarily: availability, integrity, or confidentiality?"
+  },
+  {
+   "ids": [
+    "gozi-08#0",
+    "gozi-09#0",
+    "gozi-02#0"
+   ],
+   "queries": [
+    "During what hour did the first signs of infection activity appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format."
+   ],
+   "rerank_query": "During what hour did the first signs of infection activity appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format."
+  },
+  {
+   "ids": [
+    "gozi-08#0",
+    "gozi-09#0",
+    "gozi-02#0"
+   ],
+   "queries": [
+    "According to the connection volume statistics, what single external IP address received the most connections from the infected hosts? Is it a C2 server or a legitimate service?"
+   ],
+   "rerank_query": "According to the connection volume statistics, what single external IP address received the most connections from the infected hosts? Is it a C2 server or a legitimate service?"
+  }
+ ],
+ "stdout": [
+  "[enrich] added 0 artifact(s) from raw logs",
+  "[index] 9 artifacts -> 26 chunks",
+  "",
+  "=== Affected Host and User -> ['gozi-08#0', 'gozi-02#0', 'gozi-01#3', 'gozi-03#0', 'gozi-04#1', 'gozi-07#0']",
+  "",
+  "=== Timeline -> ['gozi-08#0', 'gozi-01#4', 'gozi-06#2', 'gozi-06#6', 'gozi-06#1']",
+  "",
+  "=== Detection: IDS Alerts -> ['gozi-06#2', 'gozi-06#0', 'gozi-06#1', 'gozi-06#5', 'gozi-06#6', 'gozi-08#0']",
+  "",
+  "=== Initial Infection Indicators -> ['gozi-01#0', 'gozi-01#3', 'gozi-01#1', 'gozi-01#2', 'gozi-01#4', 'gozi-01#6']",
+  "",
+  "=== Command-and-Control and Network Activity -> ['gozi-08#0', 'gozi-02#0', 'gozi-01#0', 'gozi-01#4', 'gozi-01#1', 'gozi-01#2']",
+  "",
+  "=== Impact Assessment -> ['gozi-01#0', 'gozi-01#1', 'gozi-01#4', 'gozi-01#2', 'gozi-01#3', 'gozi-08#0']",
+  "",
+  "=== Root Cause and Evidence Gaps -> ['gozi-01#0', 'gozi-01#1', 'gozi-01#4', 'gozi-01#6', 'gozi-01#8']",
+  "",
+  "=== Corrective and Preventive Actions -> ['gozi-01#0', 'gozi-01#3', 'gozi-04#0', 'gozi-08#0', 'gozi-01#1', 'gozi-01#2']",
+  "",
+  "=== Answers to Investigation Questions -> ['gozi-09#0', 'gozi-08#0', 'gozi-05#0', 'gozi-03#0', 'gozi-01#2', 'gozi-01#0', 'gozi-02#0', 'gozi-06#2']"
+ ]
+}

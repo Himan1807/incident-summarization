@@ -1,0 +1,110 @@
+[
+ {
+  "id": "fake_auth-01#0",
+  "text": "[fake_auth-01 | network_summary/file_downloads] HTTP file downloads and file transfers: download domains/IPs, requests (client -> server:port : URI), file types and download sources.\ndownload domains: 5.252.153.241 — 594 events\ndownload domains: master16.teamviewer.com — 21 events\ndownload domains: msedge.b.tlu.dl.delivery.mp.microsoft.com — 4 events\ndownload domains: download.windowsupdate.com — 3 events"
+ },
+ {
+  "id": "fake_auth-01#1",
+  "text": "[fake_auth-01 | network_summary/file_downloads] HTTP file downloads and file transfers: download domains/IPs, requests (client -> server:port : URI), file types and download sources.\ndownload domains: ctldl.windowsupdate.com — 2 events\ndownload domains: www.msftconnecttest.com — 2 events\ndownload domains: au.download.windowsupdate.com — 1 events\nhttp requests: no_http_uri — 1187 events"
+ },
+ {
+  "id": "fake_auth-01#2",
+  "text": "[fake_auth-01 | network_summary/file_downloads] HTTP file downloads and file transfers: download domains/IPs, requests (client -> server:port : URI), file types and download sources.\nhttp requests: 10.1.17.215 -> 5.252.153.241:80 : /1517096937 — 584 events\nhttp requests: 10.1.17.215 -> 5.252.153.241:80 : /api/file/get-file/29842.ps1 — 4 events\nhttp requests: 10.1.17.215 -> 185.188.32.26:80 : /din.aspx?s=00000000&id=0&client=DynGate&rnd=427975263&p=10000001 — 3 events\nhttp requests: 10.1.17.215 -> 185.188.32.26:80 : /din.aspx?s=91930119&id=0&client=DynGate&p=10000002 — 3 events"
+ },
+ {
+  "id": "fake_auth-01#3",
+  "text": "[fake_auth-01 | network_summary/file_downloads] HTTP file downloads and file transfers: download domains/IPs, requests (client -> server:port : URI), file types and download sources.\nhttp requests: 10.1.17.215 -> 5.252.153.241:80 : /1517096937?k=script: RunRH, status: OK, message: PS process started — 3 events\nhttp requests: 10.1.17.215 -> 5.252.153.241:80 : /api/file/get-file/264872 — 3 events\nhttp requests: 10.1.17.215 -> 185.188.32.26:80 : /din.aspx?s=91930135&id=0&client=DynGate&p=10000002 — 2 events\nhttp requests: 10.1.17.215 -> 185.188.32.26:80 : /din.aspx?s=91930144&id=0&client=DynGate&p=10000002 — 2 events"
+ },
+ {
+  "id": "fake_auth-01#4",
+  "text": "[fake_auth-01 | network_summary/file_downloads] HTTP file downloads and file transfers: download domains/IPs, requests (client -> server:port : URI), file types and download sources.\nhttp requests: 10.1.17.215 -> 185.188.32.26:80 : /din.aspx?s=91930165&id=0&client=DynGate&p=10000002 — 2 events\nfile transfers: 1308 matching events\nfile transfers > transfer details: file_transfer — 617 events\nfile transfers > transfer details: 10.1.17.215 -> 13.107.21.239:443 : fuid: F1NJjy3oFAIPDAJDF3 — 1 events"
+ },
+ {
+  "id": "fake_auth-01#5",
+  "text": "[fake_auth-01 | network_summary/file_downloads] HTTP file downloads and file transfers: download domains/IPs, requests (client -> server:port : URI), file types and download sources.\nfile transfers > transfer details: 10.1.17.215 -> 13.107.21.239:443 : fuid: FDPLxym9FkpggOH87 — 1 events\nfile transfers > transfer details: 10.1.17.215 -> 13.107.21.239:443 : fuid: FMJk4e3BqbeBK80yi4 — 1 events\nfile transfers > transfer details: 10.1.17.215 -> 13.107.21.239:443 : fuid: FOjuHW2lXOjv4zdg82 — 1 events\nfile transfers > transfer details: 10.1.17.215 -> 13.107.21.239:443 : fuid: FZWTDm3BMv3YSWGQf5 — 1 events"
+ },
+ {
+  "id": "fake_auth-01#6",
+  "text": "[fake_auth-01 | network_summary/file_downloads] HTTP file downloads and file transfers: download domains/IPs, requests (client -> server:port : URI), file types and download sources.\nfile transfers > transfer details: 10.1.17.215 -> 13.107.21.239:443 : fuid: FbB23Z1dk7c9sDhWf — 1 events\nfile transfers > transfer details: 10.1.17.215 -> 13.107.21.239:443 : fuid: Fso3RP1ZQRY0bhAGVl — 1 events\nfile transfers > transfer details: 10.1.17.215 -> 13.107.42.14:443 : fuid: F4zRqw2DUGjBIBdRvh — 1 events\nfile transfers > transfer details: 10.1.17.215 -> 13.71.55.58:443 : fuid: FH1h2Z2c3UICAAcBMb — 1 events"
+ },
+ {
+  "id": "fake_auth-01#7",
+  "text": "[fake_auth-01 | network_summary/file_downloads] HTTP file downloads and file transfers: download domains/IPs, requests (client -> server:port : URI), file types and download sources.\nfile types: other — 1813 events\nfile types: exe — 5 events\nfile types: powershell — 5 events\ndownload sources: 10.1.17.215 — 1823 events"
+ },
+ {
+  "id": "fake_auth-02#0",
+  "text": "[fake_auth-02 | network_summary/high_activity_external_dest] Internal clients ranked by number of connections to external destinations, with each client's most-contacted destinations.\nsource clients: 10.1.17.215 — 1823 events; external destinations=119; top destinations: 5.252.153.241 (1196), 23.207.166.9 (75), 185.188.32.26 (48), 204.79.197.203 (30), 13.107.246.57 (26); 448 further events in other values"
+ },
+ {
+  "id": "fake_auth-03#0",
+  "text": "[fake_auth-03 | authentication/kerberos_clients] Kerberos client account names (user accounts) and the source IPs they authenticated from.\nclient accounts: shutchenson — 11 events; source ips: 10.1.17.215 (11)\nclient accounts: DESKTOP-L8C5GSJ$ — 10 events; source ips: 10.1.17.215 (10)\nclient accounts: desktop-l8c5gsj$ — 4 events; source ips: 10.1.17.215 (4)"
+ },
+ {
+  "id": "fake_auth-04#0",
+  "text": "[fake_auth-04 | authentication/kerberos_full_services] Kerberos services requested (including host and machine account names) per source IP.\nfull services: krb_tcp — 25 events; source ips: 10.1.17.215 (25)\nfull services: krbtgt/BLUEMOONTUESDAY.COM — 9 events; source ips: 10.1.17.215 (9)\nfull services: LDAP/WIN-GSH54QLW48D.bluemoontuesday.com/bluemoontuesday.com — 3 events; source ips: 10.1.17.215 (3)\nfull services: cifs/WIN-GSH54QLW48D.bluemoontuesday.com — 3 events; source ips: 10.1.17.215 (3)"
+ },
+ {
+  "id": "fake_auth-04#1",
+  "text": "[fake_auth-04 | authentication/kerberos_full_services] Kerberos services requested (including host and machine account names) per source IP.\nfull services: ldap/win-gsh54qlw48d.bluemoontuesday.com — 2 events; source ips: 10.1.17.215 (2)\nfull services: DESKTOP-L8C5GSJ$ — 1 events; source ips: 10.1.17.215 (1)\nfull services: LDAP/WIN-GSH54QLW48D.bluemoontuesday.com — 1 events; source ips: 10.1.17.215 (1)\nfull services: cifs/WIN-GSH54QLW48D.bluemoontuesday.com/bluemoontuesday.com — 1 events; source ips: 10.1.17.215 (1)"
+ },
+ {
+  "id": "fake_auth-04#2",
+  "text": "[fake_auth-04 | authentication/kerberos_full_services] Kerberos services requested (including host and machine account names) per source IP.\nfull services: host/desktop-l8c5gsj.bluemoontuesday.com — 1 events; source ips: 10.1.17.215 (1)\nfull services: krbtgt/BLUEMOONTUESDAY — 1 events; source ips: 10.1.17.215 (1)\nfull services: krbtgt/bluemoontuesday.com — 1 events; source ips: 10.1.17.215 (1)\nfull services: ldap/win-gsh54qlw48d.bluemoontuesday.com/bluemoontuesday.com — 1 events; source ips: 10.1.17.215 (1)"
+ },
+ {
+  "id": "fake_auth-04#3",
+  "text": "[fake_auth-04 | authentication/kerberos_full_services] Kerberos services requested (including host and machine account names) per source IP.\nfull services: netlogon/WIN-GSH54QLW48D.bluemoontuesday.com/bluemoontuesday.com — 1 events; source ips: 10.1.17.215 (1)"
+ },
+ {
+  "id": "fake_auth-05#0",
+  "text": "[fake_auth-05 | authentication/kerberos_hostnames] Host names seen in Kerberos traffic with their source IPs.\nhostnames: desktop-l8c5gsj — 1 events; source ips: 10.1.17.215 (1)"
+ },
+ {
+  "id": "fake_auth-06#0",
+  "text": "[fake_auth-06 | ids_alerts/suricata_alerts] Suricata IDS alerts: signatures, high-severity alert destinations and sources, and an hourly alert timeline (UTC).\nalert signatures: ET DROP Spamhaus DROP Listed Traffic Inbound group 5 — 2 events\nalert signatures: ET INFO Microsoft Connection Test — 2 events\nalert signatures: ET INFO PS1 Powershell File Request — 2 events\nalert signatures: ET INFO TeamViewer Dyngate User-Agent — 2 events"
+ },
+ {
+  "id": "fake_auth-06#1",
+  "text": "[fake_auth-06 | ids_alerts/suricata_alerts] Suricata IDS alerts: signatures, high-severity alert destinations and sources, and an hourly alert timeline (UTC).\nalert signatures: ET MALWARE Fake Microsoft Teams CnC Payload Request (GET) — 2 events\nalert signatures: ET INFO Observed UA-CPU Header — 1 events\nalert signatures: ET REMOTE_ACCESS TeamViewer RMM Domain (teamviewer .com) in DNS Lookup — 1 events\nhigh severity alerts: 8 matching events"
+ },
+ {
+  "id": "fake_auth-06#2",
+  "text": "[fake_auth-06 | ids_alerts/suricata_alerts] Suricata IDS alerts: signatures, high-severity alert destinations and sources, and an hourly alert timeline (UTC).\nhigh severity alerts > high severity  destinations: 5.252.153.241 — 4 events\nhigh severity alerts > high severity  destinations: 10.1.17.215 — 2 events\nhigh severity alerts > high severity  destinations: 185.188.32.26 — 2 events\nhigh severity alerts > high severity signatures: ET DROP Spamhaus DROP Listed Traffic Inbound group 5 — 2 events"
+ },
+ {
+  "id": "fake_auth-06#3",
+  "text": "[fake_auth-06 | ids_alerts/suricata_alerts] Suricata IDS alerts: signatures, high-severity alert destinations and sources, and an hourly alert timeline (UTC).\nhigh severity alerts > high severity signatures: ET INFO PS1 Powershell File Request — 2 events\nhigh severity alerts > high severity signatures: ET INFO TeamViewer Dyngate User-Agent — 2 events\nhigh severity alerts > high severity signatures: ET MALWARE Fake Microsoft Teams CnC Payload Request (GET) — 2 events\nhigh severity alerts > high severity sources: 10.1.17.215 — 6 events"
+ },
+ {
+  "id": "fake_auth-06#4",
+  "text": "[fake_auth-06 | ids_alerts/suricata_alerts] Suricata IDS alerts: signatures, high-severity alert destinations and sources, and an hourly alert timeline (UTC).\nhigh severity alerts > high severity sources: 45.125.66.32 — 1 events\nhigh severity alerts > high severity sources: 45.125.66.252 — 1 events\nalert timeline: 2025-01-22 19:00 UTC — 10 events\nalert timeline: 2025-01-22 20:00 UTC — 2 events"
+ },
+ {
+  "id": "fake_auth-07#0",
+  "text": "[fake_auth-07 | network_summary/suspicious_certificates] TLS certificates that are self-signed, IP-based or short-lived.\nself signed analysis: 2 matching events\nself signed analysis > self signed details: IP_certificate: 45.125.66.252 — 1 events\nself signed analysis > self signed details: IP_certificate: 45.125.66.32 — 1 events\nip based certificates: 2 matching events"
+ },
+ {
+  "id": "fake_auth-07#1",
+  "text": "[fake_auth-07 | network_summary/suspicious_certificates] TLS certificates that are self-signed, IP-based or short-lived.\nip based certificates > ip cert details: IP_cert: 45.125.66.252 — 1 events\nip based certificates > ip cert details: IP_cert: 45.125.66.32 — 1 events\nshort validity certs: normal_validity — 2 events"
+ },
+ {
+  "id": "fake_auth-08#0",
+  "text": "[fake_auth-08 | network_summary/suspicious_domains] Unusual domains with their source and destination IPs, and direct-IP HTTP connections.\ndomains: oneclient.sfx.ms — 4 events; top source ips: 10.1.17.215 (4); top destination ips: 23.212.73.35 (2), 23.41.241.15 (1), 23.55.125.39 (1)\ndomains: img-s-msn-com.akamaized.net — 2 events; top source ips: 10.1.17.215 (2); top destination ips: 23.205.110.12 (1), 23.205.110.59 (1)\ndomains: px.owneriq.net — 2 events; top source ips: 10.1.17.215 (2); top destination ips: 23.199.168.146 (2)\ndomains: ag.innovid.com — 1 events; top source ips: 10.1.17.215 (1); top destination ips: 3.82.67.153 (1)"
+ },
+ {
+  "id": "fake_auth-08#1",
+  "text": "[fake_auth-08 | network_summary/suspicious_domains] Unusual domains with their source and destination IPs, and direct-IP HTTP connections.\ndomains: appointedtimeagriculture.com — 1 events; top source ips: 10.1.17.215 (1); top destination ips: 217.70.186.109 (1)\ndomains: assets.adobedtm.com — 1 events; top source ips: 10.1.17.215 (1); top destination ips: 23.55.124.236 (1)\ndomains: authenticatoor.org — 1 events; top source ips: 10.1.17.215 (1); top destination ips: 82.221.136.26 (1)\ndomains: bttrack.com — 1 events; top source ips: 10.1.17.215 (1); top destination ips: 192.132.33.69 (1)"
+ },
+ {
+  "id": "fake_auth-08#2",
+  "text": "[fake_auth-08 | network_summary/suspicious_domains] Unusual domains with their source and destination IPs, and direct-IP HTTP connections.\ndomains: c.go-mpulse.net — 1 events; top source ips: 10.1.17.215 (1); top destination ips: 23.207.164.186 (1)\ndomains: dmpsync.3lift.com — 1 events; top source ips: 10.1.17.215 (1); top destination ips: 35.71.139.29 (1)\ndomains: dpm.demdex.net — 1 events; top source ips: 10.1.17.215 (1); top destination ips: 52.32.135.66 (1)\ndomains: ds.reson8.com — 1 events; top source ips: 10.1.17.215 (1); top destination ips: 104.18.8.76 (1)"
+ },
+ {
+  "id": "fake_auth-08#3",
+  "text": "[fake_auth-08 | network_summary/suspicious_domains] Unusual domains with their source and destination IPs, and direct-IP HTTP connections.\ndomains: google-authenticator.burleson-appliance.net — 1 events; top source ips: 10.1.17.215 (1); top destination ips: 104.21.64.1 (1)\ndomains: jadserve.postrelease.com — 1 events; top source ips: 10.1.17.215 (1); top destination ips: 44.237.90.153 (1)\ndomains: mscom.demdex.net — 1 events; top source ips: 10.1.17.215 (1); top destination ips: 35.84.233.181 (1)\ndomains: play.vidyard.com — 1 events; top source ips: 10.1.17.215 (1); top destination ips: 151.101.1.181 (1)"
+ },
+ {
+  "id": "fake_auth-09#0",
+  "text": "[fake_auth-09 | derived_findings/derived_summary] Deterministic summary computed from the query results above (client ranking, IP-to-hostname/account join, alert timeline).\nDerived: internal client 10.1.17.215 ranks #1 by external connections (1823 events, 119 distinct external destinations). Most-contacted external IP: 5.252.153.241 (1196 connections).\nDerived: Kerberos identity of 10.1.17.215: hostname(s) desktop-l8c5gsj; human user account(s) shutchenson.\nDerived: Suricata alerts span 2025-01-22 19:00 UTC to 2025-01-22 20:00 UTC; earliest alert hour 2025-01-22 19:00 UTC (10 alerts).\nDerived: destinations of high-severity alerts: 5.252.153.241 (4), 10.1.17.215 (2), 185.188.32.26 (2)."
+ }
+]

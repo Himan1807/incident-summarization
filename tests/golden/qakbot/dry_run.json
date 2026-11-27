@@ -1,0 +1,251 @@
+{
+ "retrievals": [
+  {
+   "ids": [
+    "qakbot-09#0",
+    "qakbot-03#0",
+    "qakbot-02#0",
+    "qakbot-05#0",
+    "qakbot-04#1",
+    "qakbot-08#0"
+   ],
+   "queries": [
+    "internal client IP address ranked by external connections",
+    "Kerberos hostname source IP",
+    "Kerberos client account human user source IP",
+    "derived Kerberos identity of internal client"
+   ],
+   "rerank_query": "Which internal host is affected (IP address, hostname and human user account)?"
+  },
+  {
+   "ids": [
+    "qakbot-06#1",
+    "qakbot-09#0",
+    "qakbot-06#3",
+    "qakbot-01#0",
+    "qakbot-06#4",
+    "qakbot-06#2"
+   ],
+   "queries": [
+    "earliest alert hour alert timeline",
+    "alert timeline hourly Suricata alerts UTC",
+    "first seen last seen timestamp UTC",
+    "first contact external IP first queried domain"
+   ],
+   "rerank_query": "Chronological order of key events with UTC timestamps."
+  },
+  {
+   "ids": [
+    "qakbot-06#1",
+    "qakbot-06#4",
+    "qakbot-06#6",
+    "qakbot-06#7",
+    "qakbot-06#2",
+    "qakbot-06#3"
+   ],
+   "queries": [
+    "Suricata alert signatures malware CnC",
+    "high severity alerts destinations sources",
+    "ET MALWARE trojan alert signature",
+    "suspicious POST user agent alert"
+   ],
+   "rerank_query": "Which Suricata alerts indicate malicious activity, and which hosts do they involve?"
+  },
+  {
+   "ids": [
+    "qakbot-01#0",
+    "qakbot-01#1",
+    "qakbot-01#4",
+    "qakbot-01#2",
+    "qakbot-08#1",
+    "qakbot-02#0"
+   ],
+   "queries": [
+    "suspicious domains fake site download",
+    "HTTP file downloads URI file type",
+    "download domains requests client to server",
+    "TLS certificate self-signed IP-based",
+    "direct IP HTTP connections raw IP"
+   ],
+   "rerank_query": "Which domains, URLs or downloads were the likely initial infection vector?"
+  },
+  {
+   "ids": [
+    "qakbot-02#0",
+    "qakbot-09#0",
+    "qakbot-08#3",
+    "qakbot-08#2",
+    "qakbot-08#1",
+    "qakbot-08#0"
+   ],
+   "queries": [
+    "most contacted external IP connections",
+    "high severity alert destination C2 check-in",
+    "external destinations top destinations connections",
+    "direct IP connections POST beaconing"
+   ],
+   "rerank_query": "Which external IP addresses look like command-and-control servers and why?"
+  },
+  {
+   "ids": [
+    "qakbot-06#0",
+    "qakbot-01#0",
+    "qakbot-01#1",
+    "qakbot-06#1",
+    "qakbot-02#0",
+    "qakbot-09#0"
+   ],
+   "queries": [
+    "data theft stealer credential exfiltration alert",
+    "ransomware encryption availability integrity",
+    "volume of connections external destinations",
+    "number of affected hosts"
+   ],
+   "rerank_query": "Which security property (confidentiality, integrity or availability) is targeted, and what is the scale of impact?"
+  },
+  {
+   "ids": [
+    "qakbot-01#1",
+    "qakbot-01#2",
+    "qakbot-01#3",
+    "qakbot-03#0",
+    "qakbot-01#0",
+    "qakbot-01#4"
+   ],
+   "queries": [
+    "no matching results query returned nothing",
+    "evidence unavailable shard failed",
+    "initial infection vector unknown",
+    "no results certificates"
+   ],
+   "rerank_query": "What is the most likely root cause and what cannot be determined from the evidence?"
+  },
+  {
+   "ids": [
+    "qakbot-06#1",
+    "qakbot-01#0",
+    "qakbot-01#1",
+    "qakbot-02#0",
+    "qakbot-09#0",
+    "qakbot-06#3"
+   ],
+   "queries": [
+    "block malicious IP domain",
+    "suspicious external server alert destination",
+    "affected host user account",
+    "malicious download URL"
+   ],
+   "rerank_query": "Which concrete containment and prevention actions follow from the observed indicators?"
+  },
+  {
+   "ids": [
+    "qakbot-10#0",
+    "qakbot-09#0",
+    "qakbot-05#0"
+   ],
+   "queries": [
+    "What is the IP address of the potentially infected internal host in the LAN?"
+   ],
+   "rerank_query": "What is the IP address of the potentially infected internal host in the LAN?"
+  },
+  {
+   "ids": [
+    "qakbot-10#0",
+    "qakbot-09#0",
+    "qakbot-03#0"
+   ],
+   "queries": [
+    "What is the hostname of the potentially infected machine in the LAN?"
+   ],
+   "rerank_query": "What is the hostname of the potentially infected machine in the LAN?"
+  },
+  {
+   "ids": [
+    "qakbot-10#0",
+    "qakbot-03#0",
+    "qakbot-09#0"
+   ],
+   "queries": [
+    "What is the Windows human user account name (not machine accounts ending in $) of the potentially infected machine in the LAN?"
+   ],
+   "rerank_query": "What is the Windows human user account name (not machine accounts ending in $) of the potentially infected machine in the LAN?"
+  },
+  {
+   "ids": [
+    "qakbot-10#0",
+    "qakbot-09#0",
+    "qakbot-06#1"
+   ],
+   "queries": [
+    "During what hour did the first signs of infection activity appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format."
+   ],
+   "rerank_query": "During what hour did the first signs of infection activity appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format."
+  },
+  {
+   "ids": [
+    "qakbot-10#0",
+    "qakbot-06#2",
+    "qakbot-01#0"
+   ],
+   "queries": [
+    "What is the URL used for the initial malware download?"
+   ],
+   "rerank_query": "What is the URL used for the initial malware download?"
+  },
+  {
+   "ids": [
+    "qakbot-10#0",
+    "qakbot-09#0",
+    "qakbot-02#0"
+   ],
+   "queries": [
+    "What are the suspicious external IP addresses contacted, which might be involved in command-and-control (C2) communication?"
+   ],
+   "rerank_query": "What are the suspicious external IP addresses contacted, which might be involved in command-and-control (C2) communication?"
+  },
+  {
+   "ids": [
+    "qakbot-10#0",
+    "qakbot-07#1",
+    "qakbot-02#0"
+   ],
+   "queries": [
+    "What specific spoofed domain was used in a self-signed certificate during this infection?"
+   ],
+   "rerank_query": "What specific spoofed domain was used in a self-signed certificate during this infection?"
+  },
+  {
+   "ids": [
+    "qakbot-09#0",
+    "qakbot-10#0",
+    "qakbot-02#0"
+   ],
+   "queries": [
+    "According to the connection volume statistics, what single external IP address received the most connections from the infected hosts? Is it a C2 server or a legitimate service?"
+   ],
+   "rerank_query": "According to the connection volume statistics, what single external IP address received the most connections from the infected hosts? Is it a C2 server or a legitimate service?"
+  }
+ ],
+ "stdout": [
+  "[enrich] added 0 artifact(s) from raw logs",
+  "[index] 10 artifacts -> 29 chunks",
+  "",
+  "=== Affected Host and User -> ['qakbot-09#0', 'qakbot-03#0', 'qakbot-02#0', 'qakbot-05#0', 'qakbot-04#1', 'qakbot-08#0']",
+  "",
+  "=== Timeline -> ['qakbot-06#1', 'qakbot-09#0', 'qakbot-06#3', 'qakbot-01#0', 'qakbot-06#4', 'qakbot-06#2']",
+  "",
+  "=== Detection: IDS Alerts -> ['qakbot-06#1', 'qakbot-06#4', 'qakbot-06#6', 'qakbot-06#7', 'qakbot-06#2', 'qakbot-06#3']",
+  "",
+  "=== Initial Infection Indicators -> ['qakbot-01#0', 'qakbot-01#1', 'qakbot-01#4', 'qakbot-01#2', 'qakbot-08#1', 'qakbot-02#0']",
+  "",
+  "=== Command-and-Control and Network Activity -> ['qakbot-02#0', 'qakbot-09#0', 'qakbot-08#3', 'qakbot-08#2', 'qakbot-08#1', 'qakbot-08#0']",
+  "",
+  "=== Impact Assessment -> ['qakbot-06#0', 'qakbot-01#0', 'qakbot-01#1', 'qakbot-06#1', 'qakbot-02#0', 'qakbot-09#0']",
+  "",
+  "=== Root Cause and Evidence Gaps -> ['qakbot-01#1', 'qakbot-01#2', 'qakbot-01#3', 'qakbot-03#0', 'qakbot-01#0', 'qakbot-01#4']",
+  "",
+  "=== Corrective and Preventive Actions -> ['qakbot-06#1', 'qakbot-01#0', 'qakbot-01#1', 'qakbot-02#0', 'qakbot-09#0', 'qakbot-06#3']",
+  "",
+  "=== Answers to Investigation Questions -> ['qakbot-10#0', 'qakbot-09#0', 'qakbot-05#0', 'qakbot-03#0', 'qakbot-06#1', 'qakbot-06#2', 'qakbot-01#0', 'qakbot-02#0', 'qakbot-07#1']"
+ ]
+}

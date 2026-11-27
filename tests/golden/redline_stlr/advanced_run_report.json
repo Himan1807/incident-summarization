@@ -1,0 +1,895 @@
+{
+ "condition": "rag",
+ "evaluation": {
+  "answer_f1": 0.0,
+  "answer_precision": 0.0,
+  "answer_recall": 0.0,
+  "answerable_entity_recall": 1.0,
+  "assessment_lines": 1,
+  "claims": 50,
+  "faithfulness": 1.0,
+  "grounding_rate": 1.0,
+  "hallucination_rate": 0.0,
+  "overall_entity_recall": 0.8,
+  "per_question": [
+   {
+    "answer_text": "No matching results for: suspicious certificates / self signed analysis. (Absence in this query is not proof of absence elsewhere.)",
+    "answerable_from_evidence": [
+     "10.7.10.47"
+    ],
+    "atoms": [
+     "10.7.10.47"
+    ],
+    "atoms_found_in_answer": [],
+    "correct_entities": [],
+    "found_in_report": [
+     "10.7.10.47"
+    ],
+    "id": 1,
+    "missing_from_evidence": [],
+    "precision": null,
+    "predicted_entities": [],
+    "question": "What is the IP address of the potentially infected internal host in the LAN?",
+    "recall": 0.0,
+    "reference_answer": "10.7.10.47",
+    "status": "WRONG",
+    "wrong_entities": []
+   },
+   {
+    "answer_text": "No matching results for: suspicious certificates / short validity certs. (Absence in this query is not proof of absence elsewhere.)",
+    "answerable_from_evidence": [
+     "DESKTOP-9PEA63H"
+    ],
+    "atoms": [
+     "DESKTOP-9PEA63H"
+    ],
+    "atoms_found_in_answer": [],
+    "correct_entities": [],
+    "found_in_report": [
+     "DESKTOP-9PEA63H"
+    ],
+    "id": 2,
+    "missing_from_evidence": [],
+    "precision": null,
+    "predicted_entities": [],
+    "question": "What is the hostname of the potentially infected machine in the LAN?",
+    "recall": 0.0,
+    "reference_answer": "DESKTOP-9PEA63H",
+    "status": "WRONG",
+    "wrong_entities": []
+   },
+   {
+    "answer_text": "No matching results for: suspicious certificates / ip based certificates. (Absence in this query is not proof of absence elsewhere.)",
+    "answerable_from_evidence": [
+     "rwalters"
+    ],
+    "atoms": [
+     "rwalters"
+    ],
+    "atoms_found_in_answer": [],
+    "correct_entities": [],
+    "found_in_report": [
+     "rwalters"
+    ],
+    "id": 3,
+    "missing_from_evidence": [],
+    "precision": null,
+    "predicted_entities": [],
+    "question": "What is the Windows human user account name (not machine accounts ending in $) of the potentially infected machine in the LAN?",
+    "recall": 0.0,
+    "reference_answer": "rwalters",
+    "status": "WRONG",
+    "wrong_entities": []
+   },
+   {
+    "answer_text": "Not established from the available artifacts.",
+    "answerable_from_evidence": [
+     "623start.site",
+     "guiatelefonos.com"
+    ],
+    "atoms": [
+     "623start.site",
+     "guiatelefonos.com"
+    ],
+    "atoms_found_in_answer": [],
+    "correct_entities": [],
+    "found_in_report": [
+     "623start.site",
+     "guiatelefonos.com"
+    ],
+    "id": 4,
+    "missing_from_evidence": [],
+    "precision": null,
+    "predicted_entities": [],
+    "question": "What are the likely fake or suspicious domains / URLs for initial infection?",
+    "recall": 0.0,
+    "reference_answer": "623start.site, guiatelefonos.com",
+    "status": "ABSTAINED",
+    "wrong_entities": []
+   },
+   {
+    "answer_text": "Derived: Kerberos identity of 10.7.10.47: hostname(s) desktop-9pea63h; human user account(s) rwalters.",
+    "answerable_from_evidence": [
+     "194.26.135.119"
+    ],
+    "atoms": [
+     "194.26.135.119"
+    ],
+    "atoms_found_in_answer": [],
+    "correct_entities": [],
+    "found_in_report": [
+     "194.26.135.119"
+    ],
+    "id": 5,
+    "missing_from_evidence": [],
+    "precision": 0.0,
+    "predicted_entities": [
+     "10.7.10.47",
+     "DESKTOP-9PEA63H"
+    ],
+    "question": "What are the suspicious external IP addresses contacted, which might be involved in command-and-control (C2) communication?",
+    "recall": 0.0,
+    "reference_answer": "194.26.135.119",
+    "status": "WRONG",
+    "wrong_entities": [
+     "10.7.10.47",
+     "DESKTOP-9PEA63H"
+    ]
+   },
+   {
+    "answer_text": "Derived: Suricata alerts span 2023-07-10 22:00 UTC to 2023-07-10 22:00 UTC; earliest alert hour 2023-07-10 22:00 UTC (7 alerts).",
+    "answerable_from_evidence": [],
+    "atoms": [
+     "confidentiality"
+    ],
+    "atoms_found_in_answer": [],
+    "correct_entities": [],
+    "found_in_report": [],
+    "id": 6,
+    "missing_from_evidence": [
+     "confidentiality"
+    ],
+    "precision": 0.0,
+    "predicted_entities": [
+     "2023-07-10",
+     "2023-07-10 22:00"
+    ],
+    "question": "Which of the three CIA components does the attacker target primarily: availability, integrity, or confidentiality?",
+    "recall": 0.0,
+    "reference_answer": "confidentiality",
+    "status": "WRONG",
+    "wrong_entities": [
+     "2023-07-10",
+     "2023-07-10 22:00"
+    ]
+   },
+   {
+    "answer_text": "Derived: destinations of high-severity alerts: 194.26.135.119 (4), 195.161.114.3 (1).",
+    "answerable_from_evidence": [
+     "2023-07-10 22:00 UTC"
+    ],
+    "atoms": [
+     "2023-07-10 22:00 UTC"
+    ],
+    "atoms_found_in_answer": [],
+    "correct_entities": [],
+    "found_in_report": [
+     "2023-07-10 22:00 UTC"
+    ],
+    "id": 7,
+    "missing_from_evidence": [],
+    "precision": 0.0,
+    "predicted_entities": [
+     "194.26.135.119",
+     "195.161.114.3"
+    ],
+    "question": "During what hour did the first signs of infection activity appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "recall": 0.0,
+    "reference_answer": "2023-07-10 22:00 UTC",
+    "status": "WRONG",
+    "wrong_entities": [
+     "194.26.135.119",
+     "195.161.114.3"
+    ]
+   },
+   {
+    "answer_text": "Not established from the available artifacts.",
+    "answerable_from_evidence": [
+     "195.161.114.3"
+    ],
+    "atoms": [
+     "195.161.114.3",
+     "legitimate service"
+    ],
+    "atoms_found_in_answer": [],
+    "correct_entities": [],
+    "found_in_report": [
+     "195.161.114.3"
+    ],
+    "id": 8,
+    "missing_from_evidence": [
+     "legitimate service"
+    ],
+    "precision": null,
+    "predicted_entities": [],
+    "question": "According to the connection volume statistics, what single external IP address received the most connections from the infected hosts? Is it a C2 server or a legitimate service?",
+    "recall": 0.0,
+    "reference_answer": "195.161.114.3, legitimate service",
+    "status": "ABSTAINED",
+    "wrong_entities": []
+   }
+  ],
+  "placeholder_count": 0,
+  "question_recall": 0.812,
+  "questions_correct": "7/8",
+  "unsupported_entities": [],
+  "unsupported_number_count": 0,
+  "unsupported_numbers": []
+ },
+ "flagged": [],
+ "mode": "drop",
+ "model": "golden",
+ "postprocessing": {
+  "auto_attributed_lines": 0,
+  "duplicate_lines_removed": 100,
+  "enabled": true,
+  "invalid_citations_removed": 0,
+  "partial_lines_dropped": 0,
+  "removed": [
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- full services: ldap/win-s3wt6lgqfvx.coolweathercoat.com/coolweathercoat.com — 2 events; source ips: 10.7.10.47 (2) [redline_stlr-04#1]",
+    "section": "Affected Host and User"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- full services: cifs/WIN-S3WT6LGQFVX.coolweathercoat.com — 1 events; source ips: 10.7.10.47 (1) [redline_stlr-04#1]",
+    "section": "Affected Host and User"
+   },
+   {
+    "duplicate_of": "Timeline",
+    "line": "- alert timeline: 2023-07-10 22:00 UTC — 7 events [redline_stlr-06#3]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- high severity alerts > high severity signatures: ET MALWARE Redline Stealer/MetaStealer Family TCP CnC Activity - MSValue (Outbound) — 2 events [redline_stlr-06#2]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- high severity alerts > high severity signatures: ET INFO Microsoft net.tcp Connection Initialization Activity — 1 events [redline_stlr-06#2]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- high severity alerts > high severity signatures: ET MALWARE NUMOZYLOD CnC Checkin M2 — 1 events [redline_stlr-06#2]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- high severity alerts > high severity signatures: ET MALWARE [ANY.RUN] RedLine Stealer/MetaStealer Family Related (MC-NMF Authorization) — 1 events [redline_stlr-06#2]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: internal client 10.7.10.47 ranks #1 by external connections (55 events, 20 distinct external destinations). Most-contacted external IP: 195.161.114.3 (8 connections). [redline_stlr-08#0]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: Kerberos identity of 10.7.10.47: hostname(s) desktop-9pea63h; human user account(s) rwalters. [redline_stlr-08#0]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: Suricata alerts span 2023-07-10 22:00 UTC to 2023-07-10 22:00 UTC; earliest alert hour 2023-07-10 22:00 UTC (7 alerts). [redline_stlr-08#0]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: destinations of high-severity alerts: 194.26.135.119 (4), 195.161.114.3 (1). [redline_stlr-08#0]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: guiatelefonos.com — 1 events [redline_stlr-01#4]",
+    "section": "Initial Infection Indicators"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- file types: other — 55 events [redline_stlr-01#4]",
+    "section": "Initial Infection Indicators"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- file transfers: 10 matching events [redline_stlr-01#0]",
+    "section": "Initial Infection Indicators"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- file transfers > transfer details: file_transfer — 3 events [redline_stlr-01#0]",
+    "section": "Initial Infection Indicators"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- file transfers > transfer details: 10.7.10.47 -> 13.107.21.200:443 : fuid: FRHMTH2cDhvYsVZt86 — 1 events [redline_stlr-01#0]",
+    "section": "Initial Infection Indicators"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- file transfers > transfer details: 10.7.10.47 -> 195.161.114.3:80 : fuid: FHuY9W2Rb2X336jwT5 — 1 events [redline_stlr-01#0]",
+    "section": "Initial Infection Indicators"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- file transfers > transfer details: 10.7.10.47 -> 195.161.114.3:80 : fuid: FfaeHV2N39f9ws9Ui — 1 events [redline_stlr-01#1]",
+    "section": "Initial Infection Indicators"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: internal client 10.7.10.47 ranks #1 by external connections (55 events, 20 distinct external destinations). Most-contacted external IP: 195.161.114.3 (8 connections). [redline_stlr-08#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: Kerberos identity of 10.7.10.47: hostname(s) desktop-9pea63h; human user account(s) rwalters. [redline_stlr-08#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: Suricata alerts span 2023-07-10 22:00 UTC to 2023-07-10 22:00 UTC; earliest alert hour 2023-07-10 22:00 UTC (7 alerts). [redline_stlr-08#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: destinations of high-severity alerts: 194.26.135.119 (4), 195.161.114.3 (1). [redline_stlr-08#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- source clients: 10.7.10.47 — 55 events; external destinations=20; top destinations: 195.161.114.3 (8), 92.118.151.9 (5), 204.79.197.200 (5), 13.107.21.200 (3), 20.42.65.88 (3); 31 further events in other values [redline_stlr-02#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- file transfers > transfer details: 10.7.10.47 -> 195.161.114.3:80 : fuid: FfaeHV2N39f9ws9Ui — 1 events [redline_stlr-01#1]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: 10.7.10.47 -> 20.42.65.88:443 : fuid: Fsp3YN3nMVyuIp9sDk — 1 events [redline_stlr-01#1]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: 10.7.10.47 -> 204.79.197.200:443 : fuid: FPRwDt3bWAo6siQc7j — 1 events [redline_stlr-01#1]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: 10.7.10.47 -> 204.79.197.203:443 : fuid: FPQK3hfd9HvSkrIl1 — 1 events [redline_stlr-01#1]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- file transfers: 10 matching events [redline_stlr-01#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- file transfers > transfer details: file_transfer — 3 events [redline_stlr-01#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- file transfers > transfer details: 10.7.10.47 -> 13.107.21.200:443 : fuid: FRHMTH2cDhvYsVZt86 — 1 events [redline_stlr-01#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- file transfers > transfer details: 10.7.10.47 -> 195.161.114.3:80 : fuid: FHuY9W2Rb2X336jwT5 — 1 events [redline_stlr-01#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: 10.7.10.47 -> 92.118.151.9:80 : fuid: FaY0uO3uabhmTxqaQc — 1 events [redline_stlr-01#2]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download sources: 10.7.10.47 — 55 events [redline_stlr-01#2]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: no_http_uri — 49 events [redline_stlr-01#2]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.7.10.47 -> 195.161.114.3:80 : /?status=start&av=Windows%20Defender — 3 events [redline_stlr-01#2]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: ET INFO Windows Powershell User-Agent Usage — 2 events [redline_stlr-06#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: ET MALWARE Redline Stealer/MetaStealer Family TCP CnC Activity - MSValue (Outbound) — 2 events [redline_stlr-06#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: ET INFO Microsoft net.tcp Connection Initialization Activity — 1 events [redline_stlr-06#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: ET MALWARE NUMOZYLOD CnC Checkin M2 — 1 events [redline_stlr-06#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- source clients: 10.7.10.47 — 55 events; external destinations=20; top destinations: 195.161.114.3 (8), 92.118.151.9 (5), 204.79.197.200 (5), 13.107.21.200 (3), 20.42.65.88 (3); 31 further events in other values [redline_stlr-02#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- file transfers: 10 matching events [redline_stlr-01#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- file transfers > transfer details: file_transfer — 3 events [redline_stlr-01#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- file transfers > transfer details: 10.7.10.47 -> 13.107.21.200:443 : fuid: FRHMTH2cDhvYsVZt86 — 1 events [redline_stlr-01#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- file transfers > transfer details: 10.7.10.47 -> 195.161.114.3:80 : fuid: FHuY9W2Rb2X336jwT5 — 1 events [redline_stlr-01#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- file transfers > transfer details: 10.7.10.47 -> 195.161.114.3:80 : fuid: FfaeHV2N39f9ws9Ui — 1 events [redline_stlr-01#1]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: 10.7.10.47 -> 20.42.65.88:443 : fuid: Fsp3YN3nMVyuIp9sDk — 1 events [redline_stlr-01#1]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: 10.7.10.47 -> 204.79.197.200:443 : fuid: FPRwDt3bWAo6siQc7j — 1 events [redline_stlr-01#1]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: 10.7.10.47 -> 204.79.197.203:443 : fuid: FPQK3hfd9HvSkrIl1 — 1 events [redline_stlr-01#1]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: 10.7.10.47 -> 92.118.151.9:80 : fuid: FaY0uO3uabhmTxqaQc — 1 events [redline_stlr-01#2]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download sources: 10.7.10.47 — 55 events [redline_stlr-01#2]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: no_http_uri — 49 events [redline_stlr-01#2]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.7.10.47 -> 195.161.114.3:80 : /?status=start&av=Windows%20Defender — 3 events [redline_stlr-01#2]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.7.10.47 -> 195.161.114.3:80 : /?status=install — 1 events [redline_stlr-01#3]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.7.10.47 -> 195.161.114.3:80 : /?status=start&av=Windows Defender — 1 events [redline_stlr-01#3]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.7.10.47 -> 92.118.151.9:80 : /data/czx.jpg — 1 events [redline_stlr-01#3]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: 623start.site — 2 events [redline_stlr-01#3]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: ET MALWARE [ANY.RUN] RedLine Stealer/MetaStealer Family Related (MC-NMF Authorization) — 1 events [redline_stlr-06#1]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- high severity alerts: 5 matching events [redline_stlr-06#1]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- high severity alerts > high severity  destinations: 194.26.135.119 — 4 events [redline_stlr-06#1]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- high severity alerts > high severity  destinations: 195.161.114.3 — 1 events [redline_stlr-06#1]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- file transfers: 10 matching events [redline_stlr-01#0]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- file transfers > transfer details: file_transfer — 3 events [redline_stlr-01#0]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- file transfers > transfer details: 10.7.10.47 -> 13.107.21.200:443 : fuid: FRHMTH2cDhvYsVZt86 — 1 events [redline_stlr-01#0]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- file transfers > transfer details: 10.7.10.47 -> 195.161.114.3:80 : fuid: FHuY9W2Rb2X336jwT5 — 1 events [redline_stlr-01#0]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- file transfers > transfer details: 10.7.10.47 -> 195.161.114.3:80 : fuid: FfaeHV2N39f9ws9Ui — 1 events [redline_stlr-01#1]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: 10.7.10.47 -> 20.42.65.88:443 : fuid: Fsp3YN3nMVyuIp9sDk — 1 events [redline_stlr-01#1]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: 10.7.10.47 -> 204.79.197.200:443 : fuid: FPRwDt3bWAo6siQc7j — 1 events [redline_stlr-01#1]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: 10.7.10.47 -> 204.79.197.203:443 : fuid: FPQK3hfd9HvSkrIl1 — 1 events [redline_stlr-01#1]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: 10.7.10.47 -> 92.118.151.9:80 : fuid: FaY0uO3uabhmTxqaQc — 1 events [redline_stlr-01#2]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download sources: 10.7.10.47 — 55 events [redline_stlr-01#2]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: no_http_uri — 49 events [redline_stlr-01#2]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.7.10.47 -> 195.161.114.3:80 : /?status=start&av=Windows%20Defender — 3 events [redline_stlr-01#2]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: guiatelefonos.com — 1 events [redline_stlr-01#4]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- file types: other — 55 events [redline_stlr-01#4]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.7.10.47 -> 195.161.114.3:80 : /?status=install — 1 events [redline_stlr-01#3]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.7.10.47 -> 195.161.114.3:80 : /?status=start&av=Windows Defender — 1 events [redline_stlr-01#3]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.7.10.47 -> 92.118.151.9:80 : /data/czx.jpg — 1 events [redline_stlr-01#3]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: 623start.site — 2 events [redline_stlr-01#3]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- client accounts: DESKTOP-9PEA63H$ — 12 events; source ips: 10.7.10.47 (12) [redline_stlr-03#0]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- client accounts: desktop-9pea63h$ — 8 events; source ips: 10.7.10.47 (8) [redline_stlr-03#0]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- client accounts: rwalters — 6 events; source ips: 10.7.10.47 (6) [redline_stlr-03#0]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- source clients: 10.7.10.47 — 55 events; external destinations=20; top destinations: 195.161.114.3 (8), 92.118.151.9 (5), 204.79.197.200 (5), 13.107.21.200 (3), 20.42.65.88 (3); 31 further events in other values [redline_stlr-02#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- file transfers: 10 matching events [redline_stlr-01#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- file transfers > transfer details: file_transfer — 3 events [redline_stlr-01#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- file transfers > transfer details: 10.7.10.47 -> 13.107.21.200:443 : fuid: FRHMTH2cDhvYsVZt86 — 1 events [redline_stlr-01#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- file transfers > transfer details: 10.7.10.47 -> 195.161.114.3:80 : fuid: FHuY9W2Rb2X336jwT5 — 1 events [redline_stlr-01#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: 10.7.10.47 -> 92.118.151.9:80 : fuid: FaY0uO3uabhmTxqaQc — 1 events [redline_stlr-01#2]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download sources: 10.7.10.47 — 55 events [redline_stlr-01#2]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: no_http_uri — 49 events [redline_stlr-01#2]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.7.10.47 -> 195.161.114.3:80 : /?status=start&av=Windows%20Defender — 3 events [redline_stlr-01#2]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: guiatelefonos.com — 1 events [redline_stlr-01#4]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- file types: other — 55 events [redline_stlr-01#4]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- file transfers > transfer details: 10.7.10.47 -> 195.161.114.3:80 : fuid: FfaeHV2N39f9ws9Ui — 1 events [redline_stlr-01#1]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: 10.7.10.47 -> 20.42.65.88:443 : fuid: Fsp3YN3nMVyuIp9sDk — 1 events [redline_stlr-01#1]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: 10.7.10.47 -> 204.79.197.200:443 : fuid: FPRwDt3bWAo6siQc7j — 1 events [redline_stlr-01#1]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: 10.7.10.47 -> 204.79.197.203:443 : fuid: FPQK3hfd9HvSkrIl1 — 1 events [redline_stlr-01#1]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- full services: krb_tcp — 26 events; source ips: 10.7.10.47 (26) [redline_stlr-04#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- full services: krbtgt/COOLWEATHERCOAT.COM — 13 events; source ips: 10.7.10.47 (13) [redline_stlr-04#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- full services: LDAP/WIN-S3WT6LGQFVX.coolweathercoat.com/coolweathercoat.com — 2 events; source ips: 10.7.10.47 (2) [redline_stlr-04#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- full services: krbtgt/coolweathercoat.com — 2 events; source ips: 10.7.10.47 (2) [redline_stlr-04#0]",
+    "section": "Corrective and Preventive Actions"
+   }
+  ]
+ },
+ "removed_unverified_lines": 0,
+ "run_log": [
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "redline_stlr-08#0",
+    "redline_stlr-03#0",
+    "redline_stlr-02#0",
+    "redline_stlr-04#0",
+    "redline_stlr-04#1",
+    "redline_stlr-01#4"
+   ],
+   "seconds": 0,
+   "section": "Affected Host and User",
+   "truncated": false
+  },
+  {
+   "extractive": true,
+   "flag_counts": {},
+   "retrieved": [
+    "redline_stlr-06#3",
+    "redline_stlr-08#0"
+   ],
+   "seconds": 0,
+   "section": "Timeline"
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "redline_stlr-06#0",
+    "redline_stlr-06#1",
+    "redline_stlr-06#3",
+    "redline_stlr-06#2",
+    "redline_stlr-08#0",
+    "redline_stlr-01#0"
+   ],
+   "seconds": 0,
+   "section": "Detection: IDS Alerts",
+   "truncated": false
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "redline_stlr-01#3",
+    "redline_stlr-01#4",
+    "redline_stlr-01#2",
+    "redline_stlr-01#0",
+    "redline_stlr-07#0",
+    "redline_stlr-01#1"
+   ],
+   "seconds": 0,
+   "section": "Initial Infection Indicators",
+   "truncated": false
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "redline_stlr-08#0",
+    "redline_stlr-02#0",
+    "redline_stlr-01#1",
+    "redline_stlr-01#0",
+    "redline_stlr-01#2",
+    "redline_stlr-06#0"
+   ],
+   "seconds": 0,
+   "section": "Command-and-Control and Network Activity",
+   "truncated": false
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "redline_stlr-02#0",
+    "redline_stlr-01#0",
+    "redline_stlr-01#1",
+    "redline_stlr-01#2",
+    "redline_stlr-01#3",
+    "redline_stlr-06#1"
+   ],
+   "seconds": 0,
+   "section": "Impact Assessment",
+   "truncated": false
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "redline_stlr-01#0",
+    "redline_stlr-01#1",
+    "redline_stlr-01#2",
+    "redline_stlr-01#4",
+    "redline_stlr-01#3",
+    "redline_stlr-03#0"
+   ],
+   "seconds": 0,
+   "section": "Root Cause and Evidence Gaps",
+   "truncated": false
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "redline_stlr-02#0",
+    "redline_stlr-01#0",
+    "redline_stlr-01#2",
+    "redline_stlr-01#4",
+    "redline_stlr-01#1",
+    "redline_stlr-04#0"
+   ],
+   "seconds": 0,
+   "section": "Corrective and Preventive Actions",
+   "truncated": false
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "redline_stlr-09#0",
+    "redline_stlr-08#0",
+    "redline_stlr-05#0",
+    "redline_stlr-03#0",
+    "redline_stlr-01#4",
+    "redline_stlr-01#3",
+    "redline_stlr-02#0",
+    "redline_stlr-06#0"
+   ],
+   "seconds": 0,
+   "section": "Answers to Investigation Questions",
+   "truncated": false
+  }
+ ],
+ "scenario": "redline_stlr",
+ "seconds_total": 0,
+ "verification_totals": {}
+}

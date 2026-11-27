@@ -1,0 +1,60 @@
+====================================================================================================
+INCIDENT: fake_auth   -   comparison of 1 run(s) (models and conditions)
+CREATED : <timestamp>
+====================================================================================================
+
+Runs:  R1 = golden (RAG)
+
+A. METRICS PER RUN (higher is better except Halluc. and BadNum)
+
++------+------------------------------------+----------+----------+----------+----------+----------+----------+----------+----------+--------+
+| Run  | Model / condition                  | Ans-P    | Ans-R    | Ans-F1   | Q-recall | Faithful | Ground.  | Halluc.  | BadNum   | Min    |
++------+------------------------------------+----------+----------+----------+----------+----------+----------+----------+----------+--------+
+| R1   | golden (RAG)                       | 0.167    | 0.167    | 0.167    | 0.875    | 1.000    | 1.000    | 0.000    | 0        | 0.0    |
++------+------------------------------------+----------+----------+----------+----------+----------+----------+----------+----------+--------+
+
+B. ANSWER STATUS PER QUESTION  (OK = correct, PART = partial, WRONG, ABST = 'Not established', NONE = no answer in the report)
+
++-----+------------------------------------------+--------------------------------+--------+
+| #   | Question                                 | Reference answer               | R1     |
++-----+------------------------------------------+--------------------------------+--------+
+| 1   | What is the IP address of the            | 10.1.17.215                    | PART   |
+|     | potentially infected internal host in    |                                |        |
+|     | the LAN?                                 |                                |        |
++-----+------------------------------------------+--------------------------------+--------+
+| 2   | What is the hostname of the potentially  | DESKTOP-L8C5GSJ                | PART   |
+|     | infected machine in the LAN?             |                                |        |
++-----+------------------------------------------+--------------------------------+--------+
+| 3   | What is the Windows human user account   | shutchenson                    | WRONG  |
+|     | name (not machine accounts ending in $)  |                                |        |
+|     | of the potentially infected machine in   |                                |        |
+|     | the LAN?                                 |                                |        |
++-----+------------------------------------------+--------------------------------+--------+
+| 4   | What are the likely fake or suspicious   | authenticatoor.org             | ABST   |
+|     | domains / URLs for initial infection?    |                                |        |
++-----+------------------------------------------+--------------------------------+--------+
+| 5   | What are the suspicious external IP      | 5.252.153.241, 45.125.66.32,   | WRONG  |
+|     | addresses contacted, which might be      | 45.125.66.252                  |        |
+|     | involved in command-and-control (C2)     |                                |        |
+|     | communication?                           |                                |        |
++-----+------------------------------------------+--------------------------------+--------+
+| 6   | During what hour did the first signs of  | 2025-01-22 19:00 UTC           | WRONG  |
+|     | infection activity appear? Provide the   |                                |        |
+|     | earliest date and time in YYYY-MM-DD     |                                |        |
+|     | HH:MM UTC format.                        |                                |        |
++-----+------------------------------------------+--------------------------------+--------+
+| 7   | Were any suspicious certificates         | 45.125.66.252, 45.125.66.32    | WRONG  |
+|     | observed in the encrypted network        |                                |        |
+|     | traffic? If so, identify the domain or   |                                |        |
+|     | IP in the certificate.                   |                                |        |
++-----+------------------------------------------+--------------------------------+--------+
+| 8   | According to the connection volume       | 5.252.153.241, C2 server       | ABST   |
+|     | statistics, what single external IP      |                                |        |
+|     | address received the most connections    |                                |        |
+|     | from the infected hosts? Is it a C2      |                                |        |
+|     | server or a legitimate service?          |                                |        |
++-----+------------------------------------------+--------------------------------+--------+
+
+Best answer F1: golden (RAG) (0.167)
+
+Metric definitions: see METRICS.md. 'no RAG' rows have no retrieved evidence, so their faithfulness is 0 or '-'.

@@ -1,0 +1,107 @@
+====================================================================================================
+INCIDENT : re2ob_08
+MODEL    : golden
+CONDITION: RAG (advanced pipeline)
+RUN TIME : 0.0 min of LLM generation
+REPORT   : <results>/re2ob_08/golden/advanced_postmortem.md
+CREATED  : <timestamp>
+====================================================================================================
+
+A. QUESTION-BY-QUESTION EVALUATION
+   Found = reference items present in the report's answer; Prec. = correct entities / entities the answer gave;
+   Wrong items = entities in the answer that are not in the reference answer.
+
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| #   | Question                         | Reference answer           | Answer from the report             | Found | Prec. | Wrong items      | Status    |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 1   | What is the name of the service  | currencyservice            | operation errors: no operation     | 0/1   | -     | -                | WRONG     |
+|     | where the failure originated     |                            | shows more trace errors than in    |       |       |                  |           |
+|     | (the root-cause service)?        |                            | its baseline                       |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 2   | What is the name of the          | currencyservice-b647dd94b- | operation latency:                 | 0/1   | 0/2   | 2024-01-19,      | WRONG     |
+|     | Kubernetes pod of the root-cause | f4mcm                      | shippingservice_ShipOrder —        |       |       | 2024-01-19       |           |
+|     | service?                         |                            | baseline mean 0.1951; later mean   |       |       | 22:11:30         |           |
+|     |                                  |                            | 0.1071 (x0.9264); peak 2.00 at     |       |       |                  |           |
+|     |                                  |                            | 2024-01-19 22:11:30 UTC            |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 3   | On which Kubernetes node did the | gke-gke-cluster-default-   | operation latency:                 | 0/1   | 0/2   | 2024-01-19,      | WRONG     |
+|     | pod of the root-cause service    | pool-2e1807ce-cx8g         | cartservice_EmptyCart — baseline   |       |       | 2024-01-19       |           |
+|     | run?                             |                            | mean 0.1951; later mean 0.0536     |       |       | 22:06:45         |           |
+|     |                                  |                            | (x0.8816); peak 1.00 at 2024-01-19 |       |       |                  |           |
+|     |                                  |                            | 22:06:45 UTC                       |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 4   | What type of fault caused the    | network delay              | Not established from the available | 0/1   | -     | -                | ABSTAINED |
+|     | incident: CPU, memory, disk,     |                            | artifacts.                         |       |       |                  |           |
+|     | network delay, packet loss, or   |                            |                                    |       |       |                  |           |
+|     | socket?                          |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 5   | Which of the three CIA           | availability               | log templates: stopped after the   | 0/1   | 0/2   | 2024-01-19,      | WRONG     |
+|     | components is primarily          |                            | baseline: 'cartservice             |       |       | 2024-01-19       |           |
+|     | affected: availability,          |                            | AddItemAsync called with           |       |       | 22:04:45         |           |
+|     | integrity, or confidentiality?   |                            | userId=<*>-25c0-4cce-87bc-<*>,     |       |       |                  |           |
+|     |                                  |                            | productId=1YMWWN1N4O,              |       |       |                  |           |
+|     |                                  |                            | quantity=<*>' — 7 lines in the     |       |       |                  |           |
+|     |                                  |                            | baseline, last at 2024-01-19       |       |       |                  |           |
+|     |                                  |                            | 22:04:45 UTC                       |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 6   | During what minute did the first | 2024-01-19 22:06 UTC       | log templates: stopped after the   | 0/1   | 1/2   | 2024-01-19       | WRONG     |
+|     | signs of the failure appear?     |                            | baseline: 'cartservice             |       |       | 22:04:47         |           |
+|     | Provide the earliest date and    |                            | AddItemAsync called with           |       |       |                  |           |
+|     | time in YYYY-MM-DD HH:MM UTC     |                            | userId=<*>-<*>-4cad-8a1f-<*>,      |       |       |                  |           |
+|     | format.                          |                            | productId=LS4PSXUNUM,              |       |       |                  |           |
+|     |                                  |                            | quantity=<*>' — 6 lines in the     |       |       |                  |           |
+|     |                                  |                            | baseline, last at 2024-01-19       |       |       |                  |           |
+|     |                                  |                            | 22:04:47 UTC                       |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 7   | Which metric of the root-cause   | currencyservice_latency    | log templates: stopped after the   | 0/1   | 0/2   | 2024-01-19,      | WRONG     |
+|     | service best shows the fault?    |                            | baseline: 'recommendationservice   |       |       | 2024-01-19       |           |
+|     | Give it as                       |                            | [Recv ListRecommendations]         |       |       | 22:04:50         |           |
+|     | <service>_<indicator>, for       |                            | product_ids=['OLJCESPC7Z']' — 5    |       |       |                  |           |
+|     | example cartservice_cpu.         |                            | lines in the baseline, last at     |       |       |                  |           |
+|     |                                  |                            | 2024-01-19 22:04:50 UTC            |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 8   | According to the trace latency   | frontendservice_frontend,  | Not established from the available | 0/2   | -     | -                | ABSTAINED |
+|     | statistics, which single service | downstream symptom         | artifacts.                         |       |       |                  |           |
+|     | operation showed the largest     |                            |                                    |       |       |                  |           |
+|     | latency increase? Is its service |                            |                                    |       |       |                  |           |
+|     | the root cause or a downstream   |                            |                                    |       |       |                  |           |
+|     | symptom?                         |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+
+B. METRICS
+
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Metric                                       | Value        | Meaning                                                                |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Answer precision                             | 0.100        | Entities (IPs, domains, hosts, URLs, times) in the report's answers    |
+|                                              |              | that also occur in the reference / all entities it gave                |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Answer recall                                | 0.000        | Reference answer items found in the report's answers / all reference   |
+|                                              |              | items                                                                  |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Answer F1                                    | 0.000        | Harmonic mean of answer precision and recall                           |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Question recall                              | 0.438        | Mean over questions of reference items found anywhere in the report    |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Faithfulness                                 | 1.000        | Claims whose facts are in the evidence AND in the chunks they cite /   |
+|                                              |              | all claims                                                             |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Grounding rate                               | 1.000        | Claims whose entities and numbers all exist in the evidence            |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Hallucination rate                           | 0.000        | Entities in the report that are absent from the evidence / all         |
+|                                              |              | entities (lower is better)                                             |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Unsupported numbers                          | 0            | Numbers in the report that are absent from the evidence (lower is      |
+|                                              |              | better)                                                                |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Placeholders                                 | 0            | '[insert ...]' placeholders left in the report (lower is better)       |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Questions correct / partial / wrong /        | 0 / 0 / 6 /  | Per-question status in the table above                                 |
+| abstained / unanswered                       | 2 / 0        |                                                                        |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Claims                                       | 40           | Claim lines counted by the verifier; hedged assessments are excluded   |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+
+Status: CORRECT = every reference item found and nothing wrong; PARTIAL = some items found or wrong items present;
+        WRONG = answer given but no reference item found; ABSTAINED = the report says 'Not established from the available artifacts';
+        NO ANSWER = the report has no answer for that question.

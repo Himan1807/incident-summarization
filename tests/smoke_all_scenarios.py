@@ -5,15 +5,8 @@ ROOT = __import__("pathlib").Path(__file__).resolve().parents[1]; sys.path.inser
 from pathlib import Path
 from src.pipeline_adv import run
 from src.evaluate import atom_in
+sys.path.insert(0, str(ROOT / "tests")); from fakes import HashEmb as FakeEmb
 
-class FakeEmb:
-    def encode(self, texts, **k):
-        out=[]
-        for t in texts:
-            v=np.zeros(512)
-            for w in re.findall(r"[\w.\-]+", t.lower()): v[__import__("zlib").crc32(w.encode())%512]+=1
-            out.append(v/(np.linalg.norm(v)+1e-9))
-        return np.array(out)
 
 def echo_llm(prompt, n=450):
     ev = prompt.split("EVIDENCE:")[-1].split("Write the section now")[0] if "EVIDENCE:" in prompt else ""

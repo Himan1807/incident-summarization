@@ -1,0 +1,17 @@
+{
+  "scenario": "re2ob_05",
+  "source_case": "RE2-OB/checkoutservice_mem/1",
+  "root_cause_service": "checkoutservice",
+  "fault": "mem",
+  "inject_time": "2024-01-17 03:27:50 UTC",
+  "artifacts": 7,
+  "facts": 53,
+  "questions": 8,
+  "answers": 8,
+  "atoms": 9,
+  "atoms_in_evidence": 8,
+  "atoms_not_in_evidence": [
+    "2024-01-17 03:27 UTC"
+  ],
+  "notes": []
+}

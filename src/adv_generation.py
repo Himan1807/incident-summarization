@@ -1,5 +1,8 @@
 import requests
 
+_IP_ROLE_RULE = """- An internal client is the host that makes connections; an external IP or destination is the remote server. Never call a
+  private-range IP (10.x, 172.16-31.x, 192.168.x) an external destination or C2 server.
+"""
 SYSTEM = """You are an incident-response analyst writing ONE section of a postmortem.
 Rules:
 - Use ONLY the evidence below. Do not invent timestamps, IPs, domains, files, causes or impact.
@@ -14,8 +17,16 @@ Rules:
 - Do not start with a title, heading or introduction. Start directly with the bullets. No generic security advice."""
 
 
+def _system(example: str, profile: str) -> str:
+    text = SYSTEM.format(example=example)
+    if profile == "security":
+        return text
+    assert _IP_ROLE_RULE in text                                   # the IP-role rule and 'security advice' are security-specific
+    return text.replace(_IP_ROLE_RULE, "").replace("No generic security advice.", "No generic advice.")
+
+
 def section_prompt(section: dict, evidence: str, header: str, ids: list[str] | None = None,
-                   all_sections: list[str] | None = None) -> str:
+                   all_sections: list[str] | None = None, profile: str = "security") -> str:
     example = f"[{ids[0]}]" if ids else "[<evidence id>]"
     others = ""
     if all_sections:
@@ -24,14 +35,18 @@ def section_prompt(section: dict, evidence: str, header: str, ids: list[str] | N
     valid = ("\nVALID EVIDENCE IDS: " + ", ".join(ids) + "\n") if ids else ""
     if section.get("max_bullets"):
         valid += f"LENGTH: write AT MOST {section['max_bullets']} bullets, one short line each, then stop.\n"
-    return (f"{SYSTEM.format(example=example)}\n\nINCIDENT CONTEXT:\n{header}\n{others}\nSECTION: {section['name']}\n"
+    return (f"{_system(example, profile)}\n\nINCIDENT CONTEXT:\n{header}\n{others}\nSECTION: {section['name']}\n"
             f"TASK: {section['task']}\n{valid}\nEVIDENCE:\n{evidence}\n\nWrite the section now (Markdown bullets):")
 
 
-def summary_prompt(header: str, sections_text: str) -> str:
-    return (f"{SYSTEM.format(example='[<evidence id>]')}\n\nINCIDENT CONTEXT:\n{header}\n\nBelow are verified postmortem sections.\n"
+SUMMARY_COVER = {"security": "the affected host and user, the earliest alert hour, the main C2 candidate, and the key ",
+                 "service_outage": "the root-cause service with its pod and node, the earliest sign of the failure, the fault type, the user-facing impact, and the key "}
+
+
+def summary_prompt(header: str, sections_text: str, profile: str = "security") -> str:
+    return (f"{_system('[<evidence id>]', profile)}\n\nINCIDENT CONTEXT:\n{header}\n\nBelow are verified postmortem sections.\n"
             f"TASK: Write a 4-6 sentence Incident Summary using ONLY facts stated in these sections. Keep their citations. "
-            f"Start directly with the summary (no preamble). Cover: the affected host and user, the earliest alert hour, the main C2 candidate, and the key "
+            f"Start directly with the summary (no preamble). Cover: {SUMMARY_COVER[profile]}"
             f"assessment. The query time window is NOT the incident duration: take event times only from the sections.\n\nSECTIONS:\n{sections_text}\n\nIncident Summary:")
 
 

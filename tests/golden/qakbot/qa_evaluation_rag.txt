@@ -1,0 +1,101 @@
+====================================================================================================
+INCIDENT : qakbot
+MODEL    : golden
+CONDITION: RAG (advanced pipeline)
+RUN TIME : 0.0 min of LLM generation
+REPORT   : <results>/qakbot/golden/advanced_postmortem.md
+CREATED  : <timestamp>
+====================================================================================================
+
+A. QUESTION-BY-QUESTION EVALUATION
+   Found = reference items present in the report's answer; Prec. = correct entities / entities the answer gave;
+   Wrong items = entities in the answer that are not in the reference answer.
+
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| #   | Question                         | Reference answer           | Answer from the report             | Found | Prec. | Wrong items      | Status    |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 1   | What is the IP address of the    | 10.0.0.149                 | No matching results for:           | 0/1   | -     | -                | WRONG     |
+|     | potentially infected internal    |                            | suspicious certificates / ip based |       |       |                  |           |
+|     | host in the LAN?                 |                            | certificates. (Absence in this     |       |       |                  |           |
+|     |                                  |                            | query is not proof of absence      |       |       |                  |           |
+|     |                                  |                            | elsewhere.)                        |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 2   | What is the hostname of the      | DESKTOP-E7FHJS4            | Derived: internal client           | 0/1   | 0/2   | 10.0.0.149,      | WRONG     |
+|     | potentially infected machine in  |                            | 10.0.0.149 ranks #1 by external    |       |       | 208.187.122.74   |           |
+|     | the LAN?                         |                            | connections (811 events, 98        |       |       |                  |           |
+|     |                                  |                            | distinct external destinations).   |       |       |                  |           |
+|     |                                  |                            | Most-contacted external IP:        |       |       |                  |           |
+|     |                                  |                            | 208.187.122.74 (237 connections).  |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 3   | What is the Windows human user   | damon.bauer                | Derived: Kerberos identity of      | 1/1   | 1/3   | 10.0.0.149,      | PARTIAL   |
+|     | account name (not machine        |                            | 10.0.0.149: hostname(s)            |       |       | DESKTOP-E7FHJS4  |           |
+|     | accounts ending in $) of the     |                            | desktop-e7fhjs4; human user        |       |       |                  |           |
+|     | potentially infected machine in  |                            | account(s) damon.bauer.            |       |       |                  |           |
+|     | the LAN?                         |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 4   | During what hour did the first   | 2023-02-03 17:00 UTC       | Not established from the available | 0/1   | -     | -                | ABSTAINED |
+|     | signs of infection activity      |                            | artifacts.                         |       |       |                  |           |
+|     | appear? Provide the earliest     |                            |                                    |       |       |                  |           |
+|     | date and time in YYYY-MM-DD      |                            |                                    |       |       |                  |           |
+|     | HH:MM UTC format.                |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 5   | What is the URL used for the     | http://128.254.207.55/8660 | Derived: destinations of high-     | 0/1   | 1/4   | 10.0.0.149,      | WRONG     |
+|     | initial malware download?        | 7.dat                      | severity alerts: 10.0.0.6 (17),    |       |       | 10.0.0.6,        |           |
+|     |                                  |                            | 10.0.0.149 (8), 78.31.67.7 (1),    |       |       | 78.31.67.7       |           |
+|     |                                  |                            | 128.254.207.55 (1).                |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 6   | What are the suspicious external | 102.156.32.143,            | hostnames: desktop-e7fhjs4 — 1     | 0/5   | 0/2   | 10.0.0.149,      | WRONG     |
+|     | IP addresses contacted, which    | 208.187.122.74,            | events; source ips: 10.0.0.149 (1) |       |       | DESKTOP-E7FHJS4  |           |
+|     | might be involved in command-    | 5.75.205.43,               |                                    |       |       |                  |           |
+|     | and-control (C2) communication?  | 23.111.114.52, 78.31.67.7  |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 7   | What specific spoofed domain was | vipsauna.com               | client accounts: DESKTOP-E7FHJS4$  | 0/1   | 0/2   | 10.0.0.149,      | WRONG     |
+|     | used in a self-signed            |                            | — 10 events; source ips:           |       |       | DESKTOP-E7FHJS4  |           |
+|     | certificate during this          |                            | 10.0.0.149 (10)                    |       |       |                  |           |
+|     | infection?                       |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 8   | According to the connection      | 208.187.122.74, C2 server  | Not established from the available | 0/2   | -     | -                | ABSTAINED |
+|     | volume statistics, what single   |                            | artifacts.                         |       |       |                  |           |
+|     | external IP address received the |                            |                                    |       |       |                  |           |
+|     | most connections from the        |                            |                                    |       |       |                  |           |
+|     | infected hosts? Is it a C2       |                            |                                    |       |       |                  |           |
+|     | server or a legitimate service?  |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+
+B. METRICS
+
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Metric                                       | Value        | Meaning                                                                |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Answer precision                             | 0.154        | Entities (IPs, domains, hosts, URLs, times) in the report's answers    |
+|                                              |              | that also occur in the reference / all entities it gave                |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Answer recall                                | 0.077        | Reference answer items found in the report's answers / all reference   |
+|                                              |              | items                                                                  |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Answer F1                                    | 0.103        | Harmonic mean of answer precision and recall                           |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Question recall                              | 0.825        | Mean over questions of reference items found anywhere in the report    |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Faithfulness                                 | 1.000        | Claims whose facts are in the evidence AND in the chunks they cite /   |
+|                                              |              | all claims                                                             |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Grounding rate                               | 1.000        | Claims whose entities and numbers all exist in the evidence            |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Hallucination rate                           | 0.000        | Entities in the report that are absent from the evidence / all         |
+|                                              |              | entities (lower is better)                                             |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Unsupported numbers                          | 0            | Numbers in the report that are absent from the evidence (lower is      |
+|                                              |              | better)                                                                |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Placeholders                                 | 0            | '[insert ...]' placeholders left in the report (lower is better)       |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Questions correct / partial / wrong /        | 0 / 1 / 5 /  | Per-question status in the table above                                 |
+| abstained / unanswered                       | 2 / 0        |                                                                        |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Claims                                       | 71           | Claim lines counted by the verifier; hedged assessments are excluded   |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+
+Status: CORRECT = every reference item found and nothing wrong; PARTIAL = some items found or wrong items present;
+        WRONG = answer given but no reference item found; ABSTAINED = the report says 'Not established from the available artifacts';
+        NO ANSWER = the report has no answer for that question.

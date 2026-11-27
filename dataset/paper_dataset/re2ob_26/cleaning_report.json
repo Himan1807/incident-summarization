@@ -1,0 +1,15 @@
+{
+  "scenario": "re2ob_26",
+  "source_case": "RE2-OB/recommendationservice_delay/1",
+  "root_cause_service": "recommendationservice",
+  "fault": "delay",
+  "inject_time": "2024-01-16 10:19:37 UTC",
+  "artifacts": 7,
+  "facts": 53,
+  "questions": 8,
+  "answers": 8,
+  "atoms": 9,
+  "atoms_in_evidence": 9,
+  "atoms_not_in_evidence": [],
+  "notes": []
+}

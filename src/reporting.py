@@ -3,6 +3,7 @@
   qa_evaluation_rag.txt / qa_evaluation_no_rag.txt   per incident + model: question | reference answer | answer from the report | metrics
   rag_vs_no_rag.txt                                  per incident + model: the same LLM with and without retrieval, side by side
   model_comparison.txt                               per incident: all models (and conditions) compared on every metric
+  summary.txt, unanswerable_eval.txt                 all incidents; unanswerable_eval.txt only after runs with --with-unanswerable (RQ4)
 Layout on disk:  results/<incident>/<model>/{advanced_postmortem.md, advanced_run_report.json, no_rag_postmortem.md, ...}
 """
 import json
@@ -95,7 +96,7 @@ def metrics_table(ev) -> str:
     sc = status_counts(ev)
     rows += [["Questions correct / partial / wrong / abstained / unanswered",
               f"{sc['CORRECT']} / {sc['PARTIAL']} / {sc['WRONG']} / {sc['ABSTAINED']} / {sc['NO ANSWER']}", "Per-question status in the table above"],
-             ["Claims (cited / total)", f"{ev.get('claims', 0) - ev.get('uncited_lines', 0)} / {ev.get('claims', 0)}",
+             ["Claims", f"{ev.get('claims', 0)}",
               "Claim lines counted by the verifier; hedged assessments are excluded"]]
     return render_table(["Metric", "Value", "Meaning"], rows, [44, 12, 70])
 
@@ -151,7 +152,7 @@ def write_rag_vs_norag(path: Path, scenario: str, model: str, rag: dict, norag: 
         "B. ANSWERS PER QUESTION", "",
         render_table(["#", "Question", "Reference answer", "No RAG answer", "RAG answer", "No RAG", "RAG"],
                      prow, [3, 28, 24, 30, 30, 9, 9]), "",
-        "Faithfulness and citation metrics are 0 / '-' for No RAG by construction: without retrieved chunks it cannot cite evidence.", ""])
+        "Faithfulness is 0 / '-' for No RAG by construction: without retrieved chunks it cannot cite evidence.", ""])
     Path(path).write_text(text, encoding="utf-8")
     return text
 
@@ -230,7 +231,7 @@ def write_overall_summary(results_dir: str = "results") -> str | None:
     cols = [("answer_f1", "Ans-F1"), ("answer_precision", "Ans-P"), ("answer_recall", "Ans-R"), ("question_recall", "Q-recall"),
             ("faithfulness", "Faithful"), ("grounding_rate", "Ground."), ("hallucination_rate", "Halluc.")]
     rows, acc = [], {}
-    for sdir in sorted(p for p in root.iterdir() if p.is_dir()) if root.exists() else []:
+    for sdir in sorted(p for p in root.iterdir() if p.is_dir() and p.name != "archive") if root.exists() else []:   # results/archive: old runs
         for mdir in sorted(p for p in sdir.iterdir() if p.is_dir()):
             for fname, cond in (("advanced_run_report.json", "RAG"), ("no_rag_run_report.json", "no RAG")):
                 rep = _load(mdir / fname)
@@ -254,6 +255,82 @@ def write_overall_summary(results_dir: str = "results") -> str | None:
     return str(root / "summary.txt")
 
 
+def _mcnemar_exact(b: int, c: int) -> float:
+    """Exact two-sided McNemar test: b, c = discordant pairs. p = P(X <= min(b, c)) * 2 under Binomial(b + c, 0.5), capped at 1."""
+    from math import comb
+    n = b + c
+    if n == 0:
+        return 1.0
+    return min(1.0, 2 * sum(comb(n, i) for i in range(min(b, c) + 1)) / 2 ** n)
+
+
+def write_unanswerable_eval(results_dir: str = "results") -> str | None:
+    """results/unanswerable_eval.txt (RQ4): correct-abstention, invention and over-abstention rates per model, split by
+    security vs outage incidents, plus exact McNemar tests between models on the same questions. Written only when at least one
+    RAG run was made with --with-unanswerable; otherwise nothing is written."""
+    root = Path(results_dir)
+    runs = []
+    for sdir in sorted(p for p in root.iterdir() if p.is_dir() and p.name != "archive") if root.exists() else []:
+        for mdir in sorted(p for p in sdir.iterdir() if p.is_dir()):
+            rep = _load(mdir / "advanced_run_report.json")
+            if rep and rep.get("unanswerable"):
+                runs.append((sdir.name, rep.get("model", mdir.name), rep["unanswerable"]))
+    if not runs:
+        return None
+    DOM = {"security": "security", "service_outage": "outage"}
+    groups = {}
+    for sc, model, u in runs:
+        for dom in (DOM.get(u.get("domain"), u.get("domain") or "?"), "all"):
+            g = groups.setdefault((model, dom), {"inc": 0, "rows": [], "ans": 0, "ans_abst": 0})
+            g["inc"] += 1; g["rows"] += u["per_question"]
+            n_ans = u.get("answerable_questions") or 0
+            g["ans"] += n_ans; g["ans_abst"] += round((u.get("over_abstention_rate") or 0) * n_ans)
+    rate = lambda rows, key, val: fmt(sum(r[key] == val for r in rows) / len(rows)) if rows else "-"
+    rows = []
+    for (model, dom) in sorted(groups, key=lambda k: (k[0], k[1] != "security", k[1] != "outage", k[1])):
+        g = groups[(model, dom)]; r = g["rows"]
+        rows.append([model, dom, str(g["inc"]), str(len(r)), rate(r, "raw_status", "ABSTAINED"), rate(r, "raw_status", "INVENTED"),
+                     rate(r, "final_status", "INVENTED"), str(sum(x["removed_by_fact_check"] for x in r)),
+                     rate(r, "raw_status", "OTHER"), rate(r, "raw_status", "NO ANSWER"),
+                     fmt(g["ans_abst"] / g["ans"]) if g["ans"] else "-"])
+    status = {}                                            # (model) -> {(incident, question id): abstained correctly?}
+    for sc, model, u in runs:
+        for q in u["per_question"]:
+            status.setdefault(model, {})[(sc, q["id"])] = q["raw_status"] == "ABSTAINED"
+    models = sorted(status); mrows = []
+    for i, a in enumerate(models):
+        for b in models[i + 1:]:
+            shared = sorted(set(status[a]) & set(status[b]))
+            if not shared:
+                continue
+            n10 = sum(status[a][k] and not status[b][k] for k in shared); n01 = sum(status[b][k] and not status[a][k] for k in shared)
+            mrows.append([a, b, str(len(shared)), fmt(sum(status[a][k] for k in shared) / len(shared)),
+                          fmt(sum(status[b][k] for k in shared) / len(shared)), str(n10), str(n01), f"{_mcnemar_exact(n10, n01):.4f}"])
+    detail = []
+    for sc, model, u in runs:
+        for q in u["per_question"]:
+            detail.append([sc, model, q["id"], q["absent_type"], (q.get("raw_answer") or "(no answer)")[:160], q["raw_status"],
+                           q["final_status"], "yes" if q["removed_by_fact_check"] else "-"])
+    lines = ["=" * 100, "RQ4 - UNANSWERABLE QUESTIONS: does the system say the answer is not in the evidence, or invent one?",
+             f"CREATED: {datetime.now().isoformat(timespec='seconds')}", "=" * 100, "",
+             "Questions: unanswerable_qa.json (3 per incident; each asks for a value whose type does not occur anywhere in the incident's",
+             "evidence, checked by src/check_unanswerable.py), asked with --with-unanswerable in a separate Q&A call.",
+             "Correct abstention = the answer says 'Not established' and gives no value of the asked type. Invention = it gives a value of the",
+             "asked type, or any entity/number without abstaining. 'Model' = the LLM's answer before the fact-check; 'after check' = as published.",
+             "Over-abstention = real questions whose reference answer is fully in the evidence but which the report marks 'Not established'.", "",
+             "A. RATES PER MODEL (security = network-security incidents, outage = RCAEval microservice failures)", "",
+             render_table(["Model", "Domain", "Incid.", "Quest.", "Correct abstention", "Invention (model)", "Invention after check",
+                           "Removed by check", "Other", "No answer", "Over-abstention"], rows, [26, 8, 6, 6, 10, 10, 10, 8, 7, 7, 10]), "",
+             "B. McNEMAR TESTS ON CORRECT ABSTENTION (same questions, exact two-sided; A-only / B-only = questions only that model abstained on)", ""]
+    lines += [render_table(["Model A", "Model B", "Shared", "A abst.", "B abst.", "A only", "B only", "p"], mrows, [26, 26, 7, 8, 8, 7, 7, 8]) if mrows
+              else "(needs runs of at least two models on the same incidents)", "",
+              "C. EVERY QUESTION", "",
+              render_table(["Incident", "Model", "Q", "Absent type", "Answer (model, before the fact-check)", "Model", "After check", "Removed"],
+                           detail, [13, 20, 3, 13, 50, 9, 11, 7]), ""]
+    (root / "unanswerable_eval.txt").write_text("\n".join(lines), encoding="utf-8")
+    return str(root / "unanswerable_eval.txt")
+
+
 def main():
     import argparse
     ap = argparse.ArgumentParser(description="Rebuild all text reports from stored results (no LLM needed).")
@@ -264,9 +341,9 @@ def main():
     for sc in names:
         for w in refresh_reports(sc, a.results):
             print("wrote", w)
-    w = write_overall_summary(a.results)
-    if w:
-        print("wrote", w)
+    for w in (write_overall_summary(a.results), write_unanswerable_eval(a.results)):
+        if w:
+            print("wrote", w)
 
 
 if __name__ == "__main__":

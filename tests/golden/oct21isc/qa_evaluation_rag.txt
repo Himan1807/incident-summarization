@@ -1,0 +1,103 @@
+====================================================================================================
+INCIDENT : oct21isc
+MODEL    : golden
+CONDITION: RAG (advanced pipeline)
+RUN TIME : 0.0 min of LLM generation
+REPORT   : <results>/oct21isc/golden/advanced_postmortem.md
+CREATED  : <timestamp>
+====================================================================================================
+
+A. QUESTION-BY-QUESTION EVALUATION
+   Found = reference items present in the report's answer; Prec. = correct entities / entities the answer gave;
+   Wrong items = entities in the answer that are not in the reference answer.
+
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| #   | Question                         | Reference answer           | Answer from the report             | Found | Prec. | Wrong items      | Status    |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 1   | What are the IP addresses of the | 10.10.22.156,              | Derived: internal client           | 1/3   | 1/2   | 201.137.10.225   | PARTIAL   |
+|     | potentially infected internal    | 10.10.22.157, 10.10.22.158 | 10.10.22.156 ranks #1 by external  |       |       |                  |           |
+|     | hosts in the LAN?                |                            | connections (761 events, 80        |       |       |                  |           |
+|     |                                  |                            | distinct external destinations).   |       |       |                  |           |
+|     |                                  |                            | Most-contacted external IP:        |       |       |                  |           |
+|     |                                  |                            | 201.137.10.225 (70 connections).   |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 2   | What are the hostnames of the    | DESKTOP-NZ875R4, DESKTOP-  | Derived: Kerberos identity of      | 1/3   | 1/3   | 10.10.22.156,    | PARTIAL   |
+|     | potentially infected machines in | CFA3367, DESKTOP-87WCE26   | 10.10.22.156: hostname(s) desktop- |       |       | agnes.warren     |           |
+|     | the LAN?                         |                            | cfa3367; human user account(s)     |       |       |                  |           |
+|     |                                  |                            | agnes.warren.                      |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 3   | What are the Windows human user  | marcus.cobb, agnes.warren, | Derived: internal client           | 0/3   | 0/2   | 10.10.22.158,    | WRONG     |
+|     | account names (not machine       | kevin.henderson            | 10.10.22.158 ranks #2 by external  |       |       | 194.15.112.173   |           |
+|     | accounts ending in $) of the     |                            | connections (315 events, 45        |       |       |                  |           |
+|     | potentially infected machines in |                            | distinct external destinations).   |       |       |                  |           |
+|     | the LAN?                         |                            | Most-contacted external IP:        |       |       |                  |           |
+|     |                                  |                            | 194.15.112.173 (65 connections).   |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 4   | What external servers (domains   | sobolpand.top,             | Not established from the available | 0/4   | -     | -                | ABSTAINED |
+|     | and IP addresses) were used to   | 178.23.190.8,              | artifacts.                         |       |       |                  |           |
+|     | download malicious files?        | 190.14.37.244,             |                                    |       |       |                  |           |
+|     |                                  | 194.36.191.35              |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 5   | What are the suspicious external | 37.0.10.22                 | client accounts: marcus.cobb — 6   | 0/1   | 0/2   | 10.10.22.157,    | WRONG     |
+|     | IP addresses contacted, which    |                            | events; source ips: 10.10.22.157   |       |       | marcus.cobb      |           |
+|     | might be involved in command-    |                            | (6)                                |       |       |                  |           |
+|     | and-control (C2) communication?  |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 6   | What specific malicious file was | 44491.6090605324.dat       | Derived: internal client           | 0/1   | 0/2   | 10.10.22.157,    | WRONG     |
+|     | downloaded by an internal host   |                            | 10.10.22.157 ranks #3 by external  |       |       | 52.185.211.133   |           |
+|     | from multiple external IP        |                            | connections (88 events, 24         |       |       |                  |           |
+|     | addresses?                       |                            | distinct external destinations).   |       |       |                  |           |
+|     |                                  |                            | Most-contacted external IP:        |       |       |                  |           |
+|     |                                  |                            | 52.185.211.133 (8 connections).    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 7   | During what hour did the first   | 2021-10-22 14:00 UTC       | Derived: Kerberos identity of      | 0/1   | 0/3   | 10.10.22.157,    | WRONG     |
+|     | signs of infection activity      |                            | 10.10.22.157: hostname(s) desktop- |       |       | DESKTOP-NZ875R4, |           |
+|     | appear? Provide the earliest     |                            | nz875r4; human user account(s)     |       |       | marcus.cobb      |           |
+|     | date and time in YYYY-MM-DD      |                            | marcus.cobb.                       |       |       |                  |           |
+|     | HH:MM UTC format.                |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 8   | According to the connection      | 201.137.10.225, legitimate | Not established from the available | 0/2   | -     | -                | ABSTAINED |
+|     | volume statistics, what single   | service                    | artifacts.                         |       |       |                  |           |
+|     | external IP address received the |                            |                                    |       |       |                  |           |
+|     | most connections from the        |                            |                                    |       |       |                  |           |
+|     | infected hosts? Is it a C2       |                            |                                    |       |       |                  |           |
+|     | server or a legitimate service?  |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+
+B. METRICS
+
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Metric                                       | Value        | Meaning                                                                |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Answer precision                             | 0.143        | Entities (IPs, domains, hosts, URLs, times) in the report's answers    |
+|                                              |              | that also occur in the reference / all entities it gave                |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Answer recall                                | 0.111        | Reference answer items found in the report's answers / all reference   |
+|                                              |              | items                                                                  |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Answer F1                                    | 0.125        | Harmonic mean of answer precision and recall                           |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Question recall                              | 0.938        | Mean over questions of reference items found anywhere in the report    |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Faithfulness                                 | 1.000        | Claims whose facts are in the evidence AND in the chunks they cite /   |
+|                                              |              | all claims                                                             |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Grounding rate                               | 1.000        | Claims whose entities and numbers all exist in the evidence            |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Hallucination rate                           | 0.000        | Entities in the report that are absent from the evidence / all         |
+|                                              |              | entities (lower is better)                                             |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Unsupported numbers                          | 0            | Numbers in the report that are absent from the evidence (lower is      |
+|                                              |              | better)                                                                |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Placeholders                                 | 0            | '[insert ...]' placeholders left in the report (lower is better)       |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Questions correct / partial / wrong /        | 0 / 2 / 4 /  | Per-question status in the table above                                 |
+| abstained / unanswered                       | 2 / 0        |                                                                        |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Claims                                       | 76           | Claim lines counted by the verifier; hedged assessments are excluded   |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+
+Status: CORRECT = every reference item found and nothing wrong; PARTIAL = some items found or wrong items present;
+        WRONG = answer given but no reference item found; ABSTAINED = the report says 'Not established from the available artifacts';
+        NO ANSWER = the report has no answer for that question.

@@ -1,0 +1,28 @@
+{
+  "scenario": "apr21isc",
+  "section_profile": "security",
+  "note": "Evaluation only. Every question asks for a value whose type does not occur anywhere in this incident's evidence (checked by src/check_unanswerable.py).",
+  "questions": [
+    {
+      "id": "U1",
+      "question": "What is the SHA256 hash of the malicious file downloaded by the potentially infected host?",
+      "answerable": false,
+      "absent_type": "sha256",
+      "why_absent": "no file hashes in this incident's evidence"
+    },
+    {
+      "id": "U2",
+      "question": "Which Windows registry key did the malware modify to persist on the potentially infected host?",
+      "answerable": false,
+      "absent_type": "registry_key",
+      "why_absent": "no registry data in this incident's evidence"
+    },
+    {
+      "id": "U3",
+      "question": "Which CVE identifier was exploited for the initial infection?",
+      "answerable": false,
+      "absent_type": "cve",
+      "why_absent": "no CVE identifiers in this incident's evidence"
+    }
+  ]
+}

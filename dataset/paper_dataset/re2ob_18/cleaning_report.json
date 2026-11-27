@@ -1,0 +1,15 @@
+{
+  "scenario": "re2ob_18",
+  "source_case": "RE2-OB/emailservice_socket/1",
+  "root_cause_service": "emailservice",
+  "fault": "socket",
+  "inject_time": "2024-01-20 04:51:00 UTC",
+  "artifacts": 7,
+  "facts": 61,
+  "questions": 8,
+  "answers": 8,
+  "atoms": 9,
+  "atoms_in_evidence": 9,
+  "atoms_not_in_evidence": [],
+  "notes": []
+}

@@ -1,0 +1,17 @@
+{
+  "scenario": "re2ob_23",
+  "source_case": "RE2-OB/productcatalogservice_mem/1",
+  "root_cause_service": "productcatalogservice",
+  "fault": "mem",
+  "inject_time": "2024-01-15 22:26:56 UTC",
+  "artifacts": 7,
+  "facts": 56,
+  "questions": 8,
+  "answers": 8,
+  "atoms": 9,
+  "atoms_in_evidence": 8,
+  "atoms_not_in_evidence": [
+    "2024-01-15 22:26 UTC"
+  ],
+  "notes": []
+}

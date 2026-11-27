@@ -1,0 +1,60 @@
+====================================================================================================
+INCIDENT: burnincandle   -   comparison of 1 run(s) (models and conditions)
+CREATED : <timestamp>
+====================================================================================================
+
+Runs:  R1 = golden (RAG)
+
+A. METRICS PER RUN (higher is better except Halluc. and BadNum)
+
++------+------------------------------------+----------+----------+----------+----------+----------+----------+----------+----------+--------+
+| Run  | Model / condition                  | Ans-P    | Ans-R    | Ans-F1   | Q-recall | Faithful | Ground.  | Halluc.  | BadNum   | Min    |
++------+------------------------------------+----------+----------+----------+----------+----------+----------+----------+----------+--------+
+| R1   | golden (RAG)                       | 0.182    | 0.111    | 0.138    | 0.929    | 1.000    | 1.000    | 0.000    | 0        | 0.0    |
++------+------------------------------------+----------+----------+----------+----------+----------+----------+----------+----------+--------+
+
+B. ANSWER STATUS PER QUESTION  (OK = correct, PART = partial, WRONG, ABST = 'Not established', NONE = no answer in the report)
+
++-----+------------------------------------------+--------------------------------+--------+
+| #   | Question                                 | Reference answer               | R1     |
++-----+------------------------------------------+--------------------------------+--------+
+| 1   | What is the IP address of the            | 10.0.19.14                     | WRONG  |
+|     | potentially infected internal host in    |                                |        |
+|     | the LAN?                                 |                                |        |
++-----+------------------------------------------+--------------------------------+--------+
+| 2   | What is the hostname of the potentially  | DESKTOP-5QS3D5D                | WRONG  |
+|     | infected machine in the LAN?             |                                |        |
++-----+------------------------------------------+--------------------------------+--------+
+| 3   | What is the Windows human user account   | patrick.zimmerman              | PART   |
+|     | name (not machine accounts ending in $)  |                                |        |
+|     | of the potentially infected machine in   |                                |        |
+|     | the LAN?                                 |                                |        |
++-----+------------------------------------------+--------------------------------+--------+
+| 4   | What external domains or IP addresses    | oceriesfornot.top,             | ABST   |
+|     | are associated with the initial          | antnosience.com,               |        |
+|     | infection and malware delivery?          | suncoastpinball.com,           |        |
+|     |                                          | otectagain.top,                |        |
+|     |                                          | seaskysafe.com,                |        |
+|     |                                          | dilimoretast.com, filebin.net, |        |
+|     |                                          | situla.bitbit.net              |        |
++-----+------------------------------------------+--------------------------------+--------+
+| 5   | What are the suspicious external IP      | 188.166.154.118,               | PART   |
+|     | addresses contacted, which might be      | 157.245.142.66, 160.153.32.99, |        |
+|     | involved in command-and-control (C2)     | 91.193.16.181                  |        |
+|     | communication?                           |                                |        |
++-----+------------------------------------------+--------------------------------+--------+
+| 6   | During what hour did the first signs of  | 2022-03-21 20:00 UTC           | WRONG  |
+|     | infection activity appear? Provide the   |                                |        |
+|     | earliest date and time in YYYY-MM-DD     |                                |        |
+|     | HH:MM UTC format.                        |                                |        |
++-----+------------------------------------------+--------------------------------+--------+
+| 7   | According to the connection volume       | 157.245.142.66, C2 server      | WRONG  |
+|     | statistics, what single external IP      |                                |        |
+|     | address received the most connections    |                                |        |
+|     | from the infected hosts? Is it a C2      |                                |        |
+|     | server or a legitimate service?          |                                |        |
++-----+------------------------------------------+--------------------------------+--------+
+
+Best answer F1: golden (RAG) (0.138)
+
+Metric definitions: see METRICS.md. 'no RAG' rows have no retrieved evidence, so their faithfulness is 0 or '-'.

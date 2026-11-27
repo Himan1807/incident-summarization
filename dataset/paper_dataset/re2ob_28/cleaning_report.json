@@ -1,0 +1,15 @@
+{
+  "scenario": "re2ob_28",
+  "source_case": "RE2-OB/recommendationservice_loss/1",
+  "root_cause_service": "recommendationservice",
+  "fault": "loss",
+  "inject_time": "2024-01-15 19:33:51 UTC",
+  "artifacts": 7,
+  "facts": 69,
+  "questions": 8,
+  "answers": 8,
+  "atoms": 9,
+  "atoms_in_evidence": 9,
+  "atoms_not_in_evidence": [],
+  "notes": []
+}

@@ -1,0 +1,56 @@
+====================================================================================================
+INCIDENT: dirty_rat   -   comparison of 1 run(s) (models and conditions)
+CREATED : <timestamp>
+====================================================================================================
+
+Runs:  R1 = golden (RAG)
+
+A. METRICS PER RUN (higher is better except Halluc. and BadNum)
+
++------+------------------------------------+----------+----------+----------+----------+----------+----------+----------+----------+--------+
+| Run  | Model / condition                  | Ans-P    | Ans-R    | Ans-F1   | Q-recall | Faithful | Ground.  | Halluc.  | BadNum   | Min    |
++------+------------------------------------+----------+----------+----------+----------+----------+----------+----------+----------+--------+
+| R1   | golden (RAG)                       | 0.250    | 0.091    | 0.133    | 0.893    | 1.000    | 1.000    | 0.000    | 0        | 0.0    |
++------+------------------------------------+----------+----------+----------+----------+----------+----------+----------+----------+--------+
+
+B. ANSWER STATUS PER QUESTION  (OK = correct, PART = partial, WRONG, ABST = 'Not established', NONE = no answer in the report)
+
++-----+------------------------------------------+--------------------------------+--------+
+| #   | Question                                 | Reference answer               | R1     |
++-----+------------------------------------------+--------------------------------+--------+
+| 1   | What is the IP address of the            | 172.16.1.66                    | WRONG  |
+|     | potentially infected internal host in    |                                |        |
+|     | the LAN?                                 |                                |        |
++-----+------------------------------------------+--------------------------------+--------+
+| 2   | What is the hostname of the potentially  | DESKTOP-SKBR25F                | WRONG  |
+|     | infected machine in the LAN?             |                                |        |
++-----+------------------------------------------+--------------------------------+--------+
+| 3   | What is the Windows human user account   | ccollier                       | WRONG  |
+|     | name (not machine accounts ending in $)  |                                |        |
+|     | of the potentially infected machine in   |                                |        |
+|     | the LAN?                                 |                                |        |
++-----+------------------------------------------+--------------------------------+--------+
+| 4   | What external servers (domains and IP    | github.com,                    | ABST   |
+|     | addresses) were used to download         | objects.githubusercontent.com, |        |
+|     | malicious files?                         | repo1.maven.org, ip-api.com    |        |
++-----+------------------------------------------+--------------------------------+--------+
+| 5   | What are the suspicious external IP      | 141.98.10.79                   | WRONG  |
+|     | addresses contacted, which might be      |                                |        |
+|     | involved in command-and-control (C2)     |                                |        |
+|     | communication?                           |                                |        |
++-----+------------------------------------------+--------------------------------+--------+
+| 6   | During what hour did the first signs of  | 2024-07-30 02:00 UTC           | OK     |
+|     | infection activity appear? Provide the   |                                |        |
+|     | earliest date and time in YYYY-MM-DD     |                                |        |
+|     | HH:MM UTC format.                        |                                |        |
++-----+------------------------------------------+--------------------------------+--------+
+| 7   | According to the connection volume       | 23.52.9.222, legitimate        | WRONG  |
+|     | statistics, what single external IP      | service                        |        |
+|     | address received the most connections    |                                |        |
+|     | from the infected hosts? Is it a C2      |                                |        |
+|     | server or a legitimate service?          |                                |        |
++-----+------------------------------------------+--------------------------------+--------+
+
+Best answer F1: golden (RAG) (0.133)
+
+Metric definitions: see METRICS.md. 'no RAG' rows have no retrieved evidence, so their faithfulness is 0 or '-'.

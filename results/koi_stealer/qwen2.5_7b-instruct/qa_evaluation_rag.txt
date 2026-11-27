@@ -3,8 +3,8 @@ INCIDENT : koi_stealer
 MODEL    : qwen2.5:7b-instruct
 CONDITION: RAG (advanced pipeline)
 RUN TIME : 32.6 min of LLM generation
-REPORT   : results\koi_stealer\qwen2.5_7b-instruct\advanced_postmortem.md
-CREATED  : 2026-11-19T12:58:22
+REPORT   : results/koi_stealer/qwen2.5_7b-instruct/advanced_postmortem.md
+CREATED  : 2026-11-26T16:41:03
 ====================================================================================================
 
 A. QUESTION-BY-QUESTION EVALUATION
@@ -79,10 +79,6 @@ B. METRICS
 +----------------------------------------------+--------------+------------------------------------------------------------------------+
 | Grounding rate                               | 1.000        | Claims whose entities and numbers all exist in the evidence            |
 +----------------------------------------------+--------------+------------------------------------------------------------------------+
-| Citation precision                           | 0.912        | Cited claims that are actually supported by the chunks they cite       |
-+----------------------------------------------+--------------+------------------------------------------------------------------------+
-| Citation rate                                | 0.944        | Cited claims / all claims                                              |
-+----------------------------------------------+--------------+------------------------------------------------------------------------+
 | Hallucination rate                           | 0.000        | Entities in the report that are absent from the evidence / all         |
 |                                              |              | entities (lower is better)                                             |
 +----------------------------------------------+--------------+------------------------------------------------------------------------+
@@ -94,7 +90,7 @@ B. METRICS
 | Questions correct / partial / wrong /        | 7 / 0 / 0 /  | Per-question status in the table above                                 |
 | abstained / unanswered                       | 1 / 0        |                                                                        |
 +----------------------------------------------+--------------+------------------------------------------------------------------------+
-| Claims (cited / total)                       | 34 / 36      | Claim lines counted by the verifier; hedged assessments are excluded   |
+| Claims                                       | 36           | Claim lines counted by the verifier; hedged assessments are excluded   |
 +----------------------------------------------+--------------+------------------------------------------------------------------------+
 
 Status: CORRECT = every reference item found and nothing wrong; PARTIAL = some items found or wrong items present;

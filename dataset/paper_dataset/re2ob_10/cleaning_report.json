@@ -1,0 +1,15 @@
+{
+  "scenario": "re2ob_10",
+  "source_case": "RE2-OB/currencyservice_loss/1",
+  "root_cause_service": "currencyservice",
+  "fault": "loss",
+  "inject_time": "2024-01-16 07:09:01 UTC",
+  "artifacts": 7,
+  "facts": 58,
+  "questions": 8,
+  "answers": 8,
+  "atoms": 9,
+  "atoms_in_evidence": 9,
+  "atoms_not_in_evidence": [],
+  "notes": []
+}

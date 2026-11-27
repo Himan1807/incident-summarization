@@ -1,0 +1,883 @@
+{
+ "condition": "rag",
+ "evaluation": {
+  "answer_f1": 0.293,
+  "answer_precision": 0.429,
+  "answer_recall": 0.222,
+  "answerable_entity_recall": 1.0,
+  "assessment_lines": 1,
+  "claims": 53,
+  "faithfulness": 1.0,
+  "grounding_rate": 1.0,
+  "hallucination_rate": 0.0,
+  "overall_entity_recall": 0.889,
+  "per_question": [
+   {
+    "answer_text": "No matching results for: suspicious certificates / self signed analysis. (Absence in this query is not proof of absence elsewhere.)",
+    "answerable_from_evidence": [
+     "172.17.0.99"
+    ],
+    "atoms": [
+     "172.17.0.99"
+    ],
+    "atoms_found_in_answer": [],
+    "correct_entities": [],
+    "found_in_report": [
+     "172.17.0.99"
+    ],
+    "id": 1,
+    "missing_from_evidence": [],
+    "precision": null,
+    "predicted_entities": [],
+    "question": "What is the IP address of the potentially infected internal host in the LAN?",
+    "recall": 0.0,
+    "reference_answer": "172.17.0.99",
+    "status": "WRONG",
+    "wrong_entities": []
+   },
+   {
+    "answer_text": "No matching results for: suspicious certificates / ip based certificates. (Absence in this query is not proof of absence elsewhere.)",
+    "answerable_from_evidence": [
+     "DESKTOP-RNVO9AT"
+    ],
+    "atoms": [
+     "DESKTOP-RNVO9AT"
+    ],
+    "atoms_found_in_answer": [],
+    "correct_entities": [],
+    "found_in_report": [
+     "DESKTOP-RNVO9AT"
+    ],
+    "id": 2,
+    "missing_from_evidence": [],
+    "precision": null,
+    "predicted_entities": [],
+    "question": "What is the hostname of the potentially infected machine in the LAN?",
+    "recall": 0.0,
+    "reference_answer": "DESKTOP-RNVO9AT",
+    "status": "WRONG",
+    "wrong_entities": []
+   },
+   {
+    "answer_text": "No matching results for: suspicious certificates / short validity certs. (Absence in this query is not proof of absence elsewhere.)",
+    "answerable_from_evidence": [
+     "afletcher"
+    ],
+    "atoms": [
+     "afletcher"
+    ],
+    "atoms_found_in_answer": [],
+    "correct_entities": [],
+    "found_in_report": [
+     "afletcher"
+    ],
+    "id": 3,
+    "missing_from_evidence": [],
+    "precision": null,
+    "predicted_entities": [],
+    "question": "What is the Windows human user account name (not machine accounts ending in $) of the potentially infected machine in the LAN?",
+    "recall": 0.0,
+    "reference_answer": "afletcher",
+    "status": "WRONG",
+    "wrong_entities": []
+   },
+   {
+    "answer_text": "Not established from the available artifacts.",
+    "answerable_from_evidence": [
+     "www.bellantonicioccolato.it"
+    ],
+    "atoms": [
+     "www.bellantonicioccolato.it"
+    ],
+    "atoms_found_in_answer": [],
+    "correct_entities": [],
+    "found_in_report": [
+     "www.bellantonicioccolato.it"
+    ],
+    "id": 4,
+    "missing_from_evidence": [],
+    "precision": null,
+    "predicted_entities": [],
+    "question": "What are the likely fake or suspicious domains / URLs for initial infection?",
+    "recall": 0.0,
+    "reference_answer": "www.bellantonicioccolato.it (likely compromised site associated with Koi Loader/Koi Stealer)",
+    "status": "ABSTAINED",
+    "wrong_entities": []
+   },
+   {
+    "answer_text": "Derived: internal client 172.17.0.99 ranks #1 by external connections (361 events, 35 distinct external destinations). Most-contacted external IP: 79.124.78.197 (218 connections).",
+    "answerable_from_evidence": [
+     "79.124.78.197"
+    ],
+    "atoms": [
+     "79.124.78.197"
+    ],
+    "atoms_found_in_answer": [
+     "79.124.78.197"
+    ],
+    "correct_entities": [
+     "79.124.78.197"
+    ],
+    "found_in_report": [
+     "79.124.78.197"
+    ],
+    "id": 5,
+    "missing_from_evidence": [],
+    "precision": 0.5,
+    "predicted_entities": [
+     "172.17.0.99",
+     "79.124.78.197"
+    ],
+    "question": "What are the suspicious external IP addresses contacted, which might be involved in command-and-control (C2) communication?",
+    "recall": 1.0,
+    "reference_answer": "79.124.78.197",
+    "status": "PARTIAL",
+    "wrong_entities": [
+     "172.17.0.99"
+    ]
+   },
+   {
+    "answer_text": "Derived: Kerberos identity of 172.17.0.99: hostname(s) desktop-rnvo9at; human user account(s) afletcher.",
+    "answerable_from_evidence": [],
+    "atoms": [
+     "confidentiality"
+    ],
+    "atoms_found_in_answer": [],
+    "correct_entities": [],
+    "found_in_report": [],
+    "id": 6,
+    "missing_from_evidence": [
+     "confidentiality"
+    ],
+    "precision": 0.0,
+    "predicted_entities": [
+     "172.17.0.99",
+     "DESKTOP-RNVO9AT"
+    ],
+    "question": "Which of the three CIA components does the attacker target primarily: availability, integrity, or confidentiality?",
+    "recall": 0.0,
+    "reference_answer": "confidentiality",
+    "status": "WRONG",
+    "wrong_entities": [
+     "172.17.0.99",
+     "DESKTOP-RNVO9AT"
+    ]
+   },
+   {
+    "answer_text": "Derived: Suricata alerts span 2024-09-04 17:00 UTC to 2024-09-04 18:00 UTC; earliest alert hour 2024-09-04 17:00 UTC (31 alerts).",
+    "answerable_from_evidence": [
+     "2024-09-04 17:00 UTC"
+    ],
+    "atoms": [
+     "2024-09-04 17:00 UTC"
+    ],
+    "atoms_found_in_answer": [
+     "2024-09-04 17:00 UTC"
+    ],
+    "correct_entities": [
+     "2024-09-04",
+     "2024-09-04 17:00"
+    ],
+    "found_in_report": [
+     "2024-09-04 17:00 UTC"
+    ],
+    "id": 7,
+    "missing_from_evidence": [],
+    "precision": 0.667,
+    "predicted_entities": [
+     "2024-09-04",
+     "2024-09-04 17:00",
+     "2024-09-04 18:00"
+    ],
+    "question": "During what hour did the first signs of infection activity appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "recall": 1.0,
+    "reference_answer": "2024-09-04 17:00 UTC",
+    "status": "PARTIAL",
+    "wrong_entities": [
+     "2024-09-04 18:00"
+    ]
+   },
+   {
+    "answer_text": "Not established from the available artifacts.",
+    "answerable_from_evidence": [
+     "79.124.78.197",
+     "C2 server"
+    ],
+    "atoms": [
+     "79.124.78.197",
+     "C2 server"
+    ],
+    "atoms_found_in_answer": [],
+    "correct_entities": [],
+    "found_in_report": [
+     "79.124.78.197",
+     "C2 server"
+    ],
+    "id": 8,
+    "missing_from_evidence": [],
+    "precision": null,
+    "predicted_entities": [],
+    "question": "According to the connection volume statistics, what single external IP address received the most connections from the infected hosts? Is it a C2 server or a legitimate service?",
+    "recall": 0.0,
+    "reference_answer": "79.124.78.197, C2 server",
+    "status": "ABSTAINED",
+    "wrong_entities": []
+   }
+  ],
+  "placeholder_count": 0,
+  "question_recall": 0.875,
+  "questions_correct": "7/8",
+  "unsupported_entities": [],
+  "unsupported_number_count": 0,
+  "unsupported_numbers": []
+ },
+ "flagged": [],
+ "mode": "drop",
+ "model": "golden",
+ "postprocessing": {
+  "auto_attributed_lines": 0,
+  "duplicate_lines_removed": 97,
+  "enabled": true,
+  "invalid_citations_removed": 0,
+  "partial_lines_dropped": 0,
+  "removed": [
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: ET HUNTING GENERIC SUSPICIOUS POST to Dotted Quad with Fake Browser 1 — 48 events [koi_stealer-06#0]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: ET ATTACK_RESPONSE Koi Loader/Stealer CnC Config Inbound — 1 events [koi_stealer-06#0]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: ET MALWARE Win32/Koi Stealer CnC Checkin (GET) — 1 events [koi_stealer-06#1]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Timeline",
+    "line": "- alert timeline: 2024-09-04 17:00 UTC — 31 events [koi_stealer-06#3]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Timeline",
+    "line": "- alert timeline: 2024-09-04 18:00 UTC — 26 events [koi_stealer-06#3]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: internal client 172.17.0.99 ranks #1 by external connections (361 events, 35 distinct external destinations). Most-contacted external IP: 79.124.78.197 (218 connections). [koi_stealer-08#0]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: Kerberos identity of 172.17.0.99: hostname(s) desktop-rnvo9at; human user account(s) afletcher. [koi_stealer-08#0]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: Suricata alerts span 2024-09-04 17:00 UTC to 2024-09-04 18:00 UTC; earliest alert hour 2024-09-04 17:00 UTC (31 alerts). [koi_stealer-08#0]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: destinations of high-severity alerts: 79.124.78.197 (49), 172.17.0.99 (1). [koi_stealer-08#0]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: 79.124.78.197 — 50 events [koi_stealer-01#0]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: ctldl.windowsupdate.com — 3 events [koi_stealer-01#0]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: www.msftconnecttest.com — 2 events [koi_stealer-01#0]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: acroipm2.adobe.com — 1 events [koi_stealer-01#0]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: x1.c.lencr.org — 1 events [koi_stealer-01#1]",
+    "section": "Initial Infection Indicators"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- http requests: no_http_uri — 301 events [koi_stealer-01#1]",
+    "section": "Initial Infection Indicators"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- http requests: 172.17.0.99 -> 79.124.78.197:80 : /foots.php — 48 events [koi_stealer-01#1]",
+    "section": "Initial Infection Indicators"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- http requests: 172.17.0.99 -> 23.220.251.149:80 : /connecttest.txt — 2 events [koi_stealer-01#1]",
+    "section": "Initial Infection Indicators"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: 79.124.78.197 — 50 events [koi_stealer-01#0]",
+    "section": "Initial Infection Indicators"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: ctldl.windowsupdate.com — 3 events [koi_stealer-01#0]",
+    "section": "Initial Infection Indicators"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: www.msftconnecttest.com — 2 events [koi_stealer-01#0]",
+    "section": "Initial Infection Indicators"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: acroipm2.adobe.com — 1 events [koi_stealer-01#0]",
+    "section": "Initial Infection Indicators"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: internal client 172.17.0.99 ranks #1 by external connections (361 events, 35 distinct external destinations). Most-contacted external IP: 79.124.78.197 (218 connections). [koi_stealer-08#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: Kerberos identity of 172.17.0.99: hostname(s) desktop-rnvo9at; human user account(s) afletcher. [koi_stealer-08#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: Suricata alerts span 2024-09-04 17:00 UTC to 2024-09-04 18:00 UTC; earliest alert hour 2024-09-04 17:00 UTC (31 alerts). [koi_stealer-08#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: destinations of high-severity alerts: 79.124.78.197 (49), 172.17.0.99 (1). [koi_stealer-08#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- source clients: 172.17.0.99 — 361 events; external destinations=35; top destinations: 79.124.78.197 (218), 23.45.119.144 (18), 204.79.197.203 (14), 52.113.194.132 (10), 23.195.212.189 (9); 92 further events in other values [koi_stealer-02#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: 79.124.78.197 — 50 events [koi_stealer-01#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: ctldl.windowsupdate.com — 3 events [koi_stealer-01#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: www.msftconnecttest.com — 2 events [koi_stealer-01#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: acroipm2.adobe.com — 1 events [koi_stealer-01#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: x1.c.lencr.org — 1 events [koi_stealer-01#1]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- http requests: no_http_uri — 301 events [koi_stealer-01#1]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- http requests: 172.17.0.99 -> 79.124.78.197:80 : /foots.php — 48 events [koi_stealer-01#1]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- http requests: 172.17.0.99 -> 23.220.251.149:80 : /connecttest.txt — 2 events [koi_stealer-01#1]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 172.17.0.99 -> 23.220.251.158:80 : /connecttest.txt — 2 events [koi_stealer-01#2]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 172.17.0.99 -> 79.124.78.197:80 : /index.php?id=&subid=qIOuKk7U — 2 events [koi_stealer-01#2]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 172.17.0.99 -> 184.29.137.96:80 : / — 1 events [koi_stealer-01#2]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 172.17.0.99 -> 199.232.210.172:80 : /msdownload/update/v3/static/trustedr/en/authrootstl.cab?d7a8a57aa5acd39b — 1 events [koi_stealer-01#2]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 172.17.0.99 -> 199.232.210.172:80 : /msdownload/update/v3/static/trustedr/en/disallowedcertstl.cab?91717f420e6dda94 — 1 events [koi_stealer-01#3]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 172.17.0.99 -> 199.232.214.172:80 : /msdownload/update/v3/static/trustedr/en/pinrulesstl.cab?a5fef2ac8502b132 — 1 events [koi_stealer-01#3]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 172.17.0.99 -> 23.220.251.47:80 : /assets/Owner/arm/ProcessMAU.txt — 1 events [koi_stealer-01#3]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers: 123 matching events [koi_stealer-01#3]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- source clients: 172.17.0.99 — 361 events; external destinations=35; top destinations: 79.124.78.197 (218), 23.45.119.144 (18), 204.79.197.203 (14), 52.113.194.132 (10), 23.195.212.189 (9); 92 further events in other values [koi_stealer-02#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: 79.124.78.197 — 50 events [koi_stealer-01#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: ctldl.windowsupdate.com — 3 events [koi_stealer-01#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: www.msftconnecttest.com — 2 events [koi_stealer-01#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: acroipm2.adobe.com — 1 events [koi_stealer-01#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: x1.c.lencr.org — 1 events [koi_stealer-01#1]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- http requests: no_http_uri — 301 events [koi_stealer-01#1]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- http requests: 172.17.0.99 -> 79.124.78.197:80 : /foots.php — 48 events [koi_stealer-01#1]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- http requests: 172.17.0.99 -> 23.220.251.149:80 : /connecttest.txt — 2 events [koi_stealer-01#1]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: ET HUNTING GENERIC SUSPICIOUS POST to Dotted Quad with Fake Browser 1 — 48 events [koi_stealer-06#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: GPL NETBIOS SMB IPC$ unicode share access — 5 events [koi_stealer-06#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: ET INFO Microsoft Connection Test — 2 events [koi_stealer-06#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: ET ATTACK_RESPONSE Koi Loader/Stealer CnC Config Inbound — 1 events [koi_stealer-06#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 172.17.0.99 -> 23.220.251.158:80 : /connecttest.txt — 2 events [koi_stealer-01#2]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 172.17.0.99 -> 79.124.78.197:80 : /index.php?id=&subid=qIOuKk7U — 2 events [koi_stealer-01#2]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 172.17.0.99 -> 184.29.137.96:80 : / — 1 events [koi_stealer-01#2]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 172.17.0.99 -> 199.232.210.172:80 : /msdownload/update/v3/static/trustedr/en/authrootstl.cab?d7a8a57aa5acd39b — 1 events [koi_stealer-01#2]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: 79.124.78.197 — 50 events [koi_stealer-01#0]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: ctldl.windowsupdate.com — 3 events [koi_stealer-01#0]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: www.msftconnecttest.com — 2 events [koi_stealer-01#0]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: acroipm2.adobe.com — 1 events [koi_stealer-01#0]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: x1.c.lencr.org — 1 events [koi_stealer-01#1]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- http requests: no_http_uri — 301 events [koi_stealer-01#1]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- http requests: 172.17.0.99 -> 79.124.78.197:80 : /foots.php — 48 events [koi_stealer-01#1]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- http requests: 172.17.0.99 -> 23.220.251.149:80 : /connecttest.txt — 2 events [koi_stealer-01#1]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 172.17.0.99 -> 199.232.210.172:80 : /msdownload/update/v3/static/trustedr/en/disallowedcertstl.cab?91717f420e6dda94 — 1 events [koi_stealer-01#3]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 172.17.0.99 -> 199.232.214.172:80 : /msdownload/update/v3/static/trustedr/en/pinrulesstl.cab?a5fef2ac8502b132 — 1 events [koi_stealer-01#3]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 172.17.0.99 -> 23.220.251.47:80 : /assets/Owner/arm/ProcessMAU.txt — 1 events [koi_stealer-01#3]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers: 123 matching events [koi_stealer-01#3]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 172.17.0.99 -> 23.220.251.158:80 : /connecttest.txt — 2 events [koi_stealer-01#2]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 172.17.0.99 -> 79.124.78.197:80 : /index.php?id=&subid=qIOuKk7U — 2 events [koi_stealer-01#2]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 172.17.0.99 -> 184.29.137.96:80 : / — 1 events [koi_stealer-01#2]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 172.17.0.99 -> 199.232.210.172:80 : /msdownload/update/v3/static/trustedr/en/authrootstl.cab?d7a8a57aa5acd39b — 1 events [koi_stealer-01#2]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Impact Assessment",
+    "line": "- file transfers > transfer details: 172.17.0.99 -> 20.96.153.111:443 : fuid: FwBwUeLMampjgOJ5k — 1 events [koi_stealer-01#6]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: 79.124.78.197 — 50 events [koi_stealer-01#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: ctldl.windowsupdate.com — 3 events [koi_stealer-01#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: www.msftconnecttest.com — 2 events [koi_stealer-01#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: acroipm2.adobe.com — 1 events [koi_stealer-01#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: x1.c.lencr.org — 1 events [koi_stealer-01#1]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- http requests: no_http_uri — 301 events [koi_stealer-01#1]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- http requests: 172.17.0.99 -> 79.124.78.197:80 : /foots.php — 48 events [koi_stealer-01#1]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- http requests: 172.17.0.99 -> 23.220.251.149:80 : /connecttest.txt — 2 events [koi_stealer-01#1]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- source clients: 172.17.0.99 — 361 events; external destinations=35; top destinations: 79.124.78.197 (218), 23.45.119.144 (18), 204.79.197.203 (14), 52.113.194.132 (10), 23.195.212.189 (9); 92 further events in other values [koi_stealer-02#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Impact Assessment",
+    "line": "- file transfers > transfer details: 172.17.0.99 -> 20.189.173.26:443 : fuid: FhRlFk2pp8tC1dsabb — 1 events [koi_stealer-01#5]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Impact Assessment",
+    "line": "- file transfers > transfer details: 172.17.0.99 -> 20.241.44.114:443 : fuid: FyjT0AzkMPMcF8Uck — 1 events [koi_stealer-01#5]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Impact Assessment",
+    "line": "- file transfers > transfer details: 172.17.0.99 -> 20.42.73.28:443 : fuid: FpR8YU2UKfciamuQTd — 1 events [koi_stealer-01#5]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Impact Assessment",
+    "line": "- file transfers > transfer details: 172.17.0.99 -> 20.96.153.111:443 : fuid: FSvMjvPqRih6zUFI5 — 1 events [koi_stealer-01#5]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 172.17.0.99 -> 199.232.210.172:80 : /msdownload/update/v3/static/trustedr/en/disallowedcertstl.cab?91717f420e6dda94 — 1 events [koi_stealer-01#3]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 172.17.0.99 -> 199.232.214.172:80 : /msdownload/update/v3/static/trustedr/en/pinrulesstl.cab?a5fef2ac8502b132 — 1 events [koi_stealer-01#3]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 172.17.0.99 -> 23.220.251.47:80 : /assets/Owner/arm/ProcessMAU.txt — 1 events [koi_stealer-01#3]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers: 123 matching events [koi_stealer-01#3]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Impact Assessment",
+    "line": "- file transfers > transfer details: 172.17.0.99 -> 20.96.153.111:443 : fuid: FwBwUeLMampjgOJ5k — 1 events [koi_stealer-01#6]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Root Cause and Evidence Gaps",
+    "line": "- file transfers > transfer details: 172.17.0.99 -> 23.194.68.140:443 : fuid: FYIShP1GoXJB2e2LHc — 1 events [koi_stealer-01#6]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Root Cause and Evidence Gaps",
+    "line": "- file types: other — 361 events [koi_stealer-01#6]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Root Cause and Evidence Gaps",
+    "line": "- download sources: 172.17.0.99 — 361 events [koi_stealer-01#6]",
+    "section": "Corrective and Preventive Actions"
+   }
+  ]
+ },
+ "removed_unverified_lines": 0,
+ "run_log": [
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "koi_stealer-08#0",
+    "koi_stealer-03#0",
+    "koi_stealer-02#0",
+    "koi_stealer-04#0",
+    "koi_stealer-01#0",
+    "koi_stealer-01#1"
+   ],
+   "seconds": 0,
+   "section": "Affected Host and User",
+   "truncated": false
+  },
+  {
+   "extractive": true,
+   "flag_counts": {},
+   "retrieved": [
+    "koi_stealer-06#3",
+    "koi_stealer-08#0"
+   ],
+   "seconds": 0,
+   "section": "Timeline"
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "koi_stealer-06#2",
+    "koi_stealer-06#0",
+    "koi_stealer-06#1",
+    "koi_stealer-06#3",
+    "koi_stealer-08#0",
+    "koi_stealer-01#0"
+   ],
+   "seconds": 0,
+   "section": "Detection: IDS Alerts",
+   "truncated": false
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "koi_stealer-01#1",
+    "koi_stealer-01#0",
+    "koi_stealer-07#1",
+    "koi_stealer-01#2",
+    "koi_stealer-07#0",
+    "koi_stealer-01#3"
+   ],
+   "seconds": 0,
+   "section": "Initial Infection Indicators",
+   "truncated": false
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "koi_stealer-08#0",
+    "koi_stealer-02#0",
+    "koi_stealer-01#0",
+    "koi_stealer-01#1",
+    "koi_stealer-01#2",
+    "koi_stealer-01#3"
+   ],
+   "seconds": 0,
+   "section": "Command-and-Control and Network Activity",
+   "truncated": false
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "koi_stealer-02#0",
+    "koi_stealer-01#0",
+    "koi_stealer-01#1",
+    "koi_stealer-06#0",
+    "koi_stealer-01#2",
+    "koi_stealer-01#5"
+   ],
+   "seconds": 0,
+   "section": "Impact Assessment",
+   "truncated": false
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "koi_stealer-01#0",
+    "koi_stealer-01#1",
+    "koi_stealer-01#4",
+    "koi_stealer-01#3",
+    "koi_stealer-01#2",
+    "koi_stealer-01#6"
+   ],
+   "seconds": 0,
+   "section": "Root Cause and Evidence Gaps",
+   "truncated": false
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "koi_stealer-01#0",
+    "koi_stealer-01#1",
+    "koi_stealer-02#0",
+    "koi_stealer-01#5",
+    "koi_stealer-01#3",
+    "koi_stealer-01#6"
+   ],
+   "seconds": 0,
+   "section": "Corrective and Preventive Actions",
+   "truncated": false
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "koi_stealer-09#0",
+    "koi_stealer-03#0",
+    "koi_stealer-08#0",
+    "koi_stealer-01#0",
+    "koi_stealer-07#0",
+    "koi_stealer-02#0"
+   ],
+   "seconds": 0,
+   "section": "Answers to Investigation Questions",
+   "truncated": false
+  }
+ ],
+ "scenario": "koi_stealer",
+ "seconds_total": 0,
+ "verification_totals": {}
+}

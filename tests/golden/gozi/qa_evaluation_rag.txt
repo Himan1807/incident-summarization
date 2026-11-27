@@ -1,0 +1,109 @@
+====================================================================================================
+INCIDENT : gozi
+MODEL    : golden
+CONDITION: RAG (advanced pipeline)
+RUN TIME : 0.0 min of LLM generation
+REPORT   : <results>/gozi/golden/advanced_postmortem.md
+CREATED  : <timestamp>
+====================================================================================================
+
+A. QUESTION-BY-QUESTION EVALUATION
+   Found = reference items present in the report's answer; Prec. = correct entities / entities the answer gave;
+   Wrong items = entities in the answer that are not in the reference answer.
+
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| #   | Question                         | Reference answer           | Answer from the report             | Found | Prec. | Wrong items      | Status    |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 1   | What is the IP address of the    | 172.16.1.137               | No matching results for:           | 0/1   | -     | -                | WRONG     |
+|     | potentially infected internal    |                            | suspicious certificates / self     |       |       |                  |           |
+|     | host in the LAN?                 |                            | signed analysis. (Absence in this  |       |       |                  |           |
+|     |                                  |                            | query is not proof of absence      |       |       |                  |           |
+|     |                                  |                            | elsewhere.)                        |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 2   | What is the hostname of the      | DESKTOP-3GJL3PV            | No matching results for:           | 0/1   | -     | -                | WRONG     |
+|     | potentially infected machine in  |                            | suspicious certificates / ip based |       |       |                  |           |
+|     | the LAN?                         |                            | certificates. (Absence in this     |       |       |                  |           |
+|     |                                  |                            | query is not proof of absence      |       |       |                  |           |
+|     |                                  |                            | elsewhere.)                        |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 3   | What is the Windows human user   | sherita.kolb               | No matching results for:           | 0/1   | -     | -                | WRONG     |
+|     | account name (not machine        |                            | suspicious certificates / short    |       |       |                  |           |
+|     | accounts ending in $) of the     |                            | validity certs. (Absence in this   |       |       |                  |           |
+|     | potentially infected machine in  |                            | query is not proof of absence      |       |       |                  |           |
+|     | the LAN?                         |                            | elsewhere.)                        |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 4   | What are the likely suspicious   | unapromo.com               | Not established from the available | 0/1   | -     | -                | ABSTAINED |
+|     | domains for initial infection?   |                            | artifacts.                         |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 5   | What are the suspicious external | 62.173.140.103,            | Derived: Kerberos identity of      | 0/11  | 0/3   | 172.16.1.137,    | WRONG     |
+|     | IP addresses contacted, which    | 62.173.138.138,            | 172.16.1.137: hostname(s)          |       |       | DESKTOP-3GJL3PV, |           |
+|     | might be involved in command-    | 62.173.149.243,            | desktop-3gjl3pv; human user        |       |       | sherita.kolb     |           |
+|     | and-control (C2) communication?  | 62.173.140.94,             | account(s) sherita.kolb.           |       |       |                  |           |
+|     |                                  | 31.41.44.60, 46.8.19.233,  |                                    |       |       |                  |           |
+|     |                                  | 5.44.45.201,               |                                    |       |       |                  |           |
+|     |                                  | 89.116.236.41,             |                                    |       |       |                  |           |
+|     |                                  | 62.173.140.76,             |                                    |       |       |                  |           |
+|     |                                  | 31.41.44.49, 46.8.19.86    |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 6   | What are the exact filenames of  | stilak32.rar,              | Derived: Suricata alerts span      | 0/4   | 0/2   | 2023-03-07,      | WRONG     |
+|     | the encoded modules or plugins   | stilak64.rar, cook32.rar,  | 2023-03-07 02:00 UTC to 2023-03-07 |       |       | 2023-03-07 02:00 |           |
+|     | downloaded by the malware?       | cook64.rar                 | 02:00 UTC; earliest alert hour     |       |       |                  |           |
+|     |                                  |                            | 2023-03-07 02:00 UTC (72 alerts).  |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 7   | Which of the three CIA           | confidentiality            | Derived: destinations of high-     | 0/1   | 0/5   | 46.8.19.233,     | WRONG     |
+|     | components does the attacker     |                            | severity alerts: 62.173.138.138    |       |       | 46.8.19.86,      |           |
+|     | target primarily: availability,  |                            | (12), 46.8.19.86 (6), 46.8.19.233  |       |       | 62.173.138.138,  |           |
+|     | integrity, or confidentiality?   |                            | (6), 62.173.140.76 (6),            |       |       | 62.173.140.76,   |           |
+|     |                                  |                            | 62.173.149.243 (6).                |       |       | 62.173.149.243   |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 8   | During what hour did the first   | 2023-03-07 02:00 UTC       | Not established from the available | 0/1   | -     | -                | ABSTAINED |
+|     | signs of infection activity      |                            | artifacts.                         |       |       |                  |           |
+|     | appear? Provide the earliest     |                            |                                    |       |       |                  |           |
+|     | date and time in YYYY-MM-DD      |                            |                                    |       |       |                  |           |
+|     | HH:MM UTC format.                |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 9   | According to the connection      | 62.173.138.138, C2 server  | client accounts: desktop-3gjl3pv$  | 0/2   | 0/2   | 172.16.1.137,    | WRONG     |
+|     | volume statistics, what single   |                            | — 12 events; source ips:           |       |       | DESKTOP-3GJL3PV  |           |
+|     | external IP address received the |                            | 172.16.1.137 (12)                  |       |       |                  |           |
+|     | most connections from the        |                            |                                    |       |       |                  |           |
+|     | infected hosts? Is it a C2       |                            |                                    |       |       |                  |           |
+|     | server or a legitimate service?  |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+
+B. METRICS
+
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Metric                                       | Value        | Meaning                                                                |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Answer precision                             | 0.000        | Entities (IPs, domains, hosts, URLs, times) in the report's answers    |
+|                                              |              | that also occur in the reference / all entities it gave                |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Answer recall                                | 0.000        | Reference answer items found in the report's answers / all reference   |
+|                                              |              | items                                                                  |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Answer F1                                    | 0.000        | Harmonic mean of answer precision and recall                           |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Question recall                              | 0.861        | Mean over questions of reference items found anywhere in the report    |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Faithfulness                                 | 1.000        | Claims whose facts are in the evidence AND in the chunks they cite /   |
+|                                              |              | all claims                                                             |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Grounding rate                               | 1.000        | Claims whose entities and numbers all exist in the evidence            |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Hallucination rate                           | 0.000        | Entities in the report that are absent from the evidence / all         |
+|                                              |              | entities (lower is better)                                             |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Unsupported numbers                          | 0            | Numbers in the report that are absent from the evidence (lower is      |
+|                                              |              | better)                                                                |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Placeholders                                 | 0            | '[insert ...]' placeholders left in the report (lower is better)       |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Questions correct / partial / wrong /        | 0 / 0 / 7 /  | Per-question status in the table above                                 |
+| abstained / unanswered                       | 2 / 0        |                                                                        |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Claims                                       | 62           | Claim lines counted by the verifier; hedged assessments are excluded   |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+
+Status: CORRECT = every reference item found and nothing wrong; PARTIAL = some items found or wrong items present;
+        WRONG = answer given but no reference item found; ABSTAINED = the report says 'Not established from the available artifacts';
+        NO ANSWER = the report has no answer for that question.

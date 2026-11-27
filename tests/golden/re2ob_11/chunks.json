@@ -1,0 +1,66 @@
+[
+ {
+  "id": "re2ob_11-01#0",
+  "text": "[re2ob_11-01 | monitoring_alerts/metric_anomalies] Container metric series (CPU, memory, disk I/O, sockets, workload, error rate, latency p50/p90 per service) that deviate from their baseline or appear only after it, ranked by deviation score, with peak value and first sustained deviation (UTC).\nmetric anomalies: 26 of 70 container metric series deviate from their baseline (first 10 minutes of the capture)\nmetric anomalies: currencyservice_latency-50 — baseline median 0.0042; peak 0.1337 at 2024-01-17 04:16:51 UTC; sustained deviation from 2024-01-17 04:09:06 UTC (score 114)\nmetric anomalies: redis_diskio — baseline median 0; peak 39147 at 2024-01-17 04:08:41 UTC; sustained deviation from 2024-01-17 04:08:16 UTC (score 110)\nmetric anomalies: currencyservice_mem — baseline median 44822528; peak 268439552 at 2024-01-17 04:14:51 UTC; sustained deviation from 2024-01-17 04:08:59 UTC (score 97.72)"
+ },
+ {
+  "id": "re2ob_11-01#1",
+  "text": "[re2ob_11-01 | monitoring_alerts/metric_anomalies] Container metric series (CPU, memory, disk I/O, sockets, workload, error rate, latency p50/p90 per service) that deviate from their baseline or appear only after it, ranked by deviation score, with peak value and first sustained deviation (UTC).\nmetric anomalies: currencyservice_latency-90 — baseline median 0.07; peak 0.8346 at 2024-01-17 04:16:49 UTC; sustained deviation from 2024-01-17 04:09:04 UTC (score 77.69)\nmetric anomalies: frontend_latency-90 — baseline median 0.2272; peak 2.30 at 2024-01-17 04:16:51 UTC; sustained deviation from 2024-01-17 04:09:04 UTC (score 74.40)\nmetric anomalies: checkoutservice_latency-90 — baseline median 0.2386; peak 3.67 at 2024-01-17 04:18:36 UTC; sustained deviation from 2024-01-17 04:09:06 UTC (score 55.38)\nmetric anomalies: recommendationservice_latency-90 — baseline median 0.0095; peak 0.0238 at 2024-01-17 04:09:36 UTC; sustained deviation from 2024-01-17 04:09:06 UTC (score 54.84)"
+ },
+ {
+  "id": "re2ob_11-01#2",
+  "text": "[re2ob_11-01 | monitoring_alerts/metric_anomalies] Container metric series (CPU, memory, disk I/O, sockets, workload, error rate, latency p50/p90 per service) that deviate from their baseline or appear only after it, ranked by deviation score, with peak value and first sustained deviation (UTC).\nmetric anomalies: frontend_latency-50 — baseline median 0.0618; peak 0.6111 at 2024-01-17 04:17:06 UTC; sustained deviation from 2024-01-17 04:09:06 UTC (score 47.00)\nmetric anomalies: currencyservice_socket — baseline median 3.00; peak 8.00 at 2024-01-17 04:16:04 UTC; sustained deviation from 2024-01-17 04:08:59 UTC (score 42.86)\nmetric anomalies: checkoutservice_latency-50 — baseline median 0.1395; peak 1.54 at 2024-01-17 04:18:53 UTC; sustained deviation from 2024-01-17 04:09:38 UTC (score 27.41)\nmetric anomalies: frontend_socket — baseline median 26.00; peak 37.00 at 2024-01-17 04:08:48 UTC; sustained deviation from 2024-01-17 04:08:48 UTC (score 24.72)"
+ },
+ {
+  "id": "re2ob_11-01#3",
+  "text": "[re2ob_11-01 | monitoring_alerts/metric_anomalies] Container metric series (CPU, memory, disk I/O, sockets, workload, error rate, latency p50/p90 per service) that deviate from their baseline or appear only after it, ranked by deviation score, with peak value and first sustained deviation (UTC).\nmetric anomalies: cartservice_latency-50 — baseline median 0.0034; peak 0.0059 at 2024-01-17 04:14:23 UTC; sustained deviation from 2024-01-17 04:09:06 UTC (score 16.69)"
+ },
+ {
+  "id": "re2ob_11-02#0",
+  "text": "[re2ob_11-02 | traces/latency_by_operation] Trace latency per service operation (mean of 15-second buckets): baseline (first 10 minutes) vs the rest of the capture, with the peak (UTC).\noperation latency: currencyservice_Convert — baseline mean 0; later mean 21.89 (x22.89); peak 60.00 at 2024-01-17 04:08:45 UTC\noperation latency: currencyservice_GetSupportedCurrencies — baseline mean 0; later mean 21.64 (x22.64); peak 38.00 at 2024-01-17 04:14:00 UTC\noperation latency: frontendservice_frontend — baseline mean 0; later mean 6.55 (x7.55); peak 24.00 at 2024-01-17 04:19:15 UTC\noperation latency: recommendationservice_ListRecommendations — baseline mean 0.439; later mean 7.16 (x5.67); peak 24.00 at 2024-01-17 04:09:15 UTC"
+ },
+ {
+  "id": "re2ob_11-02#1",
+  "text": "[re2ob_11-02 | traces/latency_by_operation] Trace latency per service operation (mean of 15-second buckets): baseline (first 10 minutes) vs the rest of the capture, with the peak (UTC).\noperation latency: productcatalogservice_GetProduct — baseline mean 3.00; later mean 14.91 (x3.98); peak 45.00 at 2024-01-17 04:14:30 UTC\noperation latency: productcatalogservice_ListProducts — baseline mean 0.0244; later mean 2.54 (x3.45); peak 11.00 at 2024-01-17 04:09:15 UTC\noperation latency: cartservice_GetCart — baseline mean 0.561; later mean 2.95 (x2.53); peak 25.00 at 2024-01-17 04:17:30 UTC\noperation latency: adservice_GetAds — baseline mean 0.7073; later mean 2.48 (x2.04); peak 8.00 at 2024-01-17 04:20:00 UTC"
+ },
+ {
+  "id": "re2ob_11-02#2",
+  "text": "[re2ob_11-02 | traces/latency_by_operation] Trace latency per service operation (mean of 15-second buckets): baseline (first 10 minutes) vs the rest of the capture, with the peak (UTC).\noperation latency: checkoutservice_PlaceOrder — baseline mean 0; later mean 0.3929 (x1.39); peak 4.00 at 2024-01-17 04:18:00 UTC\noperation latency: cartservice_AddItem — baseline mean 0; later mean 0.3393 (x1.34); peak 4.00 at 2024-01-17 04:10:15 UTC"
+ },
+ {
+  "id": "re2ob_11-03#0",
+  "text": "[re2ob_11-03 | traces/errors_by_operation] Trace error counts per service operation (15-second buckets): baseline vs the rest of the capture.\noperation errors: no operation shows more trace errors than in its baseline"
+ },
+ {
+  "id": "re2ob_11-04#0",
+  "text": "[re2ob_11-04 | service_logs/log_volume_by_service] Application log lines per container (lines per minute, baseline vs later) and log templates that appear or disappear after the baseline.\nlog volume: adservice — 457 lines/min in the baseline, 398 lines/min later\nlog volume: currencyservice — 2372 lines/min in the baseline, 2087 lines/min later\nlog volume: frontend — 2646 lines/min in the baseline, 2350 lines/min later\nlog volume: recommendationservice — 559 lines/min in the baseline, 498 lines/min later"
+ },
+ {
+  "id": "re2ob_11-04#1",
+  "text": "[re2ob_11-04 | service_logs/log_volume_by_service] Application log lines per container (lines per minute, baseline vs later) and log templates that appear or disappear after the baseline.\nlog volume: cartservice — 762 lines/min in the baseline, 682 lines/min later\nlog volume: shippingservice — 425 lines/min in the baseline, 396 lines/min later\nlog volume: redis — 1.00 lines/min in the baseline, 1.07 lines/min later\nlog volume: checkoutservice — 78.60 lines/min in the baseline, 76.71 lines/min later"
+ },
+ {
+  "id": "re2ob_11-04#2",
+  "text": "[re2ob_11-04 | service_logs/log_volume_by_service] Application log lines per container (lines per minute, baseline vs later) and log templates that appear or disappear after the baseline.\nlog levels: info 91646, debug 54994, (none) 19056"
+ },
+ {
+  "id": "re2ob_11-05#0",
+  "text": "[re2ob_11-05 | infrastructure_events/pod_inventory] Kubernetes pod inventory: pod name and the node it runs on.\npods: adservice-5d48bd7768-4b6mb on node gke-gke-cluster-default-pool-2e1807ce-cx8g\npods: cartservice-7b89d5f9f5-fwnpx on node gke-gke-cluster-default-pool-2e1807ce-xte3\npods: checkoutservice-cf75f649d-prfkg on node gke-gke-cluster-default-pool-2e1807ce-0e4z\npods: currencyservice-74575f86f6-zbhs7 on node gke-gke-cluster-default-pool-2e1807ce-xte3"
+ },
+ {
+  "id": "re2ob_11-05#1",
+  "text": "[re2ob_11-05 | infrastructure_events/pod_inventory] Kubernetes pod inventory: pod name and the node it runs on.\npods: emailservice-549b7c89fb-tbwv4 on node gke-gke-cluster-default-pool-2e1807ce-0e4z\npods: frontend-7bdc8844c-dtpvw on node gke-gke-cluster-default-pool-2e1807ce-cx8g\npods: loadgenerator-58894586dc-4z9ph on node gke-gke-cluster-default-pool-2e1807ce-0e4z\npods: paymentservice-845b84554d-r7gkr on node gke-gke-cluster-default-pool-2e1807ce-w819"
+ },
+ {
+  "id": "re2ob_11-05#2",
+  "text": "[re2ob_11-05 | infrastructure_events/pod_inventory] Kubernetes pod inventory: pod name and the node it runs on.\npods: productcatalogservice-574bd499cb-vd9k7 on node gke-gke-cluster-default-pool-2e1807ce-xte3\npods: recommendationservice-59d74bb4d-n5b2s on node gke-gke-cluster-default-pool-2e1807ce-w819\npods: redis-cart-564754c77-k87wg on node gke-gke-cluster-default-pool-2e1807ce-0e4z\npods: shippingservice-7c49c66fd9-pvg9v on node gke-gke-cluster-default-pool-2e1807ce-cx8g"
+ },
+ {
+  "id": "re2ob_11-06#0",
+  "text": "[re2ob_11-06 | derived_findings/derived_summary] Deterministic summary computed from the artifacts above (metric deviation ranking and onset, trace latency ranking, log volume change).\nDerived: earliest sustained metric deviation: currencyservice_cpu from 2024-01-17 04:07:07 UTC.\nDerived: metric series ranked #1 by deviation score: currencyservice_latency-50 (score 114).\nDerived: trace operation with the largest latency increase: currencyservice_Convert (mean 0 -> 21.89, x22.89).\nDerived: container with the largest change in log volume: adservice (457 -> 398 lines/min)."
+ },
+ {
+  "id": "re2ob_11-07#0",
+  "text": "[re2ob_11-07 | query_coverage/evidence_gaps] Queries that returned nothing, and telemetry that is not collected; use these to state what is NOT established.\nNo matching results for: monitoring alerts / alerting rules (no alerts were recorded in this capture). (Absence in this query is not proof of absence elsewhere.)\nNo matching results for: change records / deployments (no change-management data in this capture). (Absence in this query is not proof of absence elsewhere.)\nDisk I/O metrics contain data only for: adservice, emailservice, recommendationservice, redis.\nNo matching results for: error- or warning-level application logs (all log lines are info or debug). (Absence in this query is not proof of absence elsewhere.)"
+ }
+]

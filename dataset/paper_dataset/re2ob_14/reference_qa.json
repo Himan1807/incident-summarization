@@ -1,0 +1,106 @@
+{
+  "source": "RCAEval RE2-OB labels (root-cause service, fault, inject time, indicator rule) and pod inventory; question 8 is derived from the trace statistics by src/prepare_rcaeval.py",
+  "confidence": "benchmark ground truth (1, 4, 5, 6, 7), telemetry lookup (2, 3), derived (8)",
+  "qa": [
+    {
+      "id": 1,
+      "question": "What is the name of the service where the failure originated (the root-cause service)?",
+      "answer": "emailservice",
+      "basis": "RCAEval label",
+      "atoms": [
+        {
+          "text": "emailservice",
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "question": "What is the name of the Kubernetes pod of the root-cause service?",
+      "answer": "emailservice-79bb4c4bdd-bwfm4",
+      "basis": "pod inventory (pod-node-1.csv)",
+      "atoms": [
+        {
+          "text": "emailservice-79bb4c4bdd-bwfm4",
+          "kind": "hostname"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "question": "On which Kubernetes node did the pod of the root-cause service run?",
+      "answer": "gke-gke-cluster-default-pool-2e1807ce-w819",
+      "basis": "pod inventory (pod-node-1.csv)",
+      "atoms": [
+        {
+          "text": "gke-gke-cluster-default-pool-2e1807ce-w819",
+          "kind": "hostname"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "question": "What type of fault caused the incident: CPU, memory, disk, network delay, packet loss, or socket?",
+      "answer": "network delay",
+      "basis": "RCAEval label",
+      "atoms": [
+        {
+          "text": "delay",
+          "kind": "label"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "question": "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+      "answer": "availability",
+      "basis": "all RCAEval RE2 faults degrade availability",
+      "atoms": [
+        {
+          "text": "availability",
+          "kind": "cia"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "question": "During what minute did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+      "answer": "2024-01-20 06:49 UTC",
+      "basis": "RCAEval inject_time.txt",
+      "atoms": [
+        {
+          "text": "2024-01-20 06:49 UTC",
+          "kind": "time"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "question": "Which metric of the root-cause service best shows the fault? Give it as <service>_<indicator>, for example cartservice_cpu.",
+      "answer": "emailservice_latency",
+      "basis": "RCAEval label (indicator rule in RCAEval/benchmark/scoring.py)",
+      "atoms": [
+        {
+          "text": "emailservice_latency",
+          "kind": "other"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "question": "According to the trace latency statistics, which single service operation showed the largest latency increase? Is its service the root cause or a downstream symptom?",
+      "answer": "frontendservice_frontend, downstream symptom",
+      "basis": "derived from tracets_lat.csv by src/prepare_rcaeval.py",
+      "atoms": [
+        {
+          "text": "frontendservice_frontend",
+          "kind": "other"
+        },
+        {
+          "text": "downstream symptom",
+          "kind": "label"
+        }
+      ]
+    }
+  ]
+}

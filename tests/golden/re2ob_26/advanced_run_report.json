@@ -1,0 +1,706 @@
+{
+ "condition": "rag",
+ "evaluation": {
+  "answer_f1": 0.0,
+  "answer_precision": 0.0,
+  "answer_recall": 0.0,
+  "answerable_entity_recall": 0.667,
+  "assessment_lines": 1,
+  "claims": 42,
+  "faithfulness": 1.0,
+  "grounding_rate": 1.0,
+  "hallucination_rate": 0.0,
+  "overall_entity_recall": 0.444,
+  "per_question": [
+   {
+    "answer_text": "operation errors: no operation shows more trace errors than in its baseline",
+    "answerable_from_evidence": [
+     "recommendationservice"
+    ],
+    "atoms": [
+     "recommendationservice"
+    ],
+    "atoms_found_in_answer": [],
+    "correct_entities": [],
+    "found_in_report": [
+     "recommendationservice"
+    ],
+    "id": 1,
+    "missing_from_evidence": [],
+    "precision": null,
+    "predicted_entities": [],
+    "question": "What is the name of the service where the failure originated (the root-cause service)?",
+    "recall": 0.0,
+    "reference_answer": "recommendationservice",
+    "status": "WRONG",
+    "wrong_entities": []
+   },
+   {
+    "answer_text": "operation latency: traceservice_Export — baseline mean 0.2195; later mean 0.1607 (x0.9518); peak 1.00 at 2024-01-16 10:20:30 UTC",
+    "answerable_from_evidence": [
+     "recommendationservice-6c9d78b769-gjlkz"
+    ],
+    "atoms": [
+     "recommendationservice-6c9d78b769-gjlkz"
+    ],
+    "atoms_found_in_answer": [],
+    "correct_entities": [],
+    "found_in_report": [],
+    "id": 2,
+    "missing_from_evidence": [],
+    "precision": 0.0,
+    "predicted_entities": [
+     "2024-01-16",
+     "2024-01-16 10:20:30"
+    ],
+    "question": "What is the name of the Kubernetes pod of the root-cause service?",
+    "recall": 0.0,
+    "reference_answer": "recommendationservice-6c9d78b769-gjlkz",
+    "status": "WRONG",
+    "wrong_entities": [
+     "2024-01-16",
+     "2024-01-16 10:20:30"
+    ]
+   },
+   {
+    "answer_text": "operation latency: shippingservice_ShipOrder — baseline mean 0.1951; later mean 0.125 (x0.9413); peak 2.00 at 2024-01-16 10:30:00 UTC",
+    "answerable_from_evidence": [
+     "gke-gke-cluster-default-pool-2e1807ce-xte3"
+    ],
+    "atoms": [
+     "gke-gke-cluster-default-pool-2e1807ce-xte3"
+    ],
+    "atoms_found_in_answer": [],
+    "correct_entities": [],
+    "found_in_report": [],
+    "id": 3,
+    "missing_from_evidence": [],
+    "precision": 0.0,
+    "predicted_entities": [
+     "2024-01-16",
+     "2024-01-16 10:30"
+    ],
+    "question": "On which Kubernetes node did the pod of the root-cause service run?",
+    "recall": 0.0,
+    "reference_answer": "gke-gke-cluster-default-pool-2e1807ce-xte3",
+    "status": "WRONG",
+    "wrong_entities": [
+     "2024-01-16",
+     "2024-01-16 10:30"
+    ]
+   },
+   {
+    "answer_text": "Not established from the available artifacts.",
+    "answerable_from_evidence": [],
+    "atoms": [
+     "delay"
+    ],
+    "atoms_found_in_answer": [],
+    "correct_entities": [],
+    "found_in_report": [],
+    "id": 4,
+    "missing_from_evidence": [
+     "delay"
+    ],
+    "precision": null,
+    "predicted_entities": [],
+    "question": "What type of fault caused the incident: CPU, memory, disk, network delay, packet loss, or socket?",
+    "recall": 0.0,
+    "reference_answer": "network delay",
+    "status": "ABSTAINED",
+    "wrong_entities": []
+   },
+   {
+    "answer_text": "log volume: currencyservice — 2410 lines/min in the baseline, 2207 lines/min later",
+    "answerable_from_evidence": [],
+    "atoms": [
+     "availability"
+    ],
+    "atoms_found_in_answer": [],
+    "correct_entities": [],
+    "found_in_report": [],
+    "id": 5,
+    "missing_from_evidence": [
+     "availability"
+    ],
+    "precision": null,
+    "predicted_entities": [],
+    "question": "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+    "recall": 0.0,
+    "reference_answer": "availability",
+    "status": "WRONG",
+    "wrong_entities": []
+   },
+   {
+    "answer_text": "log volume: adservice — 461 lines/min in the baseline, 424 lines/min later",
+    "answerable_from_evidence": [
+     "2024-01-16 10:19 UTC"
+    ],
+    "atoms": [
+     "2024-01-16 10:19 UTC"
+    ],
+    "atoms_found_in_answer": [],
+    "correct_entities": [],
+    "found_in_report": [
+     "2024-01-16 10:19 UTC"
+    ],
+    "id": 6,
+    "missing_from_evidence": [],
+    "precision": null,
+    "predicted_entities": [],
+    "question": "During what minute did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "recall": 0.0,
+    "reference_answer": "2024-01-16 10:19 UTC",
+    "status": "WRONG",
+    "wrong_entities": []
+   },
+   {
+    "answer_text": "log volume: frontend — 2683 lines/min in the baseline, 2502 lines/min later",
+    "answerable_from_evidence": [
+     "recommendationservice_latency"
+    ],
+    "atoms": [
+     "recommendationservice_latency"
+    ],
+    "atoms_found_in_answer": [],
+    "correct_entities": [],
+    "found_in_report": [
+     "recommendationservice_latency"
+    ],
+    "id": 7,
+    "missing_from_evidence": [],
+    "precision": null,
+    "predicted_entities": [],
+    "question": "Which metric of the root-cause service best shows the fault? Give it as <service>_<indicator>, for example cartservice_cpu.",
+    "recall": 0.0,
+    "reference_answer": "recommendationservice_latency",
+    "status": "WRONG",
+    "wrong_entities": []
+   },
+   {
+    "answer_text": "Not established from the available artifacts.",
+    "answerable_from_evidence": [
+     "productcatalogservice_ListProducts"
+    ],
+    "atoms": [
+     "productcatalogservice_ListProducts",
+     "downstream symptom"
+    ],
+    "atoms_found_in_answer": [],
+    "correct_entities": [],
+    "found_in_report": [
+     "productcatalogservice_ListProducts"
+    ],
+    "id": 8,
+    "missing_from_evidence": [
+     "downstream symptom"
+    ],
+    "precision": null,
+    "predicted_entities": [],
+    "question": "According to the trace latency statistics, which single service operation showed the largest latency increase? Is its service the root cause or a downstream symptom?",
+    "recall": 0.0,
+    "reference_answer": "productcatalogservice_ListProducts, downstream symptom",
+    "status": "ABSTAINED",
+    "wrong_entities": []
+   }
+  ],
+  "placeholder_count": 0,
+  "question_recall": 0.438,
+  "questions_correct": "4/8",
+  "unsupported_entities": [],
+  "unsupported_number_count": 0,
+  "unsupported_numbers": []
+ },
+ "flagged": [],
+ "mode": "drop",
+ "model": "golden",
+ "postprocessing": {
+  "auto_attributed_lines": 0,
+  "duplicate_lines_removed": 66,
+  "enabled": true,
+  "invalid_citations_removed": 0,
+  "partial_lines_dropped": 0,
+  "removed": [
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- metric anomalies: 19 of 71 container metric series deviate from their baseline (first 10 minutes of the capture) [re2ob_26-01#0]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- metric anomalies: recommendationservice_latency-90 — baseline median 0.0096; peak 0.4537 at 2024-01-16 10:20:26 UTC; sustained deviation from 2024-01-16 10:19:47 UTC (score 184) [re2ob_26-01#0]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- metric anomalies: recommendationservice_latency-50 — baseline median 0.0074; peak 0.2577 at 2024-01-16 10:23:41 UTC; sustained deviation from 2024-01-16 10:20:11 UTC (score 173) [re2ob_26-01#0]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- metric anomalies: redis_diskio — baseline median 0; peak 36468 at 2024-01-16 10:22:04 UTC; sustained deviation from 2024-01-16 10:21:50 UTC (score 110) [re2ob_26-01#0]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- metric anomalies: checkoutservice_latency-90 — baseline median 0.2333; peak 0.3375 at 2024-01-16 10:25:41 UTC; sustained deviation from 2024-01-16 10:17:41 UTC (score 2.72) [re2ob_26-01#3]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- metric anomalies: 19 of 71 container metric series deviate from their baseline (first 10 minutes of the capture) [re2ob_26-01#0]",
+    "section": "Initial Infection Indicators"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- metric anomalies: recommendationservice_latency-90 — baseline median 0.0096; peak 0.4537 at 2024-01-16 10:20:26 UTC; sustained deviation from 2024-01-16 10:19:47 UTC (score 184) [re2ob_26-01#0]",
+    "section": "Initial Infection Indicators"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- metric anomalies: recommendationservice_latency-50 — baseline median 0.0074; peak 0.2577 at 2024-01-16 10:23:41 UTC; sustained deviation from 2024-01-16 10:20:11 UTC (score 173) [re2ob_26-01#0]",
+    "section": "Initial Infection Indicators"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- metric anomalies: redis_diskio — baseline median 0; peak 36468 at 2024-01-16 10:22:04 UTC; sustained deviation from 2024-01-16 10:21:50 UTC (score 110) [re2ob_26-01#0]",
+    "section": "Initial Infection Indicators"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- metric anomalies: frontend_latency-50 — baseline median 0.0548; peak 0.3691 at 2024-01-16 10:25:11 UTC; sustained deviation from 2024-01-16 10:19:57 UTC (score 47.09) [re2ob_26-01#1]",
+    "section": "Initial Infection Indicators"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- metric anomalies: frontend_latency-90 — baseline median 0.2123; peak 0.7774 at 2024-01-16 10:25:27 UTC; sustained deviation from 2024-01-16 10:19:56 UTC (score 30.40) [re2ob_26-01#1]",
+    "section": "Initial Infection Indicators"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- metric anomalies: productcatalogservice_socket — baseline median 4.00; peak 3.00 at 2024-01-16 10:22:52 UTC; sustained deviation from 2024-01-16 10:22:52 UTC (score 16.67) [re2ob_26-01#1]",
+    "section": "Initial Infection Indicators"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- metric anomalies: productcatalogservice_latency-90 — baseline median 0.0044; peak 0.0048 at 2024-01-16 10:30:32 UTC; sustained deviation from 2024-01-16 10:20:41 UTC (score 5.07) [re2ob_26-01#1]",
+    "section": "Initial Infection Indicators"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- metric anomalies: redis_cpu — baseline median 0.3181; peak 0.1703 at 2024-01-16 10:25:41 UTC; sustained deviation from 2024-01-16 10:19:06 UTC (score 4.18) [re2ob_26-01#2]",
+    "section": "Initial Infection Indicators"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- metric anomalies: frontend_cpu — baseline median 8.57; peak 5.04 at 2024-01-16 10:22:21 UTC; sustained deviation from 2024-01-16 10:22:11 UTC (score 3.66) [re2ob_26-01#2]",
+    "section": "Initial Infection Indicators"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- metric anomalies: productcatalogservice_cpu — baseline median 3.62; peak 2.04 at 2024-01-16 10:26:25 UTC; sustained deviation from 2024-01-16 10:25:48 UTC (score 3.49) [re2ob_26-01#2]",
+    "section": "Initial Infection Indicators"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- metric anomalies: paymentservice_cpu — baseline median 0.6142; peak 1.11 at 2024-01-16 10:20:49 UTC; sustained deviation from 2024-01-16 10:20:49 UTC (score 2.88) [re2ob_26-01#2]",
+    "section": "Initial Infection Indicators"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- metric anomalies: checkoutservice_latency-90 — baseline median 0.2333; peak 0.3375 at 2024-01-16 10:25:41 UTC; sustained deviation from 2024-01-16 10:17:41 UTC (score 2.72) [re2ob_26-01#3]",
+    "section": "Initial Infection Indicators"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- metric anomalies: 19 of 71 container metric series deviate from their baseline (first 10 minutes of the capture) [re2ob_26-01#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- metric anomalies: recommendationservice_latency-90 — baseline median 0.0096; peak 0.4537 at 2024-01-16 10:20:26 UTC; sustained deviation from 2024-01-16 10:19:47 UTC (score 184) [re2ob_26-01#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- metric anomalies: recommendationservice_latency-50 — baseline median 0.0074; peak 0.2577 at 2024-01-16 10:23:41 UTC; sustained deviation from 2024-01-16 10:20:11 UTC (score 173) [re2ob_26-01#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- metric anomalies: redis_diskio — baseline median 0; peak 36468 at 2024-01-16 10:22:04 UTC; sustained deviation from 2024-01-16 10:21:50 UTC (score 110) [re2ob_26-01#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- metric anomalies: frontend_latency-50 — baseline median 0.0548; peak 0.3691 at 2024-01-16 10:25:11 UTC; sustained deviation from 2024-01-16 10:19:57 UTC (score 47.09) [re2ob_26-01#1]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- metric anomalies: frontend_latency-90 — baseline median 0.2123; peak 0.7774 at 2024-01-16 10:25:27 UTC; sustained deviation from 2024-01-16 10:19:56 UTC (score 30.40) [re2ob_26-01#1]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- metric anomalies: productcatalogservice_socket — baseline median 4.00; peak 3.00 at 2024-01-16 10:22:52 UTC; sustained deviation from 2024-01-16 10:22:52 UTC (score 16.67) [re2ob_26-01#1]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- metric anomalies: productcatalogservice_latency-90 — baseline median 0.0044; peak 0.0048 at 2024-01-16 10:30:32 UTC; sustained deviation from 2024-01-16 10:20:41 UTC (score 5.07) [re2ob_26-01#1]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- metric anomalies: checkoutservice_latency-90 — baseline median 0.2333; peak 0.3375 at 2024-01-16 10:25:41 UTC; sustained deviation from 2024-01-16 10:17:41 UTC (score 2.72) [re2ob_26-01#3]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- metric anomalies: redis_cpu — baseline median 0.3181; peak 0.1703 at 2024-01-16 10:25:41 UTC; sustained deviation from 2024-01-16 10:19:06 UTC (score 4.18) [re2ob_26-01#2]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- metric anomalies: frontend_cpu — baseline median 8.57; peak 5.04 at 2024-01-16 10:22:21 UTC; sustained deviation from 2024-01-16 10:22:11 UTC (score 3.66) [re2ob_26-01#2]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- metric anomalies: productcatalogservice_cpu — baseline median 3.62; peak 2.04 at 2024-01-16 10:26:25 UTC; sustained deviation from 2024-01-16 10:25:48 UTC (score 3.49) [re2ob_26-01#2]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- metric anomalies: paymentservice_cpu — baseline median 0.6142; peak 1.11 at 2024-01-16 10:20:49 UTC; sustained deviation from 2024-01-16 10:20:49 UTC (score 2.88) [re2ob_26-01#2]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- operation latency: traceservice_Export — baseline mean 0.2195; later mean 0.1607 (x0.9518); peak 1.00 at 2024-01-16 10:20:30 UTC [re2ob_26-02#2]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- operation latency: shippingservice_ShipOrder — baseline mean 0.1951; later mean 0.125 (x0.9413); peak 2.00 at 2024-01-16 10:30:00 UTC [re2ob_26-02#2]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- metric anomalies: 19 of 71 container metric series deviate from their baseline (first 10 minutes of the capture) [re2ob_26-01#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- metric anomalies: recommendationservice_latency-90 — baseline median 0.0096; peak 0.4537 at 2024-01-16 10:20:26 UTC; sustained deviation from 2024-01-16 10:19:47 UTC (score 184) [re2ob_26-01#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- metric anomalies: recommendationservice_latency-50 — baseline median 0.0074; peak 0.2577 at 2024-01-16 10:23:41 UTC; sustained deviation from 2024-01-16 10:20:11 UTC (score 173) [re2ob_26-01#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- metric anomalies: redis_diskio — baseline median 0; peak 36468 at 2024-01-16 10:22:04 UTC; sustained deviation from 2024-01-16 10:21:50 UTC (score 110) [re2ob_26-01#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- metric anomalies: frontend_latency-50 — baseline median 0.0548; peak 0.3691 at 2024-01-16 10:25:11 UTC; sustained deviation from 2024-01-16 10:19:57 UTC (score 47.09) [re2ob_26-01#1]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- metric anomalies: frontend_latency-90 — baseline median 0.2123; peak 0.7774 at 2024-01-16 10:25:27 UTC; sustained deviation from 2024-01-16 10:19:56 UTC (score 30.40) [re2ob_26-01#1]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- metric anomalies: productcatalogservice_socket — baseline median 4.00; peak 3.00 at 2024-01-16 10:22:52 UTC; sustained deviation from 2024-01-16 10:22:52 UTC (score 16.67) [re2ob_26-01#1]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- metric anomalies: productcatalogservice_latency-90 — baseline median 0.0044; peak 0.0048 at 2024-01-16 10:30:32 UTC; sustained deviation from 2024-01-16 10:20:41 UTC (score 5.07) [re2ob_26-01#1]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- metric anomalies: 19 of 71 container metric series deviate from their baseline (first 10 minutes of the capture) [re2ob_26-01#0]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- metric anomalies: recommendationservice_latency-90 — baseline median 0.0096; peak 0.4537 at 2024-01-16 10:20:26 UTC; sustained deviation from 2024-01-16 10:19:47 UTC (score 184) [re2ob_26-01#0]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- metric anomalies: recommendationservice_latency-50 — baseline median 0.0074; peak 0.2577 at 2024-01-16 10:23:41 UTC; sustained deviation from 2024-01-16 10:20:11 UTC (score 173) [re2ob_26-01#0]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- metric anomalies: redis_diskio — baseline median 0; peak 36468 at 2024-01-16 10:22:04 UTC; sustained deviation from 2024-01-16 10:21:50 UTC (score 110) [re2ob_26-01#0]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- metric anomalies: frontend_latency-50 — baseline median 0.0548; peak 0.3691 at 2024-01-16 10:25:11 UTC; sustained deviation from 2024-01-16 10:19:57 UTC (score 47.09) [re2ob_26-01#1]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- metric anomalies: frontend_latency-90 — baseline median 0.2123; peak 0.7774 at 2024-01-16 10:25:27 UTC; sustained deviation from 2024-01-16 10:19:56 UTC (score 30.40) [re2ob_26-01#1]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- metric anomalies: productcatalogservice_socket — baseline median 4.00; peak 3.00 at 2024-01-16 10:22:52 UTC; sustained deviation from 2024-01-16 10:22:52 UTC (score 16.67) [re2ob_26-01#1]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- metric anomalies: productcatalogservice_latency-90 — baseline median 0.0044; peak 0.0048 at 2024-01-16 10:30:32 UTC; sustained deviation from 2024-01-16 10:20:41 UTC (score 5.07) [re2ob_26-01#1]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- metric anomalies: redis_cpu — baseline median 0.3181; peak 0.1703 at 2024-01-16 10:25:41 UTC; sustained deviation from 2024-01-16 10:19:06 UTC (score 4.18) [re2ob_26-01#2]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- metric anomalies: frontend_cpu — baseline median 8.57; peak 5.04 at 2024-01-16 10:22:21 UTC; sustained deviation from 2024-01-16 10:22:11 UTC (score 3.66) [re2ob_26-01#2]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- metric anomalies: productcatalogservice_cpu — baseline median 3.62; peak 2.04 at 2024-01-16 10:26:25 UTC; sustained deviation from 2024-01-16 10:25:48 UTC (score 3.49) [re2ob_26-01#2]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- metric anomalies: paymentservice_cpu — baseline median 0.6142; peak 1.11 at 2024-01-16 10:20:49 UTC; sustained deviation from 2024-01-16 10:20:49 UTC (score 2.88) [re2ob_26-01#2]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- metric anomalies: 19 of 71 container metric series deviate from their baseline (first 10 minutes of the capture) [re2ob_26-01#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- metric anomalies: recommendationservice_latency-90 — baseline median 0.0096; peak 0.4537 at 2024-01-16 10:20:26 UTC; sustained deviation from 2024-01-16 10:19:47 UTC (score 184) [re2ob_26-01#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- metric anomalies: recommendationservice_latency-50 — baseline median 0.0074; peak 0.2577 at 2024-01-16 10:23:41 UTC; sustained deviation from 2024-01-16 10:20:11 UTC (score 173) [re2ob_26-01#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- metric anomalies: redis_diskio — baseline median 0; peak 36468 at 2024-01-16 10:22:04 UTC; sustained deviation from 2024-01-16 10:21:50 UTC (score 110) [re2ob_26-01#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- metric anomalies: frontend_latency-50 — baseline median 0.0548; peak 0.3691 at 2024-01-16 10:25:11 UTC; sustained deviation from 2024-01-16 10:19:57 UTC (score 47.09) [re2ob_26-01#1]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- metric anomalies: frontend_latency-90 — baseline median 0.2123; peak 0.7774 at 2024-01-16 10:25:27 UTC; sustained deviation from 2024-01-16 10:19:56 UTC (score 30.40) [re2ob_26-01#1]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- metric anomalies: productcatalogservice_socket — baseline median 4.00; peak 3.00 at 2024-01-16 10:22:52 UTC; sustained deviation from 2024-01-16 10:22:52 UTC (score 16.67) [re2ob_26-01#1]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- metric anomalies: productcatalogservice_latency-90 — baseline median 0.0044; peak 0.0048 at 2024-01-16 10:30:32 UTC; sustained deviation from 2024-01-16 10:20:41 UTC (score 5.07) [re2ob_26-01#1]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- metric anomalies: redis_cpu — baseline median 0.3181; peak 0.1703 at 2024-01-16 10:25:41 UTC; sustained deviation from 2024-01-16 10:19:06 UTC (score 4.18) [re2ob_26-01#2]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- metric anomalies: frontend_cpu — baseline median 8.57; peak 5.04 at 2024-01-16 10:22:21 UTC; sustained deviation from 2024-01-16 10:22:11 UTC (score 3.66) [re2ob_26-01#2]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- metric anomalies: productcatalogservice_cpu — baseline median 3.62; peak 2.04 at 2024-01-16 10:26:25 UTC; sustained deviation from 2024-01-16 10:25:48 UTC (score 3.49) [re2ob_26-01#2]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- metric anomalies: paymentservice_cpu — baseline median 0.6142; peak 1.11 at 2024-01-16 10:20:49 UTC; sustained deviation from 2024-01-16 10:20:49 UTC (score 2.88) [re2ob_26-01#2]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- metric anomalies: checkoutservice_latency-90 — baseline median 0.2333; peak 0.3375 at 2024-01-16 10:25:41 UTC; sustained deviation from 2024-01-16 10:17:41 UTC (score 2.72) [re2ob_26-01#3]",
+    "section": "Corrective and Preventive Actions"
+   }
+  ]
+ },
+ "removed_unverified_lines": 0,
+ "run_log": [
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "re2ob_26-01#3",
+    "re2ob_26-01#0",
+    "re2ob_26-06#0",
+    "re2ob_26-02#2",
+    "re2ob_26-02#1"
+   ],
+   "seconds": 0,
+   "section": "Affected Host and User",
+   "truncated": false
+  },
+  {
+   "extractive": true,
+   "flag_counts": {},
+   "retrieved": [
+    "re2ob_26-02#1",
+    "re2ob_26-06#0",
+    "re2ob_26-01#0",
+    "re2ob_26-01#2",
+    "re2ob_26-02#2",
+    "re2ob_26-01#1",
+    "re2ob_26-02#0",
+    "re2ob_26-01#3"
+   ],
+   "seconds": 0,
+   "section": "Timeline"
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "re2ob_26-01#0",
+    "re2ob_26-01#1",
+    "re2ob_26-01#2",
+    "re2ob_26-01#3"
+   ],
+   "seconds": 0,
+   "section": "Detection: IDS Alerts",
+   "truncated": false
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "re2ob_26-01#0",
+    "re2ob_26-01#1",
+    "re2ob_26-01#2",
+    "re2ob_26-01#3"
+   ],
+   "seconds": 0,
+   "section": "Initial Infection Indicators",
+   "truncated": false
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "re2ob_26-01#0",
+    "re2ob_26-01#1",
+    "re2ob_26-01#3",
+    "re2ob_26-01#2"
+   ],
+   "seconds": 0,
+   "section": "Command-and-Control and Network Activity",
+   "truncated": false
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "re2ob_26-02#2",
+    "re2ob_26-01#0",
+    "re2ob_26-01#1",
+    "re2ob_26-02#0"
+   ],
+   "seconds": 0,
+   "section": "Impact Assessment",
+   "truncated": false
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "re2ob_26-01#0",
+    "re2ob_26-01#1",
+    "re2ob_26-01#2",
+    "re2ob_26-03#0"
+   ],
+   "seconds": 0,
+   "section": "Root Cause and Evidence Gaps",
+   "truncated": false
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "re2ob_26-01#0",
+    "re2ob_26-01#1",
+    "re2ob_26-01#2",
+    "re2ob_26-01#3"
+   ],
+   "seconds": 0,
+   "section": "Corrective and Preventive Actions",
+   "truncated": false
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "re2ob_26-03#0",
+    "re2ob_26-02#2",
+    "re2ob_26-04#0",
+    "re2ob_26-05#0",
+    "re2ob_26-05#2",
+    "re2ob_26-05#1",
+    "re2ob_26-01#3",
+    "re2ob_26-07#0",
+    "re2ob_26-01#0",
+    "re2ob_26-04#1",
+    "re2ob_26-06#0"
+   ],
+   "seconds": 0,
+   "section": "Answers to Investigation Questions",
+   "truncated": false
+  }
+ ],
+ "scenario": "re2ob_26",
+ "seconds_total": 0,
+ "verification_totals": {}
+}

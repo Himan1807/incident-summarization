@@ -1,0 +1,957 @@
+{
+ "condition": "rag",
+ "evaluation": {
+  "answer_f1": 0.0,
+  "answer_precision": 0.0,
+  "answer_recall": 0.0,
+  "answerable_entity_recall": 1.0,
+  "assessment_lines": 1,
+  "claims": 62,
+  "faithfulness": 1.0,
+  "grounding_rate": 1.0,
+  "hallucination_rate": 0.0,
+  "overall_entity_recall": 0.913,
+  "per_question": [
+   {
+    "answer_text": "No matching results for: suspicious certificates / self signed analysis. (Absence in this query is not proof of absence elsewhere.)",
+    "answerable_from_evidence": [
+     "172.16.1.137"
+    ],
+    "atoms": [
+     "172.16.1.137"
+    ],
+    "atoms_found_in_answer": [],
+    "correct_entities": [],
+    "found_in_report": [
+     "172.16.1.137"
+    ],
+    "id": 1,
+    "missing_from_evidence": [],
+    "precision": null,
+    "predicted_entities": [],
+    "question": "What is the IP address of the potentially infected internal host in the LAN?",
+    "recall": 0.0,
+    "reference_answer": "172.16.1.137",
+    "status": "WRONG",
+    "wrong_entities": []
+   },
+   {
+    "answer_text": "No matching results for: suspicious certificates / ip based certificates. (Absence in this query is not proof of absence elsewhere.)",
+    "answerable_from_evidence": [
+     "DESKTOP-3GJL3PV"
+    ],
+    "atoms": [
+     "DESKTOP-3GJL3PV"
+    ],
+    "atoms_found_in_answer": [],
+    "correct_entities": [],
+    "found_in_report": [
+     "DESKTOP-3GJL3PV"
+    ],
+    "id": 2,
+    "missing_from_evidence": [],
+    "precision": null,
+    "predicted_entities": [],
+    "question": "What is the hostname of the potentially infected machine in the LAN?",
+    "recall": 0.0,
+    "reference_answer": "DESKTOP-3GJL3PV",
+    "status": "WRONG",
+    "wrong_entities": []
+   },
+   {
+    "answer_text": "No matching results for: suspicious certificates / short validity certs. (Absence in this query is not proof of absence elsewhere.)",
+    "answerable_from_evidence": [
+     "sherita.kolb"
+    ],
+    "atoms": [
+     "sherita.kolb"
+    ],
+    "atoms_found_in_answer": [],
+    "correct_entities": [],
+    "found_in_report": [
+     "sherita.kolb"
+    ],
+    "id": 3,
+    "missing_from_evidence": [],
+    "precision": null,
+    "predicted_entities": [],
+    "question": "What is the Windows human user account name (not machine accounts ending in $) of the potentially infected machine in the LAN?",
+    "recall": 0.0,
+    "reference_answer": "sherita.kolb",
+    "status": "WRONG",
+    "wrong_entities": []
+   },
+   {
+    "answer_text": "Not established from the available artifacts.",
+    "answerable_from_evidence": [
+     "unapromo.com"
+    ],
+    "atoms": [
+     "unapromo.com"
+    ],
+    "atoms_found_in_answer": [],
+    "correct_entities": [],
+    "found_in_report": [
+     "unapromo.com"
+    ],
+    "id": 4,
+    "missing_from_evidence": [],
+    "precision": null,
+    "predicted_entities": [],
+    "question": "What are the likely suspicious domains for initial infection?",
+    "recall": 0.0,
+    "reference_answer": "unapromo.com",
+    "status": "ABSTAINED",
+    "wrong_entities": []
+   },
+   {
+    "answer_text": "Derived: Kerberos identity of 172.16.1.137: hostname(s) desktop-3gjl3pv; human user account(s) sherita.kolb.",
+    "answerable_from_evidence": [
+     "62.173.140.103",
+     "62.173.138.138",
+     "62.173.149.243",
+     "62.173.140.94",
+     "31.41.44.60",
+     "46.8.19.233",
+     "5.44.45.201",
+     "89.116.236.41",
+     "62.173.140.76",
+     "31.41.44.49",
+     "46.8.19.86"
+    ],
+    "atoms": [
+     "62.173.140.103",
+     "62.173.138.138",
+     "62.173.149.243",
+     "62.173.140.94",
+     "31.41.44.60",
+     "46.8.19.233",
+     "5.44.45.201",
+     "89.116.236.41",
+     "62.173.140.76",
+     "31.41.44.49",
+     "46.8.19.86"
+    ],
+    "atoms_found_in_answer": [],
+    "correct_entities": [],
+    "found_in_report": [
+     "62.173.140.103",
+     "62.173.138.138",
+     "62.173.149.243",
+     "62.173.140.94",
+     "31.41.44.60",
+     "46.8.19.233",
+     "5.44.45.201",
+     "89.116.236.41",
+     "62.173.140.76",
+     "31.41.44.49",
+     "46.8.19.86"
+    ],
+    "id": 5,
+    "missing_from_evidence": [],
+    "precision": 0.0,
+    "predicted_entities": [
+     "172.16.1.137",
+     "DESKTOP-3GJL3PV",
+     "sherita.kolb"
+    ],
+    "question": "What are the suspicious external IP addresses contacted, which might be involved in command-and-control (C2) communication?",
+    "recall": 0.0,
+    "reference_answer": "62.173.140.103, 62.173.138.138, 62.173.149.243, 62.173.140.94, 31.41.44.60, 46.8.19.233, 5.44.45.201, 89.116.236.41, 62.173.140.76, 31.41.44.49, 46.8.19.86",
+    "status": "WRONG",
+    "wrong_entities": [
+     "172.16.1.137",
+     "DESKTOP-3GJL3PV",
+     "sherita.kolb"
+    ]
+   },
+   {
+    "answer_text": "Derived: Suricata alerts span 2023-03-07 02:00 UTC to 2023-03-07 02:00 UTC; earliest alert hour 2023-03-07 02:00 UTC (72 alerts).",
+    "answerable_from_evidence": [
+     "stilak32.rar",
+     "cook32.rar",
+     "cook64.rar"
+    ],
+    "atoms": [
+     "stilak32.rar",
+     "stilak64.rar",
+     "cook32.rar",
+     "cook64.rar"
+    ],
+    "atoms_found_in_answer": [],
+    "correct_entities": [],
+    "found_in_report": [
+     "stilak32.rar",
+     "cook32.rar",
+     "cook64.rar"
+    ],
+    "id": 6,
+    "missing_from_evidence": [
+     "stilak64.rar"
+    ],
+    "precision": 0.0,
+    "predicted_entities": [
+     "2023-03-07",
+     "2023-03-07 02:00"
+    ],
+    "question": "What are the exact filenames of the encoded modules or plugins downloaded by the malware?",
+    "recall": 0.0,
+    "reference_answer": "stilak32.rar, stilak64.rar, cook32.rar, cook64.rar",
+    "status": "WRONG",
+    "wrong_entities": [
+     "2023-03-07",
+     "2023-03-07 02:00"
+    ]
+   },
+   {
+    "answer_text": "Derived: destinations of high-severity alerts: 62.173.138.138 (12), 46.8.19.86 (6), 46.8.19.233 (6), 62.173.140.76 (6), 62.173.149.243 (6).",
+    "answerable_from_evidence": [],
+    "atoms": [
+     "confidentiality"
+    ],
+    "atoms_found_in_answer": [],
+    "correct_entities": [],
+    "found_in_report": [],
+    "id": 7,
+    "missing_from_evidence": [
+     "confidentiality"
+    ],
+    "precision": 0.0,
+    "predicted_entities": [
+     "46.8.19.233",
+     "46.8.19.86",
+     "62.173.138.138",
+     "62.173.140.76",
+     "62.173.149.243"
+    ],
+    "question": "Which of the three CIA components does the attacker target primarily: availability, integrity, or confidentiality?",
+    "recall": 0.0,
+    "reference_answer": "confidentiality",
+    "status": "WRONG",
+    "wrong_entities": [
+     "46.8.19.233",
+     "46.8.19.86",
+     "62.173.138.138",
+     "62.173.140.76",
+     "62.173.149.243"
+    ]
+   },
+   {
+    "answer_text": "Not established from the available artifacts.",
+    "answerable_from_evidence": [
+     "2023-03-07 02:00 UTC"
+    ],
+    "atoms": [
+     "2023-03-07 02:00 UTC"
+    ],
+    "atoms_found_in_answer": [],
+    "correct_entities": [],
+    "found_in_report": [
+     "2023-03-07 02:00 UTC"
+    ],
+    "id": 8,
+    "missing_from_evidence": [],
+    "precision": null,
+    "predicted_entities": [],
+    "question": "During what hour did the first signs of infection activity appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "recall": 0.0,
+    "reference_answer": "2023-03-07 02:00 UTC",
+    "status": "ABSTAINED",
+    "wrong_entities": []
+   },
+   {
+    "answer_text": "client accounts: desktop-3gjl3pv$ — 12 events; source ips: 172.16.1.137 (12)",
+    "answerable_from_evidence": [
+     "62.173.138.138",
+     "C2 server"
+    ],
+    "atoms": [
+     "62.173.138.138",
+     "C2 server"
+    ],
+    "atoms_found_in_answer": [],
+    "correct_entities": [],
+    "found_in_report": [
+     "62.173.138.138",
+     "C2 server"
+    ],
+    "id": 9,
+    "missing_from_evidence": [],
+    "precision": 0.0,
+    "predicted_entities": [
+     "172.16.1.137",
+     "DESKTOP-3GJL3PV"
+    ],
+    "question": "According to the connection volume statistics, what single external IP address received the most connections from the infected hosts? Is it a C2 server or a legitimate service?",
+    "recall": 0.0,
+    "reference_answer": "62.173.138.138, C2 server",
+    "status": "WRONG",
+    "wrong_entities": [
+     "172.16.1.137",
+     "DESKTOP-3GJL3PV"
+    ]
+   }
+  ],
+  "placeholder_count": 0,
+  "question_recall": 0.861,
+  "questions_correct": "8/9",
+  "unsupported_entities": [],
+  "unsupported_number_count": 0,
+  "unsupported_numbers": []
+ },
+ "flagged": [],
+ "mode": "drop",
+ "model": "golden",
+ "postprocessing": {
+  "auto_attributed_lines": 0,
+  "duplicate_lines_removed": 98,
+  "enabled": true,
+  "invalid_citations_removed": 0,
+  "partial_lines_dropped": 0,
+  "removed": [
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: ET MALWARE Ursnif Payload Request (cook64.rar) — 1 events [gozi-06#2]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: ET INFO NTLM Session Setup Request - Negotiate — 2 events [gozi-06#1]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- high severity alerts > high severity signatures: ET INFO Dotted Quad Host RAR Request — 4 events [gozi-06#5]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- high severity alerts > high severity signatures: ET HUNTING GENERIC SUSPICIOUS POST to Dotted Quad with Fake Browser 1 — 3 events [gozi-06#5]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- high severity alerts > high severity signatures: ET MALWARE Ursnif Variant CnC Beacon 3 — 2 events [gozi-06#5]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- high severity alerts > high severity signatures: ET MALWARE Ursnif Variant CnC Data Exfil — 2 events [gozi-06#5]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- high severity alerts > high severity signatures: ET MALWARE Ursnif Payload Request (cook32.rar) — 1 events [gozi-06#6]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Timeline",
+    "line": "- alert timeline: 2023-03-07 02:00 UTC — 72 events [gozi-06#6]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: internal client 172.16.1.137 ranks #1 by external connections (311 events, 50 distinct external destinations). Most-contacted external IP: 62.173.138.138 (26 connections). [gozi-08#0]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: Kerberos identity of 172.16.1.137: hostname(s) desktop-3gjl3pv; human user account(s) sherita.kolb. [gozi-08#0]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: Suricata alerts span 2023-03-07 02:00 UTC to 2023-03-07 02:00 UTC; earliest alert hour 2023-03-07 02:00 UTC (72 alerts). [gozi-08#0]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: destinations of high-severity alerts: 62.173.138.138 (12), 46.8.19.86 (6), 46.8.19.233 (6), 62.173.140.76 (6), 62.173.149.243 (6). [gozi-08#0]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: unapromo.com — 1 events [gozi-01#3]",
+    "section": "Initial Infection Indicators"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: x1.c.lencr.org — 1 events [gozi-01#3]",
+    "section": "Initial Infection Indicators"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- http requests: no_http_uri — 212 events [gozi-01#3]",
+    "section": "Initial Infection Indicators"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- http requests: 172.16.1.137 -> 62.173.138.138:80 : /drew/uyoXjOLPocMIEKrQlytVaWB/N_2BJo4B1_/2BB8gjy1qo0bUbbKw/vIwLAJ4RuKN1/oCn1JQTfr8y/h_2BXw2JtDeVTV/csllhDtxntvdGZ0FyWsDv/fSjE8DiuaKWiQWY0/KObd8_2FyOCBEgg/RVIw8Nxnyvxjh6Qphy/yOa05BVTB/myKLdYqv5xhF3cKw_2Bk/…[truncated] — 9 events [gozi-01#3]",
+    "section": "Initial Infection Indicators"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: internal client 172.16.1.137 ranks #1 by external connections (311 events, 50 distinct external destinations). Most-contacted external IP: 62.173.138.138 (26 connections). [gozi-08#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: Kerberos identity of 172.16.1.137: hostname(s) desktop-3gjl3pv; human user account(s) sherita.kolb. [gozi-08#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: Suricata alerts span 2023-03-07 02:00 UTC to 2023-03-07 02:00 UTC; earliest alert hour 2023-03-07 02:00 UTC (72 alerts). [gozi-08#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: destinations of high-severity alerts: 62.173.138.138 (12), 46.8.19.86 (6), 46.8.19.233 (6), 62.173.140.76 (6), 62.173.149.243 (6). [gozi-08#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- source clients: 172.16.1.137 — 311 events; external destinations=50; top destinations: 62.173.138.138 (26), 20.190.159.70 (24), 104.106.121.142 (18), 62.173.149.243 (15), 46.8.19.233 (12); 216 further events in other values [gozi-02#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: 62.173.138.138 — 6 events [gozi-01#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: 46.8.19.233 — 4 events [gozi-01#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: 62.173.149.243 — 4 events [gozi-01#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: 46.8.19.86 — 3 events [gozi-01#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 172.16.1.137 -> 62.173.149.243:80 : /stilak32.rar — 7 events [gozi-01#4]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 172.16.1.137 -> 62.173.140.103:80 : /drew/Q0EmvhskDMeV_2B/hlZqNxHPY3pA7HNxtL/9pXV5RDXP/1ncHG7VUfpdi2hExi3M2/zb3SUbdKsAKR2OShwxw/qjnkZ5oqJv4hT6UPNNZkp1/2f6D94TlCm0xb/gmA0CcmM/phrug73V9foNtM3B11vM5jg/rA7X6ZhzBR/p4_2FAte6kcuk_2Bm/Xtm1EnGCcDgj/…[truncated] — 6 events [gozi-01#4]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 172.16.1.137 -> 46.8.19.233:80 : /drew/KU4sSnNPGqF6dYVU/zMqg5LcUpXWHQk4/p13TzrSaxnS204Iq07/xA1Orx2tR/0Mx7AucADFBXLarjDT_2/F6QVzfPmw6J4yJohUa_/2FwRbcVk37yP9QCm8T_2FY/tqTLVPzL1l9MI/Hp0oDTGP/yycBFCiKitaSE7y0P_2FF9B/WAmReIx3ov/DMiE0A8aFFKYTDfeS…[truncated] — 5 events [gozi-01#4]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 172.16.1.137 -> 46.8.19.86:80 : /drew/87Kol3wsW64/XzUI9sN5W8mEJo/Ry4an4JvksM8Ymx60M6o5/PQtzODDyH1TG1TtY/8vNIghEJJhKHPdL/gvYCzkuSkLZDTME_2B/cpQiO3HFc/1uU4Badum_2FGmMnE2Sm/jmTcOwcinRYLnKFzinH/QZDuBdGarUZTBgmcGsNyb0/qJGDHvwvJi7TX/u7kjTOlL/jXSV…[truncated] — 5 events [gozi-01#4]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: 62.173.140.103 — 3 events [gozi-01#1]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: 62.173.140.76 — 3 events [gozi-01#1]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: 62.173.140.94 — 3 events [gozi-01#1]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: 31.41.44.49 — 2 events [gozi-01#1]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: 31.41.44.60 — 2 events [gozi-01#2]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: 5.44.45.201 — 2 events [gozi-01#2]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: 89.116.236.41 — 2 events [gozi-01#2]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: ctldl.windowsupdate.com — 2 events [gozi-01#2]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: 62.173.138.138 — 6 events [gozi-01#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: 46.8.19.233 — 4 events [gozi-01#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: 62.173.149.243 — 4 events [gozi-01#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: 46.8.19.86 — 3 events [gozi-01#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: 62.173.140.103 — 3 events [gozi-01#1]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: 62.173.140.76 — 3 events [gozi-01#1]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: 62.173.140.94 — 3 events [gozi-01#1]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: 31.41.44.49 — 2 events [gozi-01#1]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 172.16.1.137 -> 62.173.149.243:80 : /stilak32.rar — 7 events [gozi-01#4]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 172.16.1.137 -> 62.173.140.103:80 : /drew/Q0EmvhskDMeV_2B/hlZqNxHPY3pA7HNxtL/9pXV5RDXP/1ncHG7VUfpdi2hExi3M2/zb3SUbdKsAKR2OShwxw/qjnkZ5oqJv4hT6UPNNZkp1/2f6D94TlCm0xb/gmA0CcmM/phrug73V9foNtM3B11vM5jg/rA7X6ZhzBR/p4_2FAte6kcuk_2Bm/Xtm1EnGCcDgj/…[truncated] — 6 events [gozi-01#4]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 172.16.1.137 -> 46.8.19.233:80 : /drew/KU4sSnNPGqF6dYVU/zMqg5LcUpXWHQk4/p13TzrSaxnS204Iq07/xA1Orx2tR/0Mx7AucADFBXLarjDT_2/F6QVzfPmw6J4yJohUa_/2FwRbcVk37yP9QCm8T_2FY/tqTLVPzL1l9MI/Hp0oDTGP/yycBFCiKitaSE7y0P_2FF9B/WAmReIx3ov/DMiE0A8aFFKYTDfeS…[truncated] — 5 events [gozi-01#4]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 172.16.1.137 -> 46.8.19.86:80 : /drew/87Kol3wsW64/XzUI9sN5W8mEJo/Ry4an4JvksM8Ymx60M6o5/PQtzODDyH1TG1TtY/8vNIghEJJhKHPdL/gvYCzkuSkLZDTME_2B/cpQiO3HFc/1uU4Badum_2FGmMnE2Sm/jmTcOwcinRYLnKFzinH/QZDuBdGarUZTBgmcGsNyb0/qJGDHvwvJi7TX/u7kjTOlL/jXSV…[truncated] — 5 events [gozi-01#4]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: 31.41.44.60 — 2 events [gozi-01#2]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: 5.44.45.201 — 2 events [gozi-01#2]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: 89.116.236.41 — 2 events [gozi-01#2]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: ctldl.windowsupdate.com — 2 events [gozi-01#2]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: unapromo.com — 1 events [gozi-01#3]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: x1.c.lencr.org — 1 events [gozi-01#3]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- http requests: no_http_uri — 212 events [gozi-01#3]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- http requests: 172.16.1.137 -> 62.173.138.138:80 : /drew/uyoXjOLPocMIEKrQlytVaWB/N_2BJo4B1_/2BB8gjy1qo0bUbbKw/vIwLAJ4RuKN1/oCn1JQTfr8y/h_2BXw2JtDeVTV/csllhDtxntvdGZ0FyWsDv/fSjE8DiuaKWiQWY0/KObd8_2FyOCBEgg/RVIw8Nxnyvxjh6Qphy/yOa05BVTB/myKLdYqv5xhF3cKw_2Bk/…[truncated] — 9 events [gozi-01#3]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: internal client 172.16.1.137 ranks #1 by external connections (311 events, 50 distinct external destinations). Most-contacted external IP: 62.173.138.138 (26 connections). [gozi-08#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: Kerberos identity of 172.16.1.137: hostname(s) desktop-3gjl3pv; human user account(s) sherita.kolb. [gozi-08#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: Suricata alerts span 2023-03-07 02:00 UTC to 2023-03-07 02:00 UTC; earliest alert hour 2023-03-07 02:00 UTC (72 alerts). [gozi-08#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: destinations of high-severity alerts: 62.173.138.138 (12), 46.8.19.86 (6), 46.8.19.233 (6), 62.173.140.76 (6), 62.173.149.243 (6). [gozi-08#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: 62.173.138.138 — 6 events [gozi-01#0]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: 46.8.19.233 — 4 events [gozi-01#0]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: 62.173.149.243 — 4 events [gozi-01#0]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: 46.8.19.86 — 3 events [gozi-01#0]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: 62.173.140.103 — 3 events [gozi-01#1]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: 62.173.140.76 — 3 events [gozi-01#1]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: 62.173.140.94 — 3 events [gozi-01#1]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: 31.41.44.49 — 2 events [gozi-01#1]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 172.16.1.137 -> 62.173.149.243:80 : /stilak32.rar — 7 events [gozi-01#4]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 172.16.1.137 -> 62.173.140.103:80 : /drew/Q0EmvhskDMeV_2B/hlZqNxHPY3pA7HNxtL/9pXV5RDXP/1ncHG7VUfpdi2hExi3M2/zb3SUbdKsAKR2OShwxw/qjnkZ5oqJv4hT6UPNNZkp1/2f6D94TlCm0xb/gmA0CcmM/phrug73V9foNtM3B11vM5jg/rA7X6ZhzBR/p4_2FAte6kcuk_2Bm/Xtm1EnGCcDgj/…[truncated] — 6 events [gozi-01#4]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 172.16.1.137 -> 46.8.19.233:80 : /drew/KU4sSnNPGqF6dYVU/zMqg5LcUpXWHQk4/p13TzrSaxnS204Iq07/xA1Orx2tR/0Mx7AucADFBXLarjDT_2/F6QVzfPmw6J4yJohUa_/2FwRbcVk37yP9QCm8T_2FY/tqTLVPzL1l9MI/Hp0oDTGP/yycBFCiKitaSE7y0P_2FF9B/WAmReIx3ov/DMiE0A8aFFKYTDfeS…[truncated] — 5 events [gozi-01#4]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 172.16.1.137 -> 46.8.19.86:80 : /drew/87Kol3wsW64/XzUI9sN5W8mEJo/Ry4an4JvksM8Ymx60M6o5/PQtzODDyH1TG1TtY/8vNIghEJJhKHPdL/gvYCzkuSkLZDTME_2B/cpQiO3HFc/1uU4Badum_2FGmMnE2Sm/jmTcOwcinRYLnKFzinH/QZDuBdGarUZTBgmcGsNyb0/qJGDHvwvJi7TX/u7kjTOlL/jXSV…[truncated] — 5 events [gozi-01#4]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers: 67 matching events [gozi-01#6]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: file_transfer — 14 events [gozi-01#6]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: 172.16.1.137 -> 104.106.107.237:443 : fuid: FzQMvC25dCy0cXTFie — 1 events [gozi-01#6]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: 172.16.1.137 -> 104.106.121.142:443 : fuid: F080o93E1PwtbhTVEe — 1 events [gozi-01#6]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: 172.16.1.137 -> 104.106.121.142:443 : fuid: Fv93MvGvtBwa1QgVk — 1 events [gozi-01#8]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: 62.173.138.138 — 6 events [gozi-01#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: 46.8.19.233 — 4 events [gozi-01#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: 62.173.149.243 — 4 events [gozi-01#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: 46.8.19.86 — 3 events [gozi-01#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: unapromo.com — 1 events [gozi-01#3]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: x1.c.lencr.org — 1 events [gozi-01#3]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- http requests: no_http_uri — 212 events [gozi-01#3]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- http requests: 172.16.1.137 -> 62.173.138.138:80 : /drew/uyoXjOLPocMIEKrQlytVaWB/N_2BJo4B1_/2BB8gjy1qo0bUbbKw/vIwLAJ4RuKN1/oCn1JQTfr8y/h_2BXw2JtDeVTV/csllhDtxntvdGZ0FyWsDv/fSjE8DiuaKWiQWY0/KObd8_2FyOCBEgg/RVIw8Nxnyvxjh6Qphy/yOa05BVTB/myKLdYqv5xhF3cKw_2Bk/…[truncated] — 9 events [gozi-01#3]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: internal client 172.16.1.137 ranks #1 by external connections (311 events, 50 distinct external destinations). Most-contacted external IP: 62.173.138.138 (26 connections). [gozi-08#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: Kerberos identity of 172.16.1.137: hostname(s) desktop-3gjl3pv; human user account(s) sherita.kolb. [gozi-08#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: Suricata alerts span 2023-03-07 02:00 UTC to 2023-03-07 02:00 UTC; earliest alert hour 2023-03-07 02:00 UTC (72 alerts). [gozi-08#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: destinations of high-severity alerts: 62.173.138.138 (12), 46.8.19.86 (6), 46.8.19.233 (6), 62.173.140.76 (6), 62.173.149.243 (6). [gozi-08#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: 62.173.140.103 — 3 events [gozi-01#1]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: 62.173.140.76 — 3 events [gozi-01#1]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: 62.173.140.94 — 3 events [gozi-01#1]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: 31.41.44.49 — 2 events [gozi-01#1]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: 31.41.44.60 — 2 events [gozi-01#2]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: 5.44.45.201 — 2 events [gozi-01#2]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: 89.116.236.41 — 2 events [gozi-01#2]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: ctldl.windowsupdate.com — 2 events [gozi-01#2]",
+    "section": "Corrective and Preventive Actions"
+   }
+  ]
+ },
+ "removed_unverified_lines": 0,
+ "run_log": [
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "gozi-08#0",
+    "gozi-02#0",
+    "gozi-01#3",
+    "gozi-03#0",
+    "gozi-04#1",
+    "gozi-07#0"
+   ],
+   "seconds": 0,
+   "section": "Affected Host and User",
+   "truncated": false
+  },
+  {
+   "extractive": true,
+   "flag_counts": {},
+   "retrieved": [
+    "gozi-06#6",
+    "gozi-08#0"
+   ],
+   "seconds": 0,
+   "section": "Timeline"
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "gozi-06#2",
+    "gozi-06#0",
+    "gozi-06#1",
+    "gozi-06#5",
+    "gozi-06#6",
+    "gozi-08#0"
+   ],
+   "seconds": 0,
+   "section": "Detection: IDS Alerts",
+   "truncated": false
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "gozi-01#0",
+    "gozi-01#3",
+    "gozi-01#1",
+    "gozi-01#2",
+    "gozi-01#4",
+    "gozi-01#6"
+   ],
+   "seconds": 0,
+   "section": "Initial Infection Indicators",
+   "truncated": false
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "gozi-08#0",
+    "gozi-02#0",
+    "gozi-01#0",
+    "gozi-01#4",
+    "gozi-01#1",
+    "gozi-01#2"
+   ],
+   "seconds": 0,
+   "section": "Command-and-Control and Network Activity",
+   "truncated": false
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "gozi-01#0",
+    "gozi-01#1",
+    "gozi-01#4",
+    "gozi-01#2",
+    "gozi-01#3",
+    "gozi-08#0"
+   ],
+   "seconds": 0,
+   "section": "Impact Assessment",
+   "truncated": false
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "gozi-01#0",
+    "gozi-01#1",
+    "gozi-01#4",
+    "gozi-01#6",
+    "gozi-01#8"
+   ],
+   "seconds": 0,
+   "section": "Root Cause and Evidence Gaps",
+   "truncated": false
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "gozi-01#0",
+    "gozi-01#3",
+    "gozi-04#0",
+    "gozi-08#0",
+    "gozi-01#1",
+    "gozi-01#2"
+   ],
+   "seconds": 0,
+   "section": "Corrective and Preventive Actions",
+   "truncated": false
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "gozi-09#0",
+    "gozi-08#0",
+    "gozi-05#0",
+    "gozi-03#0",
+    "gozi-01#2",
+    "gozi-01#0",
+    "gozi-02#0",
+    "gozi-06#2"
+   ],
+   "seconds": 0,
+   "section": "Answers to Investigation Questions",
+   "truncated": false
+  }
+ ],
+ "scenario": "gozi",
+ "seconds_total": 0,
+ "verification_totals": {}
+}

@@ -1,0 +1,62 @@
+====================================================================================================
+INCIDENT: iced_id   -   comparison of 1 run(s) (models and conditions)
+CREATED : <timestamp>
+====================================================================================================
+
+Runs:  R1 = golden (RAG)
+
+A. METRICS PER RUN (higher is better except Halluc. and BadNum)
+
++------+------------------------------------+----------+----------+----------+----------+----------+----------+----------+----------+--------+
+| Run  | Model / condition                  | Ans-P    | Ans-R    | Ans-F1   | Q-recall | Faithful | Ground.  | Halluc.  | BadNum   | Min    |
++------+------------------------------------+----------+----------+----------+----------+----------+----------+----------+----------+--------+
+| R1   | golden (RAG)                       | 0.182    | 0.083    | 0.114    | 0.875    | 1.000    | 1.000    | 0.000    | 0        | 0.0    |
++------+------------------------------------+----------+----------+----------+----------+----------+----------+----------+----------+--------+
+
+B. ANSWER STATUS PER QUESTION  (OK = correct, PART = partial, WRONG, ABST = 'Not established', NONE = no answer in the report)
+
++-----+------------------------------------------+--------------------------------+--------+
+| #   | Question                                 | Reference answer               | R1     |
++-----+------------------------------------------+--------------------------------+--------+
+| 1   | What is the IP address of the            | 10.4.19.136                    | WRONG  |
+|     | potentially infected internal host in    |                                |        |
+|     | the LAN?                                 |                                |        |
++-----+------------------------------------------+--------------------------------+--------+
+| 2   | What is the hostname of the potentially  | DESKTOP-SFF9LJF                | WRONG  |
+|     | infected machine in the LAN?             |                                |        |
++-----+------------------------------------------+--------------------------------+--------+
+| 3   | What is the Windows human user account   | csilva                         | WRONG  |
+|     | name (not machine accounts ending in $)  |                                |        |
+|     | of the potentially infected machine in   |                                |        |
+|     | the LAN?                                 |                                |        |
++-----+------------------------------------------+--------------------------------+--------+
+| 4   | What are the likely fake or suspicious   | 80.77.25.175 (malicious        | ABST   |
+|     | domains / URLs for initial infection?    | redirect to Firebase Storage   |        |
+|     |                                          | URL delivering ZIP archive     |        |
+|     |                                          | containing IcedID installer)   |        |
++-----+------------------------------------------+--------------------------------+--------+
+| 5   | What domain names AND external IP        | 104.168.53.18,                 | WRONG  |
+|     | addresses are involved in command-and-   | askamoshopsi.com,              |        |
+|     | control (C2) communication?              | 217.199.121.56,                |        |
+|     |                                          | skansnekssky.com               |        |
++-----+------------------------------------------+--------------------------------+--------+
+| 6   | Which of the three CIA components does   | confidentiality                | WRONG  |
+|     | the attacker target primarily:           |                                |        |
+|     | availability, integrity, or              |                                |        |
+|     | confidentiality?                         |                                |        |
++-----+------------------------------------------+--------------------------------+--------+
+| 7   | During what hour did the first signs of  | 2023-04-19 15:00 UTC           | PART   |
+|     | infection activity appear? Provide the   |                                |        |
+|     | earliest date and time in YYYY-MM-DD     |                                |        |
+|     | HH:MM UTC format.                        |                                |        |
++-----+------------------------------------------+--------------------------------+--------+
+| 8   | According to the connection volume       | 217.199.121.56, C2 server      | ABST   |
+|     | statistics, what single external IP      |                                |        |
+|     | address received the most connections    |                                |        |
+|     | from the infected hosts? Is it a C2      |                                |        |
+|     | server or a legitimate service?          |                                |        |
++-----+------------------------------------------+--------------------------------+--------+
+
+Best answer F1: golden (RAG) (0.114)
+
+Metric definitions: see METRICS.md. 'no RAG' rows have no retrieved evidence, so their faithfulness is 0 or '-'.

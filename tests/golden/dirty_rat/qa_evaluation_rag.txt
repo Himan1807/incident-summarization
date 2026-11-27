@@ -1,0 +1,95 @@
+====================================================================================================
+INCIDENT : dirty_rat
+MODEL    : golden
+CONDITION: RAG (advanced pipeline)
+RUN TIME : 0.0 min of LLM generation
+REPORT   : <results>/dirty_rat/golden/advanced_postmortem.md
+CREATED  : <timestamp>
+====================================================================================================
+
+A. QUESTION-BY-QUESTION EVALUATION
+   Found = reference items present in the report's answer; Prec. = correct entities / entities the answer gave;
+   Wrong items = entities in the answer that are not in the reference answer.
+
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| #   | Question                         | Reference answer           | Answer from the report             | Found | Prec. | Wrong items      | Status    |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 1   | What is the IP address of the    | 172.16.1.66                | No matching results for:           | 0/1   | -     | -                | WRONG     |
+|     | potentially infected internal    |                            | suspicious certificates / self     |       |       |                  |           |
+|     | host in the LAN?                 |                            | signed analysis. (Absence in this  |       |       |                  |           |
+|     |                                  |                            | query is not proof of absence      |       |       |                  |           |
+|     |                                  |                            | elsewhere.)                        |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 2   | What is the hostname of the      | DESKTOP-SKBR25F            | No matching results for:           | 0/1   | -     | -                | WRONG     |
+|     | potentially infected machine in  |                            | suspicious certificates / short    |       |       |                  |           |
+|     | the LAN?                         |                            | validity certs. (Absence in this   |       |       |                  |           |
+|     |                                  |                            | query is not proof of absence      |       |       |                  |           |
+|     |                                  |                            | elsewhere.)                        |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 3   | What is the Windows human user   | ccollier                   | No matching results for:           | 0/1   | -     | -                | WRONG     |
+|     | account name (not machine        |                            | suspicious certificates / ip based |       |       |                  |           |
+|     | accounts ending in $) of the     |                            | certificates. (Absence in this     |       |       |                  |           |
+|     | potentially infected machine in  |                            | query is not proof of absence      |       |       |                  |           |
+|     | the LAN?                         |                            | elsewhere.)                        |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 4   | What external servers (domains   | github.com, objects.github | Not established from the available | 0/4   | -     | -                | ABSTAINED |
+|     | and IP addresses) were used to   | usercontent.com,           | artifacts.                         |       |       |                  |           |
+|     | download malicious files?        | repo1.maven.org, ip-       |                                    |       |       |                  |           |
+|     |                                  | api.com                    |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 5   | What are the suspicious external | 141.98.10.79               | Derived: Kerberos identity of      | 0/1   | 0/2   | 172.16.1.66,     | WRONG     |
+|     | IP addresses contacted, which    |                            | 172.16.1.66: hostname(s) desktop-  |       |       | DESKTOP-SKBR25F  |           |
+|     | might be involved in command-    |                            | skbr25f; human user account(s)     |       |       |                  |           |
+|     | and-control (C2) communication?  |                            | ccollier.                          |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 6   | During what hour did the first   | 2024-07-30 02:00 UTC       | Derived: Suricata alerts span      | 1/1   | 2/2   | -                | CORRECT   |
+|     | signs of infection activity      |                            | 2024-07-30 02:00 UTC to 2024-07-30 |       |       |                  |           |
+|     | appear? Provide the earliest     |                            | 02:00 UTC; earliest alert hour     |       |       |                  |           |
+|     | date and time in YYYY-MM-DD      |                            | 2024-07-30 02:00 UTC (114 alerts). |       |       |                  |           |
+|     | HH:MM UTC format.                |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 7   | According to the connection      | 23.52.9.222, legitimate    | Derived: destinations of high-     | 0/2   | 0/4   | 141.98.10.79,    | WRONG     |
+|     | volume statistics, what single   | service                    | severity alerts: 141.98.10.79      |       |       | 172.16.1.4,      |           |
+|     | external IP address received the |                            | (102), 172.16.1.4 (1), 172.16.1.66 |       |       | 172.16.1.66,     |           |
+|     | most connections from the        |                            | (1), 208.95.112.1 (1).             |       |       | 208.95.112.1     |           |
+|     | infected hosts? Is it a C2       |                            |                                    |       |       |                  |           |
+|     | server or a legitimate service?  |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+
+B. METRICS
+
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Metric                                       | Value        | Meaning                                                                |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Answer precision                             | 0.250        | Entities (IPs, domains, hosts, URLs, times) in the report's answers    |
+|                                              |              | that also occur in the reference / all entities it gave                |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Answer recall                                | 0.091        | Reference answer items found in the report's answers / all reference   |
+|                                              |              | items                                                                  |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Answer F1                                    | 0.133        | Harmonic mean of answer precision and recall                           |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Question recall                              | 0.893        | Mean over questions of reference items found anywhere in the report    |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Faithfulness                                 | 1.000        | Claims whose facts are in the evidence AND in the chunks they cite /   |
+|                                              |              | all claims                                                             |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Grounding rate                               | 1.000        | Claims whose entities and numbers all exist in the evidence            |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Hallucination rate                           | 0.000        | Entities in the report that are absent from the evidence / all         |
+|                                              |              | entities (lower is better)                                             |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Unsupported numbers                          | 0            | Numbers in the report that are absent from the evidence (lower is      |
+|                                              |              | better)                                                                |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Placeholders                                 | 0            | '[insert ...]' placeholders left in the report (lower is better)       |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Questions correct / partial / wrong /        | 1 / 0 / 5 /  | Per-question status in the table above                                 |
+| abstained / unanswered                       | 1 / 0        |                                                                        |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Claims                                       | 61           | Claim lines counted by the verifier; hedged assessments are excluded   |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+
+Status: CORRECT = every reference item found and nothing wrong; PARTIAL = some items found or wrong items present;
+        WRONG = answer given but no reference item found; ABSTAINED = the report says 'Not established from the available artifacts';
+        NO ANSWER = the report has no answer for that question.

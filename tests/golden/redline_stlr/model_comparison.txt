@@ -1,0 +1,60 @@
+====================================================================================================
+INCIDENT: redline_stlr   -   comparison of 1 run(s) (models and conditions)
+CREATED : <timestamp>
+====================================================================================================
+
+Runs:  R1 = golden (RAG)
+
+A. METRICS PER RUN (higher is better except Halluc. and BadNum)
+
++------+------------------------------------+----------+----------+----------+----------+----------+----------+----------+----------+--------+
+| Run  | Model / condition                  | Ans-P    | Ans-R    | Ans-F1   | Q-recall | Faithful | Ground.  | Halluc.  | BadNum   | Min    |
++------+------------------------------------+----------+----------+----------+----------+----------+----------+----------+----------+--------+
+| R1   | golden (RAG)                       | 0.000    | 0.000    | 0.000    | 0.812    | 1.000    | 1.000    | 0.000    | 0        | 0.0    |
++------+------------------------------------+----------+----------+----------+----------+----------+----------+----------+----------+--------+
+
+B. ANSWER STATUS PER QUESTION  (OK = correct, PART = partial, WRONG, ABST = 'Not established', NONE = no answer in the report)
+
++-----+------------------------------------------+--------------------------------+--------+
+| #   | Question                                 | Reference answer               | R1     |
++-----+------------------------------------------+--------------------------------+--------+
+| 1   | What is the IP address of the            | 10.7.10.47                     | WRONG  |
+|     | potentially infected internal host in    |                                |        |
+|     | the LAN?                                 |                                |        |
++-----+------------------------------------------+--------------------------------+--------+
+| 2   | What is the hostname of the potentially  | DESKTOP-9PEA63H                | WRONG  |
+|     | infected machine in the LAN?             |                                |        |
++-----+------------------------------------------+--------------------------------+--------+
+| 3   | What is the Windows human user account   | rwalters                       | WRONG  |
+|     | name (not machine accounts ending in $)  |                                |        |
+|     | of the potentially infected machine in   |                                |        |
+|     | the LAN?                                 |                                |        |
++-----+------------------------------------------+--------------------------------+--------+
+| 4   | What are the likely fake or suspicious   | 623start.site,                 | ABST   |
+|     | domains / URLs for initial infection?    | guiatelefonos.com              |        |
++-----+------------------------------------------+--------------------------------+--------+
+| 5   | What are the suspicious external IP      | 194.26.135.119                 | WRONG  |
+|     | addresses contacted, which might be      |                                |        |
+|     | involved in command-and-control (C2)     |                                |        |
+|     | communication?                           |                                |        |
++-----+------------------------------------------+--------------------------------+--------+
+| 6   | Which of the three CIA components does   | confidentiality                | WRONG  |
+|     | the attacker target primarily:           |                                |        |
+|     | availability, integrity, or              |                                |        |
+|     | confidentiality?                         |                                |        |
++-----+------------------------------------------+--------------------------------+--------+
+| 7   | During what hour did the first signs of  | 2023-07-10 22:00 UTC           | WRONG  |
+|     | infection activity appear? Provide the   |                                |        |
+|     | earliest date and time in YYYY-MM-DD     |                                |        |
+|     | HH:MM UTC format.                        |                                |        |
++-----+------------------------------------------+--------------------------------+--------+
+| 8   | According to the connection volume       | 195.161.114.3, legitimate      | ABST   |
+|     | statistics, what single external IP      | service                        |        |
+|     | address received the most connections    |                                |        |
+|     | from the infected hosts? Is it a C2      |                                |        |
+|     | server or a legitimate service?          |                                |        |
++-----+------------------------------------------+--------------------------------+--------+
+
+Best answer F1: golden (RAG) (0.000)
+
+Metric definitions: see METRICS.md. 'no RAG' rows have no retrieved evidence, so their faithfulness is 0 or '-'.

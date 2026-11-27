@@ -1,0 +1,116 @@
+{
+  "metadata": {
+    "incident_id": "INC-RE2OB-23",
+    "scenario": "re2ob_23",
+    "title": "Microservice reliability incident investigation",
+    "source": "RCAEval RE2-OB (Pham et al.; doi:10.5281/zenodo.14590730)",
+    "query_window_start": "2024-01-15T22:00:00",
+    "query_window_end": "2024-01-15T22:59:59",
+    "evidence_types": [
+      "derived_findings",
+      "infrastructure_events",
+      "monitoring_alerts",
+      "query_coverage",
+      "service_logs",
+      "traces"
+    ],
+    "artifact_scope_note": "Evidence is aggregated query output over a 24-minute telemetry capture (not raw samples or log lines); it contains no chat/communication records."
+  },
+  "incident_description": "Reliability incident investigation of the Online Boutique microservice application on a Kubernetes (GKE) cluster. Evidence consists of aggregated query output over Prometheus container metrics (CPU, memory, disk I/O, sockets, workload, error rate, latency p50/p90), application logs and Jaeger trace statistics. No root cause, impact or trigger is stated; these must be established from the supplied artifacts. Environment context: services: adservice, cartservice, checkoutservice, currencyservice, emailservice, frontend, paymentservice, productcatalogservice, recommendationservice, redis, shippingservice; services call each other over gRPC; frontend is the user entry point; redis is the cart store.",
+  "investigation_questions": [
+    "What is the name of the service where the failure originated (the root-cause service)?",
+    "What is the name of the Kubernetes pod of the root-cause service?",
+    "On which Kubernetes node did the pod of the root-cause service run?",
+    "What type of fault caused the incident: CPU, memory, disk, network delay, packet loss, or socket?",
+    "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+    "During what minute did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "Which metric of the root-cause service best shows the fault? Give it as <service>_<indicator>, for example cartservice_cpu.",
+    "According to the trace latency statistics, which single service operation showed the largest latency increase? Is its service the root cause or a downstream symptom?"
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "re2ob_23-01",
+      "artifact_type": "monitoring_alerts",
+      "subtype": "metric_anomalies",
+      "source": "metric_anomalies",
+      "content": "{\"description\": \"Container metric series (CPU, memory, disk I/O, sockets, workload, error rate, latency p50/p90 per service) that deviate from their baseline or appear only after it, ranked by deviation score, with peak value and first sustained deviation (UTC).\", \"facts\": [\"metric anomalies: 43 of 72 container metric series deviate from their baseline (first 10 minutes of the capture)\", \"metric anomalies: recommendationservice_latency-90 \\u2014 baseline median 0.0097; peak 2.20 at 2024-01-15 22:31:07 UTC; sustained deviation from 2024-01-15 22:27:18 UTC (score 188)\", \"metric anomalies: productcatalogservice_latency-90 \\u2014 baseline median 0.0045; peak 1.80 at 2024-01-15 22:31:07 UTC; sustained deviation from 2024-01-15 22:27:22 UTC (score 187)\", \"metric anomalies: productcatalogservice_latency-50 \\u2014 baseline median 0.0024; peak 0.0774 at 2024-01-15 22:30:48 UTC; sustained deviation from 2024-01-15 22:27:39 UTC (score 156)\", \"metric anomalies: productcatalogservice_mem \\u2014 baseline median 10268672; peak 134234112 at 2024-01-15 22:30:27 UTC; sustained deviation from 2024-01-15 22:27:13 UTC (score 124)\", \"metric anomalies: frontend_latency-50 \\u2014 baseline median 0.1936; peak 3.31 at 2024-01-15 22:30:39 UTC; sustained deviation from 2024-01-15 22:27:37 UTC (score 102)\", \"metric anomalies: redis_diskio \\u2014 baseline median 0; peak 39142 at 2024-01-15 22:34:20 UTC; sustained deviation from 2024-01-15 22:29:00 UTC (score 85.51)\", \"metric anomalies: productcatalogservice_socket \\u2014 baseline median 4.00; peak 10.00 at 2024-01-15 22:29:00 UTC; sustained deviation from 2024-01-15 22:27:13 UTC (score 55.56)\", \"metric anomalies: frontend_latency-90 \\u2014 baseline median 0.7167; peak 6.58 at 2024-01-15 22:31:09 UTC; sustained deviation from 2024-01-15 22:27:22 UTC (score 51.83)\", \"metric anomalies: productcatalogservice_cpu \\u2014 baseline median 3.54; peak 20.97 at 2024-01-15 22:31:27 UTC; sustained deviation from 2024-01-15 22:27:13 UTC (score 50.06)\", \"metric anomalies: recommendationservice_socket \\u2014 baseline median 4.00; peak 8.00 at 2024-01-15 22:30:55 UTC; sustained deviation from 2024-01-15 22:30:55 UTC (score 50.00)\", \"metric anomalies: recommendationservice_mem \\u2014 baseline median 45326336; peak 90517504 at 2024-01-15 22:35:18 UTC; sustained deviation from 2024-01-15 22:30:55 UTC (score 48.36)\", \"metric anomalies: recommendationservice_latency-50 \\u2014 baseline median 0.0075; peak 0.9028 at 2024-01-15 22:31:07 UTC; sustained deviation from 2024-01-15 22:27:48 UTC (score 43.05)\"]}",
+      "metadata": {
+        "scenario": "re2ob_23",
+        "source_kind": "rcaeval_telemetry_aggregate",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "re2ob_23-02",
+      "artifact_type": "traces",
+      "subtype": "latency_by_operation",
+      "source": "latency_by_operation",
+      "content": "{\"description\": \"Trace latency per service operation (mean of 15-second buckets): baseline (first 10 minutes) vs the rest of the capture, with the peak (UTC).\", \"facts\": [\"operation latency: productcatalogservice_GetProduct \\u2014 baseline mean 0; later mean 66.25 (x67.25); peak 120 at 2024-01-15 22:34:45 UTC\", \"operation latency: productcatalogservice_ListProducts \\u2014 baseline mean 0; later mean 21.34 (x22.34); peak 41.00 at 2024-01-15 22:38:00 UTC\", \"operation latency: recommendationservice_ListRecommendations \\u2014 baseline mean 0; later mean 13.05 (x14.05); peak 53.00 at 2024-01-15 22:30:30 UTC\", \"operation latency: currencyservice_Convert \\u2014 baseline mean 4.22; later mean 15.39 (x3.14); peak 47.00 at 2024-01-15 22:37:15 UTC\", \"operation latency: frontendservice_frontend \\u2014 baseline mean 0; later mean 2.07 (x3.07); peak 14.00 at 2024-01-15 22:30:45 UTC\", \"operation latency: adservice_GetAds \\u2014 baseline mean 0.3415; later mean 2.82 (x2.85); peak 16.00 at 2024-01-15 22:34:15 UTC\", \"operation latency: traceservice_Export \\u2014 baseline mean 0; later mean 0.7321 (x1.73); peak 3.00 at 2024-01-15 22:31:30 UTC\", \"operation latency: shippingservice_GetQuote \\u2014 baseline mean 0.1951; later mean 0.9643 (x1.64); peak 10.00 at 2024-01-15 22:28:15 UTC\", \"operation latency: cartservice_AddItem \\u2014 baseline mean 0.2195; later mean 0.6429 (x1.35); peak 6.00 at 2024-01-15 22:30:45 UTC\", \"operation latency: currencyservice_GetSupportedCurrencies \\u2014 baseline mean 3.07; later mean 4.12 (x1.26); peak 16.00 at 2024-01-15 22:38:00 UTC\"]}",
+      "metadata": {
+        "scenario": "re2ob_23",
+        "source_kind": "rcaeval_telemetry_aggregate",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "re2ob_23-03",
+      "artifact_type": "traces",
+      "subtype": "errors_by_operation",
+      "source": "errors_by_operation",
+      "content": "{\"description\": \"Trace error counts per service operation (15-second buckets): baseline vs the rest of the capture.\", \"facts\": [\"operation errors: recommendationservice_ListRecommendations \\u2014 baseline mean 0; later mean 12.00; first error after baseline at 2024-01-15 22:30:30 UTC\"]}",
+      "metadata": {
+        "scenario": "re2ob_23",
+        "source_kind": "rcaeval_telemetry_aggregate",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "re2ob_23-04",
+      "artifact_type": "service_logs",
+      "subtype": "log_volume_by_service",
+      "source": "log_volume_by_service",
+      "content": "{\"description\": \"Application log lines per container (lines per minute, baseline vs later) and log templates that appear or disappear after the baseline.\", \"facts\": [\"log volume: recommendationservice \\u2014 535 lines/min in the baseline, 363 lines/min later\", \"log volume: currencyservice \\u2014 2271 lines/min in the baseline, 1549 lines/min later\", \"log volume: shippingservice \\u2014 427 lines/min in the baseline, 291 lines/min later\", \"log volume: adservice \\u2014 428 lines/min in the baseline, 294 lines/min later\", \"log volume: frontend \\u2014 2536 lines/min in the baseline, 1753 lines/min later\", \"log volume: cartservice \\u2014 732 lines/min in the baseline, 509 lines/min later\", \"log volume: checkoutservice \\u2014 78.00 lines/min in the baseline, 56.79 lines/min later\", \"log volume: paymentservice \\u2014 52.00 lines/min in the baseline, 37.86 lines/min later\", \"log templates: new after the baseline: 'frontend failed to get product recommendations rpc error: code = Unavailable desc = no healthy upstream' \\u2014 37 lines, first at 2024-01-15 22:30:39 UTC\", \"log templates: new after the baseline: 'frontend failed to get product recommendations rpc error: code = Unavailable desc = upstream connect error or disconnect' \\u2014 9 lines, first at 2024-01-15 22:30:43 UTC\", \"log templates: new after the baseline: 'recommendationservice product catalog address: productcatalogservice:<:NUM:>' \\u2014 1 lines, first at 2024-01-15 22:30:46 UTC\", \"log templates: new after the baseline: 'recommendationservice listening on port: <:NUM:>' \\u2014 1 lines, first at 2024-01-15 22:30:46 UTC\", \"log levels: info 76815, debug 46175, (none) 16038, warning 46\"]}",
+      "metadata": {
+        "scenario": "re2ob_23",
+        "source_kind": "rcaeval_telemetry_aggregate",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "re2ob_23-05",
+      "artifact_type": "infrastructure_events",
+      "subtype": "pod_inventory",
+      "source": "pod_inventory",
+      "content": "{\"description\": \"Kubernetes pod inventory: pod name and the node it runs on.\", \"facts\": [\"pods: adservice-8587fdc599-swwgx on node gke-gke-cluster-default-pool-2e1807ce-xte3\", \"pods: cartservice-5644f7cdc6-s8dh9 on node gke-gke-cluster-default-pool-2e1807ce-cx8g\", \"pods: checkoutservice-85d565b4b5-xwr4j on node gke-gke-cluster-default-pool-2e1807ce-w819\", \"pods: currencyservice-6f7df68d87-52cpc on node gke-gke-cluster-default-pool-2e1807ce-0e4z\", \"pods: emailservice-5c77d688f7-wzlg6 on node gke-gke-cluster-default-pool-2e1807ce-w819\", \"pods: frontend-59688fbf4b-cgrv9 on node gke-gke-cluster-default-pool-2e1807ce-xte3\", \"pods: loadgenerator-6465f69cb4-tdp6b on node gke-gke-cluster-default-pool-2e1807ce-w819\", \"pods: paymentservice-56744787b7-ljsn7 on node gke-gke-cluster-default-pool-2e1807ce-0e4z\", \"pods: productcatalogservice-674b96c48f-fzttv on node gke-gke-cluster-default-pool-2e1807ce-cx8g\", \"pods: recommendationservice-5cdbcd66f-btprv on node gke-gke-cluster-default-pool-2e1807ce-w819\", \"pods: redis-cart-6d88d76d78-rgpr4 on node gke-gke-cluster-default-pool-2e1807ce-xte3\", \"pods: shippingservice-5987fc9db-mxb7x on node gke-gke-cluster-default-pool-2e1807ce-0e4z\"]}",
+      "metadata": {
+        "scenario": "re2ob_23",
+        "source_kind": "rcaeval_cluster_info",
+        "heuristic": false
+      }
+    },
+    {
+      "artifact_id": "re2ob_23-06",
+      "artifact_type": "derived_findings",
+      "subtype": "derived_summary",
+      "source": "derived_summary",
+      "content": "{\"description\": \"Deterministic summary computed from the artifacts above (metric deviation ranking and onset, trace latency ranking, log volume change).\", \"facts\": [\"Derived: earliest sustained metric deviation: redis_cpu from 2024-01-15 22:25:02 UTC.\", \"Derived: metric series ranked #1 by deviation score: recommendationservice_latency-90 (score 188).\", \"Derived: trace operation with the largest latency increase: productcatalogservice_GetProduct (mean 0 -> 66.25, x67.25).\", \"Derived: container with the largest change in log volume: recommendationservice (535 -> 363 lines/min).\"]}",
+      "metadata": {
+        "scenario": "re2ob_23",
+        "source_kind": "derived_from_rcaeval_telemetry",
+        "heuristic": true
+      }
+    },
+    {
+      "artifact_id": "re2ob_23-07",
+      "artifact_type": "query_coverage",
+      "subtype": "evidence_gaps",
+      "source": "evidence_gaps",
+      "content": "{\"description\": \"Queries that returned nothing, and telemetry that is not collected; use these to state what is NOT established.\", \"facts\": [\"No matching results for: monitoring alerts / alerting rules (no alerts were recorded in this capture). (Absence in this query is not proof of absence elsewhere.)\", \"No matching results for: change records / deployments (no change-management data in this capture). (Absence in this query is not proof of absence elsewhere.)\", \"Disk I/O metrics contain data only for: adservice, emailservice, recommendationservice, redis.\"]}",
+      "metadata": {
+        "scenario": "re2ob_23",
+        "source_kind": "rcaeval_telemetry_aggregate",
+        "heuristic": false
+      }
+    }
+  ]
+}

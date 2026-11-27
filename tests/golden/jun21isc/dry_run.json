@@ -1,0 +1,250 @@
+{
+ "retrievals": [
+  {
+   "ids": [
+    "jun21isc-09#0",
+    "jun21isc-03#2",
+    "jun21isc-03#1",
+    "jun21isc-03#0",
+    "jun21isc-09#1",
+    "jun21isc-05#0"
+   ],
+   "queries": [
+    "internal client IP address ranked by external connections",
+    "Kerberos hostname source IP",
+    "Kerberos client account human user source IP",
+    "derived Kerberos identity of internal client"
+   ],
+   "rerank_query": "Which internal host is affected (IP address, hostname and human user account)?"
+  },
+  {
+   "ids": [
+    "jun21isc-06#2",
+    "jun21isc-09#1",
+    "jun21isc-06#6",
+    "jun21isc-06#0",
+    "jun21isc-06#3",
+    "jun21isc-06#1"
+   ],
+   "queries": [
+    "earliest alert hour alert timeline",
+    "alert timeline hourly Suricata alerts UTC",
+    "first seen last seen timestamp UTC",
+    "first contact external IP first queried domain"
+   ],
+   "rerank_query": "Chronological order of key events with UTC timestamps."
+  },
+  {
+   "ids": [
+    "jun21isc-06#0",
+    "jun21isc-06#5",
+    "jun21isc-06#3",
+    "jun21isc-06#2",
+    "jun21isc-06#8",
+    "jun21isc-06#7"
+   ],
+   "queries": [
+    "Suricata alert signatures malware CnC",
+    "high severity alerts destinations sources",
+    "ET MALWARE trojan alert signature",
+    "suspicious POST user agent alert"
+   ],
+   "rerank_query": "Which Suricata alerts indicate malicious activity, and which hosts do they involve?"
+  },
+  {
+   "ids": [
+    "jun21isc-01#1",
+    "jun21isc-01#0",
+    "jun21isc-01#6",
+    "jun21isc-01#4",
+    "jun21isc-01#2",
+    "jun21isc-01#10"
+   ],
+   "queries": [
+    "suspicious domains fake site download",
+    "HTTP file downloads URI file type",
+    "download domains requests client to server",
+    "TLS certificate self-signed IP-based",
+    "direct IP HTTP connections raw IP"
+   ],
+   "rerank_query": "Which domains, URLs or downloads were the likely initial infection vector?"
+  },
+  {
+   "ids": [
+    "jun21isc-09#1",
+    "jun21isc-06#2",
+    "jun21isc-09#0",
+    "jun21isc-02#0",
+    "jun21isc-06#6"
+   ],
+   "queries": [
+    "most contacted external IP connections",
+    "high severity alert destination C2 check-in",
+    "external destinations top destinations connections",
+    "direct IP connections POST beaconing"
+   ],
+   "rerank_query": "Which external IP addresses look like command-and-control servers and why?"
+  },
+  {
+   "ids": [
+    "jun21isc-02#0",
+    "jun21isc-01#0",
+    "jun21isc-09#1",
+    "jun21isc-09#0",
+    "jun21isc-01#1",
+    "jun21isc-01#2"
+   ],
+   "queries": [
+    "data theft stealer credential exfiltration alert",
+    "ransomware encryption availability integrity",
+    "volume of connections external destinations",
+    "number of affected hosts"
+   ],
+   "rerank_query": "Which security property (confidentiality, integrity or availability) is targeted, and what is the scale of impact?"
+  },
+  {
+   "ids": [
+    "jun21isc-01#1",
+    "jun21isc-01#0",
+    "jun21isc-01#2",
+    "jun21isc-01#3",
+    "jun21isc-01#4",
+    "jun21isc-01#6"
+   ],
+   "queries": [
+    "no matching results query returned nothing",
+    "evidence unavailable shard failed",
+    "initial infection vector unknown",
+    "no results certificates"
+   ],
+   "rerank_query": "What is the most likely root cause and what cannot be determined from the evidence?"
+  },
+  {
+   "ids": [
+    "jun21isc-09#0",
+    "jun21isc-09#1",
+    "jun21isc-01#1",
+    "jun21isc-01#0",
+    "jun21isc-01#2",
+    "jun21isc-01#3"
+   ],
+   "queries": [
+    "block malicious IP domain",
+    "suspicious external server alert destination",
+    "affected host user account",
+    "malicious download URL"
+   ],
+   "rerank_query": "Which concrete containment and prevention actions follow from the observed indicators?"
+  },
+  {
+   "ids": [
+    "jun21isc-09#0",
+    "jun21isc-10#0",
+    "jun21isc-09#1"
+   ],
+   "queries": [
+    "What are the IP addresses of the potentially infected internal hosts in the LAN?"
+   ],
+   "rerank_query": "What are the IP addresses of the potentially infected internal hosts in the LAN?"
+  },
+  {
+   "ids": [
+    "jun21isc-10#0",
+    "jun21isc-03#2",
+    "jun21isc-05#0"
+   ],
+   "queries": [
+    "What are the hostnames of the potentially infected machines in the LAN?"
+   ],
+   "rerank_query": "What are the hostnames of the potentially infected machines in the LAN?"
+  },
+  {
+   "ids": [
+    "jun21isc-10#0",
+    "jun21isc-03#2",
+    "jun21isc-03#0"
+   ],
+   "queries": [
+    "What are the Windows human user account names (not machine accounts ending in $) of the potentially infected machines in the LAN?"
+   ],
+   "rerank_query": "What are the Windows human user account names (not machine accounts ending in $) of the potentially infected machines in the LAN?"
+  },
+  {
+   "ids": [
+    "jun21isc-06#2",
+    "jun21isc-09#0",
+    "jun21isc-02#0"
+   ],
+   "queries": [
+    "What external domains or IP addresses are associated with the initial infection and malware delivery?"
+   ],
+   "rerank_query": "What external domains or IP addresses are associated with the initial infection and malware delivery?"
+  },
+  {
+   "ids": [
+    "jun21isc-10#0",
+    "jun21isc-09#0",
+    "jun21isc-06#2"
+   ],
+   "queries": [
+    "What are the suspicious external IP addresses contacted, which might be involved in command-and-control (C2) communication?"
+   ],
+   "rerank_query": "What are the suspicious external IP addresses contacted, which might be involved in command-and-control (C2) communication?"
+  },
+  {
+   "ids": [
+    "jun21isc-10#0",
+    "jun21isc-09#1",
+    "jun21isc-06#2"
+   ],
+   "queries": [
+    "During what hour did the first signs of infection activity appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format."
+   ],
+   "rerank_query": "During what hour did the first signs of infection activity appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format."
+  },
+  {
+   "ids": [
+    "jun21isc-10#0",
+    "jun21isc-06#2",
+    "jun21isc-03#2"
+   ],
+   "queries": [
+    "Were any suspicious certificates observed in the encrypted network traffic? If so, identify the domain or IP in the certificate."
+   ],
+   "rerank_query": "Were any suspicious certificates observed in the encrypted network traffic? If so, identify the domain or IP in the certificate."
+  },
+  {
+   "ids": [
+    "jun21isc-09#0",
+    "jun21isc-10#0",
+    "jun21isc-09#1"
+   ],
+   "queries": [
+    "According to the connection volume statistics, what single external IP address received the most connections from the infected hosts? Is it a C2 server or a legitimate service?"
+   ],
+   "rerank_query": "According to the connection volume statistics, what single external IP address received the most connections from the infected hosts? Is it a C2 server or a legitimate service?"
+  }
+ ],
+ "stdout": [
+  "[enrich] added 0 artifact(s) from raw logs",
+  "[index] 10 artifacts -> 45 chunks",
+  "",
+  "=== Affected Host and User -> ['jun21isc-09#0', 'jun21isc-03#2', 'jun21isc-03#1', 'jun21isc-03#0', 'jun21isc-09#1', 'jun21isc-05#0']",
+  "",
+  "=== Timeline -> ['jun21isc-06#2', 'jun21isc-09#1', 'jun21isc-06#6', 'jun21isc-06#0', 'jun21isc-06#3', 'jun21isc-06#1']",
+  "",
+  "=== Detection: IDS Alerts -> ['jun21isc-06#0', 'jun21isc-06#5', 'jun21isc-06#3', 'jun21isc-06#2', 'jun21isc-06#8', 'jun21isc-06#7']",
+  "",
+  "=== Initial Infection Indicators -> ['jun21isc-01#1', 'jun21isc-01#0', 'jun21isc-01#6', 'jun21isc-01#4', 'jun21isc-01#2', 'jun21isc-01#10']",
+  "",
+  "=== Command-and-Control and Network Activity -> ['jun21isc-09#1', 'jun21isc-06#2', 'jun21isc-09#0', 'jun21isc-02#0', 'jun21isc-06#6']",
+  "",
+  "=== Impact Assessment -> ['jun21isc-02#0', 'jun21isc-01#0', 'jun21isc-09#1', 'jun21isc-09#0', 'jun21isc-01#1', 'jun21isc-01#2']",
+  "",
+  "=== Root Cause and Evidence Gaps -> ['jun21isc-01#1', 'jun21isc-01#0', 'jun21isc-01#2', 'jun21isc-01#3', 'jun21isc-01#4', 'jun21isc-01#6']",
+  "",
+  "=== Corrective and Preventive Actions -> ['jun21isc-09#0', 'jun21isc-09#1', 'jun21isc-01#1', 'jun21isc-01#0', 'jun21isc-01#2', 'jun21isc-01#3']",
+  "",
+  "=== Answers to Investigation Questions -> ['jun21isc-09#0', 'jun21isc-10#0', 'jun21isc-09#1', 'jun21isc-03#2', 'jun21isc-05#0', 'jun21isc-03#0', 'jun21isc-06#2', 'jun21isc-02#0']"
+ ]
+}

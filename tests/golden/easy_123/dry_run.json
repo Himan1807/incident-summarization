@@ -1,0 +1,226 @@
+{
+ "retrievals": [
+  {
+   "ids": [
+    "easy_123-08#0",
+    "easy_123-03#0",
+    "easy_123-02#0",
+    "easy_123-01#0",
+    "easy_123-04#0",
+    "easy_123-07#1"
+   ],
+   "queries": [
+    "internal client IP address ranked by external connections",
+    "Kerberos hostname source IP",
+    "Kerberos client account human user source IP",
+    "derived Kerberos identity of internal client"
+   ],
+   "rerank_query": "Which internal host is affected (IP address, hostname and human user account)?"
+  },
+  {
+   "ids": [
+    "easy_123-08#0",
+    "easy_123-01#0",
+    "easy_123-01#1",
+    "easy_123-01#2",
+    "easy_123-01#4"
+   ],
+   "queries": [
+    "earliest alert hour alert timeline",
+    "alert timeline hourly Suricata alerts UTC",
+    "first seen last seen timestamp UTC",
+    "first contact external IP first queried domain"
+   ],
+   "rerank_query": "Chronological order of key events with UTC timestamps."
+  },
+  {
+   "ids": [
+    "easy_123-06#0",
+    "easy_123-06#1",
+    "easy_123-06#3",
+    "easy_123-06#2",
+    "easy_123-08#0",
+    "easy_123-01#0"
+   ],
+   "queries": [
+    "Suricata alert signatures malware CnC",
+    "high severity alerts destinations sources",
+    "ET MALWARE trojan alert signature",
+    "suspicious POST user agent alert"
+   ],
+   "rerank_query": "Which Suricata alerts indicate malicious activity, and which hosts do they involve?"
+  },
+  {
+   "ids": [
+    "easy_123-01#7",
+    "easy_123-01#6",
+    "easy_123-01#5",
+    "easy_123-01#3",
+    "easy_123-01#0",
+    "easy_123-07#1"
+   ],
+   "queries": [
+    "suspicious domains fake site download",
+    "HTTP file downloads URI file type",
+    "download domains requests client to server",
+    "TLS certificate self-signed IP-based",
+    "direct IP HTTP connections raw IP"
+   ],
+   "rerank_query": "Which domains, URLs or downloads were the likely initial infection vector?"
+  },
+  {
+   "ids": [
+    "easy_123-08#0",
+    "easy_123-02#0",
+    "easy_123-01#0",
+    "easy_123-01#3",
+    "easy_123-01#2",
+    "easy_123-06#1"
+   ],
+   "queries": [
+    "most contacted external IP connections",
+    "high severity alert destination C2 check-in",
+    "external destinations top destinations connections",
+    "direct IP connections POST beaconing"
+   ],
+   "rerank_query": "Which external IP addresses look like command-and-control servers and why?"
+  },
+  {
+   "ids": [
+    "easy_123-02#0",
+    "easy_123-01#0",
+    "easy_123-01#1",
+    "easy_123-01#2",
+    "easy_123-01#4"
+   ],
+   "queries": [
+    "data theft stealer credential exfiltration alert",
+    "ransomware encryption availability integrity",
+    "volume of connections external destinations",
+    "number of affected hosts"
+   ],
+   "rerank_query": "Which security property (confidentiality, integrity or availability) is targeted, and what is the scale of impact?"
+  },
+  {
+   "ids": [
+    "easy_123-01#0",
+    "easy_123-01#3",
+    "easy_123-01#1",
+    "easy_123-01#4",
+    "easy_123-01#2"
+   ],
+   "queries": [
+    "no matching results query returned nothing",
+    "evidence unavailable shard failed",
+    "initial infection vector unknown",
+    "no results certificates"
+   ],
+   "rerank_query": "What is the most likely root cause and what cannot be determined from the evidence?"
+  },
+  {
+   "ids": [
+    "easy_123-01#0",
+    "easy_123-01#5",
+    "easy_123-01#2",
+    "easy_123-01#6",
+    "easy_123-02#0",
+    "easy_123-01#7"
+   ],
+   "queries": [
+    "block malicious IP domain",
+    "suspicious external server alert destination",
+    "affected host user account",
+    "malicious download URL"
+   ],
+   "rerank_query": "Which concrete containment and prevention actions follow from the observed indicators?"
+  },
+  {
+   "ids": [
+    "easy_123-09#0",
+    "easy_123-03#0",
+    "easy_123-08#0"
+   ],
+   "queries": [
+    "What is the IP address of the infected Windows client?"
+   ],
+   "rerank_query": "What is the IP address of the infected Windows client?"
+  },
+  {
+   "ids": [
+    "easy_123-03#0",
+    "easy_123-09#0",
+    "easy_123-08#0"
+   ],
+   "queries": [
+    "What is the host name of the infected Windows client?"
+   ],
+   "rerank_query": "What is the host name of the infected Windows client?"
+  },
+  {
+   "ids": [
+    "easy_123-09#0",
+    "easy_123-03#0",
+    "easy_123-08#0"
+   ],
+   "queries": [
+    "What is the Windows human user account name (not machine accounts ending in $) of the potentially infected machine in the LAN?"
+   ],
+   "rerank_query": "What is the Windows human user account name (not machine accounts ending in $) of the potentially infected machine in the LAN?"
+  },
+  {
+   "ids": [
+    "easy_123-09#0",
+    "easy_123-08#0",
+    "easy_123-02#0"
+   ],
+   "queries": [
+    "What are the suspicious external IP addresses contacted, which might be involved in command-and-control (C2) communication?"
+   ],
+   "rerank_query": "What are the suspicious external IP addresses contacted, which might be involved in command-and-control (C2) communication?"
+  },
+  {
+   "ids": [
+    "easy_123-09#0",
+    "easy_123-08#0",
+    "easy_123-06#3"
+   ],
+   "queries": [
+    "During what hour did the first signs of infection activity appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format."
+   ],
+   "rerank_query": "During what hour did the first signs of infection activity appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format."
+  },
+  {
+   "ids": [
+    "easy_123-08#0",
+    "easy_123-09#0",
+    "easy_123-02#0"
+   ],
+   "queries": [
+    "According to the connection volume statistics, what single external IP address received the most connections from the infected hosts? Is it a C2 server or a legitimate service?"
+   ],
+   "rerank_query": "According to the connection volume statistics, what single external IP address received the most connections from the infected hosts? Is it a C2 server or a legitimate service?"
+  }
+ ],
+ "stdout": [
+  "[enrich] added 0 artifact(s) from raw logs",
+  "[index] 9 artifacts -> 21 chunks",
+  "",
+  "=== Affected Host and User -> ['easy_123-08#0', 'easy_123-03#0', 'easy_123-02#0', 'easy_123-01#0', 'easy_123-04#0', 'easy_123-07#1']",
+  "",
+  "=== Timeline -> ['easy_123-08#0', 'easy_123-01#0', 'easy_123-01#1', 'easy_123-01#2', 'easy_123-01#4']",
+  "",
+  "=== Detection: IDS Alerts -> ['easy_123-06#0', 'easy_123-06#1', 'easy_123-06#3', 'easy_123-06#2', 'easy_123-08#0', 'easy_123-01#0']",
+  "",
+  "=== Initial Infection Indicators -> ['easy_123-01#7', 'easy_123-01#6', 'easy_123-01#5', 'easy_123-01#3', 'easy_123-01#0', 'easy_123-07#1']",
+  "",
+  "=== Command-and-Control and Network Activity -> ['easy_123-08#0', 'easy_123-02#0', 'easy_123-01#0', 'easy_123-01#3', 'easy_123-01#2', 'easy_123-06#1']",
+  "",
+  "=== Impact Assessment -> ['easy_123-02#0', 'easy_123-01#0', 'easy_123-01#1', 'easy_123-01#2', 'easy_123-01#4']",
+  "",
+  "=== Root Cause and Evidence Gaps -> ['easy_123-01#0', 'easy_123-01#3', 'easy_123-01#1', 'easy_123-01#4', 'easy_123-01#2']",
+  "",
+  "=== Corrective and Preventive Actions -> ['easy_123-01#0', 'easy_123-01#5', 'easy_123-01#2', 'easy_123-01#6', 'easy_123-02#0', 'easy_123-01#7']",
+  "",
+  "=== Answers to Investigation Questions -> ['easy_123-09#0', 'easy_123-03#0', 'easy_123-08#0', 'easy_123-02#0', 'easy_123-06#3']"
+ ]
+}

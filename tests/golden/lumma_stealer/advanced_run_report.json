@@ -1,0 +1,855 @@
+{
+ "condition": "rag",
+ "evaluation": {
+  "answer_f1": 0.0,
+  "answer_precision": 0.0,
+  "answer_recall": 0.0,
+  "answerable_entity_recall": 1.0,
+  "assessment_lines": 1,
+  "claims": 60,
+  "faithfulness": 1.0,
+  "grounding_rate": 1.0,
+  "hallucination_rate": 0.0,
+  "overall_entity_recall": 0.889,
+  "per_question": [
+   {
+    "answer_text": "No matching results for: suspicious certificates / self signed analysis. (Absence in this query is not proof of absence elsewhere.)",
+    "answerable_from_evidence": [
+     "10.1.21.58"
+    ],
+    "atoms": [
+     "10.1.21.58"
+    ],
+    "atoms_found_in_answer": [],
+    "correct_entities": [],
+    "found_in_report": [
+     "10.1.21.58"
+    ],
+    "id": 1,
+    "missing_from_evidence": [],
+    "precision": null,
+    "predicted_entities": [],
+    "question": "What is the IP address of the infected Windows client?",
+    "recall": 0.0,
+    "reference_answer": "10.1.21.58",
+    "status": "WRONG",
+    "wrong_entities": []
+   },
+   {
+    "answer_text": "No matching results for: suspicious certificates / ip based certificates. (Absence in this query is not proof of absence elsewhere.)",
+    "answerable_from_evidence": [
+     "DESKTOP-ES9F3ML"
+    ],
+    "atoms": [
+     "DESKTOP-ES9F3ML"
+    ],
+    "atoms_found_in_answer": [],
+    "correct_entities": [],
+    "found_in_report": [
+     "DESKTOP-ES9F3ML"
+    ],
+    "id": 2,
+    "missing_from_evidence": [],
+    "precision": null,
+    "predicted_entities": [],
+    "question": "What is the host name of the infected Windows client?",
+    "recall": 0.0,
+    "reference_answer": "DESKTOP-ES9F3ML",
+    "status": "WRONG",
+    "wrong_entities": []
+   },
+   {
+    "answer_text": "No matching results for: suspicious certificates / short validity certs. (Absence in this query is not proof of absence elsewhere.)",
+    "answerable_from_evidence": [
+     "gwyatt"
+    ],
+    "atoms": [
+     "gwyatt"
+    ],
+    "atoms_found_in_answer": [],
+    "correct_entities": [],
+    "found_in_report": [
+     "gwyatt"
+    ],
+    "id": 3,
+    "missing_from_evidence": [],
+    "precision": null,
+    "predicted_entities": [],
+    "question": "What is the Windows human user account name (not machine accounts ending in $) of the potentially infected machine in the LAN?",
+    "recall": 0.0,
+    "reference_answer": "gwyatt",
+    "status": "WRONG",
+    "wrong_entities": []
+   },
+   {
+    "answer_text": "Not established from the available artifacts.",
+    "answerable_from_evidence": [
+     "whitepepper.su",
+     "153.92.1.49"
+    ],
+    "atoms": [
+     "whitepepper.su",
+     "153.92.1.49"
+    ],
+    "atoms_found_in_answer": [],
+    "correct_entities": [],
+    "found_in_report": [
+     "whitepepper.su",
+     "153.92.1.49"
+    ],
+    "id": 4,
+    "missing_from_evidence": [],
+    "precision": null,
+    "predicted_entities": [],
+    "question": "What domain and IP address triggered the alert for Lumma Stealer?",
+    "recall": 0.0,
+    "reference_answer": "whitepepper.su, 153.92.1.49",
+    "status": "ABSTAINED",
+    "wrong_entities": []
+   },
+   {
+    "answer_text": "Derived: internal client 10.1.21.58 ranks #1 by external connections (312 events, 57 distinct external destinations). Most-contacted external IP: 153.92.1.49 (91 connections).",
+    "answerable_from_evidence": [],
+    "atoms": [
+     "confidentiality"
+    ],
+    "atoms_found_in_answer": [],
+    "correct_entities": [],
+    "found_in_report": [],
+    "id": 5,
+    "missing_from_evidence": [
+     "confidentiality"
+    ],
+    "precision": 0.0,
+    "predicted_entities": [
+     "10.1.21.58",
+     "153.92.1.49"
+    ],
+    "question": "Which of the three CIA components does the attacker target primarily: availability, integrity, or confidentiality?",
+    "recall": 0.0,
+    "reference_answer": "confidentiality",
+    "status": "WRONG",
+    "wrong_entities": [
+     "10.1.21.58",
+     "153.92.1.49"
+    ]
+   },
+   {
+    "answer_text": "Derived: Kerberos identity of 10.1.21.58: hostname(s) desktop-es9f3ml; human user account(s) gwyatt.",
+    "answerable_from_evidence": [
+     "2026-01-27 23:00 UTC"
+    ],
+    "atoms": [
+     "2026-01-27 23:00 UTC"
+    ],
+    "atoms_found_in_answer": [],
+    "correct_entities": [],
+    "found_in_report": [
+     "2026-01-27 23:00 UTC"
+    ],
+    "id": 6,
+    "missing_from_evidence": [],
+    "precision": 0.0,
+    "predicted_entities": [
+     "10.1.21.58",
+     "DESKTOP-ES9F3ML"
+    ],
+    "question": "During what hour did the first signs of infection activity appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "recall": 0.0,
+    "reference_answer": "2026-01-27 23:00 UTC",
+    "status": "WRONG",
+    "wrong_entities": [
+     "10.1.21.58",
+     "DESKTOP-ES9F3ML"
+    ]
+   },
+   {
+    "answer_text": "Derived: Suricata alerts span 2026-01-27 23:00 UTC to 2026-01-27 23:00 UTC; earliest alert hour 2026-01-27 23:00 UTC (70 alerts).",
+    "answerable_from_evidence": [
+     "153.92.1.49",
+     "C2 server"
+    ],
+    "atoms": [
+     "153.92.1.49",
+     "C2 server"
+    ],
+    "atoms_found_in_answer": [],
+    "correct_entities": [],
+    "found_in_report": [
+     "153.92.1.49",
+     "C2 server"
+    ],
+    "id": 7,
+    "missing_from_evidence": [],
+    "precision": 0.0,
+    "predicted_entities": [
+     "2026-01-27",
+     "2026-01-27 23:00"
+    ],
+    "question": "According to the connection volume statistics, what single external IP address received the most connections from the infected hosts? Is it a C2 server or a legitimate service?",
+    "recall": 0.0,
+    "reference_answer": "153.92.1.49, C2 server",
+    "status": "WRONG",
+    "wrong_entities": [
+     "2026-01-27",
+     "2026-01-27 23:00"
+    ]
+   }
+  ],
+  "placeholder_count": 0,
+  "question_recall": 0.857,
+  "questions_correct": "6/7",
+  "unsupported_entities": [],
+  "unsupported_number_count": 0,
+  "unsupported_numbers": []
+ },
+ "flagged": [],
+ "mode": "drop",
+ "model": "golden",
+ "postprocessing": {
+  "auto_attributed_lines": 0,
+  "duplicate_lines_removed": 97,
+  "enabled": true,
+  "invalid_citations_removed": 0,
+  "partial_lines_dropped": 0,
+  "removed": [
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- file transfers > transfer details: 10.1.21.58 -> 150.171.28.11:443 : fuid: FSmyqk3GaR9bUCOzsd — 1 events [lumma_stealer-01#2]",
+    "section": "Affected Host and User"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- file transfers > transfer details: 10.1.21.58 -> 150.171.28.11:443 : fuid: FdBQ701Q4fZhyadCW5 — 1 events [lumma_stealer-01#2]",
+    "section": "Affected Host and User"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- high severity alerts > high severity signatures: ET MALWARE Observed Win32/Lumma Stealer Related Domain (whooptm .cyou) in TLS SNI — 1 events [lumma_stealer-06#6]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Timeline",
+    "line": "- alert timeline: 2026-01-27 23:00 UTC — 70 events [lumma_stealer-06#6]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- high severity alerts > high severity signatures: ET MALWARE Observed Win32/Lumma Stealer Related Domain (whitepepper .su) in TLS SNI — 16 events [lumma_stealer-06#4]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- high severity alerts > high severity signatures: ET DNS Query for .su TLD (Soviet Union) Often Malware Related — 10 events [lumma_stealer-06#4]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- high severity alerts > high severity signatures: ET MALWARE Win32/Lumma Stealer Related CnC Domain in DNS Lookup (whitepepper .su) — 10 events [lumma_stealer-06#4]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- high severity alerts > high severity signatures: ET INFO HTTP Request to .su TLD (Soviet Union) Often Malware Related — 6 events [lumma_stealer-06#4]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- high severity alerts > high severity signatures: ET MALWARE Win32/Lumma Stealer Related CnC Domain in DNS Lookup (whooptm .cyou) — 2 events [lumma_stealer-06#5]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- high severity alerts > high severity signatures: ET DROP Spamhaus DROP Listed Traffic Inbound group 10 — 1 events [lumma_stealer-06#5]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- high severity alerts > high severity signatures: ET MALWARE Lumma Stealer Victim Fingerprinting Activity — 1 events [lumma_stealer-06#5]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- file transfers: 31 matching events [lumma_stealer-01#0]",
+    "section": "Initial Infection Indicators"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- file transfers > transfer details: file_transfer — 8 events [lumma_stealer-01#0]",
+    "section": "Initial Infection Indicators"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- file transfers > transfer details: 10.1.21.58 -> 104.208.16.95:443 : fuid: FUwNUi3lIgrBDgnrnb — 1 events [lumma_stealer-01#0]",
+    "section": "Initial Infection Indicators"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- file transfers > transfer details: 10.1.21.58 -> 142.250.115.113:80 : file: json.txt — 1 events [lumma_stealer-01#0]",
+    "section": "Initial Infection Indicators"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- file transfers > transfer details: 10.1.21.58 -> 150.171.28.11:443 : fuid: FS8Yw11fhIRcqzQsli — 1 events [lumma_stealer-01#2]",
+    "section": "Initial Infection Indicators"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- file transfers > transfer details: 10.1.21.58 -> 150.171.28.11:443 : fuid: FSmyqk3GaR9bUCOzsd — 1 events [lumma_stealer-01#2]",
+    "section": "Initial Infection Indicators"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- file transfers > transfer details: 10.1.21.58 -> 150.171.28.11:443 : fuid: FdBQ701Q4fZhyadCW5 — 1 events [lumma_stealer-01#2]",
+    "section": "Initial Infection Indicators"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download sources: 10.1.21.58 — 312 events [lumma_stealer-01#2]",
+    "section": "Initial Infection Indicators"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: 10.1.21.58 -> 150.171.27.11:443 : fuid: Fa4J9G18c76oy9mB16 — 1 events [lumma_stealer-01#1]",
+    "section": "Initial Infection Indicators"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- file transfers > transfer details: 10.1.21.58 -> 150.171.28.11:443 : fuid: F0DEDZ1CYQObrx5XH4 — 1 events [lumma_stealer-01#1]",
+    "section": "Initial Infection Indicators"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: internal client 10.1.21.58 ranks #1 by external connections (312 events, 57 distinct external destinations). Most-contacted external IP: 153.92.1.49 (91 connections). [lumma_stealer-08#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: Kerberos identity of 10.1.21.58: hostname(s) desktop-es9f3ml; human user account(s) gwyatt. [lumma_stealer-08#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: Suricata alerts span 2026-01-27 23:00 UTC to 2026-01-27 23:00 UTC; earliest alert hour 2026-01-27 23:00 UTC (70 alerts). [lumma_stealer-08#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: destinations of high-severity alerts: 10.1.21.2 (26), 153.92.1.49 (23), 10.1.21.58 (1), 62.72.32.156 (1). [lumma_stealer-08#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- source clients: 10.1.21.58 — 312 events; external destinations=57; top destinations: 153.92.1.49 (91), 142.251.116.95 (34), 150.171.28.11 (14), 52.109.0.142 (10), 23.222.241.141 (6); 157 further events in other values [lumma_stealer-02#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- file transfers: 31 matching events [lumma_stealer-01#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- file transfers > transfer details: file_transfer — 8 events [lumma_stealer-01#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- file transfers > transfer details: 10.1.21.58 -> 104.208.16.95:443 : fuid: FUwNUi3lIgrBDgnrnb — 1 events [lumma_stealer-01#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- file transfers > transfer details: 10.1.21.58 -> 142.250.115.113:80 : file: json.txt — 1 events [lumma_stealer-01#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- domains: communicationfirewall-security.cc — 2 events; top source ips: 10.1.21.58 (2); top destination ips: 104.21.9.36 (2) [lumma_stealer-07#1]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- domains: img-s-msn-com.akamaized.net — 2 events; top source ips: 10.1.21.58 (2); top destination ips: 23.55.178.217 (2) [lumma_stealer-07#1]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- domains: holiday-forever.cc — 1 events; top source ips: 10.1.21.58 (1); top destination ips: 80.97.160.24 (1) [lumma_stealer-07#1]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- domains: media.megafilehub4.lat — 1 events; top source ips: 10.1.21.58 (1); top destination ips: 104.21.48.156 (1) [lumma_stealer-07#1]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- file transfers: 31 matching events [lumma_stealer-01#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- file transfers > transfer details: file_transfer — 8 events [lumma_stealer-01#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- file transfers > transfer details: 10.1.21.58 -> 104.208.16.95:443 : fuid: FUwNUi3lIgrBDgnrnb — 1 events [lumma_stealer-01#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- file transfers > transfer details: 10.1.21.58 -> 142.250.115.113:80 : file: json.txt — 1 events [lumma_stealer-01#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: 10.1.21.58 -> 150.171.22.17:443 : fuid: FaDmmHcV5jyduC2qe — 1 events [lumma_stealer-01#1]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: 10.1.21.58 -> 150.171.27.11:443 : fuid: F9LinC1gk6l6ZiHI1h — 1 events [lumma_stealer-01#1]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: 10.1.21.58 -> 150.171.27.11:443 : fuid: Fa4J9G18c76oy9mB16 — 1 events [lumma_stealer-01#1]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- file transfers > transfer details: 10.1.21.58 -> 150.171.28.11:443 : fuid: F0DEDZ1CYQObrx5XH4 — 1 events [lumma_stealer-01#1]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: ET INFO HTTP Request to .su TLD (Soviet Union) Often Malware Related — 6 events [lumma_stealer-06#1]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: ET DNS Query for .cc TLD — 4 events [lumma_stealer-06#1]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: ET MALWARE Win32/Lumma Stealer Related CnC Domain in DNS Lookup (whooptm .cyou) — 2 events [lumma_stealer-06#1]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: ET DROP Spamhaus DROP Listed Traffic Inbound group 10 — 1 events [lumma_stealer-06#1]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: ET JA3 Hash - Possible SoftEther Windows Client SSTP Traffic — 18 events [lumma_stealer-06#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: ET MALWARE Observed Win32/Lumma Stealer Related Domain (whitepepper .su) in TLS SNI — 16 events [lumma_stealer-06#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: ET DNS Query for .su TLD (Soviet Union) Often Malware Related — 10 events [lumma_stealer-06#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: ET MALWARE Win32/Lumma Stealer Related CnC Domain in DNS Lookup (whitepepper .su) — 10 events [lumma_stealer-06#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- source clients: 10.1.21.58 — 312 events; external destinations=57; top destinations: 153.92.1.49 (91), 142.251.116.95 (34), 150.171.28.11 (14), 52.109.0.142 (10), 23.222.241.141 (6); 157 further events in other values [lumma_stealer-02#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- file transfers > transfer details: 10.1.21.58 -> 150.171.28.11:443 : fuid: FS8Yw11fhIRcqzQsli — 1 events [lumma_stealer-01#2]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- file transfers > transfer details: 10.1.21.58 -> 150.171.28.11:443 : fuid: FSmyqk3GaR9bUCOzsd — 1 events [lumma_stealer-01#2]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- file transfers > transfer details: 10.1.21.58 -> 150.171.28.11:443 : fuid: FdBQ701Q4fZhyadCW5 — 1 events [lumma_stealer-01#2]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download sources: 10.1.21.58 — 312 events [lumma_stealer-01#2]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- file transfers: 31 matching events [lumma_stealer-01#0]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- file transfers > transfer details: file_transfer — 8 events [lumma_stealer-01#0]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- file transfers > transfer details: 10.1.21.58 -> 104.208.16.95:443 : fuid: FUwNUi3lIgrBDgnrnb — 1 events [lumma_stealer-01#0]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- file transfers > transfer details: 10.1.21.58 -> 142.250.115.113:80 : file: json.txt — 1 events [lumma_stealer-01#0]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: 10.1.21.58 -> 150.171.22.17:443 : fuid: FaDmmHcV5jyduC2qe — 1 events [lumma_stealer-01#1]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: 10.1.21.58 -> 150.171.27.11:443 : fuid: F9LinC1gk6l6ZiHI1h — 1 events [lumma_stealer-01#1]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: 10.1.21.58 -> 150.171.27.11:443 : fuid: Fa4J9G18c76oy9mB16 — 1 events [lumma_stealer-01#1]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- file transfers > transfer details: 10.1.21.58 -> 150.171.28.11:443 : fuid: F0DEDZ1CYQObrx5XH4 — 1 events [lumma_stealer-01#1]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- file transfers > transfer details: 10.1.21.58 -> 150.171.28.11:443 : fuid: FS8Yw11fhIRcqzQsli — 1 events [lumma_stealer-01#2]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- file transfers > transfer details: 10.1.21.58 -> 150.171.28.11:443 : fuid: FSmyqk3GaR9bUCOzsd — 1 events [lumma_stealer-01#2]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- file transfers > transfer details: 10.1.21.58 -> 150.171.28.11:443 : fuid: FdBQ701Q4fZhyadCW5 — 1 events [lumma_stealer-01#2]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download sources: 10.1.21.58 — 312 events [lumma_stealer-01#2]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: whitepepper.su — 6 events [lumma_stealer-01#5]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: clients2.google.com — 1 events [lumma_stealer-01#5]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: www.msftconnecttest.com — 1 events [lumma_stealer-01#5]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file types: other — 312 events [lumma_stealer-01#5]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- source clients: 10.1.21.58 — 312 events; external destinations=57; top destinations: 153.92.1.49 (91), 142.251.116.95 (34), 150.171.28.11 (14), 52.109.0.142 (10), 23.222.241.141 (6); 157 further events in other values [lumma_stealer-02#0]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: no_http_uri — 296 events [lumma_stealer-01#3]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.1.21.58 -> 153.92.1.49:80 : /api/set_agent?id=3BF67EC05320C5729578BE4C0ADF174C&token=842e2802df0f0a06b4ed51f12f4387e761523b&description=&agent=Chrome — 4 events [lumma_stealer-01#3]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.1.21.58 -> 153.92.1.49:80 : /favicon.ico — 4 events [lumma_stealer-01#3]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.1.21.58 -> 153.92.1.49:80 : /api/set_agent?id=3BF67EC05320C5729578BE4C0ADF174C&token=842e2802df0f0a06b4ed51f12f4387e761523b&description=&agent=Edge — 3 events [lumma_stealer-01#3]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: ET JA3 Hash - Possible SoftEther Windows Client SSTP Traffic — 18 events [lumma_stealer-06#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: ET MALWARE Observed Win32/Lumma Stealer Related Domain (whitepepper .su) in TLS SNI — 16 events [lumma_stealer-06#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: ET DNS Query for .su TLD (Soviet Union) Often Malware Related — 10 events [lumma_stealer-06#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: ET MALWARE Win32/Lumma Stealer Related CnC Domain in DNS Lookup (whitepepper .su) — 10 events [lumma_stealer-06#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: ET INFO HTTP Request to .su TLD (Soviet Union) Often Malware Related — 6 events [lumma_stealer-06#1]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: ET DNS Query for .cc TLD — 4 events [lumma_stealer-06#1]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: ET MALWARE Win32/Lumma Stealer Related CnC Domain in DNS Lookup (whooptm .cyou) — 2 events [lumma_stealer-06#1]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: ET DROP Spamhaus DROP Listed Traffic Inbound group 10 — 1 events [lumma_stealer-06#1]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- file transfers: 31 matching events [lumma_stealer-01#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- file transfers > transfer details: file_transfer — 8 events [lumma_stealer-01#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- file transfers > transfer details: 10.1.21.58 -> 104.208.16.95:443 : fuid: FUwNUi3lIgrBDgnrnb — 1 events [lumma_stealer-01#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- file transfers > transfer details: 10.1.21.58 -> 142.250.115.113:80 : file: json.txt — 1 events [lumma_stealer-01#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: internal client 10.1.21.58 ranks #1 by external connections (312 events, 57 distinct external destinations). Most-contacted external IP: 153.92.1.49 (91 connections). [lumma_stealer-08#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: Kerberos identity of 10.1.21.58: hostname(s) desktop-es9f3ml; human user account(s) gwyatt. [lumma_stealer-08#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: Suricata alerts span 2026-01-27 23:00 UTC to 2026-01-27 23:00 UTC; earliest alert hour 2026-01-27 23:00 UTC (70 alerts). [lumma_stealer-08#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: destinations of high-severity alerts: 10.1.21.2 (26), 153.92.1.49 (23), 10.1.21.58 (1), 62.72.32.156 (1). [lumma_stealer-08#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- source clients: 10.1.21.58 — 312 events; external destinations=57; top destinations: 153.92.1.49 (91), 142.251.116.95 (34), 150.171.28.11 (14), 52.109.0.142 (10), 23.222.241.141 (6); 157 further events in other values [lumma_stealer-02#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: 10.1.21.58 -> 150.171.22.17:443 : fuid: FaDmmHcV5jyduC2qe — 1 events [lumma_stealer-01#1]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: 10.1.21.58 -> 150.171.27.11:443 : fuid: F9LinC1gk6l6ZiHI1h — 1 events [lumma_stealer-01#1]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: 10.1.21.58 -> 150.171.27.11:443 : fuid: Fa4J9G18c76oy9mB16 — 1 events [lumma_stealer-01#1]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- file transfers > transfer details: 10.1.21.58 -> 150.171.28.11:443 : fuid: F0DEDZ1CYQObrx5XH4 — 1 events [lumma_stealer-01#1]",
+    "section": "Corrective and Preventive Actions"
+   }
+  ]
+ },
+ "removed_unverified_lines": 0,
+ "run_log": [
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "lumma_stealer-08#0",
+    "lumma_stealer-03#0",
+    "lumma_stealer-04#0",
+    "lumma_stealer-02#0",
+    "lumma_stealer-01#0",
+    "lumma_stealer-01#2"
+   ],
+   "seconds": 0,
+   "section": "Affected Host and User",
+   "truncated": false
+  },
+  {
+   "extractive": true,
+   "flag_counts": {},
+   "retrieved": [
+    "lumma_stealer-06#6",
+    "lumma_stealer-08#0"
+   ],
+   "seconds": 0,
+   "section": "Timeline"
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "lumma_stealer-06#1",
+    "lumma_stealer-06#0",
+    "lumma_stealer-06#2",
+    "lumma_stealer-06#6",
+    "lumma_stealer-06#4",
+    "lumma_stealer-06#5"
+   ],
+   "seconds": 0,
+   "section": "Detection: IDS Alerts",
+   "truncated": false
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "lumma_stealer-01#0",
+    "lumma_stealer-01#3",
+    "lumma_stealer-01#2",
+    "lumma_stealer-01#1",
+    "lumma_stealer-07#1",
+    "lumma_stealer-01#5"
+   ],
+   "seconds": 0,
+   "section": "Initial Infection Indicators",
+   "truncated": false
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "lumma_stealer-08#0",
+    "lumma_stealer-02#0",
+    "lumma_stealer-01#0",
+    "lumma_stealer-07#2",
+    "lumma_stealer-07#1",
+    "lumma_stealer-07#0"
+   ],
+   "seconds": 0,
+   "section": "Command-and-Control and Network Activity",
+   "truncated": false
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "lumma_stealer-01#0",
+    "lumma_stealer-01#1",
+    "lumma_stealer-06#1",
+    "lumma_stealer-06#0",
+    "lumma_stealer-02#0",
+    "lumma_stealer-01#2"
+   ],
+   "seconds": 0,
+   "section": "Impact Assessment",
+   "truncated": false
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "lumma_stealer-01#0",
+    "lumma_stealer-01#1",
+    "lumma_stealer-01#2",
+    "lumma_stealer-01#5",
+    "lumma_stealer-02#0",
+    "lumma_stealer-01#3"
+   ],
+   "seconds": 0,
+   "section": "Root Cause and Evidence Gaps",
+   "truncated": false
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "lumma_stealer-06#0",
+    "lumma_stealer-06#1",
+    "lumma_stealer-01#0",
+    "lumma_stealer-08#0",
+    "lumma_stealer-02#0",
+    "lumma_stealer-01#1"
+   ],
+   "seconds": 0,
+   "section": "Corrective and Preventive Actions",
+   "truncated": false
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "lumma_stealer-09#0",
+    "lumma_stealer-03#0",
+    "lumma_stealer-08#0",
+    "lumma_stealer-06#0",
+    "lumma_stealer-06#2",
+    "lumma_stealer-06#1"
+   ],
+   "seconds": 0,
+   "section": "Answers to Investigation Questions",
+   "truncated": false
+  }
+ ],
+ "scenario": "lumma_stealer",
+ "seconds_total": 0,
+ "verification_totals": {}
+}

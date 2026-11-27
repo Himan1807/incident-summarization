@@ -1,7 +1,7 @@
 """Score any postmortem text file(s) with the same metrics, e.g. baseline vs advanced.
 
 python -m src.compare --input dataset/final_dataset/2025-01-22/rag_input.json \
-    --report basic_RAG_output.txt --report results/2025-01-22/advanced_postmortem.md
+    --report examples/basic_RAG_output.txt --report results/2025-01-22/advanced_postmortem.md
 """
 import argparse
 from pathlib import Path

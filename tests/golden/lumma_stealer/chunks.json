@@ -1,0 +1,94 @@
+[
+ {
+  "id": "lumma_stealer-01#0",
+  "text": "[lumma_stealer-01 | network_summary/file_downloads] HTTP file downloads and file transfers: download domains/IPs, requests (client -> server:port : URI), file types and download sources.\nfile transfers: 31 matching events\nfile transfers > transfer details: file_transfer — 8 events\nfile transfers > transfer details: 10.1.21.58 -> 104.208.16.95:443 : fuid: FUwNUi3lIgrBDgnrnb — 1 events\nfile transfers > transfer details: 10.1.21.58 -> 142.250.115.113:80 : file: json.txt — 1 events"
+ },
+ {
+  "id": "lumma_stealer-01#1",
+  "text": "[lumma_stealer-01 | network_summary/file_downloads] HTTP file downloads and file transfers: download domains/IPs, requests (client -> server:port : URI), file types and download sources.\nfile transfers > transfer details: 10.1.21.58 -> 150.171.22.17:443 : fuid: FaDmmHcV5jyduC2qe — 1 events\nfile transfers > transfer details: 10.1.21.58 -> 150.171.27.11:443 : fuid: F9LinC1gk6l6ZiHI1h — 1 events\nfile transfers > transfer details: 10.1.21.58 -> 150.171.27.11:443 : fuid: Fa4J9G18c76oy9mB16 — 1 events\nfile transfers > transfer details: 10.1.21.58 -> 150.171.28.11:443 : fuid: F0DEDZ1CYQObrx5XH4 — 1 events"
+ },
+ {
+  "id": "lumma_stealer-01#2",
+  "text": "[lumma_stealer-01 | network_summary/file_downloads] HTTP file downloads and file transfers: download domains/IPs, requests (client -> server:port : URI), file types and download sources.\nfile transfers > transfer details: 10.1.21.58 -> 150.171.28.11:443 : fuid: FS8Yw11fhIRcqzQsli — 1 events\nfile transfers > transfer details: 10.1.21.58 -> 150.171.28.11:443 : fuid: FSmyqk3GaR9bUCOzsd — 1 events\nfile transfers > transfer details: 10.1.21.58 -> 150.171.28.11:443 : fuid: FdBQ701Q4fZhyadCW5 — 1 events\ndownload sources: 10.1.21.58 — 312 events"
+ },
+ {
+  "id": "lumma_stealer-01#3",
+  "text": "[lumma_stealer-01 | network_summary/file_downloads] HTTP file downloads and file transfers: download domains/IPs, requests (client -> server:port : URI), file types and download sources.\nhttp requests: no_http_uri — 296 events\nhttp requests: 10.1.21.58 -> 153.92.1.49:80 : /api/set_agent?id=3BF67EC05320C5729578BE4C0ADF174C&token=842e2802df0f0a06b4ed51f12f4387e761523b&description=&agent=Chrome — 4 events\nhttp requests: 10.1.21.58 -> 153.92.1.49:80 : /favicon.ico — 4 events\nhttp requests: 10.1.21.58 -> 153.92.1.49:80 : /api/set_agent?id=3BF67EC05320C5729578BE4C0ADF174C&token=842e2802df0f0a06b4ed51f12f4387e761523b&description=&agent=Edge — 3 events"
+ },
+ {
+  "id": "lumma_stealer-01#4",
+  "text": "[lumma_stealer-01 | network_summary/file_downloads] HTTP file downloads and file transfers: download domains/IPs, requests (client -> server:port : URI), file types and download sources.\nhttp requests: 10.1.21.58 -> 23.55.178.249:80 : /connecttest.txt — 2 events\nhttp requests: 10.1.21.58 -> 142.250.115.113:80 : /time/1/current?cup2key=9:-bEODYwkjylnH87UvVXBQ8jMCHRrFlwn5hpPDFQopQE&cup2hreq=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 — 1 events\nhttp requests: 10.1.21.58 -> 153.92.1.49:80 : /api/set_agent?id=3BF67EC05320C5729578BE4C0ADF174C&token=842e2802df0f0a06b4ed51f12f4387e761523b&description=&agent=Chrome&act=log — 1 events\nhttp requests: 10.1.21.58 -> 153.92.1.49:80 : /api/set_agent?id=3BF67EC05320C5729578BE4C0ADF174C&token=842e2802df0f0a06b4ed51f12f4387e761523b&description=&agent=Edge&act=log — 1 events"
+ },
+ {
+  "id": "lumma_stealer-01#5",
+  "text": "[lumma_stealer-01 | network_summary/file_downloads] HTTP file downloads and file transfers: download domains/IPs, requests (client -> server:port : URI), file types and download sources.\ndownload domains: whitepepper.su — 6 events\ndownload domains: clients2.google.com — 1 events\ndownload domains: www.msftconnecttest.com — 1 events\nfile types: other — 312 events"
+ },
+ {
+  "id": "lumma_stealer-02#0",
+  "text": "[lumma_stealer-02 | network_summary/high_activity_external_dest] Internal clients ranked by number of connections to external destinations, with each client's most-contacted destinations.\nsource clients: 10.1.21.58 — 312 events; external destinations=57; top destinations: 153.92.1.49 (91), 142.251.116.95 (34), 150.171.28.11 (14), 52.109.0.142 (10), 23.222.241.141 (6); 157 further events in other values"
+ },
+ {
+  "id": "lumma_stealer-03#0",
+  "text": "[lumma_stealer-03 | authentication/kerberos_clients] Kerberos client account names (user accounts) and the source IPs they authenticated from.\nclient accounts: gwyatt — 8 events; source ips: 10.1.21.58 (8)"
+ },
+ {
+  "id": "lumma_stealer-04#0",
+  "text": "[lumma_stealer-04 | authentication/kerberos_full_services] Kerberos services requested (including host and machine account names) per source IP.\nfull services: krb_tcp — 8 events; source ips: 10.1.21.58 (8)\nfull services: krbtgt/WIN11OFFICE.COM — 2 events; source ips: 10.1.21.58 (2)\nfull services: LDAP/WIN-LU4L24X3UB7.win11office.com/win11office.com — 1 events; source ips: 10.1.21.58 (1)\nfull services: cifs/WIN-LU4L24X3UB7 — 1 events; source ips: 10.1.21.58 (1)"
+ },
+ {
+  "id": "lumma_stealer-04#1",
+  "text": "[lumma_stealer-04 | authentication/kerberos_full_services] Kerberos services requested (including host and machine account names) per source IP.\nfull services: cifs/WIN-LU4L24X3UB7.win11office.com — 1 events; source ips: 10.1.21.58 (1)\nfull services: host/desktop-es9f3ml.win11office.com — 1 events; source ips: 10.1.21.58 (1)\nfull services: krbtgt/WIN11OFFICE — 1 events; source ips: 10.1.21.58 (1)\nfull services: ldap/win-lu4l24x3ub7.win11office.com — 1 events; source ips: 10.1.21.58 (1)"
+ },
+ {
+  "id": "lumma_stealer-05#0",
+  "text": "[lumma_stealer-05 | authentication/kerberos_hostnames] Host names seen in Kerberos traffic with their source IPs.\nhostnames: desktop-es9f3ml — 1 events; source ips: 10.1.21.58 (1)"
+ },
+ {
+  "id": "lumma_stealer-06#0",
+  "text": "[lumma_stealer-06 | ids_alerts/suricata_alerts] Suricata IDS alerts: signatures, high-severity alert destinations and sources, and an hourly alert timeline (UTC).\nalert signatures: ET JA3 Hash - Possible SoftEther Windows Client SSTP Traffic — 18 events\nalert signatures: ET MALWARE Observed Win32/Lumma Stealer Related Domain (whitepepper .su) in TLS SNI — 16 events\nalert signatures: ET DNS Query for .su TLD (Soviet Union) Often Malware Related — 10 events\nalert signatures: ET MALWARE Win32/Lumma Stealer Related CnC Domain in DNS Lookup (whitepepper .su) — 10 events"
+ },
+ {
+  "id": "lumma_stealer-06#1",
+  "text": "[lumma_stealer-06 | ids_alerts/suricata_alerts] Suricata IDS alerts: signatures, high-severity alert destinations and sources, and an hourly alert timeline (UTC).\nalert signatures: ET INFO HTTP Request to .su TLD (Soviet Union) Often Malware Related — 6 events\nalert signatures: ET DNS Query for .cc TLD — 4 events\nalert signatures: ET MALWARE Win32/Lumma Stealer Related CnC Domain in DNS Lookup (whooptm .cyou) — 2 events\nalert signatures: ET DROP Spamhaus DROP Listed Traffic Inbound group 10 — 1 events"
+ },
+ {
+  "id": "lumma_stealer-06#2",
+  "text": "[lumma_stealer-06 | ids_alerts/suricata_alerts] Suricata IDS alerts: signatures, high-severity alert destinations and sources, and an hourly alert timeline (UTC).\nalert signatures: ET INFO Microsoft Connection Test — 1 events\nalert signatures: ET MALWARE Lumma Stealer Victim Fingerprinting Activity — 1 events\nalert signatures: ET MALWARE Observed Win32/Lumma Stealer Related Domain (whooptm .cyou) in TLS SNI — 1 events\nhigh severity alerts: 51 matching events"
+ },
+ {
+  "id": "lumma_stealer-06#3",
+  "text": "[lumma_stealer-06 | ids_alerts/suricata_alerts] Suricata IDS alerts: signatures, high-severity alert destinations and sources, and an hourly alert timeline (UTC).\nhigh severity alerts > high severity  destinations: 10.1.21.2 — 26 events\nhigh severity alerts > high severity  destinations: 153.92.1.49 — 23 events\nhigh severity alerts > high severity  destinations: 10.1.21.58 — 1 events\nhigh severity alerts > high severity  destinations: 62.72.32.156 — 1 events"
+ },
+ {
+  "id": "lumma_stealer-06#4",
+  "text": "[lumma_stealer-06 | ids_alerts/suricata_alerts] Suricata IDS alerts: signatures, high-severity alert destinations and sources, and an hourly alert timeline (UTC).\nhigh severity alerts > high severity signatures: ET MALWARE Observed Win32/Lumma Stealer Related Domain (whitepepper .su) in TLS SNI — 16 events\nhigh severity alerts > high severity signatures: ET DNS Query for .su TLD (Soviet Union) Often Malware Related — 10 events\nhigh severity alerts > high severity signatures: ET MALWARE Win32/Lumma Stealer Related CnC Domain in DNS Lookup (whitepepper .su) — 10 events\nhigh severity alerts > high severity signatures: ET INFO HTTP Request to .su TLD (Soviet Union) Often Malware Related — 6 events"
+ },
+ {
+  "id": "lumma_stealer-06#5",
+  "text": "[lumma_stealer-06 | ids_alerts/suricata_alerts] Suricata IDS alerts: signatures, high-severity alert destinations and sources, and an hourly alert timeline (UTC).\nhigh severity alerts > high severity signatures: ET DNS Query for .cc TLD — 4 events\nhigh severity alerts > high severity signatures: ET MALWARE Win32/Lumma Stealer Related CnC Domain in DNS Lookup (whooptm .cyou) — 2 events\nhigh severity alerts > high severity signatures: ET DROP Spamhaus DROP Listed Traffic Inbound group 10 — 1 events\nhigh severity alerts > high severity signatures: ET MALWARE Lumma Stealer Victim Fingerprinting Activity — 1 events"
+ },
+ {
+  "id": "lumma_stealer-06#6",
+  "text": "[lumma_stealer-06 | ids_alerts/suricata_alerts] Suricata IDS alerts: signatures, high-severity alert destinations and sources, and an hourly alert timeline (UTC).\nhigh severity alerts > high severity signatures: ET MALWARE Observed Win32/Lumma Stealer Related Domain (whooptm .cyou) in TLS SNI — 1 events\nhigh severity alerts > high severity sources: 10.1.21.58 — 50 events\nhigh severity alerts > high severity sources: 80.97.160.24 — 1 events\nalert timeline: 2026-01-27 23:00 UTC — 70 events"
+ },
+ {
+  "id": "lumma_stealer-07#0",
+  "text": "[lumma_stealer-07 | network_summary/suspicious_domains] Unusual domains with their source and destination IPs, and direct-IP HTTP connections.\ndomains: whitepepper.su — 16 events; top source ips: 10.1.21.58 (16); top destination ips: 153.92.1.49 (16)\ndomains: assets.adobedtm.com — 2 events; top source ips: 10.1.21.58 (2); top destination ips: 184.29.31.84 (2)\ndomains: cdnjs.cloudflare.com — 2 events; top source ips: 10.1.21.58 (2); top destination ips: 104.17.25.14 (2)\ndomains: cloudflare-ech.com — 2 events; top source ips: 10.1.21.58 (2); top destination ips: 104.21.22.231 (1), 104.21.46.67 (1)"
+ },
+ {
+  "id": "lumma_stealer-07#1",
+  "text": "[lumma_stealer-07 | network_summary/suspicious_domains] Unusual domains with their source and destination IPs, and direct-IP HTTP connections.\ndomains: communicationfirewall-security.cc — 2 events; top source ips: 10.1.21.58 (2); top destination ips: 104.21.9.36 (2)\ndomains: img-s-msn-com.akamaized.net — 2 events; top source ips: 10.1.21.58 (2); top destination ips: 23.55.178.217 (2)\ndomains: holiday-forever.cc — 1 events; top source ips: 10.1.21.58 (1); top destination ips: 80.97.160.24 (1)\ndomains: media.megafilehub4.lat — 1 events; top source ips: 10.1.21.58 (1); top destination ips: 104.21.48.156 (1)"
+ },
+ {
+  "id": "lumma_stealer-07#2",
+  "text": "[lumma_stealer-07 | network_summary/suspicious_domains] Unusual domains with their source and destination IPs, and direct-IP HTTP connections.\ndomains: ssl.gstatic.com — 1 events; top source ips: 10.1.21.58 (1); top destination ips: 172.217.72.94 (1)\ndomains: static.cloudflareinsights.com — 1 events; top source ips: 10.1.21.58 (1); top destination ips: 104.16.79.73 (1)\ndomains: whooptm.cyou — 1 events; top source ips: 10.1.21.58 (1); top destination ips: 62.72.32.156 (1)\ndomains: www.gstatic.com — 1 events; top source ips: 10.1.21.58 (1); top destination ips: 142.251.116.94 (1)"
+ },
+ {
+  "id": "lumma_stealer-08#0",
+  "text": "[lumma_stealer-08 | derived_findings/derived_summary] Deterministic summary computed from the query results above (client ranking, IP-to-hostname/account join, alert timeline).\nDerived: internal client 10.1.21.58 ranks #1 by external connections (312 events, 57 distinct external destinations). Most-contacted external IP: 153.92.1.49 (91 connections).\nDerived: Kerberos identity of 10.1.21.58: hostname(s) desktop-es9f3ml; human user account(s) gwyatt.\nDerived: Suricata alerts span 2026-01-27 23:00 UTC to 2026-01-27 23:00 UTC; earliest alert hour 2026-01-27 23:00 UTC (70 alerts).\nDerived: destinations of high-severity alerts: 10.1.21.2 (26), 153.92.1.49 (23), 10.1.21.58 (1), 62.72.32.156 (1)."
+ },
+ {
+  "id": "lumma_stealer-09#0",
+  "text": "[lumma_stealer-09 | query_coverage/evidence_gaps] Queries that returned nothing or failed; use these to state what is NOT established.\nNo matching results for: suspicious certificates / self signed analysis. (Absence in this query is not proof of absence elsewhere.)\nNo matching results for: suspicious certificates / ip based certificates. (Absence in this query is not proof of absence elsewhere.)\nNo matching results for: suspicious certificates / short validity certs. (Absence in this query is not proof of absence elsewhere.)"
+ }
+]

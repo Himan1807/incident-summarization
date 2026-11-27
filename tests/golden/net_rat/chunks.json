@@ -1,0 +1,90 @@
+[
+ {
+  "id": "net_rat-01#0",
+  "text": "[net_rat-01 | network_summary/file_downloads] HTTP file downloads and file transfers: download domains/IPs, requests (client -> server:port : URI), file types and download sources.\ndownload domains: 194.180.191.64 — 58 events\ndownload domains: ctldl.windowsupdate.com — 2 events\ndownload domains: acroipm2.adobe.com — 1 events\ndownload domains: geo.netsupportsoftware.com — 1 events"
+ },
+ {
+  "id": "net_rat-01#1",
+  "text": "[net_rat-01 | network_summary/file_downloads] HTTP file downloads and file transfers: download domains/IPs, requests (client -> server:port : URI), file types and download sources.\ndownload domains: r10.o.lencr.org — 1 events\ndownload domains: www.msftconnecttest.com — 1 events\nhttp requests: no_http_uri — 406 events\nhttp requests: 10.11.26.183 -> 194.180.191.64:443 : http://194.180.191.64/fakeurl.htm — 58 events"
+ },
+ {
+  "id": "net_rat-01#2",
+  "text": "[net_rat-01 | network_summary/file_downloads] HTTP file downloads and file transfers: download domains/IPs, requests (client -> server:port : URI), file types and download sources.\nhttp requests: 10.11.26.183 -> 104.117.247.184:80 : /connecttest.txt — 2 events\nhttp requests: 10.11.26.183 -> 104.117.247.99:80 : /MFMwUTBPME0wSzAJBgUrDgMCGgUABBRpD+QVZ+1vf7U0RGQGBm8JZwdxcgQUdKR2KRcYVIUxN75n5gZYwLzFBXICEgRSsdGCXQJklJZNbHi669GH4A== — 1 events\nhttp requests: 10.11.26.183 -> 104.26.1.231:80 : /location/loca.asp — 1 events\nhttp requests: 10.11.26.183 -> 104.26.1.231:80 : /location/loca.asp\\\"; — 1 events"
+ },
+ {
+  "id": "net_rat-01#3",
+  "text": "[net_rat-01 | network_summary/file_downloads] HTTP file downloads and file transfers: download domains/IPs, requests (client -> server:port : URI), file types and download sources.\nhttp requests: 10.11.26.183 -> 23.53.127.105:80 : /assets/Owner/arm/ProcessMAU.txt — 1 events\nhttp requests: 10.11.26.183 -> 23.53.127.200:80 : /msdownload/update/v3/static/trustedr/en/authrootstl.cab?778a0928305752e9 — 1 events\nhttp requests: 10.11.26.183 -> 23.53.127.200:80 : /msdownload/update/v3/static/trustedr/en/disallowedcertstl.cab?ce02e9976e1239e1 — 1 events\nfile transfers: 157 matching events"
+ },
+ {
+  "id": "net_rat-01#4",
+  "text": "[net_rat-01 | network_summary/file_downloads] HTTP file downloads and file transfers: download domains/IPs, requests (client -> server:port : URI), file types and download sources.\nfile transfers > transfer details: file_transfer — 62 events\nfile transfers > transfer details: 10.11.26.183 -> 104.117.247.184:80 : fuid: FS19Ny2ccXfItSAHY5 — 1 events\nfile transfers > transfer details: 10.11.26.183 -> 104.117.247.99:80 : fuid: FY81pL3SoAHblZVNm9 — 1 events\nfile transfers > transfer details: 10.11.26.183 -> 104.26.1.231:80 : fuid: FrDUHo17nOjSeXu4Xi — 1 events"
+ },
+ {
+  "id": "net_rat-01#5",
+  "text": "[net_rat-01 | network_summary/file_downloads] HTTP file downloads and file transfers: download domains/IPs, requests (client -> server:port : URI), file types and download sources.\nfile transfers > transfer details: 10.11.26.183 -> 13.107.21.239:443 : fuid: FI6c6S3JlYMPnhFu24 — 1 events\nfile transfers > transfer details: 10.11.26.183 -> 13.107.21.239:443 : fuid: FgdrHo4QVLUC7gV4ef — 1 events\nfile transfers > transfer details: 10.11.26.183 -> 173.222.49.101:443 : fuid: FAKahgYUBa0eyvTdi — 1 events\nfile transfers > transfer details: 10.11.26.183 -> 173.222.49.101:443 : fuid: FNnQvX2QZleZ0W9ZZb — 1 events"
+ },
+ {
+  "id": "net_rat-01#6",
+  "text": "[net_rat-01 | network_summary/file_downloads] HTTP file downloads and file transfers: download domains/IPs, requests (client -> server:port : URI), file types and download sources.\nfile transfers > transfer details: 10.11.26.183 -> 173.222.49.101:443 : fuid: Fcjb5f3T8uL7OfxJE7 — 1 events\nfile transfers > transfer details: 10.11.26.183 -> 173.222.49.101:443 : fuid: FgmqH63niJ7wfAjZh1 — 1 events\nfile types: other — 472 events\ndownload sources: 10.11.26.183 — 472 events"
+ },
+ {
+  "id": "net_rat-02#0",
+  "text": "[net_rat-02 | network_summary/high_activity_external_dest] Internal clients ranked by number of connections to external destinations, with each client's most-contacted destinations.\nsource clients: 10.11.26.183 — 472 events; external destinations=55; top destinations: 194.180.191.64 (238), 52.113.194.132 (25), 193.42.38.139 (16), 173.222.49.101 (15), 204.79.197.203 (14); 164 further events in other values"
+ },
+ {
+  "id": "net_rat-03#0",
+  "text": "[net_rat-03 | authentication/kerberos_clients] Kerberos client account names (user accounts) and the source IPs they authenticated from.\nclient accounts: oboomwald — 8 events; source ips: 10.11.26.183 (8)"
+ },
+ {
+  "id": "net_rat-04#0",
+  "text": "[net_rat-04 | authentication/kerberos_full_services] Kerberos services requested (including host and machine account names) per source IP.\nfull services: krb_tcp — 8 events; source ips: 10.11.26.183 (8)\nfull services: krbtgt/NEMOTODES.HEALTH — 2 events; source ips: 10.11.26.183 (2)\nfull services: LDAP/NEMOTODES-DC.nemotodes.health/nemotodes.health — 1 events; source ips: 10.11.26.183 (1)\nfull services: cifs/NEMOTODES-DC — 1 events; source ips: 10.11.26.183 (1)"
+ },
+ {
+  "id": "net_rat-04#1",
+  "text": "[net_rat-04 | authentication/kerberos_full_services] Kerberos services requested (including host and machine account names) per source IP.\nfull services: cifs/NEMOTODES-DC.nemotodes.health — 1 events; source ips: 10.11.26.183 (1)\nfull services: host/desktop-b8tqk49.nemotodes.health — 1 events; source ips: 10.11.26.183 (1)\nfull services: krbtgt/NEMOTODES — 1 events; source ips: 10.11.26.183 (1)\nfull services: ldap/nemotodes-dc.nemotodes.health — 1 events; source ips: 10.11.26.183 (1)"
+ },
+ {
+  "id": "net_rat-05#0",
+  "text": "[net_rat-05 | authentication/kerberos_hostnames] Host names seen in Kerberos traffic with their source IPs.\nhostnames: desktop-b8tqk49 — 1 events; source ips: 10.11.26.183 (1)"
+ },
+ {
+  "id": "net_rat-06#0",
+  "text": "[net_rat-06 | ids_alerts/suricata_alerts] Suricata IDS alerts: signatures, high-severity alert destinations and sources, and an hourly alert timeline (UTC).\nalert signatures: ET INFO HTTP traffic on port 443 (POST) — 58 events\nalert signatures: ET REMOTE_ACCESS NetSupport Remote Admin Checkin — 58 events\nalert signatures: GPL NETBIOS SMB IPC$ unicode share access — 5 events\nalert signatures: ET INFO Microsoft Connection Test — 1 events"
+ },
+ {
+  "id": "net_rat-06#1",
+  "text": "[net_rat-06 | ids_alerts/suricata_alerts] Suricata IDS alerts: signatures, high-severity alert destinations and sources, and an hourly alert timeline (UTC).\nalert signatures: ET REMOTE_ACCESS NetSupport GeoLocation Lookup Request — 1 events\nhigh severity alerts: 59 matching events\nhigh severity alerts > high severity  destinations: 194.180.191.64 — 58 events\nhigh severity alerts > high severity  destinations: 104.26.1.231 — 1 events"
+ },
+ {
+  "id": "net_rat-06#2",
+  "text": "[net_rat-06 | ids_alerts/suricata_alerts] Suricata IDS alerts: signatures, high-severity alert destinations and sources, and an hourly alert timeline (UTC).\nhigh severity alerts > high severity signatures: ET INFO HTTP traffic on port 443 (POST) — 58 events\nhigh severity alerts > high severity signatures: ET REMOTE_ACCESS NetSupport GeoLocation Lookup Request — 1 events\nhigh severity alerts > high severity sources: 10.11.26.183 — 59 events\nalert timeline: 2024-11-26 04:00 UTC — 31 events"
+ },
+ {
+  "id": "net_rat-06#3",
+  "text": "[net_rat-06 | ids_alerts/suricata_alerts] Suricata IDS alerts: signatures, high-severity alert destinations and sources, and an hourly alert timeline (UTC).\nalert timeline: 2024-11-26 05:00 UTC — 92 events"
+ },
+ {
+  "id": "net_rat-07#0",
+  "text": "[net_rat-07 | network_summary/suspicious_domains] Unusual domains with their source and destination IPs, and direct-IP HTTP connections.\ndomains: modandcrackedapk.com — 8 events; top source ips: 10.11.26.183 (8); top destination ips: 193.42.38.139 (8)\ndomains: fonts.gstatic.com — 4 events; top source ips: 10.11.26.183 (4); top destination ips: 142.250.138.94 (4)\ndomains: classicgrand.com — 2 events; top source ips: 10.11.26.183 (2); top destination ips: 213.246.109.5 (2)\ndomains: confirmsubscription.com — 2 events; top source ips: 10.11.26.183 (2); top destination ips: 13.56.30.207 (1), 52.8.34.0 (1)"
+ },
+ {
+  "id": "net_rat-07#1",
+  "text": "[net_rat-07 | network_summary/suspicious_domains] Unusual domains with their source and destination IPs, and direct-IP HTTP connections.\ndomains: default.exp-tas.com — 2 events; top source ips: 10.11.26.183 (2); top destination ips: 13.107.5.93 (2)\ndomains: code.jquery.com — 1 events; top source ips: 10.11.26.183 (1); top destination ips: 151.101.66.137 (1)\ndomains: css.createsend1.com — 1 events; top source ips: 10.11.26.183 (1); top destination ips: 18.160.156.103 (1)\ndomains: fa000000002.resources.office.net — 1 events; top source ips: 10.11.26.183 (1); top destination ips: 173.222.49.101 (1)"
+ },
+ {
+  "id": "net_rat-07#2",
+  "text": "[net_rat-07 | network_summary/suspicious_domains] Unusual domains with their source and destination IPs, and direct-IP HTTP connections.\ndomains: fa000000005.resources.office.net — 1 events; top source ips: 10.11.26.183 (1); top destination ips: 173.222.49.101 (1)\ndomains: fa000000116.resources.office.net — 1 events; top source ips: 10.11.26.183 (1); top destination ips: 173.222.49.101 (1)\ndomains: fa000000128.resources.office.net — 1 events; top source ips: 10.11.26.183 (1); top destination ips: 173.222.49.101 (1)\ndomains: fa000000163.resources.office.net — 1 events; top source ips: 10.11.26.183 (1); top destination ips: 173.222.49.101 (1)"
+ },
+ {
+  "id": "net_rat-07#3",
+  "text": "[net_rat-07 | network_summary/suspicious_domains] Unusual domains with their source and destination IPs, and direct-IP HTTP connections.\ndomains: img-s-msn-com.akamaized.net — 1 events; top source ips: 10.11.26.183 (1); top destination ips: 104.117.247.162 (1)\ndomains: js.createsend1.com — 1 events; top source ips: 10.11.26.183 (1); top destination ips: 18.160.156.61 (1)\ndomains: maps.gstatic.com — 1 events; top source ips: 10.11.26.183 (1); top destination ips: 142.250.113.120 (1)\ndomains: www.gstatic.com — 1 events; top source ips: 10.11.26.183 (1); top destination ips: 142.250.113.94 (1)"
+ },
+ {
+  "id": "net_rat-08#0",
+  "text": "[net_rat-08 | derived_findings/derived_summary] Deterministic summary computed from the query results above (client ranking, IP-to-hostname/account join, alert timeline).\nDerived: internal client 10.11.26.183 ranks #1 by external connections (472 events, 55 distinct external destinations). Most-contacted external IP: 194.180.191.64 (238 connections).\nDerived: Kerberos identity of 10.11.26.183: hostname(s) desktop-b8tqk49; human user account(s) oboomwald.\nDerived: Suricata alerts span 2024-11-26 04:00 UTC to 2024-11-26 05:00 UTC; earliest alert hour 2024-11-26 04:00 UTC (31 alerts).\nDerived: destinations of high-severity alerts: 194.180.191.64 (58), 104.26.1.231 (1)."
+ },
+ {
+  "id": "net_rat-09#0",
+  "text": "[net_rat-09 | query_coverage/evidence_gaps] Queries that returned nothing or failed; use these to state what is NOT established.\nNo matching results for: suspicious certificates / self signed analysis. (Absence in this query is not proof of absence elsewhere.)\nNo matching results for: suspicious certificates / ip based certificates. (Absence in this query is not proof of absence elsewhere.)\nNo matching results for: suspicious certificates / short validity certs. (Absence in this query is not proof of absence elsewhere.)"
+ }
+]

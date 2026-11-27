@@ -1,0 +1,826 @@
+{
+ "condition": "rag",
+ "evaluation": {
+  "answer_f1": 0.133,
+  "answer_precision": 0.25,
+  "answer_recall": 0.091,
+  "answerable_entity_recall": 0.9,
+  "assessment_lines": 1,
+  "claims": 61,
+  "faithfulness": 1.0,
+  "grounding_rate": 1.0,
+  "hallucination_rate": 0.0,
+  "overall_entity_recall": 0.818,
+  "per_question": [
+   {
+    "answer_text": "No matching results for: suspicious certificates / self signed analysis. (Absence in this query is not proof of absence elsewhere.)",
+    "answerable_from_evidence": [
+     "172.16.1.66"
+    ],
+    "atoms": [
+     "172.16.1.66"
+    ],
+    "atoms_found_in_answer": [],
+    "correct_entities": [],
+    "found_in_report": [
+     "172.16.1.66"
+    ],
+    "id": 1,
+    "missing_from_evidence": [],
+    "precision": null,
+    "predicted_entities": [],
+    "question": "What is the IP address of the potentially infected internal host in the LAN?",
+    "recall": 0.0,
+    "reference_answer": "172.16.1.66",
+    "status": "WRONG",
+    "wrong_entities": []
+   },
+   {
+    "answer_text": "No matching results for: suspicious certificates / short validity certs. (Absence in this query is not proof of absence elsewhere.)",
+    "answerable_from_evidence": [
+     "DESKTOP-SKBR25F"
+    ],
+    "atoms": [
+     "DESKTOP-SKBR25F"
+    ],
+    "atoms_found_in_answer": [],
+    "correct_entities": [],
+    "found_in_report": [
+     "DESKTOP-SKBR25F"
+    ],
+    "id": 2,
+    "missing_from_evidence": [],
+    "precision": null,
+    "predicted_entities": [],
+    "question": "What is the hostname of the potentially infected machine in the LAN?",
+    "recall": 0.0,
+    "reference_answer": "DESKTOP-SKBR25F",
+    "status": "WRONG",
+    "wrong_entities": []
+   },
+   {
+    "answer_text": "No matching results for: suspicious certificates / ip based certificates. (Absence in this query is not proof of absence elsewhere.)",
+    "answerable_from_evidence": [
+     "ccollier"
+    ],
+    "atoms": [
+     "ccollier"
+    ],
+    "atoms_found_in_answer": [],
+    "correct_entities": [],
+    "found_in_report": [
+     "ccollier"
+    ],
+    "id": 3,
+    "missing_from_evidence": [],
+    "precision": null,
+    "predicted_entities": [],
+    "question": "What is the Windows human user account name (not machine accounts ending in $) of the potentially infected machine in the LAN?",
+    "recall": 0.0,
+    "reference_answer": "ccollier",
+    "status": "WRONG",
+    "wrong_entities": []
+   },
+   {
+    "answer_text": "Not established from the available artifacts.",
+    "answerable_from_evidence": [
+     "github.com",
+     "objects.githubusercontent.com",
+     "repo1.maven.org",
+     "ip-api.com"
+    ],
+    "atoms": [
+     "github.com",
+     "objects.githubusercontent.com",
+     "repo1.maven.org",
+     "ip-api.com"
+    ],
+    "atoms_found_in_answer": [],
+    "correct_entities": [],
+    "found_in_report": [
+     "objects.githubusercontent.com",
+     "repo1.maven.org",
+     "ip-api.com"
+    ],
+    "id": 4,
+    "missing_from_evidence": [],
+    "precision": null,
+    "predicted_entities": [],
+    "question": "What external servers (domains and IP addresses) were used to download malicious files?",
+    "recall": 0.0,
+    "reference_answer": "github.com, objects.githubusercontent.com, repo1.maven.org, ip-api.com",
+    "status": "ABSTAINED",
+    "wrong_entities": []
+   },
+   {
+    "answer_text": "Derived: Kerberos identity of 172.16.1.66: hostname(s) desktop-skbr25f; human user account(s) ccollier.",
+    "answerable_from_evidence": [
+     "141.98.10.79"
+    ],
+    "atoms": [
+     "141.98.10.79"
+    ],
+    "atoms_found_in_answer": [],
+    "correct_entities": [],
+    "found_in_report": [
+     "141.98.10.79"
+    ],
+    "id": 5,
+    "missing_from_evidence": [],
+    "precision": 0.0,
+    "predicted_entities": [
+     "172.16.1.66",
+     "DESKTOP-SKBR25F"
+    ],
+    "question": "What are the suspicious external IP addresses contacted, which might be involved in command-and-control (C2) communication?",
+    "recall": 0.0,
+    "reference_answer": "141.98.10.79",
+    "status": "WRONG",
+    "wrong_entities": [
+     "172.16.1.66",
+     "DESKTOP-SKBR25F"
+    ]
+   },
+   {
+    "answer_text": "Derived: Suricata alerts span 2024-07-30 02:00 UTC to 2024-07-30 02:00 UTC; earliest alert hour 2024-07-30 02:00 UTC (114 alerts).",
+    "answerable_from_evidence": [
+     "2024-07-30 02:00 UTC"
+    ],
+    "atoms": [
+     "2024-07-30 02:00 UTC"
+    ],
+    "atoms_found_in_answer": [
+     "2024-07-30 02:00 UTC"
+    ],
+    "correct_entities": [
+     "2024-07-30",
+     "2024-07-30 02:00"
+    ],
+    "found_in_report": [
+     "2024-07-30 02:00 UTC"
+    ],
+    "id": 6,
+    "missing_from_evidence": [],
+    "precision": 1.0,
+    "predicted_entities": [
+     "2024-07-30",
+     "2024-07-30 02:00"
+    ],
+    "question": "During what hour did the first signs of infection activity appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "recall": 1.0,
+    "reference_answer": "2024-07-30 02:00 UTC",
+    "status": "CORRECT",
+    "wrong_entities": []
+   },
+   {
+    "answer_text": "Derived: destinations of high-severity alerts: 141.98.10.79 (102), 172.16.1.4 (1), 172.16.1.66 (1), 208.95.112.1 (1).",
+    "answerable_from_evidence": [
+     "23.52.9.222"
+    ],
+    "atoms": [
+     "23.52.9.222",
+     "legitimate service"
+    ],
+    "atoms_found_in_answer": [],
+    "correct_entities": [],
+    "found_in_report": [
+     "23.52.9.222"
+    ],
+    "id": 7,
+    "missing_from_evidence": [
+     "legitimate service"
+    ],
+    "precision": 0.0,
+    "predicted_entities": [
+     "141.98.10.79",
+     "172.16.1.4",
+     "172.16.1.66",
+     "208.95.112.1"
+    ],
+    "question": "According to the connection volume statistics, what single external IP address received the most connections from the infected hosts? Is it a C2 server or a legitimate service?",
+    "recall": 0.0,
+    "reference_answer": "23.52.9.222, legitimate service",
+    "status": "WRONG",
+    "wrong_entities": [
+     "141.98.10.79",
+     "172.16.1.4",
+     "172.16.1.66",
+     "208.95.112.1"
+    ]
+   }
+  ],
+  "placeholder_count": 0,
+  "question_recall": 0.893,
+  "questions_correct": "7/7",
+  "unsupported_entities": [],
+  "unsupported_number_count": 0,
+  "unsupported_numbers": []
+ },
+ "flagged": [],
+ "mode": "drop",
+ "model": "golden",
+ "postprocessing": {
+  "auto_attributed_lines": 0,
+  "duplicate_lines_removed": 88,
+  "enabled": true,
+  "invalid_citations_removed": 0,
+  "partial_lines_dropped": 0,
+  "removed": [
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- alert signatures: ET INFO External IP Lookup Domain in DNS Lookup (ip-api .com) — 1 events [dirty_rat-06#0]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- high severity alerts > high severity signatures: ET MALWARE STRRAT CnC Checkin — 102 events [dirty_rat-06#3]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- high severity alerts > high severity signatures: ET DROP Spamhaus DROP Listed Traffic Inbound group 26 — 1 events [dirty_rat-06#3]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- alert signatures: ET INFO External IP Lookup ip-api.com — 1 events [dirty_rat-06#1]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: ET INFO NTLM Session Setup Request - Negotiate — 1 events [dirty_rat-06#1]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Timeline",
+    "line": "- alert timeline: 2024-07-30 02:00 UTC — 114 events [dirty_rat-06#5]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: internal client 172.16.1.66 ranks #1 by external connections (164 events, 38 distinct external destinations). Most-contacted external IP: 23.52.9.222 (22 connections). [dirty_rat-08#0]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: Kerberos identity of 172.16.1.66: hostname(s) desktop-skbr25f; human user account(s) ccollier. [dirty_rat-08#0]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: Suricata alerts span 2024-07-30 02:00 UTC to 2024-07-30 02:00 UTC; earliest alert hour 2024-07-30 02:00 UTC (114 alerts). [dirty_rat-08#0]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: destinations of high-severity alerts: 141.98.10.79 (102), 172.16.1.4 (1), 172.16.1.66 (1), 208.95.112.1 (1). [dirty_rat-08#0]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: internal client 172.16.1.66 ranks #1 by external connections (164 events, 38 distinct external destinations). Most-contacted external IP: 23.52.9.222 (22 connections). [dirty_rat-08#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: Kerberos identity of 172.16.1.66: hostname(s) desktop-skbr25f; human user account(s) ccollier. [dirty_rat-08#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: Suricata alerts span 2024-07-30 02:00 UTC to 2024-07-30 02:00 UTC; earliest alert hour 2024-07-30 02:00 UTC (114 alerts). [dirty_rat-08#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: destinations of high-severity alerts: 141.98.10.79 (102), 172.16.1.4 (1), 172.16.1.66 (1), 208.95.112.1 (1). [dirty_rat-08#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- high severity alerts > high severity signatures: ET INFO External IP Lookup Domain in DNS Lookup (ip-api .com) — 1 events [dirty_rat-06#4]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- high severity alerts > high severity signatures: ET INFO External IP Lookup ip-api.com — 1 events [dirty_rat-06#4]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- high severity alerts > high severity sources: 172.16.1.66 — 104 events [dirty_rat-06#4]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- high severity alerts > high severity sources: 141.98.10.79 — 1 events [dirty_rat-06#4]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- source clients: 172.16.1.66 — 164 events; external destinations=38; top destinations: 23.52.9.222 (22), 204.79.197.203 (13), 23.198.7.177 (12), 52.109.20.47 (12), 23.48.203.208 (8); 97 further events in other values [dirty_rat-02#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: ET MALWARE STRRAT CnC Checkin — 102 events [dirty_rat-06#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: GPL NETBIOS SMB IPC$ unicode share access — 5 events [dirty_rat-06#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: ET DROP Spamhaus DROP Listed Traffic Inbound group 26 — 1 events [dirty_rat-06#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- alert signatures: ET INFO External IP Lookup Domain in DNS Lookup (ip-api .com) — 1 events [dirty_rat-06#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- alert signatures: ET INFO External IP Lookup ip-api.com — 1 events [dirty_rat-06#1]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: ET INFO Microsoft Connection Test — 1 events [dirty_rat-06#1]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: ET INFO NTLM Session Setup Request - Auth — 1 events [dirty_rat-06#1]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: ET INFO NTLM Session Setup Request - Negotiate — 1 events [dirty_rat-06#1]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers: 23 matching events [dirty_rat-01#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: file_transfer — 2 events [dirty_rat-01#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: 172.16.1.66 -> 13.69.239.79:443 : fuid: FQyVNG1qSUWl88SPO8 — 1 events [dirty_rat-01#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: 172.16.1.66 -> 20.166.2.191:443 : fuid: FTAoZx1f3vyui6NSY8 — 1 events [dirty_rat-01#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- source clients: 172.16.1.66 — 164 events; external destinations=38; top destinations: 23.52.9.222 (22), 204.79.197.203 (13), 23.198.7.177 (12), 52.109.20.47 (12), 23.48.203.208 (8); 97 further events in other values [dirty_rat-02#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers: 23 matching events [dirty_rat-01#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: file_transfer — 2 events [dirty_rat-01#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: 172.16.1.66 -> 13.69.239.79:443 : fuid: FQyVNG1qSUWl88SPO8 — 1 events [dirty_rat-01#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: 172.16.1.66 -> 20.166.2.191:443 : fuid: FTAoZx1f3vyui6NSY8 — 1 events [dirty_rat-01#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: ET MALWARE STRRAT CnC Checkin — 102 events [dirty_rat-06#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: GPL NETBIOS SMB IPC$ unicode share access — 5 events [dirty_rat-06#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: ET DROP Spamhaus DROP Listed Traffic Inbound group 26 — 1 events [dirty_rat-06#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- alert signatures: ET INFO External IP Lookup Domain in DNS Lookup (ip-api .com) — 1 events [dirty_rat-06#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: 172.16.1.66 -> 20.189.173.26:443 : fuid: Fm9YMM3CNdjDmDuB2h — 1 events [dirty_rat-01#1]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: 172.16.1.66 -> 20.241.44.114:443 : fuid: F7RGOfAJ7v7njmqxc — 1 events [dirty_rat-01#1]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: 172.16.1.66 -> 20.96.153.111:443 : fuid: FtBrUL3KjJyjPbQ5V8 — 1 events [dirty_rat-01#1]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: 172.16.1.66 -> 208.95.112.1:80 : fuid: FdlG6pwAk9IIWc546 — 1 events [dirty_rat-01#1]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: no_http_uri — 160 events [dirty_rat-01#3]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 172.16.1.66 -> 208.95.112.1:80 : /json/ — 2 events [dirty_rat-01#3]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 172.16.1.66 -> 23.215.55.140:80 : /connecttest.txt — 2 events [dirty_rat-01#3]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: ip-api.com — 1 events [dirty_rat-01#3]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers: 23 matching events [dirty_rat-01#0]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: file_transfer — 2 events [dirty_rat-01#0]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: 172.16.1.66 -> 13.69.239.79:443 : fuid: FQyVNG1qSUWl88SPO8 — 1 events [dirty_rat-01#0]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: 172.16.1.66 -> 20.166.2.191:443 : fuid: FTAoZx1f3vyui6NSY8 — 1 events [dirty_rat-01#0]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: 172.16.1.66 -> 20.189.173.26:443 : fuid: Fm9YMM3CNdjDmDuB2h — 1 events [dirty_rat-01#1]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: 172.16.1.66 -> 20.241.44.114:443 : fuid: F7RGOfAJ7v7njmqxc — 1 events [dirty_rat-01#1]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: 172.16.1.66 -> 20.96.153.111:443 : fuid: FtBrUL3KjJyjPbQ5V8 — 1 events [dirty_rat-01#1]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: 172.16.1.66 -> 208.95.112.1:80 : fuid: FdlG6pwAk9IIWc546 — 1 events [dirty_rat-01#1]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Impact Assessment",
+    "line": "- file transfers > transfer details: 172.16.1.66 -> 23.194.164.136:443 : fuid: FwX9H2P4ySsBUtJw5 — 1 events [dirty_rat-01#2]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Impact Assessment",
+    "line": "- file transfers > transfer details: 172.16.1.66 -> 23.215.55.140:80 : fuid: FbBtHc4DJvYjRTHKi — 1 events [dirty_rat-01#2]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Impact Assessment",
+    "line": "- file transfers > transfer details: 172.16.1.66 -> 23.221.22.68:443 : fuid: FPikSY3rOlbAkpQ1Wa — 1 events [dirty_rat-01#2]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Impact Assessment",
+    "line": "- download sources: 172.16.1.66 — 164 events [dirty_rat-01#2]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: www.msftconnecttest.com — 1 events [dirty_rat-01#4]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file types: other — 164 events [dirty_rat-01#4]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- client accounts: DESKTOP-SKBR25F$ — 13 events; source ips: 172.16.1.66 (13) [dirty_rat-03#0]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- client accounts: ccollier — 8 events; source ips: 172.16.1.66 (8) [dirty_rat-03#0]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- client accounts: desktop-skbr25f$ — 6 events; source ips: 172.16.1.66 (6) [dirty_rat-03#0]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: no_http_uri — 160 events [dirty_rat-01#3]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 172.16.1.66 -> 208.95.112.1:80 : /json/ — 2 events [dirty_rat-01#3]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 172.16.1.66 -> 23.215.55.140:80 : /connecttest.txt — 2 events [dirty_rat-01#3]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: ip-api.com — 1 events [dirty_rat-01#3]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: ET MALWARE STRRAT CnC Checkin — 102 events [dirty_rat-06#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: GPL NETBIOS SMB IPC$ unicode share access — 5 events [dirty_rat-06#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: ET DROP Spamhaus DROP Listed Traffic Inbound group 26 — 1 events [dirty_rat-06#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- alert signatures: ET INFO External IP Lookup Domain in DNS Lookup (ip-api .com) — 1 events [dirty_rat-06#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- alert signatures: ET INFO External IP Lookup ip-api.com — 1 events [dirty_rat-06#1]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: ET INFO Microsoft Connection Test — 1 events [dirty_rat-06#1]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: ET INFO NTLM Session Setup Request - Auth — 1 events [dirty_rat-06#1]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: ET INFO NTLM Session Setup Request - Negotiate — 1 events [dirty_rat-06#1]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers: 23 matching events [dirty_rat-01#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: file_transfer — 2 events [dirty_rat-01#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: 172.16.1.66 -> 13.69.239.79:443 : fuid: FQyVNG1qSUWl88SPO8 — 1 events [dirty_rat-01#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: 172.16.1.66 -> 20.166.2.191:443 : fuid: FTAoZx1f3vyui6NSY8 — 1 events [dirty_rat-01#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: no_http_uri — 160 events [dirty_rat-01#3]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 172.16.1.66 -> 208.95.112.1:80 : /json/ — 2 events [dirty_rat-01#3]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 172.16.1.66 -> 23.215.55.140:80 : /connecttest.txt — 2 events [dirty_rat-01#3]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: ip-api.com — 1 events [dirty_rat-01#3]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- source clients: 172.16.1.66 — 164 events; external destinations=38; top destinations: 23.52.9.222 (22), 204.79.197.203 (13), 23.198.7.177 (12), 52.109.20.47 (12), 23.48.203.208 (8); 97 further events in other values [dirty_rat-02#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: www.msftconnecttest.com — 1 events [dirty_rat-01#4]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file types: other — 164 events [dirty_rat-01#4]",
+    "section": "Corrective and Preventive Actions"
+   }
+  ]
+ },
+ "removed_unverified_lines": 0,
+ "run_log": [
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "dirty_rat-08#0",
+    "dirty_rat-03#0",
+    "dirty_rat-04#3",
+    "dirty_rat-06#4",
+    "dirty_rat-02#0",
+    "dirty_rat-04#0"
+   ],
+   "seconds": 0,
+   "section": "Affected Host and User",
+   "truncated": false
+  },
+  {
+   "extractive": true,
+   "flag_counts": {},
+   "retrieved": [
+    "dirty_rat-06#5",
+    "dirty_rat-08#0"
+   ],
+   "seconds": 0,
+   "section": "Timeline"
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "dirty_rat-06#0",
+    "dirty_rat-06#3",
+    "dirty_rat-06#1",
+    "dirty_rat-06#5",
+    "dirty_rat-06#2",
+    "dirty_rat-08#0"
+   ],
+   "seconds": 0,
+   "section": "Detection: IDS Alerts",
+   "truncated": false
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "dirty_rat-01#3",
+    "dirty_rat-07#2",
+    "dirty_rat-01#4",
+    "dirty_rat-01#0",
+    "dirty_rat-07#0",
+    "dirty_rat-01#1"
+   ],
+   "seconds": 0,
+   "section": "Initial Infection Indicators",
+   "truncated": false
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "dirty_rat-08#0",
+    "dirty_rat-06#4",
+    "dirty_rat-02#0",
+    "dirty_rat-06#0",
+    "dirty_rat-06#1",
+    "dirty_rat-01#0"
+   ],
+   "seconds": 0,
+   "section": "Command-and-Control and Network Activity",
+   "truncated": false
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "dirty_rat-02#0",
+    "dirty_rat-01#0",
+    "dirty_rat-06#0",
+    "dirty_rat-01#1",
+    "dirty_rat-01#2",
+    "dirty_rat-01#3"
+   ],
+   "seconds": 0,
+   "section": "Impact Assessment",
+   "truncated": false
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "dirty_rat-01#0",
+    "dirty_rat-01#1",
+    "dirty_rat-01#2",
+    "dirty_rat-01#4",
+    "dirty_rat-03#0",
+    "dirty_rat-01#3"
+   ],
+   "seconds": 0,
+   "section": "Root Cause and Evidence Gaps",
+   "truncated": false
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "dirty_rat-06#0",
+    "dirty_rat-06#1",
+    "dirty_rat-01#0",
+    "dirty_rat-01#3",
+    "dirty_rat-02#0",
+    "dirty_rat-01#4"
+   ],
+   "seconds": 0,
+   "section": "Corrective and Preventive Actions",
+   "truncated": false
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "dirty_rat-09#0",
+    "dirty_rat-08#0",
+    "dirty_rat-05#0",
+    "dirty_rat-03#0",
+    "dirty_rat-01#4",
+    "dirty_rat-01#3",
+    "dirty_rat-01#0",
+    "dirty_rat-02#0",
+    "dirty_rat-06#0"
+   ],
+   "seconds": 0,
+   "section": "Answers to Investigation Questions",
+   "truncated": false
+  }
+ ],
+ "scenario": "dirty_rat",
+ "seconds_total": 0,
+ "verification_totals": {}
+}

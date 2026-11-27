@@ -1,0 +1,831 @@
+{
+ "condition": "rag",
+ "evaluation": {
+  "answer_f1": 0.103,
+  "answer_precision": 0.154,
+  "answer_recall": 0.077,
+  "answerable_entity_recall": 0.909,
+  "assessment_lines": 1,
+  "claims": 71,
+  "faithfulness": 1.0,
+  "grounding_rate": 1.0,
+  "hallucination_rate": 0.0,
+  "overall_entity_recall": 0.769,
+  "per_question": [
+   {
+    "answer_text": "No matching results for: suspicious certificates / ip based certificates. (Absence in this query is not proof of absence elsewhere.)",
+    "answerable_from_evidence": [
+     "10.0.0.149"
+    ],
+    "atoms": [
+     "10.0.0.149"
+    ],
+    "atoms_found_in_answer": [],
+    "correct_entities": [],
+    "found_in_report": [
+     "10.0.0.149"
+    ],
+    "id": 1,
+    "missing_from_evidence": [],
+    "precision": null,
+    "predicted_entities": [],
+    "question": "What is the IP address of the potentially infected internal host in the LAN?",
+    "recall": 0.0,
+    "reference_answer": "10.0.0.149",
+    "status": "WRONG",
+    "wrong_entities": []
+   },
+   {
+    "answer_text": "Derived: internal client 10.0.0.149 ranks #1 by external connections (811 events, 98 distinct external destinations). Most-contacted external IP: 208.187.122.74 (237 connections).",
+    "answerable_from_evidence": [
+     "DESKTOP-E7FHJS4"
+    ],
+    "atoms": [
+     "DESKTOP-E7FHJS4"
+    ],
+    "atoms_found_in_answer": [],
+    "correct_entities": [],
+    "found_in_report": [
+     "DESKTOP-E7FHJS4"
+    ],
+    "id": 2,
+    "missing_from_evidence": [],
+    "precision": 0.0,
+    "predicted_entities": [
+     "10.0.0.149",
+     "208.187.122.74"
+    ],
+    "question": "What is the hostname of the potentially infected machine in the LAN?",
+    "recall": 0.0,
+    "reference_answer": "DESKTOP-E7FHJS4",
+    "status": "WRONG",
+    "wrong_entities": [
+     "10.0.0.149",
+     "208.187.122.74"
+    ]
+   },
+   {
+    "answer_text": "Derived: Kerberos identity of 10.0.0.149: hostname(s) desktop-e7fhjs4; human user account(s) damon.bauer.",
+    "answerable_from_evidence": [
+     "damon.bauer"
+    ],
+    "atoms": [
+     "damon.bauer"
+    ],
+    "atoms_found_in_answer": [
+     "damon.bauer"
+    ],
+    "correct_entities": [
+     "damon.bauer"
+    ],
+    "found_in_report": [
+     "damon.bauer"
+    ],
+    "id": 3,
+    "missing_from_evidence": [],
+    "precision": 0.333,
+    "predicted_entities": [
+     "10.0.0.149",
+     "DESKTOP-E7FHJS4",
+     "damon.bauer"
+    ],
+    "question": "What is the Windows human user account name (not machine accounts ending in $) of the potentially infected machine in the LAN?",
+    "recall": 1.0,
+    "reference_answer": "damon.bauer",
+    "status": "PARTIAL",
+    "wrong_entities": [
+     "10.0.0.149",
+     "DESKTOP-E7FHJS4"
+    ]
+   },
+   {
+    "answer_text": "Not established from the available artifacts.",
+    "answerable_from_evidence": [
+     "2023-02-03 17:00 UTC"
+    ],
+    "atoms": [
+     "2023-02-03 17:00 UTC"
+    ],
+    "atoms_found_in_answer": [],
+    "correct_entities": [],
+    "found_in_report": [
+     "2023-02-03 17:00 UTC"
+    ],
+    "id": 4,
+    "missing_from_evidence": [],
+    "precision": null,
+    "predicted_entities": [],
+    "question": "During what hour did the first signs of infection activity appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "recall": 0.0,
+    "reference_answer": "2023-02-03 17:00 UTC",
+    "status": "ABSTAINED",
+    "wrong_entities": []
+   },
+   {
+    "answer_text": "Derived: destinations of high-severity alerts: 10.0.0.6 (17), 10.0.0.149 (8), 78.31.67.7 (1), 128.254.207.55 (1).",
+    "answerable_from_evidence": [
+     "http://128.254.207.55/86607.dat"
+    ],
+    "atoms": [
+     "http://128.254.207.55/86607.dat"
+    ],
+    "atoms_found_in_answer": [],
+    "correct_entities": [
+     "128.254.207.55"
+    ],
+    "found_in_report": [
+     "http://128.254.207.55/86607.dat"
+    ],
+    "id": 5,
+    "missing_from_evidence": [],
+    "precision": 0.25,
+    "predicted_entities": [
+     "10.0.0.149",
+     "10.0.0.6",
+     "128.254.207.55",
+     "78.31.67.7"
+    ],
+    "question": "What is the URL used for the initial malware download?",
+    "recall": 0.0,
+    "reference_answer": "http://128.254.207.55/86607.dat",
+    "status": "WRONG",
+    "wrong_entities": [
+     "10.0.0.149",
+     "10.0.0.6",
+     "78.31.67.7"
+    ]
+   },
+   {
+    "answer_text": "hostnames: desktop-e7fhjs4 — 1 events; source ips: 10.0.0.149 (1)",
+    "answerable_from_evidence": [
+     "102.156.32.143",
+     "208.187.122.74",
+     "78.31.67.7"
+    ],
+    "atoms": [
+     "102.156.32.143",
+     "208.187.122.74",
+     "5.75.205.43",
+     "23.111.114.52",
+     "78.31.67.7"
+    ],
+    "atoms_found_in_answer": [],
+    "correct_entities": [],
+    "found_in_report": [
+     "102.156.32.143",
+     "208.187.122.74",
+     "78.31.67.7"
+    ],
+    "id": 6,
+    "missing_from_evidence": [
+     "5.75.205.43",
+     "23.111.114.52"
+    ],
+    "precision": 0.0,
+    "predicted_entities": [
+     "10.0.0.149",
+     "DESKTOP-E7FHJS4"
+    ],
+    "question": "What are the suspicious external IP addresses contacted, which might be involved in command-and-control (C2) communication?",
+    "recall": 0.0,
+    "reference_answer": "102.156.32.143, 208.187.122.74, 5.75.205.43, 23.111.114.52, 78.31.67.7",
+    "status": "WRONG",
+    "wrong_entities": [
+     "10.0.0.149",
+     "DESKTOP-E7FHJS4"
+    ]
+   },
+   {
+    "answer_text": "client accounts: DESKTOP-E7FHJS4$ — 10 events; source ips: 10.0.0.149 (10)",
+    "answerable_from_evidence": [
+     "vipsauna.com"
+    ],
+    "atoms": [
+     "vipsauna.com"
+    ],
+    "atoms_found_in_answer": [],
+    "correct_entities": [],
+    "found_in_report": [],
+    "id": 7,
+    "missing_from_evidence": [],
+    "precision": 0.0,
+    "predicted_entities": [
+     "10.0.0.149",
+     "DESKTOP-E7FHJS4"
+    ],
+    "question": "What specific spoofed domain was used in a self-signed certificate during this infection?",
+    "recall": 0.0,
+    "reference_answer": "vipsauna.com",
+    "status": "WRONG",
+    "wrong_entities": [
+     "10.0.0.149",
+     "DESKTOP-E7FHJS4"
+    ]
+   },
+   {
+    "answer_text": "Not established from the available artifacts.",
+    "answerable_from_evidence": [
+     "208.187.122.74",
+     "C2 server"
+    ],
+    "atoms": [
+     "208.187.122.74",
+     "C2 server"
+    ],
+    "atoms_found_in_answer": [],
+    "correct_entities": [],
+    "found_in_report": [
+     "208.187.122.74",
+     "C2 server"
+    ],
+    "id": 8,
+    "missing_from_evidence": [],
+    "precision": null,
+    "predicted_entities": [],
+    "question": "According to the connection volume statistics, what single external IP address received the most connections from the infected hosts? Is it a C2 server or a legitimate service?",
+    "recall": 0.0,
+    "reference_answer": "208.187.122.74, C2 server",
+    "status": "ABSTAINED",
+    "wrong_entities": []
+   }
+  ],
+  "placeholder_count": 0,
+  "question_recall": 0.825,
+  "questions_correct": "7/8",
+  "unsupported_entities": [],
+  "unsupported_number_count": 0,
+  "unsupported_numbers": []
+ },
+ "flagged": [],
+ "mode": "drop",
+ "model": "golden",
+ "postprocessing": {
+  "auto_attributed_lines": 0,
+  "duplicate_lines_removed": 81,
+  "enabled": true,
+  "invalid_citations_removed": 0,
+  "partial_lines_dropped": 0,
+  "removed": [
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: ET HUNTING curl User-Agent to Dotted Quad — 1 events [qakbot-06#1]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- high severity alerts > high severity signatures: ET MALWARE BackConnect CnC Activity (Set Sleep Timer) — 5 events [qakbot-06#6]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- high severity alerts > high severity signatures: ET HUNTING SUSPICIOUS Dotted Quad Host MZ Response — 1 events [qakbot-06#6]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- high severity alerts > high severity signatures: ET INFO PE EXE or DLL Windows file download HTTP — 1 events [qakbot-06#7]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- high severity alerts > high severity signatures: ET MALWARE BackConnect CnC Activity (Start VNC) M1 — 1 events [qakbot-06#7]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: ET INFO NTLM Session Setup Request - Negotiate — 1 events [qakbot-06#2]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: ET INFO Observed DNS Query to .biz TLD — 1 events [qakbot-06#3]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: ET INFO Suspicious Domain (*.ml) in TLS SNI — 1 events [qakbot-06#3]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- source clients: 10.0.0.149 — 811 events; external destinations=98; top destinations: 208.187.122.74 (237), 13.107.42.14 (28), 209.131.162.45 (24), 204.79.197.239 (19), 72.163.4.185 (18); 485 further events in other values [qakbot-02#0]",
+    "section": "Initial Infection Indicators"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- source clients: 10.0.0.149 — 811 events; external destinations=98; top destinations: 208.187.122.74 (237), 13.107.42.14 (28), 209.131.162.45 (24), 204.79.197.239 (19), 72.163.4.185 (18); 485 further events in other values [qakbot-02#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: internal client 10.0.0.149 ranks #1 by external connections (811 events, 98 distinct external destinations). Most-contacted external IP: 208.187.122.74 (237 connections). [qakbot-09#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: Kerberos identity of 10.0.0.149: hostname(s) desktop-e7fhjs4; human user account(s) damon.bauer. [qakbot-09#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: Suricata alerts span 2023-02-03 17:00 UTC to 2023-02-03 19:00 UTC; earliest alert hour 2023-02-03 17:00 UTC (38 alerts). [qakbot-09#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: destinations of high-severity alerts: 10.0.0.6 (17), 10.0.0.149 (8), 78.31.67.7 (1), 128.254.207.55 (1). [qakbot-09#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- domains: oracle.com — 6 events; top source ips: 10.0.0.149 (6); top destination ips: 138.1.33.162 (6) [qakbot-08#1]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- domains: www.oracle.com — 6 events; top source ips: 10.0.0.149 (6); top destination ips: 104.93.55.25 (3), 72.247.204.96 (2), 23.2.51.218 (1) [qakbot-08#1]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- domains: irs.gov — 5 events; top source ips: 10.0.0.149 (5); top destination ips: 152.216.7.110 (5) [qakbot-08#1]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- domains: broadcom.com — 4 events; top source ips: 10.0.0.149 (4); top destination ips: 52.13.171.212 (4) [qakbot-08#1]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- domains: cisco.com — 9 events; top source ips: 10.0.0.149 (9); top destination ips: 72.163.4.185 (9) [qakbot-08#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- domains: www.cisco.com — 9 events; top source ips: 10.0.0.149 (9); top destination ips: 23.64.146.226 (4), 96.6.184.69 (3), 184.51.39.62 (2) [qakbot-08#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- domains: verisign.com — 8 events; top source ips: 10.0.0.149 (8); top destination ips: 209.131.162.45 (8) [qakbot-08#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- domains: www.verisign.com — 8 events; top source ips: 10.0.0.149 (8); top destination ips: 69.58.187.40 (4), 209.131.162.45 (4) [qakbot-08#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: ET INFO SMB2 NT Create AndX Request For a DLL File - Possible Lateral Movement — 9 events [qakbot-06#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: ET INFO SMB Executable File Transfer — 6 events [qakbot-06#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: 128.254.207.55 — 1 events [qakbot-01#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: cacerts.digicert.com — 1 events [qakbot-01#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: no_http_uri — 808 events [qakbot-01#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.0.0.149 -> 128.254.207.55:80 : /86607.dat — 2 events [qakbot-01#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.0.0.149 -> 192.229.211.108:80 : /DigiCertTLSRSASHA2562020CA1-1.crt — 1 events [qakbot-01#1]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers: 39 matching events [qakbot-01#1]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: file_transfer — 2 events [qakbot-01#1]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: 10.0.0.149 -> 102.156.32.143:443 : fuid: FqPnVU3bQggnrL7tXg — 1 events [qakbot-01#1]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: ET MALWARE BackConnect CnC Activity (Set Sleep Timer) — 5 events [qakbot-06#1]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: ET HUNTING SUSPICIOUS Dotted Quad Host MZ Response — 1 events [qakbot-06#1]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: ET HUNTING curl User-Agent to Dotted Quad — 1 events [qakbot-06#1]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: ET INFO DNS Query for Suspicious .ml Domain — 1 events [qakbot-06#1]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- source clients: 10.0.0.149 — 811 events; external destinations=98; top destinations: 208.187.122.74 (237), 13.107.42.14 (28), 209.131.162.45 (24), 204.79.197.239 (19), 72.163.4.185 (18); 485 further events in other values [qakbot-02#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: internal client 10.0.0.149 ranks #1 by external connections (811 events, 98 distinct external destinations). Most-contacted external IP: 208.187.122.74 (237 connections). [qakbot-09#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: Kerberos identity of 10.0.0.149: hostname(s) desktop-e7fhjs4; human user account(s) damon.bauer. [qakbot-09#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: Suricata alerts span 2023-02-03 17:00 UTC to 2023-02-03 19:00 UTC; earliest alert hour 2023-02-03 17:00 UTC (38 alerts). [qakbot-09#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: destinations of high-severity alerts: 10.0.0.6 (17), 10.0.0.149 (8), 78.31.67.7 (1), 128.254.207.55 (1). [qakbot-09#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.0.0.149 -> 192.229.211.108:80 : /DigiCertTLSRSASHA2562020CA1-1.crt — 1 events [qakbot-01#1]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers: 39 matching events [qakbot-01#1]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: file_transfer — 2 events [qakbot-01#1]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: 10.0.0.149 -> 102.156.32.143:443 : fuid: FqPnVU3bQggnrL7tXg — 1 events [qakbot-01#1]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: 10.0.0.149 -> 104.208.16.89:443 : fuid: FlI50x23MLhHuAO9o1 — 1 events [qakbot-01#2]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: 10.0.0.149 -> 128.254.207.55:80 : fuid: FcP6lP1ihIumwPgiFb — 1 events [qakbot-01#2]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: 10.0.0.149 -> 13.107.237.57:443 : fuid: Ft1sAb28nmiasL6AUd — 1 events [qakbot-01#2]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: 10.0.0.149 -> 13.107.42.16:443 : fuid: Ffj4qy4nEei2wfVkdc — 1 events [qakbot-01#2]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Root Cause and Evidence Gaps",
+    "line": "- file transfers > transfer details: 10.0.0.149 -> 13.69.239.74:443 : fuid: FcgRev3BHKpJB9APMl — 1 events [qakbot-01#3]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- client accounts: DESKTOP-E7FHJS4$ — 10 events; source ips: 10.0.0.149 (10) [qakbot-03#0]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- client accounts: damon.bauer — 7 events; source ips: 10.0.0.149 (7) [qakbot-03#0]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- client accounts: desktop-e7fhjs4$ — 6 events; source ips: 10.0.0.149 (6) [qakbot-03#0]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: 128.254.207.55 — 1 events [qakbot-01#0]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: cacerts.digicert.com — 1 events [qakbot-01#0]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: no_http_uri — 808 events [qakbot-01#0]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.0.0.149 -> 128.254.207.55:80 : /86607.dat — 2 events [qakbot-01#0]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file types: other — 810 events [qakbot-01#4]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file types: exe — 1 events [qakbot-01#4]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download sources: 10.0.0.149 — 811 events [qakbot-01#4]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: ET MALWARE BackConnect CnC Activity (Set Sleep Timer) — 5 events [qakbot-06#1]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: ET HUNTING SUSPICIOUS Dotted Quad Host MZ Response — 1 events [qakbot-06#1]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: ET HUNTING curl User-Agent to Dotted Quad — 1 events [qakbot-06#1]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: ET INFO DNS Query for Suspicious .ml Domain — 1 events [qakbot-06#1]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: 128.254.207.55 — 1 events [qakbot-01#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: cacerts.digicert.com — 1 events [qakbot-01#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: no_http_uri — 808 events [qakbot-01#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.0.0.149 -> 128.254.207.55:80 : /86607.dat — 2 events [qakbot-01#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.0.0.149 -> 192.229.211.108:80 : /DigiCertTLSRSASHA2562020CA1-1.crt — 1 events [qakbot-01#1]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers: 39 matching events [qakbot-01#1]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: file_transfer — 2 events [qakbot-01#1]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: 10.0.0.149 -> 102.156.32.143:443 : fuid: FqPnVU3bQggnrL7tXg — 1 events [qakbot-01#1]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- source clients: 10.0.0.149 — 811 events; external destinations=98; top destinations: 208.187.122.74 (237), 13.107.42.14 (28), 209.131.162.45 (24), 204.79.197.239 (19), 72.163.4.185 (18); 485 further events in other values [qakbot-02#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: internal client 10.0.0.149 ranks #1 by external connections (811 events, 98 distinct external destinations). Most-contacted external IP: 208.187.122.74 (237 connections). [qakbot-09#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: Kerberos identity of 10.0.0.149: hostname(s) desktop-e7fhjs4; human user account(s) damon.bauer. [qakbot-09#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: Suricata alerts span 2023-02-03 17:00 UTC to 2023-02-03 19:00 UTC; earliest alert hour 2023-02-03 17:00 UTC (38 alerts). [qakbot-09#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: destinations of high-severity alerts: 10.0.0.6 (17), 10.0.0.149 (8), 78.31.67.7 (1), 128.254.207.55 (1). [qakbot-09#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: ET INFO NTLMv1 Session Setup Response - Challenge — 1 events [qakbot-06#3]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: ET INFO Observed DNS Query to .biz TLD — 1 events [qakbot-06#3]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: ET INFO PE EXE or DLL Windows file download HTTP — 1 events [qakbot-06#3]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: ET INFO Suspicious Domain (*.ml) in TLS SNI — 1 events [qakbot-06#3]",
+    "section": "Corrective and Preventive Actions"
+   }
+  ]
+ },
+ "removed_unverified_lines": 0,
+ "run_log": [
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "qakbot-09#0",
+    "qakbot-03#0",
+    "qakbot-02#0",
+    "qakbot-05#0",
+    "qakbot-04#1",
+    "qakbot-08#0"
+   ],
+   "seconds": 0,
+   "section": "Affected Host and User",
+   "truncated": false
+  },
+  {
+   "extractive": true,
+   "flag_counts": {},
+   "retrieved": [
+    "qakbot-06#9",
+    "qakbot-09#0"
+   ],
+   "seconds": 0,
+   "section": "Timeline"
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "qakbot-06#1",
+    "qakbot-06#4",
+    "qakbot-06#6",
+    "qakbot-06#7",
+    "qakbot-06#2",
+    "qakbot-06#3"
+   ],
+   "seconds": 0,
+   "section": "Detection: IDS Alerts",
+   "truncated": false
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "qakbot-01#0",
+    "qakbot-01#1",
+    "qakbot-01#4",
+    "qakbot-01#2",
+    "qakbot-08#1",
+    "qakbot-02#0"
+   ],
+   "seconds": 0,
+   "section": "Initial Infection Indicators",
+   "truncated": false
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "qakbot-02#0",
+    "qakbot-09#0",
+    "qakbot-08#3",
+    "qakbot-08#2",
+    "qakbot-08#1",
+    "qakbot-08#0"
+   ],
+   "seconds": 0,
+   "section": "Command-and-Control and Network Activity",
+   "truncated": false
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "qakbot-06#0",
+    "qakbot-01#0",
+    "qakbot-01#1",
+    "qakbot-06#1",
+    "qakbot-02#0",
+    "qakbot-09#0"
+   ],
+   "seconds": 0,
+   "section": "Impact Assessment",
+   "truncated": false
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "qakbot-01#1",
+    "qakbot-01#2",
+    "qakbot-01#3",
+    "qakbot-03#0",
+    "qakbot-01#0",
+    "qakbot-01#4"
+   ],
+   "seconds": 0,
+   "section": "Root Cause and Evidence Gaps",
+   "truncated": false
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "qakbot-06#1",
+    "qakbot-01#0",
+    "qakbot-01#1",
+    "qakbot-02#0",
+    "qakbot-09#0",
+    "qakbot-06#3"
+   ],
+   "seconds": 0,
+   "section": "Corrective and Preventive Actions",
+   "truncated": false
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "qakbot-10#0",
+    "qakbot-09#0",
+    "qakbot-05#0",
+    "qakbot-03#0",
+    "qakbot-06#1",
+    "qakbot-06#2",
+    "qakbot-01#0",
+    "qakbot-02#0",
+    "qakbot-07#1"
+   ],
+   "seconds": 0,
+   "section": "Answers to Investigation Questions",
+   "truncated": false
+  }
+ ],
+ "scenario": "qakbot",
+ "seconds_total": 0,
+ "verification_totals": {}
+}

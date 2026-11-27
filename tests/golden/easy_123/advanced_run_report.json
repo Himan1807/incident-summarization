@@ -1,0 +1,773 @@
+{
+ "condition": "rag",
+ "evaluation": {
+  "answer_f1": 0.0,
+  "answer_precision": 0.0,
+  "answer_recall": 0.0,
+  "answerable_entity_recall": 1.0,
+  "assessment_lines": 1,
+  "claims": 58,
+  "faithfulness": 1.0,
+  "grounding_rate": 1.0,
+  "hallucination_rate": 0.0,
+  "overall_entity_recall": 1.0,
+  "per_question": [
+   {
+    "answer_text": "No matching results for: suspicious certificates / self signed analysis. (Absence in this query is not proof of absence elsewhere.)",
+    "answerable_from_evidence": [
+     "10.2.28.88"
+    ],
+    "atoms": [
+     "10.2.28.88"
+    ],
+    "atoms_found_in_answer": [],
+    "correct_entities": [],
+    "found_in_report": [
+     "10.2.28.88"
+    ],
+    "id": 1,
+    "missing_from_evidence": [],
+    "precision": null,
+    "predicted_entities": [],
+    "question": "What is the IP address of the infected Windows client?",
+    "recall": 0.0,
+    "reference_answer": "10.2.28.88",
+    "status": "WRONG",
+    "wrong_entities": []
+   },
+   {
+    "answer_text": "No matching results for: suspicious certificates / ip based certificates. (Absence in this query is not proof of absence elsewhere.)",
+    "answerable_from_evidence": [
+     "DESKTOP-TEYQ2NR"
+    ],
+    "atoms": [
+     "DESKTOP-TEYQ2NR"
+    ],
+    "atoms_found_in_answer": [],
+    "correct_entities": [],
+    "found_in_report": [
+     "DESKTOP-TEYQ2NR"
+    ],
+    "id": 2,
+    "missing_from_evidence": [],
+    "precision": null,
+    "predicted_entities": [],
+    "question": "What is the host name of the infected Windows client?",
+    "recall": 0.0,
+    "reference_answer": "DESKTOP-TEYQ2NR",
+    "status": "WRONG",
+    "wrong_entities": []
+   },
+   {
+    "answer_text": "No matching results for: suspicious certificates / short validity certs. (Absence in this query is not proof of absence elsewhere.)",
+    "answerable_from_evidence": [
+     "brolf"
+    ],
+    "atoms": [
+     "brolf"
+    ],
+    "atoms_found_in_answer": [],
+    "correct_entities": [],
+    "found_in_report": [
+     "brolf"
+    ],
+    "id": 3,
+    "missing_from_evidence": [],
+    "precision": null,
+    "predicted_entities": [],
+    "question": "What is the Windows human user account name (not machine accounts ending in $) of the potentially infected machine in the LAN?",
+    "recall": 0.0,
+    "reference_answer": "brolf",
+    "status": "WRONG",
+    "wrong_entities": []
+   },
+   {
+    "answer_text": "Not established from the available artifacts.",
+    "answerable_from_evidence": [
+     "45.131.214.85"
+    ],
+    "atoms": [
+     "45.131.214.85"
+    ],
+    "atoms_found_in_answer": [],
+    "correct_entities": [],
+    "found_in_report": [
+     "45.131.214.85"
+    ],
+    "id": 4,
+    "missing_from_evidence": [],
+    "precision": null,
+    "predicted_entities": [],
+    "question": "What are the suspicious external IP addresses contacted, which might be involved in command-and-control (C2) communication?",
+    "recall": 0.0,
+    "reference_answer": "45.131.214.85",
+    "status": "ABSTAINED",
+    "wrong_entities": []
+   },
+   {
+    "answer_text": "Derived: internal client 10.2.28.88 ranks #1 by external connections (1539 events, 95 distinct external destinations). Most-contacted external IP: 45.131.214.85 (1061 connections).",
+    "answerable_from_evidence": [
+     "2026-02-28 19:00 UTC"
+    ],
+    "atoms": [
+     "2026-02-28 19:00 UTC"
+    ],
+    "atoms_found_in_answer": [],
+    "correct_entities": [],
+    "found_in_report": [
+     "2026-02-28 19:00 UTC"
+    ],
+    "id": 5,
+    "missing_from_evidence": [],
+    "precision": 0.0,
+    "predicted_entities": [
+     "10.2.28.88",
+     "45.131.214.85"
+    ],
+    "question": "During what hour did the first signs of infection activity appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "recall": 0.0,
+    "reference_answer": "2026-02-28 19:00 UTC",
+    "status": "WRONG",
+    "wrong_entities": [
+     "10.2.28.88",
+     "45.131.214.85"
+    ]
+   },
+   {
+    "answer_text": "Derived: Kerberos identity of 10.2.28.88: hostname(s) desktop-teyq2nr; human user account(s) brolf.",
+    "answerable_from_evidence": [
+     "45.131.214.85",
+     "C2 server"
+    ],
+    "atoms": [
+     "45.131.214.85",
+     "C2 server"
+    ],
+    "atoms_found_in_answer": [],
+    "correct_entities": [],
+    "found_in_report": [
+     "45.131.214.85",
+     "C2 server"
+    ],
+    "id": 6,
+    "missing_from_evidence": [],
+    "precision": 0.0,
+    "predicted_entities": [
+     "10.2.28.88",
+     "DESKTOP-TEYQ2NR"
+    ],
+    "question": "According to the connection volume statistics, what single external IP address received the most connections from the infected hosts? Is it a C2 server or a legitimate service?",
+    "recall": 0.0,
+    "reference_answer": "45.131.214.85, C2 server",
+    "status": "WRONG",
+    "wrong_entities": [
+     "10.2.28.88",
+     "DESKTOP-TEYQ2NR"
+    ]
+   }
+  ],
+  "placeholder_count": 0,
+  "question_recall": 1.0,
+  "questions_correct": "6/6",
+  "unsupported_entities": [],
+  "unsupported_number_count": 0,
+  "unsupported_numbers": []
+ },
+ "flagged": [],
+ "mode": "drop",
+ "model": "golden",
+ "postprocessing": {
+  "auto_attributed_lines": 0,
+  "duplicate_lines_removed": 87,
+  "enabled": true,
+  "invalid_citations_removed": 0,
+  "partial_lines_dropped": 0,
+  "removed": [
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- high severity alerts > high severity signatures: ET INFO HTTP traffic on port 443 (POST) — 264 events [easy_123-06#1]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Timeline",
+    "line": "- alert timeline: 2026-02-28 22:00 UTC — 120 events [easy_123-06#3]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Timeline",
+    "line": "- alert timeline: 2026-02-28 23:00 UTC — 120 events [easy_123-06#3]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Timeline",
+    "line": "- alert timeline: 2026-03-01 00:00 UTC — 36 events [easy_123-06#3]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Timeline",
+    "line": "- alert timeline: 2026-02-28 19:00 UTC — 28 events [easy_123-06#2]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Timeline",
+    "line": "- alert timeline: 2026-02-28 20:00 UTC — 119 events [easy_123-06#2]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Timeline",
+    "line": "- alert timeline: 2026-02-28 21:00 UTC — 120 events [easy_123-06#2]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: internal client 10.2.28.88 ranks #1 by external connections (1539 events, 95 distinct external destinations). Most-contacted external IP: 45.131.214.85 (1061 connections). [easy_123-08#0]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: Kerberos identity of 10.2.28.88: hostname(s) desktop-teyq2nr; human user account(s) brolf. [easy_123-08#0]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: Suricata alerts span 2026-02-28 19:00 UTC to 2026-03-01 00:00 UTC; earliest alert hour 2026-02-28 19:00 UTC (28 alerts). [easy_123-08#0]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: destinations of high-severity alerts: 45.131.214.85 (264). [easy_123-08#0]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- file transfers: 598 matching events [easy_123-01#0]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- file transfers > transfer details: file_transfer — 273 events [easy_123-01#0]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- file transfers > transfer details: 10.2.28.88 -> 13.70.79.200:443 : fuid: F95H6kTOV7Ac6bcve — 1 events [easy_123-01#0]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- file transfers > transfer details: 10.2.28.88 -> 13.89.178.27:443 : fuid: Fjm5jt1kCVqVQ0zXsb — 1 events [easy_123-01#0]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- file transfers: 598 matching events [easy_123-01#0]",
+    "section": "Initial Infection Indicators"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- file transfers > transfer details: file_transfer — 273 events [easy_123-01#0]",
+    "section": "Initial Infection Indicators"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- file transfers > transfer details: 10.2.28.88 -> 13.70.79.200:443 : fuid: F95H6kTOV7Ac6bcve — 1 events [easy_123-01#0]",
+    "section": "Initial Infection Indicators"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- file transfers > transfer details: 10.2.28.88 -> 13.89.178.27:443 : fuid: Fjm5jt1kCVqVQ0zXsb — 1 events [easy_123-01#0]",
+    "section": "Initial Infection Indicators"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- domains: www.fmcsa.dot.gov — 1 events; top source ips: 10.2.28.88 (1); top destination ips: 23.64.147.24 (1) [easy_123-07#1]",
+    "section": "Initial Infection Indicators"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: internal client 10.2.28.88 ranks #1 by external connections (1539 events, 95 distinct external destinations). Most-contacted external IP: 45.131.214.85 (1061 connections). [easy_123-08#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: Kerberos identity of 10.2.28.88: hostname(s) desktop-teyq2nr; human user account(s) brolf. [easy_123-08#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: Suricata alerts span 2026-02-28 19:00 UTC to 2026-03-01 00:00 UTC; earliest alert hour 2026-02-28 19:00 UTC (28 alerts). [easy_123-08#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: destinations of high-severity alerts: 45.131.214.85 (264). [easy_123-08#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- source clients: 10.2.28.88 — 1539 events; external destinations=95; top destinations: 45.131.214.85 (1061), 150.171.28.11 (38), 150.171.27.11 (15), 23.218.232.148 (14), 23.192.223.17 (13); 398 further events in other values [easy_123-02#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- file transfers: 598 matching events [easy_123-01#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- file transfers > transfer details: file_transfer — 273 events [easy_123-01#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- file transfers > transfer details: 10.2.28.88 -> 13.70.79.200:443 : fuid: F95H6kTOV7Ac6bcve — 1 events [easy_123-01#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- file transfers > transfer details: 10.2.28.88 -> 13.89.178.27:443 : fuid: Fjm5jt1kCVqVQ0zXsb — 1 events [easy_123-01#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: no_http_uri — 1230 events [easy_123-01#3]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.2.28.88 -> 45.131.214.85:443 : http://45.131.214.85/fakeurl.htm — 264 events [easy_123-01#3]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.2.28.88 -> 23.218.232.148:80 : /filestreamingservice/files/2132f61f-f790-4ae6-a355-8cf9a1533800?P1=1772824359&P2=404&P3=2&P4=JBAPgdPQ5bbXP3YOD9Ig2AVW51pLa6vxUcHeGTEAadbzNEO5DlV3Wra1C9WqE7WnEd5RG1oYpt8saZgMxML1KA== — 11 events [easy_123-01#3]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.2.28.88 -> 23.218.232.166:80 : /filestreamingservice/files/13d0ef9b-70c8-43c9-9a51-13c752dfb777?P1=1772817857&P2=404&P3=2&P4=NxsPWDqY/PRN4X5tyugkA+dfU9EeHebHQ3SqTAWWr5XPVngvgEZDtSFAEYlah9GHFrc+S/ExNx3X0xGxvdOPow== — 7 events [easy_123-01#3]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Command-and-Control and Network Activity",
+    "line": "- file transfers > transfer details: 10.2.28.88 -> 150.171.27.11:443 : fuid: FWbsVE4la10bZ0rtc8 — 1 events [easy_123-01#2]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Command-and-Control and Network Activity",
+    "line": "- file transfers > transfer details: 10.2.28.88 -> 150.171.27.11:443 : fuid: Fjw2NV3ZLuYwZhmo2l — 1 events [easy_123-01#2]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: ET INFO Microsoft Connection Test — 1 events [easy_123-06#1]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- high severity alerts: 264 matching events [easy_123-06#1]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- high severity alerts > high severity  destinations: 45.131.214.85 — 264 events [easy_123-06#1]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- high severity alerts > high severity signatures: ET INFO HTTP traffic on port 443 (POST) — 264 events [easy_123-06#1]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- source clients: 10.2.28.88 — 1539 events; external destinations=95; top destinations: 45.131.214.85 (1061), 150.171.28.11 (38), 150.171.27.11 (15), 23.218.232.148 (14), 23.192.223.17 (13); 398 further events in other values [easy_123-02#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- file transfers: 598 matching events [easy_123-01#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- file transfers > transfer details: file_transfer — 273 events [easy_123-01#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- file transfers > transfer details: 10.2.28.88 -> 13.70.79.200:443 : fuid: F95H6kTOV7Ac6bcve — 1 events [easy_123-01#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- file transfers > transfer details: 10.2.28.88 -> 13.89.178.27:443 : fuid: Fjm5jt1kCVqVQ0zXsb — 1 events [easy_123-01#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Command-and-Control and Network Activity",
+    "line": "- file transfers > transfer details: 10.2.28.88 -> 150.171.27.11:443 : fuid: FPHQiS2gqfclBOrFL9 — 1 events [easy_123-01#2]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Command-and-Control and Network Activity",
+    "line": "- file transfers > transfer details: 10.2.28.88 -> 150.171.27.11:443 : fuid: FWbsVE4la10bZ0rtc8 — 1 events [easy_123-01#2]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Command-and-Control and Network Activity",
+    "line": "- file transfers > transfer details: 10.2.28.88 -> 150.171.27.11:443 : fuid: Fjw2NV3ZLuYwZhmo2l — 1 events [easy_123-01#2]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Command-and-Control and Network Activity",
+    "line": "- download sources: 10.2.28.88 — 1539 events [easy_123-01#2]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- file transfers: 598 matching events [easy_123-01#0]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- file transfers > transfer details: file_transfer — 273 events [easy_123-01#0]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- file transfers > transfer details: 10.2.28.88 -> 13.70.79.200:443 : fuid: F95H6kTOV7Ac6bcve — 1 events [easy_123-01#0]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- file transfers > transfer details: 10.2.28.88 -> 13.89.178.27:443 : fuid: Fjm5jt1kCVqVQ0zXsb — 1 events [easy_123-01#0]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: no_http_uri — 1230 events [easy_123-01#3]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.2.28.88 -> 45.131.214.85:443 : http://45.131.214.85/fakeurl.htm — 264 events [easy_123-01#3]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.2.28.88 -> 23.218.232.148:80 : /filestreamingservice/files/2132f61f-f790-4ae6-a355-8cf9a1533800?P1=1772824359&P2=404&P3=2&P4=JBAPgdPQ5bbXP3YOD9Ig2AVW51pLa6vxUcHeGTEAadbzNEO5DlV3Wra1C9WqE7WnEd5RG1oYpt8saZgMxML1KA== — 11 events [easy_123-01#3]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.2.28.88 -> 23.218.232.166:80 : /filestreamingservice/files/13d0ef9b-70c8-43c9-9a51-13c752dfb777?P1=1772817857&P2=404&P3=2&P4=NxsPWDqY/PRN4X5tyugkA+dfU9EeHebHQ3SqTAWWr5XPVngvgEZDtSFAEYlah9GHFrc+S/ExNx3X0xGxvdOPow== — 7 events [easy_123-01#3]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Impact Assessment",
+    "line": "- file transfers > transfer details: 10.2.28.88 -> 13.89.179.14:443 : fuid: F3leWR1jXmw5eIV2n4 — 1 events [easy_123-01#1]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Impact Assessment",
+    "line": "- file transfers > transfer details: 10.2.28.88 -> 13.89.179.9:443 : fuid: FpfWem1XHYB3V7Z3Kb — 1 events [easy_123-01#1]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Impact Assessment",
+    "line": "- file transfers > transfer details: 10.2.28.88 -> 135.234.160.246:443 : fuid: F06TIy3seFMGIoCz69 — 1 events [easy_123-01#1]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Impact Assessment",
+    "line": "- file transfers > transfer details: 10.2.28.88 -> 150.171.22.17:443 : fuid: FApV0N3DxwzTiwATnl — 1 events [easy_123-01#1]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Impact Assessment",
+    "line": "- http requests: 10.2.28.88 -> 23.218.232.183:80 : /filestreamingservice/files/86061e48-63b3-483f-8dac-609df0cbb238?P1=1772824359&P2=404&P3=2&P4=M+r84JmdgFPOKPdw6GuIsCbfL0IaRRxCYqeiJbpH9IpxZr7vLbM4w9K8uMU5Ka6CyN/uMqIEMlyIHqGqCS8/Xg== — 6 events [easy_123-01#4]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Impact Assessment",
+    "line": "- http requests: 10.2.28.88 -> 23.218.232.142:80 : /filestreamingservice/files/0b18f766-7469-4aa3-88b7-99e69c55d14d?P1=1772628813&P2=404&P3=2&P4=P9O/ZqV3zHEog/8GWjY1LjxEXlCShXCmvVwfgCjP6c7Xjf6q9SdV5Cxrlht3k8c6RsZdgDSm48GRm8J1Kej36Q== — 3 events [easy_123-01#4]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Impact Assessment",
+    "line": "- http requests: 10.2.28.88 -> 23.218.232.142:80 : /filestreamingservice/files/ddbf4492-d475-4fe4-bcde-6cbac56f6034?P1=1772824359&P2=404&P3=2&P4=TMSkemQv9LZfDxme9Q9GxU0tc2G9uhdO6d7QU9JVJHOk+a0A4pJYzApqbFnNEQ6bt9QSukbCYOxGUmPIOR1Xgw== — 3 events [easy_123-01#4]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Impact Assessment",
+    "line": "- http requests: 10.2.28.88 -> 23.47.50.182:80 : /connecttest.txt — 2 events [easy_123-01#4]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Command-and-Control and Network Activity",
+    "line": "- file transfers > transfer details: 10.2.28.88 -> 150.171.27.11:443 : fuid: FPHQiS2gqfclBOrFL9 — 1 events [easy_123-01#2]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Command-and-Control and Network Activity",
+    "line": "- file transfers > transfer details: 10.2.28.88 -> 150.171.27.11:443 : fuid: FWbsVE4la10bZ0rtc8 — 1 events [easy_123-01#2]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Command-and-Control and Network Activity",
+    "line": "- file transfers > transfer details: 10.2.28.88 -> 150.171.27.11:443 : fuid: Fjw2NV3ZLuYwZhmo2l — 1 events [easy_123-01#2]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Command-and-Control and Network Activity",
+    "line": "- download sources: 10.2.28.88 — 1539 events [easy_123-01#2]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- file transfers: 598 matching events [easy_123-01#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- file transfers > transfer details: file_transfer — 273 events [easy_123-01#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- file transfers > transfer details: 10.2.28.88 -> 13.70.79.200:443 : fuid: F95H6kTOV7Ac6bcve — 1 events [easy_123-01#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- file transfers > transfer details: 10.2.28.88 -> 13.89.178.27:443 : fuid: Fjm5jt1kCVqVQ0zXsb — 1 events [easy_123-01#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.2.28.88 -> 150.171.27.11:80 : /browsernetworktime/time/1/current?cup2key=2:cHFgppt5zfs9cbgaKCO2n0tk698hI27wU971tyrEQQg&cup2hreq=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 — 1 events [easy_123-01#5]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.2.28.88 -> 199.232.210.172:80 : /msdownload/update/v3/static/trustedr/en/authrootstl.cab?238f51c2ab526be6 — 1 events [easy_123-01#5]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: 45.131.214.85 — 264 events [easy_123-01#5]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: msedge.b.tlu.dl.delivery.mp.microsoft.com — 30 events [easy_123-01#5]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Command-and-Control and Network Activity",
+    "line": "- file transfers > transfer details: 10.2.28.88 -> 150.171.27.11:443 : fuid: FPHQiS2gqfclBOrFL9 — 1 events [easy_123-01#2]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Command-and-Control and Network Activity",
+    "line": "- file transfers > transfer details: 10.2.28.88 -> 150.171.27.11:443 : fuid: FWbsVE4la10bZ0rtc8 — 1 events [easy_123-01#2]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Command-and-Control and Network Activity",
+    "line": "- file transfers > transfer details: 10.2.28.88 -> 150.171.27.11:443 : fuid: Fjw2NV3ZLuYwZhmo2l — 1 events [easy_123-01#2]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Command-and-Control and Network Activity",
+    "line": "- download sources: 10.2.28.88 — 1539 events [easy_123-01#2]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: ctldl.windowsupdate.com — 9 events [easy_123-01#6]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: ocsp.digicert.com — 2 events [easy_123-01#6]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: acroipm2.adobe.com — 1 events [easy_123-01#6]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: edge.microsoft.com — 1 events [easy_123-01#6]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- source clients: 10.2.28.88 — 1539 events; external destinations=95; top destinations: 45.131.214.85 (1061), 150.171.28.11 (38), 150.171.27.11 (15), 23.218.232.148 (14), 23.192.223.17 (13); 398 further events in other values [easy_123-02#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: www.msftconnecttest.com — 1 events [easy_123-01#7]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file types: other — 1539 events [easy_123-01#7]",
+    "section": "Corrective and Preventive Actions"
+   }
+  ]
+ },
+ "removed_unverified_lines": 0,
+ "run_log": [
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "easy_123-08#0",
+    "easy_123-03#0",
+    "easy_123-02#0",
+    "easy_123-01#0",
+    "easy_123-04#0",
+    "easy_123-07#1"
+   ],
+   "seconds": 0,
+   "section": "Affected Host and User",
+   "truncated": false
+  },
+  {
+   "extractive": true,
+   "flag_counts": {},
+   "retrieved": [
+    "easy_123-06#2",
+    "easy_123-08#0",
+    "easy_123-06#3"
+   ],
+   "seconds": 0,
+   "section": "Timeline"
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "easy_123-06#0",
+    "easy_123-06#1",
+    "easy_123-06#3",
+    "easy_123-06#2",
+    "easy_123-08#0",
+    "easy_123-01#0"
+   ],
+   "seconds": 0,
+   "section": "Detection: IDS Alerts",
+   "truncated": false
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "easy_123-01#7",
+    "easy_123-01#6",
+    "easy_123-01#5",
+    "easy_123-01#3",
+    "easy_123-01#0",
+    "easy_123-07#1"
+   ],
+   "seconds": 0,
+   "section": "Initial Infection Indicators",
+   "truncated": false
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "easy_123-08#0",
+    "easy_123-02#0",
+    "easy_123-01#0",
+    "easy_123-01#3",
+    "easy_123-01#2",
+    "easy_123-06#1"
+   ],
+   "seconds": 0,
+   "section": "Command-and-Control and Network Activity",
+   "truncated": false
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "easy_123-02#0",
+    "easy_123-01#0",
+    "easy_123-01#1",
+    "easy_123-01#2",
+    "easy_123-01#4"
+   ],
+   "seconds": 0,
+   "section": "Impact Assessment",
+   "truncated": false
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "easy_123-01#0",
+    "easy_123-01#3",
+    "easy_123-01#1",
+    "easy_123-01#4",
+    "easy_123-01#2"
+   ],
+   "seconds": 0,
+   "section": "Root Cause and Evidence Gaps",
+   "truncated": false
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "easy_123-01#0",
+    "easy_123-01#5",
+    "easy_123-01#2",
+    "easy_123-01#6",
+    "easy_123-02#0",
+    "easy_123-01#7"
+   ],
+   "seconds": 0,
+   "section": "Corrective and Preventive Actions",
+   "truncated": false
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "easy_123-09#0",
+    "easy_123-03#0",
+    "easy_123-08#0",
+    "easy_123-02#0",
+    "easy_123-06#3"
+   ],
+   "seconds": 0,
+   "section": "Answers to Investigation Questions",
+   "truncated": false
+  }
+ ],
+ "scenario": "easy_123",
+ "seconds_total": 0,
+ "verification_totals": {}
+}

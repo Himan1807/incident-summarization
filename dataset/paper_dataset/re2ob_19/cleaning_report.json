@@ -1,0 +1,15 @@
+{
+  "scenario": "re2ob_19",
+  "source_case": "RE2-OB/productcatalogservice_cpu/1",
+  "root_cause_service": "productcatalogservice",
+  "fault": "cpu",
+  "inject_time": "2024-01-15 17:42:22 UTC",
+  "artifacts": 7,
+  "facts": 53,
+  "questions": 8,
+  "answers": 8,
+  "atoms": 9,
+  "atoms_in_evidence": 9,
+  "atoms_not_in_evidence": [],
+  "notes": []
+}

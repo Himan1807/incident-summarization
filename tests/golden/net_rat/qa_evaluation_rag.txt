@@ -1,0 +1,97 @@
+====================================================================================================
+INCIDENT : net_rat
+MODEL    : golden
+CONDITION: RAG (advanced pipeline)
+RUN TIME : 0.0 min of LLM generation
+REPORT   : <results>/net_rat/golden/advanced_postmortem.md
+CREATED  : <timestamp>
+====================================================================================================
+
+A. QUESTION-BY-QUESTION EVALUATION
+   Found = reference items present in the report's answer; Prec. = correct entities / entities the answer gave;
+   Wrong items = entities in the answer that are not in the reference answer.
+
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| #   | Question                         | Reference answer           | Answer from the report             | Found | Prec. | Wrong items      | Status    |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 1   | What is the IP address of the    | 10.11.26.183               | No matching results for:           | 0/1   | -     | -                | WRONG     |
+|     | potentially infected internal    |                            | suspicious certificates / self     |       |       |                  |           |
+|     | host in the LAN?                 |                            | signed analysis. (Absence in this  |       |       |                  |           |
+|     |                                  |                            | query is not proof of absence      |       |       |                  |           |
+|     |                                  |                            | elsewhere.)                        |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 2   | What is the hostname of the      | DESKTOP-B8TQK49            | No matching results for:           | 0/1   | -     | -                | WRONG     |
+|     | potentially infected machine in  |                            | suspicious certificates / ip based |       |       |                  |           |
+|     | the LAN?                         |                            | certificates. (Absence in this     |       |       |                  |           |
+|     |                                  |                            | query is not proof of absence      |       |       |                  |           |
+|     |                                  |                            | elsewhere.)                        |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 3   | What is the Windows human user   | oboomwald                  | No matching results for:           | 0/1   | -     | -                | WRONG     |
+|     | account name (not machine        |                            | suspicious certificates / short    |       |       |                  |           |
+|     | accounts ending in $) of the     |                            | validity certs. (Absence in this   |       |       |                  |           |
+|     | potentially infected machine in  |                            | query is not proof of absence      |       |       |                  |           |
+|     | the LAN?                         |                            | elsewhere.)                        |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 4   | What are the likely fake or      | modandcrackedapk.com       | Not established from the available | 0/2   | -     | -                | ABSTAINED |
+|     | suspicious domains / URLs for    | (SmartApeSG/fake browser   | artifacts.                         |       |       |                  |           |
+|     | initial infection?               | update), classicgrand.com  |                                    |       |       |                  |           |
+|     |                                  | (compromised site)         |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 5   | What are the suspicious external | 194.180.191.64             | Derived: internal client           | 1/1   | 1/2   | 10.11.26.183     | PARTIAL   |
+|     | IP addresses contacted, which    |                            | 10.11.26.183 ranks #1 by external  |       |       |                  |           |
+|     | might be involved in command-    |                            | connections (472 events, 55        |       |       |                  |           |
+|     | and-control (C2) communication?  |                            | distinct external destinations).   |       |       |                  |           |
+|     |                                  |                            | Most-contacted external IP:        |       |       |                  |           |
+|     |                                  |                            | 194.180.191.64 (238 connections).  |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 6   | During what hour did the first   | 2024-11-26 04:00 UTC       | Derived: Kerberos identity of      | 0/1   | 0/2   | 10.11.26.183,    | WRONG     |
+|     | signs of infection activity      |                            | 10.11.26.183: hostname(s)          |       |       | DESKTOP-B8TQK49  |           |
+|     | appear? Provide the earliest     |                            | desktop-b8tqk49; human user        |       |       |                  |           |
+|     | date and time in YYYY-MM-DD      |                            | account(s) oboomwald.              |       |       |                  |           |
+|     | HH:MM UTC format.                |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 7   | According to the connection      | 194.180.191.64, C2 server  | Derived: Suricata alerts span      | 0/2   | 0/3   | 2024-11-26,      | WRONG     |
+|     | volume statistics, what single   |                            | 2024-11-26 04:00 UTC to 2024-11-26 |       |       | 2024-11-26       |           |
+|     | external IP address received the |                            | 05:00 UTC; earliest alert hour     |       |       | 04:00,           |           |
+|     | most connections from the        |                            | 2024-11-26 04:00 UTC (31 alerts).  |       |       | 2024-11-26 05:00 |           |
+|     | infected hosts? Is it a C2       |                            |                                    |       |       |                  |           |
+|     | server or a legitimate service?  |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+
+B. METRICS
+
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Metric                                       | Value        | Meaning                                                                |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Answer precision                             | 0.143        | Entities (IPs, domains, hosts, URLs, times) in the report's answers    |
+|                                              |              | that also occur in the reference / all entities it gave                |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Answer recall                                | 0.111        | Reference answer items found in the report's answers / all reference   |
+|                                              |              | items                                                                  |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Answer F1                                    | 0.125        | Harmonic mean of answer precision and recall                           |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Question recall                              | 1.000        | Mean over questions of reference items found anywhere in the report    |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Faithfulness                                 | 1.000        | Claims whose facts are in the evidence AND in the chunks they cite /   |
+|                                              |              | all claims                                                             |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Grounding rate                               | 1.000        | Claims whose entities and numbers all exist in the evidence            |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Hallucination rate                           | 0.000        | Entities in the report that are absent from the evidence / all         |
+|                                              |              | entities (lower is better)                                             |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Unsupported numbers                          | 0            | Numbers in the report that are absent from the evidence (lower is      |
+|                                              |              | better)                                                                |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Placeholders                                 | 0            | '[insert ...]' placeholders left in the report (lower is better)       |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Questions correct / partial / wrong /        | 0 / 1 / 5 /  | Per-question status in the table above                                 |
+| abstained / unanswered                       | 1 / 0        |                                                                        |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Claims                                       | 60           | Claim lines counted by the verifier; hedged assessments are excluded   |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+
+Status: CORRECT = every reference item found and nothing wrong; PARTIAL = some items found or wrong items present;
+        WRONG = answer given but no reference item found; ABSTAINED = the report says 'Not established from the available artifacts';
+        NO ANSWER = the report has no answer for that question.

@@ -1,0 +1,86 @@
+[
+ {
+  "id": "easy_123-01#0",
+  "text": "[easy_123-01 | network_summary/file_downloads] HTTP file downloads and file transfers: download domains/IPs, requests (client -> server:port : URI), file types and download sources.\nfile transfers: 598 matching events\nfile transfers > transfer details: file_transfer — 273 events\nfile transfers > transfer details: 10.2.28.88 -> 13.70.79.200:443 : fuid: F95H6kTOV7Ac6bcve — 1 events\nfile transfers > transfer details: 10.2.28.88 -> 13.89.178.27:443 : fuid: Fjm5jt1kCVqVQ0zXsb — 1 events"
+ },
+ {
+  "id": "easy_123-01#1",
+  "text": "[easy_123-01 | network_summary/file_downloads] HTTP file downloads and file transfers: download domains/IPs, requests (client -> server:port : URI), file types and download sources.\nfile transfers > transfer details: 10.2.28.88 -> 13.89.179.14:443 : fuid: F3leWR1jXmw5eIV2n4 — 1 events\nfile transfers > transfer details: 10.2.28.88 -> 13.89.179.9:443 : fuid: FpfWem1XHYB3V7Z3Kb — 1 events\nfile transfers > transfer details: 10.2.28.88 -> 135.234.160.246:443 : fuid: F06TIy3seFMGIoCz69 — 1 events\nfile transfers > transfer details: 10.2.28.88 -> 150.171.22.17:443 : fuid: FApV0N3DxwzTiwATnl — 1 events"
+ },
+ {
+  "id": "easy_123-01#2",
+  "text": "[easy_123-01 | network_summary/file_downloads] HTTP file downloads and file transfers: download domains/IPs, requests (client -> server:port : URI), file types and download sources.\nfile transfers > transfer details: 10.2.28.88 -> 150.171.27.11:443 : fuid: FPHQiS2gqfclBOrFL9 — 1 events\nfile transfers > transfer details: 10.2.28.88 -> 150.171.27.11:443 : fuid: FWbsVE4la10bZ0rtc8 — 1 events\nfile transfers > transfer details: 10.2.28.88 -> 150.171.27.11:443 : fuid: Fjw2NV3ZLuYwZhmo2l — 1 events\ndownload sources: 10.2.28.88 — 1539 events"
+ },
+ {
+  "id": "easy_123-01#3",
+  "text": "[easy_123-01 | network_summary/file_downloads] HTTP file downloads and file transfers: download domains/IPs, requests (client -> server:port : URI), file types and download sources.\nhttp requests: no_http_uri — 1230 events\nhttp requests: 10.2.28.88 -> 45.131.214.85:443 : http://45.131.214.85/fakeurl.htm — 264 events\nhttp requests: 10.2.28.88 -> 23.218.232.148:80 : /filestreamingservice/files/2132f61f-f790-4ae6-a355-8cf9a1533800?P1=1772824359&P2=404&P3=2&P4=JBAPgdPQ5bbXP3YOD9Ig2AVW51pLa6vxUcHeGTEAadbzNEO5DlV3Wra1C9WqE7WnEd5RG1oYpt8saZgMxML1KA== — 11 events\nhttp requests: 10.2.28.88 -> 23.218.232.166:80 : /filestreamingservice/files/13d0ef9b-70c8-43c9-9a51-13c752dfb777?P1=1772817857&P2=404&P3=2&P4=NxsPWDqY/PRN4X5tyugkA+dfU9EeHebHQ3SqTAWWr5XPVngvgEZDtSFAEYlah9GHFrc+S/ExNx3X0xGxvdOPow== — 7 events"
+ },
+ {
+  "id": "easy_123-01#4",
+  "text": "[easy_123-01 | network_summary/file_downloads] HTTP file downloads and file transfers: download domains/IPs, requests (client -> server:port : URI), file types and download sources.\nhttp requests: 10.2.28.88 -> 23.218.232.183:80 : /filestreamingservice/files/86061e48-63b3-483f-8dac-609df0cbb238?P1=1772824359&P2=404&P3=2&P4=M+r84JmdgFPOKPdw6GuIsCbfL0IaRRxCYqeiJbpH9IpxZr7vLbM4w9K8uMU5Ka6CyN/uMqIEMlyIHqGqCS8/Xg== — 6 events\nhttp requests: 10.2.28.88 -> 23.218.232.142:80 : /filestreamingservice/files/0b18f766-7469-4aa3-88b7-99e69c55d14d?P1=1772628813&P2=404&P3=2&P4=P9O/ZqV3zHEog/8GWjY1LjxEXlCShXCmvVwfgCjP6c7Xjf6q9SdV5Cxrlht3k8c6RsZdgDSm48GRm8J1Kej36Q== — 3 events\nhttp requests: 10.2.28.88 -> 23.218.232.142:80 : /filestreamingservice/files/ddbf4492-d475-4fe4-bcde-6cbac56f6034?P1=1772824359&P2=404&P3=2&P4=TMSkemQv9LZfDxme9Q9GxU0tc2G9uhdO6d7QU9JVJHOk+a0A4pJYzApqbFnNEQ6bt9QSukbCYOxGUmPIOR1Xgw== — 3 events\nhttp requests: 10.2.28.88 -> 23.47.50.182:80 : /connecttest.txt — 2 events"
+ },
+ {
+  "id": "easy_123-01#5",
+  "text": "[easy_123-01 | network_summary/file_downloads] HTTP file downloads and file transfers: download domains/IPs, requests (client -> server:port : URI), file types and download sources.\nhttp requests: 10.2.28.88 -> 150.171.27.11:80 : /browsernetworktime/time/1/current?cup2key=2:cHFgppt5zfs9cbgaKCO2n0tk698hI27wU971tyrEQQg&cup2hreq=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 — 1 events\nhttp requests: 10.2.28.88 -> 199.232.210.172:80 : /msdownload/update/v3/static/trustedr/en/authrootstl.cab?238f51c2ab526be6 — 1 events\ndownload domains: 45.131.214.85 — 264 events\ndownload domains: msedge.b.tlu.dl.delivery.mp.microsoft.com — 30 events"
+ },
+ {
+  "id": "easy_123-01#6",
+  "text": "[easy_123-01 | network_summary/file_downloads] HTTP file downloads and file transfers: download domains/IPs, requests (client -> server:port : URI), file types and download sources.\ndownload domains: ctldl.windowsupdate.com — 9 events\ndownload domains: ocsp.digicert.com — 2 events\ndownload domains: acroipm2.adobe.com — 1 events\ndownload domains: edge.microsoft.com — 1 events"
+ },
+ {
+  "id": "easy_123-01#7",
+  "text": "[easy_123-01 | network_summary/file_downloads] HTTP file downloads and file transfers: download domains/IPs, requests (client -> server:port : URI), file types and download sources.\ndownload domains: www.msftconnecttest.com — 1 events\nfile types: other — 1539 events"
+ },
+ {
+  "id": "easy_123-02#0",
+  "text": "[easy_123-02 | network_summary/high_activity_external_dest] Internal clients ranked by number of connections to external destinations, with each client's most-contacted destinations.\nsource clients: 10.2.28.88 — 1539 events; external destinations=95; top destinations: 45.131.214.85 (1061), 150.171.28.11 (38), 150.171.27.11 (15), 23.218.232.148 (14), 23.192.223.17 (13); 398 further events in other values"
+ },
+ {
+  "id": "easy_123-03#0",
+  "text": "[easy_123-03 | authentication/kerberos_clients] Kerberos client account names (user accounts) and the source IPs they authenticated from.\nclient accounts: brolf — 8 events; source ips: 10.2.28.88 (8)"
+ },
+ {
+  "id": "easy_123-04#0",
+  "text": "[easy_123-04 | authentication/kerberos_full_services] Kerberos services requested (including host and machine account names) per source IP.\nfull services: krb_tcp — 8 events; source ips: 10.2.28.88 (8)\nfull services: krbtgt/EASYAS123.TECH — 2 events; source ips: 10.2.28.88 (2)\nfull services: LDAP/EASYAS123-DC.easyas123.tech/easyas123.tech — 1 events; source ips: 10.2.28.88 (1)\nfull services: cifs/EASYAS123-DC — 1 events; source ips: 10.2.28.88 (1)"
+ },
+ {
+  "id": "easy_123-04#1",
+  "text": "[easy_123-04 | authentication/kerberos_full_services] Kerberos services requested (including host and machine account names) per source IP.\nfull services: cifs/EASYAS123-DC.easyas123.tech — 1 events; source ips: 10.2.28.88 (1)\nfull services: host/desktop-teyq2nr.easyas123.tech — 1 events; source ips: 10.2.28.88 (1)\nfull services: krbtgt/EASYAS123 — 1 events; source ips: 10.2.28.88 (1)\nfull services: ldap/easyas123-dc.easyas123.tech — 1 events; source ips: 10.2.28.88 (1)"
+ },
+ {
+  "id": "easy_123-05#0",
+  "text": "[easy_123-05 | authentication/kerberos_hostnames] Host names seen in Kerberos traffic with their source IPs.\nhostnames: desktop-teyq2nr — 1 events; source ips: 10.2.28.88 (1)"
+ },
+ {
+  "id": "easy_123-06#0",
+  "text": "[easy_123-06 | ids_alerts/suricata_alerts] Suricata IDS alerts: signatures, high-severity alert destinations and sources, and an hourly alert timeline (UTC).\nalert signatures: ET INFO HTTP traffic on port 443 (POST) — 264 events\nalert signatures: ET REMOTE_ACCESS NetSupport Remote Admin Checkin — 264 events\nalert signatures: ET JA3 Hash - Possible SoftEther Windows Client SSTP Traffic — 12 events\nalert signatures: ET REMOTE_ACCESS NetSupport Remote Admin Response — 2 events"
+ },
+ {
+  "id": "easy_123-06#1",
+  "text": "[easy_123-06 | ids_alerts/suricata_alerts] Suricata IDS alerts: signatures, high-severity alert destinations and sources, and an hourly alert timeline (UTC).\nalert signatures: ET INFO Microsoft Connection Test — 1 events\nhigh severity alerts: 264 matching events\nhigh severity alerts > high severity  destinations: 45.131.214.85 — 264 events\nhigh severity alerts > high severity signatures: ET INFO HTTP traffic on port 443 (POST) — 264 events"
+ },
+ {
+  "id": "easy_123-06#2",
+  "text": "[easy_123-06 | ids_alerts/suricata_alerts] Suricata IDS alerts: signatures, high-severity alert destinations and sources, and an hourly alert timeline (UTC).\nhigh severity alerts > high severity sources: 10.2.28.88 — 264 events\nalert timeline: 2026-02-28 19:00 UTC — 28 events\nalert timeline: 2026-02-28 20:00 UTC — 119 events\nalert timeline: 2026-02-28 21:00 UTC — 120 events"
+ },
+ {
+  "id": "easy_123-06#3",
+  "text": "[easy_123-06 | ids_alerts/suricata_alerts] Suricata IDS alerts: signatures, high-severity alert destinations and sources, and an hourly alert timeline (UTC).\nalert timeline: 2026-02-28 22:00 UTC — 120 events\nalert timeline: 2026-02-28 23:00 UTC — 120 events\nalert timeline: 2026-03-01 00:00 UTC — 36 events"
+ },
+ {
+  "id": "easy_123-07#0",
+  "text": "[easy_123-07 | network_summary/suspicious_domains] Unusual domains with their source and destination IPs, and direct-IP HTTP connections.\ndomains: img-s-msn-com.akamaized.net — 4 events; top source ips: 10.2.28.88 (4); top destination ips: 23.55.178.208 (2), 23.55.178.219 (2)\ndomains: assets.adobedtm.com — 2 events; top source ips: 10.2.28.88 (2); top destination ips: 184.29.31.84 (2)\ndomains: deff.nelreports.net — 1 events; top source ips: 10.2.28.88 (1); top destination ips: 23.218.232.156 (1)\ndomains: oneclient.sfx.ms — 1 events; top source ips: 10.2.28.88 (1); top destination ips: 23.218.232.170 (1)"
+ },
+ {
+  "id": "easy_123-07#1",
+  "text": "[easy_123-07 | network_summary/suspicious_domains] Unusual domains with their source and destination IPs, and direct-IP HTTP connections.\ndomains: www.fmcsa.dot.gov — 1 events; top source ips: 10.2.28.88 (1); top destination ips: 23.64.147.24 (1)"
+ },
+ {
+  "id": "easy_123-08#0",
+  "text": "[easy_123-08 | derived_findings/derived_summary] Deterministic summary computed from the query results above (client ranking, IP-to-hostname/account join, alert timeline).\nDerived: internal client 10.2.28.88 ranks #1 by external connections (1539 events, 95 distinct external destinations). Most-contacted external IP: 45.131.214.85 (1061 connections).\nDerived: Kerberos identity of 10.2.28.88: hostname(s) desktop-teyq2nr; human user account(s) brolf.\nDerived: Suricata alerts span 2026-02-28 19:00 UTC to 2026-03-01 00:00 UTC; earliest alert hour 2026-02-28 19:00 UTC (28 alerts).\nDerived: destinations of high-severity alerts: 45.131.214.85 (264)."
+ },
+ {
+  "id": "easy_123-09#0",
+  "text": "[easy_123-09 | query_coverage/evidence_gaps] Queries that returned nothing or failed; use these to state what is NOT established.\nNo matching results for: suspicious certificates / self signed analysis. (Absence in this query is not proof of absence elsewhere.)\nNo matching results for: suspicious certificates / ip based certificates. (Absence in this query is not proof of absence elsewhere.)\nNo matching results for: suspicious certificates / short validity certs. (Absence in this query is not proof of absence elsewhere.)"
+ }
+]

@@ -1,0 +1,899 @@
+{
+ "condition": "rag",
+ "evaluation": {
+  "answer_f1": 0.138,
+  "answer_precision": 0.182,
+  "answer_recall": 0.111,
+  "answerable_entity_recall": 0.778,
+  "assessment_lines": 1,
+  "claims": 66,
+  "faithfulness": 1.0,
+  "grounding_rate": 1.0,
+  "hallucination_rate": 0.0,
+  "overall_entity_recall": 0.778,
+  "per_question": [
+   {
+    "answer_text": "Query 'suspicious certificates' returned no aggregation results (shards failed: 1 of 111). This evidence is UNAVAILABLE; it is not evidence that nothing exists.",
+    "answerable_from_evidence": [
+     "10.0.19.14"
+    ],
+    "atoms": [
+     "10.0.19.14"
+    ],
+    "atoms_found_in_answer": [],
+    "correct_entities": [],
+    "found_in_report": [
+     "10.0.19.14"
+    ],
+    "id": 1,
+    "missing_from_evidence": [],
+    "precision": null,
+    "predicted_entities": [],
+    "question": "What is the IP address of the potentially infected internal host in the LAN?",
+    "recall": 0.0,
+    "reference_answer": "10.0.19.14",
+    "status": "WRONG",
+    "wrong_entities": []
+   },
+   {
+    "answer_text": "Derived: internal client 10.0.19.14 ranks #1 by external connections (683 events, 50 distinct external destinations). Most-contacted external IP: 157.245.142.66 (267 connections).",
+    "answerable_from_evidence": [
+     "DESKTOP-5QS3D5D"
+    ],
+    "atoms": [
+     "DESKTOP-5QS3D5D"
+    ],
+    "atoms_found_in_answer": [],
+    "correct_entities": [],
+    "found_in_report": [
+     "DESKTOP-5QS3D5D"
+    ],
+    "id": 2,
+    "missing_from_evidence": [],
+    "precision": 0.0,
+    "predicted_entities": [
+     "10.0.19.14",
+     "157.245.142.66"
+    ],
+    "question": "What is the hostname of the potentially infected machine in the LAN?",
+    "recall": 0.0,
+    "reference_answer": "DESKTOP-5QS3D5D",
+    "status": "WRONG",
+    "wrong_entities": [
+     "10.0.19.14",
+     "157.245.142.66"
+    ]
+   },
+   {
+    "answer_text": "Derived: Kerberos identity of 10.0.19.14: hostname(s) desktop-5qs3d5d; human user account(s) patrick.zimmerman.",
+    "answerable_from_evidence": [
+     "patrick.zimmerman"
+    ],
+    "atoms": [
+     "patrick.zimmerman"
+    ],
+    "atoms_found_in_answer": [
+     "patrick.zimmerman"
+    ],
+    "correct_entities": [
+     "patrick.zimmerman"
+    ],
+    "found_in_report": [
+     "patrick.zimmerman"
+    ],
+    "id": 3,
+    "missing_from_evidence": [],
+    "precision": 0.333,
+    "predicted_entities": [
+     "10.0.19.14",
+     "DESKTOP-5QS3D5D",
+     "patrick.zimmerman"
+    ],
+    "question": "What is the Windows human user account name (not machine accounts ending in $) of the potentially infected machine in the LAN?",
+    "recall": 1.0,
+    "reference_answer": "patrick.zimmerman",
+    "status": "PARTIAL",
+    "wrong_entities": [
+     "10.0.19.14",
+     "DESKTOP-5QS3D5D"
+    ]
+   },
+   {
+    "answer_text": "Not established from the available artifacts.",
+    "answerable_from_evidence": [
+     "oceriesfornot.top",
+     "antnosience.com",
+     "suncoastpinball.com",
+     "otectagain.top",
+     "seaskysafe.com",
+     "dilimoretast.com",
+     "filebin.net",
+     "situla.bitbit.net"
+    ],
+    "atoms": [
+     "oceriesfornot.top",
+     "antnosience.com",
+     "suncoastpinball.com",
+     "otectagain.top",
+     "seaskysafe.com",
+     "dilimoretast.com",
+     "filebin.net",
+     "situla.bitbit.net"
+    ],
+    "atoms_found_in_answer": [],
+    "correct_entities": [],
+    "found_in_report": [
+     "oceriesfornot.top",
+     "suncoastpinball.com",
+     "filebin.net",
+     "situla.bitbit.net"
+    ],
+    "id": 4,
+    "missing_from_evidence": [],
+    "precision": null,
+    "predicted_entities": [],
+    "question": "What external domains or IP addresses are associated with the initial infection and malware delivery?",
+    "recall": 0.0,
+    "reference_answer": "oceriesfornot.top, antnosience.com, suncoastpinball.com, otectagain.top, seaskysafe.com, dilimoretast.com, filebin.net, situla.bitbit.net",
+    "status": "ABSTAINED",
+    "wrong_entities": []
+   },
+   {
+    "answer_text": "Derived: destinations of high-severity alerts: 10.0.19.9 (22), 188.166.154.118 (4).",
+    "answerable_from_evidence": [
+     "188.166.154.118",
+     "157.245.142.66",
+     "160.153.32.99",
+     "91.193.16.181"
+    ],
+    "atoms": [
+     "188.166.154.118",
+     "157.245.142.66",
+     "160.153.32.99",
+     "91.193.16.181"
+    ],
+    "atoms_found_in_answer": [
+     "188.166.154.118"
+    ],
+    "correct_entities": [
+     "188.166.154.118"
+    ],
+    "found_in_report": [
+     "188.166.154.118",
+     "157.245.142.66",
+     "160.153.32.99",
+     "91.193.16.181"
+    ],
+    "id": 5,
+    "missing_from_evidence": [],
+    "precision": 0.5,
+    "predicted_entities": [
+     "10.0.19.9",
+     "188.166.154.118"
+    ],
+    "question": "What are the suspicious external IP addresses contacted, which might be involved in command-and-control (C2) communication?",
+    "recall": 0.25,
+    "reference_answer": "188.166.154.118, 157.245.142.66, 160.153.32.99, 91.193.16.181",
+    "status": "PARTIAL",
+    "wrong_entities": [
+     "10.0.19.9"
+    ]
+   },
+   {
+    "answer_text": "hostnames: desktop-5qs3d5d — 1 events; source ips: 10.0.19.14 (1)",
+    "answerable_from_evidence": [
+     "2022-03-21 20:00 UTC"
+    ],
+    "atoms": [
+     "2022-03-21 20:00 UTC"
+    ],
+    "atoms_found_in_answer": [],
+    "correct_entities": [],
+    "found_in_report": [
+     "2022-03-21 20:00 UTC"
+    ],
+    "id": 6,
+    "missing_from_evidence": [],
+    "precision": 0.0,
+    "predicted_entities": [
+     "10.0.19.14",
+     "DESKTOP-5QS3D5D"
+    ],
+    "question": "During what hour did the first signs of infection activity appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "recall": 0.0,
+    "reference_answer": "2022-03-21 20:00 UTC",
+    "status": "WRONG",
+    "wrong_entities": [
+     "10.0.19.14",
+     "DESKTOP-5QS3D5D"
+    ]
+   },
+   {
+    "answer_text": "client accounts: patrick.zimmerman — 12 events; source ips: 10.0.19.14 (12)",
+    "answerable_from_evidence": [
+     "157.245.142.66",
+     "C2 server"
+    ],
+    "atoms": [
+     "157.245.142.66",
+     "C2 server"
+    ],
+    "atoms_found_in_answer": [],
+    "correct_entities": [],
+    "found_in_report": [
+     "157.245.142.66",
+     "C2 server"
+    ],
+    "id": 7,
+    "missing_from_evidence": [],
+    "precision": 0.0,
+    "predicted_entities": [
+     "10.0.19.14",
+     "patrick.zimmerman"
+    ],
+    "question": "According to the connection volume statistics, what single external IP address received the most connections from the infected hosts? Is it a C2 server or a legitimate service?",
+    "recall": 0.0,
+    "reference_answer": "157.245.142.66, C2 server",
+    "status": "WRONG",
+    "wrong_entities": [
+     "10.0.19.14",
+     "patrick.zimmerman"
+    ]
+   }
+  ],
+  "placeholder_count": 0,
+  "question_recall": 0.929,
+  "questions_correct": "7/7",
+  "unsupported_entities": [],
+  "unsupported_number_count": 0,
+  "unsupported_numbers": []
+ },
+ "flagged": [],
+ "mode": "drop",
+ "model": "golden",
+ "postprocessing": {
+  "auto_attributed_lines": 0,
+  "duplicate_lines_removed": 96,
+  "enabled": true,
+  "invalid_citations_removed": 0,
+  "partial_lines_dropped": 0,
+  "removed": [
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: ET MALWARE Win32/IcedID Requesting Encoded Binary M4 — 1 events [burnincandle-06#2]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Timeline",
+    "line": "- alert timeline: 2022-03-21 20:00 UTC — 10 events [burnincandle-06#4]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Timeline",
+    "line": "- alert timeline: 2022-03-21 21:00 UTC — 13 events [burnincandle-06#4]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: ET FILE_SHARING Observed DNS Query to Abused File Sharing Domain in DNS Lookup (filebin .net)  — 1 events [burnincandle-06#0]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Timeline",
+    "line": "- alert timeline: 2022-03-22 02:00 UTC — 60 events [burnincandle-06#6]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Timeline",
+    "line": "- alert timeline: 2022-03-22 03:00 UTC — 18 events [burnincandle-06#6]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Timeline",
+    "line": "- alert timeline: 2022-03-21 22:00 UTC — 12 events [burnincandle-06#5]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Timeline",
+    "line": "- alert timeline: 2022-03-21 23:00 UTC — 11 events [burnincandle-06#5]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Timeline",
+    "line": "- alert timeline: 2022-03-22 00:00 UTC — 60 events [burnincandle-06#5]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Timeline",
+    "line": "- alert timeline: 2022-03-22 01:00 UTC — 63 events [burnincandle-06#5]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: ctldl.windowsupdate.com — 12 events [burnincandle-01#0]",
+    "section": "Initial Infection Indicators"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: x1.c.lencr.org — 4 events [burnincandle-01#0]",
+    "section": "Initial Infection Indicators"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: oceriesfornot.top — 1 events [burnincandle-01#0]",
+    "section": "Initial Infection Indicators"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: r3.i.lencr.org — 1 events [burnincandle-01#0]",
+    "section": "Initial Infection Indicators"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.0.19.14 -> 209.197.3.8:80 : /msdownload/update/v3/static/trustedr/en/pinrulesstl.cab?fcfd7669d19bb421 — 1 events [burnincandle-01#2]",
+    "section": "Initial Infection Indicators"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: 10.0.19.14 -> 157.245.142.66:443 : fuid: F4Lt2H2UpM7eZidEG — 1 events [burnincandle-01#5]",
+    "section": "Initial Infection Indicators"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: internal client 10.0.19.14 ranks #1 by external connections (683 events, 50 distinct external destinations). Most-contacted external IP: 157.245.142.66 (267 connections). [burnincandle-08#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: Kerberos identity of 10.0.19.14: hostname(s) desktop-5qs3d5d; human user account(s) patrick.zimmerman. [burnincandle-08#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: Suricata alerts span 2022-03-21 20:00 UTC to 2022-03-22 03:00 UTC; earliest alert hour 2022-03-21 20:00 UTC (10 alerts). [burnincandle-08#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: destinations of high-severity alerts: 10.0.19.9 (22), 188.166.154.118 (4). [burnincandle-08#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- source clients: 10.0.19.14 — 683 events; external destinations=50; top destinations: 157.245.142.66 (267), 91.193.16.181 (175), 40.83.240.146 (20), 52.183.220.149 (20), 52.185.211.133 (20); 181 further events in other values [burnincandle-02#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: ctldl.windowsupdate.com — 12 events [burnincandle-01#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: x1.c.lencr.org — 4 events [burnincandle-01#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: oceriesfornot.top — 1 events [burnincandle-01#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: r3.i.lencr.org — 1 events [burnincandle-01#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: no_http_uri — 661 events [burnincandle-01#1]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.0.19.14 -> 104.80.96.219:80 : / — 5 events [burnincandle-01#1]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.0.19.14 -> 188.166.154.118:80 : / — 5 events [burnincandle-01#1]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.0.19.14 -> 209.197.3.8:80 : /msdownload/update/v3/static/trustedr/en/authrootstl.cab?c6c9c220471a286c — 1 events [burnincandle-01#1]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.0.19.14 -> 209.197.3.8:80 : /msdownload/update/v3/static/trustedr/en/pinrulesstl.cab?36a063424dfa7851 — 1 events [burnincandle-01#2]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.0.19.14 -> 209.197.3.8:80 : /msdownload/update/v3/static/trustedr/en/pinrulesstl.cab?fcfd7669d19bb421 — 1 events [burnincandle-01#2]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.0.19.14 -> 23.219.38.10:80 : /msdownload/update/v3/static/trustedr/en/disallowedcertstl.cab?8fd0590036de0ddd — 1 events [burnincandle-01#2]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.0.19.14 -> 68.142.107.129:80 : /msdownload/update/v3/static/trustedr/en/pinrulesstl.cab?d1adc478adff0d72 — 1 events [burnincandle-01#2]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: ctldl.windowsupdate.com — 12 events [burnincandle-01#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: x1.c.lencr.org — 4 events [burnincandle-01#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: oceriesfornot.top — 1 events [burnincandle-01#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: r3.i.lencr.org — 1 events [burnincandle-01#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: no_http_uri — 661 events [burnincandle-01#1]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.0.19.14 -> 104.80.96.219:80 : / — 5 events [burnincandle-01#1]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.0.19.14 -> 188.166.154.118:80 : / — 5 events [burnincandle-01#1]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.0.19.14 -> 209.197.3.8:80 : /msdownload/update/v3/static/trustedr/en/authrootstl.cab?c6c9c220471a286c — 1 events [burnincandle-01#1]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Impact Assessment",
+    "line": "- file transfers > transfer details: 10.0.19.14 -> 13.107.42.16:443 : fuid: FsD3to47YUEBkQOcZ — 1 events [burnincandle-01#4]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.0.19.14 -> 209.197.3.8:80 : /msdownload/update/v3/static/trustedr/en/pinrulesstl.cab?36a063424dfa7851 — 1 events [burnincandle-01#2]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.0.19.14 -> 209.197.3.8:80 : /msdownload/update/v3/static/trustedr/en/pinrulesstl.cab?fcfd7669d19bb421 — 1 events [burnincandle-01#2]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.0.19.14 -> 23.219.38.10:80 : /msdownload/update/v3/static/trustedr/en/disallowedcertstl.cab?8fd0590036de0ddd — 1 events [burnincandle-01#2]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.0.19.14 -> 68.142.107.129:80 : /msdownload/update/v3/static/trustedr/en/pinrulesstl.cab?d1adc478adff0d72 — 1 events [burnincandle-01#2]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: ET INFO OpenSSL Demo CA - Internet Widgits Pty (O) — 216 events [burnincandle-06#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: ET DNS Query to a *.top domain - Likely Hostile — 22 events [burnincandle-06#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: GPL NETBIOS SMB IPC$ unicode share access — 3 events [burnincandle-06#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: ET FILE_SHARING Observed DNS Query to Abused File Sharing Domain in DNS Lookup (filebin .net)  — 1 events [burnincandle-06#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: 10.0.19.14 -> 157.245.142.66:443 : fuid: FE8HqU2VXjUR5N7Hu1 — 1 events [burnincandle-01#6]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file types: other — 683 events [burnincandle-01#6]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download sources: 10.0.19.14 — 683 events [burnincandle-01#6]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: ctldl.windowsupdate.com — 12 events [burnincandle-01#0]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: x1.c.lencr.org — 4 events [burnincandle-01#0]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: oceriesfornot.top — 1 events [burnincandle-01#0]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: r3.i.lencr.org — 1 events [burnincandle-01#0]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: no_http_uri — 661 events [burnincandle-01#1]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.0.19.14 -> 104.80.96.219:80 : / — 5 events [burnincandle-01#1]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.0.19.14 -> 188.166.154.118:80 : / — 5 events [burnincandle-01#1]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.0.19.14 -> 209.197.3.8:80 : /msdownload/update/v3/static/trustedr/en/authrootstl.cab?c6c9c220471a286c — 1 events [burnincandle-01#1]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.0.19.14 -> 68.142.107.1:80 : /msdownload/update/v3/static/trustedr/en/authrootstl.cab?c66ea67221454a2e — 1 events [burnincandle-01#3]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.0.19.14 -> 68.142.107.1:80 : /msdownload/update/v3/static/trustedr/en/pinrulesstl.cab?416ee1a6826abea5 — 1 events [burnincandle-01#3]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers: 55 matching events [burnincandle-01#3]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: file_transfer — 2 events [burnincandle-01#3]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Impact Assessment",
+    "line": "- file transfers > transfer details: 10.0.19.14 -> 104.80.96.219:80 : fuid: FXJkhP2Z2m8vw4ukM6 — 1 events [burnincandle-01#4]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Impact Assessment",
+    "line": "- file transfers > transfer details: 10.0.19.14 -> 13.107.42.16:443 : fuid: FJoV2T1Wg9qRybhxf2 — 1 events [burnincandle-01#4]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Impact Assessment",
+    "line": "- file transfers > transfer details: 10.0.19.14 -> 13.107.42.16:443 : fuid: FsD3to47YUEBkQOcZ — 1 events [burnincandle-01#4]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Impact Assessment",
+    "line": "- file transfers > transfer details: 10.0.19.14 -> 13.69.116.104:443 : fuid: FOGdMEmtC3nLDsbVd — 1 events [burnincandle-01#4]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.0.19.14 -> 209.197.3.8:80 : /msdownload/update/v3/static/trustedr/en/pinrulesstl.cab?36a063424dfa7851 — 1 events [burnincandle-01#2]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.0.19.14 -> 209.197.3.8:80 : /msdownload/update/v3/static/trustedr/en/pinrulesstl.cab?fcfd7669d19bb421 — 1 events [burnincandle-01#2]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.0.19.14 -> 23.219.38.10:80 : /msdownload/update/v3/static/trustedr/en/disallowedcertstl.cab?8fd0590036de0ddd — 1 events [burnincandle-01#2]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.0.19.14 -> 68.142.107.129:80 : /msdownload/update/v3/static/trustedr/en/pinrulesstl.cab?d1adc478adff0d72 — 1 events [burnincandle-01#2]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: 10.0.19.14 -> 157.245.142.66:443 : fuid: FE8HqU2VXjUR5N7Hu1 — 1 events [burnincandle-01#6]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file types: other — 683 events [burnincandle-01#6]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download sources: 10.0.19.14 — 683 events [burnincandle-01#6]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: ET INFO OpenSSL Demo CA - Internet Widgits Pty (O) — 216 events [burnincandle-06#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: ET DNS Query to a *.top domain - Likely Hostile — 22 events [burnincandle-06#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: GPL NETBIOS SMB IPC$ unicode share access — 3 events [burnincandle-06#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: ET FILE_SHARING Observed DNS Query to Abused File Sharing Domain in DNS Lookup (filebin .net)  — 1 events [burnincandle-06#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: ctldl.windowsupdate.com — 12 events [burnincandle-01#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: x1.c.lencr.org — 4 events [burnincandle-01#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: oceriesfornot.top — 1 events [burnincandle-01#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: r3.i.lencr.org — 1 events [burnincandle-01#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: no_http_uri — 661 events [burnincandle-01#1]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.0.19.14 -> 104.80.96.219:80 : / — 5 events [burnincandle-01#1]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.0.19.14 -> 188.166.154.118:80 : / — 5 events [burnincandle-01#1]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.0.19.14 -> 209.197.3.8:80 : /msdownload/update/v3/static/trustedr/en/authrootstl.cab?c6c9c220471a286c — 1 events [burnincandle-01#1]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- source clients: 10.0.19.14 — 683 events; external destinations=50; top destinations: 157.245.142.66 (267), 91.193.16.181 (175), 40.83.240.146 (20), 52.183.220.149 (20), 52.185.211.133 (20); 181 further events in other values [burnincandle-02#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.0.19.14 -> 209.197.3.8:80 : /msdownload/update/v3/static/trustedr/en/pinrulesstl.cab?36a063424dfa7851 — 1 events [burnincandle-01#2]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.0.19.14 -> 209.197.3.8:80 : /msdownload/update/v3/static/trustedr/en/pinrulesstl.cab?fcfd7669d19bb421 — 1 events [burnincandle-01#2]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.0.19.14 -> 23.219.38.10:80 : /msdownload/update/v3/static/trustedr/en/disallowedcertstl.cab?8fd0590036de0ddd — 1 events [burnincandle-01#2]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.0.19.14 -> 68.142.107.129:80 : /msdownload/update/v3/static/trustedr/en/pinrulesstl.cab?d1adc478adff0d72 — 1 events [burnincandle-01#2]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: 10.0.19.14 -> 157.245.142.66:443 : fuid: FE8HqU2VXjUR5N7Hu1 — 1 events [burnincandle-01#6]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file types: other — 683 events [burnincandle-01#6]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download sources: 10.0.19.14 — 683 events [burnincandle-01#6]",
+    "section": "Corrective and Preventive Actions"
+   }
+  ]
+ },
+ "removed_unverified_lines": 0,
+ "run_log": [
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "burnincandle-08#0",
+    "burnincandle-03#0",
+    "burnincandle-04#2",
+    "burnincandle-02#0",
+    "burnincandle-01#0",
+    "burnincandle-04#1"
+   ],
+   "seconds": 0,
+   "section": "Affected Host and User",
+   "truncated": false
+  },
+  {
+   "extractive": true,
+   "flag_counts": {},
+   "retrieved": [
+    "burnincandle-06#4",
+    "burnincandle-08#0",
+    "burnincandle-06#5",
+    "burnincandle-06#6"
+   ],
+   "seconds": 0,
+   "section": "Timeline"
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "burnincandle-06#1",
+    "burnincandle-06#2",
+    "burnincandle-06#4",
+    "burnincandle-06#0",
+    "burnincandle-06#6",
+    "burnincandle-06#5"
+   ],
+   "seconds": 0,
+   "section": "Detection: IDS Alerts",
+   "truncated": false
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "burnincandle-01#0",
+    "burnincandle-01#1",
+    "burnincandle-01#6",
+    "burnincandle-01#3",
+    "burnincandle-01#2",
+    "burnincandle-01#5"
+   ],
+   "seconds": 0,
+   "section": "Initial Infection Indicators",
+   "truncated": false
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "burnincandle-08#0",
+    "burnincandle-02#0",
+    "burnincandle-01#0",
+    "burnincandle-01#1",
+    "burnincandle-01#2",
+    "burnincandle-07#1"
+   ],
+   "seconds": 0,
+   "section": "Command-and-Control and Network Activity",
+   "truncated": false
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "burnincandle-01#0",
+    "burnincandle-01#1",
+    "burnincandle-01#4",
+    "burnincandle-01#2",
+    "burnincandle-06#0",
+    "burnincandle-01#6"
+   ],
+   "seconds": 0,
+   "section": "Impact Assessment",
+   "truncated": false
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "burnincandle-01#0",
+    "burnincandle-01#1",
+    "burnincandle-01#3",
+    "burnincandle-01#4",
+    "burnincandle-01#2",
+    "burnincandle-01#6"
+   ],
+   "seconds": 0,
+   "section": "Root Cause and Evidence Gaps",
+   "truncated": false
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "burnincandle-06#0",
+    "burnincandle-01#0",
+    "burnincandle-01#1",
+    "burnincandle-02#0",
+    "burnincandle-01#2",
+    "burnincandle-01#6"
+   ],
+   "seconds": 0,
+   "section": "Corrective and Preventive Actions",
+   "truncated": false
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "burnincandle-09#0",
+    "burnincandle-08#0",
+    "burnincandle-05#0",
+    "burnincandle-03#0",
+    "burnincandle-02#0",
+    "burnincandle-07#1",
+    "burnincandle-01#0",
+    "burnincandle-06#6"
+   ],
+   "seconds": 0,
+   "section": "Answers to Investigation Questions",
+   "truncated": false
+  }
+ ],
+ "scenario": "burnincandle",
+ "seconds_total": 0,
+ "verification_totals": {}
+}

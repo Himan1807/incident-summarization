@@ -1,0 +1,15 @@
+{
+  "scenario": "re2ob_21",
+  "source_case": "RE2-OB/productcatalogservice_disk/1",
+  "root_cause_service": "productcatalogservice",
+  "fault": "disk",
+  "inject_time": "2024-01-15 23:18:19 UTC",
+  "artifacts": 7,
+  "facts": 54,
+  "questions": 8,
+  "answers": 8,
+  "atoms": 9,
+  "atoms_in_evidence": 9,
+  "atoms_not_in_evidence": [],
+  "notes": []
+}

@@ -1,0 +1,236 @@
+{
+ "retrievals": [
+  {
+   "ids": [
+    "re2ob_15-01#0",
+    "re2ob_15-06#0",
+    "re2ob_15-01#3",
+    "re2ob_15-02#0",
+    "re2ob_15-02#2"
+   ],
+   "queries": [
+    "internal client IP address ranked by external connections",
+    "Kerberos hostname source IP",
+    "Kerberos client account human user source IP",
+    "derived Kerberos identity of internal client"
+   ],
+   "rerank_query": "Which internal host is affected (IP address, hostname and human user account)?"
+  },
+  {
+   "ids": [
+    "re2ob_15-01#0",
+    "re2ob_15-01#1",
+    "re2ob_15-01#2",
+    "re2ob_15-01#3"
+   ],
+   "queries": [
+    "earliest alert hour alert timeline",
+    "alert timeline hourly Suricata alerts UTC",
+    "first seen last seen timestamp UTC",
+    "first contact external IP first queried domain"
+   ],
+   "rerank_query": "Chronological order of key events with UTC timestamps."
+  },
+  {
+   "ids": [
+    "re2ob_15-01#0",
+    "re2ob_15-01#1",
+    "re2ob_15-01#2"
+   ],
+   "queries": [
+    "Suricata alert signatures malware CnC",
+    "high severity alerts destinations sources",
+    "ET MALWARE trojan alert signature",
+    "suspicious POST user agent alert"
+   ],
+   "rerank_query": "Which Suricata alerts indicate malicious activity, and which hosts do they involve?"
+  },
+  {
+   "ids": [
+    "re2ob_15-01#0",
+    "re2ob_15-01#1",
+    "re2ob_15-01#2",
+    "re2ob_15-01#3"
+   ],
+   "queries": [
+    "suspicious domains fake site download",
+    "HTTP file downloads URI file type",
+    "download domains requests client to server",
+    "TLS certificate self-signed IP-based",
+    "direct IP HTTP connections raw IP"
+   ],
+   "rerank_query": "Which domains, URLs or downloads were the likely initial infection vector?"
+  },
+  {
+   "ids": [
+    "re2ob_15-01#0",
+    "re2ob_15-01#1",
+    "re2ob_15-01#3",
+    "re2ob_15-01#2"
+   ],
+   "queries": [
+    "most contacted external IP connections",
+    "high severity alert destination C2 check-in",
+    "external destinations top destinations connections",
+    "direct IP connections POST beaconing"
+   ],
+   "rerank_query": "Which external IP addresses look like command-and-control servers and why?"
+  },
+  {
+   "ids": [
+    "re2ob_15-02#2",
+    "re2ob_15-01#0",
+    "re2ob_15-02#0",
+    "re2ob_15-02#1"
+   ],
+   "queries": [
+    "data theft stealer credential exfiltration alert",
+    "ransomware encryption availability integrity",
+    "volume of connections external destinations",
+    "number of affected hosts"
+   ],
+   "rerank_query": "Which security property (confidentiality, integrity or availability) is targeted, and what is the scale of impact?"
+  },
+  {
+   "ids": [
+    "re2ob_15-01#0",
+    "re2ob_15-01#1",
+    "re2ob_15-01#2",
+    "re2ob_15-01#3",
+    "re2ob_15-03#0"
+   ],
+   "queries": [
+    "no matching results query returned nothing",
+    "evidence unavailable shard failed",
+    "initial infection vector unknown",
+    "no results certificates"
+   ],
+   "rerank_query": "What is the most likely root cause and what cannot be determined from the evidence?"
+  },
+  {
+   "ids": [
+    "re2ob_15-01#0",
+    "re2ob_15-01#1",
+    "re2ob_15-01#2",
+    "re2ob_15-01#3"
+   ],
+   "queries": [
+    "block malicious IP domain",
+    "suspicious external server alert destination",
+    "affected host user account",
+    "malicious download URL"
+   ],
+   "rerank_query": "Which concrete containment and prevention actions follow from the observed indicators?"
+  },
+  {
+   "ids": [
+    "re2ob_15-03#0",
+    "re2ob_15-02#2",
+    "re2ob_15-04#1"
+   ],
+   "queries": [
+    "What is the name of the service where the failure originated (the root-cause service)?"
+   ],
+   "rerank_query": "What is the name of the service where the failure originated (the root-cause service)?"
+  },
+  {
+   "ids": [
+    "re2ob_15-03#0",
+    "re2ob_15-02#2",
+    "re2ob_15-05#0"
+   ],
+   "queries": [
+    "What is the name of the Kubernetes pod of the root-cause service?"
+   ],
+   "rerank_query": "What is the name of the Kubernetes pod of the root-cause service?"
+  },
+  {
+   "ids": [
+    "re2ob_15-05#0",
+    "re2ob_15-05#1",
+    "re2ob_15-05#2"
+   ],
+   "queries": [
+    "On which Kubernetes node did the pod of the root-cause service run?"
+   ],
+   "rerank_query": "On which Kubernetes node did the pod of the root-cause service run?"
+  },
+  {
+   "ids": [
+    "re2ob_15-01#0",
+    "re2ob_15-07#0",
+    "re2ob_15-02#2"
+   ],
+   "queries": [
+    "What type of fault caused the incident: CPU, memory, disk, network delay, packet loss, or socket?"
+   ],
+   "rerank_query": "What type of fault caused the incident: CPU, memory, disk, network delay, packet loss, or socket?"
+  },
+  {
+   "ids": [
+    "re2ob_15-07#0",
+    "re2ob_15-02#2",
+    "re2ob_15-03#0"
+   ],
+   "queries": [
+    "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?"
+   ],
+   "rerank_query": "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?"
+  },
+  {
+   "ids": [
+    "re2ob_15-04#1",
+    "re2ob_15-04#0",
+    "re2ob_15-02#1"
+   ],
+   "queries": [
+    "During what minute did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format."
+   ],
+   "rerank_query": "During what minute did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format."
+  },
+  {
+   "ids": [
+    "re2ob_15-03#0",
+    "re2ob_15-02#2",
+    "re2ob_15-06#0"
+   ],
+   "queries": [
+    "Which metric of the root-cause service best shows the fault? Give it as <service>_<indicator>, for example cartservice_cpu."
+   ],
+   "rerank_query": "Which metric of the root-cause service best shows the fault? Give it as <service>_<indicator>, for example cartservice_cpu."
+  },
+  {
+   "ids": [
+    "re2ob_15-06#0",
+    "re2ob_15-03#0",
+    "re2ob_15-02#2"
+   ],
+   "queries": [
+    "According to the trace latency statistics, which single service operation showed the largest latency increase? Is its service the root cause or a downstream symptom?"
+   ],
+   "rerank_query": "According to the trace latency statistics, which single service operation showed the largest latency increase? Is its service the root cause or a downstream symptom?"
+  }
+ ],
+ "stdout": [
+  "[enrich] added 0 artifact(s) from raw logs",
+  "[index] 7 artifacts -> 16 chunks",
+  "",
+  "=== Affected Host and User -> ['re2ob_15-01#0', 're2ob_15-06#0', 're2ob_15-01#3', 're2ob_15-02#0', 're2ob_15-02#2']",
+  "",
+  "=== Timeline -> ['re2ob_15-01#0', 're2ob_15-01#1', 're2ob_15-01#2', 're2ob_15-01#3']",
+  "",
+  "=== Detection: IDS Alerts -> ['re2ob_15-01#0', 're2ob_15-01#1', 're2ob_15-01#2']",
+  "",
+  "=== Initial Infection Indicators -> ['re2ob_15-01#0', 're2ob_15-01#1', 're2ob_15-01#2', 're2ob_15-01#3']",
+  "",
+  "=== Command-and-Control and Network Activity -> ['re2ob_15-01#0', 're2ob_15-01#1', 're2ob_15-01#3', 're2ob_15-01#2']",
+  "",
+  "=== Impact Assessment -> ['re2ob_15-02#2', 're2ob_15-01#0', 're2ob_15-02#0', 're2ob_15-02#1']",
+  "",
+  "=== Root Cause and Evidence Gaps -> ['re2ob_15-01#0', 're2ob_15-01#1', 're2ob_15-01#2', 're2ob_15-01#3', 're2ob_15-03#0']",
+  "",
+  "=== Corrective and Preventive Actions -> ['re2ob_15-01#0', 're2ob_15-01#1', 're2ob_15-01#2', 're2ob_15-01#3']",
+  "",
+  "=== Answers to Investigation Questions -> ['re2ob_15-03#0', 're2ob_15-02#2', 're2ob_15-04#1', 're2ob_15-05#0', 're2ob_15-05#1', 're2ob_15-05#2', 're2ob_15-01#0', 're2ob_15-07#0', 're2ob_15-04#0', 're2ob_15-02#1', 're2ob_15-06#0']"
+ ]
+}

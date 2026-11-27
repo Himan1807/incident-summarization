@@ -1,0 +1,74 @@
+[
+ {
+  "id": "redline_stlr-01#0",
+  "text": "[redline_stlr-01 | network_summary/file_downloads] HTTP file downloads and file transfers: download domains/IPs, requests (client -> server:port : URI), file types and download sources.\nfile transfers: 10 matching events\nfile transfers > transfer details: file_transfer — 3 events\nfile transfers > transfer details: 10.7.10.47 -> 13.107.21.200:443 : fuid: FRHMTH2cDhvYsVZt86 — 1 events\nfile transfers > transfer details: 10.7.10.47 -> 195.161.114.3:80 : fuid: FHuY9W2Rb2X336jwT5 — 1 events"
+ },
+ {
+  "id": "redline_stlr-01#1",
+  "text": "[redline_stlr-01 | network_summary/file_downloads] HTTP file downloads and file transfers: download domains/IPs, requests (client -> server:port : URI), file types and download sources.\nfile transfers > transfer details: 10.7.10.47 -> 195.161.114.3:80 : fuid: FfaeHV2N39f9ws9Ui — 1 events\nfile transfers > transfer details: 10.7.10.47 -> 20.42.65.88:443 : fuid: Fsp3YN3nMVyuIp9sDk — 1 events\nfile transfers > transfer details: 10.7.10.47 -> 204.79.197.200:443 : fuid: FPRwDt3bWAo6siQc7j — 1 events\nfile transfers > transfer details: 10.7.10.47 -> 204.79.197.203:443 : fuid: FPQK3hfd9HvSkrIl1 — 1 events"
+ },
+ {
+  "id": "redline_stlr-01#2",
+  "text": "[redline_stlr-01 | network_summary/file_downloads] HTTP file downloads and file transfers: download domains/IPs, requests (client -> server:port : URI), file types and download sources.\nfile transfers > transfer details: 10.7.10.47 -> 92.118.151.9:80 : fuid: FaY0uO3uabhmTxqaQc — 1 events\ndownload sources: 10.7.10.47 — 55 events\nhttp requests: no_http_uri — 49 events\nhttp requests: 10.7.10.47 -> 195.161.114.3:80 : /?status=start&av=Windows%20Defender — 3 events"
+ },
+ {
+  "id": "redline_stlr-01#3",
+  "text": "[redline_stlr-01 | network_summary/file_downloads] HTTP file downloads and file transfers: download domains/IPs, requests (client -> server:port : URI), file types and download sources.\nhttp requests: 10.7.10.47 -> 195.161.114.3:80 : /?status=install — 1 events\nhttp requests: 10.7.10.47 -> 195.161.114.3:80 : /?status=start&av=Windows Defender — 1 events\nhttp requests: 10.7.10.47 -> 92.118.151.9:80 : /data/czx.jpg — 1 events\ndownload domains: 623start.site — 2 events"
+ },
+ {
+  "id": "redline_stlr-01#4",
+  "text": "[redline_stlr-01 | network_summary/file_downloads] HTTP file downloads and file transfers: download domains/IPs, requests (client -> server:port : URI), file types and download sources.\ndownload domains: guiatelefonos.com — 1 events\nfile types: other — 55 events"
+ },
+ {
+  "id": "redline_stlr-02#0",
+  "text": "[redline_stlr-02 | network_summary/high_activity_external_dest] Internal clients ranked by number of connections to external destinations, with each client's most-contacted destinations.\nsource clients: 10.7.10.47 — 55 events; external destinations=20; top destinations: 195.161.114.3 (8), 92.118.151.9 (5), 204.79.197.200 (5), 13.107.21.200 (3), 20.42.65.88 (3); 31 further events in other values"
+ },
+ {
+  "id": "redline_stlr-03#0",
+  "text": "[redline_stlr-03 | authentication/kerberos_clients] Kerberos client account names (user accounts) and the source IPs they authenticated from.\nclient accounts: DESKTOP-9PEA63H$ — 12 events; source ips: 10.7.10.47 (12)\nclient accounts: desktop-9pea63h$ — 8 events; source ips: 10.7.10.47 (8)\nclient accounts: rwalters — 6 events; source ips: 10.7.10.47 (6)"
+ },
+ {
+  "id": "redline_stlr-04#0",
+  "text": "[redline_stlr-04 | authentication/kerberos_full_services] Kerberos services requested (including host and machine account names) per source IP.\nfull services: krb_tcp — 26 events; source ips: 10.7.10.47 (26)\nfull services: krbtgt/COOLWEATHERCOAT.COM — 13 events; source ips: 10.7.10.47 (13)\nfull services: LDAP/WIN-S3WT6LGQFVX.coolweathercoat.com/coolweathercoat.com — 2 events; source ips: 10.7.10.47 (2)\nfull services: krbtgt/coolweathercoat.com — 2 events; source ips: 10.7.10.47 (2)"
+ },
+ {
+  "id": "redline_stlr-04#1",
+  "text": "[redline_stlr-04 | authentication/kerberos_full_services] Kerberos services requested (including host and machine account names) per source IP.\nfull services: ldap/win-s3wt6lgqfvx.coolweathercoat.com/coolweathercoat.com — 2 events; source ips: 10.7.10.47 (2)\nfull services: DESKTOP-9PEA63H$ — 1 events; source ips: 10.7.10.47 (1)\nfull services: LDAP/WIN-S3WT6LGQFVX.coolweathercoat.com — 1 events; source ips: 10.7.10.47 (1)\nfull services: cifs/WIN-S3WT6LGQFVX.coolweathercoat.com — 1 events; source ips: 10.7.10.47 (1)"
+ },
+ {
+  "id": "redline_stlr-04#2",
+  "text": "[redline_stlr-04 | authentication/kerberos_full_services] Kerberos services requested (including host and machine account names) per source IP.\nfull services: cifs/WIN-S3WT6LGQFVX.coolweathercoat.com/coolweathercoat.com — 1 events; source ips: 10.7.10.47 (1)\nfull services: desktop-9pea63h$ — 1 events; source ips: 10.7.10.47 (1)\nfull services: host/desktop-9pea63h.coolweathercoat.com — 1 events; source ips: 10.7.10.47 (1)\nfull services: krbtgt/COOLWEATHERCOAT — 1 events; source ips: 10.7.10.47 (1)"
+ },
+ {
+  "id": "redline_stlr-05#0",
+  "text": "[redline_stlr-05 | authentication/kerberos_hostnames] Host names seen in Kerberos traffic with their source IPs.\nhostnames: desktop-9pea63h — 1 events; source ips: 10.7.10.47 (1)"
+ },
+ {
+  "id": "redline_stlr-06#0",
+  "text": "[redline_stlr-06 | ids_alerts/suricata_alerts] Suricata IDS alerts: signatures, high-severity alert destinations and sources, and an hourly alert timeline (UTC).\nalert signatures: ET INFO Windows Powershell User-Agent Usage — 2 events\nalert signatures: ET MALWARE Redline Stealer/MetaStealer Family TCP CnC Activity - MSValue (Outbound) — 2 events\nalert signatures: ET INFO Microsoft net.tcp Connection Initialization Activity — 1 events\nalert signatures: ET MALWARE NUMOZYLOD CnC Checkin M2 — 1 events"
+ },
+ {
+  "id": "redline_stlr-06#1",
+  "text": "[redline_stlr-06 | ids_alerts/suricata_alerts] Suricata IDS alerts: signatures, high-severity alert destinations and sources, and an hourly alert timeline (UTC).\nalert signatures: ET MALWARE [ANY.RUN] RedLine Stealer/MetaStealer Family Related (MC-NMF Authorization) — 1 events\nhigh severity alerts: 5 matching events\nhigh severity alerts > high severity  destinations: 194.26.135.119 — 4 events\nhigh severity alerts > high severity  destinations: 195.161.114.3 — 1 events"
+ },
+ {
+  "id": "redline_stlr-06#2",
+  "text": "[redline_stlr-06 | ids_alerts/suricata_alerts] Suricata IDS alerts: signatures, high-severity alert destinations and sources, and an hourly alert timeline (UTC).\nhigh severity alerts > high severity signatures: ET MALWARE Redline Stealer/MetaStealer Family TCP CnC Activity - MSValue (Outbound) — 2 events\nhigh severity alerts > high severity signatures: ET INFO Microsoft net.tcp Connection Initialization Activity — 1 events\nhigh severity alerts > high severity signatures: ET MALWARE NUMOZYLOD CnC Checkin M2 — 1 events\nhigh severity alerts > high severity signatures: ET MALWARE [ANY.RUN] RedLine Stealer/MetaStealer Family Related (MC-NMF Authorization) — 1 events"
+ },
+ {
+  "id": "redline_stlr-06#3",
+  "text": "[redline_stlr-06 | ids_alerts/suricata_alerts] Suricata IDS alerts: signatures, high-severity alert destinations and sources, and an hourly alert timeline (UTC).\nhigh severity alerts > high severity sources: 10.7.10.47 — 5 events\nalert timeline: 2023-07-10 22:00 UTC — 7 events"
+ },
+ {
+  "id": "redline_stlr-07#0",
+  "text": "[redline_stlr-07 | network_summary/suspicious_domains] Unusual domains with their source and destination IPs, and direct-IP HTTP connections.\ndomains: a6d04e539d712e4ef920661af4825316.clo.footprintdns.com — 1 events; top source ips: 10.7.10.47 (1); top destination ips: 13.107.6.163 (1)\ndomains: guiatelefonos.com — 1 events; top source ips: 10.7.10.47 (1); top destination ips: 92.118.151.9 (1)\ndomains: static-ecst.licdn.com — 1 events; top source ips: 10.7.10.47 (1); top destination ips: 152.199.24.163 (1)"
+ },
+ {
+  "id": "redline_stlr-08#0",
+  "text": "[redline_stlr-08 | derived_findings/derived_summary] Deterministic summary computed from the query results above (client ranking, IP-to-hostname/account join, alert timeline).\nDerived: internal client 10.7.10.47 ranks #1 by external connections (55 events, 20 distinct external destinations). Most-contacted external IP: 195.161.114.3 (8 connections).\nDerived: Kerberos identity of 10.7.10.47: hostname(s) desktop-9pea63h; human user account(s) rwalters.\nDerived: Suricata alerts span 2023-07-10 22:00 UTC to 2023-07-10 22:00 UTC; earliest alert hour 2023-07-10 22:00 UTC (7 alerts).\nDerived: destinations of high-severity alerts: 194.26.135.119 (4), 195.161.114.3 (1)."
+ },
+ {
+  "id": "redline_stlr-09#0",
+  "text": "[redline_stlr-09 | query_coverage/evidence_gaps] Queries that returned nothing or failed; use these to state what is NOT established.\nNo matching results for: suspicious certificates / self signed analysis. (Absence in this query is not proof of absence elsewhere.)\nNo matching results for: suspicious certificates / short validity certs. (Absence in this query is not proof of absence elsewhere.)\nNo matching results for: suspicious certificates / ip based certificates. (Absence in this query is not proof of absence elsewhere.)"
+ }
+]

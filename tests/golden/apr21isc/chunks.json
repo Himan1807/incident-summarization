@@ -1,0 +1,78 @@
+[
+ {
+  "id": "apr21isc-01#0",
+  "text": "[apr21isc-01 | network_summary/file_downloads] HTTP file downloads and file transfers: download domains/IPs, requests (client -> server:port : URI), file types and download sources.\ndownload domains: onedrive.live.com — 1071 events\ndownload domains: store-images.s-microsoft.com — 12 events\ndownload domains: checkip.amazonaws.com — 7 events\ndownload domains: ts-ocsp.ws.symantec.com — 3 events"
+ },
+ {
+  "id": "apr21isc-01#1",
+  "text": "[apr21isc-01 | network_summary/file_downloads] HTTP file downloads and file transfers: download domains/IPs, requests (client -> server:port : URI), file types and download sources.\ndownload domains: veso2.xyz — 3 events\ndownload domains: ocsp.verisign.com — 2 events\ndownload domains: 217.12.218.46 — 1 events\ndownload domains: admin.yougleeindia.in — 1 events"
+ },
+ {
+  "id": "apr21isc-01#2",
+  "text": "[apr21isc-01 | network_summary/file_downloads] HTTP file downloads and file transfers: download domains/IPs, requests (client -> server:port : URI), file types and download sources.\ndownload domains: api.ip.sb — 1 events\ndownload domains: ctldl.windowsupdate.com — 1 events\ndownload domains: s.symcd.com — 1 events\ndownload domains: s2.symcb.com — 1 events"
+ },
+ {
+  "id": "apr21isc-01#3",
+  "text": "[apr21isc-01 | network_summary/file_downloads] HTTP file downloads and file transfers: download domains/IPs, requests (client -> server:port : URI), file types and download sources.\ndownload domains: sv.symcd.com — 1 events\nhttp requests: no_http_uri — 2126 events\nhttp requests: 192.168.5.125 -> 217.12.218.46:80 : /preload?manifest=wac — 1856 events\nhttp requests: 192.168.5.125 -> 217.12.218.46:80 : /sa — 143 events"
+ },
+ {
+  "id": "apr21isc-01#4",
+  "text": "[apr21isc-01 | network_summary/file_downloads] HTTP file downloads and file transfers: download domains/IPs, requests (client -> server:port : URI), file types and download sources.\nhttp requests: 192.168.5.125 -> 107.21.162.206:80 : / — 12 events\nhttp requests: 192.168.5.125 -> 34.193.115.2:80 : / — 4 events\nhttp requests: 192.168.5.125 -> 52.204.109.97:80 : / — 4 events\nhttp requests: 192.168.5.125 -> 3.224.94.38:80 : / — 3 events"
+ },
+ {
+  "id": "apr21isc-01#5",
+  "text": "[apr21isc-01 | network_summary/file_downloads] HTTP file downloads and file transfers: download domains/IPs, requests (client -> server:port : URI), file types and download sources.\nhttp requests: 192.168.5.125 -> 52.20.197.7:80 : / — 3 events\nhttp requests: 192.168.5.125 -> 172.67.75.172:80 : /ip — 2 events\nhttp requests: 192.168.5.125 -> 176.111.174.53:80 : /campo/r/r1 — 2 events\nfile transfers: 1944 matching events"
+ },
+ {
+  "id": "apr21isc-01#6",
+  "text": "[apr21isc-01 | network_summary/file_downloads] HTTP file downloads and file transfers: download domains/IPs, requests (client -> server:port : URI), file types and download sources.\nfile transfers > transfer details: file_transfer — 961 events\nfile transfers > transfer details: 192.168.5.125 -> 104.21.74.174:80 : fuid: F9pkCk47eaobtnKKJ — 1 events\nfile transfers > transfer details: 192.168.5.125 -> 104.21.74.174:80 : fuid: Fm7vSh3PCW5dN5oqZb — 1 events\nfile transfers > transfer details: 192.168.5.125 -> 107.21.162.206:80 : fuid: FEp36W2cRZVgCa5hB6 — 1 events"
+ },
+ {
+  "id": "apr21isc-01#7",
+  "text": "[apr21isc-01 | network_summary/file_downloads] HTTP file downloads and file transfers: download domains/IPs, requests (client -> server:port : URI), file types and download sources.\nfile transfers > transfer details: 192.168.5.125 -> 107.21.162.206:80 : fuid: FYscFL3F9zWamVdQkb — 1 events\nfile transfers > transfer details: 192.168.5.125 -> 107.21.162.206:80 : fuid: FoWR1C3JdihoDp4RXf — 1 events\nfile transfers > transfer details: 192.168.5.125 -> 13.107.42.23:443 : fuid: F6ZpeN2J0roTJeKwrf — 1 events\nfile transfers > transfer details: 192.168.5.125 -> 13.107.42.23:443 : fuid: Fd7rhBiagE29O22Ta — 1 events"
+ },
+ {
+  "id": "apr21isc-01#8",
+  "text": "[apr21isc-01 | network_summary/file_downloads] HTTP file downloads and file transfers: download domains/IPs, requests (client -> server:port : URI), file types and download sources.\nfile transfers > transfer details: 192.168.5.125 -> 13.107.42.23:443 : fuid: FeRbvb2Sh63zJEufub — 1 events\nfile transfers > transfer details: 192.168.5.125 -> 168.62.200.169:443 : fuid: FDESeU16jOwEDIKEP3 — 1 events\nfile types: other — 4174 events\nfile types: exe — 5 events"
+ },
+ {
+  "id": "apr21isc-01#9",
+  "text": "[apr21isc-01 | network_summary/file_downloads] HTTP file downloads and file transfers: download domains/IPs, requests (client -> server:port : URI), file types and download sources.\ndownload sources: 192.168.5.125 — 4179 events"
+ },
+ {
+  "id": "apr21isc-02#0",
+  "text": "[apr21isc-02 | authentication/kerberos_clients] Kerberos client account names (user accounts) and the source IPs they authenticated from.\nclient accounts: laptop-x9naq2eu$ — 32 events; source ips: 192.168.5.125 (32)\nclient accounts: wilmer.coughlin — 3 events; source ips: 192.168.5.125 (3)"
+ },
+ {
+  "id": "apr21isc-03#0",
+  "text": "[apr21isc-03 | authentication/kerberos_full_services] Kerberos services requested (including host and machine account names) per source IP.\nfull services: krb_tcp — 35 events; source ips: 192.168.5.125 (35)\nfull services: krbtgt/CLOCKWATER.NET — 24 events; source ips: 192.168.5.125 (24)\nfull services: krbtgt/clockwater.net — 8 events; source ips: 192.168.5.125 (8)\nfull services: HOST/Clockwater-DC.clockwater.net — 1 events; source ips: 192.168.5.125 (1)"
+ },
+ {
+  "id": "apr21isc-03#1",
+  "text": "[apr21isc-03 | authentication/kerberos_full_services] Kerberos services requested (including host and machine account names) per source IP.\nfull services: cifs/Clockwater-DC.clockwater.net — 1 events; source ips: 192.168.5.125 (1)\nfull services: ldap/Clockwater-DC.clockwater.net — 1 events; source ips: 192.168.5.125 (1)"
+ },
+ {
+  "id": "apr21isc-04#0",
+  "text": "[apr21isc-04 | ids_alerts/suricata_alerts] Suricata IDS alerts: signatures, high-severity alert destinations and sources, and an hourly alert timeline (UTC).\nalert signatures: ET MALWARE Observed Malicious SSL Cert (BazaLoader CnC) — 1 events\nalert signatures: ET MALWARE Observed Malicious SSL Cert (Bazar Backdoor) — 1 events\nhigh severity alerts: 2 matching events\nhigh severity alerts > high severity  destinations: 192.168.5.125 — 2 events"
+ },
+ {
+  "id": "apr21isc-04#1",
+  "text": "[apr21isc-04 | ids_alerts/suricata_alerts] Suricata IDS alerts: signatures, high-severity alert destinations and sources, and an hourly alert timeline (UTC).\nhigh severity alerts > high severity signatures: ET MALWARE Observed Malicious SSL Cert (BazaLoader CnC) — 1 events\nhigh severity alerts > high severity signatures: ET MALWARE Observed Malicious SSL Cert (Bazar Backdoor) — 1 events\nhigh severity alerts > high severity sources: 54.184.119.29 — 2 events\nalert timeline: 2021-03-29 22:00 UTC — 2 events"
+ },
+ {
+  "id": "apr21isc-05#0",
+  "text": "[apr21isc-05 | network_summary/suspicious_certificates] TLS certificates that are self-signed, IP-based or short-lived.\nself signed analysis: 2 matching events\nself signed analysis > self signed details: self_signed: CN=forenzik.kz,OU=KZ System,O=NN Fern,L=Astana,ST= — 2 events\nshort validity certs: normal_validity — 2 events"
+ },
+ {
+  "id": "apr21isc-06#0",
+  "text": "[apr21isc-06 | network_summary/suspicious_domains] Unusual domains with their source and destination IPs, and direct-IP HTTP connections.\ndomains: gtmers.xyz — 9 events; top source ips: 192.168.5.125 (9); top destination ips: 8.209.100.246 (9)\ndomains: fonts.gstatic.com — 4 events; top source ips: 192.168.5.125 (4); top destination ips: 142.250.138.94 (4)\ndomains: img-prod-cms-rt-microsoft-com.akamaized.net — 1 events; top source ips: 192.168.5.125 (1); top destination ips: 23.47.52.180 (1)"
+ },
+ {
+  "id": "apr21isc-07#0",
+  "text": "[apr21isc-07 | derived_findings/derived_summary] Deterministic summary computed from the query results above (client ranking, IP-to-hostname/account join, alert timeline).\nDerived: Suricata alerts span 2021-03-29 22:00 UTC to 2021-03-29 22:00 UTC; earliest alert hour 2021-03-29 22:00 UTC (2 alerts).\nDerived: destinations of high-severity alerts: 192.168.5.125 (2)."
+ },
+ {
+  "id": "apr21isc-08#0",
+  "text": "[apr21isc-08 | query_coverage/evidence_gaps] Queries that returned nothing or failed; use these to state what is NOT established.\nNo matching results for: high activity external dest / source clients. (Absence in this query is not proof of absence elsewhere.)\nNo matching results for: kerberos hostnames / hostnames. (Absence in this query is not proof of absence elsewhere.)\nNo matching results for: suspicious certificates / ip based certificates. (Absence in this query is not proof of absence elsewhere.)"
+ }
+]

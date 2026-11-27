@@ -1,0 +1,15 @@
+{
+  "scenario": "re2ob_06",
+  "source_case": "RE2-OB/checkoutservice_socket/1",
+  "root_cause_service": "checkoutservice",
+  "fault": "socket",
+  "inject_time": "2024-01-19 09:25:13 UTC",
+  "artifacts": 7,
+  "facts": 62,
+  "questions": 8,
+  "answers": 8,
+  "atoms": 9,
+  "atoms_in_evidence": 9,
+  "atoms_not_in_evidence": [],
+  "notes": []
+}

@@ -1,0 +1,917 @@
+{
+ "condition": "rag",
+ "evaluation": {
+  "answer_f1": 0.167,
+  "answer_precision": 0.167,
+  "answer_recall": 0.167,
+  "answerable_entity_recall": 0.917,
+  "assessment_lines": 1,
+  "claims": 58,
+  "faithfulness": 1.0,
+  "grounding_rate": 1.0,
+  "hallucination_rate": 0.0,
+  "overall_entity_recall": 0.917,
+  "per_question": [
+   {
+    "answer_text": "Derived: internal client 10.1.17.215 ranks #1 by external connections (1823 events, 119 distinct external destinations). Most-contacted external IP: 5.252.153.241 (1196 connections).",
+    "answerable_from_evidence": [
+     "10.1.17.215"
+    ],
+    "atoms": [
+     "10.1.17.215"
+    ],
+    "atoms_found_in_answer": [
+     "10.1.17.215"
+    ],
+    "correct_entities": [
+     "10.1.17.215"
+    ],
+    "found_in_report": [
+     "10.1.17.215"
+    ],
+    "id": 1,
+    "missing_from_evidence": [],
+    "precision": 0.5,
+    "predicted_entities": [
+     "10.1.17.215",
+     "5.252.153.241"
+    ],
+    "question": "What is the IP address of the potentially infected internal host in the LAN?",
+    "recall": 1.0,
+    "reference_answer": "10.1.17.215",
+    "status": "PARTIAL",
+    "wrong_entities": [
+     "5.252.153.241"
+    ]
+   },
+   {
+    "answer_text": "Derived: Kerberos identity of 10.1.17.215: hostname(s) desktop-l8c5gsj; human user account(s) shutchenson.",
+    "answerable_from_evidence": [
+     "DESKTOP-L8C5GSJ"
+    ],
+    "atoms": [
+     "DESKTOP-L8C5GSJ"
+    ],
+    "atoms_found_in_answer": [
+     "DESKTOP-L8C5GSJ"
+    ],
+    "correct_entities": [
+     "DESKTOP-L8C5GSJ"
+    ],
+    "found_in_report": [
+     "DESKTOP-L8C5GSJ"
+    ],
+    "id": 2,
+    "missing_from_evidence": [],
+    "precision": 0.5,
+    "predicted_entities": [
+     "10.1.17.215",
+     "DESKTOP-L8C5GSJ"
+    ],
+    "question": "What is the hostname of the potentially infected machine in the LAN?",
+    "recall": 1.0,
+    "reference_answer": "DESKTOP-L8C5GSJ",
+    "status": "PARTIAL",
+    "wrong_entities": [
+     "10.1.17.215"
+    ]
+   },
+   {
+    "answer_text": "Derived: Suricata alerts span 2025-01-22 19:00 UTC to 2025-01-22 20:00 UTC; earliest alert hour 2025-01-22 19:00 UTC (10 alerts).",
+    "answerable_from_evidence": [
+     "shutchenson"
+    ],
+    "atoms": [
+     "shutchenson"
+    ],
+    "atoms_found_in_answer": [],
+    "correct_entities": [],
+    "found_in_report": [
+     "shutchenson"
+    ],
+    "id": 3,
+    "missing_from_evidence": [],
+    "precision": 0.0,
+    "predicted_entities": [
+     "2025-01-22",
+     "2025-01-22 19:00",
+     "2025-01-22 20:00"
+    ],
+    "question": "What is the Windows human user account name (not machine accounts ending in $) of the potentially infected machine in the LAN?",
+    "recall": 0.0,
+    "reference_answer": "shutchenson",
+    "status": "WRONG",
+    "wrong_entities": [
+     "2025-01-22",
+     "2025-01-22 19:00",
+     "2025-01-22 20:00"
+    ]
+   },
+   {
+    "answer_text": "Not established from the available artifacts.",
+    "answerable_from_evidence": [
+     "authenticatoor.org"
+    ],
+    "atoms": [
+     "authenticatoor.org"
+    ],
+    "atoms_found_in_answer": [],
+    "correct_entities": [],
+    "found_in_report": [],
+    "id": 4,
+    "missing_from_evidence": [],
+    "precision": null,
+    "predicted_entities": [],
+    "question": "What are the likely fake or suspicious domains / URLs for initial infection?",
+    "recall": 0.0,
+    "reference_answer": "authenticatoor.org",
+    "status": "ABSTAINED",
+    "wrong_entities": []
+   },
+   {
+    "answer_text": "hostnames: desktop-l8c5gsj — 1 events; source ips: 10.1.17.215 (1)",
+    "answerable_from_evidence": [
+     "5.252.153.241",
+     "45.125.66.32",
+     "45.125.66.252"
+    ],
+    "atoms": [
+     "5.252.153.241",
+     "45.125.66.32",
+     "45.125.66.252"
+    ],
+    "atoms_found_in_answer": [],
+    "correct_entities": [],
+    "found_in_report": [
+     "5.252.153.241",
+     "45.125.66.32",
+     "45.125.66.252"
+    ],
+    "id": 5,
+    "missing_from_evidence": [],
+    "precision": 0.0,
+    "predicted_entities": [
+     "10.1.17.215",
+     "DESKTOP-L8C5GSJ"
+    ],
+    "question": "What are the suspicious external IP addresses contacted, which might be involved in command-and-control (C2) communication?",
+    "recall": 0.0,
+    "reference_answer": "5.252.153.241, 45.125.66.32, 45.125.66.252",
+    "status": "WRONG",
+    "wrong_entities": [
+     "10.1.17.215",
+     "DESKTOP-L8C5GSJ"
+    ]
+   },
+   {
+    "answer_text": "client accounts: shutchenson — 11 events; source ips: 10.1.17.215 (11)",
+    "answerable_from_evidence": [
+     "2025-01-22 19:00 UTC"
+    ],
+    "atoms": [
+     "2025-01-22 19:00 UTC"
+    ],
+    "atoms_found_in_answer": [],
+    "correct_entities": [],
+    "found_in_report": [
+     "2025-01-22 19:00 UTC"
+    ],
+    "id": 6,
+    "missing_from_evidence": [],
+    "precision": 0.0,
+    "predicted_entities": [
+     "10.1.17.215"
+    ],
+    "question": "During what hour did the first signs of infection activity appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "recall": 0.0,
+    "reference_answer": "2025-01-22 19:00 UTC",
+    "status": "WRONG",
+    "wrong_entities": [
+     "10.1.17.215"
+    ]
+   },
+   {
+    "answer_text": "client accounts: DESKTOP-L8C5GSJ$ — 10 events; source ips: 10.1.17.215 (10)",
+    "answerable_from_evidence": [
+     "45.125.66.252",
+     "45.125.66.32"
+    ],
+    "atoms": [
+     "45.125.66.252",
+     "45.125.66.32"
+    ],
+    "atoms_found_in_answer": [],
+    "correct_entities": [],
+    "found_in_report": [
+     "45.125.66.252",
+     "45.125.66.32"
+    ],
+    "id": 7,
+    "missing_from_evidence": [],
+    "precision": 0.0,
+    "predicted_entities": [
+     "10.1.17.215",
+     "DESKTOP-L8C5GSJ"
+    ],
+    "question": "Were any suspicious certificates observed in the encrypted network traffic? If so, identify the domain or IP in the certificate.",
+    "recall": 0.0,
+    "reference_answer": "45.125.66.252, 45.125.66.32",
+    "status": "WRONG",
+    "wrong_entities": [
+     "10.1.17.215",
+     "DESKTOP-L8C5GSJ"
+    ]
+   },
+   {
+    "answer_text": "Not established from the available artifacts.",
+    "answerable_from_evidence": [
+     "5.252.153.241",
+     "C2 server"
+    ],
+    "atoms": [
+     "5.252.153.241",
+     "C2 server"
+    ],
+    "atoms_found_in_answer": [],
+    "correct_entities": [],
+    "found_in_report": [
+     "5.252.153.241",
+     "C2 server"
+    ],
+    "id": 8,
+    "missing_from_evidence": [],
+    "precision": null,
+    "predicted_entities": [],
+    "question": "According to the connection volume statistics, what single external IP address received the most connections from the infected hosts? Is it a C2 server or a legitimate service?",
+    "recall": 0.0,
+    "reference_answer": "5.252.153.241, C2 server",
+    "status": "ABSTAINED",
+    "wrong_entities": []
+   }
+  ],
+  "placeholder_count": 0,
+  "question_recall": 0.875,
+  "questions_correct": "7/8",
+  "unsupported_entities": [],
+  "unsupported_number_count": 0,
+  "unsupported_numbers": []
+ },
+ "flagged": [],
+ "mode": "drop",
+ "model": "golden",
+ "postprocessing": {
+  "auto_attributed_lines": 0,
+  "duplicate_lines_removed": 98,
+  "enabled": true,
+  "invalid_citations_removed": 0,
+  "partial_lines_dropped": 0,
+  "removed": [
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- full services: cifs/WIN-GSH54QLW48D.bluemoontuesday.com/bluemoontuesday.com — 1 events; source ips: 10.1.17.215 (1) [fake_auth-04#1]",
+    "section": "Affected Host and User"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- high severity alerts > high severity signatures: ET MALWARE Fake Microsoft Teams CnC Payload Request (GET) — 2 events [fake_auth-06#3]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Timeline",
+    "line": "- alert timeline: 2025-01-22 19:00 UTC — 10 events [fake_auth-06#4]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Timeline",
+    "line": "- alert timeline: 2025-01-22 20:00 UTC — 2 events [fake_auth-06#4]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: ET INFO PS1 Powershell File Request — 2 events [fake_auth-06#0]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: ET INFO TeamViewer Dyngate User-Agent — 2 events [fake_auth-06#0]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- high severity alerts > high severity signatures: ET DROP Spamhaus DROP Listed Traffic Inbound group 5 — 2 events [fake_auth-06#2]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: internal client 10.1.17.215 ranks #1 by external connections (1823 events, 119 distinct external destinations). Most-contacted external IP: 5.252.153.241 (1196 connections). [fake_auth-09#0]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: Kerberos identity of 10.1.17.215: hostname(s) desktop-l8c5gsj; human user account(s) shutchenson. [fake_auth-09#0]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: Suricata alerts span 2025-01-22 19:00 UTC to 2025-01-22 20:00 UTC; earliest alert hour 2025-01-22 19:00 UTC (10 alerts). [fake_auth-09#0]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: destinations of high-severity alerts: 5.252.153.241 (4), 10.1.17.215 (2), 185.188.32.26 (2). [fake_auth-09#0]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file types: powershell — 5 events [fake_auth-01#7]",
+    "section": "Initial Infection Indicators"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: internal client 10.1.17.215 ranks #1 by external connections (1823 events, 119 distinct external destinations). Most-contacted external IP: 5.252.153.241 (1196 connections). [fake_auth-09#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: Kerberos identity of 10.1.17.215: hostname(s) desktop-l8c5gsj; human user account(s) shutchenson. [fake_auth-09#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: Suricata alerts span 2025-01-22 19:00 UTC to 2025-01-22 20:00 UTC; earliest alert hour 2025-01-22 19:00 UTC (10 alerts). [fake_auth-09#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: destinations of high-severity alerts: 5.252.153.241 (4), 10.1.17.215 (2), 185.188.32.26 (2). [fake_auth-09#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- source clients: 10.1.17.215 — 1823 events; external destinations=119; top destinations: 5.252.153.241 (1196), 23.207.166.9 (75), 185.188.32.26 (48), 204.79.197.203 (30), 13.107.246.57 (26); 448 further events in other values [fake_auth-02#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.1.17.215 -> 5.252.153.241:80 : /1517096937 — 584 events [fake_auth-01#2]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.1.17.215 -> 5.252.153.241:80 : /api/file/get-file/29842.ps1 — 4 events [fake_auth-01#2]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.1.17.215 -> 185.188.32.26:80 : /din.aspx?s=00000000&id=0&client=DynGate&rnd=427975263&p=10000001 — 3 events [fake_auth-01#2]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.1.17.215 -> 185.188.32.26:80 : /din.aspx?s=91930119&id=0&client=DynGate&p=10000002 — 3 events [fake_auth-01#2]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- domains: oneclient.sfx.ms — 4 events; top source ips: 10.1.17.215 (4); top destination ips: 23.212.73.35 (2), 23.41.241.15 (1), 23.55.125.39 (1) [fake_auth-08#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- domains: img-s-msn-com.akamaized.net — 2 events; top source ips: 10.1.17.215 (2); top destination ips: 23.205.110.12 (1), 23.205.110.59 (1) [fake_auth-08#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- domains: px.owneriq.net — 2 events; top source ips: 10.1.17.215 (2); top destination ips: 23.199.168.146 (2) [fake_auth-08#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- domains: ag.innovid.com — 1 events; top source ips: 10.1.17.215 (1); top destination ips: 3.82.67.153 (1) [fake_auth-08#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: 5.252.153.241 — 594 events [fake_auth-01#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: master16.teamviewer.com — 21 events [fake_auth-01#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: msedge.b.tlu.dl.delivery.mp.microsoft.com — 4 events [fake_auth-01#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: download.windowsupdate.com — 3 events [fake_auth-01#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: ctldl.windowsupdate.com — 2 events [fake_auth-01#1]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: www.msftconnecttest.com — 2 events [fake_auth-01#1]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: au.download.windowsupdate.com — 1 events [fake_auth-01#1]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: no_http_uri — 1187 events [fake_auth-01#1]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- source clients: 10.1.17.215 — 1823 events; external destinations=119; top destinations: 5.252.153.241 (1196), 23.207.166.9 (75), 185.188.32.26 (48), 204.79.197.203 (30), 13.107.246.57 (26); 448 further events in other values [fake_auth-02#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: 5.252.153.241 — 594 events [fake_auth-01#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: master16.teamviewer.com — 21 events [fake_auth-01#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: msedge.b.tlu.dl.delivery.mp.microsoft.com — 4 events [fake_auth-01#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: download.windowsupdate.com — 3 events [fake_auth-01#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: ctldl.windowsupdate.com — 2 events [fake_auth-01#1]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: www.msftconnecttest.com — 2 events [fake_auth-01#1]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: au.download.windowsupdate.com — 1 events [fake_auth-01#1]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: no_http_uri — 1187 events [fake_auth-01#1]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.1.17.215 -> 5.252.153.241:80 : /1517096937 — 584 events [fake_auth-01#2]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.1.17.215 -> 5.252.153.241:80 : /api/file/get-file/29842.ps1 — 4 events [fake_auth-01#2]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.1.17.215 -> 185.188.32.26:80 : /din.aspx?s=00000000&id=0&client=DynGate&rnd=427975263&p=10000001 — 3 events [fake_auth-01#2]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.1.17.215 -> 185.188.32.26:80 : /din.aspx?s=91930119&id=0&client=DynGate&p=10000002 — 3 events [fake_auth-01#2]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.1.17.215 -> 5.252.153.241:80 : /1517096937?k=script: RunRH, status: OK, message: PS process started — 3 events [fake_auth-01#3]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.1.17.215 -> 5.252.153.241:80 : /api/file/get-file/264872 — 3 events [fake_auth-01#3]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.1.17.215 -> 185.188.32.26:80 : /din.aspx?s=91930135&id=0&client=DynGate&p=10000002 — 2 events [fake_auth-01#3]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.1.17.215 -> 185.188.32.26:80 : /din.aspx?s=91930144&id=0&client=DynGate&p=10000002 — 2 events [fake_auth-01#3]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: internal client 10.1.17.215 ranks #1 by external connections (1823 events, 119 distinct external destinations). Most-contacted external IP: 5.252.153.241 (1196 connections). [fake_auth-09#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: Kerberos identity of 10.1.17.215: hostname(s) desktop-l8c5gsj; human user account(s) shutchenson. [fake_auth-09#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: Suricata alerts span 2025-01-22 19:00 UTC to 2025-01-22 20:00 UTC; earliest alert hour 2025-01-22 19:00 UTC (10 alerts). [fake_auth-09#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: destinations of high-severity alerts: 5.252.153.241 (4), 10.1.17.215 (2), 185.188.32.26 (2). [fake_auth-09#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: 5.252.153.241 — 594 events [fake_auth-01#0]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: master16.teamviewer.com — 21 events [fake_auth-01#0]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: msedge.b.tlu.dl.delivery.mp.microsoft.com — 4 events [fake_auth-01#0]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: download.windowsupdate.com — 3 events [fake_auth-01#0]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: ctldl.windowsupdate.com — 2 events [fake_auth-01#1]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: www.msftconnecttest.com — 2 events [fake_auth-01#1]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: au.download.windowsupdate.com — 1 events [fake_auth-01#1]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: no_http_uri — 1187 events [fake_auth-01#1]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.1.17.215 -> 5.252.153.241:80 : /1517096937 — 584 events [fake_auth-01#2]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.1.17.215 -> 5.252.153.241:80 : /api/file/get-file/29842.ps1 — 4 events [fake_auth-01#2]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.1.17.215 -> 185.188.32.26:80 : /din.aspx?s=00000000&id=0&client=DynGate&rnd=427975263&p=10000001 — 3 events [fake_auth-01#2]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.1.17.215 -> 185.188.32.26:80 : /din.aspx?s=91930119&id=0&client=DynGate&p=10000002 — 3 events [fake_auth-01#2]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.1.17.215 -> 5.252.153.241:80 : /1517096937?k=script: RunRH, status: OK, message: PS process started — 3 events [fake_auth-01#3]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.1.17.215 -> 5.252.153.241:80 : /api/file/get-file/264872 — 3 events [fake_auth-01#3]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.1.17.215 -> 185.188.32.26:80 : /din.aspx?s=91930135&id=0&client=DynGate&p=10000002 — 2 events [fake_auth-01#3]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.1.17.215 -> 185.188.32.26:80 : /din.aspx?s=91930144&id=0&client=DynGate&p=10000002 — 2 events [fake_auth-01#3]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Root Cause and Evidence Gaps",
+    "line": "- file transfers > transfer details: 10.1.17.215 -> 13.107.21.239:443 : fuid: FDPLxym9FkpggOH87 — 1 events [fake_auth-01#5]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Root Cause and Evidence Gaps",
+    "line": "- file transfers > transfer details: 10.1.17.215 -> 13.107.21.239:443 : fuid: FMJk4e3BqbeBK80yi4 — 1 events [fake_auth-01#5]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Root Cause and Evidence Gaps",
+    "line": "- file transfers > transfer details: 10.1.17.215 -> 13.107.21.239:443 : fuid: FOjuHW2lXOjv4zdg82 — 1 events [fake_auth-01#5]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Root Cause and Evidence Gaps",
+    "line": "- file transfers > transfer details: 10.1.17.215 -> 13.107.21.239:443 : fuid: FZWTDm3BMv3YSWGQf5 — 1 events [fake_auth-01#5]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: 5.252.153.241 — 594 events [fake_auth-01#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: master16.teamviewer.com — 21 events [fake_auth-01#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: msedge.b.tlu.dl.delivery.mp.microsoft.com — 4 events [fake_auth-01#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: download.windowsupdate.com — 3 events [fake_auth-01#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: ctldl.windowsupdate.com — 2 events [fake_auth-01#1]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: www.msftconnecttest.com — 2 events [fake_auth-01#1]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: au.download.windowsupdate.com — 1 events [fake_auth-01#1]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: no_http_uri — 1187 events [fake_auth-01#1]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Root Cause and Evidence Gaps",
+    "line": "- http requests: 10.1.17.215 -> 185.188.32.26:80 : /din.aspx?s=91930165&id=0&client=DynGate&p=10000002 — 2 events [fake_auth-01#4]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Root Cause and Evidence Gaps",
+    "line": "- file transfers: 1308 matching events [fake_auth-01#4]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Root Cause and Evidence Gaps",
+    "line": "- file transfers > transfer details: file_transfer — 617 events [fake_auth-01#4]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Root Cause and Evidence Gaps",
+    "line": "- file transfers > transfer details: 10.1.17.215 -> 13.107.21.239:443 : fuid: F1NJjy3oFAIPDAJDF3 — 1 events [fake_auth-01#4]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: internal client 10.1.17.215 ranks #1 by external connections (1823 events, 119 distinct external destinations). Most-contacted external IP: 5.252.153.241 (1196 connections). [fake_auth-09#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: Kerberos identity of 10.1.17.215: hostname(s) desktop-l8c5gsj; human user account(s) shutchenson. [fake_auth-09#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: Suricata alerts span 2025-01-22 19:00 UTC to 2025-01-22 20:00 UTC; earliest alert hour 2025-01-22 19:00 UTC (10 alerts). [fake_auth-09#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: destinations of high-severity alerts: 5.252.153.241 (4), 10.1.17.215 (2), 185.188.32.26 (2). [fake_auth-09#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file types: other — 1813 events [fake_auth-01#7]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file types: exe — 5 events [fake_auth-01#7]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file types: powershell — 5 events [fake_auth-01#7]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download sources: 10.1.17.215 — 1823 events [fake_auth-01#7]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.1.17.215 -> 5.252.153.241:80 : /1517096937 — 584 events [fake_auth-01#2]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.1.17.215 -> 5.252.153.241:80 : /api/file/get-file/29842.ps1 — 4 events [fake_auth-01#2]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.1.17.215 -> 185.188.32.26:80 : /din.aspx?s=00000000&id=0&client=DynGate&rnd=427975263&p=10000001 — 3 events [fake_auth-01#2]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.1.17.215 -> 185.188.32.26:80 : /din.aspx?s=91930119&id=0&client=DynGate&p=10000002 — 3 events [fake_auth-01#2]",
+    "section": "Corrective and Preventive Actions"
+   }
+  ]
+ },
+ "removed_unverified_lines": 0,
+ "run_log": [
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "fake_auth-09#0",
+    "fake_auth-03#0",
+    "fake_auth-04#3",
+    "fake_auth-02#0",
+    "fake_auth-05#0",
+    "fake_auth-04#1"
+   ],
+   "seconds": 0,
+   "section": "Affected Host and User",
+   "truncated": false
+  },
+  {
+   "extractive": true,
+   "flag_counts": {},
+   "retrieved": [
+    "fake_auth-06#4",
+    "fake_auth-09#0"
+   ],
+   "seconds": 0,
+   "section": "Timeline"
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "fake_auth-06#1",
+    "fake_auth-06#3",
+    "fake_auth-06#4",
+    "fake_auth-06#0",
+    "fake_auth-06#2",
+    "fake_auth-09#0"
+   ],
+   "seconds": 0,
+   "section": "Detection: IDS Alerts",
+   "truncated": false
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "fake_auth-01#1",
+    "fake_auth-01#2",
+    "fake_auth-01#3",
+    "fake_auth-08#0",
+    "fake_auth-01#0",
+    "fake_auth-01#7"
+   ],
+   "seconds": 0,
+   "section": "Initial Infection Indicators",
+   "truncated": false
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "fake_auth-09#0",
+    "fake_auth-02#0",
+    "fake_auth-01#2",
+    "fake_auth-08#0",
+    "fake_auth-01#0",
+    "fake_auth-01#1"
+   ],
+   "seconds": 0,
+   "section": "Command-and-Control and Network Activity",
+   "truncated": false
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "fake_auth-02#0",
+    "fake_auth-01#0",
+    "fake_auth-01#1",
+    "fake_auth-01#2",
+    "fake_auth-01#3",
+    "fake_auth-09#0"
+   ],
+   "seconds": 0,
+   "section": "Impact Assessment",
+   "truncated": false
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "fake_auth-01#0",
+    "fake_auth-01#1",
+    "fake_auth-01#4",
+    "fake_auth-01#2",
+    "fake_auth-01#3",
+    "fake_auth-01#5"
+   ],
+   "seconds": 0,
+   "section": "Root Cause and Evidence Gaps",
+   "truncated": false
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "fake_auth-01#0",
+    "fake_auth-01#1",
+    "fake_auth-01#4",
+    "fake_auth-09#0",
+    "fake_auth-01#7",
+    "fake_auth-01#2"
+   ],
+   "seconds": 0,
+   "section": "Corrective and Preventive Actions",
+   "truncated": false
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "fake_auth-09#0",
+    "fake_auth-05#0",
+    "fake_auth-03#0",
+    "fake_auth-04#3",
+    "fake_auth-01#0",
+    "fake_auth-01#1",
+    "fake_auth-07#1",
+    "fake_auth-02#0",
+    "fake_auth-06#4",
+    "fake_auth-06#1"
+   ],
+   "seconds": 0,
+   "section": "Answers to Investigation Questions",
+   "truncated": false
+  }
+ ],
+ "scenario": "fake_auth",
+ "seconds_total": 0,
+ "verification_totals": {}
+}

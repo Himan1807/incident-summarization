@@ -2,14 +2,22 @@
 
 python -m src.pipeline_adv --input dataset/paper_dataset/koi_stealer/rag_input.json
 Options: --dry-run (retrieval only) | --model llama3.2:3b | --sections 1,2 | --no-enrich | --no-postprocess
+         --section-profile auto|security|service_outage (default: the security section plan for every incident)
+         --with-unanswerable (RQ4: also ask the incident's unanswerable_qa.json questions in a separate Q&A call; see below)
          --annotate (keep unverified lines with visible tags instead of removing them) | --strict (also remove uncited lines)
          --llm-timeline (write the Timeline with the LLM instead of extracting it from timestamped evidence)
 
 Flow per scenario: ingest -> chunk -> hybrid retrieval + rerank per section -> LLM section (Timeline: extractive) -> clean ->
 attach citations -> remove duplicates -> verify (unverifiable lines removed, logged) -> summary from verified lines -> evaluate.
+
+--with-unanswerable: the questions in unanswerable_qa.json get their own Q&A call, built exactly like the real one (same task,
+per-question retrieval, context budget and token cap), cleaned, citation-attributed and fact-checked the same way. The answers go to a
+separate section 'Additional Investigation Questions' (numbered U1, U2, ...) appended to the postmortem; they are excluded from
+de-duplication, the summary and the real evaluation, which therefore stay exactly as without the option. Scores: result['unanswerable'].
 """
 import argparse
 import json
+import re
 import time
 from pathlib import Path
 
@@ -18,20 +26,60 @@ from src.adv_ingestion import load_artifacts
 from src.adv_chunking import chunk_artifacts
 from src.enrichment import build_enrichment
 from src.adv_retrieval import AdvancedRetriever
-from src.sections import build_sections
+from src.sections import build_sections, resolve_profile
 from src.adv_generation import section_prompt, summary_prompt, call_ollama
 from src.postprocess import (clean_model_output, attribute_citations, dedupe_sections, drop_partial_tail,
                              drop_orphan_parents)
+from src.evaluate import evaluate_unanswerable, UNANSWERABLE_HEADING
 from src.timeline import build_timeline
-from src.verify import make_evidence, sanitize, analyze_text
+from src.verify import make_evidence, sanitize
 from src.evaluate import evaluate_report
 from src.check_env import preflight
-from src.reporting import model_tag, refresh_reports
+from src.common import incident_header
+from src.reporting import model_tag, refresh_reports, write_unanswerable_eval
 
 
-def _citation_rate(text, ev, ids):
-    rows = [r for r in analyze_text(text, ev, ids) if r["is_claim"]]
-    return (sum(r["cited"] for r in rows), len(rows))
+def _unanswerable_section(args, folder, profile, retriever, S, header, names, gen, post, mode):
+    """RQ4: one extra Q&A call for unanswerable_qa.json, identical in construction to the real Q&A section."""
+    path = folder / "unanswerable_qa.json"
+    if not path.exists():
+        raise SystemExit(f"--with-unanswerable: {path} not found; create it with: python -m src.check_unanswerable --write")
+    doc = json.loads(path.read_text(encoding="utf-8")); uqs = doc["questions"]
+    sec = dict(build_sections([q["question"] for q in uqs], profile)[-1])     # the Q&A section, built for these questions
+    sec["name"] = UNANSWERABLE_HEADING
+    t0 = time.time()
+    seen, hits, used = set(), [], 0                           # same per-question retrieval and budget as the real Q&A section
+    for q in sec["queries"]:
+        for h in retriever.retrieve([q], q, S.bm25_top_k, S.dense_top_k, S.rrf_k, sec["per_query_k"], 10 ** 9):
+            cid = h["chunk"]["id"]
+            if cid not in seen and used + len(h["chunk"]["text"]) <= sec.get("max_chars", S.max_context_chars):
+                seen.add(cid); hits.append(h); used += len(h["chunk"]["text"])
+    ids = [h["chunk"]["id"] for h in hits]
+    entry = {"section": sec["name"], "retrieved": ids}
+    if args.dry_run:
+        print(f"\n=== {sec['name']} -> {ids}")
+        return None
+    evidence = "\n\n".join(f"[{h['chunk']['id']}]\n{h['chunk']['body']}" for h in hits)
+    n_tok = S.num_predict_long if sec.get("long") else S.num_predict
+    raw, truncated = gen(section_prompt(sec, evidence, header, ids, names + [sec["name"]], profile), n_tok)
+    sec_chunks = [h["chunk"] for h in hits]
+    sec_ev = make_evidence("\n".join(c["text"] for c in sec_chunks), header)
+    if truncated:
+        raw, _ = drop_partial_tail(raw)
+    text = clean_model_output(raw, sec["name"]) if post else raw
+    if post:
+        text, _, _ = attribute_citations(text, sec_chunks, set(ids))
+    text = re.sub(r"^(\s{0,3})(\d+)([.)])", r"\1U\2\3", text, flags=re.M)    # U1, U2, ...: never read as a real answer
+    final, flags, _ = sanitize(text, sec_ev, set(ids), mode=mode)
+    if mode == "drop":
+        final = drop_orphan_parents(final)
+    counts = {}
+    for f in flags:
+        for t in f["types"]:
+            counts[t] = counts.get(t, 0) + 1
+    entry.update(seconds=round(time.time() - t0, 1), truncated=truncated, flag_counts=counts)
+    print(f"[gen] {sec['name']} ({entry['seconds']}s, RQ4)")
+    return {"doc": doc, "questions": uqs, "raw": text, "text": final, "flags": flags, "run": entry}
 
 
 def run(args, embedder=None, reranker=None, llm=None):
@@ -56,16 +104,13 @@ def run(args, embedder=None, reranker=None, llm=None):
     chunks = chunk_artifacts(artifacts, S.items_per_chunk)
     valid_ids = {c["id"] for c in chunks}
     chunk_text = {c["id"]: c["text"] for c in chunks}
-    lo = meta.get("capture_start") or meta.get("query_window_start")
-    hi = meta.get("capture_end") or meta.get("query_window_end")
-    label = "Capture window" if meta.get("capture_start") else "Query time window"
-    header = (f"Title: {meta.get('title')}; {label} (UTC): {lo} to {hi}; "
-              f"Scope: {meta.get('artifact_scope_note', '')}\nDescription: {data['description']}")
+    header = incident_header(meta, data["description"])
     global_ev = make_evidence("\n".join(c["text"] for c in chunks), header)   # only used for the final evaluation
     print(f"[index] {len(artifacts)} artifacts -> {len(chunks)} chunks")
 
     retriever = AdvancedRetriever(chunks, S.embedding_model, S.reranker_model, embedder, reranker)
-    sections = build_sections(data.get("questions"))
+    profile = resolve_profile(getattr(args, "section_profile", None), meta)
+    sections = build_sections(data.get("questions"), profile)
     chosen = sections
     if args.sections:
         keep = {int(x) - 1 for x in args.sections.split(",")}
@@ -85,8 +130,7 @@ def run(args, embedder=None, reranker=None, llm=None):
                 tl_chunks = [c for c in chunks if c["id"] in set(tl_ids)]
                 work.append({"sec": sec, "text": tl_text, "ids": set(tl_ids),
                              "ev": make_evidence("\n".join(c["text"] for c in tl_chunks), header), "dropped_tail": None})
-                run_log.append({"section": sec["name"], "retrieved": tl_ids, "extractive": True, "seconds": 0.0,
-                                "claims": tl_text.count("\n") + 1, "model_cited_claims": tl_text.count("\n") + 1})
+                run_log.append({"section": sec["name"], "retrieved": tl_ids, "extractive": True, "seconds": 0.0})
                 print(f"[gen] {sec['name']} (extractive, {len(tl_ids)} chunks, no LLM call)")
                 continue
         if sec.get("per_query_k"):                       # one retrieval + rerank PER question, then merge (no crowding out)
@@ -106,23 +150,26 @@ def run(args, embedder=None, reranker=None, llm=None):
             print(f"\n=== {sec['name']} -> {ids}")
             run_log.append(entry); continue
         n_tok = S.num_predict_long if sec.get("long") else S.num_predict
-        raw, truncated = gen(section_prompt(sec, evidence, header, ids, names), n_tok)
+        raw, truncated = gen(section_prompt(sec, evidence, header, ids, names, profile), n_tok)
         sec_chunks = [h["chunk"] for h in hits]
         sec_ev = make_evidence("\n".join(c["text"] for c in sec_chunks), header)
         dropped = None
         if truncated:                                    # remove the unfinished last line instead of showing a half sentence
             raw, dropped = drop_partial_tail(raw)
         text = clean_model_output(raw, sec["name"]) if post else raw
-        pre_cited, n_claims = _citation_rate(text, sec_ev, set(ids))
         attributed = bad_cites = 0
         if post:
             text, attributed, bad_cites = attribute_citations(text, sec_chunks, set(ids))
         work.append({"sec": sec, "text": text, "ids": set(ids), "ev": sec_ev, "dropped_tail": dropped})
         entry.update(seconds=round(time.time() - t0, 1), truncated=truncated, dropped_partial_line=dropped,
-                     model_cited_claims=pre_cited, claims=n_claims, auto_attributed_lines=attributed,
+                     auto_attributed_lines=attributed,
                      invalid_citations_removed=bad_cites)
         run_log.append(entry)
         print(f"[gen] {sec['name']} ({entry['seconds']}s){' - hit token cap, partial last line dropped' if truncated else ''}")
+
+    extra = None                                         # RQ4: separate Q&A call, only with --with-unanswerable
+    if getattr(args, "with_unanswerable", False):
+        extra = _unanswerable_section(args, folder, profile, retriever, S, header, names, gen, post, mode)
 
     if args.dry_run:
         return None
@@ -152,7 +199,7 @@ def run(args, embedder=None, reranker=None, llm=None):
 
     body = "\n".join(report_parts)
     clean_body = "\n\n".join(clean_parts)
-    summ_raw, summ_trunc = gen(summary_prompt(header, clean_body), S.num_predict)
+    summ_raw, summ_trunc = gen(summary_prompt(header, clean_body, profile), S.num_predict)
     if summ_trunc:
         summ_raw, _ = drop_partial_tail(summ_raw)
     summ_ev = make_evidence(clean_body, header)
@@ -174,38 +221,49 @@ def run(args, embedder=None, reranker=None, llm=None):
     results_dir = getattr(args, "results_dir", "results")
     out_dir = Path(results_dir) / scenario / model_tag(S.ollama_model)      # results/<incident>/<model>/
     out_dir.mkdir(parents=True, exist_ok=True)
-    (out_dir / "advanced_postmortem.md").write_text(report, encoding="utf-8")
+    published = report + (f"## {UNANSWERABLE_HEADING}\n\n{extra['text']}\n" if extra else "")   # no blank line: keeps the last real answer intact
+    (out_dir / "advanced_postmortem.md").write_text(published, encoding="utf-8")
     totals = {}
     for f in all_flags:
         for t in f["types"]:
             totals[t] = totals.get(t, 0) + 1
-    mc = sum(e.get("model_cited_claims", 0) for e in run_log)
-    nc = sum(e.get("claims", 0) for e in run_log)
     result = {"condition": "rag", "model": S.ollama_model, "scenario": scenario,
               "seconds_total": round(sum(e.get("seconds", 0) for e in run_log), 1),
               "verification_totals": totals, "mode": mode, "removed_unverified_lines": n_removed,
-              "postprocessing": {"enabled": post, "model_citation_rate_before_attribution": round(mc / nc, 3) if nc else None,
+              "postprocessing": {"enabled": post,
                                  "auto_attributed_lines": sum(e.get("auto_attributed_lines", 0) for e in run_log),
                                  "invalid_citations_removed": sum(e.get("invalid_citations_removed", 0) for e in run_log),
                                  "partial_lines_dropped": sum(1 for e in run_log if e.get("dropped_partial_line")),
                                  "duplicate_lines_removed": len(removed),
                                  "removed": [{"section": s, "line": l, "duplicate_of": d} for s, l, d in removed]},
               "run_log": run_log, "flagged": all_flags}
+    if getattr(args, "section_profile", None):                 # recorded only when the option is used
+        result["section_profile"] = profile
     qa = folder / "reference_qa.json"
     if qa.exists():                                        # evaluation only, never given to the LLM
         result["evaluation"] = evaluate_report(report, str(qa), global_ev, valid_ids, chunk_text)
+    if extra:                                              # scored separately; the real evaluation above never sees this section
+        result["unanswerable"] = {"domain": extra["doc"].get("section_profile"), "section_profile_used": profile,
+                                  **evaluate_unanswerable(extra["raw"], extra["text"], extra["questions"], result.get("evaluation")),
+                                  "run": extra["run"], "flagged": extra["flags"]}
     (out_dir / "advanced_run_report.json").write_text(json.dumps(result, indent=2), encoding="utf-8")
     written = refresh_reports(scenario, results_dir)         # qa_evaluation_*.txt, rag_vs_no_rag.txt, model_comparison.txt
-    print(report)
+    if extra:
+        w = write_unanswerable_eval(results_dir)
+        written += [w] if w else []
+    print(published)
     if "evaluation" in result:
         ev = result["evaluation"]
         keys = ("answer_precision", "answer_recall", "answer_f1", "question_recall", "faithfulness", "grounding_rate",
                 "hallucination_rate", "unsupported_number_count", "placeholder_count")
         print("\n[eval]", {k: ev[k] for k in keys})
         print("[verify] mode:", mode, "| flagged by type:", totals or "none", "| removed:", n_removed,
-              "| model-cited before attribution:", result["postprocessing"]["model_citation_rate_before_attribution"],
               "| auto-attributed:", result["postprocessing"]["auto_attributed_lines"],
               "| duplicates removed:", len(removed))
+        if extra:
+            u = result["unanswerable"]
+            print("[rq4]", {k: u.get(k) for k in ("correct_abstention_rate", "invention_rate", "invention_rate_after_fact_check",
+                                                  "invented_removed_by_fact_check", "over_abstention_rate")})
         print("[reports]", *written, sep="\n   ")
     return report
 
@@ -221,6 +279,10 @@ def main():
     ap.add_argument("--no-enrich", action="store_true")
     ap.add_argument("--no-postprocess", action="store_true", help="disable cleaning, citation attribution and de-duplication")
     ap.add_argument("--sections", default=None, help="e.g. 2,4 to run a subset")
+    ap.add_argument("--with-unanswerable", action="store_true", dest="with_unanswerable",
+                    help="RQ4: also ask the unanswerable_qa.json questions (separate Q&A call and report section)")
+    ap.add_argument("--section-profile", default=None, choices=["auto", "security", "service_outage"], dest="section_profile",
+                    help="section plan: auto picks service_outage for operational incidents (e.g. RCAEval); default: security for all")
     ap.add_argument("--results-dir", default="results", dest="results_dir", help="output folder (default: results)")
     run(ap.parse_args())
 

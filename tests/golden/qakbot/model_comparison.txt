@@ -1,0 +1,59 @@
+====================================================================================================
+INCIDENT: qakbot   -   comparison of 1 run(s) (models and conditions)
+CREATED : <timestamp>
+====================================================================================================
+
+Runs:  R1 = golden (RAG)
+
+A. METRICS PER RUN (higher is better except Halluc. and BadNum)
+
++------+------------------------------------+----------+----------+----------+----------+----------+----------+----------+----------+--------+
+| Run  | Model / condition                  | Ans-P    | Ans-R    | Ans-F1   | Q-recall | Faithful | Ground.  | Halluc.  | BadNum   | Min    |
++------+------------------------------------+----------+----------+----------+----------+----------+----------+----------+----------+--------+
+| R1   | golden (RAG)                       | 0.154    | 0.077    | 0.103    | 0.825    | 1.000    | 1.000    | 0.000    | 0        | 0.0    |
++------+------------------------------------+----------+----------+----------+----------+----------+----------+----------+----------+--------+
+
+B. ANSWER STATUS PER QUESTION  (OK = correct, PART = partial, WRONG, ABST = 'Not established', NONE = no answer in the report)
+
++-----+------------------------------------------+--------------------------------+--------+
+| #   | Question                                 | Reference answer               | R1     |
++-----+------------------------------------------+--------------------------------+--------+
+| 1   | What is the IP address of the            | 10.0.0.149                     | WRONG  |
+|     | potentially infected internal host in    |                                |        |
+|     | the LAN?                                 |                                |        |
++-----+------------------------------------------+--------------------------------+--------+
+| 2   | What is the hostname of the potentially  | DESKTOP-E7FHJS4                | WRONG  |
+|     | infected machine in the LAN?             |                                |        |
++-----+------------------------------------------+--------------------------------+--------+
+| 3   | What is the Windows human user account   | damon.bauer                    | PART   |
+|     | name (not machine accounts ending in $)  |                                |        |
+|     | of the potentially infected machine in   |                                |        |
+|     | the LAN?                                 |                                |        |
++-----+------------------------------------------+--------------------------------+--------+
+| 4   | During what hour did the first signs of  | 2023-02-03 17:00 UTC           | ABST   |
+|     | infection activity appear? Provide the   |                                |        |
+|     | earliest date and time in YYYY-MM-DD     |                                |        |
+|     | HH:MM UTC format.                        |                                |        |
++-----+------------------------------------------+--------------------------------+--------+
+| 5   | What is the URL used for the initial     | http://128.254.207.55/86607.da | WRONG  |
+|     | malware download?                        | t                              |        |
++-----+------------------------------------------+--------------------------------+--------+
+| 6   | What are the suspicious external IP      | 102.156.32.143,                | WRONG  |
+|     | addresses contacted, which might be      | 208.187.122.74, 5.75.205.43,   |        |
+|     | involved in command-and-control (C2)     | 23.111.114.52, 78.31.67.7      |        |
+|     | communication?                           |                                |        |
++-----+------------------------------------------+--------------------------------+--------+
+| 7   | What specific spoofed domain was used in | vipsauna.com                   | WRONG  |
+|     | a self-signed certificate during this    |                                |        |
+|     | infection?                               |                                |        |
++-----+------------------------------------------+--------------------------------+--------+
+| 8   | According to the connection volume       | 208.187.122.74, C2 server      | ABST   |
+|     | statistics, what single external IP      |                                |        |
+|     | address received the most connections    |                                |        |
+|     | from the infected hosts? Is it a C2      |                                |        |
+|     | server or a legitimate service?          |                                |        |
++-----+------------------------------------------+--------------------------------+--------+
+
+Best answer F1: golden (RAG) (0.103)
+
+Metric definitions: see METRICS.md. 'no RAG' rows have no retrieved evidence, so their faithfulness is 0 or '-'.

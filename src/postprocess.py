@@ -4,8 +4,8 @@
                         removes empty bullets, merges 'N. question? / answer' pairs.
 2. attribute_citations: for claim lines the model left uncited, attaches the retrieved chunk(s) that actually contain the
                         line's entities/numbers (or most of its content words). Pure string matching. Attached citations are
-                        written as [auto: id#n] so they stay visible in the report but are EXCLUDED from citation metrics
-                        (citation rate, citation precision, faithfulness), which count model-written citations only.
+                        written as [auto: id#n] so they stay visible in the report but are EXCLUDED from faithfulness,
+                        which counts model-written citations only.
 3. dedupe_sections    : removes near-duplicate lines inside a section and across sections (earlier occurrence wins).
 """
 import re
@@ -150,7 +150,7 @@ def attribute_citations(text: str, chunks: list[dict], valid_ids: set[str]):
         if r["uncited"]:
             ids = _best_chunks(line, chunks)
             if ids:
-                line = line.rstrip() + " [auto: " + ", ".join(ids) + "]"     # marked: excluded from citation metrics
+                line = line.rstrip() + " [auto: " + ", ".join(ids) + "]"     # marked: excluded from faithfulness
                 n += 1
         out.append(line)
     return "\n".join(out), n, bad

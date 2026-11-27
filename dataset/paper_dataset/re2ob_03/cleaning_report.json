@@ -1,0 +1,15 @@
+{
+  "scenario": "re2ob_03",
+  "source_case": "RE2-OB/checkoutservice_disk/1",
+  "root_cause_service": "checkoutservice",
+  "fault": "disk",
+  "inject_time": "2024-01-16 02:58:30 UTC",
+  "artifacts": 7,
+  "facts": 54,
+  "questions": 8,
+  "answers": 8,
+  "atoms": 9,
+  "atoms_in_evidence": 9,
+  "atoms_not_in_evidence": [],
+  "notes": []
+}

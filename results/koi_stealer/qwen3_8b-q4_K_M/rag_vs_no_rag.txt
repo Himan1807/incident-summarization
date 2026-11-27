@@ -2,7 +2,7 @@
 INCIDENT : koi_stealer
 MODEL    : qwen3:8b-q4_K_M
 CONDITION: No RAG vs RAG (same LLM, same section plan, same questions)
-CREATED  : 2026-11-19T12:58:22
+CREATED  : 2026-11-26T16:41:03
 ====================================================================================================
 
 NO RAG : the LLM receives only the incident context (network description and the questions). It has NO logs, alerts or query results.
@@ -26,10 +26,6 @@ A. METRICS
 | Faithfulness                                         | 0.000          | 0.857          | +0.857         |
 +------------------------------------------------------+----------------+----------------+----------------+
 | Grounding rate                                       | 0.250          | 1.000          | +0.750         |
-+------------------------------------------------------+----------------+----------------+----------------+
-| Citation precision                                   | -              | 0.857          | -              |
-+------------------------------------------------------+----------------+----------------+----------------+
-| Citation rate                                        | 0.000          | 1.000          | +1.000         |
 +------------------------------------------------------+----------------+----------------+----------------+
 | Hallucination rate (lower is better)                 | 0.000          | 0.000          | +0.000         |
 +------------------------------------------------------+----------------+----------------+----------------+
@@ -100,4 +96,4 @@ B. ANSWERS PER QUESTION
 |     | service?                     |                          |                                |                                |           |           |
 +-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
 
-Faithfulness and citation metrics are 0 / '-' for No RAG by construction: without retrieved chunks it cannot cite evidence.
+Faithfulness is 0 / '-' for No RAG by construction: without retrieved chunks it cannot cite evidence.

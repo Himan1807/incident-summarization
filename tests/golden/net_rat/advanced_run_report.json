@@ -1,0 +1,869 @@
+{
+ "condition": "rag",
+ "evaluation": {
+  "answer_f1": 0.125,
+  "answer_precision": 0.143,
+  "answer_recall": 0.111,
+  "answerable_entity_recall": 1.0,
+  "assessment_lines": 1,
+  "claims": 60,
+  "faithfulness": 1.0,
+  "grounding_rate": 1.0,
+  "hallucination_rate": 0.0,
+  "overall_entity_recall": 1.0,
+  "per_question": [
+   {
+    "answer_text": "No matching results for: suspicious certificates / self signed analysis. (Absence in this query is not proof of absence elsewhere.)",
+    "answerable_from_evidence": [
+     "10.11.26.183"
+    ],
+    "atoms": [
+     "10.11.26.183"
+    ],
+    "atoms_found_in_answer": [],
+    "correct_entities": [],
+    "found_in_report": [
+     "10.11.26.183"
+    ],
+    "id": 1,
+    "missing_from_evidence": [],
+    "precision": null,
+    "predicted_entities": [],
+    "question": "What is the IP address of the potentially infected internal host in the LAN?",
+    "recall": 0.0,
+    "reference_answer": "10.11.26.183",
+    "status": "WRONG",
+    "wrong_entities": []
+   },
+   {
+    "answer_text": "No matching results for: suspicious certificates / ip based certificates. (Absence in this query is not proof of absence elsewhere.)",
+    "answerable_from_evidence": [
+     "DESKTOP-B8TQK49"
+    ],
+    "atoms": [
+     "DESKTOP-B8TQK49"
+    ],
+    "atoms_found_in_answer": [],
+    "correct_entities": [],
+    "found_in_report": [
+     "DESKTOP-B8TQK49"
+    ],
+    "id": 2,
+    "missing_from_evidence": [],
+    "precision": null,
+    "predicted_entities": [],
+    "question": "What is the hostname of the potentially infected machine in the LAN?",
+    "recall": 0.0,
+    "reference_answer": "DESKTOP-B8TQK49",
+    "status": "WRONG",
+    "wrong_entities": []
+   },
+   {
+    "answer_text": "No matching results for: suspicious certificates / short validity certs. (Absence in this query is not proof of absence elsewhere.)",
+    "answerable_from_evidence": [
+     "oboomwald"
+    ],
+    "atoms": [
+     "oboomwald"
+    ],
+    "atoms_found_in_answer": [],
+    "correct_entities": [],
+    "found_in_report": [
+     "oboomwald"
+    ],
+    "id": 3,
+    "missing_from_evidence": [],
+    "precision": null,
+    "predicted_entities": [],
+    "question": "What is the Windows human user account name (not machine accounts ending in $) of the potentially infected machine in the LAN?",
+    "recall": 0.0,
+    "reference_answer": "oboomwald",
+    "status": "WRONG",
+    "wrong_entities": []
+   },
+   {
+    "answer_text": "Not established from the available artifacts.",
+    "answerable_from_evidence": [
+     "modandcrackedapk.com",
+     "classicgrand.com"
+    ],
+    "atoms": [
+     "modandcrackedapk.com",
+     "classicgrand.com"
+    ],
+    "atoms_found_in_answer": [],
+    "correct_entities": [],
+    "found_in_report": [
+     "modandcrackedapk.com",
+     "classicgrand.com"
+    ],
+    "id": 4,
+    "missing_from_evidence": [],
+    "precision": null,
+    "predicted_entities": [],
+    "question": "What are the likely fake or suspicious domains / URLs for initial infection?",
+    "recall": 0.0,
+    "reference_answer": "modandcrackedapk.com (SmartApeSG/fake browser update), classicgrand.com (compromised site)",
+    "status": "ABSTAINED",
+    "wrong_entities": []
+   },
+   {
+    "answer_text": "Derived: internal client 10.11.26.183 ranks #1 by external connections (472 events, 55 distinct external destinations). Most-contacted external IP: 194.180.191.64 (238 connections).",
+    "answerable_from_evidence": [
+     "194.180.191.64"
+    ],
+    "atoms": [
+     "194.180.191.64"
+    ],
+    "atoms_found_in_answer": [
+     "194.180.191.64"
+    ],
+    "correct_entities": [
+     "194.180.191.64"
+    ],
+    "found_in_report": [
+     "194.180.191.64"
+    ],
+    "id": 5,
+    "missing_from_evidence": [],
+    "precision": 0.5,
+    "predicted_entities": [
+     "10.11.26.183",
+     "194.180.191.64"
+    ],
+    "question": "What are the suspicious external IP addresses contacted, which might be involved in command-and-control (C2) communication?",
+    "recall": 1.0,
+    "reference_answer": "194.180.191.64",
+    "status": "PARTIAL",
+    "wrong_entities": [
+     "10.11.26.183"
+    ]
+   },
+   {
+    "answer_text": "Derived: Kerberos identity of 10.11.26.183: hostname(s) desktop-b8tqk49; human user account(s) oboomwald.",
+    "answerable_from_evidence": [
+     "2024-11-26 04:00 UTC"
+    ],
+    "atoms": [
+     "2024-11-26 04:00 UTC"
+    ],
+    "atoms_found_in_answer": [],
+    "correct_entities": [],
+    "found_in_report": [
+     "2024-11-26 04:00 UTC"
+    ],
+    "id": 6,
+    "missing_from_evidence": [],
+    "precision": 0.0,
+    "predicted_entities": [
+     "10.11.26.183",
+     "DESKTOP-B8TQK49"
+    ],
+    "question": "During what hour did the first signs of infection activity appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "recall": 0.0,
+    "reference_answer": "2024-11-26 04:00 UTC",
+    "status": "WRONG",
+    "wrong_entities": [
+     "10.11.26.183",
+     "DESKTOP-B8TQK49"
+    ]
+   },
+   {
+    "answer_text": "Derived: Suricata alerts span 2024-11-26 04:00 UTC to 2024-11-26 05:00 UTC; earliest alert hour 2024-11-26 04:00 UTC (31 alerts).",
+    "answerable_from_evidence": [
+     "194.180.191.64",
+     "C2 server"
+    ],
+    "atoms": [
+     "194.180.191.64",
+     "C2 server"
+    ],
+    "atoms_found_in_answer": [],
+    "correct_entities": [],
+    "found_in_report": [
+     "194.180.191.64",
+     "C2 server"
+    ],
+    "id": 7,
+    "missing_from_evidence": [],
+    "precision": 0.0,
+    "predicted_entities": [
+     "2024-11-26",
+     "2024-11-26 04:00",
+     "2024-11-26 05:00"
+    ],
+    "question": "According to the connection volume statistics, what single external IP address received the most connections from the infected hosts? Is it a C2 server or a legitimate service?",
+    "recall": 0.0,
+    "reference_answer": "194.180.191.64, C2 server",
+    "status": "WRONG",
+    "wrong_entities": [
+     "2024-11-26",
+     "2024-11-26 04:00",
+     "2024-11-26 05:00"
+    ]
+   }
+  ],
+  "placeholder_count": 0,
+  "question_recall": 1.0,
+  "questions_correct": "7/7",
+  "unsupported_entities": [],
+  "unsupported_number_count": 0,
+  "unsupported_numbers": []
+ },
+ "flagged": [],
+ "mode": "drop",
+ "model": "golden",
+ "postprocessing": {
+  "auto_attributed_lines": 0,
+  "duplicate_lines_removed": 98,
+  "enabled": true,
+  "invalid_citations_removed": 0,
+  "partial_lines_dropped": 0,
+  "removed": [
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- full services: ldap/nemotodes-dc.nemotodes.health — 1 events; source ips: 10.11.26.183 (1) [net_rat-04#1]",
+    "section": "Affected Host and User"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- high severity alerts > high severity signatures: ET INFO HTTP traffic on port 443 (POST) — 58 events [net_rat-06#2]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Timeline",
+    "line": "- alert timeline: 2024-11-26 04:00 UTC — 31 events [net_rat-06#2]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Timeline",
+    "line": "- alert timeline: 2024-11-26 05:00 UTC — 92 events [net_rat-06#3]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: ET REMOTE_ACCESS NetSupport GeoLocation Lookup Request — 1 events [net_rat-06#1]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: internal client 10.11.26.183 ranks #1 by external connections (472 events, 55 distinct external destinations). Most-contacted external IP: 194.180.191.64 (238 connections). [net_rat-08#0]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: Kerberos identity of 10.11.26.183: hostname(s) desktop-b8tqk49; human user account(s) oboomwald. [net_rat-08#0]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: Suricata alerts span 2024-11-26 04:00 UTC to 2024-11-26 05:00 UTC; earliest alert hour 2024-11-26 04:00 UTC (31 alerts). [net_rat-08#0]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: destinations of high-severity alerts: 194.180.191.64 (58), 104.26.1.231 (1). [net_rat-08#0]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: 194.180.191.64 — 58 events [net_rat-01#0]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: ctldl.windowsupdate.com — 2 events [net_rat-01#0]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: acroipm2.adobe.com — 1 events [net_rat-01#0]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: geo.netsupportsoftware.com — 1 events [net_rat-01#0]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: 194.180.191.64 — 58 events [net_rat-01#0]",
+    "section": "Initial Infection Indicators"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: ctldl.windowsupdate.com — 2 events [net_rat-01#0]",
+    "section": "Initial Infection Indicators"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: acroipm2.adobe.com — 1 events [net_rat-01#0]",
+    "section": "Initial Infection Indicators"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: geo.netsupportsoftware.com — 1 events [net_rat-01#0]",
+    "section": "Initial Infection Indicators"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.11.26.183 -> 104.26.1.231:80 : /location/loca.asp\\\"; — 1 events [net_rat-01#2]",
+    "section": "Initial Infection Indicators"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: 10.11.26.183 -> 173.222.49.101:443 : fuid: FgmqH63niJ7wfAjZh1 — 1 events [net_rat-01#6]",
+    "section": "Initial Infection Indicators"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: internal client 10.11.26.183 ranks #1 by external connections (472 events, 55 distinct external destinations). Most-contacted external IP: 194.180.191.64 (238 connections). [net_rat-08#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: Kerberos identity of 10.11.26.183: hostname(s) desktop-b8tqk49; human user account(s) oboomwald. [net_rat-08#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: Suricata alerts span 2024-11-26 04:00 UTC to 2024-11-26 05:00 UTC; earliest alert hour 2024-11-26 04:00 UTC (31 alerts). [net_rat-08#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: destinations of high-severity alerts: 194.180.191.64 (58), 104.26.1.231 (1). [net_rat-08#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- source clients: 10.11.26.183 — 472 events; external destinations=55; top destinations: 194.180.191.64 (238), 52.113.194.132 (25), 193.42.38.139 (16), 173.222.49.101 (15), 204.79.197.203 (14); 164 further events in other values [net_rat-02#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: 194.180.191.64 — 58 events [net_rat-01#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: ctldl.windowsupdate.com — 2 events [net_rat-01#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: acroipm2.adobe.com — 1 events [net_rat-01#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: geo.netsupportsoftware.com — 1 events [net_rat-01#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: r10.o.lencr.org — 1 events [net_rat-01#1]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: www.msftconnecttest.com — 1 events [net_rat-01#1]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: no_http_uri — 406 events [net_rat-01#1]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.11.26.183 -> 194.180.191.64:443 : http://194.180.191.64/fakeurl.htm — 58 events [net_rat-01#1]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- source clients: 10.11.26.183 — 472 events; external destinations=55; top destinations: 194.180.191.64 (238), 52.113.194.132 (25), 193.42.38.139 (16), 173.222.49.101 (15), 204.79.197.203 (14); 164 further events in other values [net_rat-02#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: ET INFO HTTP traffic on port 443 (POST) — 58 events [net_rat-06#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: ET REMOTE_ACCESS NetSupport Remote Admin Checkin — 58 events [net_rat-06#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: GPL NETBIOS SMB IPC$ unicode share access — 5 events [net_rat-06#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: ET INFO Microsoft Connection Test — 1 events [net_rat-06#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: 194.180.191.64 — 58 events [net_rat-01#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: ctldl.windowsupdate.com — 2 events [net_rat-01#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: acroipm2.adobe.com — 1 events [net_rat-01#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: geo.netsupportsoftware.com — 1 events [net_rat-01#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: r10.o.lencr.org — 1 events [net_rat-01#1]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: www.msftconnecttest.com — 1 events [net_rat-01#1]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: no_http_uri — 406 events [net_rat-01#1]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.11.26.183 -> 194.180.191.64:443 : http://194.180.191.64/fakeurl.htm — 58 events [net_rat-01#1]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.11.26.183 -> 104.117.247.184:80 : /connecttest.txt — 2 events [net_rat-01#2]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.11.26.183 -> 104.117.247.99:80 : /MFMwUTBPME0wSzAJBgUrDgMCGgUABBRpD+QVZ+1vf7U0RGQGBm8JZwdxcgQUdKR2KRcYVIUxN75n5gZYwLzFBXICEgRSsdGCXQJklJZNbHi669GH4A== — 1 events [net_rat-01#2]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.11.26.183 -> 104.26.1.231:80 : /location/loca.asp — 1 events [net_rat-01#2]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.11.26.183 -> 104.26.1.231:80 : /location/loca.asp\\\"; — 1 events [net_rat-01#2]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.11.26.183 -> 23.53.127.105:80 : /assets/Owner/arm/ProcessMAU.txt — 1 events [net_rat-01#3]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.11.26.183 -> 23.53.127.200:80 : /msdownload/update/v3/static/trustedr/en/authrootstl.cab?778a0928305752e9 — 1 events [net_rat-01#3]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.11.26.183 -> 23.53.127.200:80 : /msdownload/update/v3/static/trustedr/en/disallowedcertstl.cab?ce02e9976e1239e1 — 1 events [net_rat-01#3]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers: 157 matching events [net_rat-01#3]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: 194.180.191.64 — 58 events [net_rat-01#0]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: ctldl.windowsupdate.com — 2 events [net_rat-01#0]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: acroipm2.adobe.com — 1 events [net_rat-01#0]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: geo.netsupportsoftware.com — 1 events [net_rat-01#0]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: r10.o.lencr.org — 1 events [net_rat-01#1]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: www.msftconnecttest.com — 1 events [net_rat-01#1]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: no_http_uri — 406 events [net_rat-01#1]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.11.26.183 -> 194.180.191.64:443 : http://194.180.191.64/fakeurl.htm — 58 events [net_rat-01#1]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.11.26.183 -> 23.53.127.105:80 : /assets/Owner/arm/ProcessMAU.txt — 1 events [net_rat-01#3]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.11.26.183 -> 23.53.127.200:80 : /msdownload/update/v3/static/trustedr/en/authrootstl.cab?778a0928305752e9 — 1 events [net_rat-01#3]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.11.26.183 -> 23.53.127.200:80 : /msdownload/update/v3/static/trustedr/en/disallowedcertstl.cab?ce02e9976e1239e1 — 1 events [net_rat-01#3]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers: 157 matching events [net_rat-01#3]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.11.26.183 -> 104.117.247.184:80 : /connecttest.txt — 2 events [net_rat-01#2]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.11.26.183 -> 104.117.247.99:80 : /MFMwUTBPME0wSzAJBgUrDgMCGgUABBRpD+QVZ+1vf7U0RGQGBm8JZwdxcgQUdKR2KRcYVIUxN75n5gZYwLzFBXICEgRSsdGCXQJklJZNbHi669GH4A== — 1 events [net_rat-01#2]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.11.26.183 -> 104.26.1.231:80 : /location/loca.asp — 1 events [net_rat-01#2]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.11.26.183 -> 104.26.1.231:80 : /location/loca.asp\\\"; — 1 events [net_rat-01#2]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: 10.11.26.183 -> 173.222.49.101:443 : fuid: Fcjb5f3T8uL7OfxJE7 — 1 events [net_rat-01#6]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: 10.11.26.183 -> 173.222.49.101:443 : fuid: FgmqH63niJ7wfAjZh1 — 1 events [net_rat-01#6]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file types: other — 472 events [net_rat-01#6]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download sources: 10.11.26.183 — 472 events [net_rat-01#6]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: file_transfer — 62 events [net_rat-01#4]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: 10.11.26.183 -> 104.117.247.184:80 : fuid: FS19Ny2ccXfItSAHY5 — 1 events [net_rat-01#4]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: 10.11.26.183 -> 104.117.247.99:80 : fuid: FY81pL3SoAHblZVNm9 — 1 events [net_rat-01#4]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: 10.11.26.183 -> 104.26.1.231:80 : fuid: FrDUHo17nOjSeXu4Xi — 1 events [net_rat-01#4]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: 194.180.191.64 — 58 events [net_rat-01#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: ctldl.windowsupdate.com — 2 events [net_rat-01#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: acroipm2.adobe.com — 1 events [net_rat-01#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- download domains: geo.netsupportsoftware.com — 1 events [net_rat-01#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: r10.o.lencr.org — 1 events [net_rat-01#1]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: www.msftconnecttest.com — 1 events [net_rat-01#1]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: no_http_uri — 406 events [net_rat-01#1]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.11.26.183 -> 194.180.191.64:443 : http://194.180.191.64/fakeurl.htm — 58 events [net_rat-01#1]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: 10.11.26.183 -> 173.222.49.101:443 : fuid: Fcjb5f3T8uL7OfxJE7 — 1 events [net_rat-01#6]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: 10.11.26.183 -> 173.222.49.101:443 : fuid: FgmqH63niJ7wfAjZh1 — 1 events [net_rat-01#6]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file types: other — 472 events [net_rat-01#6]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download sources: 10.11.26.183 — 472 events [net_rat-01#6]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- source clients: 10.11.26.183 — 472 events; external destinations=55; top destinations: 194.180.191.64 (238), 52.113.194.132 (25), 193.42.38.139 (16), 173.222.49.101 (15), 204.79.197.203 (14); 164 further events in other values [net_rat-02#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.11.26.183 -> 23.53.127.105:80 : /assets/Owner/arm/ProcessMAU.txt — 1 events [net_rat-01#3]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.11.26.183 -> 23.53.127.200:80 : /msdownload/update/v3/static/trustedr/en/authrootstl.cab?778a0928305752e9 — 1 events [net_rat-01#3]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.11.26.183 -> 23.53.127.200:80 : /msdownload/update/v3/static/trustedr/en/disallowedcertstl.cab?ce02e9976e1239e1 — 1 events [net_rat-01#3]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers: 157 matching events [net_rat-01#3]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: file_transfer — 62 events [net_rat-01#4]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: 10.11.26.183 -> 104.117.247.184:80 : fuid: FS19Ny2ccXfItSAHY5 — 1 events [net_rat-01#4]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: 10.11.26.183 -> 104.117.247.99:80 : fuid: FY81pL3SoAHblZVNm9 — 1 events [net_rat-01#4]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: 10.11.26.183 -> 104.26.1.231:80 : fuid: FrDUHo17nOjSeXu4Xi — 1 events [net_rat-01#4]",
+    "section": "Corrective and Preventive Actions"
+   }
+  ]
+ },
+ "removed_unverified_lines": 0,
+ "run_log": [
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "net_rat-08#0",
+    "net_rat-03#0",
+    "net_rat-04#0",
+    "net_rat-02#0",
+    "net_rat-04#1",
+    "net_rat-01#0"
+   ],
+   "seconds": 0,
+   "section": "Affected Host and User",
+   "truncated": false
+  },
+  {
+   "extractive": true,
+   "flag_counts": {},
+   "retrieved": [
+    "net_rat-06#2",
+    "net_rat-08#0",
+    "net_rat-06#3"
+   ],
+   "seconds": 0,
+   "section": "Timeline"
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "net_rat-06#0",
+    "net_rat-06#2",
+    "net_rat-06#3",
+    "net_rat-06#1",
+    "net_rat-08#0",
+    "net_rat-01#0"
+   ],
+   "seconds": 0,
+   "section": "Detection: IDS Alerts",
+   "truncated": false
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "net_rat-01#1",
+    "net_rat-01#0",
+    "net_rat-01#2",
+    "net_rat-01#3",
+    "net_rat-01#6",
+    "net_rat-01#4"
+   ],
+   "seconds": 0,
+   "section": "Initial Infection Indicators",
+   "truncated": false
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "net_rat-08#0",
+    "net_rat-02#0",
+    "net_rat-01#0",
+    "net_rat-01#1",
+    "net_rat-07#0",
+    "net_rat-07#1"
+   ],
+   "seconds": 0,
+   "section": "Command-and-Control and Network Activity",
+   "truncated": false
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "net_rat-02#0",
+    "net_rat-06#0",
+    "net_rat-01#0",
+    "net_rat-01#1",
+    "net_rat-01#2",
+    "net_rat-01#3"
+   ],
+   "seconds": 0,
+   "section": "Impact Assessment",
+   "truncated": false
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "net_rat-01#0",
+    "net_rat-01#1",
+    "net_rat-01#3",
+    "net_rat-01#2",
+    "net_rat-01#6",
+    "net_rat-01#4"
+   ],
+   "seconds": 0,
+   "section": "Root Cause and Evidence Gaps",
+   "truncated": false
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "net_rat-01#0",
+    "net_rat-01#1",
+    "net_rat-01#6",
+    "net_rat-02#0",
+    "net_rat-01#3",
+    "net_rat-01#4"
+   ],
+   "seconds": 0,
+   "section": "Corrective and Preventive Actions",
+   "truncated": false
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "net_rat-09#0",
+    "net_rat-03#0",
+    "net_rat-08#0",
+    "net_rat-01#0",
+    "net_rat-01#1",
+    "net_rat-02#0",
+    "net_rat-06#3"
+   ],
+   "seconds": 0,
+   "section": "Answers to Investigation Questions",
+   "truncated": false
+  }
+ ],
+ "scenario": "net_rat",
+ "seconds_total": 0,
+ "verification_totals": {}
+}

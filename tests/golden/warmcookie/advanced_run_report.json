@@ -1,0 +1,803 @@
+{
+ "condition": "rag",
+ "evaluation": {
+  "answer_f1": 0.267,
+  "answer_precision": 0.5,
+  "answer_recall": 0.182,
+  "answerable_entity_recall": 0.9,
+  "assessment_lines": 1,
+  "claims": 68,
+  "faithfulness": 1.0,
+  "grounding_rate": 1.0,
+  "hallucination_rate": 0.0,
+  "overall_entity_recall": 0.818,
+  "per_question": [
+   {
+    "answer_text": "No matching results for: suspicious certificates / self signed analysis. (Absence in this query is not proof of absence elsewhere.)",
+    "answerable_from_evidence": [
+     "10.8.15.133"
+    ],
+    "atoms": [
+     "10.8.15.133"
+    ],
+    "atoms_found_in_answer": [],
+    "correct_entities": [],
+    "found_in_report": [
+     "10.8.15.133"
+    ],
+    "id": 1,
+    "missing_from_evidence": [],
+    "precision": null,
+    "predicted_entities": [],
+    "question": "What is the IP address of the potentially infected internal host in the LAN?",
+    "recall": 0.0,
+    "reference_answer": "10.8.15.133",
+    "status": "WRONG",
+    "wrong_entities": []
+   },
+   {
+    "answer_text": "No matching results for: suspicious certificates / short validity certs. (Absence in this query is not proof of absence elsewhere.)",
+    "answerable_from_evidence": [
+     "DESKTOP-H8ALZBV"
+    ],
+    "atoms": [
+     "DESKTOP-H8ALZBV"
+    ],
+    "atoms_found_in_answer": [],
+    "correct_entities": [],
+    "found_in_report": [
+     "DESKTOP-H8ALZBV"
+    ],
+    "id": 2,
+    "missing_from_evidence": [],
+    "precision": null,
+    "predicted_entities": [],
+    "question": "What is the hostname of the potentially infected machine in the LAN?",
+    "recall": 0.0,
+    "reference_answer": "DESKTOP-H8ALZBV",
+    "status": "WRONG",
+    "wrong_entities": []
+   },
+   {
+    "answer_text": "No matching results for: suspicious certificates / ip based certificates. (Absence in this query is not proof of absence elsewhere.)",
+    "answerable_from_evidence": [
+     "plucero"
+    ],
+    "atoms": [
+     "plucero"
+    ],
+    "atoms_found_in_answer": [],
+    "correct_entities": [],
+    "found_in_report": [
+     "plucero"
+    ],
+    "id": 3,
+    "missing_from_evidence": [],
+    "precision": null,
+    "predicted_entities": [],
+    "question": "What is the Windows human user account name (not machine accounts ending in $) of the potentially infected machine in the LAN?",
+    "recall": 0.0,
+    "reference_answer": "plucero",
+    "status": "WRONG",
+    "wrong_entities": []
+   },
+   {
+    "answer_text": "Not established from the available artifacts.",
+    "answerable_from_evidence": [
+     "quote.checkfedexexp.com",
+     "business.checkfedexexp.com",
+     "104.21.55.70"
+    ],
+    "atoms": [
+     "quote.checkfedexexp.com",
+     "business.checkfedexexp.com",
+     "104.21.55.70",
+     "172.67.170.169"
+    ],
+    "atoms_found_in_answer": [],
+    "correct_entities": [],
+    "found_in_report": [
+     "quote.checkfedexexp.com",
+     "104.21.55.70"
+    ],
+    "id": 4,
+    "missing_from_evidence": [
+     "172.67.170.169"
+    ],
+    "precision": null,
+    "predicted_entities": [],
+    "question": "What are the likely suspicious domains or URLs for initial infection?",
+    "recall": 0.0,
+    "reference_answer": "quote.checkfedexexp.com, business.checkfedexexp.com, 104.21.55.70, 172.67.170.169",
+    "status": "ABSTAINED",
+    "wrong_entities": []
+   },
+   {
+    "answer_text": "Derived: Kerberos identity of 10.8.15.133: hostname(s) desktop-h8alzbv; human user account(s) plucero.",
+    "answerable_from_evidence": [
+     "72.5.43.29"
+    ],
+    "atoms": [
+     "72.5.43.29"
+    ],
+    "atoms_found_in_answer": [],
+    "correct_entities": [],
+    "found_in_report": [
+     "72.5.43.29"
+    ],
+    "id": 5,
+    "missing_from_evidence": [],
+    "precision": 0.0,
+    "predicted_entities": [
+     "10.8.15.133",
+     "DESKTOP-H8ALZBV"
+    ],
+    "question": "What are the suspicious external IP addresses contacted, which might be involved in command-and-control (C2) communication?",
+    "recall": 0.0,
+    "reference_answer": "72.5.43.29",
+    "status": "WRONG",
+    "wrong_entities": [
+     "10.8.15.133",
+     "DESKTOP-H8ALZBV"
+    ]
+   },
+   {
+    "answer_text": "Derived: Suricata alerts span 2024-08-15 00:00 UTC to 2024-08-15 00:00 UTC; earliest alert hour 2024-08-15 00:00 UTC (314 alerts).",
+    "answerable_from_evidence": [
+     "2024-08-15 00:00 UTC"
+    ],
+    "atoms": [
+     "2024-08-15 00:00 UTC"
+    ],
+    "atoms_found_in_answer": [
+     "2024-08-15 00:00 UTC"
+    ],
+    "correct_entities": [
+     "2024-08-15",
+     "2024-08-15 00:00"
+    ],
+    "found_in_report": [
+     "2024-08-15 00:00 UTC"
+    ],
+    "id": 6,
+    "missing_from_evidence": [],
+    "precision": 1.0,
+    "predicted_entities": [
+     "2024-08-15",
+     "2024-08-15 00:00"
+    ],
+    "question": "During what hour did the first signs of infection activity appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+    "recall": 1.0,
+    "reference_answer": "2024-08-15 00:00 UTC",
+    "status": "CORRECT",
+    "wrong_entities": []
+   },
+   {
+    "answer_text": "Derived: destinations of high-severity alerts: 72.5.43.29 (309), 10.8.15.133 (3).",
+    "answerable_from_evidence": [
+     "72.5.43.29",
+     "C2 server"
+    ],
+    "atoms": [
+     "72.5.43.29",
+     "C2 server"
+    ],
+    "atoms_found_in_answer": [
+     "72.5.43.29"
+    ],
+    "correct_entities": [
+     "72.5.43.29"
+    ],
+    "found_in_report": [
+     "72.5.43.29",
+     "C2 server"
+    ],
+    "id": 7,
+    "missing_from_evidence": [],
+    "precision": 0.5,
+    "predicted_entities": [
+     "10.8.15.133",
+     "72.5.43.29"
+    ],
+    "question": "According to the connection volume statistics, what single external IP address received the most connections from the infected hosts? Is it a C2 server or a legitimate service?",
+    "recall": 0.5,
+    "reference_answer": "72.5.43.29, C2 server",
+    "status": "PARTIAL",
+    "wrong_entities": [
+     "10.8.15.133"
+    ]
+   }
+  ],
+  "placeholder_count": 0,
+  "question_recall": 0.929,
+  "questions_correct": "7/7",
+  "unsupported_entities": [],
+  "unsupported_number_count": 0,
+  "unsupported_numbers": []
+ },
+ "flagged": [],
+ "mode": "drop",
+ "model": "golden",
+ "postprocessing": {
+  "auto_attributed_lines": 0,
+  "duplicate_lines_removed": 84,
+  "enabled": true,
+  "invalid_citations_removed": 0,
+  "partial_lines_dropped": 0,
+  "removed": [
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- full services: LDAP/WIN-JEGJIX7Q9RS.lafontainebleu.org — 1 events; source ips: 10.8.15.133 (1) [warmcookie-04#1]",
+    "section": "Affected Host and User"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- high severity alerts > high severity signatures: ET HUNTING GENERIC SUSPICIOUS POST to Dotted Quad with Fake Browser 1 — 3 events [warmcookie-06#3]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- high severity alerts > high severity signatures: ET MALWARE W32/Badspace.Backdoor CnC Activity (POST) — 3 events [warmcookie-06#3]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- high severity alerts > high severity signatures: ET HUNTING SUSPICIOUS Dotted Quad Host MZ Response — 1 events [warmcookie-06#3]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Timeline",
+    "line": "- alert timeline: 2024-08-15 00:00 UTC — 314 events [warmcookie-06#4]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: ET INFO PE EXE or DLL Windows file download HTTP — 1 events [warmcookie-06#1]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: ET MALWARE Possible Windows executable sent when remote host claims to send html content — 1 events [warmcookie-06#1]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- high severity alerts > high severity signatures: ET MALWARE BadSpace/WarmCookie CnC Activity (GET) M1 — 303 events [warmcookie-06#2]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: internal client 10.8.15.133 ranks #1 by external connections (1570 events, 66 distinct external destinations). Most-contacted external IP: 72.5.43.29 (1235 connections). [warmcookie-08#0]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: Kerberos identity of 10.8.15.133: hostname(s) desktop-h8alzbv; human user account(s) plucero. [warmcookie-08#0]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: Suricata alerts span 2024-08-15 00:00 UTC to 2024-08-15 00:00 UTC; earliest alert hour 2024-08-15 00:00 UTC (314 alerts). [warmcookie-08#0]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: destinations of high-severity alerts: 72.5.43.29 (309), 10.8.15.133 (3). [warmcookie-08#0]",
+    "section": "Detection: IDS Alerts"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: internal client 10.8.15.133 ranks #1 by external connections (1570 events, 66 distinct external destinations). Most-contacted external IP: 72.5.43.29 (1235 connections). [warmcookie-08#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: Kerberos identity of 10.8.15.133: hostname(s) desktop-h8alzbv; human user account(s) plucero. [warmcookie-08#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: Suricata alerts span 2024-08-15 00:00 UTC to 2024-08-15 00:00 UTC; earliest alert hour 2024-08-15 00:00 UTC (314 alerts). [warmcookie-08#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: destinations of high-severity alerts: 72.5.43.29 (309), 10.8.15.133 (3). [warmcookie-08#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- source clients: 10.8.15.133 — 1570 events; external destinations=66; top destinations: 72.5.43.29 (1235), 204.79.197.203 (27), 23.220.103.18 (24), 23.33.138.184 (22), 23.220.103.8 (21); 241 further events in other values [warmcookie-02#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers: 661 matching events [warmcookie-01#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: file_transfer — 313 events [warmcookie-01#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: 10.8.15.133 -> 104.21.55.70:80 : file: Invoice 876597035_003.zip — 1 events [warmcookie-01#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: 10.8.15.133 -> 13.107.21.239:443 : fuid: Fq2eaB3mes5OTBfh11 — 1 events [warmcookie-01#0]",
+    "section": "Command-and-Control and Network Activity"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers: 661 matching events [warmcookie-01#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: file_transfer — 313 events [warmcookie-01#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: 10.8.15.133 -> 104.21.55.70:80 : file: Invoice 876597035_003.zip — 1 events [warmcookie-01#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: 10.8.15.133 -> 13.107.21.239:443 : fuid: Fq2eaB3mes5OTBfh11 — 1 events [warmcookie-01#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Command-and-Control and Network Activity",
+    "line": "- file transfers > transfer details: 10.8.15.133 -> 20.125.209.212:443 : fuid: FTdK8xWfbfKNOp2Pa — 1 events [warmcookie-01#2]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Command-and-Control and Network Activity",
+    "line": "- file transfers > transfer details: 10.8.15.133 -> 20.189.173.9:443 : fuid: FGIG8s1floME1LLqVj — 1 events [warmcookie-01#2]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Command-and-Control and Network Activity",
+    "line": "- file transfers > transfer details: 10.8.15.133 -> 20.241.44.114:443 : fuid: FNlgaK3cZscpKjdHM2 — 1 events [warmcookie-01#2]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Command-and-Control and Network Activity",
+    "line": "- download sources: 10.8.15.133 — 1570 events [warmcookie-01#2]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: no_http_uri — 942 events [warmcookie-01#3]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.8.15.133 -> 72.5.43.29:80 : / — 611 events [warmcookie-01#3]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.8.15.133 -> 199.232.210.172:80 : /filestreamingservice/files/8f2381c2-652d-48a2-86f6-19cb7757f5dc?P1=1724113284&P2=404&P3=2&P4=QwGPFdJVa+Bw71q1beBnqYWdAtr86AnZ79l2/NOX9l1PkiMLSVObKUK4QmaPqxVAgCpCljWyTVtZO9mpmuJNlQ== — 5 events [warmcookie-01#3]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.8.15.133 -> 199.232.210.172:80 : /filestreamingservice/files/f37dd878-a1b9-4f21-a8c9-65c3dd00f7a6?P1=1724225867&P2=404&P3=2&P4=IaxXE3ikzdIKvQz1E1qPcLRRfyHtwqWgjE0YDO8CsvKt6Jcq94KnSHhjEOc1Vkk62+udS1LrVl+tTvm0Hctz+A== — 5 events [warmcookie-01#3]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- source clients: 10.8.15.133 — 1570 events; external destinations=66; top destinations: 72.5.43.29 (1235), 204.79.197.203 (27), 23.220.103.18 (24), 23.33.138.184 (22), 23.220.103.8 (21); 241 further events in other values [warmcookie-02#0]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.8.15.133 -> 23.205.110.48:80 : /connecttest.txt — 2 events [warmcookie-01#4]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.8.15.133 -> 72.5.43.29:80 : /data/0f60a3e7baecf2748b1c8183ed37d1e4 — 2 events [warmcookie-01#4]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.8.15.133 -> 104.21.55.70:80 : /managements?16553a25e45250a41fd5&endeds=MIGpq&JStx=59bf050d37df88a9-ade43358-eaa1220b-0571422b-0f33e6aa150e86bafd0ed4&Ld=9d7502d88d752a27b1d00587309184b5a215 — 1 events [warmcookie-01#4]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.8.15.133 -> 204.79.197.203:80 : /ocsp/MFQwUjBQME4wTDAJBgUrDgMCGgUABBR2JNtr0JxEvYySpbyBWaqBmealCgQUzhUWO+oCo6Zr2tkr/eWMUr56UKgCEzMAPnPpacmgFoSqVQMAAAA+c+k= — 1 events [warmcookie-01#4]",
+    "section": "Impact Assessment"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers: 661 matching events [warmcookie-01#0]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: file_transfer — 313 events [warmcookie-01#0]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: 10.8.15.133 -> 104.21.55.70:80 : file: Invoice 876597035_003.zip — 1 events [warmcookie-01#0]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: 10.8.15.133 -> 13.107.21.239:443 : fuid: Fq2eaB3mes5OTBfh11 — 1 events [warmcookie-01#0]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: no_http_uri — 942 events [warmcookie-01#3]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.8.15.133 -> 72.5.43.29:80 : / — 611 events [warmcookie-01#3]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.8.15.133 -> 199.232.210.172:80 : /filestreamingservice/files/8f2381c2-652d-48a2-86f6-19cb7757f5dc?P1=1724113284&P2=404&P3=2&P4=QwGPFdJVa+Bw71q1beBnqYWdAtr86AnZ79l2/NOX9l1PkiMLSVObKUK4QmaPqxVAgCpCljWyTVtZO9mpmuJNlQ== — 5 events [warmcookie-01#3]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.8.15.133 -> 199.232.210.172:80 : /filestreamingservice/files/f37dd878-a1b9-4f21-a8c9-65c3dd00f7a6?P1=1724225867&P2=404&P3=2&P4=IaxXE3ikzdIKvQz1E1qPcLRRfyHtwqWgjE0YDO8CsvKt6Jcq94KnSHhjEOc1Vkk62+udS1LrVl+tTvm0Hctz+A== — 5 events [warmcookie-01#3]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: 10.8.15.133 -> 13.107.21.239:443 : fuid: Fzij3Q38fa4cYGVUDf — 1 events [warmcookie-01#1]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Root Cause and Evidence Gaps",
+    "line": "- file transfers > transfer details: 10.8.15.133 -> 199.232.210.172:80 : fuid: FVqcub4S5RJRa5ipy8 — 1 events [warmcookie-01#1]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Command-and-Control and Network Activity",
+    "line": "- file transfers > transfer details: 10.8.15.133 -> 20.125.209.212:443 : fuid: FTdK8xWfbfKNOp2Pa — 1 events [warmcookie-01#2]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Command-and-Control and Network Activity",
+    "line": "- file transfers > transfer details: 10.8.15.133 -> 20.189.173.9:443 : fuid: FGIG8s1floME1LLqVj — 1 events [warmcookie-01#2]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Command-and-Control and Network Activity",
+    "line": "- file transfers > transfer details: 10.8.15.133 -> 20.241.44.114:443 : fuid: FNlgaK3cZscpKjdHM2 — 1 events [warmcookie-01#2]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Command-and-Control and Network Activity",
+    "line": "- download sources: 10.8.15.133 — 1570 events [warmcookie-01#2]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: oneocsp.microsoft.com — 1 events [warmcookie-01#6]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: quote.checkfedexexp.com — 1 events [warmcookie-01#6]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: www.msftconnecttest.com — 1 events [warmcookie-01#6]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file types: other — 1569 events [warmcookie-01#6]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- http requests: 10.8.15.133 -> 23.220.251.208:80 : /assets/Owner/arm/ProcessMAU.txt — 1 events [warmcookie-01#5]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: 72.5.43.29 — 308 events [warmcookie-01#5]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: msedge.b.tlu.dl.delivery.mp.microsoft.com — 10 events [warmcookie-01#5]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- download domains: acroipm2.adobe.com — 1 events [warmcookie-01#5]",
+    "section": "Root Cause and Evidence Gaps"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers: 661 matching events [warmcookie-01#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: file_transfer — 313 events [warmcookie-01#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: 10.8.15.133 -> 104.21.55.70:80 : file: Invoice 876597035_003.zip — 1 events [warmcookie-01#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Initial Infection Indicators",
+    "line": "- file transfers > transfer details: 10.8.15.133 -> 13.107.21.239:443 : fuid: Fq2eaB3mes5OTBfh11 — 1 events [warmcookie-01#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: internal client 10.8.15.133 ranks #1 by external connections (1570 events, 66 distinct external destinations). Most-contacted external IP: 72.5.43.29 (1235 connections). [warmcookie-08#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: Kerberos identity of 10.8.15.133: hostname(s) desktop-h8alzbv; human user account(s) plucero. [warmcookie-08#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: Suricata alerts span 2024-08-15 00:00 UTC to 2024-08-15 00:00 UTC; earliest alert hour 2024-08-15 00:00 UTC (314 alerts). [warmcookie-08#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- Derived: destinations of high-severity alerts: 72.5.43.29 (309), 10.8.15.133 (3). [warmcookie-08#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: ET INFO Microsoft Connection Test — 1 events [warmcookie-06#1]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: ET INFO PE EXE or DLL Windows file download HTTP — 1 events [warmcookie-06#1]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: ET INFO Packed Executable Download — 1 events [warmcookie-06#1]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- alert signatures: ET MALWARE Possible Windows executable sent when remote host claims to send html content — 1 events [warmcookie-06#1]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- high severity alerts > high severity signatures: ET HUNTING GENERIC SUSPICIOUS POST to Dotted Quad with Fake Browser 1 — 3 events [warmcookie-06#3]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- high severity alerts > high severity signatures: ET MALWARE W32/Badspace.Backdoor CnC Activity (POST) — 3 events [warmcookie-06#3]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- high severity alerts > high severity signatures: ET HUNTING SUSPICIOUS Dotted Quad Host MZ Response — 1 events [warmcookie-06#3]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Detection: IDS Alerts",
+    "line": "- high severity alerts > high severity signatures: ET INFO PE EXE or DLL Windows file download HTTP — 1 events [warmcookie-06#3]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Command-and-Control and Network Activity",
+    "line": "- file transfers > transfer details: 10.8.15.133 -> 20.125.209.212:443 : fuid: FTdK8xWfbfKNOp2Pa — 1 events [warmcookie-01#2]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Command-and-Control and Network Activity",
+    "line": "- file transfers > transfer details: 10.8.15.133 -> 20.189.173.9:443 : fuid: FGIG8s1floME1LLqVj — 1 events [warmcookie-01#2]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Command-and-Control and Network Activity",
+    "line": "- file transfers > transfer details: 10.8.15.133 -> 20.241.44.114:443 : fuid: FNlgaK3cZscpKjdHM2 — 1 events [warmcookie-01#2]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Command-and-Control and Network Activity",
+    "line": "- download sources: 10.8.15.133 — 1570 events [warmcookie-01#2]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- full services: krb_tcp — 25 events; source ips: 10.8.15.133 (25) [warmcookie-04#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- full services: krbtgt/LAFONTAINEBLEU.ORG — 10 events; source ips: 10.8.15.133 (10) [warmcookie-04#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- full services: LDAP/WIN-JEGJIX7Q9RS.lafontainebleu.org/lafontainebleu.org — 2 events; source ips: 10.8.15.133 (2) [warmcookie-04#0]",
+    "section": "Corrective and Preventive Actions"
+   },
+   {
+    "duplicate_of": "Affected Host and User",
+    "line": "- full services: cifs/WIN-JEGJIX7Q9RS.lafontainebleu.org — 2 events; source ips: 10.8.15.133 (2) [warmcookie-04#0]",
+    "section": "Corrective and Preventive Actions"
+   }
+  ]
+ },
+ "removed_unverified_lines": 0,
+ "run_log": [
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "warmcookie-08#0",
+    "warmcookie-03#0",
+    "warmcookie-04#3",
+    "warmcookie-04#0",
+    "warmcookie-02#0",
+    "warmcookie-04#1"
+   ],
+   "seconds": 0,
+   "section": "Affected Host and User",
+   "truncated": false
+  },
+  {
+   "extractive": true,
+   "flag_counts": {},
+   "retrieved": [
+    "warmcookie-06#4",
+    "warmcookie-08#0"
+   ],
+   "seconds": 0,
+   "section": "Timeline"
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "warmcookie-06#0",
+    "warmcookie-06#3",
+    "warmcookie-06#4",
+    "warmcookie-06#1",
+    "warmcookie-06#2",
+    "warmcookie-08#0"
+   ],
+   "seconds": 0,
+   "section": "Detection: IDS Alerts",
+   "truncated": false
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "warmcookie-01#5",
+    "warmcookie-01#4",
+    "warmcookie-01#3",
+    "warmcookie-01#7",
+    "warmcookie-01#6",
+    "warmcookie-01#0"
+   ],
+   "seconds": 0,
+   "section": "Initial Infection Indicators",
+   "truncated": false
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "warmcookie-08#0",
+    "warmcookie-02#0",
+    "warmcookie-01#0",
+    "warmcookie-01#2",
+    "warmcookie-07#2",
+    "warmcookie-07#1"
+   ],
+   "seconds": 0,
+   "section": "Command-and-Control and Network Activity",
+   "truncated": false
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "warmcookie-01#0",
+    "warmcookie-01#2",
+    "warmcookie-01#3",
+    "warmcookie-02#0",
+    "warmcookie-01#4"
+   ],
+   "seconds": 0,
+   "section": "Impact Assessment",
+   "truncated": false
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "warmcookie-01#0",
+    "warmcookie-01#3",
+    "warmcookie-01#1",
+    "warmcookie-01#2",
+    "warmcookie-01#6",
+    "warmcookie-01#5"
+   ],
+   "seconds": 0,
+   "section": "Root Cause and Evidence Gaps",
+   "truncated": false
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "warmcookie-01#0",
+    "warmcookie-08#0",
+    "warmcookie-06#1",
+    "warmcookie-06#3",
+    "warmcookie-01#2",
+    "warmcookie-04#0"
+   ],
+   "seconds": 0,
+   "section": "Corrective and Preventive Actions",
+   "truncated": false
+  },
+  {
+   "auto_attributed_lines": 0,
+   "dropped_partial_line": null,
+   "flag_counts": {},
+   "invalid_citations_removed": 0,
+   "retrieved": [
+    "warmcookie-09#0",
+    "warmcookie-08#0",
+    "warmcookie-05#0",
+    "warmcookie-03#0",
+    "warmcookie-01#5",
+    "warmcookie-01#6",
+    "warmcookie-02#0",
+    "warmcookie-06#0"
+   ],
+   "seconds": 0,
+   "section": "Answers to Investigation Questions",
+   "truncated": false
+  }
+ ],
+ "scenario": "warmcookie",
+ "seconds_total": 0,
+ "verification_totals": {}
+}

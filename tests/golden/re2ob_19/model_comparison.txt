@@ -1,0 +1,58 @@
+====================================================================================================
+INCIDENT: re2ob_19   -   comparison of 1 run(s) (models and conditions)
+CREATED : <timestamp>
+====================================================================================================
+
+Runs:  R1 = golden (RAG)
+
+A. METRICS PER RUN (higher is better except Halluc. and BadNum)
+
++------+------------------------------------+----------+----------+----------+----------+----------+----------+----------+----------+--------+
+| Run  | Model / condition                  | Ans-P    | Ans-R    | Ans-F1   | Q-recall | Faithful | Ground.  | Halluc.  | BadNum   | Min    |
++------+------------------------------------+----------+----------+----------+----------+----------+----------+----------+----------+--------+
+| R1   | golden (RAG)                       | 0.000    | 0.000    | 0.000    | 0.625    | 1.000    | 1.000    | 0.000    | 0        | 0.0    |
++------+------------------------------------+----------+----------+----------+----------+----------+----------+----------+----------+--------+
+
+B. ANSWER STATUS PER QUESTION  (OK = correct, PART = partial, WRONG, ABST = 'Not established', NONE = no answer in the report)
+
++-----+------------------------------------------+--------------------------------+--------+
+| #   | Question                                 | Reference answer               | R1     |
++-----+------------------------------------------+--------------------------------+--------+
+| 1   | What is the name of the service where    | productcatalogservice          | WRONG  |
+|     | the failure originated (the root-cause   |                                |        |
+|     | service)?                                |                                |        |
++-----+------------------------------------------+--------------------------------+--------+
+| 2   | What is the name of the Kubernetes pod   | productcatalogservice-         | WRONG  |
+|     | of the root-cause service?               | 674b96c48f-n8qq8               |        |
++-----+------------------------------------------+--------------------------------+--------+
+| 3   | On which Kubernetes node did the pod of  | gke-gke-cluster-default-       | WRONG  |
+|     | the root-cause service run?              | pool-2e1807ce-xd9m             |        |
++-----+------------------------------------------+--------------------------------+--------+
+| 4   | What type of fault caused the incident:  | CPU                            | ABST   |
+|     | CPU, memory, disk, network delay, packet |                                |        |
+|     | loss, or socket?                         |                                |        |
++-----+------------------------------------------+--------------------------------+--------+
+| 5   | Which of the three CIA components is     | availability                   | WRONG  |
+|     | primarily affected: availability,        |                                |        |
+|     | integrity, or confidentiality?           |                                |        |
++-----+------------------------------------------+--------------------------------+--------+
+| 6   | During what minute did the first signs   | 2024-01-15 17:42 UTC           | WRONG  |
+|     | of the failure appear? Provide the       |                                |        |
+|     | earliest date and time in YYYY-MM-DD     |                                |        |
+|     | HH:MM UTC format.                        |                                |        |
++-----+------------------------------------------+--------------------------------+--------+
+| 7   | Which metric of the root-cause service   | productcatalogservice_cpu      | WRONG  |
+|     | best shows the fault? Give it as         |                                |        |
+|     | <service>_<indicator>, for example       |                                |        |
+|     | cartservice_cpu.                         |                                |        |
++-----+------------------------------------------+--------------------------------+--------+
+| 8   | According to the trace latency           | productcatalogservice_GetProdu | ABST   |
+|     | statistics, which single service         | ct, root cause                 |        |
+|     | operation showed the largest latency     |                                |        |
+|     | increase? Is its service the root cause  |                                |        |
+|     | or a downstream symptom?                 |                                |        |
++-----+------------------------------------------+--------------------------------+--------+
+
+Best answer F1: golden (RAG) (0.000)
+
+Metric definitions: see METRICS.md. 'no RAG' rows have no retrieved evidence, so their faithfulness is 0 or '-'.

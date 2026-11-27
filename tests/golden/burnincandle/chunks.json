@@ -1,0 +1,98 @@
+[
+ {
+  "id": "burnincandle-01#0",
+  "text": "[burnincandle-01 | network_summary/file_downloads] HTTP file downloads and file transfers: download domains/IPs, requests (client -> server:port : URI), file types and download sources.\ndownload domains: ctldl.windowsupdate.com — 12 events\ndownload domains: x1.c.lencr.org — 4 events\ndownload domains: oceriesfornot.top — 1 events\ndownload domains: r3.i.lencr.org — 1 events"
+ },
+ {
+  "id": "burnincandle-01#1",
+  "text": "[burnincandle-01 | network_summary/file_downloads] HTTP file downloads and file transfers: download domains/IPs, requests (client -> server:port : URI), file types and download sources.\nhttp requests: no_http_uri — 661 events\nhttp requests: 10.0.19.14 -> 104.80.96.219:80 : / — 5 events\nhttp requests: 10.0.19.14 -> 188.166.154.118:80 : / — 5 events\nhttp requests: 10.0.19.14 -> 209.197.3.8:80 : /msdownload/update/v3/static/trustedr/en/authrootstl.cab?c6c9c220471a286c — 1 events"
+ },
+ {
+  "id": "burnincandle-01#2",
+  "text": "[burnincandle-01 | network_summary/file_downloads] HTTP file downloads and file transfers: download domains/IPs, requests (client -> server:port : URI), file types and download sources.\nhttp requests: 10.0.19.14 -> 209.197.3.8:80 : /msdownload/update/v3/static/trustedr/en/pinrulesstl.cab?36a063424dfa7851 — 1 events\nhttp requests: 10.0.19.14 -> 209.197.3.8:80 : /msdownload/update/v3/static/trustedr/en/pinrulesstl.cab?fcfd7669d19bb421 — 1 events\nhttp requests: 10.0.19.14 -> 23.219.38.10:80 : /msdownload/update/v3/static/trustedr/en/disallowedcertstl.cab?8fd0590036de0ddd — 1 events\nhttp requests: 10.0.19.14 -> 68.142.107.129:80 : /msdownload/update/v3/static/trustedr/en/pinrulesstl.cab?d1adc478adff0d72 — 1 events"
+ },
+ {
+  "id": "burnincandle-01#3",
+  "text": "[burnincandle-01 | network_summary/file_downloads] HTTP file downloads and file transfers: download domains/IPs, requests (client -> server:port : URI), file types and download sources.\nhttp requests: 10.0.19.14 -> 68.142.107.1:80 : /msdownload/update/v3/static/trustedr/en/authrootstl.cab?c66ea67221454a2e — 1 events\nhttp requests: 10.0.19.14 -> 68.142.107.1:80 : /msdownload/update/v3/static/trustedr/en/pinrulesstl.cab?416ee1a6826abea5 — 1 events\nfile transfers: 55 matching events\nfile transfers > transfer details: file_transfer — 2 events"
+ },
+ {
+  "id": "burnincandle-01#4",
+  "text": "[burnincandle-01 | network_summary/file_downloads] HTTP file downloads and file transfers: download domains/IPs, requests (client -> server:port : URI), file types and download sources.\nfile transfers > transfer details: 10.0.19.14 -> 104.80.96.219:80 : fuid: FXJkhP2Z2m8vw4ukM6 — 1 events\nfile transfers > transfer details: 10.0.19.14 -> 13.107.42.16:443 : fuid: FJoV2T1Wg9qRybhxf2 — 1 events\nfile transfers > transfer details: 10.0.19.14 -> 13.107.42.16:443 : fuid: FsD3to47YUEBkQOcZ — 1 events\nfile transfers > transfer details: 10.0.19.14 -> 13.69.116.104:443 : fuid: FOGdMEmtC3nLDsbVd — 1 events"
+ },
+ {
+  "id": "burnincandle-01#5",
+  "text": "[burnincandle-01 | network_summary/file_downloads] HTTP file downloads and file transfers: download domains/IPs, requests (client -> server:port : URI), file types and download sources.\nfile transfers > transfer details: 10.0.19.14 -> 13.69.239.74:443 : fuid: Fv3eyH1ZHebL3IA9f — 1 events\nfile transfers > transfer details: 10.0.19.14 -> 13.89.179.10:443 : fuid: FuKuuXxzeF3KeH3a9 — 1 events\nfile transfers > transfer details: 10.0.19.14 -> 13.89.179.9:443 : fuid: FsmyaS1IbV3icPlSef — 1 events\nfile transfers > transfer details: 10.0.19.14 -> 157.245.142.66:443 : fuid: F4Lt2H2UpM7eZidEG — 1 events"
+ },
+ {
+  "id": "burnincandle-01#6",
+  "text": "[burnincandle-01 | network_summary/file_downloads] HTTP file downloads and file transfers: download domains/IPs, requests (client -> server:port : URI), file types and download sources.\nfile transfers > transfer details: 10.0.19.14 -> 157.245.142.66:443 : fuid: FE8HqU2VXjUR5N7Hu1 — 1 events\nfile types: other — 683 events\ndownload sources: 10.0.19.14 — 683 events"
+ },
+ {
+  "id": "burnincandle-02#0",
+  "text": "[burnincandle-02 | network_summary/high_activity_external_dest] Internal clients ranked by number of connections to external destinations, with each client's most-contacted destinations.\nsource clients: 10.0.19.14 — 683 events; external destinations=50; top destinations: 157.245.142.66 (267), 91.193.16.181 (175), 40.83.240.146 (20), 52.183.220.149 (20), 52.185.211.133 (20); 181 further events in other values"
+ },
+ {
+  "id": "burnincandle-03#0",
+  "text": "[burnincandle-03 | authentication/kerberos_clients] Kerberos client account names (user accounts) and the source IPs they authenticated from.\nclient accounts: patrick.zimmerman — 12 events; source ips: 10.0.19.14 (12)\nclient accounts: DESKTOP-5QS3D5D$ — 7 events; source ips: 10.0.19.14 (7)\nclient accounts: desktop-5qs3d5d$ — 2 events; source ips: 10.0.19.14 (2)"
+ },
+ {
+  "id": "burnincandle-04#0",
+  "text": "[burnincandle-04 | authentication/kerberos_full_services] Kerberos services requested (including host and machine account names) per source IP.\nfull services: krb_tcp — 22 events; source ips: 10.0.19.14 (22)\nfull services: krbtgt/BURNINCANDLE.COM — 13 events; source ips: 10.0.19.14 (13)\nfull services: LDAP/BURNINCANDLE-DC.burnincandle.com/burnincandle.com — 2 events; source ips: 10.0.19.14 (2)\nfull services: cifs/BURNINCANDLE-DC.burnincandle.com — 2 events; source ips: 10.0.19.14 (2)"
+ },
+ {
+  "id": "burnincandle-04#1",
+  "text": "[burnincandle-04 | authentication/kerberos_full_services] Kerberos services requested (including host and machine account names) per source IP.\nfull services: cifs/BURNINCANDLE-DC — 1 events; source ips: 10.0.19.14 (1)\nfull services: desktop-5qs3d5d$ — 1 events; source ips: 10.0.19.14 (1)\nfull services: host/desktop-5qs3d5d.burnincandle.com — 1 events; source ips: 10.0.19.14 (1)\nfull services: krbtgt/BURNINCANDLE — 1 events; source ips: 10.0.19.14 (1)"
+ },
+ {
+  "id": "burnincandle-04#2",
+  "text": "[burnincandle-04 | authentication/kerberos_full_services] Kerberos services requested (including host and machine account names) per source IP.\nfull services: ldap/BURNINCANDLE-DC.burnincandle.com — 1 events; source ips: 10.0.19.14 (1)"
+ },
+ {
+  "id": "burnincandle-05#0",
+  "text": "[burnincandle-05 | authentication/kerberos_hostnames] Host names seen in Kerberos traffic with their source IPs.\nhostnames: desktop-5qs3d5d — 1 events; source ips: 10.0.19.14 (1)"
+ },
+ {
+  "id": "burnincandle-06#0",
+  "text": "[burnincandle-06 | ids_alerts/suricata_alerts] Suricata IDS alerts: signatures, high-severity alert destinations and sources, and an hourly alert timeline (UTC).\nalert signatures: ET INFO OpenSSL Demo CA - Internet Widgits Pty (O) — 216 events\nalert signatures: ET DNS Query to a *.top domain - Likely Hostile — 22 events\nalert signatures: GPL NETBIOS SMB IPC$ unicode share access — 3 events\nalert signatures: ET FILE_SHARING Observed DNS Query to Abused File Sharing Domain in DNS Lookup (filebin .net)  — 1 events"
+ },
+ {
+  "id": "burnincandle-06#1",
+  "text": "[burnincandle-06 | ids_alerts/suricata_alerts] Suricata IDS alerts: signatures, high-severity alert destinations and sources, and an hourly alert timeline (UTC).\nalert signatures: ET HUNTING Request to .TOP Domain with Minimal Headers — 1 events\nalert signatures: ET INFO HTTP Request to a *.top domain — 1 events\nalert signatures: ET INFO Observed Abused File Sharing Domain in TLS SNI (filebin .net) — 1 events\nalert signatures: ET MALWARE Win32/IcedID Request Cookie — 1 events"
+ },
+ {
+  "id": "burnincandle-06#2",
+  "text": "[burnincandle-06 | ids_alerts/suricata_alerts] Suricata IDS alerts: signatures, high-severity alert destinations and sources, and an hourly alert timeline (UTC).\nalert signatures: ET MALWARE Win32/IcedID Requesting Encoded Binary M4 — 1 events\nhigh severity alerts: 26 matching events\nhigh severity alerts > high severity  destinations: 10.0.19.9 — 22 events\nhigh severity alerts > high severity  destinations: 188.166.154.118 — 4 events"
+ },
+ {
+  "id": "burnincandle-06#3",
+  "text": "[burnincandle-06 | ids_alerts/suricata_alerts] Suricata IDS alerts: signatures, high-severity alert destinations and sources, and an hourly alert timeline (UTC).\nhigh severity alerts > high severity signatures: ET DNS Query to a *.top domain - Likely Hostile — 22 events\nhigh severity alerts > high severity signatures: ET HUNTING Request to .TOP Domain with Minimal Headers — 1 events\nhigh severity alerts > high severity signatures: ET INFO HTTP Request to a *.top domain — 1 events\nhigh severity alerts > high severity signatures: ET MALWARE Win32/IcedID Request Cookie — 1 events"
+ },
+ {
+  "id": "burnincandle-06#4",
+  "text": "[burnincandle-06 | ids_alerts/suricata_alerts] Suricata IDS alerts: signatures, high-severity alert destinations and sources, and an hourly alert timeline (UTC).\nhigh severity alerts > high severity signatures: ET MALWARE Win32/IcedID Requesting Encoded Binary M4 — 1 events\nhigh severity alerts > high severity sources: 10.0.19.14 — 26 events\nalert timeline: 2022-03-21 20:00 UTC — 10 events\nalert timeline: 2022-03-21 21:00 UTC — 13 events"
+ },
+ {
+  "id": "burnincandle-06#5",
+  "text": "[burnincandle-06 | ids_alerts/suricata_alerts] Suricata IDS alerts: signatures, high-severity alert destinations and sources, and an hourly alert timeline (UTC).\nalert timeline: 2022-03-21 22:00 UTC — 12 events\nalert timeline: 2022-03-21 23:00 UTC — 11 events\nalert timeline: 2022-03-22 00:00 UTC — 60 events\nalert timeline: 2022-03-22 01:00 UTC — 63 events"
+ },
+ {
+  "id": "burnincandle-06#6",
+  "text": "[burnincandle-06 | ids_alerts/suricata_alerts] Suricata IDS alerts: signatures, high-severity alert destinations and sources, and an hourly alert timeline (UTC).\nalert timeline: 2022-03-22 02:00 UTC — 60 events\nalert timeline: 2022-03-22 03:00 UTC — 18 events"
+ },
+ {
+  "id": "burnincandle-07#0",
+  "text": "[burnincandle-07 | network_summary/suspicious_domains] Unusual domains with their source and destination IPs, and direct-IP HTTP connections.\ndomains: antnosience.com — 88 events; top source ips: 10.0.19.14 (88); top destination ips: 157.245.142.66 (88)\ndomains: dilimoretast.com — 45 events; top source ips: 10.0.19.14 (45); top destination ips: 91.193.16.181 (45)\ndomains: otectagain.top — 42 events; top source ips: 10.0.19.14 (42); top destination ips: 157.245.142.66 (42)\ndomains: seaskysafe.com — 41 events; top source ips: 10.0.19.14 (41); top destination ips: 91.193.16.181 (41)"
+ },
+ {
+  "id": "burnincandle-07#1",
+  "text": "[burnincandle-07 | network_summary/suspicious_domains] Unusual domains with their source and destination IPs, and direct-IP HTTP connections.\ndomains: suncoastpinball.com — 5 events; top source ips: 10.0.19.14 (5); top destination ips: 160.153.32.99 (5)\ndomains: filebin.net — 1 events; top source ips: 10.0.19.14 (1); top destination ips: 185.47.40.36 (1)\ndomains: situla.bitbit.net — 1 events; top source ips: 10.0.19.14 (1); top destination ips: 87.238.33.8 (1)"
+ },
+ {
+  "id": "burnincandle-08#0",
+  "text": "[burnincandle-08 | derived_findings/derived_summary] Deterministic summary computed from the query results above (client ranking, IP-to-hostname/account join, alert timeline).\nDerived: internal client 10.0.19.14 ranks #1 by external connections (683 events, 50 distinct external destinations). Most-contacted external IP: 157.245.142.66 (267 connections).\nDerived: Kerberos identity of 10.0.19.14: hostname(s) desktop-5qs3d5d; human user account(s) patrick.zimmerman.\nDerived: Suricata alerts span 2022-03-21 20:00 UTC to 2022-03-22 03:00 UTC; earliest alert hour 2022-03-21 20:00 UTC (10 alerts).\nDerived: destinations of high-severity alerts: 10.0.19.9 (22), 188.166.154.118 (4)."
+ },
+ {
+  "id": "burnincandle-09#0",
+  "text": "[burnincandle-09 | query_coverage/evidence_gaps] Queries that returned nothing or failed; use these to state what is NOT established.\nQuery 'suspicious certificates' returned no aggregation results (shards failed: 1 of 111). This evidence is UNAVAILABLE; it is not evidence that nothing exists."
+ }
+]

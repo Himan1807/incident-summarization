@@ -7,16 +7,9 @@ import numpy as np
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT)); sys.path.insert(0, str(ROOT / "tests")); __import__("os").chdir(ROOT)
 from fixture_koi_model_output import RAW
+from fakes import HashEmb
 from src.pipeline_adv import run
 
-class HashEmb:
-    def encode(self, texts, **k):
-        out = []
-        for t in texts:
-            v = np.zeros(512)
-            for w in re.findall(r"[\w.\-]+", t.lower()): v[zlib.crc32(w.encode()) % 512] += 1
-            out.append(v / (np.linalg.norm(v) + 1e-9))
-        return np.array(out)
 
 asked = []
 def canned(prompt, n=600):

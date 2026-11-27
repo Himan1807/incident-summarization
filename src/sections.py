@@ -1,8 +1,10 @@
 """Postmortem section plan: one focused multi-query retrieval + one short generation per section.
 
-Works with the paper dataset (Suricata alerts, Kerberos, HTTP downloads, domains, certificates, derived findings).
-A final 'Answers to Investigation Questions' section is added automatically when the incident provides questions
-(see build_sections). Optional keys per section: long (bigger token budget), top_k, max_chars.
+Profiles: 'security' (default; SECTIONS, for the paper's network-security incidents: Suricata alerts, Kerberos, HTTP downloads,
+domains, certificates, derived findings) and 'service_outage' (OUTAGE_SECTIONS, for reliability incidents such as the RCAEval
+cases: metric anomalies, trace latency/errors, log volume, pod inventory). '--section-profile auto' picks one per incident
+(resolve_profile). A final 'Answers to Investigation Questions' section is added automatically when the incident provides
+questions (see build_sections). Optional keys per section: long (bigger token budget), top_k, max_chars.
 """
 
 SECTIONS = [
@@ -58,6 +60,73 @@ SECTIONS = [
      "task": "Give 4-6 concrete actions tied to specific observed indicators (e.g. isolate host X, reset account Y, block IP Z). No generic advice."},
 ]
 
+OUTAGE_SECTIONS = [
+    {"name": "Affected Service and Infrastructure", "max_bullets": 4,
+     "queries": ["earliest sustained metric deviation service", "metric series ranked deviation score service",
+                 "pods on node kubernetes pod inventory", "series without baseline data appears"],
+     "rerank": "Which service is the origin of the failure, and which Kubernetes pod and node does it run on?",
+     "task": "State the service where the failure most likely originated and its Kubernetes pod and node, as observed. Label the choice of "
+             "service 'Assessment:' and name the metric or trace evidence that supports it. List other affected services separately as symptoms."},
+    {"name": "Timeline", "long": True, "extractive": "timeline",
+     "queries": ["earliest sustained metric deviation UTC", "sustained deviation from UTC", "series appears at UTC peak at UTC",
+                 "first error after baseline at UTC"],
+     "rerank": "Chronological order of key events with UTC timestamps.",
+     "task": "Write a chronological list with ONE line per timestamp. Include only events that have their own timestamp in the evidence "
+             "(first sustained deviations, series that appear, peaks, first errors). Every line MUST start with the exact UTC date and time from "
+             "the evidence. Do not attach a timestamp to facts that have none (pod inventory). Merge events that share a timestamp. Never write placeholders."},
+    {"name": "Detection: Metric Anomalies", "max_bullets": 6,
+     "queries": ["metric anomalies sustained deviation baseline", "deviation score cpu mem socket diskio", "latency-90 latency-50 deviation",
+                 "series without baseline data appears"],
+     "rerank": "Which metric series deviate from their baseline, and for which services?",
+     "task": "List the most significant metric deviations with service, metric, peak value and time. Separate deviations of a service's own "
+             "resources (CPU, memory, disk I/O, sockets) from latency or workload effects."},
+    {"name": "Service Dependencies and Propagation", "max_bullets": 8,
+     "queries": ["operation latency baseline mean later mean", "trace operation with the largest latency increase",
+                 "operation errors first error after baseline", "log volume lines per minute baseline later"],
+     "rerank": "How did the failure propagate across services (trace latency, trace errors, log volume)?",
+     "task": "Separate OBSERVED facts (latency and error changes per operation, log volume changes) from INFERRED assessment (label it 'Assessment:'; "
+             "at most 3 assessment bullets, each a different conclusion). State which operation showed the largest latency increase and whether "
+             "its service is the root cause or a downstream symptom."},
+    {"name": "Impact Assessment", "max_bullets": 5,
+     "queries": ["frontend latency user entry point", "operation errors", "number of metric series deviate from their baseline",
+                 "latency increase operations"],
+     "rerank": "Which property (confidentiality, integrity or availability) is affected, and how large is the user-facing impact?",
+     "task": "State the primary CIA component affected (confidentiality, integrity or availability) as 'Assessment:' with supporting evidence, "
+             "the services affected and the scale of user-facing latency or errors. Use 'possible' where evidence is indirect."},
+    {"name": "Root Cause and Evidence Gaps", "max_bullets": 7,
+     "queries": ["no matching results query returned nothing", "metrics contain data only for", "no alerts no change records",
+                 "earliest sustained metric deviation"],
+     "rerank": "What is the most likely root cause and what cannot be determined from the evidence?",
+     "task": "Give the most likely root cause (service and fault type: CPU, memory, disk, network delay, packet loss or socket) as 'Assessment:' "
+             "with confidence (low/medium/high). Then list what is NOT established (for example missing telemetry, no alerts, no change records, "
+             "no error logs). Do not invent evidence."},
+    {"name": "Corrective and Preventive Actions", "max_bullets": 5,
+     "queries": ["root-cause service pod node", "cpu mem diskio socket saturation", "operation latency dependency", "telemetry not collected"],
+     "rerank": "Which concrete mitigation and prevention actions follow from the observed indicators?",
+     "task": "Give 4-6 concrete actions tied to specific observed indicators (e.g. restart or reschedule pod X, set resource limits on service Y, "
+             "alert on metric Z). No generic advice."},
+]
+
+PROFILES = {"security": SECTIONS, "service_outage": OUTAGE_SECTIONS}
+_SECURITY_EVIDENCE = {"ids_alerts", "authentication", "network_summary", "dns", "http", "tls"}
+_OUTAGE_EVIDENCE = {"monitoring_alerts", "traces", "service_logs", "resource_metrics", "infrastructure_events"}
+
+
+def resolve_profile(choice: str | None, meta: dict) -> str:
+    """'security' (default), 'service_outage', or 'auto': metadata.section_profile if set, else 'service_outage' when the incident's
+    evidence is operational (metrics, traces, service logs, infrastructure) and contains no security evidence; otherwise 'security'."""
+    if choice in (None, "", "security"):
+        return "security"
+    if choice in PROFILES:
+        return choice
+    if choice != "auto":
+        raise ValueError(f"unknown section profile {choice!r}; use security, service_outage or auto")
+    if meta.get("section_profile") in PROFILES:
+        return meta["section_profile"]
+    ev = set(meta.get("evidence_types") or [])
+    return "service_outage" if ev & _OUTAGE_EVIDENCE and not ev & _SECURITY_EVIDENCE else "security"
+
+
 QUESTIONS_SECTION = {
     "name": "Answers to Investigation Questions", "long": True, "per_query_k": 3, "max_chars": 6500,
     "rerank": "Evidence needed to answer the investigation questions.",
@@ -68,8 +137,8 @@ QUESTIONS_SECTION = {
 }
 
 
-def build_sections(questions: list[str] | None = None) -> list[dict]:
-    secs = [dict(s) for s in SECTIONS]
+def build_sections(questions: list[str] | None = None, profile: str = "security") -> list[dict]:
+    secs = [dict(s) for s in PROFILES[profile]]
     if questions:
         q = dict(QUESTIONS_SECTION)
         q["queries"] = list(questions)

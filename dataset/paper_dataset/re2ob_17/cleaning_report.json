@@ -1,0 +1,17 @@
+{
+  "scenario": "re2ob_17",
+  "source_case": "RE2-OB/emailservice_mem/1",
+  "root_cause_service": "emailservice",
+  "fault": "mem",
+  "inject_time": "2024-01-17 07:11:45 UTC",
+  "artifacts": 7,
+  "facts": 52,
+  "questions": 8,
+  "answers": 8,
+  "atoms": 9,
+  "atoms_in_evidence": 8,
+  "atoms_not_in_evidence": [
+    "2024-01-17 07:11 UTC"
+  ],
+  "notes": []
+}

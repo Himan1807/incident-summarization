@@ -1,0 +1,56 @@
+====================================================================================================
+INCIDENT: apr21isc   -   comparison of 1 run(s) (models and conditions)
+CREATED : <timestamp>
+====================================================================================================
+
+Runs:  R1 = golden (RAG)
+
+A. METRICS PER RUN (higher is better except Halluc. and BadNum)
+
++------+------------------------------------+----------+----------+----------+----------+----------+----------+----------+----------+--------+
+| Run  | Model / condition                  | Ans-P    | Ans-R    | Ans-F1   | Q-recall | Faithful | Ground.  | Halluc.  | BadNum   | Min    |
++------+------------------------------------+----------+----------+----------+----------+----------+----------+----------+----------+--------+
+| R1   | golden (RAG)                       | 0.000    | 0.000    | 0.000    | 0.854    | 1.000    | 1.000    | 0.000    | 0        | 0.0    |
++------+------------------------------------+----------+----------+----------+----------+----------+----------+----------+----------+--------+
+
+B. ANSWER STATUS PER QUESTION  (OK = correct, PART = partial, WRONG, ABST = 'Not established', NONE = no answer in the report)
+
++-----+------------------------------------------+--------------------------------+--------+
+| #   | Question                                 | Reference answer               | R1     |
++-----+------------------------------------------+--------------------------------+--------+
+| 1   | What was the IP address of the infected  | 192.168.5.125                  | WRONG  |
+|     | Windows computer?                        |                                |        |
++-----+------------------------------------------+--------------------------------+--------+
+| 2   | What was the host name of the infected   | LAPTOP-X9NAQ2EU                | WRONG  |
+|     | Windows computer?                        |                                |        |
++-----+------------------------------------------+--------------------------------+--------+
+| 3   | What is the Windows human user account   | wilmer.coughlin                | WRONG  |
+|     | name (not machine accounts ending in $)  |                                |        |
+|     | of the potentially infected machine in   |                                |        |
+|     | the LAN?                                 |                                |        |
++-----+------------------------------------------+--------------------------------+--------+
+| 4   | During what hour did the first signs of  | 2021-03-29 22:00 UTC           | ABST   |
+|     | infection activity appear? Provide the   |                                |        |
+|     | earliest date and time in YYYY-MM-DD     |                                |        |
+|     | HH:MM UTC format.                        |                                |        |
++-----+------------------------------------------+--------------------------------+--------+
+| 5   | What malware family do the IDS alerts    | Baza                           | WRONG  |
+|     | identify?                                |                                |        |
++-----+------------------------------------------+--------------------------------+--------+
+| 6   | What are the suspicious external IP      | 176.111.174.53, 104.21.74.174, | WRONG  |
+|     | addresses contacted, which might be      | 54.184.119.29, 184.72.1.208,   |        |
+|     | involved in command-and-control (C2)     | 217.12.218.46, 8.209.100.246   |        |
+|     | communication?                           |                                |        |
++-----+------------------------------------------+--------------------------------+--------+
+| 7   | What are the likely suspicious domains   | gtmers.xyz, veso2.xyz          | WRONG  |
+|     | for initial infection or C2?             |                                |        |
++-----+------------------------------------------+--------------------------------+--------+
+| 8   | Were any suspicious certificates         | forenzik.kz                    | ABST   |
+|     | observed in the encrypted network        |                                |        |
+|     | traffic? If so, identify the domain or   |                                |        |
+|     | IP in the certificate.                   |                                |        |
++-----+------------------------------------------+--------------------------------+--------+
+
+Best answer F1: golden (RAG) (0.000)
+
+Metric definitions: see METRICS.md. 'no RAG' rows have no retrieved evidence, so their faithfulness is 0 or '-'.
