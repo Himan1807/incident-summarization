@@ -2,7 +2,7 @@
 INCIDENT : fake_auth
 MODEL    : deepinfra:deepseek-ai/DeepSeek-V3
 CONDITION: No RAG vs RAG (same LLM, same section plan, same questions)
-CREATED  : 2026-11-28T01:28:20
+CREATED  : 2026-11-28T11:25:48
 ====================================================================================================
 
 NO RAG : the LLM receives only the incident context (network description and the questions). It has NO logs, alerts or query results.

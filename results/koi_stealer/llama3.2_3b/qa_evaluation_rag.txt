@@ -3,8 +3,8 @@ INCIDENT : koi_stealer
 MODEL    : llama3.2:3b
 CONDITION: RAG (advanced pipeline)
 RUN TIME : 14.5 min of LLM generation
-REPORT   : results\koi_stealer\llama3.2_3b\advanced_postmortem.md
-CREATED  : 2026-11-28T01:28:20
+REPORT   : results/koi_stealer/llama3.2_3b/advanced_postmortem.md
+CREATED  : 2026-11-28T11:25:48
 ====================================================================================================
 
 A. QUESTION-BY-QUESTION EVALUATION

@@ -1,0 +1,603 @@
+{
+  "condition": "rag",
+  "model": "llama3.2:3b",
+  "scenario": "re2ob_08",
+  "seconds_total": 29.2,
+  "verification_totals": {
+    "uncited": 15,
+    "unsupported_numbers": 2,
+    "unsupported_entities": 1
+  },
+  "mode": "drop",
+  "removed_unverified_lines": 3,
+  "postprocessing": {
+    "enabled": true,
+    "auto_attributed_lines": 3,
+    "invalid_citations_removed": 0,
+    "partial_lines_dropped": 0,
+    "duplicate_lines_removed": 0,
+    "removed": []
+  },
+  "run_log": [
+    {
+      "section": "Affected Service and Infrastructure",
+      "retrieved": [
+        "re2ob_08-05#1",
+        "re2ob_08-05#0",
+        "re2ob_08-05#2",
+        "re2ob_08-03#0",
+        "re2ob_08-04#4",
+        "re2ob_08-01#3"
+      ],
+      "seconds": 4.0,
+      "truncated": false,
+      "dropped_partial_line": null,
+      "auto_attributed_lines": 1,
+      "invalid_citations_removed": 0,
+      "flag_counts": {
+        "uncited": 2
+      }
+    },
+    {
+      "section": "Timeline",
+      "retrieved": [
+        "re2ob_08-04#3",
+        "re2ob_08-04#2",
+        "re2ob_08-06#0",
+        "re2ob_08-02#1",
+        "re2ob_08-01#2",
+        "re2ob_08-02#0",
+        "re2ob_08-02#2",
+        "re2ob_08-01#1",
+        "re2ob_08-01#0",
+        "re2ob_08-01#3"
+      ],
+      "extractive": true,
+      "seconds": 0.0,
+      "flag_counts": {}
+    },
+    {
+      "section": "Detection: Metric Anomalies",
+      "retrieved": [
+        "re2ob_08-01#3",
+        "re2ob_08-01#0",
+        "re2ob_08-01#2",
+        "re2ob_08-01#1"
+      ],
+      "seconds": 6.1,
+      "truncated": false,
+      "dropped_partial_line": null,
+      "auto_attributed_lines": 0,
+      "invalid_citations_removed": 0,
+      "flag_counts": {}
+    },
+    {
+      "section": "Service Dependencies and Propagation",
+      "retrieved": [
+        "re2ob_08-06#0",
+        "re2ob_08-03#0",
+        "re2ob_08-02#1",
+        "re2ob_08-02#0",
+        "re2ob_08-02#2",
+        "re2ob_08-04#0"
+      ],
+      "seconds": 4.7,
+      "truncated": false,
+      "dropped_partial_line": null,
+      "auto_attributed_lines": 0,
+      "invalid_citations_removed": 0,
+      "flag_counts": {}
+    },
+    {
+      "section": "Impact Assessment",
+      "retrieved": [
+        "re2ob_08-04#4",
+        "re2ob_08-04#2",
+        "re2ob_08-01#1",
+        "re2ob_08-03#0",
+        "re2ob_08-01#3"
+      ],
+      "seconds": 3.0,
+      "truncated": false,
+      "dropped_partial_line": null,
+      "auto_attributed_lines": 2,
+      "invalid_citations_removed": 0,
+      "flag_counts": {
+        "unsupported_numbers": 2,
+        "uncited": 1
+      }
+    },
+    {
+      "section": "Root Cause and Evidence Gaps",
+      "retrieved": [
+        "re2ob_08-07#0",
+        "re2ob_08-02#1",
+        "re2ob_08-02#0",
+        "re2ob_08-01#1"
+      ],
+      "seconds": 3.1,
+      "truncated": false,
+      "dropped_partial_line": null,
+      "auto_attributed_lines": 0,
+      "invalid_citations_removed": 0,
+      "flag_counts": {}
+    },
+    {
+      "section": "Corrective and Preventive Actions",
+      "retrieved": [
+        "re2ob_08-01#1",
+        "re2ob_08-01#2",
+        "re2ob_08-01#0"
+      ],
+      "seconds": 3.4,
+      "truncated": false,
+      "dropped_partial_line": null,
+      "auto_attributed_lines": 0,
+      "invalid_citations_removed": 0,
+      "flag_counts": {}
+    },
+    {
+      "section": "Answers to Investigation Questions",
+      "retrieved": [
+        "re2ob_08-03#0",
+        "re2ob_08-04#4",
+        "re2ob_08-01#0",
+        "re2ob_08-05#1",
+        "re2ob_08-05#2",
+        "re2ob_08-05#0",
+        "re2ob_08-01#3",
+        "re2ob_08-01#1",
+        "re2ob_08-01#2",
+        "re2ob_08-02#0",
+        "re2ob_08-02#2"
+      ],
+      "seconds": 4.9,
+      "truncated": false,
+      "dropped_partial_line": null,
+      "auto_attributed_lines": 0,
+      "invalid_citations_removed": 0,
+      "flag_counts": {}
+    }
+  ],
+  "flagged": [
+    {
+      "section": "Affected Service and Infrastructure",
+      "line": "* The frontend-6d8846d9c5-dnnk4 pod on node gke-gke-cluster-default-pool-2e1807ce-cx8g is also affected, indicating a potential propagation of the issue from the emailservice.",
+      "types": [
+        "uncited"
+      ],
+      "action": "kept"
+    },
+    {
+      "section": "Affected Service and Infrastructure",
+      "line": "* The loadgenerator-655bfd9b95-l7gt2 pod on node gke-gke-cluster-default-pool-2e1807ce-0e4z is also affected, suggesting that the issue may be related to external load or stress.",
+      "types": [
+        "uncited"
+      ],
+      "action": "kept"
+    },
+    {
+      "section": "Impact Assessment",
+      "line": "* The primary CIA component affected is availability, as the incident resulted in sustained user-facing latency for the frontend service, with peak latency values exceeding 0.8 seconds for the frontend_latency-90 metric. [auto: re2ob_08-01#1]",
+      "types": [
+        "unsupported_numbers"
+      ],
+      "action": "removed",
+      "unsupported_numbers": [
+        "0.8"
+      ]
+    },
+    {
+      "section": "Impact Assessment",
+      "line": "* The services affected by the incident are the frontend, checkoutservice, and currencyservice, as their latency metrics showed sustained deviations from their baseline values.",
+      "types": [
+        "uncited"
+      ],
+      "action": "kept"
+    },
+    {
+      "section": "Impact Assessment",
+      "line": "* The scale of user-facing latency was significant, with peak values exceeding 0.8 seconds for the frontend_latency-90 metric, indicating a substantial impact on the user experience. [auto: re2ob_08-01#1]",
+      "types": [
+        "unsupported_numbers"
+      ],
+      "action": "removed",
+      "unsupported_numbers": [
+        "0.8"
+      ]
+    },
+    {
+      "section": "Incident Summary",
+      "line": "* **Incident Type:** Metric Anomalies",
+      "types": [
+        "uncited"
+      ],
+      "action": "kept"
+    },
+    {
+      "section": "Incident Summary",
+      "line": "* **Date and Time:** 2024-01-19 22:00-23:00 UTC [auto: re2ob_08-06#0, re2ob_08-04#3]",
+      "types": [
+        "unsupported_entities"
+      ],
+      "action": "removed",
+      "unsupported_entities": [
+        "2024-01-19 22:00"
+      ]
+    },
+    {
+      "section": "Incident Summary",
+      "line": "* **Services Affected:** Frontend, CheckoutService, CurrencyService",
+      "types": [
+        "uncited"
+      ],
+      "action": "kept"
+    },
+    {
+      "section": "Incident Summary",
+      "line": "* **Impact:** Significant latency issues for the Frontend service and its dependent services, affecting availability",
+      "types": [
+        "uncited"
+      ],
+      "action": "kept"
+    },
+    {
+      "section": "Incident Summary",
+      "line": "* **Evidence Gaps:** Environment context, fault type, and impact on application functionality or user experience not explicitly stated",
+      "types": [
+        "uncited"
+      ],
+      "action": "kept"
+    },
+    {
+      "section": "Incident Summary",
+      "line": "+ Set resource limits on ProductCatalogService to prevent excessive CPU usage",
+      "types": [
+        "uncited"
+      ],
+      "action": "kept"
+    },
+    {
+      "section": "Incident Summary",
+      "line": "+ Restart Redis pods to address sustained deviations in redis_cpu and redis_diskio metrics",
+      "types": [
+        "uncited"
+      ],
+      "action": "kept"
+    },
+    {
+      "section": "Incident Summary",
+      "line": "+ Review and optimize Frontend latency metrics",
+      "types": [
+        "uncited"
+      ],
+      "action": "kept"
+    },
+    {
+      "section": "Incident Summary",
+      "line": "1. Conduct a thorough investigation to determine the root cause of the incident.",
+      "types": [
+        "uncited"
+      ],
+      "action": "kept"
+    },
+    {
+      "section": "Incident Summary",
+      "line": "2. Implement alerting on critical metrics to detect potential issues in a timely manner.",
+      "types": [
+        "uncited"
+      ],
+      "action": "kept"
+    },
+    {
+      "section": "Incident Summary",
+      "line": "3. Review and optimize latency metrics for critical services to ensure they are within acceptable ranges.",
+      "types": [
+        "uncited"
+      ],
+      "action": "kept"
+    },
+    {
+      "section": "Incident Summary",
+      "line": "4. Investigate and address potential issues with resource allocation and CPU usage for ProductCatalogService.",
+      "types": [
+        "uncited"
+      ],
+      "action": "kept"
+    },
+    {
+      "section": "Incident Summary",
+      "line": "5. Consider implementing additional monitoring and logging to improve visibility into system performance and reliability.",
+      "types": [
+        "uncited"
+      ],
+      "action": "kept"
+    }
+  ],
+  "section_profile": "service_outage",
+  "evaluation": {
+    "answer_precision": null,
+    "answer_recall": 0.0,
+    "answer_f1": null,
+    "question_recall": 0.812,
+    "questions_correct": "7/8",
+    "answerable_entity_recall": 0.833,
+    "overall_entity_recall": 0.778,
+    "faithfulness": 0.578,
+    "grounding_rate": 1.0,
+    "claims": 45,
+    "assessment_lines": 6,
+    "hallucination_rate": 0.0,
+    "unsupported_entities": [],
+    "unsupported_number_count": 1,
+    "unsupported_numbers": [
+      "3"
+    ],
+    "placeholder_count": 0,
+    "per_question": [
+      {
+        "id": 1,
+        "question": "What is the name of the service where the failure originated (the root-cause service)?",
+        "reference_answer": "currencyservice",
+        "atoms": [
+          "currencyservice"
+        ],
+        "answerable_from_evidence": [
+          "currencyservice"
+        ],
+        "found_in_report": [
+          "currencyservice"
+        ],
+        "missing_from_evidence": [],
+        "answer_text": "Not established from the available artifacts",
+        "status": "ABSTAINED",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 0.0
+      },
+      {
+        "id": 2,
+        "question": "What is the name of the Kubernetes pod of the root-cause service?",
+        "reference_answer": "currencyservice-b647dd94b-f4mcm",
+        "atoms": [
+          "currencyservice-b647dd94b-f4mcm"
+        ],
+        "answerable_from_evidence": [
+          "currencyservice-b647dd94b-f4mcm"
+        ],
+        "found_in_report": [],
+        "missing_from_evidence": [],
+        "answer_text": "Not established from the available artifacts",
+        "status": "ABSTAINED",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 0.0
+      },
+      {
+        "id": 3,
+        "question": "On which Kubernetes node did the pod of the root-cause service run?",
+        "reference_answer": "gke-gke-cluster-default-pool-2e1807ce-cx8g",
+        "atoms": [
+          "gke-gke-cluster-default-pool-2e1807ce-cx8g"
+        ],
+        "answerable_from_evidence": [
+          "gke-gke-cluster-default-pool-2e1807ce-cx8g"
+        ],
+        "found_in_report": [
+          "gke-gke-cluster-default-pool-2e1807ce-cx8g"
+        ],
+        "missing_from_evidence": [],
+        "answer_text": "Not established from the available artifacts",
+        "status": "ABSTAINED",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 0.0
+      },
+      {
+        "id": 4,
+        "question": "What type of fault caused the incident: CPU, memory, disk, network delay, packet loss, or socket?",
+        "reference_answer": "network delay",
+        "atoms": [
+          "delay"
+        ],
+        "answerable_from_evidence": [],
+        "found_in_report": [
+          "delay"
+        ],
+        "missing_from_evidence": [
+          "delay"
+        ],
+        "answer_text": "Not established from the available artifacts,",
+        "status": "ABSTAINED",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 0.0
+      },
+      {
+        "id": 5,
+        "question": "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+        "reference_answer": "availability",
+        "atoms": [
+          "availability"
+        ],
+        "answerable_from_evidence": [],
+        "found_in_report": [
+          "availability"
+        ],
+        "missing_from_evidence": [
+          "availability"
+        ],
+        "answer_text": "Not established from the available artifacts,",
+        "status": "ABSTAINED",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 0.0
+      },
+      {
+        "id": 6,
+        "question": "During what minute did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+        "reference_answer": "2024-01-19 22:06 UTC",
+        "atoms": [
+          "2024-01-19 22:06 UTC"
+        ],
+        "answerable_from_evidence": [
+          "2024-01-19 22:06 UTC"
+        ],
+        "found_in_report": [
+          "2024-01-19 22:06 UTC"
+        ],
+        "missing_from_evidence": [],
+        "answer_text": "Not established from the available artifacts,",
+        "status": "ABSTAINED",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 0.0
+      },
+      {
+        "id": 7,
+        "question": "Which metric of the root-cause service best shows the fault? Give it as <service>_<indicator>, for example cartservice_cpu.",
+        "reference_answer": "currencyservice_latency",
+        "atoms": [
+          "currencyservice_latency"
+        ],
+        "answerable_from_evidence": [
+          "currencyservice_latency"
+        ],
+        "found_in_report": [
+          "currencyservice_latency"
+        ],
+        "missing_from_evidence": [],
+        "answer_text": "Not established from the available artifacts,",
+        "status": "ABSTAINED",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 0.0
+      },
+      {
+        "id": 8,
+        "question": "According to the trace latency statistics, which single service operation showed the largest latency increase? Is its service the root cause or a downstream symptom?",
+        "reference_answer": "frontendservice_frontend, downstream symptom",
+        "atoms": [
+          "frontendservice_frontend",
+          "downstream symptom"
+        ],
+        "answerable_from_evidence": [
+          "frontendservice_frontend"
+        ],
+        "found_in_report": [
+          "frontendservice_frontend"
+        ],
+        "missing_from_evidence": [
+          "downstream symptom"
+        ],
+        "answer_text": "Not established from the available artifacts,",
+        "status": "ABSTAINED",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 0.0
+      }
+    ]
+  },
+  "unanswerable": {
+    "domain": "service_outage",
+    "section_profile_used": "service_outage",
+    "questions": 3,
+    "correct_abstention_rate": 0.333,
+    "invention_rate": 0.0,
+    "invention_rate_after_fact_check": 0.0,
+    "invented_removed_by_fact_check": 0,
+    "other_rate": 0.667,
+    "no_answer_rate": 0.0,
+    "per_question": [
+      {
+        "id": "U1",
+        "question": "What is the full 40-character Git commit hash of the build of the root-cause service that was running?",
+        "absent_type": "git_commit",
+        "raw_answer": "The root-cause service that was running is not identified from the available artifacts. [re2ob_08-03#0]",
+        "raw_status": "OTHER",
+        "raw_values": [],
+        "final_answer": "The root-cause service that was running is not identified from the available artifacts. [re2ob_08-03#0]",
+        "final_status": "OTHER",
+        "final_values": [],
+        "removed_by_fact_check": false
+      },
+      {
+        "id": "U2",
+        "question": "Which Linux kernel version ran on the node that hosted the pod of the root-cause service?",
+        "absent_type": "kernel_version",
+        "raw_answer": "Not established from the available artifacts.",
+        "raw_status": "ABSTAINED",
+        "raw_values": [],
+        "final_answer": "Not established from the available artifacts.",
+        "final_status": "ABSTAINED",
+        "final_values": [],
+        "removed_by_fact_check": false
+      },
+      {
+        "id": "U3",
+        "question": "Which container image version (tag) of the root-cause service was running when the failure started?",
+        "absent_type": "version",
+        "raw_answer": "The container image version (tag) of the root-cause service that was running when the failure started is not specified in the evidence.",
+        "raw_status": "OTHER",
+        "raw_values": [],
+        "final_answer": "The container image version (tag) of the root-cause service that was running when the failure started is not specified in the evidence.",
+        "final_status": "OTHER",
+        "final_values": [],
+        "removed_by_fact_check": false
+      }
+    ],
+    "answerable_questions": 5,
+    "over_abstention_rate": 1.0,
+    "over_abstention_rate_all_questions": 1.0,
+    "run": {
+      "section": "Additional Investigation Questions",
+      "retrieved": [
+        "re2ob_08-03#0",
+        "re2ob_08-04#4",
+        "re2ob_08-04#2",
+        "re2ob_08-05#1",
+        "re2ob_08-05#0",
+        "re2ob_08-05#2",
+        "re2ob_08-01#0"
+      ],
+      "seconds": 1.9,
+      "truncated": false,
+      "flag_counts": {
+        "uncited": 1
+      }
+    },
+    "flagged": [
+      {
+        "line": "U3. The container image version (tag) of the root-cause service that was running when the failure started is not specified in the evidence.",
+        "types": [
+          "uncited"
+        ],
+        "action": "kept"
+      }
+    ]
+  }
+}

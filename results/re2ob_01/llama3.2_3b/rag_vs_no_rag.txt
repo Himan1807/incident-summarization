@@ -1,0 +1,101 @@
+====================================================================================================
+INCIDENT : re2ob_01
+MODEL    : llama3.2:3b
+CONDITION: No RAG vs RAG (same LLM, same section plan, same questions)
+CREATED  : 2026-11-28T11:25:48
+====================================================================================================
+
+NO RAG : the LLM receives only the incident context (network description and the questions). It has NO logs, alerts or query results.
+         Output is formatted (titles/preambles removed) but not verified, de-duplicated or given citations.
+RAG    : the advanced pipeline (hybrid retrieval, reranking, section-wise generation with citations, verification).
+Hallucination, grounding and number checks are always measured against the REAL evidence of the incident.
+
+A. METRICS
+
++------------------------------------------------------+----------------+----------------+----------------+
+| Metric                                               | No RAG         | RAG            | RAG - No RAG   |
++------------------------------------------------------+----------------+----------------+----------------+
+| Answer precision                                     | -              | 0.500          | -              |
++------------------------------------------------------+----------------+----------------+----------------+
+| Answer recall                                        | -              | 0.333          | -              |
++------------------------------------------------------+----------------+----------------+----------------+
+| Answer F1                                            | -              | 0.400          | -              |
++------------------------------------------------------+----------------+----------------+----------------+
+| Question recall                                      | 0.438          | 0.875          | +0.437         |
++------------------------------------------------------+----------------+----------------+----------------+
+| Faithfulness                                         | 0.000          | 0.806          | +0.806         |
++------------------------------------------------------+----------------+----------------+----------------+
+| Grounding rate                                       | 0.341          | 1.000          | +0.659         |
++------------------------------------------------------+----------------+----------------+----------------+
+| Hallucination rate (lower is better)                 | 0.714          | 0.000          | -0.714         |
++------------------------------------------------------+----------------+----------------+----------------+
+| Unsupported numbers (lower is better)                | 22             | 1              | -21            |
++------------------------------------------------------+----------------+----------------+----------------+
+| Placeholders (lower is better)                       | 0              | 0              | +0             |
++------------------------------------------------------+----------------+----------------+----------------+
+| Questions CORRECT                                    | 0              | 2              | +2             |
++------------------------------------------------------+----------------+----------------+----------------+
+| Questions PARTIAL                                    | 0              | 0              | +0             |
++------------------------------------------------------+----------------+----------------+----------------+
+| Questions WRONG                                      | 0              | 2              | +2             |
++------------------------------------------------------+----------------+----------------+----------------+
+| Questions ABSTAINED / unanswered                     | 0 / 8          | 4 / 0          | -              |
++------------------------------------------------------+----------------+----------------+----------------+
+| LLM generation time (min)                            | 0.4            | 2.8            | -              |
++------------------------------------------------------+----------------+----------------+----------------+
+
+B. ANSWERS PER QUESTION
+
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| #   | Question                     | Reference answer         | No RAG answer                  | RAG answer                     | No RAG    | RAG       |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 1   | What is the name of the      | checkoutservice          | (no answer)                    | The root-cause service is not  | NO ANSWER | ABSTAINED |
+|     | service where the failure    |                          |                                | established from the available |           |           |
+|     | originated (the root-cause   |                          |                                | artifacts.                     |           |           |
+|     | service)?                    |                          |                                |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 2   | What is the name of the      | checkoutservice-         | (no answer)                    | The Kubernetes pod of the      | NO ANSWER | WRONG     |
+|     | Kubernetes pod of the root-  | 85d565b4b5-xwr4j         |                                | root-cause service is          |           |           |
+|     | cause service?               |                          |                                | emailservice-5c77d688f7-wzlg6  |           |           |
+|     |                              |                          |                                | on node gke-gke-cluster-       |           |           |
+|     |                              |                          |                                | default-pool-2e1807ce-w819     |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 3   | On which Kubernetes node did | gke-gke-cluster-default- | (no answer)                    | The Kubernetes node where the  | NO ANSWER | CORRECT   |
+|     | the pod of the root-cause    | pool-2e1807ce-w819       |                                | emailservice-5c77d688f7-wzlg6  |           |           |
+|     | service run?                 |                          |                                | pod runs is node gke-gke-      |           |           |
+|     |                              |                          |                                | cluster-default-               |           |           |
+|     |                              |                          |                                | pool-2e1807ce-w819             |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 4   | What type of fault caused    | CPU                      | (no answer)                    | Not established from the       | NO ANSWER | ABSTAINED |
+|     | the incident: CPU, memory,   |                          |                                | available artifacts.           |           |           |
+|     | disk, network delay, packet  |                          |                                |                                |           |           |
+|     | loss, or socket?             |                          |                                |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 5   | Which of the three CIA       | availability             | (no answer)                    | Not established from the       | NO ANSWER | ABSTAINED |
+|     | components is primarily      |                          |                                | available artifacts.           |           |           |
+|     | affected: availability,      |                          |                                |                                |           |           |
+|     | integrity, or                |                          |                                |                                |           |           |
+|     | confidentiality?             |                          |                                |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 6   | During what minute did the   | 2024-01-15 21:36 UTC     | (no answer)                    | The first signs of the failure | NO ANSWER | WRONG     |
+|     | first signs of the failure   |                          |                                | appeared at 2024-01-15         |           |           |
+|     | appear? Provide the earliest |                          |                                | 21:34:06 UTC                   |           |           |
+|     | date and time in YYYY-MM-DD  |                          |                                |                                |           |           |
+|     | HH:MM UTC format.            |                          |                                |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 7   | Which metric of the root-    | checkoutservice_cpu      | (no answer)                    | The metric that best shows the | NO ANSWER | ABSTAINED |
+|     | cause service best shows the |                          |                                | fault for the root-cause       |           |           |
+|     | fault? Give it as            |                          |                                | service is not established     |           |           |
+|     | <service>_<indicator>, for   |                          |                                | from the available artifacts.  |           |           |
+|     | example cartservice_cpu.     |                          |                                |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 8   | According to the trace       | shippingservice_GetQuote | (no answer)                    | The single service operation   | NO ANSWER | CORRECT   |
+|     | latency statistics, which    | , downstream symptom     |                                | with the largest latency       |           |           |
+|     | single service operation     |                          |                                | increase is                    |           |           |
+|     | showed the largest latency   |                          |                                | shippingservice_GetQuote,      |           |           |
+|     | increase? Is its service the |                          |                                | which is not the root cause    |           |           |
+|     | root cause or a downstream   |                          |                                | but a downstream symptom       |           |           |
+|     | symptom?                     |                          |                                |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+
+Faithfulness is 0 / '-' for No RAG by construction: without retrieved chunks it cannot cite evidence.

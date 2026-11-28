@@ -3,8 +3,8 @@ INCIDENT : koi_stealer
 MODEL    : deepinfra:deepseek-ai/DeepSeek-V3
 CONDITION: RAG (advanced pipeline)
 RUN TIME : 1.9 min of LLM generation
-REPORT   : results\koi_stealer\deepinfra_deepseek-ai_DeepSeek-V3\advanced_postmortem.md
-CREATED  : 2026-11-28T01:28:20
+REPORT   : results/koi_stealer/deepinfra_deepseek-ai_DeepSeek-V3/advanced_postmortem.md
+CREATED  : 2026-11-28T11:25:48
 ====================================================================================================
 
 A. QUESTION-BY-QUESTION EVALUATION

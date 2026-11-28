@@ -1,0 +1,98 @@
+====================================================================================================
+INCIDENT : re2ob_01
+MODEL    : llama3.2:3b
+CONDITION: RAG (advanced pipeline)
+RUN TIME : 2.8 min of LLM generation
+REPORT   : results/re2ob_01/llama3.2_3b/advanced_postmortem.md
+CREATED  : 2026-11-28T11:25:48
+====================================================================================================
+
+A. QUESTION-BY-QUESTION EVALUATION
+   Found = reference items present in the report's answer; Prec. = correct entities / entities the answer gave;
+   Wrong items = entities in the answer that are not in the reference answer.
+
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| #   | Question                         | Reference answer           | Answer from the report             | Found | Prec. | Wrong items      | Status    |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 1   | What is the name of the service  | checkoutservice            | The root-cause service is not      | 0/1   | -     | -                | ABSTAINED |
+|     | where the failure originated     |                            | established from the available     |       |       |                  |           |
+|     | (the root-cause service)?        |                            | artifacts.                         |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 2   | What is the name of the          | checkoutservice-           | The Kubernetes pod of the root-    | 0/1   | -     | -                | WRONG     |
+|     | Kubernetes pod of the root-cause | 85d565b4b5-xwr4j           | cause service is                   |       |       |                  |           |
+|     | service?                         |                            | emailservice-5c77d688f7-wzlg6 on   |       |       |                  |           |
+|     |                                  |                            | node gke-gke-cluster-default-      |       |       |                  |           |
+|     |                                  |                            | pool-2e1807ce-w819                 |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 3   | On which Kubernetes node did the | gke-gke-cluster-default-   | The Kubernetes node where the      | 1/1   | -     | -                | CORRECT   |
+|     | pod of the root-cause service    | pool-2e1807ce-w819         | emailservice-5c77d688f7-wzlg6 pod  |       |       |                  |           |
+|     | run?                             |                            | runs is node gke-gke-cluster-      |       |       |                  |           |
+|     |                                  |                            | default-pool-2e1807ce-w819         |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 4   | What type of fault caused the    | CPU                        | Not established from the available | 0/1   | -     | -                | ABSTAINED |
+|     | incident: CPU, memory, disk,     |                            | artifacts.                         |       |       |                  |           |
+|     | network delay, packet loss, or   |                            |                                    |       |       |                  |           |
+|     | socket?                          |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 5   | Which of the three CIA           | availability               | Not established from the available | 0/1   | -     | -                | ABSTAINED |
+|     | components is primarily          |                            | artifacts.                         |       |       |                  |           |
+|     | affected: availability,          |                            |                                    |       |       |                  |           |
+|     | integrity, or confidentiality?   |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 6   | During what minute did the first | 2024-01-15 21:36 UTC       | The first signs of the failure     | 0/1   | 1/2   | 2024-01-15       | WRONG     |
+|     | signs of the failure appear?     |                            | appeared at 2024-01-15 21:34:06    |       |       | 21:34:06         |           |
+|     | Provide the earliest date and    |                            | UTC                                |       |       |                  |           |
+|     | time in YYYY-MM-DD HH:MM UTC     |                            |                                    |       |       |                  |           |
+|     | format.                          |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 7   | Which metric of the root-cause   | checkoutservice_cpu        | The metric that best shows the     | 0/1   | -     | -                | ABSTAINED |
+|     | service best shows the fault?    |                            | fault for the root-cause service   |       |       |                  |           |
+|     | Give it as                       |                            | is not established from the        |       |       |                  |           |
+|     | <service>_<indicator>, for       |                            | available artifacts.               |       |       |                  |           |
+|     | example cartservice_cpu.         |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 8   | According to the trace latency   | shippingservice_GetQuote,  | The single service operation with  | 2/2   | -     | -                | CORRECT   |
+|     | statistics, which single service | downstream symptom         | the largest latency increase is    |       |       |                  |           |
+|     | operation showed the largest     |                            | shippingservice_GetQuote, which is |       |       |                  |           |
+|     | latency increase? Is its service |                            | not the root cause but a           |       |       |                  |           |
+|     | the root cause or a downstream   |                            | downstream symptom                 |       |       |                  |           |
+|     | symptom?                         |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+
+B. METRICS
+
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Metric                                       | Value        | Meaning                                                                |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Answer precision                             | 0.500        | Entities (IPs, domains, hosts, URLs, times) in the report's answers    |
+|                                              |              | that also occur in the reference / all entities it gave                |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Answer recall                                | 0.333        | Reference answer items found in the report's answers / all reference   |
+|                                              |              | items                                                                  |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Answer F1                                    | 0.400        | Harmonic mean of answer precision and recall                           |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Question recall                              | 0.875        | Mean over questions of reference items found anywhere in the report    |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Faithfulness                                 | 0.806        | Claims whose facts are in the evidence AND in the chunks they cite /   |
+|                                              |              | all claims                                                             |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Grounding rate                               | 1.000        | Claims whose entities and numbers all exist in the evidence            |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Hallucination rate                           | 0.000        | Entities in the report that are absent from the evidence / all         |
+|                                              |              | entities (lower is better)                                             |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Unsupported numbers                          | 1            | Numbers in the report that are absent from the evidence (lower is      |
+|                                              |              | better)                                                                |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Placeholders                                 | 0            | '[insert ...]' placeholders left in the report (lower is better)       |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Questions correct / partial / wrong /        | 2 / 0 / 2 /  | Per-question status in the table above                                 |
+| abstained / unanswered                       | 4 / 0        |                                                                        |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Claims                                       | 31           | Claim lines counted by the verifier; hedged assessments are excluded   |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+
+Status: CORRECT = every reference item found and nothing wrong; PARTIAL = some items found or wrong items present;
+        WRONG = answer given but no reference item found; ABSTAINED = the report says 'Not established from the available artifacts';
+        NO ANSWER = the report has no answer for that question.

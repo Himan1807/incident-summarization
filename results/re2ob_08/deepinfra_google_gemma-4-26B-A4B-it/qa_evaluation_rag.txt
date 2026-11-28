@@ -1,0 +1,95 @@
+====================================================================================================
+INCIDENT : re2ob_08
+MODEL    : deepinfra:google/gemma-4-26B-A4B-it
+CONDITION: RAG (advanced pipeline)
+RUN TIME : 0.8 min of LLM generation
+REPORT   : results/re2ob_08/deepinfra_google_gemma-4-26B-A4B-it/advanced_postmortem.md
+CREATED  : 2026-11-28T11:25:48
+====================================================================================================
+
+A. QUESTION-BY-QUESTION EVALUATION
+   Found = reference items present in the report's answer; Prec. = correct entities / entities the answer gave;
+   Wrong items = entities in the answer that are not in the reference answer.
+
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| #   | Question                         | Reference answer           | Answer from the report             | Found | Prec. | Wrong items      | Status    |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 1   | What is the name of the service  | currencyservice            | redis                              | 0/1   | -     | -                | WRONG     |
+|     | where the failure originated     |                            |                                    |       |       |                  |           |
+|     | (the root-cause service)?        |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 2   | What is the name of the          | currencyservice-b647dd94b- | redis-cart-9fcc49bdf-g8rwv         | 0/1   | -     | -                | WRONG     |
+|     | Kubernetes pod of the root-cause | f4mcm                      |                                    |       |       |                  |           |
+|     | service?                         |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 3   | On which Kubernetes node did the | gke-gke-cluster-default-   | gke-gke-cluster-default-           | 0/1   | -     | -                | WRONG     |
+|     | pod of the root-cause service    | pool-2e1807ce-cx8g         | pool-2e1807ce-0e4z                 |       |       |                  |           |
+|     | run?                             |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 4   | What type of fault caused the    | network delay              | disk                               | 0/1   | -     | -                | WRONG     |
+|     | incident: CPU, memory, disk,     |                            |                                    |       |       |                  |           |
+|     | network delay, packet loss, or   |                            |                                    |       |       |                  |           |
+|     | socket?                          |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 5   | Which of the three CIA           | availability               | Not established from the available | 0/1   | -     | -                | ABSTAINED |
+|     | components is primarily          |                            | artifacts.                         |       |       |                  |           |
+|     | affected: availability,          |                            |                                    |       |       |                  |           |
+|     | integrity, or confidentiality?   |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 6   | During what minute did the first | 2024-01-19 22:06 UTC       | 2024-01-19 22:04 UTC               | 0/1   | 1/2   | 2024-01-19 22:04 | WRONG     |
+|     | signs of the failure appear?     |                            |                                    |       |       |                  |           |
+|     | Provide the earliest date and    |                            |                                    |       |       |                  |           |
+|     | time in YYYY-MM-DD HH:MM UTC     |                            |                                    |       |       |                  |           |
+|     | format.                          |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 7   | Which metric of the root-cause   | currencyservice_latency    | redis_diskio                       | 0/1   | -     | -                | WRONG     |
+|     | service best shows the fault?    |                            |                                    |       |       |                  |           |
+|     | Give it as                       |                            |                                    |       |       |                  |           |
+|     | <service>_<indicator>, for       |                            |                                    |       |       |                  |           |
+|     | example cartservice_cpu.         |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 8   | According to the trace latency   | frontendservice_frontend,  | frontendservice_frontend; its      | 2/2   | -     | -                | CORRECT   |
+|     | statistics, which single service | downstream symptom         | service is a downstream symptom    |       |       |                  |           |
+|     | operation showed the largest     |                            |                                    |       |       |                  |           |
+|     | latency increase? Is its service |                            |                                    |       |       |                  |           |
+|     | the root cause or a downstream   |                            |                                    |       |       |                  |           |
+|     | symptom?                         |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+
+B. METRICS
+
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Metric                                       | Value        | Meaning                                                                |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Answer precision                             | 0.500        | Entities (IPs, domains, hosts, URLs, times) in the report's answers    |
+|                                              |              | that also occur in the reference / all entities it gave                |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Answer recall                                | 0.222        | Reference answer items found in the report's answers / all reference   |
+|                                              |              | items                                                                  |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Answer F1                                    | 0.307        | Harmonic mean of answer precision and recall                           |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Question recall                              | 0.625        | Mean over questions of reference items found anywhere in the report    |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Faithfulness                                 | 0.842        | Claims whose facts are in the evidence AND in the chunks they cite /   |
+|                                              |              | all claims                                                             |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Grounding rate                               | 1.000        | Claims whose entities and numbers all exist in the evidence            |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Hallucination rate                           | 0.000        | Entities in the report that are absent from the evidence / all         |
+|                                              |              | entities (lower is better)                                             |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Unsupported numbers                          | 0            | Numbers in the report that are absent from the evidence (lower is      |
+|                                              |              | better)                                                                |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Placeholders                                 | 0            | '[insert ...]' placeholders left in the report (lower is better)       |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Questions correct / partial / wrong /        | 1 / 0 / 6 /  | Per-question status in the table above                                 |
+| abstained / unanswered                       | 1 / 0        |                                                                        |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Claims                                       | 38           | Claim lines counted by the verifier; hedged assessments are excluded   |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+
+Status: CORRECT = every reference item found and nothing wrong; PARTIAL = some items found or wrong items present;
+        WRONG = answer given but no reference item found; ABSTAINED = the report says 'Not established from the available artifacts';
+        NO ANSWER = the report has no answer for that question.

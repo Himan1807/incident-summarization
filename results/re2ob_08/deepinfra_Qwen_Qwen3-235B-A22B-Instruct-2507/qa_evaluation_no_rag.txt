@@ -1,0 +1,96 @@
+====================================================================================================
+INCIDENT : re2ob_08
+MODEL    : deepinfra:Qwen/Qwen3-235B-A22B-Instruct-2507
+CONDITION: No RAG (LLM without retrieval)
+RUN TIME : 1.4 min of LLM generation
+REPORT   : results/re2ob_08/deepinfra_Qwen_Qwen3-235B-A22B-Instruct-2507/no_rag_postmortem.md
+CREATED  : 2026-11-28T11:25:48
+====================================================================================================
+
+A. QUESTION-BY-QUESTION EVALUATION
+   Found = reference items present in the report's answer; Prec. = correct entities / entities the answer gave;
+   Wrong items = entities in the answer that are not in the reference answer.
+
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| #   | Question                         | Reference answer           | Answer from the report             | Found | Prec. | Wrong items      | Status    |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 1   | What is the name of the service  | currencyservice            | recommendationservice [evidence    | 0/1   | -     | -                | WRONG     |
+|     | where the failure originated     |                            | id: trace-latency-spike-           |       |       |                  |           |
+|     | (the root-cause service)?        |                            | recommendationservice]             |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 2   | What is the name of the          | currencyservice-b647dd94b- | recommendationservice-758b95f5b9-  | 0/1   | -     | -                | WRONG     |
+|     | Kubernetes pod of the root-cause | f4mcm                      | 4x2k7 [evidence id: pod-metrics-   |       |       |                  |           |
+|     | service?                         |                            | correlation]                       |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 3   | On which Kubernetes node did the | gke-gke-cluster-default-   | gke-prod-cluster-1-default-        | 0/1   | -     | -                | WRONG     |
+|     | pod of the root-cause service    | pool-2e1807ce-cx8g         | pool-b9f3a3e2-8v2n [evidence id:   |       |       |                  |           |
+|     | run?                             |                            | node-affinity-logs]                |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 4   | What type of fault caused the    | network delay              | CPU [evidence id: cpu-usage-spike- | 0/1   | -     | -                | WRONG     |
+|     | incident: CPU, memory, disk,     |                            | aggregated]                        |       |       |                  |           |
+|     | network delay, packet loss, or   |                            |                                    |       |       |                  |           |
+|     | socket?                          |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 5   | Which of the three CIA           | availability               | availability [evidence id: error-  | 1/1   | -     | -                | CORRECT   |
+|     | components is primarily          |                            | rate-increase-frontend]            |       |       |                  |           |
+|     | affected: availability,          |                            |                                    |       |       |                  |           |
+|     | integrity, or confidentiality?   |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 6   | During what minute did the first | 2024-01-19 22:06 UTC       | 2024-01-19 21:12 UTC [evidence id: | 0/1   | 1/2   | 2024-01-19 21:12 | WRONG     |
+|     | signs of the failure appear?     |                            | metric-anomaly-onset]              |       |       |                  |           |
+|     | Provide the earliest date and    |                            |                                    |       |       |                  |           |
+|     | time in YYYY-MM-DD HH:MM UTC     |                            |                                    |       |       |                  |           |
+|     | format.                          |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 7   | Which metric of the root-cause   | currencyservice_latency    | recommendationservice_cpu          | 0/1   | -     | -                | WRONG     |
+|     | service best shows the fault?    |                            | [evidence id: cpu-usage-spike-     |       |       |                  |           |
+|     | Give it as                       |                            | aggregated]                        |       |       |                  |           |
+|     | <service>_<indicator>, for       |                            |                                    |       |       |                  |           |
+|     | example cartservice_cpu.         |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 8   | According to the trace latency   | frontendservice_frontend,  | /recommendationservice.Recommendat | 0/2   | 0/2   | /recommendations | WRONG     |
+|     | statistics, which single service | downstream symptom         | ionService/Recommend [evidence id: |       |       | ervice.Recommend |           |
+|     | operation showed the largest     |                            | trace-latency-spike-               |       |       | ationService/Rec |           |
+|     | latency increase? Is its service |                            | recommendationservice]             |       |       | ommend, recommen |           |
+|     | the root cause or a downstream   |                            |                                    |       |       | dationservice.re |           |
+|     | symptom?                         |                            |                                    |       |       | commendationserv |           |
+|     |                                  |                            |                                    |       |       | ice              |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+
+B. METRICS
+
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Metric                                       | Value        | Meaning                                                                |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Answer precision                             | 0.250        | Entities (IPs, domains, hosts, URLs, times) in the report's answers    |
+|                                              |              | that also occur in the reference / all entities it gave                |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Answer recall                                | 0.111        | Reference answer items found in the report's answers / all reference   |
+|                                              |              | items                                                                  |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Answer F1                                    | 0.154        | Harmonic mean of answer precision and recall                           |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Question recall                              | 0.312        | Mean over questions of reference items found anywhere in the report    |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Faithfulness                                 | 0.000        | Claims whose facts are in the evidence AND in the chunks they cite /   |
+|                                              |              | all claims                                                             |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Grounding rate                               | 0.279        | Claims whose entities and numbers all exist in the evidence            |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Hallucination rate                           | 0.957        | Entities in the report that are absent from the evidence / all         |
+|                                              |              | entities (lower is better)                                             |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Unsupported numbers                          | 24           | Numbers in the report that are absent from the evidence (lower is      |
+|                                              |              | better)                                                                |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Placeholders                                 | 0            | '[insert ...]' placeholders left in the report (lower is better)       |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Questions correct / partial / wrong /        | 1 / 0 / 7 /  | Per-question status in the table above                                 |
+| abstained / unanswered                       | 0 / 0        |                                                                        |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Claims                                       | 43           | Claim lines counted by the verifier; hedged assessments are excluded   |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+
+Status: CORRECT = every reference item found and nothing wrong; PARTIAL = some items found or wrong items present;
+        WRONG = answer given but no reference item found; ABSTAINED = the report says 'Not established from the available artifacts';
+        NO ANSWER = the report has no answer for that question.

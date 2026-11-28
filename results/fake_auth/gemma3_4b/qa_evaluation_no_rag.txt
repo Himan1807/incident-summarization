@@ -3,8 +3,8 @@ INCIDENT : fake_auth
 MODEL    : gemma3:4b
 CONDITION: No RAG (LLM without retrieval)
 RUN TIME : 11.4 min of LLM generation
-REPORT   : results\fake_auth\gemma3_4b\no_rag_postmortem.md
-CREATED  : 2026-11-28T01:28:21
+REPORT   : results/fake_auth/gemma3_4b/no_rag_postmortem.md
+CREATED  : 2026-11-28T11:25:48
 ====================================================================================================
 
 A. QUESTION-BY-QUESTION EVALUATION

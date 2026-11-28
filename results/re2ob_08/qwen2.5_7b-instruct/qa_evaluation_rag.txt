@@ -1,0 +1,97 @@
+====================================================================================================
+INCIDENT : re2ob_08
+MODEL    : qwen2.5:7b-instruct
+CONDITION: RAG (advanced pipeline)
+RUN TIME : 1.2 min of LLM generation
+REPORT   : results/re2ob_08/qwen2.5_7b-instruct/advanced_postmortem.md
+CREATED  : 2026-11-28T11:25:48
+====================================================================================================
+
+A. QUESTION-BY-QUESTION EVALUATION
+   Found = reference items present in the report's answer; Prec. = correct entities / entities the answer gave;
+   Wrong items = entities in the answer that are not in the reference answer.
+
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| #   | Question                         | Reference answer           | Answer from the report             | Found | Prec. | Wrong items      | Status    |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 1   | What is the name of the service  | currencyservice            | The service where the failure      | 1/1   | -     | -                | CORRECT   |
+|     | where the failure originated     |                            | originated (the root-cause         |       |       |                  |           |
+|     | (the root-cause service)?        |                            | service) is currencyservice.       |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 2   | What is the name of the          | currencyservice-b647dd94b- | The name of the Kubernetes pod of  | 1/1   | -     | -                | CORRECT   |
+|     | Kubernetes pod of the root-cause | f4mcm                      | the root-cause service is          |       |       |                  |           |
+|     | service?                         |                            | currencyservice-b647dd94b-f4mcm.   |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 3   | On which Kubernetes node did the | gke-gke-cluster-default-   | The pod of the root-cause service  | 1/1   | -     | -                | CORRECT   |
+|     | pod of the root-cause service    | pool-2e1807ce-cx8g         | ran on the Kubernetes node gke-    |       |       |                  |           |
+|     | run?                             |                            | gke-cluster-default-pool-2e1807ce- |       |       |                  |           |
+|     |                                  |                            | cx8g.                              |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 4   | What type of fault caused the    | network delay              | The type of fault caused the       | 0/1   | -     | -                | WRONG     |
+|     | incident: CPU, memory, disk,     |                            | incident is CPU.                   |       |       |                  |           |
+|     | network delay, packet loss, or   |                            |                                    |       |       |                  |           |
+|     | socket?                          |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 5   | Which of the three CIA           | availability               | The CIA component primarily        | 1/1   | -     | -                | CORRECT   |
+|     | components is primarily          |                            | affected is availability.          |       |       |                  |           |
+|     | affected: availability,          |                            |                                    |       |       |                  |           |
+|     | integrity, or confidentiality?   |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 6   | During what minute did the first | 2024-01-19 22:06 UTC       | The first signs of the failure     | 1/1   | 1/2   | 2024-01-19       | PARTIAL   |
+|     | signs of the failure appear?     |                            | appeared during the minute         |       |       | 22:06:11         |           |
+|     | Provide the earliest date and    |                            | starting at 2024-01-19 22:06:11    |       |       |                  |           |
+|     | time in YYYY-MM-DD HH:MM UTC     |                            | UTC.                               |       |       |                  |           |
+|     | format.                          |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 7   | Which metric of the root-cause   | currencyservice_latency    | The metric of the root-cause       | 0/1   | -     | -                | WRONG     |
+|     | service best shows the fault?    |                            | service that best shows the fault  |       |       |                  |           |
+|     | Give it as                       |                            | is currencyservice_cpu.            |       |       |                  |           |
+|     | <service>_<indicator>, for       |                            |                                    |       |       |                  |           |
+|     | example cartservice_cpu.         |                            |                                    |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+| 8   | According to the trace latency   | frontendservice_frontend,  | According to the trace latency     | 1/2   | -     | -                | PARTIAL   |
+|     | statistics, which single service | downstream symptom         | statistics, the single service     |       |       |                  |           |
+|     | operation showed the largest     |                            | operation that showed the largest  |       |       |                  |           |
+|     | latency increase? Is its service |                            | latency increase is                |       |       |                  |           |
+|     | the root cause or a downstream   |                            | currencyservice_Convert, which is  |       |       |                  |           |
+|     | symptom?                         |                            | not the root cause but a           |       |       |                  |           |
+|     |                                  |                            | downstream symptom.                |       |       |                  |           |
++-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
+
+B. METRICS
+
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Metric                                       | Value        | Meaning                                                                |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Answer precision                             | 0.500        | Entities (IPs, domains, hosts, URLs, times) in the report's answers    |
+|                                              |              | that also occur in the reference / all entities it gave                |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Answer recall                                | 0.667        | Reference answer items found in the report's answers / all reference   |
+|                                              |              | items                                                                  |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Answer F1                                    | 0.572        | Harmonic mean of answer precision and recall                           |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Question recall                              | 0.875        | Mean over questions of reference items found anywhere in the report    |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Faithfulness                                 | 0.560        | Claims whose facts are in the evidence AND in the chunks they cite /   |
+|                                              |              | all claims                                                             |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Grounding rate                               | 1.000        | Claims whose entities and numbers all exist in the evidence            |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Hallucination rate                           | 0.000        | Entities in the report that are absent from the evidence / all         |
+|                                              |              | entities (lower is better)                                             |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Unsupported numbers                          | 1            | Numbers in the report that are absent from the evidence (lower is      |
+|                                              |              | better)                                                                |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Placeholders                                 | 0            | '[insert ...]' placeholders left in the report (lower is better)       |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Questions correct / partial / wrong /        | 4 / 2 / 2 /  | Per-question status in the table above                                 |
+| abstained / unanswered                       | 0 / 0        |                                                                        |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+| Claims                                       | 50           | Claim lines counted by the verifier; hedged assessments are excluded   |
++----------------------------------------------+--------------+------------------------------------------------------------------------+
+
+Status: CORRECT = every reference item found and nothing wrong; PARTIAL = some items found or wrong items present;
+        WRONG = answer given but no reference item found; ABSTAINED = the report says 'Not established from the available artifacts';
+        NO ANSWER = the report has no answer for that question.

@@ -1,0 +1,97 @@
+====================================================================================================
+INCIDENT : re2ob_01
+MODEL    : deepinfra:google/gemma-4-26B-A4B-it
+CONDITION: No RAG vs RAG (same LLM, same section plan, same questions)
+CREATED  : 2026-11-28T11:25:48
+====================================================================================================
+
+NO RAG : the LLM receives only the incident context (network description and the questions). It has NO logs, alerts or query results.
+         Output is formatted (titles/preambles removed) but not verified, de-duplicated or given citations.
+RAG    : the advanced pipeline (hybrid retrieval, reranking, section-wise generation with citations, verification).
+Hallucination, grounding and number checks are always measured against the REAL evidence of the incident.
+
+A. METRICS
+
++------------------------------------------------------+----------------+----------------+----------------+
+| Metric                                               | No RAG         | RAG            | RAG - No RAG   |
++------------------------------------------------------+----------------+----------------+----------------+
+| Answer precision                                     | -              | 0.500          | -              |
++------------------------------------------------------+----------------+----------------+----------------+
+| Answer recall                                        | -              | 0.222          | -              |
++------------------------------------------------------+----------------+----------------+----------------+
+| Answer F1                                            | -              | 0.307          | -              |
++------------------------------------------------------+----------------+----------------+----------------+
+| Question recall                                      | 0.438          | 0.750          | +0.312         |
++------------------------------------------------------+----------------+----------------+----------------+
+| Faithfulness                                         | 0.000          | 0.806          | +0.806         |
++------------------------------------------------------+----------------+----------------+----------------+
+| Grounding rate                                       | 0.606          | 1.000          | +0.394         |
++------------------------------------------------------+----------------+----------------+----------------+
+| Hallucination rate (lower is better)                 | 0.778          | 0.000          | -0.778         |
++------------------------------------------------------+----------------+----------------+----------------+
+| Unsupported numbers (lower is better)                | 11             | 0              | -11            |
++------------------------------------------------------+----------------+----------------+----------------+
+| Placeholders (lower is better)                       | 0              | 0              | +0             |
++------------------------------------------------------+----------------+----------------+----------------+
+| Questions CORRECT                                    | 0              | 1              | +1             |
++------------------------------------------------------+----------------+----------------+----------------+
+| Questions PARTIAL                                    | 0              | 0              | +0             |
++------------------------------------------------------+----------------+----------------+----------------+
+| Questions WRONG                                      | 0              | 6              | +6             |
++------------------------------------------------------+----------------+----------------+----------------+
+| Questions ABSTAINED / unanswered                     | 0 / 8          | 1 / 0          | -              |
++------------------------------------------------------+----------------+----------------+----------------+
+| LLM generation time (min)                            | 0.5            | 0.8            | -              |
++------------------------------------------------------+----------------+----------------+----------------+
+
+B. ANSWERS PER QUESTION
+
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| #   | Question                     | Reference answer         | No RAG answer                  | RAG answer                     | No RAG    | RAG       |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 1   | What is the name of the      | checkoutservice          | (no answer)                    | redis                          | NO ANSWER | WRONG     |
+|     | service where the failure    |                          |                                |                                |           |           |
+|     | originated (the root-cause   |                          |                                |                                |           |           |
+|     | service)?                    |                          |                                |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 2   | What is the name of the      | checkoutservice-         | (no answer)                    | redis-cart-6d88d76d78-rgpr4    | NO ANSWER | WRONG     |
+|     | Kubernetes pod of the root-  | 85d565b4b5-xwr4j         |                                |                                |           |           |
+|     | cause service?               |                          |                                |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 3   | On which Kubernetes node did | gke-gke-cluster-default- | (no answer)                    | gke-gke-cluster-default-       | NO ANSWER | WRONG     |
+|     | the pod of the root-cause    | pool-2e1807ce-w819       |                                | pool-2e1807ce-xte3             |           |           |
+|     | service run?                 |                          |                                |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 4   | What type of fault caused    | CPU                      | (no answer)                    | disk                           | NO ANSWER | WRONG     |
+|     | the incident: CPU, memory,   |                          |                                |                                |           |           |
+|     | disk, network delay, packet  |                          |                                |                                |           |           |
+|     | loss, or socket?             |                          |                                |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 5   | Which of the three CIA       | availability             | (no answer)                    | Not established from the       | NO ANSWER | ABSTAINED |
+|     | components is primarily      |                          |                                | available artifacts.           |           |           |
+|     | affected: availability,      |                          |                                |                                |           |           |
+|     | integrity, or                |                          |                                |                                |           |           |
+|     | confidentiality?             |                          |                                |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 6   | During what minute did the   | 2024-01-15 21:36 UTC     | (no answer)                    | 2024-01-15 21:34 UTC           | NO ANSWER | WRONG     |
+|     | first signs of the failure   |                          |                                |                                |           |           |
+|     | appear? Provide the earliest |                          |                                |                                |           |           |
+|     | date and time in YYYY-MM-DD  |                          |                                |                                |           |           |
+|     | HH:MM UTC format.            |                          |                                |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 7   | Which metric of the root-    | checkoutservice_cpu      | (no answer)                    | redis_diskio                   | NO ANSWER | WRONG     |
+|     | cause service best shows the |                          |                                |                                |           |           |
+|     | fault? Give it as            |                          |                                |                                |           |           |
+|     | <service>_<indicator>, for   |                          |                                |                                |           |           |
+|     | example cartservice_cpu.     |                          |                                |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 8   | According to the trace       | shippingservice_GetQuote | (no answer)                    | shippingservice_GetQuote;      | NO ANSWER | CORRECT   |
+|     | latency statistics, which    | , downstream symptom     |                                | downstream symptom             |           |           |
+|     | single service operation     |                          |                                |                                |           |           |
+|     | showed the largest latency   |                          |                                |                                |           |           |
+|     | increase? Is its service the |                          |                                |                                |           |           |
+|     | root cause or a downstream   |                          |                                |                                |           |           |
+|     | symptom?                     |                          |                                |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+
+Faithfulness is 0 / '-' for No RAG by construction: without retrieved chunks it cannot cite evidence.

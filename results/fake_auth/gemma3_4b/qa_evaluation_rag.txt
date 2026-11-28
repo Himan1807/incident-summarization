@@ -3,8 +3,8 @@ INCIDENT : fake_auth
 MODEL    : gemma3:4b
 CONDITION: RAG (advanced pipeline)
 RUN TIME : 33.4 min of LLM generation
-REPORT   : results\fake_auth\gemma3_4b\advanced_postmortem.md
-CREATED  : 2026-11-28T01:28:21
+REPORT   : results/fake_auth/gemma3_4b/advanced_postmortem.md
+CREATED  : 2026-11-28T11:25:48
 ====================================================================================================
 
 A. QUESTION-BY-QUESTION EVALUATION

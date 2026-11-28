@@ -1,0 +1,97 @@
+====================================================================================================
+INCIDENT : re2ob_08
+MODEL    : deepinfra:Qwen/Qwen3-235B-A22B-Instruct-2507
+CONDITION: No RAG vs RAG (same LLM, same section plan, same questions)
+CREATED  : 2026-11-28T11:25:48
+====================================================================================================
+
+NO RAG : the LLM receives only the incident context (network description and the questions). It has NO logs, alerts or query results.
+         Output is formatted (titles/preambles removed) but not verified, de-duplicated or given citations.
+RAG    : the advanced pipeline (hybrid retrieval, reranking, section-wise generation with citations, verification).
+Hallucination, grounding and number checks are always measured against the REAL evidence of the incident.
+
+A. METRICS
+
++------------------------------------------------------+----------------+----------------+----------------+
+| Metric                                               | No RAG         | RAG            | RAG - No RAG   |
++------------------------------------------------------+----------------+----------------+----------------+
+| Answer precision                                     | 0.250          | 0.500          | +0.250         |
++------------------------------------------------------+----------------+----------------+----------------+
+| Answer recall                                        | 0.111          | 0.889          | +0.778         |
++------------------------------------------------------+----------------+----------------+----------------+
+| Answer F1                                            | 0.154          | 0.640          | +0.486         |
++------------------------------------------------------+----------------+----------------+----------------+
+| Question recall                                      | 0.312          | 1.000          | +0.688         |
++------------------------------------------------------+----------------+----------------+----------------+
+| Faithfulness                                         | 0.000          | 0.762          | +0.762         |
++------------------------------------------------------+----------------+----------------+----------------+
+| Grounding rate                                       | 0.279          | 1.000          | +0.721         |
++------------------------------------------------------+----------------+----------------+----------------+
+| Hallucination rate (lower is better)                 | 0.957          | 0.000          | -0.957         |
++------------------------------------------------------+----------------+----------------+----------------+
+| Unsupported numbers (lower is better)                | 24             | 1              | -23            |
++------------------------------------------------------+----------------+----------------+----------------+
+| Placeholders (lower is better)                       | 0              | 0              | +0             |
++------------------------------------------------------+----------------+----------------+----------------+
+| Questions CORRECT                                    | 1              | 7              | +6             |
++------------------------------------------------------+----------------+----------------+----------------+
+| Questions PARTIAL                                    | 0              | 0              | +0             |
++------------------------------------------------------+----------------+----------------+----------------+
+| Questions WRONG                                      | 7              | 1              | -6             |
++------------------------------------------------------+----------------+----------------+----------------+
+| Questions ABSTAINED / unanswered                     | 0 / 0          | 0 / 0          | -              |
++------------------------------------------------------+----------------+----------------+----------------+
+| LLM generation time (min)                            | 1.4            | 2.3            | -              |
++------------------------------------------------------+----------------+----------------+----------------+
+
+B. ANSWERS PER QUESTION
+
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| #   | Question                     | Reference answer         | No RAG answer                  | RAG answer                     | No RAG    | RAG       |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 1   | What is the name of the      | currencyservice          | recommendationservice          | currencyservice                | WRONG     | CORRECT   |
+|     | service where the failure    |                          | [evidence id: trace-latency-   |                                |           |           |
+|     | originated (the root-cause   |                          | spike-recommendationservice]   |                                |           |           |
+|     | service)?                    |                          |                                |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 2   | What is the name of the      | currencyservice-         | recommendationservice-         | currencyservice-b647dd94b-     | WRONG     | CORRECT   |
+|     | Kubernetes pod of the root-  | b647dd94b-f4mcm          | 758b95f5b9-4x2k7 [evidence id: | f4mcm                          |           |           |
+|     | cause service?               |                          | pod-metrics-correlation]       |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 3   | On which Kubernetes node did | gke-gke-cluster-default- | gke-prod-cluster-1-default-    | gke-gke-cluster-default-       | WRONG     | CORRECT   |
+|     | the pod of the root-cause    | pool-2e1807ce-cx8g       | pool-b9f3a3e2-8v2n [evidence   | pool-2e1807ce-cx8g             |           |           |
+|     | service run?                 |                          | id: node-affinity-logs]        |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 4   | What type of fault caused    | network delay            | CPU [evidence id: cpu-usage-   | network delay                  | WRONG     | CORRECT   |
+|     | the incident: CPU, memory,   |                          | spike-aggregated]              |                                |           |           |
+|     | disk, network delay, packet  |                          |                                |                                |           |           |
+|     | loss, or socket?             |                          |                                |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 5   | Which of the three CIA       | availability             | availability [evidence id:     | availability                   | CORRECT   | CORRECT   |
+|     | components is primarily      |                          | error-rate-increase-frontend]  |                                |           |           |
+|     | affected: availability,      |                          |                                |                                |           |           |
+|     | integrity, or                |                          |                                |                                |           |           |
+|     | confidentiality?             |                          |                                |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 6   | During what minute did the   | 2024-01-19 22:06 UTC     | 2024-01-19 21:12 UTC [evidence | 2024-01-19 22:04 UTC           | WRONG     | WRONG     |
+|     | first signs of the failure   |                          | id: metric-anomaly-onset]      |                                |           |           |
+|     | appear? Provide the earliest |                          |                                |                                |           |           |
+|     | date and time in YYYY-MM-DD  |                          |                                |                                |           |           |
+|     | HH:MM UTC format.            |                          |                                |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 7   | Which metric of the root-    | currencyservice_latency  | recommendationservice_cpu      | currencyservice_latency-50     | WRONG     | CORRECT   |
+|     | cause service best shows the |                          | [evidence id: cpu-usage-spike- |                                |           |           |
+|     | fault? Give it as            |                          | aggregated]                    |                                |           |           |
+|     | <service>_<indicator>, for   |                          |                                |                                |           |           |
+|     | example cartservice_cpu.     |                          |                                |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 8   | According to the trace       | frontendservice_frontend | /recommendationservice.Recomme | frontendservice_frontend —     | WRONG     | CORRECT   |
+|     | latency statistics, which    | , downstream symptom     | ndationService/Recommend       | downstream symptom             |           |           |
+|     | single service operation     |                          | [evidence id: trace-latency-   |                                |           |           |
+|     | showed the largest latency   |                          | spike-recommendationservice]   |                                |           |           |
+|     | increase? Is its service the |                          |                                |                                |           |           |
+|     | root cause or a downstream   |                          |                                |                                |           |           |
+|     | symptom?                     |                          |                                |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+
+Faithfulness is 0 / '-' for No RAG by construction: without retrieved chunks it cannot cite evidence.

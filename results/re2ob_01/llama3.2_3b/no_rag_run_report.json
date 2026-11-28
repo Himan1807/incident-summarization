@@ -1,0 +1,239 @@
+{
+  "condition": "no_rag",
+  "model": "llama3.2:3b",
+  "scenario": "re2ob_01",
+  "seconds_total": 21.7,
+  "run_log": [
+    {
+      "section": "Affected Service and Infrastructure",
+      "seconds": 1.6,
+      "truncated": false
+    },
+    {
+      "section": "Timeline",
+      "seconds": 6.4,
+      "truncated": false
+    },
+    {
+      "section": "Detection: Metric Anomalies",
+      "seconds": 3.2,
+      "truncated": false
+    },
+    {
+      "section": "Service Dependencies and Propagation",
+      "seconds": 3.7,
+      "truncated": false
+    },
+    {
+      "section": "Impact Assessment",
+      "seconds": 1.5,
+      "truncated": false
+    },
+    {
+      "section": "Root Cause and Evidence Gaps",
+      "seconds": 2.0,
+      "truncated": false
+    },
+    {
+      "section": "Corrective and Preventive Actions",
+      "seconds": 1.8,
+      "truncated": false
+    },
+    {
+      "section": "Answers to Investigation Questions",
+      "seconds": 1.5,
+      "truncated": false
+    }
+  ],
+  "section_profile": "service_outage",
+  "evaluation": {
+    "answer_precision": null,
+    "answer_recall": null,
+    "answer_f1": null,
+    "question_recall": 0.438,
+    "questions_correct": "4/8",
+    "answerable_entity_recall": 0.286,
+    "overall_entity_recall": 0.444,
+    "faithfulness": 0.0,
+    "grounding_rate": 0.341,
+    "claims": 41,
+    "assessment_lines": 10,
+    "hallucination_rate": 0.714,
+    "unsupported_entities": [
+      "2024-01-15 21:00:30",
+      "2024-01-15 21:01",
+      "2024-01-15 21:01:15",
+      "2024-01-15 21:02",
+      "2024-01-15 21:02:30",
+      "2024-01-15 21:03",
+      "2024-01-15 21:04",
+      "2024-01-15 21:05",
+      "2024-01-15 21:06",
+      "2024-01-15 21:10",
+      "2024-01-15 21:20",
+      "2024-01-15 21:25",
+      "2024-01-15 21:30",
+      "2024-01-15 21:45",
+      "2024-01-15 21:50"
+    ],
+    "unsupported_number_count": 22,
+    "unsupported_numbers": [
+      "0.1",
+      "0.3",
+      "0.5",
+      "00",
+      "100",
+      "123456",
+      "2",
+      "20",
+      "200",
+      "3",
+      "30",
+      "4",
+      "40",
+      "5",
+      "50",
+      "6",
+      "7",
+      "70",
+      "8",
+      "80",
+      "85",
+      "95"
+    ],
+    "placeholder_count": 0,
+    "per_question": [
+      {
+        "id": 1,
+        "question": "What is the name of the service where the failure originated (the root-cause service)?",
+        "reference_answer": "checkoutservice",
+        "atoms": [
+          "checkoutservice"
+        ],
+        "answerable_from_evidence": [
+          "checkoutservice"
+        ],
+        "found_in_report": [
+          "checkoutservice"
+        ],
+        "missing_from_evidence": [],
+        "answer_text": null,
+        "status": "NO ANSWER"
+      },
+      {
+        "id": 2,
+        "question": "What is the name of the Kubernetes pod of the root-cause service?",
+        "reference_answer": "checkoutservice-85d565b4b5-xwr4j",
+        "atoms": [
+          "checkoutservice-85d565b4b5-xwr4j"
+        ],
+        "answerable_from_evidence": [
+          "checkoutservice-85d565b4b5-xwr4j"
+        ],
+        "found_in_report": [],
+        "missing_from_evidence": [],
+        "answer_text": null,
+        "status": "NO ANSWER"
+      },
+      {
+        "id": 3,
+        "question": "On which Kubernetes node did the pod of the root-cause service run?",
+        "reference_answer": "gke-gke-cluster-default-pool-2e1807ce-w819",
+        "atoms": [
+          "gke-gke-cluster-default-pool-2e1807ce-w819"
+        ],
+        "answerable_from_evidence": [
+          "gke-gke-cluster-default-pool-2e1807ce-w819"
+        ],
+        "found_in_report": [],
+        "missing_from_evidence": [],
+        "answer_text": null,
+        "status": "NO ANSWER"
+      },
+      {
+        "id": 4,
+        "question": "What type of fault caused the incident: CPU, memory, disk, network delay, packet loss, or socket?",
+        "reference_answer": "CPU",
+        "atoms": [
+          "CPU"
+        ],
+        "answerable_from_evidence": [
+          "CPU"
+        ],
+        "found_in_report": [
+          "CPU"
+        ],
+        "missing_from_evidence": [],
+        "answer_text": null,
+        "status": "NO ANSWER"
+      },
+      {
+        "id": 5,
+        "question": "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+        "reference_answer": "availability",
+        "atoms": [
+          "availability"
+        ],
+        "answerable_from_evidence": [],
+        "found_in_report": [
+          "availability"
+        ],
+        "missing_from_evidence": [
+          "availability"
+        ],
+        "answer_text": null,
+        "status": "NO ANSWER"
+      },
+      {
+        "id": 6,
+        "question": "During what minute did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+        "reference_answer": "2024-01-15 21:36 UTC",
+        "atoms": [
+          "2024-01-15 21:36 UTC"
+        ],
+        "answerable_from_evidence": [
+          "2024-01-15 21:36 UTC"
+        ],
+        "found_in_report": [],
+        "missing_from_evidence": [],
+        "answer_text": null,
+        "status": "NO ANSWER"
+      },
+      {
+        "id": 7,
+        "question": "Which metric of the root-cause service best shows the fault? Give it as <service>_<indicator>, for example cartservice_cpu.",
+        "reference_answer": "checkoutservice_cpu",
+        "atoms": [
+          "checkoutservice_cpu"
+        ],
+        "answerable_from_evidence": [
+          "checkoutservice_cpu"
+        ],
+        "found_in_report": [],
+        "missing_from_evidence": [],
+        "answer_text": null,
+        "status": "NO ANSWER"
+      },
+      {
+        "id": 8,
+        "question": "According to the trace latency statistics, which single service operation showed the largest latency increase? Is its service the root cause or a downstream symptom?",
+        "reference_answer": "shippingservice_GetQuote, downstream symptom",
+        "atoms": [
+          "shippingservice_GetQuote",
+          "downstream symptom"
+        ],
+        "answerable_from_evidence": [
+          "shippingservice_GetQuote"
+        ],
+        "found_in_report": [
+          "downstream symptom"
+        ],
+        "missing_from_evidence": [
+          "downstream symptom"
+        ],
+        "answer_text": null,
+        "status": "NO ANSWER"
+      }
+    ]
+  }
+}

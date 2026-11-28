@@ -1,0 +1,300 @@
+{
+  "condition": "no_rag",
+  "model": "deepinfra:Qwen/Qwen3-235B-A22B-Instruct-2507",
+  "scenario": "re2ob_01",
+  "seconds_total": 71.4,
+  "run_log": [
+    {
+      "section": "Affected Service and Infrastructure",
+      "seconds": 5.4,
+      "truncated": false
+    },
+    {
+      "section": "Timeline",
+      "seconds": 16.4,
+      "truncated": false
+    },
+    {
+      "section": "Detection: Metric Anomalies",
+      "seconds": 6.3,
+      "truncated": false
+    },
+    {
+      "section": "Service Dependencies and Propagation",
+      "seconds": 11.7,
+      "truncated": false
+    },
+    {
+      "section": "Impact Assessment",
+      "seconds": 4.1,
+      "truncated": false
+    },
+    {
+      "section": "Root Cause and Evidence Gaps",
+      "seconds": 5.3,
+      "truncated": false
+    },
+    {
+      "section": "Corrective and Preventive Actions",
+      "seconds": 9.7,
+      "truncated": false
+    },
+    {
+      "section": "Answers to Investigation Questions",
+      "seconds": 12.5,
+      "truncated": false
+    }
+  ],
+  "section_profile": "service_outage",
+  "llm_usage": {
+    "provider": "deepinfra",
+    "calls": 9,
+    "retries": 0,
+    "prompt_tokens": 6132,
+    "completion_tokens": 2035,
+    "estimated_cost_usd": 0.001671
+  },
+  "evaluation": {
+    "answer_precision": 0.333,
+    "answer_recall": 0.111,
+    "answer_f1": 0.167,
+    "question_recall": 0.375,
+    "questions_correct": "3/8",
+    "answerable_entity_recall": 0.286,
+    "overall_entity_recall": 0.333,
+    "faithfulness": 0.0,
+    "grounding_rate": 0.364,
+    "claims": 44,
+    "assessment_lines": 5,
+    "hallucination_rate": 0.933,
+    "unsupported_entities": [
+      "/Checkout.OnCheckout",
+      "/GetCart",
+      "/health",
+      "/placeOrder",
+      "2024-01-15 21:12",
+      "2024-01-15 21:12:03",
+      "2024-01-15 21:12:17",
+      "2024-01-15 21:12:45",
+      "2024-01-15 21:13:01",
+      "2024-01-15 21:13:22",
+      "2024-01-15 21:14:18",
+      "2024-01-15 21:15:03",
+      "cartservice.getcart",
+      "checkout.oncheckout"
+    ],
+    "unsupported_number_count": 17,
+    "unsupported_numbers": [
+      "0.2",
+      "18",
+      "2",
+      "20",
+      "38",
+      "40",
+      "45",
+      "47",
+      "50",
+      "500",
+      "60",
+      "70",
+      "85",
+      "89",
+      "9",
+      "95",
+      "98"
+    ],
+    "placeholder_count": 0,
+    "per_question": [
+      {
+        "id": 1,
+        "question": "What is the name of the service where the failure originated (the root-cause service)?",
+        "reference_answer": "checkoutservice",
+        "atoms": [
+          "checkoutservice"
+        ],
+        "answerable_from_evidence": [
+          "checkoutservice"
+        ],
+        "found_in_report": [
+          "checkoutservice"
+        ],
+        "missing_from_evidence": [],
+        "answer_text": "cartservice [evidence id: Prometheus metric surge in cartservice_memory_usage, Jaeger trace latency spikes originating from cartservice]",
+        "status": "WRONG",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 0.0
+      },
+      {
+        "id": 2,
+        "question": "What is the name of the Kubernetes pod of the root-cause service?",
+        "reference_answer": "checkoutservice-85d565b4b5-xwr4j",
+        "atoms": [
+          "checkoutservice-85d565b4b5-xwr4j"
+        ],
+        "answerable_from_evidence": [
+          "checkoutservice-85d565b4b5-xwr4j"
+        ],
+        "found_in_report": [],
+        "missing_from_evidence": [],
+        "answer_text": "cartservice-7b5c6f4f4d-x9k2l [evidence id: Kubernetes pod metrics correlated with cartservice memory pressure]",
+        "status": "WRONG",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 0.0
+      },
+      {
+        "id": 3,
+        "question": "On which Kubernetes node did the pod of the root-cause service run?",
+        "reference_answer": "gke-gke-cluster-default-pool-2e1807ce-w819",
+        "atoms": [
+          "gke-gke-cluster-default-pool-2e1807ce-w819"
+        ],
+        "answerable_from_evidence": [
+          "gke-gke-cluster-default-pool-2e1807ce-w819"
+        ],
+        "found_in_report": [],
+        "missing_from_evidence": [],
+        "answer_text": "gke-prod-cluster-default-pool-8d9a2c1f-3k7p [evidence id: node-level resource telemetry showing memory pressure on node hosting cartservice-7b5c6f4f4d-x9k2l]",
+        "status": "WRONG",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 0.0
+      },
+      {
+        "id": 4,
+        "question": "What type of fault caused the incident: CPU, memory, disk, network delay, packet loss, or socket?",
+        "reference_answer": "CPU",
+        "atoms": [
+          "CPU"
+        ],
+        "answerable_from_evidence": [
+          "CPU"
+        ],
+        "found_in_report": [
+          "CPU"
+        ],
+        "missing_from_evidence": [],
+        "answer_text": "memory [evidence id: sustained cartservice memory usage at 98% of limit, followed by OOMKilled restarts]",
+        "status": "WRONG",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 0.0
+      },
+      {
+        "id": 5,
+        "question": "Which of the three CIA components is primarily affected: availability, integrity, or confidentiality?",
+        "reference_answer": "availability",
+        "atoms": [
+          "availability"
+        ],
+        "answerable_from_evidence": [],
+        "found_in_report": [
+          "availability"
+        ],
+        "missing_from_evidence": [
+          "availability"
+        ],
+        "answer_text": "availability [evidence id: increased error rates and latency in user-facing requests, no data corruption or breach indicators]",
+        "status": "CORRECT",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [
+          "availability"
+        ],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 1.0
+      },
+      {
+        "id": 6,
+        "question": "During what minute did the first signs of the failure appear? Provide the earliest date and time in YYYY-MM-DD HH:MM UTC format.",
+        "reference_answer": "2024-01-15 21:36 UTC",
+        "atoms": [
+          "2024-01-15 21:36 UTC"
+        ],
+        "answerable_from_evidence": [
+          "2024-01-15 21:36 UTC"
+        ],
+        "found_in_report": [],
+        "missing_from_evidence": [],
+        "answer_text": "2024-01-15 21:12 UTC [evidence id: first anomalous memory spike in cartservice at 21:12, preceding downstream latency increases]",
+        "status": "WRONG",
+        "predicted_entities": [
+          "2024-01-15",
+          "2024-01-15 21:12"
+        ],
+        "correct_entities": [
+          "2024-01-15"
+        ],
+        "atoms_found_in_answer": [],
+        "wrong_entities": [
+          "2024-01-15 21:12"
+        ],
+        "precision": 0.5,
+        "recall": 0.0
+      },
+      {
+        "id": 7,
+        "question": "Which metric of the root-cause service best shows the fault? Give it as <service>_<indicator>, for example cartservice_cpu.",
+        "reference_answer": "checkoutservice_cpu",
+        "atoms": [
+          "checkoutservice_cpu"
+        ],
+        "answerable_from_evidence": [
+          "checkoutservice_cpu"
+        ],
+        "found_in_report": [],
+        "missing_from_evidence": [],
+        "answer_text": "cartservice_memory_usage [evidence id: memory usage climbs from 50% to 98% between 21:12 and 21:18, correlating with pod restarts]",
+        "status": "WRONG",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 0.0
+      },
+      {
+        "id": 8,
+        "question": "According to the trace latency statistics, which single service operation showed the largest latency increase? Is its service the root cause or a downstream symptom?",
+        "reference_answer": "shippingservice_GetQuote, downstream symptom",
+        "atoms": [
+          "shippingservice_GetQuote",
+          "downstream symptom"
+        ],
+        "answerable_from_evidence": [
+          "shippingservice_GetQuote"
+        ],
+        "found_in_report": [],
+        "missing_from_evidence": [
+          "downstream symptom"
+        ],
+        "answer_text": "cartservice.GetCart [evidence id: Jaeger trace statistics show p90 latency for cartservice.GetCart increased from 50ms to 2.1s; cartservice is the root cause]",
+        "status": "WRONG",
+        "predicted_entities": [
+          "cartservice.getcart"
+        ],
+        "correct_entities": [],
+        "atoms_found_in_answer": [],
+        "wrong_entities": [
+          "cartservice.getcart"
+        ],
+        "precision": 0.0,
+        "recall": 0.0
+      }
+    ]
+  }
+}

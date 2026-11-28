@@ -1,0 +1,102 @@
+====================================================================================================
+INCIDENT : re2ob_01
+MODEL    : deepinfra:Qwen/Qwen3-235B-A22B-Instruct-2507
+CONDITION: No RAG vs RAG (same LLM, same section plan, same questions)
+CREATED  : 2026-11-28T11:25:48
+====================================================================================================
+
+NO RAG : the LLM receives only the incident context (network description and the questions). It has NO logs, alerts or query results.
+         Output is formatted (titles/preambles removed) but not verified, de-duplicated or given citations.
+RAG    : the advanced pipeline (hybrid retrieval, reranking, section-wise generation with citations, verification).
+Hallucination, grounding and number checks are always measured against the REAL evidence of the incident.
+
+A. METRICS
+
++------------------------------------------------------+----------------+----------------+----------------+
+| Metric                                               | No RAG         | RAG            | RAG - No RAG   |
++------------------------------------------------------+----------------+----------------+----------------+
+| Answer precision                                     | 0.333          | 0.500          | +0.167         |
++------------------------------------------------------+----------------+----------------+----------------+
+| Answer recall                                        | 0.111          | 0.333          | +0.222         |
++------------------------------------------------------+----------------+----------------+----------------+
+| Answer F1                                            | 0.167          | 0.400          | +0.233         |
++------------------------------------------------------+----------------+----------------+----------------+
+| Question recall                                      | 0.375          | 0.750          | +0.375         |
++------------------------------------------------------+----------------+----------------+----------------+
+| Faithfulness                                         | 0.000          | 0.805          | +0.805         |
++------------------------------------------------------+----------------+----------------+----------------+
+| Grounding rate                                       | 0.364          | 1.000          | +0.636         |
++------------------------------------------------------+----------------+----------------+----------------+
+| Hallucination rate (lower is better)                 | 0.933          | 0.000          | -0.933         |
++------------------------------------------------------+----------------+----------------+----------------+
+| Unsupported numbers (lower is better)                | 17             | 1              | -16            |
++------------------------------------------------------+----------------+----------------+----------------+
+| Placeholders (lower is better)                       | 0              | 0              | +0             |
++------------------------------------------------------+----------------+----------------+----------------+
+| Questions CORRECT                                    | 1              | 2              | +1             |
++------------------------------------------------------+----------------+----------------+----------------+
+| Questions PARTIAL                                    | 0              | 0              | +0             |
++------------------------------------------------------+----------------+----------------+----------------+
+| Questions WRONG                                      | 7              | 6              | -1             |
++------------------------------------------------------+----------------+----------------+----------------+
+| Questions ABSTAINED / unanswered                     | 0 / 0          | 0 / 0          | -              |
++------------------------------------------------------+----------------+----------------+----------------+
+| LLM generation time (min)                            | 1.2            | 2.0            | -              |
++------------------------------------------------------+----------------+----------------+----------------+
+
+B. ANSWERS PER QUESTION
+
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| #   | Question                     | Reference answer         | No RAG answer                  | RAG answer                     | No RAG    | RAG       |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 1   | What is the name of the      | checkoutservice          | cartservice [evidence id:      | adservice                      | WRONG     | WRONG     |
+|     | service where the failure    |                          | Prometheus metric surge in     |                                |           |           |
+|     | originated (the root-cause   |                          | cartservice_memory_usage,      |                                |           |           |
+|     | service)?                    |                          | Jaeger trace latency spikes    |                                |           |           |
+|     |                              |                          | originating from cartservice]  |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 2   | What is the name of the      | checkoutservice-         | cartservice-7b5c6f4f4d-x9k2l   | adservice-8587fdc599-swwgx     | WRONG     | WRONG     |
+|     | Kubernetes pod of the root-  | 85d565b4b5-xwr4j         | [evidence id: Kubernetes pod   |                                |           |           |
+|     | cause service?               |                          | metrics correlated with        |                                |           |           |
+|     |                              |                          | cartservice memory pressure]   |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 3   | On which Kubernetes node did | gke-gke-cluster-default- | gke-prod-cluster-default-      | gke-gke-cluster-default-       | WRONG     | WRONG     |
+|     | the pod of the root-cause    | pool-2e1807ce-w819       | pool-8d9a2c1f-3k7p [evidence   | pool-2e1807ce-xte3             |           |           |
+|     | service run?                 |                          | id: node-level resource        |                                |           |           |
+|     |                              |                          | telemetry showing memory       |                                |           |           |
+|     |                              |                          | pressure on node hosting       |                                |           |           |
+|     |                              |                          | cartservice-7b5c6f4f4d-x9k2l]  |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 4   | What type of fault caused    | CPU                      | memory [evidence id: sustained | socket                         | WRONG     | WRONG     |
+|     | the incident: CPU, memory,   |                          | cartservice memory usage at    |                                |           |           |
+|     | disk, network delay, packet  |                          | 98% of limit, followed by      |                                |           |           |
+|     | loss, or socket?             |                          | OOMKilled restarts]            |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 5   | Which of the three CIA       | availability             | availability [evidence id:     | availability                   | CORRECT   | CORRECT   |
+|     | components is primarily      |                          | increased error rates and      |                                |           |           |
+|     | affected: availability,      |                          | latency in user-facing         |                                |           |           |
+|     | integrity, or                |                          | requests, no data corruption   |                                |           |           |
+|     | confidentiality?             |                          | or breach indicators]          |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 6   | During what minute did the   | 2024-01-15 21:36 UTC     | 2024-01-15 21:12 UTC [evidence | 2024-01-15 21:34 UTC           | WRONG     | WRONG     |
+|     | first signs of the failure   |                          | id: first anomalous memory     |                                |           |           |
+|     | appear? Provide the earliest |                          | spike in cartservice at 21:12, |                                |           |           |
+|     | date and time in YYYY-MM-DD  |                          | preceding downstream latency   |                                |           |           |
+|     | HH:MM UTC format.            |                          | increases]                     |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 7   | Which metric of the root-    | checkoutservice_cpu      | cartservice_memory_usage       | adservice_socket               | WRONG     | WRONG     |
+|     | cause service best shows the |                          | [evidence id: memory usage     |                                |           |           |
+|     | fault? Give it as            |                          | climbs from 50% to 98% between |                                |           |           |
+|     | <service>_<indicator>, for   |                          | 21:12 and 21:18, correlating   |                                |           |           |
+|     | example cartservice_cpu.     |                          | with pod restarts]             |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 8   | According to the trace       | shippingservice_GetQuote | cartservice.GetCart [evidence  | shippingservice_GetQuote,      | WRONG     | CORRECT   |
+|     | latency statistics, which    | , downstream symptom     | id: Jaeger trace statistics    | downstream symptom             |           |           |
+|     | single service operation     |                          | show p90 latency for           |                                |           |           |
+|     | showed the largest latency   |                          | cartservice.GetCart increased  |                                |           |           |
+|     | increase? Is its service the |                          | from 50ms to 2.1s; cartservice |                                |           |           |
+|     | root cause or a downstream   |                          | is the root cause]             |                                |           |           |
+|     | symptom?                     |                          |                                |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+
+Faithfulness is 0 / '-' for No RAG by construction: without retrieved chunks it cannot cite evidence.

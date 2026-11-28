@@ -1,0 +1,97 @@
+====================================================================================================
+INCIDENT : re2ob_08
+MODEL    : llama3.2:3b
+CONDITION: No RAG vs RAG (same LLM, same section plan, same questions)
+CREATED  : 2026-11-28T11:25:48
+====================================================================================================
+
+NO RAG : the LLM receives only the incident context (network description and the questions). It has NO logs, alerts or query results.
+         Output is formatted (titles/preambles removed) but not verified, de-duplicated or given citations.
+RAG    : the advanced pipeline (hybrid retrieval, reranking, section-wise generation with citations, verification).
+Hallucination, grounding and number checks are always measured against the REAL evidence of the incident.
+
+A. METRICS
+
++------------------------------------------------------+----------------+----------------+----------------+
+| Metric                                               | No RAG         | RAG            | RAG - No RAG   |
++------------------------------------------------------+----------------+----------------+----------------+
+| Answer precision                                     | -              | -              | -              |
++------------------------------------------------------+----------------+----------------+----------------+
+| Answer recall                                        | -              | 0.000          | -              |
++------------------------------------------------------+----------------+----------------+----------------+
+| Answer F1                                            | -              | -              | -              |
++------------------------------------------------------+----------------+----------------+----------------+
+| Question recall                                      | 0.375          | 0.812          | +0.437         |
++------------------------------------------------------+----------------+----------------+----------------+
+| Faithfulness                                         | 0.000          | 0.578          | +0.578         |
++------------------------------------------------------+----------------+----------------+----------------+
+| Grounding rate                                       | 0.396          | 1.000          | +0.604         |
++------------------------------------------------------+----------------+----------------+----------------+
+| Hallucination rate (lower is better)                 | 0.889          | 0.000          | -0.889         |
++------------------------------------------------------+----------------+----------------+----------------+
+| Unsupported numbers (lower is better)                | 17             | 1              | -16            |
++------------------------------------------------------+----------------+----------------+----------------+
+| Placeholders (lower is better)                       | 0              | 0              | +0             |
++------------------------------------------------------+----------------+----------------+----------------+
+| Questions CORRECT                                    | 0              | 0              | +0             |
++------------------------------------------------------+----------------+----------------+----------------+
+| Questions PARTIAL                                    | 0              | 0              | +0             |
++------------------------------------------------------+----------------+----------------+----------------+
+| Questions WRONG                                      | 0              | 0              | +0             |
++------------------------------------------------------+----------------+----------------+----------------+
+| Questions ABSTAINED / unanswered                     | 0 / 8          | 8 / 0          | -              |
++------------------------------------------------------+----------------+----------------+----------------+
+| LLM generation time (min)                            | 0.4            | 0.5            | -              |
++------------------------------------------------------+----------------+----------------+----------------+
+
+B. ANSWERS PER QUESTION
+
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| #   | Question                     | Reference answer         | No RAG answer                  | RAG answer                     | No RAG    | RAG       |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 1   | What is the name of the      | currencyservice          | (no answer)                    | Not established from the       | NO ANSWER | ABSTAINED |
+|     | service where the failure    |                          |                                | available artifacts            |           |           |
+|     | originated (the root-cause   |                          |                                |                                |           |           |
+|     | service)?                    |                          |                                |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 2   | What is the name of the      | currencyservice-         | (no answer)                    | Not established from the       | NO ANSWER | ABSTAINED |
+|     | Kubernetes pod of the root-  | b647dd94b-f4mcm          |                                | available artifacts            |           |           |
+|     | cause service?               |                          |                                |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 3   | On which Kubernetes node did | gke-gke-cluster-default- | (no answer)                    | Not established from the       | NO ANSWER | ABSTAINED |
+|     | the pod of the root-cause    | pool-2e1807ce-cx8g       |                                | available artifacts            |           |           |
+|     | service run?                 |                          |                                |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 4   | What type of fault caused    | network delay            | (no answer)                    | Not established from the       | NO ANSWER | ABSTAINED |
+|     | the incident: CPU, memory,   |                          |                                | available artifacts,           |           |           |
+|     | disk, network delay, packet  |                          |                                |                                |           |           |
+|     | loss, or socket?             |                          |                                |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 5   | Which of the three CIA       | availability             | (no answer)                    | Not established from the       | NO ANSWER | ABSTAINED |
+|     | components is primarily      |                          |                                | available artifacts,           |           |           |
+|     | affected: availability,      |                          |                                |                                |           |           |
+|     | integrity, or                |                          |                                |                                |           |           |
+|     | confidentiality?             |                          |                                |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 6   | During what minute did the   | 2024-01-19 22:06 UTC     | (no answer)                    | Not established from the       | NO ANSWER | ABSTAINED |
+|     | first signs of the failure   |                          |                                | available artifacts,           |           |           |
+|     | appear? Provide the earliest |                          |                                |                                |           |           |
+|     | date and time in YYYY-MM-DD  |                          |                                |                                |           |           |
+|     | HH:MM UTC format.            |                          |                                |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 7   | Which metric of the root-    | currencyservice_latency  | (no answer)                    | Not established from the       | NO ANSWER | ABSTAINED |
+|     | cause service best shows the |                          |                                | available artifacts,           |           |           |
+|     | fault? Give it as            |                          |                                |                                |           |           |
+|     | <service>_<indicator>, for   |                          |                                |                                |           |           |
+|     | example cartservice_cpu.     |                          |                                |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+| 8   | According to the trace       | frontendservice_frontend | (no answer)                    | Not established from the       | NO ANSWER | ABSTAINED |
+|     | latency statistics, which    | , downstream symptom     |                                | available artifacts,           |           |           |
+|     | single service operation     |                          |                                |                                |           |           |
+|     | showed the largest latency   |                          |                                |                                |           |           |
+|     | increase? Is its service the |                          |                                |                                |           |           |
+|     | root cause or a downstream   |                          |                                |                                |           |           |
+|     | symptom?                     |                          |                                |                                |           |           |
++-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
+
+Faithfulness is 0 / '-' for No RAG by construction: without retrieved chunks it cannot cite evidence.
