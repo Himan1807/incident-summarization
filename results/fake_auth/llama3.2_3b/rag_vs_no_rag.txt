@@ -2,7 +2,7 @@
 INCIDENT : fake_auth
 MODEL    : llama3.2:3b
 CONDITION: No RAG vs RAG (same LLM, same section plan, same questions)
-CREATED  : 2026-11-27T21:04:28
+CREATED  : 2026-11-28T01:28:21
 ====================================================================================================
 
 NO RAG : the LLM receives only the incident context (network description and the questions). It has NO logs, alerts or query results.
@@ -15,33 +15,33 @@ A. METRICS
 +------------------------------------------------------+----------------+----------------+----------------+
 | Metric                                               | No RAG         | RAG            | RAG - No RAG   |
 +------------------------------------------------------+----------------+----------------+----------------+
-| Answer precision                                     | -              | 0.214          | -              |
+| Answer precision                                     | -              | 0.154          | -              |
 +------------------------------------------------------+----------------+----------------+----------------+
-| Answer recall                                        | 0.000          | 0.500          | +0.500         |
+| Answer recall                                        | 0.000          | 0.250          | +0.250         |
 +------------------------------------------------------+----------------+----------------+----------------+
-| Answer F1                                            | -              | 0.300          | -              |
+| Answer F1                                            | -              | 0.191          | -              |
 +------------------------------------------------------+----------------+----------------+----------------+
 | Question recall                                      | 0.062          | 0.875          | +0.813         |
 +------------------------------------------------------+----------------+----------------+----------------+
-| Faithfulness                                         | 0.000          | 0.692          | +0.692         |
+| Faithfulness                                         | 0.000          | 0.643          | +0.643         |
 +------------------------------------------------------+----------------+----------------+----------------+
 | Grounding rate                                       | 0.372          | 1.000          | +0.628         |
 +------------------------------------------------------+----------------+----------------+----------------+
 | Hallucination rate (lower is better)                 | 0.720          | 0.000          | -0.720         |
 +------------------------------------------------------+----------------+----------------+----------------+
-| Unsupported numbers (lower is better)                | 12             | 0              | -12            |
+| Unsupported numbers (lower is better)                | 12             | 1              | -11            |
 +------------------------------------------------------+----------------+----------------+----------------+
 | Placeholders (lower is better)                       | 0              | 0              | +0             |
 +------------------------------------------------------+----------------+----------------+----------------+
 | Questions CORRECT                                    | 0              | 3              | +3             |
 +------------------------------------------------------+----------------+----------------+----------------+
-| Questions PARTIAL                                    | 0              | 1              | +1             |
+| Questions PARTIAL                                    | 0              | 0              | +0             |
 +------------------------------------------------------+----------------+----------------+----------------+
-| Questions WRONG                                      | 0              | 2              | +2             |
+| Questions WRONG                                      | 0              | 1              | +1             |
 +------------------------------------------------------+----------------+----------------+----------------+
-| Questions ABSTAINED / unanswered                     | 8 / 0          | 2 / 0          | -              |
+| Questions ABSTAINED / unanswered                     | 8 / 0          | 4 / 0          | -              |
 +------------------------------------------------------+----------------+----------------+----------------+
-| LLM generation time (min)                            | 4.5            | 16.2           | -              |
+| LLM generation time (min)                            | 4.5            | 13.3           | -              |
 +------------------------------------------------------+----------------+----------------+----------------+
 
 B. ANSWERS PER QUESTION
@@ -79,24 +79,16 @@ B. ANSWERS PER QUESTION
 |     |                              |                          |                                | mscom.demdex.net *             |           |           |
 |     |                              |                          |                                | play.vidyard.com               |           |           |
 +-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
-| 5   | What are the suspicious      | 5.252.153.241,           | Not established from the       | The suspicious external IP     | ABSTAINED | PARTIAL   |
-|     | external IP addresses        | 45.125.66.32,            | available artifacts            | addresses contacted, which     |           |           |
-|     | contacted, which might be    | 45.125.66.252            |                                | might be involved in command-  |           |           |
-|     | involved in command-and-     |                          |                                | and-control (C2)               |           |           |
-|     | control (C2) communication?  |                          |                                | communication, are: *          |           |           |
-|     |                              |                          |                                | 5.252.153.241 * 23.207.164.186 |           |           |
-|     |                              |                          |                                | * 23.207.166.9 * 23.205.110.12 |           |           |
-|     |                              |                          |                                | * 23.205.110.59 *              |           |           |
-|     |                              |                          |                                | 23.199.168.146 * 104.18.8.76 * |           |           |
-|     |                              |                          |                                | 104.21.64.1 * 44.237.90.153 *  |           |           |
-|     |                              |                          |                                | 35.71.139.29 * 35.84.233.181 * |           |           |
-|     |                              |                          |                                | 151.101.1.181 * 45.125.66.32 * |           |           |
-|     |                              |                          |                                | 45.125.66.252                  |           |           |
+| 5   | What are the suspicious      | 5.252.153.241,           | Not established from the       | Not established from the       | ABSTAINED | ABSTAINED |
+|     | external IP addresses        | 45.125.66.32,            | available artifacts            | available artifacts.           |           |           |
+|     | contacted, which might be    | 45.125.66.252            |                                |                                |           |           |
+|     | involved in command-and-     |                          |                                |                                |           |           |
+|     | control (C2) communication?  |                          |                                |                                |           |           |
 +-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
-| 6   | During what hour did the     | 2025-01-22 19:00 UTC     | Not established from the       | The first signs of infection   | ABSTAINED | WRONG     |
-|     | first signs of infection     |                          | available artifacts            | activity appeared during the   |           |           |
-|     | activity appear? Provide the |                          |                                | hour of 19:00 UTC on           |           |           |
-|     | earliest date and time in    |                          |                                | 2025-01-22.                    |           |           |
+| 6   | During what hour did the     | 2025-01-22 19:00 UTC     | Not established from the       | Not established from the       | ABSTAINED | ABSTAINED |
+|     | first signs of infection     |                          | available artifacts            | available artifacts.           |           |           |
+|     | activity appear? Provide the |                          |                                |                                |           |           |
+|     | earliest date and time in    |                          |                                |                                |           |           |
 |     | YYYY-MM-DD HH:MM UTC format. |                          |                                |                                |           |           |
 +-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
 | 7   | Were any suspicious          | 45.125.66.252,           | Not established from the       | Not established from the       | ABSTAINED | ABSTAINED |

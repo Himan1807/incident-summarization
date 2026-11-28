@@ -2,7 +2,7 @@
 INCIDENT : cache_stampede_0013
 MODEL    : deepinfra:Qwen/Qwen3-235B-A22B-Instruct-2507
 CONDITION: No RAG vs RAG (same LLM, same section plan, same questions)
-CREATED  : 2026-11-27T22:42:16
+CREATED  : 2026-11-28T01:28:25
 ====================================================================================================
 
 NO RAG : the LLM receives only the incident context (network description and the questions). It has NO logs, alerts or query results.

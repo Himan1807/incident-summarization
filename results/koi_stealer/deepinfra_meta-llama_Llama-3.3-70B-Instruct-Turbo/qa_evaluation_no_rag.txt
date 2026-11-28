@@ -4,7 +4,7 @@ MODEL    : deepinfra:meta-llama/Llama-3.3-70B-Instruct-Turbo
 CONDITION: No RAG (LLM without retrieval)
 RUN TIME : 0.6 min of LLM generation
 REPORT   : results\koi_stealer\deepinfra_meta-llama_Llama-3.3-70B-Instruct-Turbo\no_rag_postmortem.md
-CREATED  : 2026-11-27T21:04:28
+CREATED  : 2026-11-28T01:28:20
 ====================================================================================================
 
 A. QUESTION-BY-QUESTION EVALUATION

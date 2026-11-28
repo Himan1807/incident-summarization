@@ -4,7 +4,7 @@ MODEL    : deepinfra:nvidia/NVIDIA-Nemotron-3-Ultra-550B-A55B
 CONDITION: RAG (advanced pipeline)
 RUN TIME : 0.7 min of LLM generation
 REPORT   : results\koi_stealer\deepinfra_nvidia_NVIDIA-Nemotron-3-Ultra-550B-A55B\advanced_postmortem.md
-CREATED  : 2026-11-27T21:04:28
+CREATED  : 2026-11-28T01:28:20
 ====================================================================================================
 
 A. QUESTION-BY-QUESTION EVALUATION

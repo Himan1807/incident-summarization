@@ -4,7 +4,7 @@ MODEL    : deepinfra:Qwen/Qwen3-235B-A22B-Instruct-2507
 CONDITION: No RAG (LLM without retrieval)
 RUN TIME : 34.8 min of LLM generation
 REPORT   : results\fake_auth\deepinfra_Qwen_Qwen3-235B-A22B-Instruct-2507\no_rag_postmortem.md
-CREATED  : 2026-11-27T21:04:28
+CREATED  : 2026-11-28T01:28:21
 ====================================================================================================
 
 A. QUESTION-BY-QUESTION EVALUATION

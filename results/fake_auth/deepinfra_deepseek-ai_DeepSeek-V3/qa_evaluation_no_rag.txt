@@ -4,7 +4,7 @@ MODEL    : deepinfra:deepseek-ai/DeepSeek-V3
 CONDITION: No RAG (LLM without retrieval)
 RUN TIME : 1.2 min of LLM generation
 REPORT   : results\fake_auth\deepinfra_deepseek-ai_DeepSeek-V3\no_rag_postmortem.md
-CREATED  : 2026-11-27T21:04:28
+CREATED  : 2026-11-28T01:28:20
 ====================================================================================================
 
 A. QUESTION-BY-QUESTION EVALUATION

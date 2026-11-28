@@ -4,7 +4,7 @@ MODEL    : qwen2.5:7b-instruct
 CONDITION: RAG (advanced pipeline)
 RUN TIME : 27.1 min of LLM generation
 REPORT   : results\acl_split_brain_0001\qwen2.5_7b-instruct\advanced_postmortem.md
-CREATED  : 2026-11-27T22:42:16
+CREATED  : 2026-11-28T01:28:24
 ====================================================================================================
 
 A. QUESTION-BY-QUESTION EVALUATION

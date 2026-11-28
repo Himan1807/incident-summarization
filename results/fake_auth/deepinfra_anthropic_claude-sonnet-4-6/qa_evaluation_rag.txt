@@ -4,7 +4,7 @@ MODEL    : deepinfra:anthropic/claude-sonnet-4-6
 CONDITION: RAG (advanced pipeline)
 RUN TIME : 1.8 min of LLM generation
 REPORT   : results\fake_auth\deepinfra_anthropic_claude-sonnet-4-6\advanced_postmortem.md
-CREATED  : 2026-11-27T21:04:27
+CREATED  : 2026-11-28T01:28:20
 ====================================================================================================
 
 A. QUESTION-BY-QUESTION EVALUATION

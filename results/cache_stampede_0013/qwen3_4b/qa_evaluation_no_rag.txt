@@ -4,7 +4,7 @@ MODEL    : qwen3:4b
 CONDITION: No RAG (LLM without retrieval)
 RUN TIME : 20.9 min of LLM generation
 REPORT   : results\cache_stampede_0013\qwen3_4b\no_rag_postmortem.md
-CREATED  : 2026-11-27T22:42:16
+CREATED  : 2026-11-28T01:28:26
 ====================================================================================================
 
 A. QUESTION-BY-QUESTION EVALUATION

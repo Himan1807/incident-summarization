@@ -4,7 +4,7 @@ MODEL    : deepinfra:nvidia/NVIDIA-Nemotron-3-Ultra-550B-A55B
 CONDITION: No RAG (LLM without retrieval)
 RUN TIME : 0.4 min of LLM generation
 REPORT   : results\cache_stampede_0013\deepinfra_nvidia_NVIDIA-Nemotron-3-Ultra-550B-A55B\no_rag_postmortem.md
-CREATED  : 2026-11-27T22:42:16
+CREATED  : 2026-11-28T01:28:25
 ====================================================================================================
 
 A. QUESTION-BY-QUESTION EVALUATION

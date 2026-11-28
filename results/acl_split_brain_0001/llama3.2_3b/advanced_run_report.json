@@ -2,38 +2,40 @@
   "condition": "rag",
   "model": "llama3.2:3b",
   "scenario": "acl_split_brain_0001",
-  "seconds_total": 811.7,
+  "seconds_total": 705.2,
   "verification_totals": {
-    "unsupported_numbers": 9,
-    "uncited": 2
+    "uncited": 3
   },
   "mode": "drop",
-  "removed_unverified_lines": 9,
+  "removed_unverified_lines": 0,
   "postprocessing": {
     "enabled": true,
-    "model_citation_rate_before_attribution": 0.642,
-    "auto_attributed_lines": 17,
+    "auto_attributed_lines": 5,
     "invalid_citations_removed": 0,
     "partial_lines_dropped": 0,
-    "duplicate_lines_removed": 0,
-    "removed": []
+    "duplicate_lines_removed": 1,
+    "removed": [
+      {
+        "section": "Detection: Metric Anomalies",
+        "line": "* Metric anomalies: node_cpu utilisation on 172.31.118.226 \u2014 baseline 17%; peak 90%; onset 2022-02-15 12:00 UTC; recovered 2022-02-15 14:00 UTC [acl_split_brain_0001-08#0]",
+        "duplicate_of": "Timeline"
+      }
+    ]
   },
   "run_log": [
     {
-      "section": "Affected Host and User",
+      "section": "Affected Service and Infrastructure",
       "retrieved": [
-        "acl_split_brain_0001-05#1",
-        "acl_split_brain_0001-05#0",
         "acl_split_brain_0001-06#1",
-        "acl_split_brain_0001-09#1",
         "acl_split_brain_0001-06#0",
-        "acl_split_brain_0001-04#0"
+        "acl_split_brain_0001-02#0",
+        "acl_split_brain_0001-01#3",
+        "acl_split_brain_0001-01#2",
+        "acl_split_brain_0001-01#0"
       ],
-      "seconds": 96.1,
+      "seconds": 87.9,
       "truncated": false,
       "dropped_partial_line": null,
-      "model_cited_claims": 4,
-      "claims": 4,
       "auto_attributed_lines": 0,
       "invalid_citations_removed": 0,
       "flag_counts": {}
@@ -53,65 +55,39 @@
       ],
       "extractive": true,
       "seconds": 0.0,
-      "claims": 14,
-      "model_cited_claims": 14,
       "flag_counts": {}
     },
     {
-      "section": "Detection: IDS Alerts",
+      "section": "Detection: Metric Anomalies",
       "retrieved": [
+        "acl_split_brain_0001-08#0",
         "acl_split_brain_0001-09#0",
-        "acl_split_brain_0001-06#0",
-        "acl_split_brain_0001-07#6",
-        "acl_split_brain_0001-07#2",
-        "acl_split_brain_0001-07#0"
-      ],
-      "seconds": 120.7,
-      "truncated": false,
-      "dropped_partial_line": null,
-      "model_cited_claims": 0,
-      "claims": 9,
-      "auto_attributed_lines": 9,
-      "invalid_citations_removed": 0,
-      "flag_counts": {
-        "unsupported_numbers": 8
-      }
-    },
-    {
-      "section": "Initial Infection Indicators",
-      "retrieved": [
         "acl_split_brain_0001-09#1",
-        "acl_split_brain_0001-05#0",
-        "acl_split_brain_0001-06#0",
         "acl_split_brain_0001-02#0",
-        "acl_split_brain_0001-05#1",
-        "acl_split_brain_0001-06#1"
+        "acl_split_brain_0001-01#3",
+        "acl_split_brain_0001-01#2"
       ],
-      "seconds": 82.2,
+      "seconds": 117.8,
       "truncated": false,
       "dropped_partial_line": null,
-      "model_cited_claims": 4,
-      "claims": 4,
       "auto_attributed_lines": 0,
       "invalid_citations_removed": 0,
       "flag_counts": {}
     },
     {
-      "section": "Command-and-Control and Network Activity",
+      "section": "Service Dependencies and Propagation",
       "retrieved": [
-        "acl_split_brain_0001-05#1",
-        "acl_split_brain_0001-05#0",
-        "acl_split_brain_0001-06#1",
-        "acl_split_brain_0001-06#0",
+        "acl_split_brain_0001-02#0",
         "acl_split_brain_0001-01#3",
-        "acl_split_brain_0001-01#1"
+        "acl_split_brain_0001-01#1",
+        "acl_split_brain_0001-01#2",
+        "acl_split_brain_0001-09#0",
+        "acl_split_brain_0001-01#0"
       ],
-      "seconds": 81.1,
+      "seconds": 92.3,
       "truncated": false,
       "dropped_partial_line": null,
-      "model_cited_claims": 0,
-      "claims": 5,
-      "auto_attributed_lines": 5,
+      "auto_attributed_lines": 4,
       "invalid_citations_removed": 0,
       "flag_counts": {}
     },
@@ -120,20 +96,18 @@
       "retrieved": [
         "acl_split_brain_0001-05#1",
         "acl_split_brain_0001-05#0",
-        "acl_split_brain_0001-03#2",
-        "acl_split_brain_0001-07#1",
-        "acl_split_brain_0001-03#1",
-        "acl_split_brain_0001-09#1"
+        "acl_split_brain_0001-09#1",
+        "acl_split_brain_0001-09#0",
+        "acl_split_brain_0001-02#0",
+        "acl_split_brain_0001-08#0"
       ],
-      "seconds": 70.8,
+      "seconds": 80.9,
       "truncated": false,
       "dropped_partial_line": null,
-      "model_cited_claims": 1,
-      "claims": 1,
-      "auto_attributed_lines": 0,
+      "auto_attributed_lines": 1,
       "invalid_citations_removed": 0,
       "flag_counts": {
-        "unsupported_numbers": 1
+        "uncited": 2
       }
     },
     {
@@ -142,15 +116,13 @@
         "acl_split_brain_0001-10#0",
         "acl_split_brain_0001-02#0",
         "acl_split_brain_0001-09#0",
-        "acl_split_brain_0001-05#0",
         "acl_split_brain_0001-08#0",
-        "acl_split_brain_0001-09#1"
+        "acl_split_brain_0001-09#1",
+        "acl_split_brain_0001-07#1"
       ],
-      "seconds": 71.5,
+      "seconds": 75.3,
       "truncated": false,
       "dropped_partial_line": null,
-      "model_cited_claims": 0,
-      "claims": 0,
       "auto_attributed_lines": 0,
       "invalid_citations_removed": 0,
       "flag_counts": {}
@@ -158,22 +130,18 @@
     {
       "section": "Corrective and Preventive Actions",
       "retrieved": [
-        "acl_split_brain_0001-07#0",
         "acl_split_brain_0001-09#0",
-        "acl_split_brain_0001-07#1",
+        "acl_split_brain_0001-07#0",
         "acl_split_brain_0001-05#0",
-        "acl_split_brain_0001-09#1"
+        "acl_split_brain_0001-07#1",
+        "acl_split_brain_0001-07#2"
       ],
-      "seconds": 87.6,
+      "seconds": 94.2,
       "truncated": false,
       "dropped_partial_line": null,
-      "model_cited_claims": 0,
-      "claims": 5,
-      "auto_attributed_lines": 3,
+      "auto_attributed_lines": 0,
       "invalid_citations_removed": 0,
-      "flag_counts": {
-        "uncited": 2
-      }
+      "flag_counts": {}
     },
     {
       "section": "Answers to Investigation Questions",
@@ -191,11 +159,9 @@
         "acl_split_brain_0001-09#1",
         "acl_split_brain_0001-05#1"
       ],
-      "seconds": 201.7,
+      "seconds": 156.8,
       "truncated": false,
       "dropped_partial_line": null,
-      "model_cited_claims": 11,
-      "claims": 11,
       "auto_attributed_lines": 0,
       "invalid_citations_removed": 0,
       "flag_counts": {}
@@ -203,136 +169,43 @@
   ],
   "flagged": [
     {
-      "section": "Detection: IDS Alerts",
-      "line": "* acl_split_brain_0001-07#2: critical alerts > critical instances: 172.31.240.72:9187 \u2014 4 events [acl_split_brain_0001-07#2]",
-      "types": [
-        "unsupported_numbers"
-      ],
-      "action": "removed",
-      "unsupported_numbers": [
-        "2"
-      ]
-    },
-    {
-      "section": "Detection: IDS Alerts",
-      "line": "* acl_split_brain_0001-07#2: critical alerts > critical alert names: ReconciliationConflicts \u2014 8 events [acl_split_brain_0001-07#2, acl_split_brain_0001-07#0]",
-      "types": [
-        "unsupported_numbers"
-      ],
-      "action": "removed",
-      "unsupported_numbers": [
-        "2"
-      ]
-    },
-    {
-      "section": "Detection: IDS Alerts",
-      "line": "* acl_split_brain_0001-07#2: critical alerts > critical alert names: PostgresReplicationBroken \u2014 4 events [acl_split_brain_0001-07#2, acl_split_brain_0001-07#0]",
-      "types": [
-        "unsupported_numbers"
-      ],
-      "action": "removed",
-      "unsupported_numbers": [
-        "2"
-      ]
-    },
-    {
-      "section": "Detection: IDS Alerts",
-      "line": "* acl_split_brain_0001-07#2: critical alerts > critical services: reconciliation-job \u2014 8 events [acl_split_brain_0001-07#2, acl_split_brain_0001-07#0]",
-      "types": [
-        "unsupported_numbers"
-      ],
-      "action": "removed",
-      "unsupported_numbers": [
-        "2"
-      ]
-    },
-    {
-      "section": "Detection: IDS Alerts",
-      "line": "* acl_split_brain_0001-07#0: alert names: Watchdog (info) \u2014 72 events; service: alertmanager; firing continuously [acl_split_brain_0001-07#0]",
-      "types": [
-        "unsupported_numbers"
-      ],
-      "action": "removed",
-      "unsupported_numbers": [
-        "0"
-      ]
-    },
-    {
-      "section": "Detection: IDS Alerts",
-      "line": "* acl_split_brain_0001-07#0: alert names: KubeJobFailed (warning) \u2014 4 events; service: batch; first seen in hour 2022-02-16 13:00 UTC; last seen in hour 2022-02-16 15:00 UTC [acl_split_brain_0001-07#0]",
-      "types": [
-        "unsupported_numbers"
-      ],
-      "action": "removed",
-      "unsupported_numbers": [
-        "0"
-      ]
-    },
-    {
-      "section": "Detection: IDS Alerts",
-      "line": "* acl_split_brain_0001-07#0: alert names: PostgresReplicationBroken (critical) \u2014 4 events; service: postgres; first seen in hour 2022-02-15 19:00 UTC; last seen in hour 2022-02-15 20:00 UTC [acl_split_brain_0001-07#0]",
-      "types": [
-        "unsupported_numbers"
-      ],
-      "action": "removed",
-      "unsupported_numbers": [
-        "0"
-      ]
-    },
-    {
-      "section": "Detection: IDS Alerts",
-      "line": "* acl_split_brain_0001-06#0: network device logs: %ACL-6-LOG: INTERCONNECT-IN denied protocol 112 172.31.173.231 -> 224.0.0.18 \u2014 12879 events; top objects: core-b1 (1) [acl_split_brain_0001-06#0]",
-      "types": [
-        "unsupported_numbers"
-      ],
-      "action": "removed",
-      "unsupported_numbers": [
-        "0"
-      ]
-    },
-    {
       "section": "Impact Assessment",
-      "line": "* Assessment: The number of affected hosts was moderate, with at least 5 hosts experiencing issues, including core routers, rider-app-bff hosts, and PostgreSQL databases. [acl_split_brain_0001-05#1]",
-      "types": [
-        "unsupported_numbers"
-      ],
-      "action": "removed",
-      "unsupported_numbers": [
-        "5"
-      ]
-    },
-    {
-      "section": "Corrective and Preventive Actions",
-      "line": "* Review and update the Ansible AWX job IDs (AWX-) to ensure that router ACLs are properly configured and up-to-date.",
+      "line": "* Scale of user-facing latency or errors: High, with a significant number of events indicating service failures and dependencies.",
       "types": [
         "uncited"
       ],
       "action": "kept"
     },
     {
-      "section": "Corrective and Preventive Actions",
-      "line": "* Monitor the PostgreSQL primary/standby pair (db-a in DC-A, db-b in DC-B) and the keepalived VRRP virtual IP (172.31.173.196) for any signs of instability or misconfiguration.",
+      "section": "Impact Assessment",
+      "line": "* Assessment: The incident's impact was likely due to the stretched VLAN 50 and the legacy PostgreSQL primary/standby pair, which may have contributed to the replication and write transaction issues.",
+      "types": [
+        "uncited"
+      ],
+      "action": "kept"
+    },
+    {
+      "section": "Incident Summary",
+      "line": "* Assessment: The incident's impact was likely due to the stretched VLAN 50 and the legacy PostgreSQL primary/standby pair, which may have contributed to the replication and write transaction issues.",
       "types": [
         "uncited"
       ],
       "action": "kept"
     }
   ],
+  "section_profile": "service_outage",
   "evaluation": {
-    "answer_precision": 0.0,
-    "answer_recall": 0.5,
-    "answer_f1": 0.0,
+    "answer_precision": 0.2,
+    "answer_recall": 0.1,
+    "answer_f1": 0.133,
     "question_recall": 0.722,
     "questions_correct": "7/9",
     "answerable_entity_recall": 1.0,
     "overall_entity_recall": 0.7,
-    "faithfulness": 0.75,
+    "faithfulness": 0.707,
     "grounding_rate": 1.0,
-    "citation_precision": 0.783,
-    "citation_rate": 0.958,
-    "claims": 48,
-    "assessment_lines": 7,
-    "uncited_lines": 2,
+    "claims": 41,
+    "assessment_lines": 13,
     "hallucination_rate": 0.0,
     "unsupported_entities": [],
     "unsupported_number_count": 0,
@@ -353,16 +226,22 @@
           "AWX-54207"
         ],
         "missing_from_evidence": [],
-        "answer_text": "CHG-16855 * CHG-16809 * AWX-54207 * CHG-16846",
-        "status": "CORRECT",
-        "predicted_entities": [],
-        "correct_entities": [],
-        "atoms_found_in_answer": [
-          "AWX-54207"
+        "answer_text": "The change that triggered the incident is CHG-16846, a database recovery change on db-b, executed by m.singh on 2022-02-16 03:12 UTC.",
+        "status": "WRONG",
+        "predicted_entities": [
+          "2022-02-16",
+          "2022-02-16 03:12",
+          "m.singh"
         ],
-        "wrong_entities": [],
-        "precision": null,
-        "recall": 1.0
+        "correct_entities": [],
+        "atoms_found_in_answer": [],
+        "wrong_entities": [
+          "2022-02-16",
+          "2022-02-16 03:12",
+          "m.singh"
+        ],
+        "precision": 0.0,
+        "recall": 0.0
       },
       {
         "id": 2,
@@ -378,20 +257,18 @@
           "awx-svc"
         ],
         "missing_from_evidence": [],
-        "answer_text": "ansible-deploy * m.singh * awx-svc",
-        "status": "PARTIAL",
+        "answer_text": "The account or automation identity that executed the change is m.singh.",
+        "status": "WRONG",
         "predicted_entities": [
           "m.singh"
         ],
         "correct_entities": [],
-        "atoms_found_in_answer": [
-          "awx-svc"
-        ],
+        "atoms_found_in_answer": [],
         "wrong_entities": [
           "m.singh"
         ],
         "precision": 0.0,
-        "recall": 1.0
+        "recall": 0.0
       },
       {
         "id": 3,
@@ -407,16 +284,14 @@
           "core-b1"
         ],
         "missing_from_evidence": [],
-        "answer_text": "core-b1",
-        "status": "CORRECT",
+        "answer_text": "Not established from the available artifacts.",
+        "status": "ABSTAINED",
         "predicted_entities": [],
         "correct_entities": [],
-        "atoms_found_in_answer": [
-          "core-b1"
-        ],
+        "atoms_found_in_answer": [],
         "wrong_entities": [],
         "precision": null,
-        "recall": 1.0
+        "recall": 0.0
       },
       {
         "id": 4,
@@ -432,16 +307,14 @@
           "db-b"
         ],
         "missing_from_evidence": [],
-        "answer_text": "db-b",
-        "status": "CORRECT",
+        "answer_text": "Not established from the available artifacts.",
+        "status": "ABSTAINED",
         "predicted_entities": [],
         "correct_entities": [],
-        "atoms_found_in_answer": [
-          "db-b"
-        ],
+        "atoms_found_in_answer": [],
         "wrong_entities": [],
         "precision": null,
-        "recall": 1.0
+        "recall": 0.0
       },
       {
         "id": 5,
@@ -457,13 +330,17 @@
           "2022-02-15 19:00 UTC"
         ],
         "missing_from_evidence": [],
-        "answer_text": "16:00 UTC",
+        "answer_text": "The first signs of the failure appeared during the hour of 16:00 UTC on 2022-02-15.",
         "status": "WRONG",
-        "predicted_entities": [],
-        "correct_entities": [],
+        "predicted_entities": [
+          "2022-02-15"
+        ],
+        "correct_entities": [
+          "2022-02-15"
+        ],
         "atoms_found_in_answer": [],
         "wrong_entities": [],
-        "precision": null,
+        "precision": 1.0,
         "recall": 0.0
       },
       {
@@ -478,7 +355,7 @@
         "missing_from_evidence": [
           "automation error"
         ],
-        "answer_text": "Not established from the available artifacts",
+        "answer_text": "Not established from the available artifacts.",
         "status": "ABSTAINED",
         "predicted_entities": [],
         "correct_entities": [],
@@ -499,7 +376,7 @@
         "missing_from_evidence": [
           "integrity"
         ],
-        "answer_text": "Not established from the available artifacts",
+        "answer_text": "Not established from the available artifacts.",
         "status": "ABSTAINED",
         "predicted_entities": [],
         "correct_entities": [],
@@ -525,7 +402,7 @@
         "missing_from_evidence": [
           "downstream symptom"
         ],
-        "answer_text": "reconciliation-job",
+        "answer_text": "The service that emitted the most errors is reconciliation-job, which is the root cause.",
         "status": "PARTIAL",
         "predicted_entities": [],
         "correct_entities": [],
@@ -550,7 +427,7 @@
           "CHG-16828"
         ],
         "missing_from_evidence": [],
-        "answer_text": "Not established from the available artifacts",
+        "answer_text": "Not established from the available artifacts.",
         "status": "ABSTAINED",
         "predicted_entities": [],
         "correct_entities": [],
@@ -558,6 +435,86 @@
         "wrong_entities": [],
         "precision": null,
         "recall": 0.0
+      }
+    ]
+  },
+  "unanswerable": {
+    "domain": "service_outage",
+    "section_profile_used": "service_outage",
+    "questions": 3,
+    "correct_abstention_rate": 0.333,
+    "invention_rate": 0.0,
+    "invention_rate_after_fact_check": 0.0,
+    "invented_removed_by_fact_check": 0,
+    "other_rate": 0.667,
+    "no_answer_rate": 0.0,
+    "per_question": [
+      {
+        "id": "U1",
+        "question": "What is the email address of the on-call engineer who acknowledged the incident?",
+        "absent_type": "email",
+        "raw_answer": "The on-call engineer who acknowledged the incident is not identified in the evidence. [acl_split_brain_0001-05#0]",
+        "raw_status": "OTHER",
+        "raw_values": [],
+        "final_answer": "The on-call engineer who acknowledged the incident is not identified in the evidence. [acl_split_brain_0001-05#0]",
+        "final_status": "OTHER",
+        "final_values": [],
+        "removed_by_fact_check": false
+      },
+      {
+        "id": "U2",
+        "question": "What is the full 40-character Git commit hash of the build of the root-cause service that was running?",
+        "absent_type": "git_commit",
+        "raw_answer": "Not established from the available artifacts.",
+        "raw_status": "ABSTAINED",
+        "raw_values": [],
+        "final_answer": "Not established from the available artifacts.",
+        "final_status": "ABSTAINED",
+        "final_values": [],
+        "removed_by_fact_check": false
+      },
+      {
+        "id": "U3",
+        "question": "Which Linux kernel version ran on the node that hosted the pod of the root-cause service?",
+        "absent_type": "kernel_version",
+        "raw_answer": "The Linux kernel version ran on the node that hosted the pod of the root-cause service is not specified in the evidence. [acl_split_brain_0001-05#1]",
+        "raw_status": "OTHER",
+        "raw_values": [],
+        "final_answer": "The Linux kernel version ran on the node that hosted the pod of the root-cause service is not specified in the evidence. [acl_split_brain_0001-05#1]",
+        "final_status": "OTHER",
+        "final_values": [],
+        "removed_by_fact_check": false
+      }
+    ],
+    "answerable_questions": 6,
+    "over_abstention_rate": 0.5,
+    "over_abstention_rate_all_questions": 0.556,
+    "run": {
+      "section": "Additional Investigation Questions",
+      "retrieved": [
+        "acl_split_brain_0001-06#1",
+        "acl_split_brain_0001-05#0",
+        "acl_split_brain_0001-05#1",
+        "acl_split_brain_0001-02#0",
+        "acl_split_brain_0001-01#2",
+        "acl_split_brain_0001-01#0"
+      ],
+      "seconds": 76.1,
+      "truncated": false,
+      "flag_counts": {
+        "unsupported_numbers": 1
+      }
+    },
+    "flagged": [
+      {
+        "line": "U4. The full 40-character Git commit hash of the build of the root-cause service that was running is not provided in the evidence. [acl_split_brain_0001-02#0]",
+        "types": [
+          "unsupported_numbers"
+        ],
+        "action": "removed",
+        "unsupported_numbers": [
+          "40"
+        ]
       }
     ]
   }

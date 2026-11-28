@@ -2,7 +2,7 @@
 INCIDENT : fake_auth
 MODEL    : qwen2.5:7b-instruct
 CONDITION: No RAG vs RAG (same LLM, same section plan, same questions)
-CREATED  : 2026-11-27T21:04:28
+CREATED  : 2026-11-28T01:28:21
 ====================================================================================================
 
 NO RAG : the LLM receives only the incident context (network description and the questions). It has NO logs, alerts or query results.
@@ -15,15 +15,15 @@ A. METRICS
 +------------------------------------------------------+----------------+----------------+----------------+
 | Metric                                               | No RAG         | RAG            | RAG - No RAG   |
 +------------------------------------------------------+----------------+----------------+----------------+
-| Answer precision                                     | -              | 0.562          | -              |
+| Answer precision                                     | -              | 0.643          | -              |
 +------------------------------------------------------+----------------+----------------+----------------+
-| Answer recall                                        | -              | 0.900          | -              |
+| Answer recall                                        | -              | 0.833          | -              |
 +------------------------------------------------------+----------------+----------------+----------------+
-| Answer F1                                            | -              | 0.692          | -              |
+| Answer F1                                            | -              | 0.726          | -              |
 +------------------------------------------------------+----------------+----------------+----------------+
 | Question recall                                      | 0.062          | 0.875          | +0.813         |
 +------------------------------------------------------+----------------+----------------+----------------+
-| Faithfulness                                         | 0.000          | 0.780          | +0.780         |
+| Faithfulness                                         | 0.000          | 0.857          | +0.857         |
 +------------------------------------------------------+----------------+----------------+----------------+
 | Grounding rate                                       | 0.125          | 1.000          | +0.875         |
 +------------------------------------------------------+----------------+----------------+----------------+
@@ -33,15 +33,15 @@ A. METRICS
 +------------------------------------------------------+----------------+----------------+----------------+
 | Placeholders (lower is better)                       | 0              | 0              | +0             |
 +------------------------------------------------------+----------------+----------------+----------------+
-| Questions CORRECT                                    | 0              | 4              | +4             |
+| Questions CORRECT                                    | 0              | 6              | +6             |
 +------------------------------------------------------+----------------+----------------+----------------+
-| Questions PARTIAL                                    | 0              | 2              | +2             |
+| Questions PARTIAL                                    | 0              | 1              | +1             |
 +------------------------------------------------------+----------------+----------------+----------------+
 | Questions WRONG                                      | 0              | 1              | +1             |
 +------------------------------------------------------+----------------+----------------+----------------+
-| Questions ABSTAINED / unanswered                     | 0 / 8          | 0 / 1          | -              |
+| Questions ABSTAINED / unanswered                     | 0 / 8          | 0 / 0          | -              |
 +------------------------------------------------------+----------------+----------------+----------------+
-| LLM generation time (min)                            | 11.3           | 401.7          | -              |
+| LLM generation time (min)                            | 11.3           | 31.5           | -              |
 +------------------------------------------------------+----------------+----------------+----------------+
 
 B. ANSWERS PER QUESTION
@@ -77,8 +77,7 @@ B. ANSWERS PER QUESTION
 |     | involved in command-and-     |                          |                                | and-control (C2)               |           |           |
 |     | control (C2) communication?  |                          |                                | communication, are             |           |           |
 |     |                              |                          |                                | 5.252.153.241, 185.188.32.26,  |           |           |
-|     |                              |                          |                                | and 45.125.66.32,              |           |           |
-|     |                              |                          |                                | 45.125.66.252.                 |           |           |
+|     |                              |                          |                                | and 45.125.66.32.              |           |           |
 +-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
 | 6   | During what hour did the     | 2025-01-22 19:00 UTC     | (no answer)                    | The first signs of infection   | NO ANSWER | CORRECT   |
 |     | first signs of infection     |                          |                                | activity appeared during the   |           |           |
@@ -86,24 +85,19 @@ B. ANSWERS PER QUESTION
 |     | earliest date and time in    |                          |                                |                                |           |           |
 |     | YYYY-MM-DD HH:MM UTC format. |                          |                                |                                |           |           |
 +-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
-| 7   | Were any suspicious          | 45.125.66.252,           | (no answer)                    | Suspicious certificates were   | NO ANSWER | PARTIAL   |
+| 7   | Were any suspicious          | 45.125.66.252,           | (no answer)                    | Suspicious certificates were   | NO ANSWER | CORRECT   |
 |     | certificates observed in the | 45.125.66.32             |                                | observed in the encrypted      |           |           |
 |     | encrypted network traffic?   |                          |                                | network traffic. The domain or |           |           |
 |     | If so, identify the domain   |                          |                                | IP in the certificate is       |           |           |
 |     | or IP in the certificate.    |                          |                                | 45.125.66.252 and              |           |           |
-|     |                              |                          |                                | 45.125.66.32. Not established  |           |           |
-|     |                              |                          |                                | from the available artifacts   |           |           |
-|     |                              |                          |                                | regarding whether the IP       |           |           |
-|     |                              |                          |                                | 5.252.153.241 or 185.188.32.26 |           |           |
-|     |                              |                          |                                | is a C2 server or a legitimate |           |           |
-|     |                              |                          |                                | service.                       |           |           |
+|     |                              |                          |                                | 45.125.66.32.                  |           |           |
 +-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+
-| 8   | According to the connection  | 5.252.153.241, C2 server | (no answer)                    | (no answer)                    | NO ANSWER | NO ANSWER |
-|     | volume statistics, what      |                          |                                |                                |           |           |
-|     | single external IP address   |                          |                                |                                |           |           |
-|     | received the most            |                          |                                |                                |           |           |
-|     | connections from the         |                          |                                |                                |           |           |
-|     | infected hosts? Is it a C2   |                          |                                |                                |           |           |
+| 8   | According to the connection  | 5.252.153.241, C2 server | (no answer)                    | The single external IP address | NO ANSWER | CORRECT   |
+|     | volume statistics, what      |                          |                                | that received the most         |           |           |
+|     | single external IP address   |                          |                                | connections from the infected  |           |           |
+|     | received the most            |                          |                                | hosts is 5.252.153.241. It is  |           |           |
+|     | connections from the         |                          |                                | not identified as a C2 server  |           |           |
+|     | infected hosts? Is it a C2   |                          |                                | or a legitimate service.       |           |           |
 |     | server or a legitimate       |                          |                                |                                |           |           |
 |     | service?                     |                          |                                |                                |           |           |
 +-----+------------------------------+--------------------------+--------------------------------+--------------------------------+-----------+-----------+

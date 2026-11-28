@@ -4,7 +4,7 @@ MODEL    : deepinfra:zai-org/GLM-4.7
 CONDITION: RAG (advanced pipeline)
 RUN TIME : 2.6 min of LLM generation
 REPORT   : results\fake_auth\deepinfra_zai-org_GLM-4.7\advanced_postmortem.md
-CREATED  : 2026-11-27T21:04:28
+CREATED  : 2026-11-28T01:28:21
 ====================================================================================================
 
 A. QUESTION-BY-QUESTION EVALUATION

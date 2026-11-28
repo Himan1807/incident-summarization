@@ -2,9 +2,9 @@
 INCIDENT : fake_auth
 MODEL    : qwen2.5:7b-instruct
 CONDITION: RAG (advanced pipeline)
-RUN TIME : 401.7 min of LLM generation
+RUN TIME : 31.5 min of LLM generation
 REPORT   : results\fake_auth\qwen2.5_7b-instruct\advanced_postmortem.md
-CREATED  : 2026-11-27T21:04:28
+CREATED  : 2026-11-28T01:28:21
 ====================================================================================================
 
 A. QUESTION-BY-QUESTION EVALUATION
@@ -34,12 +34,12 @@ A. QUESTION-BY-QUESTION EVALUATION
 |     |                                  |                            | dmpsync.3lift.com, dpm.demdex.net, |       |       | dpm.demdex.net,  |           |
 |     |                                  |                            | and ds.reson8.com.                 |       |       | ds.reson8.com    |           |
 +-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
-| 5   | What are the suspicious external | 5.252.153.241,             | The suspicious external IP         | 3/3   | 3/4   | 185.188.32.26    | PARTIAL   |
+| 5   | What are the suspicious external | 5.252.153.241,             | The suspicious external IP         | 2/3   | 2/3   | 185.188.32.26    | PARTIAL   |
 |     | IP addresses contacted, which    | 45.125.66.32,              | addresses contacted, which might   |       |       |                  |           |
 |     | might be involved in command-    | 45.125.66.252              | be involved in command-and-control |       |       |                  |           |
 |     | and-control (C2) communication?  |                            | (C2) communication, are            |       |       |                  |           |
 |     |                                  |                            | 5.252.153.241, 185.188.32.26, and  |       |       |                  |           |
-|     |                                  |                            | 45.125.66.32, 45.125.66.252.       |       |       |                  |           |
+|     |                                  |                            | 45.125.66.32.                      |       |       |                  |           |
 +-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
 | 6   | During what hour did the first   | 2025-01-22 19:00 UTC       | The first signs of infection       | 1/1   | 2/2   | -                | CORRECT   |
 |     | signs of infection activity      |                            | activity appeared during the hour  |       |       |                  |           |
@@ -47,22 +47,18 @@ A. QUESTION-BY-QUESTION EVALUATION
 |     | date and time in YYYY-MM-DD      |                            |                                    |       |       |                  |           |
 |     | HH:MM UTC format.                |                            |                                    |       |       |                  |           |
 +-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
-| 7   | Were any suspicious certificates | 45.125.66.252,             | Suspicious certificates were       | 2/2   | 2/4   | 185.188.32.26,   | PARTIAL   |
-|     | observed in the encrypted        | 45.125.66.32               | observed in the encrypted network  |       |       | 5.252.153.241    |           |
+| 7   | Were any suspicious certificates | 45.125.66.252,             | Suspicious certificates were       | 2/2   | 2/2   | -                | CORRECT   |
+|     | observed in the encrypted        | 45.125.66.32               | observed in the encrypted network  |       |       |                  |           |
 |     | network traffic? If so, identify |                            | traffic. The domain or IP in the   |       |       |                  |           |
 |     | the domain or IP in the          |                            | certificate is 45.125.66.252 and   |       |       |                  |           |
-|     | certificate.                     |                            | 45.125.66.32. Not established from |       |       |                  |           |
-|     |                                  |                            | the available artifacts regarding  |       |       |                  |           |
-|     |                                  |                            | whether the IP 5.252.153.241 or    |       |       |                  |           |
-|     |                                  |                            | 185.188.32.26 is a C2 server or a  |       |       |                  |           |
-|     |                                  |                            | legitimate service.                |       |       |                  |           |
+|     | certificate.                     |                            | 45.125.66.32.                      |       |       |                  |           |
 +-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
-| 8   | According to the connection      | 5.252.153.241, C2 server   | (no answer in the report)          | -     | -     | -                | NO ANSWER |
-|     | volume statistics, what single   |                            |                                    |       |       |                  |           |
-|     | external IP address received the |                            |                                    |       |       |                  |           |
-|     | most connections from the        |                            |                                    |       |       |                  |           |
-|     | infected hosts? Is it a C2       |                            |                                    |       |       |                  |           |
-|     | server or a legitimate service?  |                            |                                    |       |       |                  |           |
+| 8   | According to the connection      | 5.252.153.241, C2 server   | The single external IP address     | 2/2   | 1/1   | -                | CORRECT   |
+|     | volume statistics, what single   |                            | that received the most connections |       |       |                  |           |
+|     | external IP address received the |                            | from the infected hosts is         |       |       |                  |           |
+|     | most connections from the        |                            | 5.252.153.241. It is not           |       |       |                  |           |
+|     | infected hosts? Is it a C2       |                            | identified as a C2 server or a     |       |       |                  |           |
+|     | server or a legitimate service?  |                            | legitimate service.                |       |       |                  |           |
 +-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
 
 B. METRICS
@@ -70,17 +66,17 @@ B. METRICS
 +----------------------------------------------+--------------+------------------------------------------------------------------------+
 | Metric                                       | Value        | Meaning                                                                |
 +----------------------------------------------+--------------+------------------------------------------------------------------------+
-| Answer precision                             | 0.562        | Entities (IPs, domains, hosts, URLs, times) in the report's answers    |
+| Answer precision                             | 0.643        | Entities (IPs, domains, hosts, URLs, times) in the report's answers    |
 |                                              |              | that also occur in the reference / all entities it gave                |
 +----------------------------------------------+--------------+------------------------------------------------------------------------+
-| Answer recall                                | 0.900        | Reference answer items found in the report's answers / all reference   |
+| Answer recall                                | 0.833        | Reference answer items found in the report's answers / all reference   |
 |                                              |              | items                                                                  |
 +----------------------------------------------+--------------+------------------------------------------------------------------------+
-| Answer F1                                    | 0.692        | Harmonic mean of answer precision and recall                           |
+| Answer F1                                    | 0.726        | Harmonic mean of answer precision and recall                           |
 +----------------------------------------------+--------------+------------------------------------------------------------------------+
 | Question recall                              | 0.875        | Mean over questions of reference items found anywhere in the report    |
 +----------------------------------------------+--------------+------------------------------------------------------------------------+
-| Faithfulness                                 | 0.780        | Claims whose facts are in the evidence AND in the chunks they cite /   |
+| Faithfulness                                 | 0.857        | Claims whose facts are in the evidence AND in the chunks they cite /   |
 |                                              |              | all claims                                                             |
 +----------------------------------------------+--------------+------------------------------------------------------------------------+
 | Grounding rate                               | 1.000        | Claims whose entities and numbers all exist in the evidence            |
@@ -93,10 +89,10 @@ B. METRICS
 +----------------------------------------------+--------------+------------------------------------------------------------------------+
 | Placeholders                                 | 0            | '[insert ...]' placeholders left in the report (lower is better)       |
 +----------------------------------------------+--------------+------------------------------------------------------------------------+
-| Questions correct / partial / wrong /        | 4 / 2 / 1 /  | Per-question status in the table above                                 |
-| abstained / unanswered                       | 0 / 1        |                                                                        |
+| Questions correct / partial / wrong /        | 6 / 1 / 1 /  | Per-question status in the table above                                 |
+| abstained / unanswered                       | 0 / 0        |                                                                        |
 +----------------------------------------------+--------------+------------------------------------------------------------------------+
-| Claims                                       | 41           | Claim lines counted by the verifier; hedged assessments are excluded   |
+| Claims                                       | 42           | Claim lines counted by the verifier; hedged assessments are excluded   |
 +----------------------------------------------+--------------+------------------------------------------------------------------------+
 
 Status: CORRECT = every reference item found and nothing wrong; PARTIAL = some items found or wrong items present;

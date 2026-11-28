@@ -1,6 +1,6 @@
 ====================================================================================================
 INCIDENT: acl_split_brain_0001   -   comparison of 16 run(s) (models and conditions)
-CREATED : 2026-11-27T22:42:16
+CREATED : 2026-11-28T01:28:24
 ====================================================================================================
 
 Runs:  R1 = deepinfra:deepseek-ai/DeepSeek-V3 (RAG)   R2 = deepinfra:deepseek-ai/DeepSeek-V3 (no RAG)   R3 = deepinfra:google/gemma-4-26B-A4B-it (RAG)   R4 = deepinfra:google/gemma-4-26B-A4B-it (no RAG)   R5 = deepinfra:moonshotai/Kimi-K3 (RAG)   R6 = deepinfra:moonshotai/Kimi-K3 (no RAG)   R7 = deepinfra:nvidia/NVIDIA-Nemotron-3-Ultra-550B-A55B (RAG)   R8 = deepinfra:nvidia/NVIDIA-Nemotron-3-Ultra-550B-A55B (no RAG)   R9 = deepinfra:Qwen/Qwen3-235B-A22B-Instruct-2507 (RAG)   R10 = deepinfra:Qwen/Qwen3-235B-A22B-Instruct-2507 (no RAG)   R11 = deepinfra:zai-org/GLM-4.7 (RAG)   R12 = deepinfra:zai-org/GLM-4.7 (no RAG)   R13 = llama3.2:3b (RAG)   R14 = llama3.2:3b (no RAG)   R15 = qwen2.5:7b-instruct (RAG)   R16 = qwen2.5:7b-instruct (no RAG)
@@ -44,7 +44,7 @@ A. METRICS PER RUN (higher is better except Halluc. and BadNum)
 +------+------------------------------------+----------+----------+----------+----------+----------+----------+----------+----------+--------+
 | R12  | deepinfra:zai-org/GLM-4.7 (no RAG) | -        | -        | -        | 0.000    | -        | -        | 0.000    | 0        | 3.5    |
 +------+------------------------------------+----------+----------+----------+----------+----------+----------+----------+----------+--------+
-| R13  | llama3.2:3b (RAG)                  | 0.000    | 0.500    | 0.000    | 0.722    | 0.750    | 1.000    | 0.000    | 0        | 13.5   |
+| R13  | llama3.2:3b (RAG)                  | 0.200    | 0.100    | 0.133    | 0.722    | 0.707    | 1.000    | 0.000    | 0        | 11.8   |
 +------+------------------------------------+----------+----------+----------+----------+----------+----------+----------+----------+--------+
 | R14  | llama3.2:3b (no RAG)               | -        | 0.000    | -        | 0.111    | 0.000    | 0.699    | 0.600    | 5        | 6.5    |
 +------+------------------------------------+----------+----------+----------+----------+----------+----------+----------+----------+--------+
@@ -58,18 +58,18 @@ B. ANSWER STATUS PER QUESTION  (OK = correct, PART = partial, WRONG, ABST = 'Not
 +-----+------------------------------------------+--------------------------------+--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+
 | #   | Question                                 | Reference answer               | R1     | R2     | R3     | R4     | R5     | R6     | R7     | R8     | R9     | R10    | R11    | R12    | R13    | R14    | R15    | R16    |
 +-----+------------------------------------------+--------------------------------+--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+
-| 1   | What change, deployment or automation    | AWX-54207                      | WRONG  | ABST   | OK     | NONE   | NONE   | NONE   | NONE   | NONE   | WRONG  | WRONG  | NONE   | NONE   | OK     | ABST   | WRONG  | NONE   |
+| 1   | What change, deployment or automation    | AWX-54207                      | WRONG  | ABST   | OK     | NONE   | NONE   | NONE   | NONE   | NONE   | WRONG  | WRONG  | NONE   | NONE   | WRONG  | ABST   | WRONG  | NONE   |
 |     | run triggered the incident? Provide its  |                                |        |        |        |        |        |        |        |        |        |        |        |        |        |        |        |        |
 |     | change identifier.                       |                                |        |        |        |        |        |        |        |        |        |        |        |        |        |        |        |        |
 +-----+------------------------------------------+--------------------------------+--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+
-| 2   | Which account or automation identity     | awx-svc                        | WRONG  | ABST   | OK     | NONE   | NONE   | NONE   | NONE   | NONE   | OK     | WRONG  | NONE   | NONE   | PART   | ABST   | WRONG  | NONE   |
+| 2   | Which account or automation identity     | awx-svc                        | WRONG  | ABST   | OK     | NONE   | NONE   | NONE   | NONE   | NONE   | OK     | WRONG  | NONE   | NONE   | WRONG  | ABST   | WRONG  | NONE   |
 |     | executed the triggering change?          |                                |        |        |        |        |        |        |        |        |        |        |        |        |        |        |        |        |
 +-----+------------------------------------------+--------------------------------+--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+
-| 3   | Which network device dropped the         | core-b1                        | OK     | ABST   | OK     | NONE   | NONE   | NONE   | NONE   | NONE   | OK     | WRONG  | NONE   | NONE   | OK     | ABST   | OK     | NONE   |
+| 3   | Which network device dropped the         | core-b1                        | OK     | ABST   | OK     | NONE   | NONE   | NONE   | NONE   | NONE   | OK     | WRONG  | NONE   | NONE   | ABST   | ABST   | OK     | NONE   |
 |     | database heartbeat and replication       |                                |        |        |        |        |        |        |        |        |        |        |        |        |        |        |        |        |
 |     | traffic?                                 |                                |        |        |        |        |        |        |        |        |        |        |        |        |        |        |        |        |
 +-----+------------------------------------------+--------------------------------+--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+
-| 4   | Which database node was promoted,        | db-b                           | OK     | OK     | OK     | NONE   | NONE   | NONE   | NONE   | NONE   | OK     | OK     | NONE   | NONE   | OK     | ABST   | OK     | NONE   |
+| 4   | Which database node was promoted,        | db-b                           | OK     | OK     | OK     | NONE   | NONE   | NONE   | NONE   | NONE   | OK     | OK     | NONE   | NONE   | ABST   | ABST   | OK     | NONE   |
 |     | creating a second writable primary?      |                                |        |        |        |        |        |        |        |        |        |        |        |        |        |        |        |        |
 +-----+------------------------------------------+--------------------------------+--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+
 | 5   | During what hour did the first signs of  | 2022-02-15 19:00 UTC           | OK     | WRONG  | WRONG  | NONE   | NONE   | NONE   | NONE   | NONE   | OK     | WRONG  | NONE   | NONE   | WRONG  | ABST   | WRONG  | NONE   |

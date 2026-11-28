@@ -2,25 +2,23 @@
   "condition": "rag",
   "model": "qwen2.5:7b-instruct",
   "scenario": "fake_auth",
-  "seconds_total": 24100.8,
+  "seconds_total": 1892.1,
   "verification_totals": {
-    "unsupported_numbers": 1,
     "uncited": 1
   },
   "mode": "drop",
-  "removed_unverified_lines": 1,
+  "removed_unverified_lines": 0,
   "postprocessing": {
     "enabled": true,
-    "model_citation_rate_before_attribution": 0.875,
     "auto_attributed_lines": 4,
     "invalid_citations_removed": 0,
-    "partial_lines_dropped": 1,
+    "partial_lines_dropped": 0,
     "duplicate_lines_removed": 1,
     "removed": [
       {
-        "section": "Command-and-Control and Network Activity",
-        "line": "- The Kerberos identity of the internal client 10.1.17.215 was hostname(s) desktop-l8c5gsj and human user account(s) shutchenson. [fake_auth-05#0]",
-        "duplicate_of": "Affected Host and User"
+        "section": "Detection: IDS Alerts",
+        "line": "- High severity alerts > high severity signatures: ET MALWARE Fake Microsoft Teams CnC Payload Request (GET) \u2014 2 events [fake_auth-06#3]",
+        "duplicate_of": "Detection: IDS Alerts"
       }
     ]
   },
@@ -35,11 +33,9 @@
         "fake_auth-04#0",
         "fake_auth-04#1"
       ],
-      "seconds": 179.3,
+      "seconds": 156.7,
       "truncated": false,
       "dropped_partial_line": null,
-      "model_cited_claims": 1,
-      "claims": 1,
       "auto_attributed_lines": 0,
       "invalid_citations_removed": 0,
       "flag_counts": {}
@@ -52,8 +48,6 @@
       ],
       "extractive": true,
       "seconds": 0.0,
-      "claims": 2,
-      "model_cited_claims": 2,
       "flag_counts": {}
     },
     {
@@ -66,11 +60,9 @@
         "fake_auth-09#0",
         "fake_auth-06#0"
       ],
-      "seconds": 197.6,
+      "seconds": 235.8,
       "truncated": false,
       "dropped_partial_line": null,
-      "model_cited_claims": 9,
-      "claims": 9,
       "auto_attributed_lines": 0,
       "invalid_citations_removed": 0,
       "flag_counts": {}
@@ -85,11 +77,9 @@
         "fake_auth-01#4",
         "fake_auth-01#6"
       ],
-      "seconds": 228.6,
+      "seconds": 228.3,
       "truncated": false,
       "dropped_partial_line": null,
-      "model_cited_claims": 5,
-      "claims": 5,
       "auto_attributed_lines": 0,
       "invalid_citations_removed": 0,
       "flag_counts": {}
@@ -104,11 +94,9 @@
         "fake_auth-08#3",
         "fake_auth-08#0"
       ],
-      "seconds": 312.8,
-      "truncated": true,
-      "dropped_partial_line": "- Assessment: The high number of connections to",
-      "model_cited_claims": 10,
-      "claims": 10,
+      "seconds": 235.2,
+      "truncated": false,
+      "dropped_partial_line": null,
       "auto_attributed_lines": 0,
       "invalid_citations_removed": 0,
       "flag_counts": {}
@@ -123,11 +111,9 @@
         "fake_auth-08#0",
         "fake_auth-08#2"
       ],
-      "seconds": 244.9,
+      "seconds": 270.4,
       "truncated": false,
       "dropped_partial_line": null,
-      "model_cited_claims": 3,
-      "claims": 3,
       "auto_attributed_lines": 0,
       "invalid_citations_removed": 0,
       "flag_counts": {}
@@ -142,16 +128,12 @@
         "fake_auth-03#0",
         "fake_auth-01#2"
       ],
-      "seconds": 243.1,
+      "seconds": 224.6,
       "truncated": false,
       "dropped_partial_line": null,
-      "model_cited_claims": 0,
-      "claims": 1,
       "auto_attributed_lines": 1,
       "invalid_citations_removed": 0,
-      "flag_counts": {
-        "unsupported_numbers": 1
-      }
+      "flag_counts": {}
     },
     {
       "section": "Corrective and Preventive Actions",
@@ -163,11 +145,9 @@
         "fake_auth-08#3",
         "fake_auth-01#2"
       ],
-      "seconds": 153.7,
+      "seconds": 152.7,
       "truncated": false,
       "dropped_partial_line": null,
-      "model_cited_claims": 0,
-      "claims": 4,
       "auto_attributed_lines": 3,
       "invalid_citations_removed": 0,
       "flag_counts": {
@@ -192,11 +172,9 @@
         "fake_auth-07#1",
         "fake_auth-02#0"
       ],
-      "seconds": 22540.8,
+      "seconds": 388.4,
       "truncated": false,
       "dropped_partial_line": null,
-      "model_cited_claims": 5,
-      "claims": 5,
       "auto_attributed_lines": 0,
       "invalid_citations_removed": 0,
       "flag_counts": {}
@@ -204,40 +182,27 @@
   ],
   "flagged": [
     {
-      "section": "Root Cause and Evidence Gaps",
-      "line": "- Not established: The behavior of the payload 29842.ps1, if it was executed, is not established.",
-      "types": [
-        "unsupported_numbers"
-      ],
-      "action": "removed",
-      "unsupported_numbers": [
-        "29842"
-      ]
-    },
-    {
       "section": "Corrective and Preventive Actions",
-      "line": "- Reset the account shutchenson to remove any potential malware or unauthorized access.",
+      "line": "- Reset the user account shutchenson to remove any potential malware or unauthorized access.",
       "types": [
         "uncited"
       ],
       "action": "kept"
     }
   ],
+  "section_profile": "security",
   "evaluation": {
-    "answer_precision": 0.562,
-    "answer_recall": 0.9,
-    "answer_f1": 0.692,
+    "answer_precision": 0.643,
+    "answer_recall": 0.833,
+    "answer_f1": 0.726,
     "question_recall": 0.875,
     "questions_correct": "7/8",
     "answerable_entity_recall": 0.917,
     "overall_entity_recall": 0.917,
-    "faithfulness": 0.78,
+    "faithfulness": 0.857,
     "grounding_rate": 1.0,
-    "citation_precision": 0.889,
-    "citation_rate": 0.878,
-    "claims": 41,
-    "assessment_lines": 3,
-    "uncited_lines": 5,
+    "claims": 42,
+    "assessment_lines": 2,
     "hallucination_rate": 0.0,
     "unsupported_entities": [],
     "unsupported_number_count": 0,
@@ -378,29 +343,26 @@
           "45.125.66.252"
         ],
         "missing_from_evidence": [],
-        "answer_text": "The suspicious external IP addresses contacted, which might be involved in command-and-control (C2) communication, are 5.252.153.241, 185.188.32.26, and 45.125.66.32, 45.125.66.252.",
+        "answer_text": "The suspicious external IP addresses contacted, which might be involved in command-and-control (C2) communication, are 5.252.153.241, 185.188.32.26, and 45.125.66.32.",
         "status": "PARTIAL",
         "predicted_entities": [
           "185.188.32.26",
-          "45.125.66.252",
           "45.125.66.32",
           "5.252.153.241"
         ],
         "correct_entities": [
-          "45.125.66.252",
           "45.125.66.32",
           "5.252.153.241"
         ],
         "atoms_found_in_answer": [
           "5.252.153.241",
-          "45.125.66.32",
-          "45.125.66.252"
+          "45.125.66.32"
         ],
         "wrong_entities": [
           "185.188.32.26"
         ],
-        "precision": 0.75,
-        "recall": 1.0
+        "precision": 0.667,
+        "recall": 0.667
       },
       {
         "id": 6,
@@ -450,13 +412,11 @@
           "45.125.66.32"
         ],
         "missing_from_evidence": [],
-        "answer_text": "Suspicious certificates were observed in the encrypted network traffic. The domain or IP in the certificate is 45.125.66.252 and 45.125.66.32. Not established from the available artifacts regarding whether the IP 5.252.153.241 or 185.188.32.26 is a C2 server or a legitimate service.",
-        "status": "PARTIAL",
+        "answer_text": "Suspicious certificates were observed in the encrypted network traffic. The domain or IP in the certificate is 45.125.66.252 and 45.125.66.32.",
+        "status": "CORRECT",
         "predicted_entities": [
-          "185.188.32.26",
           "45.125.66.252",
-          "45.125.66.32",
-          "5.252.153.241"
+          "45.125.66.32"
         ],
         "correct_entities": [
           "45.125.66.252",
@@ -466,11 +426,8 @@
           "45.125.66.252",
           "45.125.66.32"
         ],
-        "wrong_entities": [
-          "185.188.32.26",
-          "5.252.153.241"
-        ],
-        "precision": 0.5,
+        "wrong_entities": [],
+        "precision": 1.0,
         "recall": 1.0
       },
       {
@@ -490,9 +447,88 @@
           "C2 server"
         ],
         "missing_from_evidence": [],
-        "answer_text": null,
-        "status": "NO ANSWER"
+        "answer_text": "The single external IP address that received the most connections from the infected hosts is 5.252.153.241. It is not identified as a C2 server or a legitimate service.",
+        "status": "CORRECT",
+        "predicted_entities": [
+          "5.252.153.241"
+        ],
+        "correct_entities": [
+          "5.252.153.241"
+        ],
+        "atoms_found_in_answer": [
+          "5.252.153.241",
+          "C2 server"
+        ],
+        "wrong_entities": [],
+        "precision": 1.0,
+        "recall": 1.0
       }
     ]
+  },
+  "unanswerable": {
+    "domain": "security",
+    "section_profile_used": "security",
+    "questions": 3,
+    "correct_abstention_rate": 1.0,
+    "invention_rate": 0.0,
+    "invention_rate_after_fact_check": 0.0,
+    "invented_removed_by_fact_check": 0,
+    "other_rate": 0.0,
+    "no_answer_rate": 0.0,
+    "per_question": [
+      {
+        "id": "U1",
+        "question": "What is the MD5 hash of the payload executed on the potentially infected host?",
+        "absent_type": "md5",
+        "raw_answer": "Not established from the available artifacts [fake_auth-05#0, fake_auth-09#0, fake_auth-06#1, fake_auth-01#2, fake_auth-01#3]",
+        "raw_status": "ABSTAINED",
+        "raw_values": [],
+        "final_answer": "Not established from the available artifacts [fake_auth-05#0, fake_auth-09#0, fake_auth-06#1, fake_auth-01#2, fake_auth-01#3]",
+        "final_status": "ABSTAINED",
+        "final_values": [],
+        "removed_by_fact_check": false
+      },
+      {
+        "id": "U2",
+        "question": "What is the process ID (PID) of the malicious process on the potentially infected host?",
+        "absent_type": "pid",
+        "raw_answer": "Not established from the available artifacts [fake_auth-05#0, fake_auth-09#0, fake_auth-06#1, fake_auth-01#2, fake_auth-01#3]",
+        "raw_status": "ABSTAINED",
+        "raw_values": [],
+        "final_answer": "Not established from the available artifacts [fake_auth-05#0, fake_auth-09#0, fake_auth-06#1, fake_auth-01#2, fake_auth-01#3]",
+        "final_status": "ABSTAINED",
+        "final_values": [],
+        "removed_by_fact_check": false
+      },
+      {
+        "id": "U3",
+        "question": "What is the SHA256 hash of the malicious file downloaded by the potentially infected host?",
+        "absent_type": "sha256",
+        "raw_answer": "Not established from the available artifacts [fake_auth-05#0, fake_auth-09#0, fake_auth-06#1, fake_auth-01#2, fake_auth-01#3]",
+        "raw_status": "ABSTAINED",
+        "raw_values": [],
+        "final_answer": "Not established from the available artifacts [fake_auth-05#0, fake_auth-09#0, fake_auth-06#1, fake_auth-01#2, fake_auth-01#3]",
+        "final_status": "ABSTAINED",
+        "final_values": [],
+        "removed_by_fact_check": false
+      }
+    ],
+    "answerable_questions": 8,
+    "over_abstention_rate": 0.0,
+    "over_abstention_rate_all_questions": 0.0,
+    "run": {
+      "section": "Additional Investigation Questions",
+      "retrieved": [
+        "fake_auth-05#0",
+        "fake_auth-09#0",
+        "fake_auth-06#1",
+        "fake_auth-01#2",
+        "fake_auth-01#3"
+      ],
+      "seconds": 191.9,
+      "truncated": false,
+      "flag_counts": {}
+    },
+    "flagged": []
   }
 }

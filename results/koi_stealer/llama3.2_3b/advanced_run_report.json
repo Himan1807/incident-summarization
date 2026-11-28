@@ -2,66 +2,20 @@
   "condition": "rag",
   "model": "llama3.2:3b",
   "scenario": "koi_stealer",
-  "seconds_total": 755.2,
+  "seconds_total": 867.6,
   "verification_totals": {
+    "unsupported_numbers": 1,
     "uncited": 1
   },
   "mode": "drop",
-  "removed_unverified_lines": 0,
+  "removed_unverified_lines": 1,
   "postprocessing": {
     "enabled": true,
-    "model_citation_rate_before_attribution": 0.618,
-    "auto_attributed_lines": 12,
+    "auto_attributed_lines": 21,
     "invalid_citations_removed": 0,
     "partial_lines_dropped": 0,
-    "duplicate_lines_removed": 9,
-    "removed": [
-      {
-        "section": "Detection: IDS Alerts",
-        "line": "* ET MALWARE Win32/Koi Stealer CnC Checkin (GET) \u2014 1 events [koi_stealer-08#0, koi_stealer-06#3]",
-        "duplicate_of": "Detection: IDS Alerts"
-      },
-      {
-        "section": "Detection: IDS Alerts",
-        "line": "* ET HUNTING GENERIC SUSPICIOUS POST to Dotted Quad with Fake Browser 1 \u2014 48 events [koi_stealer-06#2, koi_stealer-06#0]",
-        "duplicate_of": "Detection: IDS Alerts"
-      },
-      {
-        "section": "Detection: IDS Alerts",
-        "line": "* ET ATTACK RESPONSE Koi Loader/Stealer CnC Config Inbound \u2014 1 events [koi_stealer-08#0, koi_stealer-06#3]",
-        "duplicate_of": "Detection: IDS Alerts"
-      },
-      {
-        "section": "Detection: IDS Alerts",
-        "line": "* ET HUNTING GENERIC SUSPICIOUS POST to Dotted Quad with Fake Browser 1 \u2014 48 events [koi_stealer-06#2, koi_stealer-06#0]",
-        "duplicate_of": "Detection: IDS Alerts"
-      },
-      {
-        "section": "Detection: IDS Alerts",
-        "line": "* ET ATTACK RESPONSE Koi Loader/Stealer CnC Config Inbound \u2014 1 events [koi_stealer-08#0, koi_stealer-06#3]",
-        "duplicate_of": "Detection: IDS Alerts"
-      },
-      {
-        "section": "Detection: IDS Alerts",
-        "line": "* ET MALWARE Win32/Koi Stealer CnC Checkin (GET) \u2014 1 events [koi_stealer-08#0, koi_stealer-06#3]",
-        "duplicate_of": "Detection: IDS Alerts"
-      },
-      {
-        "section": "Detection: IDS Alerts",
-        "line": "* High-severity alerts > high-severity signatures:",
-        "duplicate_of": "(orphaned parent)"
-      },
-      {
-        "section": "Root Cause and Evidence Gaps",
-        "line": "+ Data exfiltration destinations or methods",
-        "duplicate_of": "Root Cause and Evidence Gaps"
-      },
-      {
-        "section": "Root Cause and Evidence Gaps",
-        "line": "+ External IP involvement or motivations",
-        "duplicate_of": "Root Cause and Evidence Gaps"
-      }
-    ]
+    "duplicate_lines_removed": 0,
+    "removed": []
   },
   "run_log": [
     {
@@ -74,12 +28,10 @@
         "koi_stealer-03#0",
         "koi_stealer-02#0"
       ],
-      "seconds": 75.9,
+      "seconds": 93.0,
       "truncated": false,
       "dropped_partial_line": null,
-      "model_cited_claims": 0,
-      "claims": 0,
-      "auto_attributed_lines": 0,
+      "auto_attributed_lines": 4,
       "invalid_citations_removed": 0,
       "flag_counts": {}
     },
@@ -91,8 +43,6 @@
       ],
       "extractive": true,
       "seconds": 0.0,
-      "claims": 2,
-      "model_cited_claims": 2,
       "flag_counts": {}
     },
     {
@@ -105,12 +55,10 @@
         "koi_stealer-06#0",
         "koi_stealer-05#0"
       ],
-      "seconds": 97.9,
+      "seconds": 119.5,
       "truncated": false,
       "dropped_partial_line": null,
-      "model_cited_claims": 0,
-      "claims": 9,
-      "auto_attributed_lines": 9,
+      "auto_attributed_lines": 5,
       "invalid_citations_removed": 0,
       "flag_counts": {}
     },
@@ -124,11 +72,9 @@
         "koi_stealer-01#3",
         "koi_stealer-01#5"
       ],
-      "seconds": 93.4,
+      "seconds": 110.0,
       "truncated": false,
       "dropped_partial_line": null,
-      "model_cited_claims": 6,
-      "claims": 6,
       "auto_attributed_lines": 0,
       "invalid_citations_removed": 0,
       "flag_counts": {}
@@ -143,12 +89,10 @@
         "koi_stealer-01#2",
         "koi_stealer-07#0"
       ],
-      "seconds": 83.5,
+      "seconds": 88.4,
       "truncated": false,
       "dropped_partial_line": null,
-      "model_cited_claims": 3,
-      "claims": 3,
-      "auto_attributed_lines": 0,
+      "auto_attributed_lines": 6,
       "invalid_citations_removed": 0,
       "flag_counts": {}
     },
@@ -162,14 +106,14 @@
         "koi_stealer-08#0",
         "koi_stealer-06#2"
       ],
-      "seconds": 79.4,
+      "seconds": 94.9,
       "truncated": false,
       "dropped_partial_line": null,
-      "model_cited_claims": 2,
-      "claims": 2,
       "auto_attributed_lines": 0,
       "invalid_citations_removed": 0,
-      "flag_counts": {}
+      "flag_counts": {
+        "unsupported_numbers": 1
+      }
     },
     {
       "section": "Root Cause and Evidence Gaps",
@@ -181,12 +125,10 @@
         "koi_stealer-04#1",
         "koi_stealer-01#5"
       ],
-      "seconds": 117.2,
+      "seconds": 110.8,
       "truncated": false,
       "dropped_partial_line": null,
-      "model_cited_claims": 3,
-      "claims": 3,
-      "auto_attributed_lines": 0,
+      "auto_attributed_lines": 2,
       "invalid_citations_removed": 0,
       "flag_counts": {}
     },
@@ -200,12 +142,10 @@
         "koi_stealer-04#0",
         "koi_stealer-01#2"
       ],
-      "seconds": 69.9,
+      "seconds": 95.0,
       "truncated": false,
       "dropped_partial_line": null,
-      "model_cited_claims": 0,
-      "claims": 4,
-      "auto_attributed_lines": 3,
+      "auto_attributed_lines": 4,
       "invalid_citations_removed": 0,
       "flag_counts": {
         "uncited": 1
@@ -226,11 +166,9 @@
         "koi_stealer-06#3",
         "koi_stealer-06#1"
       ],
-      "seconds": 138.0,
+      "seconds": 156.0,
       "truncated": false,
       "dropped_partial_line": null,
-      "model_cited_claims": 5,
-      "claims": 5,
       "auto_attributed_lines": 0,
       "invalid_citations_removed": 0,
       "flag_counts": {}
@@ -238,35 +176,42 @@
   ],
   "flagged": [
     {
+      "section": "Impact Assessment",
+      "line": "* Assessment: The number of affected hosts is at least 2, as indicated by the presence of high-severity alerts related to 172.17.0.99 and 172.17.0.99 ranks #1 by external connections. [koi_stealer-08#0]",
+      "types": [
+        "unsupported_numbers"
+      ],
+      "action": "removed",
+      "unsupported_numbers": [
+        "2"
+      ]
+    },
+    {
       "section": "Corrective and Preventive Actions",
-      "line": "* Review and update the network segmentation and access controls to prevent similar incidents in the future, considering the use of a more secure gateway and segment isolation.",
+      "line": "* Conduct a thorough review of the AD environment and ensure that all Kerberos tickets are properly revoked and cleaned up to prevent potential future attacks.",
       "types": [
         "uncited"
       ],
       "action": "kept"
     }
   ],
+  "section_profile": "security",
   "evaluation": {
-    "answer_precision": 1.0,
-    "answer_recall": 0.667,
-    "answer_f1": 0.8,
-    "question_recall": 0.875,
-    "questions_correct": "7/8",
-    "answerable_entity_recall": 0.875,
-    "overall_entity_recall": 0.889,
-    "faithfulness": 0.964,
+    "answer_precision": 0.6,
+    "answer_recall": 0.778,
+    "answer_f1": 0.678,
+    "question_recall": 1.0,
+    "questions_correct": "8/8",
+    "answerable_entity_recall": 1.0,
+    "overall_entity_recall": 1.0,
+    "faithfulness": 0.439,
     "grounding_rate": 1.0,
-    "citation_precision": 1.0,
-    "citation_rate": 0.964,
-    "claims": 28,
-    "assessment_lines": 6,
-    "uncited_lines": 1,
+    "claims": 41,
+    "assessment_lines": 4,
     "hallucination_rate": 0.0,
     "unsupported_entities": [],
-    "unsupported_number_count": 1,
-    "unsupported_numbers": [
-      "0"
-    ],
+    "unsupported_number_count": 0,
+    "unsupported_numbers": [],
     "placeholder_count": 0,
     "per_question": [
       {
@@ -362,16 +307,33 @@
         "answerable_from_evidence": [
           "www.bellantonicioccolato.it"
         ],
-        "found_in_report": [],
+        "found_in_report": [
+          "www.bellantonicioccolato.it"
+        ],
         "missing_from_evidence": [],
-        "answer_text": "Not established from the available artifacts.",
-        "status": "ABSTAINED",
-        "predicted_entities": [],
-        "correct_entities": [],
-        "atoms_found_in_answer": [],
-        "wrong_entities": [],
-        "precision": null,
-        "recall": 0.0
+        "answer_text": "The likely fake or suspicious domains / URLs for initial infection are weathermapdata.blob.core.windows.net, sso.godaddy.com, www.bellantonicioccolato.it, img-s-msn-com.akamaized.net, and oneclient.sfx.ms.",
+        "status": "PARTIAL",
+        "predicted_entities": [
+          "img-s-msn-com.akamaized.net",
+          "oneclient.sfx.ms",
+          "sso.godaddy.com",
+          "weathermapdata.blob.core.windows.net",
+          "www.bellantonicioccolato.it"
+        ],
+        "correct_entities": [
+          "www.bellantonicioccolato.it"
+        ],
+        "atoms_found_in_answer": [
+          "www.bellantonicioccolato.it"
+        ],
+        "wrong_entities": [
+          "img-s-msn-com.akamaized.net",
+          "oneclient.sfx.ms",
+          "sso.godaddy.com",
+          "weathermapdata.blob.core.windows.net"
+        ],
+        "precision": 0.2,
+        "recall": 1.0
       },
       {
         "id": 5,
@@ -469,7 +431,7 @@
           "C2 server"
         ],
         "missing_from_evidence": [],
-        "answer_text": "The single external IP address that received the most connections from the infected hosts is 79.124.78.197, which is likely a C2 server.",
+        "answer_text": "According to the connection volume statistics, the single external IP address that received the most connections from the infected hosts is 79.124.78.197, which is likely a C2 server.",
         "status": "CORRECT",
         "predicted_entities": [
           "79.124.78.197"
@@ -486,5 +448,73 @@
         "recall": 1.0
       }
     ]
+  },
+  "unanswerable": {
+    "domain": "security",
+    "section_profile_used": "security",
+    "questions": 3,
+    "correct_abstention_rate": 1.0,
+    "invention_rate": 0.0,
+    "invention_rate_after_fact_check": 0.0,
+    "invented_removed_by_fact_check": 0,
+    "other_rate": 0.0,
+    "no_answer_rate": 0.0,
+    "per_question": [
+      {
+        "id": "U1",
+        "question": "Which CVE identifier was exploited for the initial infection?",
+        "absent_type": "cve",
+        "raw_answer": "Not established from the available artifacts.",
+        "raw_status": "ABSTAINED",
+        "raw_values": [],
+        "final_answer": "Not established from the available artifacts.",
+        "final_status": "ABSTAINED",
+        "final_values": [],
+        "removed_by_fact_check": false
+      },
+      {
+        "id": "U2",
+        "question": "What is the email address of the sender of the message that delivered the initial infection?",
+        "absent_type": "email",
+        "raw_answer": "Not established from the available artifacts.",
+        "raw_status": "ABSTAINED",
+        "raw_values": [],
+        "final_answer": "Not established from the available artifacts.",
+        "final_status": "ABSTAINED",
+        "final_values": [],
+        "removed_by_fact_check": false
+      },
+      {
+        "id": "U3",
+        "question": "Which ticket number was assigned to this incident in the organisation's ticketing system?",
+        "absent_type": "ticket",
+        "raw_answer": "Not established from the available artifacts.",
+        "raw_status": "ABSTAINED",
+        "raw_values": [],
+        "final_answer": "Not established from the available artifacts.",
+        "final_status": "ABSTAINED",
+        "final_values": [],
+        "removed_by_fact_check": false
+      }
+    ],
+    "answerable_questions": 7,
+    "over_abstention_rate": 0.0,
+    "over_abstention_rate_all_questions": 0.125,
+    "run": {
+      "section": "Additional Investigation Questions",
+      "retrieved": [
+        "koi_stealer-08#0",
+        "koi_stealer-06#1",
+        "koi_stealer-06#2",
+        "koi_stealer-05#0",
+        "koi_stealer-01#2",
+        "koi_stealer-02#0",
+        "koi_stealer-04#0"
+      ],
+      "seconds": 55.9,
+      "truncated": false,
+      "flag_counts": {}
+    },
+    "flagged": []
   }
 }

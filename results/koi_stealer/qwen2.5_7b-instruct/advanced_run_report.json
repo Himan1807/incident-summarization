@@ -2,7 +2,7 @@
   "condition": "rag",
   "model": "qwen2.5:7b-instruct",
   "scenario": "koi_stealer",
-  "seconds_total": 1954.3,
+  "seconds_total": 1664.6,
   "verification_totals": {
     "uncited": 2
   },
@@ -10,18 +10,11 @@
   "removed_unverified_lines": 0,
   "postprocessing": {
     "enabled": true,
-    "model_citation_rate_before_attribution": 0.865,
-    "auto_attributed_lines": 3,
+    "auto_attributed_lines": 4,
     "invalid_citations_removed": 0,
-    "partial_lines_dropped": 1,
-    "duplicate_lines_removed": 1,
-    "removed": [
-      {
-        "section": "Impact Assessment",
-        "line": "- Assessment: The internal client 172.17.0.99 is associated with the user afletcher and the hostname desktop-rnvo9at [koi_stealer-08#0].",
-        "duplicate_of": "Command-and-Control and Network Activity"
-      }
-    ]
+    "partial_lines_dropped": 0,
+    "duplicate_lines_removed": 0,
+    "removed": []
   },
   "run_log": [
     {
@@ -34,11 +27,9 @@
         "koi_stealer-03#0",
         "koi_stealer-02#0"
       ],
-      "seconds": 211.6,
+      "seconds": 170.8,
       "truncated": false,
       "dropped_partial_line": null,
-      "model_cited_claims": 1,
-      "claims": 1,
       "auto_attributed_lines": 0,
       "invalid_citations_removed": 0,
       "flag_counts": {}
@@ -51,8 +42,6 @@
       ],
       "extractive": true,
       "seconds": 0.0,
-      "claims": 2,
-      "model_cited_claims": 2,
       "flag_counts": {}
     },
     {
@@ -65,11 +54,9 @@
         "koi_stealer-06#0",
         "koi_stealer-05#0"
       ],
-      "seconds": 188.3,
+      "seconds": 178.4,
       "truncated": false,
       "dropped_partial_line": null,
-      "model_cited_claims": 6,
-      "claims": 6,
       "auto_attributed_lines": 0,
       "invalid_citations_removed": 0,
       "flag_counts": {}
@@ -84,11 +71,9 @@
         "koi_stealer-01#3",
         "koi_stealer-01#5"
       ],
-      "seconds": 245.1,
+      "seconds": 230.5,
       "truncated": false,
       "dropped_partial_line": null,
-      "model_cited_claims": 5,
-      "claims": 5,
       "auto_attributed_lines": 0,
       "invalid_citations_removed": 0,
       "flag_counts": {}
@@ -103,12 +88,10 @@
         "koi_stealer-01#2",
         "koi_stealer-07#0"
       ],
-      "seconds": 316.4,
-      "truncated": true,
-      "dropped_partial_line": "- Assessment: The high number of external connections and the variety of contacted IPs and domains suggest potential C2 activity, but this is not conclus",
-      "model_cited_claims": 7,
-      "claims": 8,
-      "auto_attributed_lines": 1,
+      "seconds": 171.4,
+      "truncated": false,
+      "dropped_partial_line": null,
+      "auto_attributed_lines": 2,
       "invalid_citations_removed": 0,
       "flag_counts": {}
     },
@@ -122,11 +105,9 @@
         "koi_stealer-08#0",
         "koi_stealer-06#2"
       ],
-      "seconds": 247.1,
+      "seconds": 187.4,
       "truncated": false,
       "dropped_partial_line": null,
-      "model_cited_claims": 5,
-      "claims": 5,
       "auto_attributed_lines": 0,
       "invalid_citations_removed": 0,
       "flag_counts": {}
@@ -141,11 +122,9 @@
         "koi_stealer-04#1",
         "koi_stealer-01#5"
       ],
-      "seconds": 276.1,
+      "seconds": 304.5,
       "truncated": false,
       "dropped_partial_line": null,
-      "model_cited_claims": 1,
-      "claims": 1,
       "auto_attributed_lines": 0,
       "invalid_citations_removed": 0,
       "flag_counts": {}
@@ -160,11 +139,9 @@
         "koi_stealer-04#0",
         "koi_stealer-01#2"
       ],
-      "seconds": 167.7,
+      "seconds": 150.9,
       "truncated": false,
       "dropped_partial_line": null,
-      "model_cited_claims": 0,
-      "claims": 4,
       "auto_attributed_lines": 2,
       "invalid_citations_removed": 0,
       "flag_counts": {
@@ -186,11 +163,9 @@
         "koi_stealer-06#3",
         "koi_stealer-06#1"
       ],
-      "seconds": 302.0,
+      "seconds": 270.7,
       "truncated": false,
       "dropped_partial_line": null,
-      "model_cited_claims": 5,
-      "claims": 5,
       "auto_attributed_lines": 0,
       "invalid_citations_removed": 0,
       "flag_counts": {}
@@ -214,21 +189,19 @@
       "action": "kept"
     }
   ],
+  "section_profile": "security",
   "evaluation": {
     "answer_precision": 1.0,
-    "answer_recall": 0.889,
-    "answer_f1": 0.941,
+    "answer_recall": 0.778,
+    "answer_f1": 0.875,
     "question_recall": 1.0,
     "questions_correct": "8/8",
     "answerable_entity_recall": 1.0,
     "overall_entity_recall": 1.0,
-    "faithfulness": 0.861,
+    "faithfulness": 0.667,
     "grounding_rate": 1.0,
-    "citation_precision": 0.912,
-    "citation_rate": 0.944,
-    "claims": 36,
-    "assessment_lines": 5,
-    "uncited_lines": 2,
+    "claims": 33,
+    "assessment_lines": 3,
     "hallucination_rate": 0.0,
     "unsupported_entities": [],
     "unsupported_number_count": 1,
@@ -251,7 +224,7 @@
           "172.17.0.99"
         ],
         "missing_from_evidence": [],
-        "answer_text": "The IP address of the potentially infected internal host in the LAN is 172.17.0.99.",
+        "answer_text": "172.17.0.99",
         "status": "CORRECT",
         "predicted_entities": [
           "172.17.0.99"
@@ -280,7 +253,7 @@
           "DESKTOP-RNVO9AT"
         ],
         "missing_from_evidence": [],
-        "answer_text": "The hostname of the potentially infected machine in the LAN is desktop-rnvo9at.",
+        "answer_text": "desktop-rnvo9at",
         "status": "CORRECT",
         "predicted_entities": [
           "DESKTOP-RNVO9AT"
@@ -309,7 +282,7 @@
           "afletcher"
         ],
         "missing_from_evidence": [],
-        "answer_text": "The Windows human user account name of the potentially infected machine in the LAN is afletcher.",
+        "answer_text": "afletcher",
         "status": "CORRECT",
         "predicted_entities": [],
         "correct_entities": [],
@@ -334,7 +307,7 @@
           "www.bellantonicioccolato.it"
         ],
         "missing_from_evidence": [],
-        "answer_text": "The likely fake or suspicious domains / URLs for initial infection are Not established from the available artifacts.",
+        "answer_text": "Not established from the available artifacts.",
         "status": "ABSTAINED",
         "predicted_entities": [],
         "correct_entities": [],
@@ -357,7 +330,7 @@
           "79.124.78.197"
         ],
         "missing_from_evidence": [],
-        "answer_text": "The suspicious external IP addresses contacted, which might be involved in command-and-control (C2) communication, are 79.124.78.197.",
+        "answer_text": "79.124.78.197",
         "status": "CORRECT",
         "predicted_entities": [
           "79.124.78.197"
@@ -386,16 +359,14 @@
         "missing_from_evidence": [
           "confidentiality"
         ],
-        "answer_text": "The attacker primarily targets confidentiality [Assessment: Based on the nature of a koi stealer, which typically focuses on stealing sensitive information].",
-        "status": "CORRECT",
+        "answer_text": "Not established from the available artifacts.",
+        "status": "ABSTAINED",
         "predicted_entities": [],
         "correct_entities": [],
-        "atoms_found_in_answer": [
-          "confidentiality"
-        ],
+        "atoms_found_in_answer": [],
         "wrong_entities": [],
         "precision": null,
-        "recall": 1.0
+        "recall": 0.0
       },
       {
         "id": 7,
@@ -411,7 +382,7 @@
           "2024-09-04 17:00 UTC"
         ],
         "missing_from_evidence": [],
-        "answer_text": "The first signs of infection activity appeared during the hour 2024-09-04 17:00 UTC.",
+        "answer_text": "2024-09-04 17:00 UTC",
         "status": "CORRECT",
         "predicted_entities": [
           "2024-09-04",
@@ -445,7 +416,7 @@
           "C2 server"
         ],
         "missing_from_evidence": [],
-        "answer_text": "According to the connection volume statistics, the single external IP address that received the most connections from the infected hosts is 79.124.78.197, and it is likely a C2 server.",
+        "answer_text": "79.124.78.197 received the most connections (218). This IP address is likely involved in command-and-control (C2) communication.",
         "status": "CORRECT",
         "predicted_entities": [
           "79.124.78.197"
@@ -462,5 +433,73 @@
         "recall": 1.0
       }
     ]
+  },
+  "unanswerable": {
+    "domain": "security",
+    "section_profile_used": "security",
+    "questions": 3,
+    "correct_abstention_rate": 1.0,
+    "invention_rate": 0.0,
+    "invention_rate_after_fact_check": 0.0,
+    "invented_removed_by_fact_check": 0,
+    "other_rate": 0.0,
+    "no_answer_rate": 0.0,
+    "per_question": [
+      {
+        "id": "U1",
+        "question": "Which CVE identifier was exploited for the initial infection?",
+        "absent_type": "cve",
+        "raw_answer": "Not established from the available artifacts [koi_stealer-08#0]",
+        "raw_status": "ABSTAINED",
+        "raw_values": [],
+        "final_answer": "Not established from the available artifacts [koi_stealer-08#0]",
+        "final_status": "ABSTAINED",
+        "final_values": [],
+        "removed_by_fact_check": false
+      },
+      {
+        "id": "U2",
+        "question": "What is the email address of the sender of the message that delivered the initial infection?",
+        "absent_type": "email",
+        "raw_answer": "Not established from the available artifacts [koi_stealer-08#0]",
+        "raw_status": "ABSTAINED",
+        "raw_values": [],
+        "final_answer": "Not established from the available artifacts [koi_stealer-08#0]",
+        "final_status": "ABSTAINED",
+        "final_values": [],
+        "removed_by_fact_check": false
+      },
+      {
+        "id": "U3",
+        "question": "Which ticket number was assigned to this incident in the organisation's ticketing system?",
+        "absent_type": "ticket",
+        "raw_answer": "Not established from the available artifacts [koi_stealer-08#0]",
+        "raw_status": "ABSTAINED",
+        "raw_values": [],
+        "final_answer": "Not established from the available artifacts [koi_stealer-08#0]",
+        "final_status": "ABSTAINED",
+        "final_values": [],
+        "removed_by_fact_check": false
+      }
+    ],
+    "answerable_questions": 7,
+    "over_abstention_rate": 0.143,
+    "over_abstention_rate_all_questions": 0.25,
+    "run": {
+      "section": "Additional Investigation Questions",
+      "retrieved": [
+        "koi_stealer-08#0",
+        "koi_stealer-06#1",
+        "koi_stealer-06#2",
+        "koi_stealer-05#0",
+        "koi_stealer-01#2",
+        "koi_stealer-02#0",
+        "koi_stealer-04#0"
+      ],
+      "seconds": 136.4,
+      "truncated": false,
+      "flag_counts": {}
+    },
+    "flagged": []
   }
 }

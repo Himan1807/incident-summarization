@@ -2,45 +2,74 @@
   "condition": "rag",
   "model": "llama3.2:3b",
   "scenario": "fake_auth",
-  "seconds_total": 975.0,
+  "seconds_total": 796.9,
   "verification_totals": {
-    "unsupported_entities": 1,
-    "uncited": 1
+    "uncited": 8,
+    "unsupported_entities": 1
   },
   "mode": "drop",
   "removed_unverified_lines": 1,
   "postprocessing": {
     "enabled": true,
-    "model_citation_rate_before_attribution": 0.667,
-    "auto_attributed_lines": 18,
+    "auto_attributed_lines": 21,
     "invalid_citations_removed": 0,
     "partial_lines_dropped": 0,
-    "duplicate_lines_removed": 5,
+    "duplicate_lines_removed": 11,
     "removed": [
       {
         "section": "Detection: IDS Alerts",
-        "line": "+ ET MALWARE Fake Microsoft Teams CnC Payload Request (GET) \u2014 2 events [auto: fake_auth-09#0, fake_auth-06#4]",
+        "line": "ET MALWARE Fake Microsoft Teams CnC Payload Request (GET) \u2014 2 events [auto: fake_auth-09#0, fake_auth-06#4]",
         "duplicate_of": "Detection: IDS Alerts"
       },
       {
         "section": "Detection: IDS Alerts",
-        "line": "+ ET MALWARE Fake Microsoft Teams CnC Payload Request (GET) \u2014 2 events [auto: fake_auth-09#0, fake_auth-06#4]",
+        "line": "ET MALWARE Fake Microsoft Teams CnC Payload Request (GET) \u2014 2 events [auto: fake_auth-09#0, fake_auth-06#4]",
         "duplicate_of": "Detection: IDS Alerts"
       },
       {
         "section": "Detection: IDS Alerts",
-        "line": "+ ET MALWARE Fake Microsoft Teams CnC Payload Request (GET) \u2014 2 events [auto: fake_auth-09#0, fake_auth-06#4]",
+        "line": "ET MALWARE Fake Microsoft Teams CnC Payload Request (GET) \u2014 2 events [auto: fake_auth-09#0, fake_auth-06#4]",
         "duplicate_of": "Detection: IDS Alerts"
       },
       {
         "section": "Detection: IDS Alerts",
-        "line": "+ ET MALWARE Fake Microsoft Teams CnC Payload Request (GET) \u2014 2 events [auto: fake_auth-09#0, fake_auth-06#4]",
+        "line": "ET MALWARE Fake Microsoft Teams CnC Payload Request (GET) \u2014 2 events [auto: fake_auth-09#0, fake_auth-06#4]",
         "duplicate_of": "Detection: IDS Alerts"
       },
       {
         "section": "Detection: IDS Alerts",
-        "line": "+ ET MALWARE Fake Microsoft Teams CnC Payload Request (GET) \u2014 2 events [auto: fake_auth-09#0, fake_auth-06#4]",
+        "line": "ET MALWARE Fake Microsoft Teams CnC Payload Request (GET) \u2014 2 events [auto: fake_auth-09#0, fake_auth-06#4]",
         "duplicate_of": "Detection: IDS Alerts"
+      },
+      {
+        "section": "Detection: IDS Alerts",
+        "line": "ET DROP Spamhaus DROP Listed Traffic Inbound group 5 \u2014 2 events [auto: fake_auth-06#2, fake_auth-06#0]",
+        "duplicate_of": "Detection: IDS Alerts"
+      },
+      {
+        "section": "Detection: IDS Alerts",
+        "line": "ET MALWARE Fake Microsoft Teams CnC Payload Request (GET) \u2014 2 events [auto: fake_auth-09#0, fake_auth-06#4]",
+        "duplicate_of": "Detection: IDS Alerts"
+      },
+      {
+        "section": "Detection: IDS Alerts",
+        "line": "ET INFO PS1 Powershell File Request \u2014 2 events [auto: fake_auth-09#0, fake_auth-06#4]",
+        "duplicate_of": "Detection: IDS Alerts"
+      },
+      {
+        "section": "Detection: IDS Alerts",
+        "line": "ET INFO TeamViewer Dyngate User-Agent \u2014 2 events [auto: fake_auth-09#0, fake_auth-06#4]",
+        "duplicate_of": "Detection: IDS Alerts"
+      },
+      {
+        "section": "Detection: IDS Alerts",
+        "line": "ET MALWARE Fake Microsoft Teams CnC Payload Request (GET) \u2014 2 events [auto: fake_auth-09#0, fake_auth-06#4]",
+        "duplicate_of": "Detection: IDS Alerts"
+      },
+      {
+        "section": "Root Cause and Evidence Gaps",
+        "line": "* Not established from the available artifacts:",
+        "duplicate_of": "(orphaned parent)"
       }
     ]
   },
@@ -55,11 +84,9 @@
         "fake_auth-04#0",
         "fake_auth-04#1"
       ],
-      "seconds": 75.1,
+      "seconds": 62.2,
       "truncated": false,
       "dropped_partial_line": null,
-      "model_cited_claims": 0,
-      "claims": 3,
       "auto_attributed_lines": 3,
       "invalid_citations_removed": 0,
       "flag_counts": {}
@@ -72,8 +99,6 @@
       ],
       "extractive": true,
       "seconds": 0.0,
-      "claims": 2,
-      "model_cited_claims": 2,
       "flag_counts": {}
     },
     {
@@ -86,12 +111,10 @@
         "fake_auth-09#0",
         "fake_auth-06#0"
       ],
-      "seconds": 113.7,
+      "seconds": 118.9,
       "truncated": false,
       "dropped_partial_line": null,
-      "model_cited_claims": 0,
-      "claims": 11,
-      "auto_attributed_lines": 11,
+      "auto_attributed_lines": 15,
       "invalid_citations_removed": 0,
       "flag_counts": {}
     },
@@ -105,11 +128,9 @@
         "fake_auth-01#4",
         "fake_auth-01#6"
       ],
-      "seconds": 90.4,
+      "seconds": 84.6,
       "truncated": false,
       "dropped_partial_line": null,
-      "model_cited_claims": 6,
-      "claims": 6,
       "auto_attributed_lines": 0,
       "invalid_citations_removed": 0,
       "flag_counts": {}
@@ -124,11 +145,9 @@
         "fake_auth-08#3",
         "fake_auth-08#0"
       ],
-      "seconds": 112.4,
+      "seconds": 96.5,
       "truncated": false,
       "dropped_partial_line": null,
-      "model_cited_claims": 3,
-      "claims": 3,
       "auto_attributed_lines": 0,
       "invalid_citations_removed": 0,
       "flag_counts": {}
@@ -143,11 +162,9 @@
         "fake_auth-08#0",
         "fake_auth-08#2"
       ],
-      "seconds": 102.1,
+      "seconds": 90.9,
       "truncated": false,
       "dropped_partial_line": null,
-      "model_cited_claims": 2,
-      "claims": 2,
       "auto_attributed_lines": 0,
       "invalid_citations_removed": 0,
       "flag_counts": {}
@@ -162,14 +179,14 @@
         "fake_auth-03#0",
         "fake_auth-01#2"
       ],
-      "seconds": 126.2,
+      "seconds": 78.1,
       "truncated": false,
       "dropped_partial_line": null,
-      "model_cited_claims": 2,
-      "claims": 2,
       "auto_attributed_lines": 0,
       "invalid_citations_removed": 0,
-      "flag_counts": {}
+      "flag_counts": {
+        "uncited": 6
+      }
     },
     {
       "section": "Corrective and Preventive Actions",
@@ -181,16 +198,14 @@
         "fake_auth-08#3",
         "fake_auth-01#2"
       ],
-      "seconds": 75.0,
+      "seconds": 70.4,
       "truncated": false,
       "dropped_partial_line": null,
-      "model_cited_claims": 0,
-      "claims": 5,
-      "auto_attributed_lines": 4,
+      "auto_attributed_lines": 3,
       "invalid_citations_removed": 0,
       "flag_counts": {
         "unsupported_entities": 1,
-        "uncited": 1
+        "uncited": 2
       }
     },
     {
@@ -211,11 +226,9 @@
         "fake_auth-07#1",
         "fake_auth-02#0"
       ],
-      "seconds": 280.1,
+      "seconds": 195.3,
       "truncated": false,
       "dropped_partial_line": null,
-      "model_cited_claims": 23,
-      "claims": 23,
       "auto_attributed_lines": 0,
       "invalid_citations_removed": 0,
       "flag_counts": {}
@@ -223,8 +236,56 @@
   ],
   "flagged": [
     {
+      "section": "Root Cause and Evidence Gaps",
+      "line": "* Initial vector (e.g., phishing, exploit kit, etc.)",
+      "types": [
+        "uncited"
+      ],
+      "action": "kept"
+    },
+    {
+      "section": "Root Cause and Evidence Gaps",
+      "line": "* Payload behavior (e.g., data exfiltration, lateral movement, etc.)",
+      "types": [
+        "uncited"
+      ],
+      "action": "kept"
+    },
+    {
+      "section": "Root Cause and Evidence Gaps",
+      "line": "* Data exfiltration (e.g., whether data was actually transferred, etc.)",
+      "types": [
+        "uncited"
+      ],
+      "action": "kept"
+    },
+    {
+      "section": "Root Cause and Evidence Gaps",
+      "line": "* Queries that failed or were empty (e.g., whether any queries were made to external destinations, etc.)",
+      "types": [
+        "uncited"
+      ],
+      "action": "kept"
+    },
+    {
+      "section": "Root Cause and Evidence Gaps",
+      "line": "* Command-and-Control (C2) server or communication (e.g., whether the client was communicating with a C2 server, etc.)",
+      "types": [
+        "uncited"
+      ],
+      "action": "kept"
+    },
+    {
+      "section": "Root Cause and Evidence Gaps",
+      "line": "* Impact on the network or system (e.g., whether the incident had any noticeable effects on the network or system, etc.)",
+      "types": [
+        "uncited"
+      ],
+      "action": "kept"
+    },
+    {
       "section": "Corrective and Preventive Actions",
-      "line": "* Monitor the DNS lookup activity of the TeamViewer RMM domain (teamviewer.com) to detect any potential future malicious activity.",
+      "line": "* Monitor the DNS lookup activity of TeamViewer RMM Domain (teamviewer.com) to detect any suspicious activity.",
       "types": [
         "unsupported_entities",
         "uncited"
@@ -233,27 +294,35 @@
       "unsupported_entities": [
         "teamviewer.com"
       ]
+    },
+    {
+      "section": "Corrective and Preventive Actions",
+      "line": "* Review and update the network segmentation to ensure that the affected internal client is not connected to the rest of the network.",
+      "types": [
+        "uncited"
+      ],
+      "action": "kept"
     }
   ],
+  "section_profile": "security",
   "evaluation": {
-    "answer_precision": 0.214,
-    "answer_recall": 0.5,
-    "answer_f1": 0.3,
+    "answer_precision": 0.154,
+    "answer_recall": 0.25,
+    "answer_f1": 0.191,
     "question_recall": 0.875,
     "questions_correct": "7/8",
     "answerable_entity_recall": 0.917,
     "overall_entity_recall": 0.917,
-    "faithfulness": 0.692,
+    "faithfulness": 0.643,
     "grounding_rate": 1.0,
-    "citation_precision": 1.0,
-    "citation_rate": 0.692,
-    "claims": 52,
-    "assessment_lines": 11,
-    "uncited_lines": 16,
+    "claims": 42,
+    "assessment_lines": 10,
     "hallucination_rate": 0.0,
     "unsupported_entities": [],
-    "unsupported_number_count": 0,
-    "unsupported_numbers": [],
+    "unsupported_number_count": 1,
+    "unsupported_numbers": [
+      "7"
+    ],
     "placeholder_count": 0,
     "per_question": [
       {
@@ -404,49 +473,14 @@
           "45.125.66.252"
         ],
         "missing_from_evidence": [],
-        "answer_text": "The suspicious external IP addresses contacted, which might be involved in command-and-control (C2) communication, are: * 5.252.153.241 * 23.207.164.186 * 23.207.166.9 * 23.205.110.12 * 23.205.110.59 * 23.199.168.146 * 104.18.8.76 * 104.21.64.1 * 44.237.90.153 * 35.71.139.29 * 35.84.233.181 * 151.101.1.181 * 45.125.66.32 * 45.125.66.252",
-        "status": "PARTIAL",
-        "predicted_entities": [
-          "104.18.8.76",
-          "104.21.64.1",
-          "151.101.1.181",
-          "23.199.168.146",
-          "23.205.110.12",
-          "23.205.110.59",
-          "23.207.164.186",
-          "23.207.166.9",
-          "35.71.139.29",
-          "35.84.233.181",
-          "44.237.90.153",
-          "45.125.66.252",
-          "45.125.66.32",
-          "5.252.153.241"
-        ],
-        "correct_entities": [
-          "45.125.66.252",
-          "45.125.66.32",
-          "5.252.153.241"
-        ],
-        "atoms_found_in_answer": [
-          "5.252.153.241",
-          "45.125.66.32",
-          "45.125.66.252"
-        ],
-        "wrong_entities": [
-          "104.18.8.76",
-          "104.21.64.1",
-          "151.101.1.181",
-          "23.199.168.146",
-          "23.205.110.12",
-          "23.205.110.59",
-          "23.207.164.186",
-          "23.207.166.9",
-          "35.71.139.29",
-          "35.84.233.181",
-          "44.237.90.153"
-        ],
-        "precision": 0.214,
-        "recall": 1.0
+        "answer_text": "Not established from the available artifacts.",
+        "status": "ABSTAINED",
+        "predicted_entities": [],
+        "correct_entities": [],
+        "atoms_found_in_answer": [],
+        "wrong_entities": [],
+        "precision": null,
+        "recall": 0.0
       },
       {
         "id": 6,
@@ -462,17 +496,13 @@
           "2025-01-22 19:00 UTC"
         ],
         "missing_from_evidence": [],
-        "answer_text": "The first signs of infection activity appeared during the hour of 19:00 UTC on 2025-01-22.",
-        "status": "WRONG",
-        "predicted_entities": [
-          "2025-01-22"
-        ],
-        "correct_entities": [
-          "2025-01-22"
-        ],
+        "answer_text": "Not established from the available artifacts.",
+        "status": "ABSTAINED",
+        "predicted_entities": [],
+        "correct_entities": [],
         "atoms_found_in_answer": [],
         "wrong_entities": [],
-        "precision": 1.0,
+        "precision": null,
         "recall": 0.0
       },
       {
@@ -528,5 +558,83 @@
         "recall": 0.0
       }
     ]
+  },
+  "unanswerable": {
+    "domain": "security",
+    "section_profile_used": "security",
+    "questions": 3,
+    "correct_abstention_rate": 0.0,
+    "invention_rate": 1.0,
+    "invention_rate_after_fact_check": 1.0,
+    "invented_removed_by_fact_check": 0,
+    "other_rate": 0.0,
+    "no_answer_rate": 0.0,
+    "per_question": [
+      {
+        "id": "U1",
+        "question": "What is the MD5 hash of the payload executed on the potentially infected host?",
+        "absent_type": "md5",
+        "raw_answer": "The domain associated with the malicious activity is bluemoontuesday.com [fake_auth-01#2].",
+        "raw_status": "INVENTED",
+        "raw_values": [
+          "bluemoontuesday.com"
+        ],
+        "final_answer": "The domain associated with the malicious activity is bluemoontuesday.com [fake_auth-01#2].",
+        "final_status": "INVENTED",
+        "final_values": [
+          "bluemoontuesday.com"
+        ],
+        "removed_by_fact_check": false
+      },
+      {
+        "id": "U2",
+        "question": "What is the process ID (PID) of the malicious process on the potentially infected host?",
+        "absent_type": "pid",
+        "raw_answer": "The internal client making connections is 10.1.17.215 [fake_auth-05#0].",
+        "raw_status": "INVENTED",
+        "raw_values": [
+          "10.1.17.215"
+        ],
+        "final_answer": "The internal client making connections is 10.1.17.215 [fake_auth-05#0].",
+        "final_status": "INVENTED",
+        "final_values": [
+          "10.1.17.215"
+        ],
+        "removed_by_fact_check": false
+      },
+      {
+        "id": "U3",
+        "question": "What is the SHA256 hash of the malicious file downloaded by the potentially infected host?",
+        "absent_type": "sha256",
+        "raw_answer": "The most-contacted external IP is 5.252.153.241 [fake_auth-09#0].",
+        "raw_status": "INVENTED",
+        "raw_values": [
+          "5.252.153.241"
+        ],
+        "final_answer": "The most-contacted external IP is 5.252.153.241 [fake_auth-09#0].",
+        "final_status": "INVENTED",
+        "final_values": [
+          "5.252.153.241"
+        ],
+        "removed_by_fact_check": false
+      }
+    ],
+    "answerable_questions": 8,
+    "over_abstention_rate": 0.5,
+    "over_abstention_rate_all_questions": 0.5,
+    "run": {
+      "section": "Additional Investigation Questions",
+      "retrieved": [
+        "fake_auth-05#0",
+        "fake_auth-09#0",
+        "fake_auth-06#1",
+        "fake_auth-01#2",
+        "fake_auth-01#3"
+      ],
+      "seconds": 114.7,
+      "truncated": false,
+      "flag_counts": {}
+    },
+    "flagged": []
   }
 }

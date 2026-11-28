@@ -2,17 +2,18 @@
 
 ## Incident Summary
 
-* Affected host: rider-07 and rider-07-2, both running the rider-app-bff host role, with IP addresses 172.31.118.16 and 172.31.118.226, respectively. [acl_split_brain_0001-05#0]
-* Earliest alert hour: 16:00 UTC on 2022-02-15. [acl_split_brain_0001-09#1, acl_split_brain_0001-09#0]
-* Main C2 candidate: The external IP 172.31.46.142, associated with the core-router role in zone DC-B. [acl_split_brain_0001-05#0]
-* Assessment: The high volume of connections (9728 events) from the external IP 172.31.46.142 to the core-router role in zone DC-B suggests a potential command and control (C2) activity. [acl_split_brain_0001-05#0]
+* The root cause of the incident is likely related to the reconciliation-job service, as it has the highest number of failing dependencies and error events.
+* The earliest sign of the failure was during the hour of 16:00 UTC on 2022-02-15, with a warning/critical alert span from 2022-02-15 16:00 UTC to 2022-02-16 15:00 UTC. [auto: acl_split_brain_0001-09#0]
+* The fault type is likely a distributed system issue, with a conflict between DC-A and DC-B, as indicated by the error messages and most-failed dependency between db-a and db-b.
+* The user-facing impact was high, with significant latency and errors in services such as reconciliation-job, eta-svc, dispatch-svc, and nightly-batch. [auto: acl_split_brain_0001-02#0]
+* Assessment: The incident's impact was likely due to the stretched VLAN 50 and the legacy PostgreSQL primary/standby pair, which may have contributed to the replication and write transaction issues.
 
-## Affected Host and User
+## Affected Service and Infrastructure
 
-* hosts: rider-07 — 35 events; ip: 172.31.118.16; role: rider-app-bff host; zone: rack M33 [acl_split_brain_0001-05#1]
-* hosts: rider-07-2 — 59 events; ip: 172.31.118.226; role: rider-app-bff host; zone: rack M26 [acl_split_brain_0001-05#0]
-* hosts: core-a1 — 51 events; ip: 172.31.160.153; role: core-router; zone: DC-A [acl_split_brain_0001-05#1]
-* hosts: db-b — 136 events; ip: 172.31.240.72; role: postgres-standby; zone: DC-B [acl_split_brain_0001-05#0]
+* The failure most likely originated in the PostgreSQL database service, specifically in the db-b instance in DC-B, as indicated by the Keepalived VRRP virtual IP 172.31.173.196 being in the MASTER STATE and the promote-on-MASTER script being executed. [acl_split_brain_0001-06#0]
+* The Kubernetes pod and node affected by this failure are not explicitly stated in the provided evidence, but the top dependencies for services such as eta-svc, dispatch-svc, and nightly-batch are 172.31.173.196, suggesting a connection to the database service. [acl_split_brain_0001-02#0]
+* The error messages indicating a sequence collision after promotion and a duplicate key value violate unique constraint suggest a database-related issue. [acl_split_brain_0001-01#2]
+* The error events and failing requests for the reconciliation-job service also point towards a database-related problem, specifically with the compare ledgers operation. [acl_split_brain_0001-01#0]
 
 ## Timeline
 
@@ -31,69 +32,69 @@
 - 2022-02-16 02:30 UTC — changes: CHG-16828 | network_change | ACL INTERCONNECT-IN on core-a1, core-b1 | actor: m.singh | 2022-02-16 02:30 UTC | status: completed | rollback to v28 — 1 events [acl_split_brain_0001-03#0]
 - 2022-02-16 03:12 UTC — changes: CHG-16846 | db_recovery | db-b | actor: m.singh | 2022-02-16 03:12 UTC | status: completed | fence db-b; export divergent transactions; rebuild standby from db-a — 1 events [acl_split_brain_0001-03#0]
 
-## Detection: IDS Alerts
+## Detection: Metric Anomalies
 
-* Informational signatures:
-  * acl_split_brain_0001-07#6: alert timeline: 2022-02-16 15:00 UTC — 1 events [acl_split_brain_0001-09#0, acl_split_brain_0001-07#6]
+* Metric anomalies: connected replication standbys on db-a — baseline 1; trough 0; onset 2022-02-15 19:00 UTC; recovered 2022-02-16 04:00 UTC [acl_split_brain_0001-08#0]
+* Metric anomalies: write transactions per minute on db-b — baseline 0 (standby); peak 263/min; onset 2022-02-15 19:00 UTC; recovered 2022-02-16 03:00 UTC [acl_split_brain_0001-08#0]
+* Derived: earliest metric anomaly onset 2022-02-15 12:00 UTC (node_cpu utilisation on 172.31.118.226) [acl_split_brain_0001-09#1]
+* Derived: warning/critical alerts span 2022-02-15 16:00 UTC to 2022-02-16 15:00 UTC; earliest alert hour 2022-02-15 16:00 UTC (1 alerts) [acl_split_brain_0001-09#0]
+* Derived: most-failed dependency: db-a / db-b (2782 errors) [acl_split_brain_0001-09#0]
 
-## Initial Infection Indicators
+## Service Dependencies and Propagation
 
-* Possible suspicious domain: Not established from the available artifacts
-* Possible suspicious IP: 172.31.118.16 [acl_split_brain_0001-05#1]
-* Possible suspicious IP: 172.31.118.226 [acl_split_brain_0001-05#0]
-* Possible suspicious IP: 172.31.173.196 [acl_split_brain_0001-06#0]
-* Possible suspicious network device log: %ACL-6-LOG: INTERCONNECT-IN denied tcp 172.31.173.231(5432) -> 172.31.240.72 — 3013 events [acl_split_brain_0001-06#1]
-
-## Command-and-Control and Network Activity
-
-* The affected host(s) received the most connections from the external IP 172.31.46.142, which is associated with the core-router role in zone DC-B. [acl_split_brain_0001-05#0]
-* Not established from the available artifacts whether the external IP 172.31.46.142 is a C2 server or a legitimate service.
-* Assessment: The high volume of connections (9728 events) from the external IP 172.31.46.142 to the core-router role in zone DC-B suggests a potential command and control (C2) activity. [acl_split_brain_0001-05#0]
-* Assessment: The presence of duplicate addresses on Vlan50 (54 events) and the high volume of denied INTERCONNECT-IN traffic (3013 events) suggests a potential split-brain scenario. [acl_split_brain_0001-06#1]
-* Assessment: The error messages indicating a conflict between DC-A and DC-B (2782 events) suggest a potential root cause related to the split-brain scenario. [acl_split_brain_0001-01#1]
-* The external IP 172.31.173.196 received a significant number of connections from the affected host(s), but it is not clear whether this is a C2 server or a legitimate service. [acl_split_brain_0001-06#1, acl_split_brain_0001-01#1]
-* Not established from the available artifacts whether the affected host(s) are the source or target of the connections.
+* The largest latency increase occurred in the reconciliation-job service, with a top dependency of db-a / db-b, showing 2782 events of failing dependencies. [auto: acl_split_brain_0001-09#0, acl_split_brain_0001-02#0]
+* Assessment: The root cause of the incident is likely related to the reconciliation-job service, as it has the highest number of failing dependencies and error events.
+* Assessment: The service dependencies and propagation of the incident suggest that the issue is not isolated to a single service, but rather affects multiple services, including eta-svc, dispatch-svc, and nightly-batch.
+* Assessment: The error messages indicate a conflict between DC-A and DC-B, suggesting a distributed system issue.
+* The most-failed dependency of db-a / db-b has 2782 errors, indicating a significant issue with the database replication or synchronization. [auto: acl_split_brain_0001-09#0, acl_split_brain_0001-02#0]
+* The earliest alert hour for the reconciliation-job service was 2022-02-15 16:00 UTC, with a warning/critical alert span from 2022-02-15 16:00 UTC to 2022-02-16 15:00 UTC. [auto: acl_split_brain_0001-09#0]
+* The incident occurred during a period of no changes recorded from 6 hours before the earliest alert hour to its end, suggesting a potential lack of monitoring or detection during this time. [auto: acl_split_brain_0001-09#0]
 
 ## Impact Assessment
 
-* Assessment: The primary CIA component targeted was availability, as the incident resulted in a reliability issue with the production environment, causing disruptions to the ride-hailing service. [acl_split_brain_0001-05#1]
-* Assessment: The scale of external activity was limited, with no evidence of external IP or destination involvement. [acl_split_brain_0001-05#0]
-* Assessment: The incident was not related to a known vulnerability or exploit, and no evidence of command-and-control activity was found. [acl_split_brain_0001-03#2]
-* Assessment: The root cause of the incident is not established from the available artifacts, and further investigation is required to determine the cause. [acl_split_brain_0001-03#1]
+* Assessment: Availability is the primary CIA component affected, as the incident resulted in service unavailability and latency.
+* Services affected: reconciliation-job, eta-svc, dispatch-svc, and nightly-batch. [auto: acl_split_brain_0001-02#0]
+* Scale of user-facing latency or errors: High, with a significant number of events indicating service failures and dependencies.
+* Assessment: The incident's impact was likely due to the stretched VLAN 50 and the legacy PostgreSQL primary/standby pair, which may have contributed to the replication and write transaction issues.
+* Assessment: The root cause of the incident is not established from the available artifacts, and further investigation is required to determine the exact cause.
 
 ## Root Cause and Evidence Gaps
 
-* Assessment: Low confidence; the root cause is not established from the available artifacts.
-* Initial vector: Not established from the available artifacts.
-* Payload behavior: Not established from the available artifacts.
-* Data exfiltration: Not established from the available artifacts.
-* Queries that failed or were empty: Not established from the available artifacts.
-* Timeframe of critical alerts: Not established from the available artifacts.
+* Assessment: Not established from the available artifacts.
+* Not established from the available artifacts: No root cause, impact or trigger is stated in the evidence.
+* Assessment: Not established from the available artifacts.
+* Not established from the available artifacts: No error logs or change records are present in the evidence.
+* Assessment: Not established from the available artifacts.
+* Not established from the available artifacts: No telemetry or monitoring data is available for the affected services.
+* Assessment: Not established from the available artifacts.
 
 ## Corrective and Preventive Actions
 
-* Isolate the core-router host (172.31.46.142) and its associated zone (DC-B) from the rest of the network to prevent further propagation of potential issues. [acl_split_brain_0001-05#0]
-* Investigate and resolve the duplicate IP address detected on the rider-app-bff host (172.31.118.226) to prevent potential security vulnerabilities. [acl_split_brain_0001-09#1, acl_split_brain_0001-05#0]
-* Run a thorough analysis on the reconciliation-job service to identify the root cause of the 2782 errors and 8 critical alerts, and take corrective actions to resolve the issues. [acl_split_brain_0001-09#0]
-* Review and update the Ansible AWX job IDs (AWX-) to ensure that router ACLs are properly configured and up-to-date.
-* Monitor the PostgreSQL primary/standby pair (db-a in DC-A, db-b in DC-B) and the keepalived VRRP virtual IP (172.31.173.196) for any signs of instability or misconfiguration.
+* The reconciliation-job service should be restarted to resolve the critical ReconciliationConflicts and PostgresReplicationBroken alerts, as indicated by the high error volume and most-failed dependency between db-a and db-b [acl_split_brain_0001-09#0].
+* The alertmanager service should be checked for continuous firing, as indicated by the Watchdog (info) alert, and addressed to prevent further alerts [acl_split_brain_0001-07#0].
+* The rider-app-bff service should be checked for duplicate IP addresses, as indicated by the DuplicateIPAddressDetected (warning) alert, and addressed to prevent further alerts [acl_split_brain_0001-07#1].
+* The PostgreSQL replication should be checked for issues, as indicated by the PostgresReplicationBroken (critical) alert, and addressed to prevent further alerts [acl_split_brain_0001-07#2].
+* The reconciliation-job service should be checked for critical instances, as indicated by the critical alerts > critical instances reconciliation-job — 8 events [acl_split_brain_0001-07#2].
 
 ## Answers to Investigation Questions
 
-1. CHG-16855 [acl_split_brain_0001-03#2]
-* CHG-16809 [acl_split_brain_0001-03#0]
-* AWX-54207 [acl_split_brain_0001-03#0]
-* CHG-16846 [acl_split_brain_0001-04#0]
-2. ansible-deploy [acl_split_brain_0001-03#1]
-* m.singh [acl_split_brain_0001-04#0]
-* awx-svc [acl_split_brain_0001-04#0]
-3. core-b1 [acl_split_brain_0001-06#1]
-4. db-b [acl_split_brain_0001-04#0]
-5. 16:00 UTC [acl_split_brain_0001-09#0]
-6. Not established from the available artifacts
-7. Not established from the available artifacts
-8. reconciliation-job [acl_split_brain_0001-09#0]
-9. Not established from the available artifacts
+1. The change that triggered the incident is CHG-16846, a database recovery change on db-b, executed by m.singh on 2022-02-16 03:12 UTC [acl_split_brain_0001-04#0].
+2. The account or automation identity that executed the change is m.singh [acl_split_brain_0001-04#0].
+3. Not established from the available artifacts.
+4. Not established from the available artifacts.
+5. The first signs of the failure appeared during the hour of 16:00 UTC on 2022-02-15 [acl_split_brain_0001-09#1].
+6. Not established from the available artifacts.
+7. Not established from the available artifacts.
+8. The service that emitted the most errors is reconciliation-job, which is the root cause [acl_split_brain_0001-09#0].
+9. Not established from the available artifacts.
 
 ---
-Verification note: 9 line(s) were removed because their entities, numbers or citations could not be verified against the retrieved evidence; 2 claim(s) remain without a citation. Details: advanced_run_report.json.
+Verification note: 0 line(s) were removed because their entities, numbers or citations could not be verified against the retrieved evidence; 3 claim(s) remain without a citation. Details: advanced_run_report.json.
+## Additional Investigation Questions
+
+U1. The on-call engineer who acknowledged the incident is not identified in the evidence. [acl_split_brain_0001-05#0]
+U2. Not established from the available artifacts.
+U3. The Linux kernel version ran on the node that hosted the pod of the root-cause service is not specified in the evidence. [acl_split_brain_0001-05#1]
+U5. The email address of the on-call engineer who acknowledged the incident is not present in the evidence. [acl_split_brain_0001-05#0]
+U6. Not established from the available artifacts.
+U7. Not established from the available artifacts.

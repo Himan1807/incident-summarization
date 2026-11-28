@@ -2,9 +2,9 @@
 INCIDENT : fake_auth
 MODEL    : llama3.2:3b
 CONDITION: RAG (advanced pipeline)
-RUN TIME : 16.2 min of LLM generation
+RUN TIME : 13.3 min of LLM generation
 REPORT   : results\fake_auth\llama3.2_3b\advanced_postmortem.md
-CREATED  : 2026-11-27T21:04:28
+CREATED  : 2026-11-28T01:28:21
 ====================================================================================================
 
 A. QUESTION-BY-QUESTION EVALUATION
@@ -45,21 +45,14 @@ A. QUESTION-BY-QUESTION EVALUATION
 |     |                                  |                            |                                    |       |       | vidyard.com,     |           |
 |     |                                  |                            |                                    |       |       | px.owneriq.net   |           |
 +-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
-| 5   | What are the suspicious external | 5.252.153.241,             | The suspicious external IP         | 3/3   | 3/14  | 104.18.8.76,     | PARTIAL   |
-|     | IP addresses contacted, which    | 45.125.66.32,              | addresses contacted, which might   |       |       | 104.21.64.1,     |           |
-|     | might be involved in command-    | 45.125.66.252              | be involved in command-and-control |       |       | 151.101.1.181,   |           |
-|     | and-control (C2) communication?  |                            | (C2) communication, are: *         |       |       | 23.199.168.146,  |           |
-|     |                                  |                            | 5.252.153.241 * 23.207.164.186 *   |       |       | 23.205.110.12,   |           |
-|     |                                  |                            | 23.207.166.9 * 23.205.110.12 *     |       |       | 23.205.110.59,   |           |
-|     |                                  |                            | 23.205.110.59 * 23.199.168.146 *   |       |       | 23.207.164.186,  |           |
-|     |                                  |                            | 104.18.8.76 * 104.21.64.1 *        |       |       | 23.207.166.9,    |           |
-|     |                                  |                            | 44.237.90.153 * 35.71.139.29 *     |       |       | 35.71.139.29,    |           |
-|     |                                  |                            | 35.84.233.181 * 151.101.1.181 *    |       |       | 35.84.233.181,   |           |
-|     |                                  |                            | 45.125.66.32 * 45.125.66.252       |       |       | 44.237.90.153    |           |
+| 5   | What are the suspicious external | 5.252.153.241,             | Not established from the available | 0/3   | -     | -                | ABSTAINED |
+|     | IP addresses contacted, which    | 45.125.66.32,              | artifacts.                         |       |       |                  |           |
+|     | might be involved in command-    | 45.125.66.252              |                                    |       |       |                  |           |
+|     | and-control (C2) communication?  |                            |                                    |       |       |                  |           |
 +-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
-| 6   | During what hour did the first   | 2025-01-22 19:00 UTC       | The first signs of infection       | 0/1   | 1/1   | -                | WRONG     |
-|     | signs of infection activity      |                            | activity appeared during the hour  |       |       |                  |           |
-|     | appear? Provide the earliest     |                            | of 19:00 UTC on 2025-01-22.        |       |       |                  |           |
+| 6   | During what hour did the first   | 2025-01-22 19:00 UTC       | Not established from the available | 0/1   | -     | -                | ABSTAINED |
+|     | signs of infection activity      |                            | artifacts.                         |       |       |                  |           |
+|     | appear? Provide the earliest     |                            |                                    |       |       |                  |           |
 |     | date and time in YYYY-MM-DD      |                            |                                    |       |       |                  |           |
 |     | HH:MM UTC format.                |                            |                                    |       |       |                  |           |
 +-----+----------------------------------+----------------------------+------------------------------------+-------+-------+------------------+-----------+
@@ -82,17 +75,17 @@ B. METRICS
 +----------------------------------------------+--------------+------------------------------------------------------------------------+
 | Metric                                       | Value        | Meaning                                                                |
 +----------------------------------------------+--------------+------------------------------------------------------------------------+
-| Answer precision                             | 0.214        | Entities (IPs, domains, hosts, URLs, times) in the report's answers    |
+| Answer precision                             | 0.154        | Entities (IPs, domains, hosts, URLs, times) in the report's answers    |
 |                                              |              | that also occur in the reference / all entities it gave                |
 +----------------------------------------------+--------------+------------------------------------------------------------------------+
-| Answer recall                                | 0.500        | Reference answer items found in the report's answers / all reference   |
+| Answer recall                                | 0.250        | Reference answer items found in the report's answers / all reference   |
 |                                              |              | items                                                                  |
 +----------------------------------------------+--------------+------------------------------------------------------------------------+
-| Answer F1                                    | 0.300        | Harmonic mean of answer precision and recall                           |
+| Answer F1                                    | 0.191        | Harmonic mean of answer precision and recall                           |
 +----------------------------------------------+--------------+------------------------------------------------------------------------+
 | Question recall                              | 0.875        | Mean over questions of reference items found anywhere in the report    |
 +----------------------------------------------+--------------+------------------------------------------------------------------------+
-| Faithfulness                                 | 0.692        | Claims whose facts are in the evidence AND in the chunks they cite /   |
+| Faithfulness                                 | 0.643        | Claims whose facts are in the evidence AND in the chunks they cite /   |
 |                                              |              | all claims                                                             |
 +----------------------------------------------+--------------+------------------------------------------------------------------------+
 | Grounding rate                               | 1.000        | Claims whose entities and numbers all exist in the evidence            |
@@ -100,15 +93,15 @@ B. METRICS
 | Hallucination rate                           | 0.000        | Entities in the report that are absent from the evidence / all         |
 |                                              |              | entities (lower is better)                                             |
 +----------------------------------------------+--------------+------------------------------------------------------------------------+
-| Unsupported numbers                          | 0            | Numbers in the report that are absent from the evidence (lower is      |
+| Unsupported numbers                          | 1            | Numbers in the report that are absent from the evidence (lower is      |
 |                                              |              | better)                                                                |
 +----------------------------------------------+--------------+------------------------------------------------------------------------+
 | Placeholders                                 | 0            | '[insert ...]' placeholders left in the report (lower is better)       |
 +----------------------------------------------+--------------+------------------------------------------------------------------------+
-| Questions correct / partial / wrong /        | 3 / 1 / 2 /  | Per-question status in the table above                                 |
-| abstained / unanswered                       | 2 / 0        |                                                                        |
+| Questions correct / partial / wrong /        | 3 / 0 / 1 /  | Per-question status in the table above                                 |
+| abstained / unanswered                       | 4 / 0        |                                                                        |
 +----------------------------------------------+--------------+------------------------------------------------------------------------+
-| Claims                                       | 52           | Claim lines counted by the verifier; hedged assessments are excluded   |
+| Claims                                       | 42           | Claim lines counted by the verifier; hedged assessments are excluded   |
 +----------------------------------------------+--------------+------------------------------------------------------------------------+
 
 Status: CORRECT = every reference item found and nothing wrong; PARTIAL = some items found or wrong items present;
